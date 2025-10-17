@@ -15,12 +15,14 @@ interface NarratedControllerProps {
   onSlideChange: (slideId: number) => void;
   onPlaybackStart?: () => void;
   onPlaybackEnd?: () => void;
+  manualSlideChange?: number | null;
 }
 
 export const NarratedController: React.FC<NarratedControllerProps> = ({
   onSlideChange,
   onPlaybackStart,
-  onPlaybackEnd
+  onPlaybackEnd,
+  manualSlideChange
 }) => {
   const [manifest, setManifest] = useState<NarrationManifest | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -29,9 +31,13 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [showStartOverlay, setShowStartOverlay] = useState(true);
   const [hideInterface, setHideInterface] = useState(false);
+  const [isManualMode, setIsManualMode] = useState(false);
+  const [isManualWithAudio, setIsManualWithAudio] = useState(false);
+  const [autoAdvanceOnAudioEnd, setAutoAdvanceOnAudioEnd] = useState(false);
   
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const nextAudioRef = useRef<HTMLAudioElement | null>(null);
+  const forceAudioPlayRef = useRef(0);
 
   // Load manifest on mount
   useEffect(() => {
@@ -61,9 +67,9 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     setCurrentIndex(nextIndex);
   }, [manifest, currentIndex, onPlaybackEnd]);
   
-  // Play audio for current slide
+  // Play audio for current slide (only in non-manual mode or when manually triggered in manual+audio mode)
   useEffect(() => {
-    if (!manifest || !isPlaying || currentIndex >= manifest.slides.length) return;
+    if (!manifest || !isPlaying || currentIndex >= manifest.slides.length || isManualMode) return;
     
     const currentSlide = manifest.slides[currentIndex];
     
@@ -129,7 +135,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     };
   }, [manifest, isPlaying, currentIndex, onSlideChange, advanceSlide]);
 
-  // Start playback
+  // Start narrated playback
   const handleStart = () => {
     if (!manifest || manifest.slides.length === 0) {
       setError('No slides to play');
@@ -138,9 +144,112 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     
     setShowStartOverlay(false);
     setIsPlaying(true);
+    setIsManualMode(false);
     setCurrentIndex(0);
     onPlaybackStart?.();
   };
+
+  // Start manual mode without audio
+  const handleManualMode = () => {
+    if (!manifest || manifest.slides.length === 0) {
+      setError('No slides to play');
+      return;
+    }
+    
+    setShowStartOverlay(false);
+    setIsPlaying(false);
+    setIsManualMode(true);
+    setIsManualWithAudio(false);
+    setCurrentIndex(0);
+    onSlideChange(manifest.slides[0].id);
+    // Don't call onPlaybackStart to keep manual navigation enabled
+  };
+
+  // Start manual mode with audio
+  const handleManualWithAudio = () => {
+    if (!manifest || manifest.slides.length === 0) {
+      setError('No slides to play');
+      return;
+    }
+    
+    setShowStartOverlay(false);
+    setIsPlaying(false); // Don't auto-play, let manual navigation trigger audio
+    setIsManualMode(true);
+    setIsManualWithAudio(true);
+    setCurrentIndex(0);
+    onSlideChange(manifest.slides[0].id);
+    // Play audio for first slide
+    playAudioForSlide(0);
+    // Don't call onPlaybackStart to keep manual navigation enabled
+  };
+
+  // Play audio for a specific slide (used in manual+audio mode)
+  const playAudioForSlide = useCallback((index: number) => {
+    if (!manifest || index >= manifest.slides.length) return;
+    
+    const slide = manifest.slides[index];
+    
+    // Stop any existing audio
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.onended = null;
+      audioRef.current.onplay = null;
+    }
+    
+    // Create new audio element
+    const audio = new Audio(slide.src);
+    audioRef.current = audio;
+    
+    // Setup event handlers
+    audio.onended = () => {
+      console.log(`Audio ended for slide ${slide.id}`);
+      // Auto-advance if enabled
+      if (autoAdvanceOnAudioEnd && slide.autoAdvance) {
+        const nextIndex = index + 1;
+        if (nextIndex < manifest.slides.length) {
+          setCurrentIndex(nextIndex);
+          onSlideChange(manifest.slides[nextIndex].id);
+          // Force audio to play for the next slide
+          forceAudioPlayRef.current += 1;
+        }
+      }
+    };
+    
+    audio.onerror = (e) => {
+      console.error(`Failed to load audio for slide ${slide.id}:`, e);
+      setError(`Failed to load audio for slide ${slide.id}`);
+    };
+    
+    audio.onplay = () => {
+      console.log(`Audio playing for slide ${slide.id}`);
+      setError(null);
+    };
+    
+    // Start playing
+    audio.play().catch(err => {
+      console.error('Audio playback failed:', err);
+      setError('Audio playback failed');
+    });
+  }, [manifest, autoAdvanceOnAudioEnd, onSlideChange]);
+
+  // Listen for external slide changes (from SlidePlayer keyboard navigation in manual+audio mode)
+  useEffect(() => {
+    if (!isManualMode || !manifest || manualSlideChange === null) return;
+    
+    // Find the index for the manually changed slide ID
+    const slideIndex = manifest.slides.findIndex(s => s.id === manualSlideChange);
+    
+    if (slideIndex !== -1 && slideIndex !== currentIndex) {
+      setCurrentIndex(slideIndex);
+    }
+  }, [manualSlideChange, isManualMode, manifest, currentIndex]);
+
+  // Play audio whenever currentIndex changes in manual+audio mode only
+  useEffect(() => {
+    if (!isManualMode || !isManualWithAudio || !manifest) return;
+    
+    playAudioForSlide(currentIndex);
+  }, [currentIndex, isManualMode, isManualWithAudio, manifest, playAudioForSlide, forceAudioPlayRef.current]);
 
   // Restart from beginning
   const handleRestart = () => {
@@ -152,6 +261,9 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     }
     setCurrentIndex(0);
     setIsPlaying(false);
+    setIsManualMode(false);
+    setIsManualWithAudio(false);
+    setAutoAdvanceOnAudioEnd(false);
     setError(null);
     setShowStartOverlay(true);
   };
@@ -236,27 +348,67 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
                 </label>
               </div>
               
-              <button
-                onClick={handleStart}
-                disabled={!manifest}
-                style={{
-                  background: 'linear-gradient(135deg, #00B7C3, #0078D4)',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: 12,
-                  padding: '1rem 2rem',
-                  fontSize: 18,
-                  fontWeight: 600,
-                  cursor: manifest ? 'pointer' : 'not-allowed',
-                  opacity: manifest ? 1 : 0.5,
-                  boxShadow: '0 4px 12px rgba(0, 183, 195, 0.3)'
-                }}
-              >
-                {manifest ? '▶ Start Narrated Playback' : 'Loading...'}
-              </button>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', alignItems: 'center' }}>
+                <button
+                  onClick={handleStart}
+                  disabled={!manifest}
+                  style={{
+                    background: 'linear-gradient(135deg, #00B7C3, #0078D4)',
+                    color: '#fff',
+                    border: 'none',
+                    borderRadius: 12,
+                    padding: '1rem 2rem',
+                    fontSize: 18,
+                    fontWeight: 600,
+                    cursor: manifest ? 'pointer' : 'not-allowed',
+                    opacity: manifest ? 1 : 0.5,
+                    boxShadow: '0 4px 12px rgba(0, 183, 195, 0.3)'
+                  }}
+                >
+                  {manifest ? '▶ Narrated' : 'Loading...'}
+                </button>
+                
+                <div style={{ display: 'flex', gap: '0.75rem' }}>
+                  <button
+                    onClick={handleManualMode}
+                    disabled={!manifest}
+                    style={{
+                      background: 'transparent',
+                      color: '#94a3b8',
+                      border: '2px solid #475569',
+                      borderRadius: 12,
+                      padding: '1rem 1.5rem',
+                      fontSize: 16,
+                      fontWeight: 600,
+                      cursor: manifest ? 'pointer' : 'not-allowed',
+                      opacity: manifest ? 1 : 0.5
+                    }}
+                  >
+                    {manifest ? '⌨ Manual (Silent)' : 'Loading...'}
+                  </button>
+                  
+                  <button
+                    onClick={handleManualWithAudio}
+                    disabled={!manifest}
+                    style={{
+                      background: 'transparent',
+                      color: '#00B7C3',
+                      border: '2px solid #00B7C3',
+                      borderRadius: 12,
+                      padding: '1rem 1.5rem',
+                      fontSize: 16,
+                      fontWeight: 600,
+                      cursor: manifest ? 'pointer' : 'not-allowed',
+                      opacity: manifest ? 1 : 0.5
+                    }}
+                  >
+                    {manifest ? '⌨ Manual + Audio' : 'Loading...'}
+                  </button>
+                </div>
+              </div>
               
               <p style={{ color: '#64748b', marginTop: '1.5rem', fontSize: 12 }}>
-                Note: Audio will play automatically after clicking start
+                Narrated: Auto-advance | Manual: Arrow keys | Manual + Audio: Arrow keys + narration
               </p>
             </motion.div>
           </motion.div>
@@ -288,13 +440,13 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
       </AnimatePresence>
 
       {/* Progress indicator */}
-      {isPlaying && manifest && !hideInterface && (
+      {(isPlaying || isManualMode) && manifest && !hideInterface && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           style={{
             position: 'fixed',
-            bottom: 20,
+            top: 80,
             left: '50%',
             transform: 'translateX(-50%)',
             background: 'rgba(0, 0, 0, 0.8)',
@@ -311,6 +463,32 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
           <span>
             Slide {currentIndex + 1} of {manifest.slides.length}
           </span>
+          
+          {/* Auto-advance toggle (only in manual+audio mode) */}
+          {isManualMode && isManualWithAudio && (
+            <label
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                cursor: 'pointer',
+                fontSize: 11,
+                color: '#94a3b8'
+              }}
+            >
+              <input
+                type="checkbox"
+                checked={autoAdvanceOnAudioEnd}
+                onChange={(e) => setAutoAdvanceOnAudioEnd(e.target.checked)}
+                style={{
+                  width: 14,
+                  height: 14,
+                  cursor: 'pointer'
+                }}
+              />
+              Auto-advance
+            </label>
+          )}
           
           <button
             onClick={handleRestart}

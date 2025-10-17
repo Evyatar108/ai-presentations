@@ -42,3 +42,14 @@ tts/server_config.json
 tts/output/
 tts/venv/
 *.wav
+*.mp3
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/

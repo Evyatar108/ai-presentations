@@ -40,8 +40,15 @@ const slides: Slide[] = [
 export const App: React.FC = () => {
   const [currentSlideId, setCurrentSlideId] = useState<number | undefined>(undefined);
   const [isNarratedMode, setIsNarratedMode] = useState(false);
+  const [manualSlideChange, setManualSlideChange] = useState<number | null>(null);
 
   const handleSlideChange = (slideId: number) => {
+    setCurrentSlideId(slideId);
+  };
+
+  const handleManualSlideChange = (slideId: number) => {
+    // This is called by SlidePlayer when user manually navigates
+    setManualSlideChange(slideId);
     setCurrentSlideId(slideId);
   };
 
@@ -61,6 +68,7 @@ export const App: React.FC = () => {
         onSlideChange={handleSlideChange}
         onPlaybackStart={handlePlaybackStart}
         onPlaybackEnd={handlePlaybackEnd}
+        manualSlideChange={manualSlideChange}
       />
 
       {/* Slide presentation */}
@@ -68,6 +76,7 @@ export const App: React.FC = () => {
         slides={slides}
         autoAdvance={false}
         externalSlideId={currentSlideId}
+        onSlideChange={handleManualSlideChange}
         disableManualNav={isNarratedMode}
       />
     </div>
