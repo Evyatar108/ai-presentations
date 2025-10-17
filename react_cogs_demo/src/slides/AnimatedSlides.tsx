@@ -970,6 +970,156 @@ export const Slide27TokenOptimization: React.FC = () => {
 };
 
 /**
+ * Slide 32 - Path to General Availability
+ */
+export const Slide32PathToGA: React.FC = () => {
+  const { reduced } = useReducedMotion();
+
+  return (
+    <div style={{
+      background: '#0f172a',
+      minHeight: '100vh',
+      width: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '2rem',
+      fontFamily: 'Inter, system-ui, sans-serif'
+    }}>
+      <div style={{ maxWidth: 900, width: '100%', textAlign: 'center' }}>
+        <motion.h1
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: reduced ? 0.2 : 0.5 }}
+          style={{ color: '#f1f5f9', marginBottom: '3rem' }}
+        >
+          Path to General Availability
+        </motion.h1>
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: reduced ? 0.2 : 0.6, delay: reduced ? 0 : 0.2 }}
+          style={{
+            background: '#1e293b',
+            borderRadius: 16,
+            padding: '2rem',
+            border: '1px solid #334155',
+            marginBottom: '2rem'
+          }}
+        >
+          <p style={{ color: '#e2e8f0', fontSize: 18, lineHeight: 1.6, marginBottom: '2rem' }}>
+            These cost and quality improvements directly unblock the private preview release and pave the way for general availability within approved capacity constraints.
+          </p>
+
+          {/* Roadmap arrow */}
+          <motion.div
+            initial={{ opacity: 0, scaleX: 0 }}
+            animate={{ opacity: 1, scaleX: 1 }}
+            transition={{ duration: reduced ? 0.3 : 1, delay: reduced ? 0 : 0.4 }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '2rem',
+              marginTop: '2rem'
+            }}
+          >
+            {/* Private Preview */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: reduced ? 0.2 : 0.5, delay: reduced ? 0 : 0.6 }}
+              style={{
+                background: 'linear-gradient(135deg, #00B7C3, #0078D4)',
+                borderRadius: 12,
+                padding: '1.5rem',
+                minWidth: 180,
+                boxShadow: reduced ? 'none' : '0 4px 12px rgba(0, 183, 195, 0.3)'
+              }}
+            >
+              <div style={{ fontSize: 16, fontWeight: 600, color: '#fff', marginBottom: '0.5rem' }}>
+                Private Preview
+              </div>
+              <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.8)' }}>
+                Enabled by COGS reduction
+              </div>
+            </motion.div>
+
+            {/* Arrow */}
+            <motion.svg
+              width="80"
+              height="40"
+              viewBox="0 0 80 40"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: reduced ? 0 : 0.8 }}
+            >
+              <path d="M5 20 L70 20 M55 10 L70 20 L55 30" stroke="#00B7C3" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+            </motion.svg>
+
+            {/* General Availability */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: reduced ? 0.2 : 0.5, delay: reduced ? 0 : 1 }}
+              style={{
+                background: 'linear-gradient(135deg, #10b981, #059669)',
+                borderRadius: 12,
+                padding: '1.5rem',
+                minWidth: 180,
+                boxShadow: reduced ? 'none' : '0 4px 12px rgba(16, 185, 129, 0.3)',
+                position: 'relative'
+              }}
+            >
+              <div style={{ fontSize: 16, fontWeight: 600, color: '#fff', marginBottom: '0.5rem' }}>
+                General Availability
+              </div>
+              <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.8)' }}>
+                Within capacity limits
+              </div>
+              
+              {/* Capacity check badge */}
+              <motion.div
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: reduced ? 0 : 1.2, type: 'spring' }}
+                style={{
+                  position: 'absolute',
+                  top: -12,
+                  right: -12,
+                  width: 36,
+                  height: 36,
+                  borderRadius: '50%',
+                  background: '#10b981',
+                  border: '3px solid #0f172a',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: 20,
+                  color: '#fff'
+                }}
+              >
+                ✓
+              </motion.div>
+            </motion.div>
+          </motion.div>
+        </motion.div>
+
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: reduced ? 0.2 : 0.5, delay: reduced ? 0 : 1.4 }}
+          style={{ color: '#94a3b8', fontSize: 14 }}
+        >
+          Unified prompt optimization enables scalable global rollout
+        </motion.p>
+      </div>
+    </div>
+  );
+};
+
+/**
  * Export all animated slides
  */
 export const AnimatedSlides = {
@@ -983,5 +1133,6 @@ export const AnimatedSlides = {
   Slide26UnifiedFlow,
   Slide27TokenOptimization,
   Slide28CallReduction,
-  Slide29GPUReduction
+  Slide29GPUReduction,
+  Slide32PathToGA
 };

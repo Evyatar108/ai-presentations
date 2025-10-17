@@ -12,7 +12,8 @@ import {
   Slide26UnifiedFlow,
   Slide27TokenOptimization,
   Slide28CallReduction,
-  Slide29GPUReduction
+  Slide29GPUReduction,
+  Slide32PathToGA
 } from './slides/AnimatedSlides';
 import { CostCurve, QualityComparison } from './components/ImpactComponents';
 
@@ -29,7 +30,8 @@ const slides: Slide[] = [
   { id: 28, title: 'Call Reduction', Component: Slide28CallReduction },
   { id: 29, title: 'GPU Optimization', Component: Slide29GPUReduction },
   { id: 30, title: 'Cost Savings', Component: CostCurve },
-  { id: 31, title: 'Quality Improvement', Component: QualityComparison }
+  { id: 31, title: 'Quality Improvement', Component: QualityComparison },
+  { id: 32, title: 'Path to GA', Component: Slide32PathToGA }
 ];
 
 export const App: React.FC = () => {
