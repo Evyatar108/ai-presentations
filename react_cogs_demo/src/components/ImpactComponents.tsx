@@ -349,10 +349,17 @@ export const QualityComparison: React.FC = () => {
               Internal Reviewers
             </div>
             <motion.div
-              initial={{ scale: reduced ? 1 : 0.9 }}
-              animate={reduced ? {} : { scale:[1,1.06,1] }}
-              transition={{ duration:2, repeat:Infinity }}
-              style={{ fontSize: 24, fontWeight: 'bold', color: '#fff' }}
+              initial={{ scale: reduced ? 1 : 0.92 }}
+              animate={reduced ? {} : { scale: [1, 1.12, 1], opacity: [1, 1, 1] }}
+              transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+              style={{
+                fontSize: 24,
+                fontWeight: 'bold',
+                color: '#fff',
+                display: 'inline-block',
+                willChange: 'transform',
+                transformOrigin: 'center center'
+              }}
             >
               Strongly Prefer
             </motion.div>
@@ -366,7 +373,7 @@ export const QualityComparison: React.FC = () => {
           variants={fadeUp}
           style={{marginTop:'1.5rem', textAlign:'center', fontSize:12, opacity:0.55}}
         >
-          Consolidation (4→1 call) improved cohesion; preference spans narrative flow, detail depth, and reduced redundancy.
+          The unified prompt improved cohesion, detail depth, and reduced redundancy based on initial feedback.
         </motion.div>
       </motion.div>
     </div>
