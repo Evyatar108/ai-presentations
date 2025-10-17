@@ -36,3 +36,9 @@ react_cogs_demo/dist/
 
 # Remotion (future)
 .remotion/
+
+# TTS configuration
+tts/server_config.json
+tts/output/
+tts/venv/
+*.wav
