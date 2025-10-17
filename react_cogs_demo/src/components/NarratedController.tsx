@@ -64,10 +64,12 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     const nextIndex = currentIndex + 1;
     
     if (nextIndex >= manifest.slides.length) {
-      // End of presentation
+      // End of presentation - add delay before showing overlay
       setIsPlaying(false);
-      setShowStartOverlay(true);
-      onPlaybackEnd?.();
+      setTimeout(() => {
+        setShowStartOverlay(true);
+        onPlaybackEnd?.();
+      }, 2000); // 2 second delay after final slide
       return;
     }
     
