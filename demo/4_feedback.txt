@@ -1,0 +1,45 @@
+
+28
+00:03:31,946 --> 00:03:35,786
+The Meeting Highlights feature has received overwhelmingly positive feedback in a recent Ms.
+
+29
+00:03:35,786 --> 00:03:39,706
+Elite survey, underscoring its growing impact and daily use among our users.
+
+30
+00:03:40,986 --> 00:03:45,706
+More than 80% of users rated Meeting Highlights as extremely useful or very useful.
+
+31
+00:03:46,026 --> 00:03:53,226
+In addition, 96% shared that they are very likely or likely to use the feature again, pointing to strong product market fit and daily habit formation.
+
+32
+00:03:54,826 --> 00:03:56,906
+Users have shared enthusiastic feedback.
+
+33
+00:03:57,146 --> 00:03:59,226
+Kevin C commented, love this feature.
+
+34
+00:03:59,666 --> 00:04:02,106
+Great way to catch up on a recap without watching the full thing.
+
+35
+00:04:02,346 --> 00:04:08,026
+Ryan Roslonsky added, Beyond the awesome text recap, there is literally a two-minute narrated video about the meeting.
+
+36
+00:04:08,266 --> 00:04:12,666
+It's mind-blowing and an engaging way to recap a meeting for a richer understanding of the conversation.
+
+37
+00:04:14,466 --> 00:04:18,826
+While the core experience is resonating, users also expressed valuable requests for improvement.
+
+38
+00:04:19,146 --> 00:04:27,066
+Suggestions include making highlights more detailed and specific, integrating highlights more directly into Teams recap, including action items, and supporting additional languages.
+

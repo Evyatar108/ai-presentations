@@ -1,0 +1,60 @@
+
+5
+00:00:32,041 --> 00:00:37,601
+Let's take a closer look at how back-end systems orchestrate the process of generating meeting highlights.
+
+6
+00:00:39,641 --> 00:00:43,361
+When a Teams meeting recording finishes, a back-end event is triggered.
+
+7
+00:00:43,681 --> 00:00:46,681
+This event initiates the highlight generation workflow.
+
+8
+00:00:46,961 --> 00:00:54,801
+The textual transcription of the meeting is sent directly to a large language model, which analyzes the content to identify key moments and topics.
+
+9
+00:00:55,121 --> 00:01:00,481
+The model returns a structured list of textual metadata objects, with each representing a highlight.
+
+10
+00:01:00,881 --> 00:01:10,321
+Highlights fall into two categories: abstractive, which provide succinct summaries of discussion topics, and key moments, which pinpoint significant points in the original meeting.
+
+11
+00:01:12,641 --> 00:01:20,081
+Each highlight includes unique timestamps covering 20 to 30 second segments and a narration text that summarizes the key content.
+
+12
+00:01:20,401 --> 00:01:29,441
+This narration text is then converted into audio using Azure Cognitive Services speech APIs, creating a clear voiceover for each segment.
+
+13
+00:01:29,761 --> 00:01:34,801
+For key moments, only the timestamp of the most interesting moment is selected by the model.
+
+14
+00:01:35,041 --> 00:01:40,161
+Captions and narrated audio for each highlight are generated and paired with these timestamps.
+
+15
+00:01:40,561 --> 00:01:42,801
+all packaged as metadata objects.
+
+16
+00:01:44,881 --> 00:01:52,721
+Once generated, all highlight metadata, timestamps, narrated audio, and captions are securely stored in OneDrive SharePoint ODSP.
+
+17
+00:01:53,281 --> 00:02:01,521
+This approach ensures that the highlights are readily available to various platforms like M365 Chat, Clipchamp Web, and the team's recap page.
+
+18
+00:02:01,841 --> 00:02:05,361
+Importantly, the process does not create any new video files.
+
+19
+00:02:05,681 --> 00:02:14,161
+Only metadata is generated and stored, providing efficient access to key meeting moments across Microsoft 365 without additional storage overhead.
