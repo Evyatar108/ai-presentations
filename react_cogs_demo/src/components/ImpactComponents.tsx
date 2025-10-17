@@ -102,23 +102,24 @@ export const CostCurve: React.FC = () => {
         style={{display:'flex', gap:'4rem', justifyContent:'center', alignItems:'flex-end', marginTop:'1rem'}}
       >
         {/* V1 */}
-        <div style={{textAlign:'center'}}>
-          <div style={barStyle}>
+        <motion.div style={{textAlign:'center'}}>
+          <motion.div style={barStyle}>
             {v1Segments.map((seg, idx) => (
               <motion.div
                 key={seg.key}
                 title={seg.label}
                 initial={{ height: 0 }}
                 animate={{ height: seg.h * hScale }}
+                exit={{ height: seg.h * hScale }}
                 transition={{
                   duration: reduced ? 0.25 : 0.8,
                   delay: reduced ? 0 : 0.2 + idx * 0.1,
-                  type: 'spring'
+                  ease: 'easeOut'
                 }}
                 style={{ background: seg.color }}
               />
             ))}
-          </div>
+          </motion.div>
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -127,25 +128,26 @@ export const CostCurve: React.FC = () => {
           >
             V1 Total
           </motion.div>
-        </div>
+        </motion.div>
         {/* V2 */}
-        <div style={{textAlign:'center'}}>
-          <div style={barStyle}>
+        <motion.div style={{textAlign:'center'}}>
+          <motion.div style={barStyle}>
             {v2Segments.map((seg, idx) => (
               <motion.div
                 key={seg.key}
                 title={seg.label}
                 initial={{ height: 0 }}
                 animate={{ height: seg.h * hScale }}
+                exit={{ height: seg.h * hScale }}
                 transition={{
                   duration: reduced ? 0.25 : 0.8,
                   delay: reduced ? 0 : 0.2 + idx * 0.1,
-                  type: 'spring'
+                  ease: 'easeOut'
                 }}
                 style={{ background: seg.color }}
               />
             ))}
-          </div>
+          </motion.div>
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -154,7 +156,7 @@ export const CostCurve: React.FC = () => {
           >
             Unified V2
           </motion.div>
-        </div>
+        </motion.div>
       </motion.div>
     );
   };

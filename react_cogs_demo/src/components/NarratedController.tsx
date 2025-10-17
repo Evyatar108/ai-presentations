@@ -38,6 +38,13 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const nextAudioRef = useRef<HTMLAudioElement | null>(null);
   const forceAudioPlayRef = useRef(0);
+  const currentIndexRef = useRef(currentIndex);
+  const lastAutoAdvanceFromIndexRef = useRef<number | null>(null);
+
+  // Keep ref in sync with state
+  useEffect(() => {
+    currentIndexRef.current = currentIndex;
+  }, [currentIndex]);
 
   // Load manifest on mount
   useEffect(() => {
@@ -50,7 +57,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
       });
   }, []);
 
-  // Advance to next slide
+  // Advance to next slide (narrated mode)
   const advanceSlide = useCallback(() => {
     if (!manifest) return;
     
@@ -67,7 +74,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     setCurrentIndex(nextIndex);
   }, [manifest, currentIndex, onPlaybackEnd]);
   
-  // Play audio for current slide (only in non-manual mode or when manually triggered in manual+audio mode)
+  // Play audio for current slide in narrated mode
   useEffect(() => {
     if (!manifest || !isPlaying || currentIndex >= manifest.slides.length || isManualMode) return;
     
@@ -125,7 +132,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
       setIsLoading(false);
     });
     
-    // Cleanup on unmount or when dependencies change
+    // Cleanup
     return () => {
       audio.pause();
       audio.onended = null;
@@ -133,7 +140,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
       audio.onplay = null;
       audio.oncanplaythrough = null;
     };
-  }, [manifest, isPlaying, currentIndex, onSlideChange, advanceSlide]);
+  }, [manifest, isPlaying, currentIndex, onSlideChange, advanceSlide, isManualMode]);
 
   // Start narrated playback
   const handleStart = () => {
@@ -162,7 +169,6 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     setIsManualWithAudio(false);
     setCurrentIndex(0);
     onSlideChange(manifest.slides[0].id);
-    // Don't call onPlaybackStart to keep manual navigation enabled
   };
 
   // Start manual mode with audio
@@ -173,21 +179,18 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     }
     
     setShowStartOverlay(false);
-    setIsPlaying(false); // Don't auto-play, let manual navigation trigger audio
+    setIsPlaying(false);
     setIsManualMode(true);
     setIsManualWithAudio(true);
     setCurrentIndex(0);
     onSlideChange(manifest.slides[0].id);
-    // Play audio for first slide
-    playAudioForSlide(0);
-    // Don't call onPlaybackStart to keep manual navigation enabled
   };
 
-  // Play audio for a specific slide (used in manual+audio mode)
-  const playAudioForSlide = useCallback((index: number) => {
-    if (!manifest || index >= manifest.slides.length) return;
+  // Play audio for current slide in manual+audio mode
+  useEffect(() => {
+    if (!isManualMode || !isManualWithAudio || !manifest || currentIndex >= manifest.slides.length) return;
     
-    const slide = manifest.slides[index];
+    const slide = manifest.slides[currentIndex];
     
     // Stop any existing audio
     if (audioRef.current) {
@@ -199,57 +202,69 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     // Create new audio element
     const audio = new Audio(slide.src);
     audioRef.current = audio;
-    
-    // Setup event handlers
+
+    // Setup event handlers - use ref to get current index at time of onended
     audio.onended = () => {
-      console.log(`Audio ended for slide ${slide.id}`);
+      const indexAtEnd = currentIndexRef.current;
+      console.log(`[Manual+Audio] onended slide=${slide.id} indexAtEnd=${indexAtEnd}`);
+      
       // Auto-advance if enabled
       if (autoAdvanceOnAudioEnd && slide.autoAdvance) {
-        const nextIndex = index + 1;
+        const nextIndex = indexAtEnd + 1;
         if (nextIndex < manifest.slides.length) {
+          console.log('[Manual+Audio] auto-advancing from', indexAtEnd, 'to', nextIndex);
+          lastAutoAdvanceFromIndexRef.current = indexAtEnd;
           setCurrentIndex(nextIndex);
           onSlideChange(manifest.slides[nextIndex].id);
-          // Force audio to play for the next slide
-          forceAudioPlayRef.current += 1;
+        } else {
+          console.log('[Manual+Audio] reached end, not advancing');
         }
       }
     };
-    
-    audio.onerror = (e) => {
+
+    audio.onerror = (e: any) => {
       console.error(`Failed to load audio for slide ${slide.id}:`, e);
       setError(`Failed to load audio for slide ${slide.id}`);
     };
-    
+
     audio.onplay = () => {
-      console.log(`Audio playing for slide ${slide.id}`);
+      console.log(`[Manual+Audio] playing slide=${slide.id} index=${currentIndex}`);
       setError(null);
     };
-    
-    // Start playing
+
     audio.play().catch(err => {
       console.error('Audio playback failed:', err);
       setError('Audio playback failed');
     });
-  }, [manifest, autoAdvanceOnAudioEnd, onSlideChange]);
 
-  // Listen for external slide changes (from SlidePlayer keyboard navigation in manual+audio mode)
+    // Cleanup
+    return () => {
+      audio.pause();
+      audio.onended = null;
+      audio.onerror = null;
+      audio.onplay = null;
+    };
+  }, [currentIndex, isManualMode, isManualWithAudio, manifest, autoAdvanceOnAudioEnd, onSlideChange, forceAudioPlayRef.current]);
+
+  // Consume external manual slide changes (manual+audio mode)
   useEffect(() => {
-    if (!isManualMode || !manifest || manualSlideChange === null) return;
-    
-    // Find the index for the manually changed slide ID
+    if (!isManualMode || !isManualWithAudio || !manifest || manualSlideChange == null) return;
     const slideIndex = manifest.slides.findIndex(s => s.id === manualSlideChange);
-    
-    if (slideIndex !== -1 && slideIndex !== currentIndex) {
-      setCurrentIndex(slideIndex);
-    }
-  }, [manualSlideChange, isManualMode, manifest, currentIndex]);
+    if (slideIndex === -1) return;
 
-  // Play audio whenever currentIndex changes in manual+audio mode only
-  useEffect(() => {
-    if (!isManualMode || !isManualWithAudio || !manifest) return;
-    
-    playAudioForSlide(currentIndex);
-  }, [currentIndex, isManualMode, isManualWithAudio, manifest, playAudioForSlide, forceAudioPlayRef.current]);
+    // Ignore only if this is the specific stale value from just before an auto-advance
+    if (lastAutoAdvanceFromIndexRef.current !== null && slideIndex === lastAutoAdvanceFromIndexRef.current) {
+      console.log(`[Manual+Audio] ignoring stale manualSlideChange=${slideIndex} (pre-auto-advance value)`);
+      lastAutoAdvanceFromIndexRef.current = null; // Clear so user can navigate back later
+      return;
+    }
+
+    if (slideIndex !== currentIndex) {
+      console.log('[Manual+Audio] applying user navigation to index', slideIndex);
+      setCurrentIndex(slideIndex);
+      lastAutoAdvanceFromIndexRef.current = null; // Clear flag on manual navigation
+    }
+  }, [manualSlideChange, isManualMode, isManualWithAudio, manifest, currentIndex]);
 
   // Restart from beginning
   const handleRestart = () => {
@@ -266,7 +281,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     setAutoAdvanceOnAudioEnd(false);
     setError(null);
     setShowStartOverlay(true);
-    onPlaybackEnd?.(); // Reset narrated mode in App
+    onPlaybackEnd?.();
   };
 
   return (
