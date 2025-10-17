@@ -70,7 +70,7 @@ export const CostCurve: React.FC = () => {
   const savingsPct = 70;
 
   const StackedBars: React.FC = () => {
-    const hScale = 3.2;
+    const hScale = 2.4;
     const barStyle: React.CSSProperties = {
       width: 140,
       borderRadius: 10,
