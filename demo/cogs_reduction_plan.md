@@ -33,7 +33,7 @@ Through architectural innovation, the four-step pipeline was collapsed into a si
 The new unified prompt processes transcripts through the same logical flow: segment into topics, write narrations, extract verbatim ranges, rank by quality, and build the final narrative.
 
 ### Slide 27 (00:03:15,600 --> 00:03:22,400)
-This consolidation also optimized token usage by streamlining both input and output, reducing the total amount of data processed per meeting.
+This consolidation also significantly reduced the number of input tokens per meeting by streamlining what is sent to the model—cutting total processed tokens and lowering COGs even more.
 
 ### Slide 28 (00:03:23,200 --> 00:03:30,000)
 The impact was substantial: reducing LLM calls from four to one represents a seventy-five percent reduction in model invocations per meeting.
@@ -82,7 +82,7 @@ These cost and quality improvements directly unblock the private preview release
 ### V2 Unified Prompt Innovation
 - **Single-pass processing**: All operations in one LLM call
 - **Algorithm preservation**: Same logical flow (segment→narrate→extract→rank→build)
-- **Token optimization**: Reduced input and output tokens
+- **Token optimization**: Significant reduction in input and output tokens per meeting, lowering COGs
 - **Quality improvement**: Enhanced output quality based on user feedback
 
 ### Impact Metrics

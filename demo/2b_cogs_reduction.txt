@@ -1,0 +1,55 @@
+19
+00:02:16,000 --> 00:02:22,000
+Achieving cost efficiency while maintaining quality was a critical challenge for scaling Meeting Highlights to global availability.
+
+20
+00:02:22,400 --> 00:02:28,800
+The initial implementation required four sequential calls to large language models for each meeting, creating significant computational costs.
+
+21
+00:02:29,200 --> 00:02:36,400
+The first prompt analyzed the transcript to segment it into key topics, identifying one to seven distinct discussion areas within each meeting.
+
+22
+00:02:36,800 --> 00:02:44,000
+The second prompt extracted engaging verbatim moments from the meeting, selecting up to ten self-contained utterance blocks that captured important feedback, exciting news, or demonstration segments.
+
+23
+00:02:44,400 --> 00:02:51,200
+The third prompt ranked these extracted moments by quality, assessing clarity, intelligibility, self-containment, and overall interest level.
+
+24
+00:02:51,600 --> 00:02:59,200
+The fourth prompt synthesized everything into a cohesive narrative, rephrasing summaries and creating smooth transitions between abstractive and extractive sections.
+
+25
+00:03:00,000 --> 00:03:07,600
+Through architectural innovation, the four-step pipeline was collapsed into a single unified prompt—preserving the algorithmic flow (segment→narrate→extract→rank→compose) and improving COGs via fewer tokens and a single model invocation.
+
+26
+00:03:08,000 --> 00:03:15,200
+The new unified prompt processes transcripts through the same logical flow: segment into topics, write narrations, extract verbatim ranges, rank by quality, and build the final narrative.
+
+27
+00:03:15,600 --> 00:03:22,400
+This consolidation also significantly reduced the number of input tokens per meeting by streamlining what is sent to the model—cutting total processed tokens and lowering COGs even more.
+
+28
+00:03:23,200 --> 00:03:30,000
+The impact was substantial: reducing LLM calls from four to one represents a seventy-five percent reduction in model invocations per meeting.
+
+29
+00:03:30,400 --> 00:03:38,400
+Based on capacity estimations, the original implementation would have required approximately six hundred GPUs to support global availability, but the optimized approach reduced this to around two hundred GPUs.
+
+30
+00:03:38,800 --> 00:03:45,600
+This optimization cut COGs by more than fifty percent, making the feature economically viable for worldwide rollout.
+
+31
+00:03:46,400 --> 00:03:53,600
+Team evaluation so far shows the unified prompt produces higher-quality highlights than the previous multi-prompt version; internal reviewers strongly prefer its output.
+
+32
+00:03:54,000 --> 00:04:01,200
+These cost and quality improvements directly unblock the private preview release and pave the way for general availability within approved capacity constraints.
