@@ -1,0 +1,18 @@
+{
+  "slides": [
+    { "id": 19, "src": "/audio/01-Audio 1.wav", "autoAdvance": true },
+    { "id": 20, "src": "/audio/02-Audio 2.wav", "autoAdvance": true },
+    { "id": 21, "src": "/audio/03-Audio 3.wav", "autoAdvance": true },
+    { "id": 22, "src": "/audio/04-Audio 4.wav", "autoAdvance": true },
+    { "id": 23, "src": "/audio/05-Audio 5.wav", "autoAdvance": true },
+    { "id": 24, "src": "/audio/06-Audio 6.wav", "autoAdvance": true },
+    { "id": 25, "src": "/audio/07-Audio 7.wav", "autoAdvance": true },
+    { "id": 26, "src": "/audio/08-Audio 8.wav", "autoAdvance": true },
+    { "id": 27, "src": "/audio/09-Audio 9.wav", "autoAdvance": true },
+    { "id": 28, "src": "/audio/10-Audio 10.wav", "autoAdvance": true },
+    { "id": 29, "src": "/audio/11-Audio 11.wav", "autoAdvance": true },
+    { "id": 30, "src": "/audio/12-Audio 12.wav", "autoAdvance": true },
+    { "id": 31, "src": "/audio/13-Audio 13.wav", "autoAdvance": true },
+    { "id": 32, "src": "/audio/14-Audio 14.wav", "autoAdvance": true }
+  ]
+}

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ReducedMotionToggle } from './accessibility/ReducedMotion';
 import { SlidePlayer, Slide } from './components/SlidePlayer';
+import { NarratedController } from './components/NarratedController';
 import {
   Slide19Challenge,
   Slide20FourPrompts,
@@ -35,6 +36,22 @@ const slides: Slide[] = [
 ];
 
 export const App: React.FC = () => {
+  const [currentSlideId, setCurrentSlideId] = useState<number | undefined>(undefined);
+  const [isNarratedMode, setIsNarratedMode] = useState(false);
+
+  const handleSlideChange = (slideId: number) => {
+    setCurrentSlideId(slideId);
+  };
+
+  const handlePlaybackStart = () => {
+    setIsNarratedMode(true);
+  };
+
+  const handlePlaybackEnd = () => {
+    setIsNarratedMode(false);
+    setCurrentSlideId(undefined);
+  };
+
   return (
     <div style={{ position: 'relative' }}>
       {/* Reduced motion toggle overlay */}
@@ -47,8 +64,20 @@ export const App: React.FC = () => {
         <ReducedMotionToggle />
       </div>
 
+      {/* Narrated Controller (manages audio and slide progression) */}
+      <NarratedController
+        onSlideChange={handleSlideChange}
+        onPlaybackStart={handlePlaybackStart}
+        onPlaybackEnd={handlePlaybackEnd}
+      />
+
       {/* Slide presentation */}
-      <SlidePlayer slides={slides} autoAdvance={false} />
+      <SlidePlayer
+        slides={slides}
+        autoAdvance={false}
+        externalSlideId={currentSlideId}
+        disableManualNav={isNarratedMode}
+      />
     </div>
   );
 };

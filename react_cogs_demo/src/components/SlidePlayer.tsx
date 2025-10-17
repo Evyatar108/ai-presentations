@@ -11,36 +11,59 @@ interface SlidePlayerProps {
   slides: Slide[];
   autoAdvance?: boolean;
   autoAdvanceDelay?: number;
+  externalSlideId?: number;
+  onSlideChange?: (slideId: number) => void;
+  disableManualNav?: boolean;
 }
 
 export const SlidePlayer: React.FC<SlidePlayerProps> = ({
   slides,
   autoAdvance = false,
-  autoAdvanceDelay = 8000
+  autoAdvanceDelay = 8000,
+  externalSlideId,
+  onSlideChange,
+  disableManualNav = false
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
 
+  // Handle external slide control
+  useEffect(() => {
+    if (externalSlideId !== undefined) {
+      const index = slides.findIndex(s => s.id === externalSlideId);
+      if (index !== -1 && index !== currentIndex) {
+        setDirection(index > currentIndex ? 1 : -1);
+        setCurrentIndex(index);
+      }
+    }
+  }, [externalSlideId, slides, currentIndex]);
+
   const goToNext = useCallback(() => {
+    if (disableManualNav) return;
     if (currentIndex < slides.length - 1) {
       setDirection(1);
       setCurrentIndex(prev => prev + 1);
+      onSlideChange?.(slides[currentIndex + 1].id);
     }
-  }, [currentIndex, slides.length]);
+  }, [currentIndex, slides, disableManualNav, onSlideChange]);
 
   const goToPrev = useCallback(() => {
+    if (disableManualNav) return;
     if (currentIndex > 0) {
       setDirection(-1);
       setCurrentIndex(prev => prev - 1);
+      onSlideChange?.(slides[currentIndex - 1].id);
     }
-  }, [currentIndex]);
+  }, [currentIndex, slides, disableManualNav, onSlideChange]);
 
   const goToSlide = useCallback((index: number) => {
+    if (disableManualNav) return;
     if (index >= 0 && index < slides.length) {
       setDirection(index > currentIndex ? 1 : -1);
       setCurrentIndex(index);
+      onSlideChange?.(slides[index].id);
     }
-  }, [currentIndex, slides.length]);
+  }, [currentIndex, slides, disableManualNav, onSlideChange]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -119,8 +142,9 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
         </motion.div>
       </AnimatePresence>
 
-      {/* Navigation controls */}
-      <div style={{
+      {/* Navigation controls (hidden when manual nav disabled) */}
+      {!disableManualNav && (
+        <div style={{
         position: 'fixed',
         bottom: 20,
         left: '50%',
@@ -201,10 +225,12 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
         }}>
           {currentIndex + 1} / {slides.length}
         </div>
-      </div>
+        </div>
+      )}
 
-      {/* Keyboard hint */}
-      <div style={{
+      {/* Keyboard hint (hidden when manual nav disabled) */}
+      {!disableManualNav && (
+        <div style={{
         position: 'fixed',
         top: 20,
         right: 20,
@@ -215,9 +241,10 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
         padding: '0.5rem 1rem',
         borderRadius: 8,
         backdropFilter: 'blur(10px)'
-      }}>
-        Use ← → or Space to navigate
-      </div>
+        }}>
+          Use ← → or Space to navigate
+        </div>
+      )}
     </div>
   );
 };
