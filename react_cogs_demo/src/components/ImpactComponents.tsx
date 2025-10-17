@@ -154,20 +154,31 @@ export const QualityComparison: React.FC = () => {
       <h2 style={{marginTop:0}}>Quality Shift: Unified Prompt Preference</h2>
       <p style={{fontSize:14, lineHeight:1.5, opacity:0.85}}>
         Early internal feedback strongly prefers unified prompt highlight videos over
-        the multi-call pipeline output. Gains center on cohesion and reduced redundancy.
+        the multi-call pipeline output. Gains center on depth and natural flow.
       </p>
       <div style={{display:'flex', gap:'1rem', flexWrap:'wrap', marginTop:'1rem'}}>
-        <MetricTile label="Cohesion" before="Fragmented" after="Unified" />
+        <MetricTile label="Detail Level" before="Surface/Generic" after="Detailed" />
         <MetricTile label="Redundancy" before="Higher" after="Lower" />
-        <MetricTile label="Narrative Flow" before="Choppy" after="Smooth" />
-        <MetricTile label="Reviewer Preference" before="Baseline" after="Strong" emphasis />
+        <MetricTile label="Narrative Style" before="Plain/Robotic" after="Natural/Flowing" />
+        <div style={{
+          background: 'linear-gradient(135deg, #00B7C3, #0078D4)',
+          borderRadius: 12,
+          padding: '1rem',
+          minWidth: 180,
+          textAlign: 'center',
+          boxShadow: '0 4px 12px rgba(0, 183, 195, 0.3)'
+        }}>
+          <div style={{ fontSize: 14, fontWeight: 600, color: '#fff', marginBottom: '0.5rem' }}>
+            Internal Reviewers
+          </div>
+          <div style={{ fontSize: 24, fontWeight: 'bold', color: '#fff' }}>
+            Strongly Prefer
+          </div>
+          <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.9)', marginTop: '0.5rem' }}>
+            Unified Prompt Output
+          </div>
+        </div>
       </div>
-      <ul style={{fontSize:13, lineHeight:1.4, marginTop:'1rem'}}>
-        <li>Single semantic context → fewer contradictory summaries</li>
-        <li>Improved highlight ordering fidelity</li>
-        <li>Cleaner transitions between thematic clusters</li>
-        <li>Lower duplicate surface due to fused ranking phase</li>
-      </ul>
       </div>
     </div>
   );
