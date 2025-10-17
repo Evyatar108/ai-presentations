@@ -61,7 +61,8 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
   const advanceSlide = useCallback(() => {
     if (!manifest) return;
     
-    const nextIndex = currentIndex + 1;
+    const currentIdx = currentIndexRef.current;
+    const nextIndex = currentIdx + 1;
     
     if (nextIndex >= manifest.slides.length) {
       // End of presentation - add delay before showing overlay
@@ -74,7 +75,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     }
     
     setCurrentIndex(nextIndex);
-  }, [manifest, currentIndex, onPlaybackEnd]);
+  }, [manifest, onPlaybackEnd]);
   
   // Play audio for current slide in narrated mode
   useEffect(() => {
