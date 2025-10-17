@@ -1,55 +1,55 @@
 19
 00:02:16,000 --> 00:02:22,000
-Achieving cost efficiency while maintaining quality was a critical challenge for scaling Meeting Highlights to global availability.
+Cost efficiency while maintaining quality is critical for scaling Meeting Highlights globally.
 
 20
 00:02:22,400 --> 00:02:28,800
-The initial implementation required four sequential calls to large language models for each meeting, creating significant computational costs.
+The initial implementation required four sequential LLM calls per meeting, creating significant computational costs.
 
 21
 00:02:29,200 --> 00:02:36,965
-The first prompt analyzed the transcript to segment it into key topics, identifying one to seven distinct discussion areas within each meeting.
+The first prompt segmented transcripts into one to seven key topics.
 
 22
 00:02:36,800 --> 00:02:45,976
-The second prompt extracted engaging verbatim moments from the meeting, selecting up to ten self-contained utterance blocks that captured important feedback, exciting news, or demonstration segments.
+The second prompt extracted up to ten self-contained utterance blocks capturing key feedback, news, or demonstrations.
 
 23
 00:02:44,400 --> 00:02:50,400
-The third prompt ranked these extracted moments by quality, assessing clarity, intelligibility, self-containment, and overall interest level.
+The third prompt ranked utterance blocks by quality—clarity, intelligibility, self-containment, and interest.
 
 24
 00:02:51,600 --> 00:02:58,600
-The fourth prompt synthesized everything into a cohesive narrative, rephrasing summaries and creating smooth transitions between abstractive and extractive sections.
+The fourth prompt synthesized a cohesive narrative with smooth transitions between abstractive and extractive sections.
 
 25
 00:03:00,000 --> 00:03:14,824
-We collapsed the four-step pipeline into one unified prompt—same flow, one call, leaner input—cutting cost while keeping quality high. One dedicated tuning phase preserved the original four-step algorithm as an internal reasoning chain (segment → narrate → extract → rank → compose).
+We collapsed the four-step pipeline into one unified prompt with leaner input. Dedicated tuning preserved the original algorithm as an internal reasoning chain: segment → extract → rank → compose.
 
 26
 00:03:08,000 --> 00:03:19,294
-In a single invocation the model still performs the same logical sequence—segment topics, write narrations, extract verbatim ranges, rank by quality, compose the final narrative—internally instead of through four externally orchestrated calls.
+The model executes this sequence in a single invocation instead of four external calls.
 
 27
 00:03:15,600 --> 00:03:30,776
-We also trimmed what we send—significantly smaller input per meeting for even lower cost. A separate tuning effort adapted the model to the slimmer schema and lower token budget while still executing that internal chain and emitting structurally valid output for video generation.
+We trimmed input size significantly for lower cost. Separate tuning adapted the model to the slimmer schema and token budget while maintaining valid output for video generation.
 
 28
 00:03:23,200 --> 00:03:30,612
-The impact was substantial: reducing LLM calls from four to one represents a seventy-five percent reduction in model invocations per meeting.
+The impact: seventy-five percent fewer model invocations per meeting.
 
 29
 00:03:30,400 --> 00:03:40,635
-Based on capacity estimations, the original implementation would have required approximately six hundred GPUs to support global availability, but the optimized approach reduced this to around two hundred GPUs.
+GPU requirements dropped from six hundred to two hundred for global availability.
 
 30
 00:03:38,800 --> 00:03:44,800
-This optimization cut COGs by more than fifty percent, making the feature economically viable for worldwide rollout.
+This cut COGS by over fifty percent, enabling economically viable worldwide rollout.
 
 31
 00:03:46,400 --> 00:03:54,164
-Team evaluation so far shows the unified prompt produces higher-quality highlights than the previous multi-prompt version; internal reviewers strongly prefer its output.
+The unified prompt produces higher-quality highlights; internal reviewers strongly prefer it over the multi-prompt version.
 
 32
 00:03:54,000 --> 00:04:01,765
-These cost and quality improvements directly unblock the private preview release and pave the way for general availability within approved capacity constraints.
+These improvements unblock private preview and enable general availability within capacity constraints.
