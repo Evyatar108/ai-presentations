@@ -191,7 +191,11 @@ export const Slide20FourPrompts: React.FC = () => {
                 }}
               >
                 <div style={{ color: '#00B7C3', fontSize: 36, fontWeight: 'bold' }}>
-                  {prompt.id}
+                  {prompt.id === 4 ? (
+                    <span style={{ textDecoration: 'line-through', opacity: 0.6 }}>4</span>
+                  ) : (
+                    prompt.id
+                  )}
                 </div>
                 <div style={{ color: '#f1f5f9', fontSize: 14, marginTop: '0.5rem' }}>
                   {prompt.label}
@@ -230,13 +234,14 @@ export const Slide25Convergence: React.FC = () => {
     <div style={{
       background: '#0f172a',
       minHeight: '100vh',
+      width: '100%',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       padding: '2rem',
       fontFamily: 'Inter, system-ui, sans-serif'
     }}>
-      <div style={{ maxWidth: 800, width: '100%', textAlign: 'center' }}>
+      <div style={{ maxWidth: 900, width: '100%', textAlign: 'center' }}>
         <h1 style={{ color: '#f1f5f9', marginBottom: '3rem' }}>
           Unified Single Prompt
         </h1>
@@ -305,19 +310,20 @@ export const Slide25Convergence: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: reduced ? 0.3 : 1, duration: 0.5 }}
-          style={{
-            marginTop: '3rem',
-            fontSize: 48,
-            fontWeight: 'bold',
-            color: '#00B7C3'
-          }}
+          style={{ marginTop: '3rem' }}
         >
-          4 → 1 Call
-        </motion.div>
+          <div style={{ fontSize: 48, fontWeight: 'bold', color: '#00B7C3', marginBottom: '1rem' }}>
+            4 → 1 Call
+          </div>
+          
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '2rem' }}>
+            <MetricTile label="Success Rate" before="Lower" after="Higher" emphasis note="Improved in local testing" />
+          </div>
 
-        <p style={{ color: '#94a3b8', marginTop: '1rem', fontSize: 16 }}>
-          All stages executed in one inference
-        </p>
+          <p style={{ color: '#94a3b8', marginTop: '1.5rem', fontSize: 16 }}>
+            All stages executed in one inference
+          </p>
+        </motion.div>
       </div>
     </div>
   );
@@ -333,6 +339,7 @@ export const Slide28CallReduction: React.FC = () => {
     <div style={{
       background: '#0f172a',
       minHeight: '100vh',
+      width: '100%',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -413,6 +420,7 @@ export const Slide29GPUReduction: React.FC = () => {
     <div style={{
       background: '#0f172a',
       minHeight: '100vh',
+      width: '100%',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',

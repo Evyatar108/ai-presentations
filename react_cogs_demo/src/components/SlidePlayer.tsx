@@ -78,24 +78,24 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
   const CurrentComponent = currentSlide.Component;
 
   const variants = {
-    enter: (direction: number) => ({
-      x: direction > 0 ? '100%' : '-100%',
-      opacity: 0
-    }),
-    center: {
-      x: 0,
-      opacity: 1
+    enter: {
+      opacity: 0,
+      scale: 0.95
     },
-    exit: (direction: number) => ({
-      x: direction > 0 ? '-100%' : '100%',
-      opacity: 0
-    })
+    center: {
+      opacity: 1,
+      scale: 1
+    },
+    exit: {
+      opacity: 0,
+      scale: 1.05
+    }
   };
 
   return (
-    <div style={{ position: 'relative', width: '100%', height: '100vh', overflow: 'hidden' }}>
+    <div style={{ position: 'relative', width: '100%', height: '100vh', overflow: 'hidden', background: '#0f172a' }}>
       {/* Slide content */}
-      <AnimatePresence initial={false} custom={direction} mode="wait">
+      <AnimatePresence initial={false} custom={direction}>
         <motion.div
           key={currentIndex}
           custom={direction}
@@ -104,13 +104,15 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
           animate="center"
           exit="exit"
           transition={{
-            x: { type: 'spring', stiffness: 300, damping: 30 },
-            opacity: { duration: 0.2 }
+            duration: 0.4,
+            ease: [0.4, 0, 0.2, 1]
           }}
           style={{
             position: 'absolute',
             width: '100%',
-            height: '100%'
+            height: '100%',
+            top: 0,
+            left: 0
           }}
         >
           <CurrentComponent />

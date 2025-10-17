@@ -9,14 +9,23 @@ import { MetricTile } from './CoreComponents';
 export const GPUReduction: React.FC = () => {
   return (
     <div style={{
-      fontFamily:'Inter, system-ui, sans-serif',
-      color:'#f1f5f9',
-      background:'#0f172a',
-      border:'1px solid #334155',
-      borderRadius:16,
-      padding:'1.5rem',
-      maxWidth:900
+      background: '#0f172a',
+      minHeight: '100vh',
+      width: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '2rem',
+      fontFamily: 'Inter, system-ui, sans-serif'
     }}>
+      <div style={{
+        color:'#f1f5f9',
+        border:'1px solid #334155',
+        borderRadius:16,
+        padding:'1.5rem',
+        maxWidth:900,
+        width: '100%'
+      }}>
       <h2 style={{marginTop:0}}>Capacity Impact: GPUs ~600 → ~200</h2>
       <p style={{fontSize:14, lineHeight:1.5, opacity:0.85}}>
         The V1 design required four distinct LLM calls per highlight generation session:
@@ -42,6 +51,7 @@ export const GPUReduction: React.FC = () => {
         <li>Simplified backoff / retry orchestration logic</li>
         <li>Lower transient memory footprint</li>
       </ul>
+      </div>
     </div>
   );
 };
@@ -54,14 +64,23 @@ export const GPUReduction: React.FC = () => {
 export const CostCurve: React.FC = () => {
   return (
     <div style={{
-      fontFamily:'Inter, system-ui, sans-serif',
-      color:'#f1f5f9',
-      background:'#0f172a',
-      border:'1px solid #334155',
-      borderRadius:16,
-      padding:'1.25rem',
-      maxWidth:900
+      background: '#0f172a',
+      minHeight: '100vh',
+      width: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '2rem',
+      fontFamily: 'Inter, system-ui, sans-serif'
     }}>
+      <div style={{
+        color:'#f1f5f9',
+        border:'1px solid #334155',
+        borderRadius:16,
+        padding:'1.25rem',
+        maxWidth:900,
+        width: '100%'
+      }}>
       <h2 style={{marginTop:0}}>COGS Trend: Multi-Call vs Unified Prompt</h2>
       <p style={{fontSize:13, opacity:0.75}}>
         Indicative curve: consolidation reduces per-session variable cost by removing
@@ -103,6 +122,7 @@ export const CostCurve: React.FC = () => {
         <MetricTile label="Session Latency" before="High" after="Lower" note="Fewer round trips" />
         <MetricTile label="Failure Surface" before="4 pts" after="1 pt" note="Simpler retries" />
       </div>
+      </div>
     </div>
   );
 };
@@ -114,14 +134,23 @@ export const CostCurve: React.FC = () => {
 export const QualityComparison: React.FC = () => {
   return (
     <div style={{
-      fontFamily:'Inter, system-ui, sans-serif',
-      color:'#f1f5f9',
-      background:'#0f172a',
-      border:'1px solid #334155',
-      borderRadius:16,
-      padding:'1.5rem',
-      maxWidth:900
+      background: '#0f172a',
+      minHeight: '100vh',
+      width: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '2rem',
+      fontFamily: 'Inter, system-ui, sans-serif'
     }}>
+      <div style={{
+        color:'#f1f5f9',
+        border:'1px solid #334155',
+        borderRadius:16,
+        padding:'1.5rem',
+        maxWidth:900,
+        width: '100%'
+      }}>
       <h2 style={{marginTop:0}}>Quality Shift: Unified Prompt Preference</h2>
       <p style={{fontSize:14, lineHeight:1.5, opacity:0.85}}>
         Early internal feedback strongly prefers unified prompt highlight videos over
@@ -139,6 +168,7 @@ export const QualityComparison: React.FC = () => {
         <li>Cleaner transitions between thematic clusters</li>
         <li>Lower duplicate surface due to fused ranking phase</li>
       </ul>
+      </div>
     </div>
   );
 };
@@ -150,14 +180,23 @@ export const QualityComparison: React.FC = () => {
 export const RoadmapSlide: React.FC = () => {
   return (
     <div style={{
-      fontFamily:'Inter, system-ui, sans-serif',
-      color:'#f1f5f9',
-      background:'#0f172a',
-      border:'1px solid #334155',
-      borderRadius:16,
-      padding:'1.25rem',
-      maxWidth:800
+      background: '#0f172a',
+      minHeight: '100vh',
+      width: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '2rem',
+      fontFamily: 'Inter, system-ui, sans-serif'
     }}>
+      <div style={{
+        color:'#f1f5f9',
+        border:'1px solid #334155',
+        borderRadius:16,
+        padding:'1.25rem',
+        maxWidth:800,
+        width: '100%'
+      }}>
       <h2 style={{marginTop:0}}>Roadmap</h2>
       <ol style={{fontSize:14, lineHeight:1.5, paddingLeft:'1.2rem'}}>
         <li>Replace static placeholders with Framer Motion variants</li>
@@ -171,6 +210,7 @@ export const RoadmapSlide: React.FC = () => {
       <p style={{fontSize:12, opacity:0.7}}>
         Focus remains on clarity of key message: LLM calls 4→1, GPUs ~600→~200, quality uplift.
       </p>
+      </div>
     </div>
   );
 };
