@@ -191,11 +191,7 @@ export const Slide20FourPrompts: React.FC = () => {
                 }}
               >
                 <div style={{ color: '#00B7C3', fontSize: 36, fontWeight: 'bold' }}>
-                  {prompt.id === 4 ? (
-                    <span style={{ textDecoration: 'line-through', opacity: 0.6 }}>4</span>
-                  ) : (
-                    prompt.id
-                  )}
+                  {prompt.id}
                 </div>
                 <div style={{ color: '#f1f5f9', fontSize: 14, marginTop: '0.5rem' }}>
                   {prompt.label}
@@ -313,7 +309,7 @@ export const Slide25Convergence: React.FC = () => {
           style={{ marginTop: '3rem' }}
         >
           <div style={{ fontSize: 48, fontWeight: 'bold', color: '#00B7C3', marginBottom: '1rem' }}>
-            4 → 1 Call
+            <span style={{ textDecoration: 'line-through', opacity: 0.6 }}>4</span> → 1 Call
           </div>
           
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '2rem' }}>

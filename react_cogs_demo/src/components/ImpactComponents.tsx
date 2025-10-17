@@ -81,10 +81,10 @@ export const CostCurve: React.FC = () => {
         maxWidth:900,
         width: '100%'
       }}>
-      <h2 style={{marginTop:0}}>COGS Trend: Multi-Call vs Unified Prompt</h2>
+      <h2 style={{marginTop:0}}>COGS Impact: Multi-Call vs Unified Prompt</h2>
       <p style={{fontSize:13, opacity:0.75}}>
-        Indicative curve: consolidation reduces per-session variable cost by removing
-        orchestration overhead and excess token allocation.
+        Consolidation reduces per-session variable cost by removing orchestration overhead,
+        excess token allocation, and eliminating multiple LLM invocations.
       </p>
       <svg width="100%" height="180" viewBox="0 0 600 180">
         <defs>
@@ -118,9 +118,10 @@ export const CostCurve: React.FC = () => {
         <text x="28" y="95" fontSize="12" fill="#f1f5f9">V2 (1 unified)</text>
       </svg>
       <div style={{display:'flex', gap:'1rem', marginTop:'0.75rem', flexWrap:'wrap'}}>
-        <MetricTile label="Calls" before="4" after="1" />
-        <MetricTile label="Session Latency" before="High" after="Lower" note="Fewer round trips" />
+        <MetricTile label="LLM Calls" before="4" after="1" emphasis />
+        <MetricTile label="Orchestration" before="Complex" after="Simple" note="Single invocation" />
         <MetricTile label="Failure Surface" before="4 pts" after="1 pt" note="Simpler retries" />
+        <MetricTile label="Token Overhead" before="Higher" after="Lower" note="Fused processing" />
       </div>
       </div>
     </div>
