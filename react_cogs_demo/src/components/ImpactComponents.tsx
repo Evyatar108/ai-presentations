@@ -57,11 +57,77 @@ export const GPUReduction: React.FC = () => {
 };
 
 /**
- * CostCurve
- * Simple visual placeholder (SVG) for cost trend before vs after consolidation.
- * Replace later with animated Framer Motion sequence.
+ * CostCurve (Slide 30) - Fixed Stacked Bar Comparison Only
+ * Simplified to a single visualization focusing on component cost reduction.
  */
 export const CostCurve: React.FC = () => {
+  // Relative component magnitudes (illustrative only)
+  const v1 = { calls: 40, orchestration: 18, tokens: 22, gpuPadding: 20 };
+  const v2 = { calls: 10, orchestration: 2, tokens: 12, gpuPadding: 8 };
+
+  const totalV1 = Object.values(v1).reduce((a,b)=>a+b,0);
+  const totalV2 = Object.values(v2).reduce((a,b)=>a+b,0);
+  const savingsPct = 70;
+
+  const StackedBars: React.FC = () => {
+    const hScale = 3.2;
+    const barStyle: React.CSSProperties = {
+      width: 140,
+      borderRadius: 10,
+      display:'flex',
+      flexDirection:'column-reverse',
+      overflow:'hidden',
+      border:'1px solid #334155',
+      background:'#0f172a'
+    };
+    const seg = (color:string, h:number): React.CSSProperties => ({
+      background: color,
+      height: h * hScale,
+      transition:'height 0.6s'
+    });
+    return (
+      <div style={{display:'flex', gap:'4rem', justifyContent:'center', alignItems:'flex-end', marginTop:'1rem'}}>
+        <div style={{textAlign:'center'}}>
+          <div style={barStyle}>
+            <div style={seg('#ef4444', v1.calls)} title="LLM Calls" />
+            <div style={seg('#f59e0b', v1.orchestration)} title="Orchestration" />
+            <div style={seg('#6366f1', v1.tokens)} title="Tokens" />
+            <div style={seg('#94a3b8', v1.gpuPadding)} title="GPU Padding" />
+          </div>
+          <div style={{color:'#94a3b8', fontSize:12, marginTop:6}}>V1 Total</div>
+        </div>
+        <div style={{textAlign:'center'}}>
+          <div style={barStyle}>
+            <div style={seg('#22c55e', v2.calls)} title="LLM Calls" />
+            <div style={seg('#10b981', v2.orchestration)} title="Orchestration" />
+            <div style={seg('#0ea5e9', v2.tokens)} title="Tokens" />
+            <div style={seg('#64748b', v2.gpuPadding)} title="GPU Padding" />
+          </div>
+          <div style={{color:'#94a3b8', fontSize:12, marginTop:6}}>Unified V2</div>
+        </div>
+      </div>
+    );
+  };
+
+  const commonTileRow = (
+    <div style={{
+      display:'flex',
+      gap:'0.75rem',
+      marginTop:'1.5rem',
+      flexWrap:'wrap',
+      justifyContent:'center',
+      alignItems:'stretch'
+    }}>
+      <MetricTile label="LLM Calls" before="4" after="1" emphasis note="Call collapse" />
+      <div style={{fontSize:28, color:'#94a3b8', display:'flex', alignItems:'center'}}>+</div>
+      <MetricTile label="Transcript Format" before="Verbose" after="Compact" note="Schema redesign" />
+      <div style={{fontSize:28, color:'#94a3b8', display:'flex', alignItems:'center'}}>+</div>
+      <MetricTile label="Extractive Input" before="Candidates" after="Direct" note="Model selects ranges" />
+      <div style={{fontSize:28, color:'#94a3b8', display:'flex', alignItems:'center'}}>=</div>
+      <MetricTile label="GPU Capacity" before="~600" after="~200" emphasis note="Resulting capacity" />
+    </div>
+  );
+
   return (
     <div style={{
       background: '#0f172a',
@@ -77,52 +143,22 @@ export const CostCurve: React.FC = () => {
         color:'#f1f5f9',
         border:'1px solid #334155',
         borderRadius:16,
-        padding:'1.25rem',
-        maxWidth:900,
+        padding:'1.5rem',
+        maxWidth:1000,
         width: '100%'
       }}>
-      <h2 style={{marginTop:0}}>COGS Impact: Multi-Call vs Unified Prompt</h2>
-      <p style={{fontSize:13, opacity:0.75}}>
-        Consolidation reduces per-session variable cost by removing orchestration overhead,
-        excess token allocation, and eliminating multiple LLM invocations.
-      </p>
-      <svg width="100%" height="180" viewBox="0 0 600 180">
-        <defs>
-          <linearGradient id="gradA" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#ef4444" stopOpacity="0.9" />
-            <stop offset="100%" stopColor="#f59e0b" stopOpacity="0.7" />
-          </linearGradient>
-          <linearGradient id="gradB" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#22c55e" stopOpacity="0.9" />
-            <stop offset="100%" stopColor="#06b6d4" stopOpacity="0.7" />
-          </linearGradient>
-        </defs>
-        <rect x="0" y="0" width="600" height="180" fill="#0f172a" />
-        {/* V1 curve (higher) */}
-        <path
-          d="M20 140 C120 110, 220 100, 320 90 C420 80, 520 70, 580 60"
-          fill="none"
-          stroke="url(#gradA)"
-          strokeWidth="4"
-          strokeLinecap="round"
-        />
-        {/* V2 curve (lower) */}
-        <path
-          d="M20 150 C120 130, 220 120, 320 115 C420 110, 520 105, 580 100"
-          fill="none"
-          stroke="url(#gradB)"
-          strokeWidth="4"
-          strokeLinecap="round"
-        />
-        <text x="28" y="55" fontSize="12" fill="#f1f5f9">V1 (4 calls)</text>
-        <text x="28" y="95" fontSize="12" fill="#f1f5f9">V2 (1 unified)</text>
-      </svg>
-      <div style={{display:'flex', gap:'1rem', marginTop:'0.75rem', flexWrap:'wrap'}}>
-        <MetricTile label="LLM Calls" before="4" after="1" emphasis />
-        <MetricTile label="Orchestration" before="Complex" after="Simple" note="Single invocation" />
-        <MetricTile label="Failure Surface" before="4 pts" after="1 pt" note="Simpler retries" />
-        <MetricTile label="Token Overhead" before="Higher" after="Lower" note="Fused processing" />
-      </div>
+        <h2 style={{marginTop:0}}>COGS Impact: Multi-Call vs Unified Prompt</h2>
+        <p style={{fontSize:14, lineHeight:1.5, opacity:0.85}}>
+          Unified prompt consolidation combines three major levers (call reduction, compact transcript format, direct extractive range selection) yielding a {savingsPct}%+ variable cost reduction and enabling GPU capacity drop (~600→~200).
+        </p>
+
+        <StackedBars />
+
+        <div style={{marginTop:'1.5rem', textAlign:'center', fontSize:16, color:'#94a3b8'}}>
+          Estimated Cost Reduction: <span style={{color:'#22c55e', fontWeight:600}}>{savingsPct}%+</span>
+        </div>
+
+        {commonTileRow}
       </div>
     </div>
   );

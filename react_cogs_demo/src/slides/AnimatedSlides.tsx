@@ -940,7 +940,7 @@ export const Slide27TokenOptimization: React.FC = () => {
           transition={{ duration: reduced ? 0.2 : 0.5 }}
           style={{ color: '#f1f5f9', marginBottom: '3rem' }}
         >
-          Token Optimization
+          Input Token Optimization
         </motion.h1>
 
         <motion.div
@@ -960,7 +960,7 @@ export const Slide27TokenOptimization: React.FC = () => {
 
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
             <MetricTile label="Abstractive Input" before="Verbose JSON" after="Compact Schema" note="Format streamlined" />
-            <MetricTile label="Extractive Input" before="Candidate Ranges" after="Direct Selection" note="Model-driven" emphasis />
+            <MetricTile label="Extractive Input" before="Candidate Range Combinations" after="Direct Selection" note="Model-driven" emphasis />
             <MetricTile label="Total Tokens" before="Higher" after="Lower" note="Per meeting" />
           </div>
         </motion.div>
