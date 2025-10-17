@@ -313,7 +313,7 @@ export const Slide25Convergence: React.FC = () => {
           </div>
           
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '2rem' }}>
-            <MetricTile label="Success Rate" before="Lower" after="Higher" emphasis note="Improved in local testing" />
+            <MetricTile label="Success Rate" before="92%" after="99%" emphasis note="Improved in local testing" />
           </div>
 
           <p style={{ color: '#94a3b8', marginTop: '1.5rem', fontSize: 16 }}>
@@ -544,12 +544,444 @@ export const Slide29GPUReduction: React.FC = () => {
 };
 
 /**
+ * Slide 21 - First Prompt: Topic Abstraction
+ */
+export const Slide21TopicAbstraction: React.FC = () => {
+  const { reduced } = useReducedMotion();
+
+  return (
+    <div style={{
+      background: '#0f172a',
+      minHeight: '100vh',
+      width: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '2rem',
+      fontFamily: 'Inter, system-ui, sans-serif'
+    }}>
+      <div style={{ maxWidth: 800, width: '100%' }}>
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: reduced ? 0.2 : 0.5 }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
+            <div style={{
+              width: 60,
+              height: 60,
+              borderRadius: '50%',
+              background: 'linear-gradient(135deg, #00B7C3, #0078D4)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: 28,
+              fontWeight: 'bold',
+              color: '#fff'
+            }}>
+              1
+            </div>
+            <h1 style={{ color: '#f1f5f9', margin: 0 }}>
+              Prompt 1: Topic Abstraction
+            </h1>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: reduced ? 0.2 : 0.6, delay: reduced ? 0 : 0.2 }}
+          style={{
+            background: '#1e293b',
+            borderRadius: 16,
+            padding: '2rem',
+            border: '1px solid #334155'
+          }}
+        >
+          <p style={{ color: '#e2e8f0', fontSize: 18, lineHeight: 1.6, marginTop: 0 }}>
+            The first prompt analyzed the transcript to segment it into key topics, identifying one to seven distinct discussion areas within each meeting.
+          </p>
+          
+          <ul style={{ color: '#94a3b8', fontSize: 16, lineHeight: 1.8 }}>
+            <li>Segments transcript into 1-7 topics</li>
+            <li>Generates narration summaries</li>
+            <li>Selects video playback anchors</li>
+            <li>Categorizes topics by type</li>
+            <li>Assesses interest levels</li>
+          </ul>
+        </motion.div>
+      </div>
+    </div>
+  );
+};
+
+/**
+ * Slide 22 - Second Prompt: Extractive Selection
+ */
+export const Slide22ExtractiveSelection: React.FC = () => {
+  const { reduced } = useReducedMotion();
+
+  return (
+    <div style={{
+      background: '#0f172a',
+      minHeight: '100vh',
+      width: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '2rem',
+      fontFamily: 'Inter, system-ui, sans-serif'
+    }}>
+      <div style={{ maxWidth: 800, width: '100%' }}>
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: reduced ? 0.2 : 0.5 }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
+            <div style={{
+              width: 60,
+              height: 60,
+              borderRadius: '50%',
+              background: 'linear-gradient(135deg, #00B7C3, #0078D4)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: 28,
+              fontWeight: 'bold',
+              color: '#fff'
+            }}>
+              2
+            </div>
+            <h1 style={{ color: '#f1f5f9', margin: 0 }}>
+              Prompt 2: Extractive Selection
+            </h1>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: reduced ? 0.2 : 0.6, delay: reduced ? 0 : 0.2 }}
+          style={{
+            background: '#1e293b',
+            borderRadius: 16,
+            padding: '2rem',
+            border: '1px solid #334155'
+          }}
+        >
+          <p style={{ color: '#e2e8f0', fontSize: 18, lineHeight: 1.6, marginTop: 0 }}>
+            The second prompt extracted engaging verbatim moments from the meeting, selecting up to ten self-contained utterance blocks that captured important feedback, exciting news, or demonstration segments.
+          </p>
+          
+          <ul style={{ color: '#94a3b8', fontSize: 16, lineHeight: 1.8 }}>
+            <li>Identifies engaging verbatim moments</li>
+            <li>Selects up to 10 self-contained blocks</li>
+            <li>Filters by content type (feedback/news/demo)</li>
+            <li>Ensures coherent boundaries</li>
+          </ul>
+        </motion.div>
+      </div>
+    </div>
+  );
+};
+
+/**
+ * Slide 23 - Third Prompt: Quality Ranking
+ */
+export const Slide23QualityRanking: React.FC = () => {
+  const { reduced } = useReducedMotion();
+
+  return (
+    <div style={{
+      background: '#0f172a',
+      minHeight: '100vh',
+      width: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '2rem',
+      fontFamily: 'Inter, system-ui, sans-serif'
+    }}>
+      <div style={{ maxWidth: 800, width: '100%' }}>
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: reduced ? 0.2 : 0.5 }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
+            <div style={{
+              width: 60,
+              height: 60,
+              borderRadius: '50%',
+              background: 'linear-gradient(135deg, #00B7C3, #0078D4)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: 28,
+              fontWeight: 'bold',
+              color: '#fff'
+            }}>
+              3
+            </div>
+            <h1 style={{ color: '#f1f5f9', margin: 0 }}>
+              Prompt 3: Quality Ranking
+            </h1>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: reduced ? 0.2 : 0.6, delay: reduced ? 0 : 0.2 }}
+          style={{
+            background: '#1e293b',
+            borderRadius: 16,
+            padding: '2rem',
+            border: '1px solid #334155'
+          }}
+        >
+          <p style={{ color: '#e2e8f0', fontSize: 18, lineHeight: 1.6, marginTop: 0 }}>
+            The third prompt ranked these extracted moments by quality, assessing clarity, intelligibility, self-containment, and overall interest level.
+          </p>
+          
+          <ul style={{ color: '#94a3b8', fontSize: 16, lineHeight: 1.8 }}>
+            <li>Assesses clarity and intelligibility</li>
+            <li>Evaluates self-containment</li>
+            <li>Scores interest level (0-100)</li>
+            <li>Provides overall quality ranking</li>
+          </ul>
+        </motion.div>
+      </div>
+    </div>
+  );
+};
+
+/**
+ * Slide 24 - Fourth Prompt: Narrative Synthesis
+ */
+export const Slide24NarrativeSynthesis: React.FC = () => {
+  const { reduced } = useReducedMotion();
+
+  return (
+    <div style={{
+      background: '#0f172a',
+      minHeight: '100vh',
+      width: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '2rem',
+      fontFamily: 'Inter, system-ui, sans-serif'
+    }}>
+      <div style={{ maxWidth: 800, width: '100%' }}>
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: reduced ? 0.2 : 0.5 }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
+            <div style={{
+              width: 60,
+              height: 60,
+              borderRadius: '50%',
+              background: 'linear-gradient(135deg, #00B7C3, #0078D4)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: 28,
+              fontWeight: 'bold',
+              color: '#fff'
+            }}>
+              4
+            </div>
+            <h1 style={{ color: '#f1f5f9', margin: 0 }}>
+              Prompt 4: Narrative Synthesis
+            </h1>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: reduced ? 0.2 : 0.6, delay: reduced ? 0 : 0.2 }}
+          style={{
+            background: '#1e293b',
+            borderRadius: 16,
+            padding: '2rem',
+            border: '1px solid #334155'
+          }}
+        >
+          <p style={{ color: '#e2e8f0', fontSize: 18, lineHeight: 1.6, marginTop: 0 }}>
+            The fourth prompt synthesized everything into a cohesive narrative, rephrasing summaries and creating smooth transitions between abstractive and extractive sections.
+          </p>
+          
+          <ul style={{ color: '#94a3b8', fontSize: 16, lineHeight: 1.8 }}>
+            <li>Rephrases narrations for story flow</li>
+            <li>Creates transition sentences</li>
+            <li>Unifies abstractive + extractive sections</li>
+            <li>Ensures gender-neutral language</li>
+          </ul>
+        </motion.div>
+      </div>
+    </div>
+  );
+};
+
+/**
+ * Slide 26 - Unified Flow Details
+ */
+export const Slide26UnifiedFlow: React.FC = () => {
+  const { reduced } = useReducedMotion();
+
+  return (
+    <div style={{
+      background: '#0f172a',
+      minHeight: '100vh',
+      width: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '2rem',
+      fontFamily: 'Inter, system-ui, sans-serif'
+    }}>
+      <div style={{ maxWidth: 900, width: '100%', textAlign: 'center' }}>
+        <motion.h1
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: reduced ? 0.2 : 0.5 }}
+          style={{ color: '#f1f5f9', marginBottom: '2rem' }}
+        >
+          Unified Prompt: Same Logical Flow
+        </motion.h1>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: reduced ? 0.2 : 0.6, delay: reduced ? 0 : 0.2 }}
+          style={{
+            background: '#1e293b',
+            borderRadius: 16,
+            padding: '2rem',
+            border: '1px solid #334155',
+            marginBottom: '2rem'
+          }}
+        >
+          <p style={{ color: '#e2e8f0', fontSize: 18, lineHeight: 1.6 }}>
+            The new unified prompt processes transcripts through the same logical flow: segment into topics, write narrations, extract verbatim ranges, rank by quality, and build the final narrative.
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: reduced ? 0.2 : 0.8, delay: reduced ? 0 : 0.4 }}
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '0.5rem',
+            flexWrap: 'wrap'
+          }}
+        >
+          {['Segment', 'Narrate', 'Extract', 'Rank', 'Compose'].map((step, idx) => (
+            <motion.div
+              key={step}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: reduced ? 0.1 : 0.3, delay: reduced ? 0 : 0.5 + idx * 0.1 }}
+              style={{
+                background: 'linear-gradient(135deg, #00B7C3, #0078D4)',
+                borderRadius: 8,
+                padding: '0.75rem 1.5rem',
+                color: '#fff',
+                fontWeight: 600,
+                fontSize: 16
+              }}
+            >
+              {step}
+            </motion.div>
+          ))}
+        </motion.div>
+
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: reduced ? 0.2 : 0.5, delay: reduced ? 0 : 1 }}
+          style={{ color: '#94a3b8', marginTop: '2rem', fontSize: 16 }}
+        >
+          All in a single LLM invocation
+        </motion.p>
+      </div>
+    </div>
+  );
+};
+
+/**
+ * Slide 27 - Token Optimization
+ */
+export const Slide27TokenOptimization: React.FC = () => {
+  const { reduced } = useReducedMotion();
+
+  return (
+    <div style={{
+      background: '#0f172a',
+      minHeight: '100vh',
+      width: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '2rem',
+      fontFamily: 'Inter, system-ui, sans-serif'
+    }}>
+      <div style={{ maxWidth: 800, width: '100%', textAlign: 'center' }}>
+        <motion.h1
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: reduced ? 0.2 : 0.5 }}
+          style={{ color: '#f1f5f9', marginBottom: '3rem' }}
+        >
+          Token Optimization
+        </motion.h1>
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: reduced ? 0.2 : 0.6, delay: reduced ? 0 : 0.2 }}
+          style={{
+            background: '#1e293b',
+            borderRadius: 16,
+            padding: '2rem',
+            border: '1px solid #334155'
+          }}
+        >
+          <p style={{ color: '#e2e8f0', fontSize: 18, lineHeight: 1.6, marginBottom: '2rem' }}>
+            Beyond reducing LLM calls, we transformed the input approach: switching from verbose JSON to compact schema, and critically, eliminating pre-computed candidate ranges—now the model selects extractive ranges directly from the transcript. This required extensive prompt tuning but dramatically reduced input tokens.
+          </p>
+
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <MetricTile label="Abstractive Input" before="Verbose JSON" after="Compact Schema" note="Format streamlined" />
+            <MetricTile label="Extractive Input" before="Candidate Ranges" after="Direct Selection" note="Model-driven" emphasis />
+            <MetricTile label="Total Tokens" before="Higher" after="Lower" note="Per meeting" />
+          </div>
+        </motion.div>
+      </div>
+    </div>
+  );
+};
+
+/**
  * Export all animated slides
  */
 export const AnimatedSlides = {
   Slide19Challenge,
   Slide20FourPrompts,
+  Slide21TopicAbstraction,
+  Slide22ExtractiveSelection,
+  Slide23QualityRanking,
+  Slide24NarrativeSynthesis,
   Slide25Convergence,
+  Slide26UnifiedFlow,
+  Slide27TokenOptimization,
   Slide28CallReduction,
   Slide29GPUReduction
 };
