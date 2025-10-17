@@ -98,8 +98,9 @@ export const CostCurve: React.FC = () => {
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: reduced ? 0.2 : 0.6 }}
-        style={{display:'flex', gap:'4rem', justifyContent:'center', alignItems:'flex-end', marginTop:'1rem'}}
+        exit={{ opacity: 0, y: -12 }}
+        transition={{ duration: reduced ? 0.2 : 0.3 }}
+        style={{display:'flex', gap:'4rem', justifyContent:'center', alignItems:'flex-end', marginTop:'2rem', height: 250}}
       >
         {/* V1 */}
         <motion.div style={{textAlign:'center'}}>
@@ -110,10 +111,10 @@ export const CostCurve: React.FC = () => {
                 title={seg.label}
                 initial={{ height: 0 }}
                 animate={{ height: seg.h * hScale }}
-                exit={{ height: seg.h * hScale }}
+                exit={{ height: 0 }}
                 transition={{
-                  duration: reduced ? 0.25 : 0.8,
-                  delay: reduced ? 0 : 0.2 + idx * 0.1,
+                  duration: reduced ? 0.2 : 0.4,
+                  delay: reduced ? 0 : idx * 0.05,
                   ease: 'easeOut'
                 }}
                 style={{ background: seg.color }}
@@ -138,10 +139,10 @@ export const CostCurve: React.FC = () => {
                 title={seg.label}
                 initial={{ height: 0 }}
                 animate={{ height: seg.h * hScale }}
-                exit={{ height: seg.h * hScale }}
+                exit={{ height: 0 }}
                 transition={{
-                  duration: reduced ? 0.25 : 0.8,
-                  delay: reduced ? 0 : 0.2 + idx * 0.1,
+                  duration: reduced ? 0.2 : 0.4,
+                  delay: reduced ? 0 : idx * 0.05,
                   ease: 'easeOut'
                 }}
                 style={{ background: seg.color }}
@@ -225,25 +226,27 @@ export const CostCurve: React.FC = () => {
         >
           Unified prompt consolidation combines three major levers (call reduction, compact transcript format, direct extractive range selection) yielding a {savingsPct}%+ variable cost reduction and enabling GPU capacity drop (~600→~200).
         </motion.p>
-  
-        <StackedBars />
-  
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: reduced ? 0 : 0.9, duration: 0.4 }}
-          style={{marginTop:'1.5rem', textAlign:'center', fontSize:16, color:'#94a3b8'}}
-        >
-          Estimated Cost Reduction:{' '}
-          <motion.span
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: reduced ? 0 : 1.1, type:'spring', duration:0.6 }}
-            style={{color:'#22c55e', fontWeight:600}}
-          >
-            {savingsPct}%+
-          </motion.span>
-        </motion.div>
+  <div style={{ minHeight: 120 }}>
+    <StackedBars />
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0 }}
+      transition={{ delay: reduced ? 0 : 0.9, duration: 0.4 }}
+      style={{marginTop:'1.5rem', textAlign:'center', fontSize:16, color:'#94a3b8'}}
+    >
+      Estimated Cost Reduction:{' '}
+      <motion.span
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ delay: reduced ? 0 : 1.1, type:'spring', duration:0.6 }}
+        style={{color:'#22c55e', fontWeight:600}}
+      >
+        {savingsPct}%+
+      </motion.span>
+    </motion.div>
+  </div>
+
   
         {commonTileRow}
       </motion.div>
