@@ -1,5 +1,6 @@
 {
   "slides": [
+    { "id": 18, "src": "/audio/00-Silence.mp3", "autoAdvance": true },
     { "id": 19, "src": "/audio/01-Audio 1.wav", "autoAdvance": true },
     { "id": 20, "src": "/audio/02-Audio 2.wav", "autoAdvance": true },
     { "id": 21, "src": "/audio/03-Audio 3.wav", "autoAdvance": true },

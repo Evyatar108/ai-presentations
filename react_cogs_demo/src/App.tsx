@@ -3,6 +3,7 @@ import { ReducedMotionToggle } from './accessibility/ReducedMotion';
 import { SlidePlayer, Slide } from './components/SlidePlayer';
 import { NarratedController } from './components/NarratedController';
 import {
+  Slide18Blank,
   Slide19Challenge,
   Slide20FourPrompts,
   Slide21TopicAbstraction,
@@ -19,6 +20,7 @@ import {
 import { CostCurve, QualityComparison } from './components/ImpactComponents';
 
 const slides: Slide[] = [
+  { id: 18, title: 'Intro', Component: Slide18Blank },
   { id: 19, title: 'Challenge Framing', Component: Slide19Challenge },
   { id: 20, title: 'Four-Prompt Pipeline', Component: Slide20FourPrompts },
   { id: 21, title: 'Prompt 1: Topic Abstraction', Component: Slide21TopicAbstraction },
@@ -54,16 +56,6 @@ export const App: React.FC = () => {
 
   return (
     <div style={{ position: 'relative' }}>
-      {/* Reduced motion toggle overlay */}
-      <div style={{
-        position: 'fixed',
-        top: 20,
-        left: 20,
-        zIndex: 2000
-      }}>
-        <ReducedMotionToggle />
-      </div>
-
       {/* Narrated Controller (manages audio and slide progression) */}
       <NarratedController
         onSlideChange={handleSlideChange}

@@ -28,6 +28,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showStartOverlay, setShowStartOverlay] = useState(true);
+  const [hideInterface, setHideInterface] = useState(false);
   
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const nextAudioRef = useRef<HTMLAudioElement | null>(null);
@@ -192,7 +193,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
                 Meeting Highlights COGS Reduction
               </h1>
               <p style={{ color: '#94a3b8', marginBottom: '2rem', fontSize: 16 }}>
-                This presentation will auto-advance through 14 slides with narration.
+                This presentation will auto-advance through 15 slides with narration.
                 <br />
                 Duration: ~4 minutes
               </p>
@@ -202,6 +203,38 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
                   {error}
                 </p>
               )}
+              
+              {/* Hide Interface Option */}
+              <div style={{
+                marginBottom: '1.5rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.5rem'
+              }}>
+                <input
+                  type="checkbox"
+                  id="hideInterface"
+                  checked={hideInterface}
+                  onChange={(e) => setHideInterface(e.target.checked)}
+                  style={{
+                    width: 18,
+                    height: 18,
+                    cursor: 'pointer'
+                  }}
+                />
+                <label
+                  htmlFor="hideInterface"
+                  style={{
+                    color: '#94a3b8',
+                    fontSize: 14,
+                    cursor: 'pointer',
+                    userSelect: 'none'
+                  }}
+                >
+                  Hide interface (for recording)
+                </label>
+              </div>
               
               <button
                 onClick={handleStart}
@@ -255,7 +288,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
       </AnimatePresence>
 
       {/* Progress indicator */}
-      {isPlaying && manifest && (
+      {isPlaying && manifest && !hideInterface && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

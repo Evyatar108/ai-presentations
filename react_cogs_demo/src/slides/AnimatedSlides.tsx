@@ -4,6 +4,39 @@ import { useReducedMotion } from '../accessibility/ReducedMotion';
 import { MetricTile } from '../components/CoreComponents';
 
 /**
+ * Slide 18 - Empty/Blank Intro Slide
+ * Simple dark screen to start narration cleanly
+ */
+export const Slide18Blank: React.FC = () => {
+  return (
+    <div style={{
+      background: '#0f172a',
+      minHeight: '100vh',
+      width: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      fontFamily: 'Inter, system-ui, sans-serif'
+    }}>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        style={{
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+      >
+        {/* Empty slide - just dark background */}
+      </motion.div>
+    </div>
+  );
+};
+
+/**
  * Slide 19 - Challenge Framing
  * BEFORE metrics → TARGET unified approach
  */
@@ -1123,6 +1156,7 @@ export const Slide32PathToGA: React.FC = () => {
  * Export all animated slides
  */
 export const AnimatedSlides = {
+  Slide18Blank,
   Slide19Challenge,
   Slide20FourPrompts,
   Slide21TopicAbstraction,
