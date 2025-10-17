@@ -14,7 +14,7 @@ import {
   Slide28CallReduction,
   Slide29GPUReduction
 } from './slides/AnimatedSlides';
-import { CostCurve, QualityComparison, RoadmapSlide } from './components/ImpactComponents';
+import { CostCurve, QualityComparison } from './components/ImpactComponents';
 
 const slides: Slide[] = [
   { id: 19, title: 'Challenge Framing', Component: Slide19Challenge },
@@ -29,8 +29,7 @@ const slides: Slide[] = [
   { id: 28, title: 'Call Reduction', Component: Slide28CallReduction },
   { id: 29, title: 'GPU Optimization', Component: Slide29GPUReduction },
   { id: 30, title: 'Cost Savings', Component: CostCurve },
-  { id: 31, title: 'Quality Improvement', Component: QualityComparison },
-  { id: 32, title: 'Business Impact', Component: RoadmapSlide }
+  { id: 31, title: 'Quality Improvement', Component: QualityComparison }
 ];
 
 export const App: React.FC = () => {

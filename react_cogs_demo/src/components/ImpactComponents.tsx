@@ -373,47 +373,7 @@ export const QualityComparison: React.FC = () => {
   );
 };
 
-/**
- * RoadmapSlide
- * Extended roadmap including remaining animation & accessibility tasks.
- */
-export const RoadmapSlide: React.FC = () => {
-  return (
-    <div style={{
-      background: '#0f172a',
-      minHeight: '100vh',
-      width: '100%',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '2rem',
-      fontFamily: 'Inter, system-ui, sans-serif'
-    }}>
-      <div style={{
-        color:'#f1f5f9',
-        border:'1px solid #334155',
-        borderRadius:16,
-        padding:'1.25rem',
-        maxWidth:800,
-        width: '100%'
-      }}>
-      <h2 style={{marginTop:0}}>Roadmap</h2>
-      <ol style={{fontSize:14, lineHeight:1.5, paddingLeft:'1.2rem'}}>
-        <li>Replace static placeholders with Framer Motion variants</li>
-        <li>GPU rack visualization + token bar animation</li>
-        <li>Integrate transcript excerpt overlays</li>
-        <li>Reduced-motion accessibility mode</li>
-        <li>Alt text / semantic roles for visuals</li>
-        <li>Remotion export scaffold (optional video generation)</li>
-        <li>Performance polish & memoization for heavy slides</li>
-      </ol>
-      <p style={{fontSize:12, opacity:0.7}}>
-        Focus remains on clarity of key message: LLM calls 4→1, GPUs ~600→~200, quality uplift.
-      </p>
-      </div>
-    </div>
-  );
-};
+/* RoadmapSlide removed per user request: animations complete; slide omitted. */
 
 /**
  * Group export.
@@ -421,6 +381,5 @@ export const RoadmapSlide: React.FC = () => {
 export const ImpactComponents = {
   GPUReduction,
   CostCurve,
-  QualityComparison,
-  RoadmapSlide
+  QualityComparison
 };
