@@ -157,7 +157,7 @@ export const QualityComparison: React.FC = () => {
         Early internal feedback strongly prefers unified prompt highlight videos over
         the multi-call pipeline output. Gains center on depth and natural flow.
       </p>
-      <div style={{display:'flex', gap:'1rem', flexWrap:'wrap', marginTop:'1rem'}}>
+      <div style={{display:'flex', gap:'1rem', flexWrap:'wrap', marginTop:'1rem', justifyContent:'center'}}>
         <MetricTile label="Detail Level" before="Surface/Generic" after="Detailed" />
         <MetricTile label="Redundancy" before="Higher" after="Lower" />
         <MetricTile label="Narrative Style" before="Plain/Robotic" after="Natural/Flowing" />
