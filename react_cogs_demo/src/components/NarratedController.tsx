@@ -266,6 +266,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     setAutoAdvanceOnAudioEnd(false);
     setError(null);
     setShowStartOverlay(true);
+    onPlaybackEnd?.(); // Reset narrated mode in App
   };
 
   return (
