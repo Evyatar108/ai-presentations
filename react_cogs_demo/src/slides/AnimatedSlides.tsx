@@ -1535,7 +1535,7 @@ Ch1_S1_WhatIsMeetingHighlights.metadata = {
       audioFilePath: "/audio/c1/s1_segment_01_intro.wav",
       srtSegmentNumber: 1,
       visualDescription: "Title slide \"Meeting Highlights\"",
-      narrationText: "Meeting Highlights delivers AI-generated short video recaps of your meetings."
+      narrationText: "Meeting Highlights is a new feature that delivers AI-generated short video recaps of your meetings."
     },
     {
       id: "ai_generation",
@@ -1585,145 +1585,152 @@ export const Ch1_S2_HowToAccess: SlideComponentWithMetadata = () => {
       padding: '2rem',
       fontFamily: 'Inter, system-ui, sans-serif'
     }}>
-      <div style={{ maxWidth: 1000, width: '100%' }}>
+      <div style={{ maxWidth: 1200, width: '100%' }}>
         <AnimatePresence>
           {isSegmentVisible(0) && (
             <motion.h1
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: reduced ? 0.2 : 0.5 }}
-              style={{ color: '#f1f5f9', marginBottom: '3rem', textAlign: 'center' }}
+              style={{ color: '#f1f5f9', marginBottom: '2rem', textAlign: 'center' }}
             >
               How to Access Meeting Highlights
             </motion.h1>
           )}
         </AnimatePresence>
-<AnimatePresence>
-  {isSegmentVisible(1) && (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: reduced ? 0.3 : 0.6 }}
-      style={{
-        background: '#1e293b',
-        borderRadius: 16,
-        padding: '2rem',
-        marginBottom: '2rem',
-        textAlign: 'center'
-      }}
-    >
-      <p style={{ color: '#e2e8f0', fontSize: 20, marginBottom: '1.5rem' }}>
-        Open <strong style={{ color: '#00B7C3' }}>BizChat</strong> and ask it to recap a specific meeting
-      </p>
-      <div style={{
-        background: '#0f172a',
-        borderRadius: 12,
-        padding: '2rem'
-      }}>
-        <VideoPlayer
-          videoPath="/videos/meeting_highlights_usage_in_bizchat.mp4"
-          isPlaying={isSegmentVisible(1)}
-          freezeOnEnd={true}
-        />
-      </div>
-    </motion.div>
-  )}
-</AnimatePresence>
 
         <AnimatePresence>
-          {isSegmentVisible(2) && (
+          {isSegmentVisible(1) && (
             <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: reduced ? 0.2 : 0.5 }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: reduced ? 0.3 : 0.6 }}
               style={{
+                display: 'grid',
+                gridTemplateColumns: '1.2fr 1fr',
+                gap: '2rem',
+                alignItems: 'start'
+              }}
+            >
+              {/* Left column: Video */}
+              <div style={{
                 background: '#1e293b',
-                borderRadius: 12,
-                padding: '1.5rem',
-                marginBottom: '1rem',
+                borderRadius: 16,
+                padding: '2rem',
                 border: '1px solid #334155'
-              }}
-            >
-              <p style={{ color: '#e2e8f0', fontSize: 16, margin: 0 }}>
-                💡 Use <strong style={{ color: '#00B7C3' }}>/</strong> (slash) for Contextual Instant Query
-              </p>
-            </motion.div>
-          )}
-        </AnimatePresence>
+              }}>
+                <p style={{ color: '#e2e8f0', fontSize: 18, marginBottom: '1.5rem', marginTop: 0 }}>
+                  Open <strong style={{ color: '#00B7C3' }}>BizChat</strong> and ask it to recap a specific meeting
+                </p>
+                <div style={{
+                  background: '#0f172a',
+                  borderRadius: 12,
+                  padding: '1.5rem'
+                }}>
+                  <VideoPlayer
+                    videoPath="/videos/meeting_highlights_usage_in_bizchat.mp4"
+                    isPlaying={isSegmentVisible(1)}
+                    freezeOnEnd={true}
+                  />
+                </div>
+              </div>
 
-        <AnimatePresence>
-          {isSegmentVisible(3) && (
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: reduced ? 0.2 : 0.5 }}
-              style={{
-                background: '#1e293b',
-                borderRadius: 12,
-                padding: '1.5rem',
-                marginBottom: '1rem',
-                border: '1px solid #334155'
-              }}
-            >
-              <p style={{ color: '#e2e8f0', fontSize: 16, margin: 0 }}>
-                📋 Select and search for meetings from the menu
-              </p>
-            </motion.div>
-          )}
-        </AnimatePresence>
+              {/* Right column: Instructions */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <AnimatePresence>
+                  {isSegmentVisible(2) && (
+                    <motion.div
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: reduced ? 0.2 : 0.5 }}
+                      style={{
+                        background: '#1e293b',
+                        borderRadius: 12,
+                        padding: '1.5rem',
+                        border: '1px solid #334155'
+                      }}
+                    >
+                      <p style={{ color: '#e2e8f0', fontSize: 15, margin: 0 }}>
+                        💡 Use <strong style={{ color: '#00B7C3' }}>/</strong> (slash) for Contextual Instant Query
+                      </p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
-        <AnimatePresence>
-          {isSegmentVisible(4) && (
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: reduced ? 0.2 : 0.5 }}
-              style={{
-                background: 'linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))',
-                borderRadius: 12,
-                padding: '1.5rem',
-                marginBottom: '1rem',
-                border: '2px solid #00B7C3'
-              }}
-            >
-              <p style={{ color: '#e2e8f0', fontSize: 16, margin: 0 }}>
-                🎬 Video player with highlights appears at the bottom
-              </p>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                <AnimatePresence>
+                  {isSegmentVisible(3) && (
+                    <motion.div
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: reduced ? 0.2 : 0.5 }}
+                      style={{
+                        background: '#1e293b',
+                        borderRadius: 12,
+                        padding: '1.5rem',
+                        border: '1px solid #334155'
+                      }}
+                    >
+                      <p style={{ color: '#e2e8f0', fontSize: 15, margin: 0 }}>
+                        📋 Select and search for meetings from the menu
+                      </p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
-        <AnimatePresence>
-          {isSegmentVisible(5) && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: reduced ? 0.3 : 0.5 }}
-              style={{
-                background: '#78350f',
-                borderRadius: 12,
-                padding: '1rem',
-                marginBottom: '1rem',
-                border: '1px solid #fbbf24'
-              }}
-            >
-              <p style={{ color: '#fef3c7', fontSize: 14, margin: 0 }}>
-                ⚠️ Note: Series meetings don't show the highlights player yet
-              </p>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                <AnimatePresence>
+                  {isSegmentVisible(4) && (
+                    <motion.div
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: reduced ? 0.2 : 0.5 }}
+                      style={{
+                        background: 'linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))',
+                        borderRadius: 12,
+                        padding: '1.5rem',
+                        border: '2px solid #00B7C3'
+                      }}
+                    >
+                      <p style={{ color: '#e2e8f0', fontSize: 15, margin: 0 }}>
+                        🎬 Video player with highlights appears at the bottom
+                      </p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
-        <AnimatePresence>
-          {isSegmentVisible(6) && (
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: reduced ? 0.2 : 0.5 }}
-              style={{ color: '#94a3b8', textAlign: 'center', fontSize: 14, marginTop: '2rem' }}
-            >
-              Additional entry points via Teams and M365 Copilot coming soon
-            </motion.p>
+                <AnimatePresence>
+                  {isSegmentVisible(5) && (
+                    <motion.div
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: reduced ? 0.3 : 0.5 }}
+                      style={{
+                        background: '#78350f',
+                        borderRadius: 12,
+                        padding: '1.25rem',
+                        border: '1px solid #fbbf24'
+                      }}
+                    >
+                      <p style={{ color: '#fef3c7', fontSize: 14, margin: 0 }}>
+                        ⚠️ Note: Series meetings don't show the highlights player yet
+                      </p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                <AnimatePresence>
+                  {isSegmentVisible(6) && (
+                    <motion.p
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: reduced ? 0.2 : 0.5 }}
+                      style={{ color: '#94a3b8', fontSize: 13, marginTop: '0.5rem', marginBottom: 0 }}
+                    >
+                      Additional entry points via Teams and M365 Copilot coming soon
+                    </motion.p>
+                  )}
+                </AnimatePresence>
+              </div>
+            </motion.div>
           )}
         </AnimatePresence>
       </div>

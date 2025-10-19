@@ -1,11 +1,11 @@
 {
   "c1\\s1_segment_01_intro.wav": {
-    "narrationText": "Meeting Highlights is a new Microsoft Teams feature that delivers a dynamic, bite-sized video recap of your meeting.",
-    "generatedAt": "2025-10-19T08:26:13.565Z"
+    "narrationText": "Meeting Highlights is a new feature that delivers AI-generated short video recaps of your meetings.",
+    "generatedAt": "2025-10-19T10:33:29.625Z"
   },
   "c1\\s1_segment_02_ai_generation.wav": {
-    "narrationText": "It uses AI to automatically generate a short highlights video, typically 3 to 5 minutes long.",
-    "generatedAt": "2025-10-19T08:26:13.569Z"
+    "narrationText": "It uses AI to automatically generate a short highlights video, typically 2 to 3 minutes long.",
+    "generatedAt": "2025-10-19T10:31:50.587Z"
   },
   "c1\\s1_segment_03_combination.wav": {
     "narrationText": "The feature combines AI-generated voiceover summaries with authentic video snippets from the actual meeting.",
@@ -52,8 +52,8 @@
     "generatedAt": "2025-10-19T08:26:44.861Z"
   },
   "c1\\s3_segment_02_time.wav": {
-    "narrationText": "First, massive time savings. Instead of watching a 60-minute recording, catch up in 3 to 5 minutes.",
-    "generatedAt": "2025-10-19T08:26:44.863Z"
+    "narrationText": "First, massive time savings. Instead of watching a 60-minute recording, catch up in 2 to 3 minutes.",
+    "generatedAt": "2025-10-19T10:31:50.591Z"
   },
   "c1\\s3_segment_03_engagement.wav": {
     "narrationText": "Second, better engagement and retention through audiovisual content that caters to all learning styles.",
