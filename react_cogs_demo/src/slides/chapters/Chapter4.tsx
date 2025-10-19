@@ -16,7 +16,7 @@ import { typography, highlightBorder, layouts } from '../SlideStyles';
  */
 export const Ch4_S1_HighlightTypes: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
-  const { isSegmentVisible } = useSegmentedAnimation();
+  const { isSegmentVisible, currentSegmentIndex } = useSegmentedAnimation();
 
   const fadeLeftVariant = {
     hidden: { opacity: 0, x: reduced ? 0 : -20 },
@@ -43,7 +43,7 @@ export const Ch4_S1_HighlightTypes: SlideComponentWithMetadata = () => {
         )}
       </AnimatePresence>
 
-      <div style={layouts.grid2Col('2rem')}>
+      <div style={{ ...layouts.grid2Col('2rem'), marginBottom: '2rem' }}>
         <AnimatePresence>
           {isSegmentVisible(1) && (
             <motion.div
@@ -51,10 +51,14 @@ export const Ch4_S1_HighlightTypes: SlideComponentWithMetadata = () => {
               initial="hidden"
               animate="visible"
               style={{
-                ...highlightBorder,
+                borderRadius: 16,
                 padding: '2rem',
                 textAlign: 'center',
-                background: 'linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))'
+                background: currentSegmentIndex === 1
+                  ? 'linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))'
+                  : '#1e293b',
+                border: currentSegmentIndex === 1 ? '2px solid #00B7C3' : '1px solid #334155',
+                transition: 'all 0.3s ease'
               }}
             >
               <div style={{ fontSize: 48, marginBottom: '1rem' }}>📝</div>
@@ -74,16 +78,24 @@ export const Ch4_S1_HighlightTypes: SlideComponentWithMetadata = () => {
               variants={fadeRightVariant}
               initial="hidden"
               animate="visible"
+              style={{
+                borderRadius: 16,
+                padding: '2rem',
+                textAlign: 'center',
+                background: currentSegmentIndex === 2
+                  ? 'linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))'
+                  : '#1e293b',
+                border: currentSegmentIndex === 2 ? '2px solid #00B7C3' : '1px solid #334155',
+                transition: 'all 0.3s ease'
+              }}
             >
-              <ContentCard style={{ textAlign: 'center', padding: '2rem' }}>
-                <div style={{ fontSize: 48, marginBottom: '1rem' }}>🎬</div>
-                <h2 style={{ ...typography.h2, marginBottom: '1rem' }}>
-                  Key Moments
-                </h2>
-                <p style={{ ...typography.caption, fontSize: 16 }}>
-                  Significant verbatim segments from the meeting
-                </p>
-              </ContentCard>
+              <div style={{ fontSize: 48, marginBottom: '1rem' }}>🎬</div>
+              <h2 style={{ ...typography.h2, marginBottom: '1rem' }}>
+                Key Moments
+              </h2>
+              <p style={{ ...typography.caption, fontSize: 16 }}>
+                Significant verbatim segments from the meeting
+              </p>
             </motion.div>
           )}
         </AnimatePresence>
@@ -92,11 +104,22 @@ export const Ch4_S1_HighlightTypes: SlideComponentWithMetadata = () => {
       <AnimatePresence>
         {isSegmentVisible(3) && (
           <motion.div variants={fadeUpVariant} initial="hidden" animate="visible">
-            <ContentCard style={{ marginBottom: '1.5rem' }}>
+            <div
+              style={{
+                borderRadius: 16,
+                padding: '1.5rem',
+                marginBottom: '1.5rem',
+                background: currentSegmentIndex === 3
+                  ? 'linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))'
+                  : '#1e293b',
+                border: currentSegmentIndex === 3 ? '2px solid #00B7C3' : '1px solid #334155',
+                transition: 'all 0.3s ease'
+              }}
+            >
               <p style={{ ...typography.body, margin: 0 }}>
                 ⏱️ Each highlight covers <strong style={{ color: '#00B7C3' }}>20-30 second segments</strong> with timestamps and narration
               </p>
-            </ContentCard>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -104,34 +127,23 @@ export const Ch4_S1_HighlightTypes: SlideComponentWithMetadata = () => {
       <AnimatePresence>
         {isSegmentVisible(4) && (
           <motion.div variants={fadeUpVariant} initial="hidden" animate="visible">
-            <ContentCard style={{ marginBottom: '1.5rem' }}>
+            <div
+              style={{
+                borderRadius: 16,
+                padding: '1.5rem',
+                marginBottom: '1.5rem',
+                background: currentSegmentIndex === 4
+                  ? 'linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))'
+                  : '#1e293b',
+                border: currentSegmentIndex === 4 ? '2px solid #00B7C3' : '1px solid #334155',
+                transition: 'all 0.3s ease'
+              }}
+            >
               <p style={{ ...typography.body, margin: 0 }}>
                 🎙️ Narration text converted to audio using <strong style={{ color: '#00B7C3' }}>Azure Cognitive Services</strong>
               </p>
-            </ContentCard>
+            </div>
           </motion.div>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {isSegmentVisible(5) && (
-          <motion.div variants={fadeUpVariant} initial="hidden" animate="visible">
-            <ContentCard style={{ marginBottom: '1.5rem' }}>
-              <p style={{ ...typography.body, margin: 0 }}>
-                🗄️ All metadata, audio, and captions <strong style={{ color: '#00B7C3' }}>securely stored in ODSP</strong>
-              </p>
-            </ContentCard>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {isSegmentVisible(6) && (
-          <GradientHighlightBox reduced={reduced} style={{ textAlign: 'center' }}>
-            <p style={{ ...typography.body, margin: 0 }}>
-              📱 Available across <strong style={{ color: '#fff' }}>Microsoft 365 platforms</strong>
-            </p>
-          </GradientHighlightBox>
         )}
       </AnimatePresence>
     </SlideContainer>
@@ -178,20 +190,6 @@ Ch4_S1_HighlightTypes.metadata = {
       srtSegmentNumber: 5,
       visualDescription: "Azure Cognitive Services logo with audio waveform",
       narrationText: "The narration text is converted to natural-sounding audio using Azure Cognitive Services text-to-speech."
-    },
-    {
-      id: "storage",
-      audioFilePath: "/audio/c4/s1_segment_06_storage.wav",
-      srtSegmentNumber: 6,
-      visualDescription: "ODSP storage icon with security badge",
-      narrationText: "All the metadata, audio files, and caption data are securely stored in ODSP."
-    },
-    {
-      id: "platforms",
-      audioFilePath: "/audio/c4/s1_segment_07_platforms.wav",
-      srtSegmentNumber: 7,
-      visualDescription: "M365 platform icons (Teams, BizChat, Copilot)",
-      narrationText: "Making highlights available across Microsoft 365 platforms wherever users work."
     }
   ]
 };

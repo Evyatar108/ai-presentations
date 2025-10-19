@@ -258,5 +258,9 @@
   "c4/s1_segment_01_intro.wav": {
     "narrationText": "Meeting Highlights combines two distinct types of highlights to create a comprehensive recap.",
     "generatedAt": "2025-10-19T22:42:29.938Z"
+  },
+  "c1/s1_segment_02_combination.wav": {
+    "narrationText": "It combines AI summaries with authentic video clips, preserving tone and discussion flow.",
+    "generatedAt": "2025-10-19T22:58:04.574Z"
   }
 }
