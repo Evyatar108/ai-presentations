@@ -90,6 +90,8 @@ const teams: TeamInfo[] = [
  * Node renderer component for ReactFlow diagram
  */
 const NodeRenderer: React.FC<{ data: any }> = ({ data }) => {
+  const isCurrent = data.isCurrent;
+  
   return (
     <>
       {/* Connection handles for edges */}
@@ -102,8 +104,29 @@ const NodeRenderer: React.FC<{ data: any }> = ({ data }) => {
       <Handle id="right" type="source" position={Position.Right} style={{ opacity: 0 }} />
       <Handle id="bottom" type="source" position={Position.Bottom} style={{ opacity: 0 }} />
       
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <div
+      <motion.div
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{
+          scale: isCurrent ? 1.05 : 1,
+          opacity: 1
+        }}
+        transition={{
+          duration: 0.4,
+          type: 'spring',
+          stiffness: 200,
+          damping: 15
+        }}
+        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+      >
+        <motion.div
+          animate={isCurrent ? {
+            boxShadow: [
+              '0 2px 6px rgba(0,0,0,0.25)',
+              '0 4px 20px rgba(0,183,195,0.6)',
+              '0 2px 6px rgba(0,0,0,0.25)'
+            ]
+          } : {}}
+          transition={{ duration: 1.5, repeat: isCurrent ? Infinity : 0 }}
           style={{
             width: 64,
             height: 64,
@@ -117,15 +140,36 @@ const NodeRenderer: React.FC<{ data: any }> = ({ data }) => {
             padding: 6
           }}
         >
-          <img
+          <motion.img
             src={data.logo}
             alt={data.label}
+            initial={{ scale: 0, rotate: -180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{
+              duration: 0.6,
+              type: 'spring',
+              delay: 0.1
+            }}
             style={{ width: '100%', height: '100%', objectFit: 'contain' }}
           />
-        </div>
-        <div style={{ color: '#f1f5f9', fontSize: 14, fontWeight: 600 }}>{data.label}</div>
-        <div style={{ color: '#00B7C3', fontSize: 11, marginTop: 2 }}>{data.role}</div>
-      </div>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: -5 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.2 }}
+          style={{ color: '#f1f5f9', fontSize: 14, fontWeight: 600 }}
+        >
+          {data.label}
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: -5 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.3 }}
+          style={{ color: '#00B7C3', fontSize: 11, marginTop: 2 }}
+        >
+          {data.role}
+        </motion.div>
+      </motion.div>
     </>
   );
 };
