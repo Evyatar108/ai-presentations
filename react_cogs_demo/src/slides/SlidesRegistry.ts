@@ -15,13 +15,11 @@ import {
 } from './chapters/Chapter5';
 import {
   Ch6_S1_UnifiedConvergence,
-  Ch6_S2_UnifiedFlow,
   Ch6_S4_TokenOptimization
 } from './chapters/Chapter6';
 import {
   Ch7_S1_CallReduction,
   Ch7_S2_GPUReduction,
-  Ch7_S3_CostCurve,
   Ch7_S4_QualityComparison,
   Ch7_S5_PathToGA
 } from './chapters/Chapter7';
@@ -48,11 +46,9 @@ export const allSlides: SlideComponentWithMetadata[] = [
   Ch5_S1_ChallengeFraming,
   Ch5_S2_FourPrompts,
   Ch6_S1_UnifiedConvergence,
-  Ch6_S2_UnifiedFlow,
   Ch6_S4_TokenOptimization,
   Ch7_S1_CallReduction,
   Ch7_S2_GPUReduction,
-  Ch7_S3_CostCurve,
   Ch7_S4_QualityComparison,
   Ch7_S5_PathToGA,
   Ch8_S1_UserSatisfaction,

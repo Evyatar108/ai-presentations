@@ -42,7 +42,14 @@ export const Ch8_S1_UserSatisfaction: SlideComponentWithMetadata = () => {
                 boxShadow: !reduced ? '0 0 40px rgba(0, 183, 195, 0.3)' : 'none'
               }}
             >
-              <div style={{ fontSize: 72, fontWeight: 'bold', color: '#00B7C3', marginBottom: '1rem' }}>
+              <div style={{
+                fontSize: 72,
+                fontWeight: 'bold',
+                color: '#f8fafc',
+                marginBottom: '1rem',
+                textShadow: '0 0 20px rgba(0, 183, 195, 0.9), 0 0 40px rgba(0, 183, 195, 0.6), 0 2px 4px rgba(0, 0, 0, 0.3)',
+                filter: 'drop-shadow(0 0 8px rgba(0, 183, 195, 0.5))'
+              }}>
                 80%
               </div>
               <div style={{ ...typography.h2, fontSize: 18, marginBottom: '0.5rem' }}>
@@ -67,7 +74,14 @@ export const Ch8_S1_UserSatisfaction: SlideComponentWithMetadata = () => {
                 boxShadow: !reduced ? '0 0 40px rgba(16, 185, 129, 0.3)' : 'none'
               }}
             >
-              <div style={{ fontSize: 72, fontWeight: 'bold', color: '#10b981', marginBottom: '1rem' }}>
+              <div style={{
+                fontSize: 72,
+                fontWeight: 'bold',
+                color: '#f8fafc',
+                marginBottom: '1rem',
+                textShadow: '0 0 20px rgba(34, 211, 238, 0.9), 0 0 40px rgba(34, 211, 238, 0.6), 0 2px 4px rgba(0, 0, 0, 0.3)',
+                filter: 'drop-shadow(0 0 8px rgba(34, 211, 238, 0.5))'
+              }}>
                 96%
               </div>
               <div style={{ ...typography.h2, fontSize: 18, marginBottom: '0.5rem' }}>
@@ -87,6 +101,7 @@ export const Ch8_S1_UserSatisfaction: SlideComponentWithMetadata = () => {
             variants={fadeUp(reduced)}
             initial="hidden"
             animate="visible"
+            style={{ marginTop: '3rem' }}
           >
             <ContentCard>
               <p style={{ ...typography.body, fontSize: 20, fontWeight: 600, margin: 0 }}>
