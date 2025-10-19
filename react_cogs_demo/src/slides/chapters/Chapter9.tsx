@@ -136,119 +136,222 @@ Ch9_S1_Testimonials.metadata = {
 };
 
 /**
- * Chapter 9, Slide 2 - Future Improvements
+ * Chapter 9, Slide 2 - Try It Yourself
  */
-export const Ch9_S2_FutureImprovements: SlideComponentWithMetadata = () => {
+export const Ch9_S2_TryItYourself: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
   const { isSegmentVisible } = useSegmentedAnimation();
 
-  const improvements = [
+  const steps = [
     {
-      icon: '🔍',
-      title: 'Detail & Specificity',
-      description: 'More detailed highlights capturing nuanced discussions'
+      number: '1️⃣',
+      title: 'Open BizChat',
+      description: 'Navigate to BizChat in your Microsoft 365 apps'
     },
     {
-      icon: '📊',
-      title: 'Teams Integration',
-      description: 'Deeper integration with Teams Recap for seamless access'
+      number: '2️⃣',
+      title: 'Reference a Meeting',
+      description: 'Type / to open the mention menu and select your meeting'
     },
     {
-      icon: '✅',
-      title: 'Action Items',
-      description: 'Include action items and decisions for actionable outcomes'
-    },
-    {
-      icon: '🌍',
-      title: 'Languages',
-      description: 'Additional language support for global users'
+      number: '3️⃣',
+      title: 'Ask for a Recap',
+      description: 'Request a meeting summary and watch your highlight video appear!'
     }
   ];
 
   return (
-    <SlideContainer maxWidth={1100}>
+    <SlideContainer maxWidth={1000}>
       <AnimatePresence>
         {isSegmentVisible(0) && (
-          <SlideTitle reduced={reduced} subtitle="User feedback drives our roadmap">
-            Future Improvements
-          </SlideTitle>
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: reduced ? 0.2 : 0.5 }}
+            style={{ textAlign: 'center', marginBottom: '3rem' }}
+          >
+            <h1 style={{ ...typography.h1, marginBottom: '1rem' }}>
+              Ready to Experience It?
+            </h1>
+            <p style={{ ...typography.body, fontSize: 18, color: '#94a3b8' }}>
+              Join the <span style={{ color: '#00B7C3', fontWeight: 600 }}>80%</span> who find it extremely useful
+            </p>
+          </motion.div>
         )}
       </AnimatePresence>
 
-      <div style={{ ...layouts.grid2Col(), marginBottom: '3rem' }}>
-        {improvements.map((improvement, index) => (
-          <ImprovementCard
-            key={improvement.title}
-            icon={improvement.icon}
-            title={improvement.title}
-            description={improvement.description}
-            isVisible={isSegmentVisible(index + 1)}
-            reduced={reduced}
-            index={index}
-          />
+      {/* Satisfaction Metric */}
+      <AnimatePresence>
+        {isSegmentVisible(1) && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: reduced ? 0.3 : 0.6 }}
+            style={{
+              background: 'linear-gradient(135deg, #00B7C3, #0078D4)',
+              borderRadius: 16,
+              padding: '2rem',
+              textAlign: 'center',
+              marginBottom: '2rem',
+              boxShadow: reduced ? 'none' : '0 0 40px rgba(0, 183, 195, 0.3)'
+            }}
+          >
+            <div style={{
+              fontSize: 64,
+              fontWeight: 'bold',
+              color: '#fff',
+              marginBottom: '0.5rem',
+              textShadow: '0 0 20px rgba(255, 255, 255, 0.5)'
+            }}>
+              80%
+            </div>
+            <div style={{ color: '#fff', fontSize: 18, marginBottom: '0.5rem' }}>
+              find it extremely useful
+            </div>
+            <div style={{ fontSize: 24 }}>⭐⭐⭐⭐⭐</div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Coming Soon Banner */}
+      <AnimatePresence>
+        {isSegmentVisible(2) && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: reduced ? 0.3 : 0.6 }}
+            style={{
+              background: '#1e293b',
+              border: '2px solid #00B7C3',
+              borderRadius: 12,
+              padding: '1.5rem',
+              marginBottom: '2rem',
+              textAlign: 'center'
+            }}
+          >
+            <div style={{ fontSize: 24, marginBottom: '0.5rem' }}>🚀</div>
+            <div style={{ ...typography.h2, marginBottom: '0.5rem', color: '#00B7C3' }}>
+              Coming Soon: Even Better Quality
+            </div>
+            <p style={{ ...typography.body, fontSize: 16, margin: 0, color: '#cbd5e1' }}>
+              The unified prompt optimization will roll out with higher satisfaction scores
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Steps */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '2rem' }}>
+        {steps.map((step, index) => (
+          <AnimatePresence key={step.title}>
+            {isSegmentVisible(index + 3) && (
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: reduced ? 0.3 : 0.5 }}
+                style={{
+                  background: '#1e293b',
+                  borderRadius: 12,
+                  padding: '1.5rem',
+                  border: '1px solid #334155',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '1.5rem'
+                }}
+              >
+                <div style={{ fontSize: 36, flexShrink: 0 }}>
+                  {step.number}
+                </div>
+                <div>
+                  <div style={{ ...typography.h2, fontSize: 20, marginBottom: '0.5rem' }}>
+                    {step.title}
+                  </div>
+                  <p style={{ ...typography.body, fontSize: 14, margin: 0, color: '#94a3b8' }}>
+                    {step.description}
+                  </p>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         ))}
       </div>
 
+      {/* Call to Action */}
       <AnimatePresence>
-        {isSegmentVisible(5) && (
-          <GradientHighlightBox reduced={reduced} style={{ textAlign: 'center' }}>
-            <p style={{ ...typography.body, fontSize: 20, fontWeight: 600, margin: 0 }}>
-              On our roadmap for general availability in 2024
-            </p>
-          </GradientHighlightBox>
+        {isSegmentVisible(6) && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: reduced ? 0.3 : 0.6 }}
+            style={{ textAlign: 'center' }}
+          >
+            <motion.div
+              animate={reduced ? {} : {
+                boxShadow: [
+                  '0 0 20px rgba(0, 183, 195, 0.3)',
+                  '0 0 40px rgba(0, 183, 195, 0.6)',
+                  '0 0 20px rgba(0, 183, 195, 0.3)'
+                ]
+              }}
+              transition={{ duration: 2, repeat: Infinity }}
+              style={{
+                display: 'inline-block',
+                background: 'linear-gradient(135deg, #00B7C3, #0078D4)',
+                borderRadius: 12,
+                padding: '1.5rem 3rem',
+                cursor: 'pointer'
+              }}
+            >
+              <div style={{ ...typography.h2, fontSize: 24, color: '#fff', margin: 0 }}>
+                Try It Today in BizChat! 🚀
+              </div>
+            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
     </SlideContainer>
   );
 };
 
-Ch9_S2_FutureImprovements.metadata = {
+Ch9_S2_TryItYourself.metadata = {
   chapter: 9,
   slide: 2,
-  title: "Future Improvements",
-  srtFilePath: "highlights_demo/chapters/c9/s2_future_improvements.srt",
+  title: "Try It Yourself",
   audioSegments: [
     {
       id: "intro",
       audioFilePath: "/audio/c9/s2_segment_01_intro.wav",
-      srtSegmentNumber: 1,
-      visualDescription: "Title \"Future Improvements\" with roadmap icon",
-      narrationText: "Based on user feedback, we have an exciting roadmap ahead."
+      narrationText: "More than 80 percent of users find Meeting Highlights extremely useful, and we want you to experience it too."
     },
     {
-      id: "detail",
-      audioFilePath: "/audio/c9/s2_segment_02_detail.wav",
-      srtSegmentNumber: 2,
-      visualDescription: "Card 1 appears - Detail & Specificity with magnifying glass icon",
-      narrationText: "Users want more detailed and specific highlights that capture nuanced discussions."
+      id: "satisfaction",
+      audioFilePath: "/audio/c9/s2_segment_02_satisfaction.wav",
+      narrationText: "With such high user satisfaction, Meeting Highlights is already making a significant impact."
     },
     {
-      id: "teams",
-      audioFilePath: "/audio/c9/s2_segment_03_teams.wav",
-      srtSegmentNumber: 3,
-      visualDescription: "Card 2 appears - Teams Integration with integration icon",
-      narrationText: "Deeper integration with Teams Recap for seamless access to highlights."
+      id: "quality_teaser",
+      audioFilePath: "/audio/c9/s2_segment_03_quality_teaser.wav",
+      narrationText: "And there's even better news: the unified prompt optimization we discussed will soon roll out, delivering even higher quality highlights with improved detail and natural flow."
     },
     {
-      id: "action",
-      audioFilePath: "/audio/c9/s2_segment_04_action.wav",
-      srtSegmentNumber: 4,
-      visualDescription: "Card 3 appears - Action Items with checkmark icon",
-      narrationText: "Including action items and decisions to make highlights more actionable."
+      id: "step1",
+      audioFilePath: "/audio/c9/s2_segment_04_step1.wav",
+      narrationText: "Getting started is simple. First, open BizChat."
     },
     {
-      id: "languages",
-      audioFilePath: "/audio/c9/s2_segment_05_languages.wav",
-      srtSegmentNumber: 5,
-      visualDescription: "Card 4 appears - Languages with globe icon",
-      narrationText: "And additional language support to serve our global user base."
+      id: "step2",
+      audioFilePath: "/audio/c9/s2_segment_05_step2.wav",
+      narrationText: "Next, type forward slash to bring up the mention menu, and select the meeting you want recapped."
     },
     {
-      id: "roadmap",
-      audioFilePath: "/audio/c9/s2_segment_06_roadmap.wav",
-      srtSegmentNumber: 6,
-      visualDescription: "Summary banner appears with timeline",
-      narrationText: "These improvements are on our roadmap as we work toward general availability in 2024."
+      id: "step3",
+      audioFilePath: "/audio/c9/s2_segment_06_step3.wav",
+      narrationText: "Then just ask for a recap. Your personalized highlight video will appear at the bottom of the response."
+    },
+    {
+      id: "cta",
+      audioFilePath: "/audio/c9/s2_segment_07_cta.wav",
+      narrationText: "Try it today and see why users love meeting highlights!"
     }
   ]
 };

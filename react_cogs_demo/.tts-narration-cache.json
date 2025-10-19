@@ -79,54 +79,6 @@
     "narrationText": "M-S-A-I Hive processes meeting transcripts using Large Language Model technology. Our processor receives the transcript and calls the LLM with our prompts, which analyzes the content and returns structured metadata describing the highlights.",
     "generatedAt": "2025-10-19T15:01:00.327Z"
   },
-  "c2\\s1_segment_04_clipchamp.wav": {
-    "narrationText": "Clipchamp owns the highlights player component, delivering the visual playback experience.",
-    "generatedAt": "2025-10-19T08:27:10.440Z"
-  },
-  "c2\\s1_segment_05_loop.wav": {
-    "narrationText": "Loop enables seamless embedding of the Clipchamp player within different application surfaces.",
-    "generatedAt": "2025-10-19T08:27:10.442Z"
-  },
-  "c2\\s1_segment_06_bizchat.wav": {
-    "narrationText": "BizChat provides the primary user interface with natural language access to highlights.",
-    "generatedAt": "2025-10-19T08:27:10.444Z"
-  },
-  "c2\\s1_segment_07_teams.wav": {
-    "narrationText": "Teams integration is planned to deliver highlights within the Teams ecosystem using the same player technology via Loop.",
-    "generatedAt": "2025-10-19T10:43:37.872Z"
-  },
-  "c2\\s1_segment_08_conclusion.wav": {
-    "narrationText": "Together, these teams deliver a unified end-to-end experience from recording through AI processing to user access, showcasing true Microsoft collaboration.",
-    "generatedAt": "2025-10-19T12:46:28.723Z"
-  },
-  "c3\\s1_segment_01_intro.wav": {
-    "narrationText": "Let me walk you through the architecture behind Meeting Highlights.",
-    "generatedAt": "2025-10-19T08:27:10.449Z"
-  },
-  "c3\\s1_segment_02_recording.wav": {
-    "narrationText": "It starts when a Teams meeting ends and a recording exists.",
-    "generatedAt": "2025-10-19T08:27:10.451Z"
-  },
-  "c3\\s1_segment_03_odsp.wav": {
-    "narrationText": "O-D-S-P, our storage and orchestration layer, detects the recording and initiates the highlight generation process.",
-    "generatedAt": "2025-10-19T12:27:45.223Z"
-  },
-  "c3\\s1_segment_04_tmr.wav": {
-    "narrationText": "The M-S-A-I processor receives the meeting transcript and calls the LLM using our prompts.",
-    "generatedAt": "2025-10-19T12:27:45.225Z"
-  },
-  "c3\\s1_segment_05_llm.wav": {
-    "narrationText": "The LLM analyzes the transcript and returns structured metadata describing the highlights.",
-    "generatedAt": "2025-10-19T08:27:10.466Z"
-  },
-  "c3\\s1_segment_06_acs.wav": {
-    "narrationText": "Azure Cognitive Services then converts the narration text into audio using text-to-speech.",
-    "generatedAt": "2025-10-19T08:27:41.554Z"
-  },
-  "c3\\s1_segment_07_storage.wav": {
-    "narrationText": "Finally, all the metadata, audio, and captions are securely stored in ODSP and made available to users through BizChat and Teams.",
-    "generatedAt": "2025-10-19T12:27:45.228Z"
-  },
   "c4\\s1_segment_01_intro.wav": {
     "narrationText": "Meeting Highlights combines two distinct types of highlights to create a comprehensive recap.",
     "generatedAt": "2025-10-19T08:27:41.558Z"
@@ -167,10 +119,6 @@
     "narrationText": "We collapsed the four-step pipeline into one unified prompt with leaner input.",
     "generatedAt": "2025-10-19T08:28:14.269Z"
   },
-  "c6\\s2_segment_01_main.wav": {
-    "narrationText": "Dedicated tuning preserved the original algorithm as an internal reasoning chain: segment, extract, rank, compose.",
-    "generatedAt": "2025-10-19T08:28:14.271Z"
-  },
   "c6\\s4_segment_01_main.wav": {
     "narrationText": "We also optimized input tokens by switching from verbose JSON to compact schema and eliminating pre-computed candidate ranges.",
     "generatedAt": "2025-10-19T08:28:14.272Z"
@@ -180,12 +128,8 @@
     "generatedAt": "2025-10-19T08:28:14.275Z"
   },
   "c7\\s2_segment_01_main.wav": {
-    "narrationText": "GPU capacity requirements dropped from roughly 600 to 200, a 67% reduction.",
-    "generatedAt": "2025-10-19T13:15:51.813Z"
-  },
-  "c7\\s3_segment_01_main.wav": {
-    "narrationText": "Combined, this is estimated to cut COGS by over 70%, enabling economically viable worldwide rollout.",
-    "generatedAt": "2025-10-19T08:28:14.278Z"
+    "narrationText": "GPU capacity requirements are estimated to have dropped from roughly 600 to less than 200, over 70% reduction.",
+    "generatedAt": "2025-10-19T16:00:56.196Z"
   },
   "c7\\s4_segment_01_main.wav": {
     "narrationText": "The unified prompt produces higher-quality highlights that internal reviewers strongly prefer over the multi-prompt version.",
@@ -232,44 +176,8 @@
     "generatedAt": "2025-10-19T08:28:42.320Z"
   },
   "c9\\s2_segment_01_intro.wav": {
-    "narrationText": "Based on user feedback, we have an exciting roadmap ahead.",
-    "generatedAt": "2025-10-19T08:28:42.327Z"
-  },
-  "c9\\s2_segment_02_detail.wav": {
-    "narrationText": "Users want more detailed and specific highlights that capture nuanced discussions.",
-    "generatedAt": "2025-10-19T08:28:42.330Z"
-  },
-  "c9\\s2_segment_03_teams.wav": {
-    "narrationText": "Deeper integration with Teams Recap for seamless access to highlights.",
-    "generatedAt": "2025-10-19T08:28:51.388Z"
-  },
-  "c9\\s2_segment_04_action.wav": {
-    "narrationText": "Including action items and decisions to make highlights more actionable.",
-    "generatedAt": "2025-10-19T08:28:51.389Z"
-  },
-  "c9\\s2_segment_05_languages.wav": {
-    "narrationText": "And additional language support to serve our global user base.",
-    "generatedAt": "2025-10-19T08:28:51.392Z"
-  },
-  "c9\\s2_segment_06_roadmap.wav": {
-    "narrationText": "These improvements are on our roadmap as we work toward general availability in 2024.",
-    "generatedAt": "2025-10-19T08:28:51.394Z"
-  },
-  "c2\\s1_segment_04_bizchat.wav": {
-    "narrationText": "BizChat provides the primary user interface with natural language access to highlights.",
-    "generatedAt": "2025-10-19T12:27:45.211Z"
-  },
-  "c2\\s1_segment_05_teams.wav": {
-    "narrationText": "Teams integration is planned to deliver highlights within the Teams ecosystem.",
-    "generatedAt": "2025-10-19T12:32:38.721Z"
-  },
-  "c2\\s1_segment_06_loop.wav": {
-    "narrationText": "Loop enables seamless embedding of the Clipchamp player within different application surfaces.",
-    "generatedAt": "2025-10-19T12:27:45.216Z"
-  },
-  "c2\\s1_segment_07_clipchamp.wav": {
-    "narrationText": "Clipchamp owns the highlights player component, delivering the rich visual playback experience users see, without requiring us to create a new video file.",
-    "generatedAt": "2025-10-19T12:46:28.718Z"
+    "narrationText": "More than 80 percent of users find Meeting Highlights extremely useful, and we want you to experience it too.",
+    "generatedAt": "2025-10-19T16:00:56.200Z"
   },
   "c2\\s1_segment_04_acs.wav": {
     "narrationText": "We use Azure Cognitive Services to convert the narration text into natural-sounding audio using text-to-speech technology.",
@@ -278,10 +186,6 @@
   "c2\\s1_segment_05_bizchat.wav": {
     "narrationText": "BizChat provides the primary user interface with natural language access to highlights through conversational queries.",
     "generatedAt": "2025-10-19T15:01:00.330Z"
-  },
-  "c2\\s1_segment_06_loop_storage.wav": {
-    "narrationText": "Loop enables seamless embedding of the Clipchamp player within different application surfaces. All metadata, audio, and captions are securely stored in ODSP and made available through BizChat and Teams.",
-    "generatedAt": "2025-10-19T12:46:28.716Z"
   },
   "c2\\s1_segment_06_teams.wav": {
     "narrationText": "We are also planning to provide access to highlights directly within the Teams ecosystem as another interface option.",
@@ -298,5 +202,29 @@
   "c2\\s1_segment_09_conclusion.wav": {
     "narrationText": "Together, these teams deliver a unified end-to-end experience from recording through AI processing to user access, showcasing true Microsoft collaboration.",
     "generatedAt": "2025-10-19T15:01:00.341Z"
+  },
+  "c9\\s2_segment_02_satisfaction.wav": {
+    "narrationText": "With such high user satisfaction, Meeting Highlights is already making a significant impact.",
+    "generatedAt": "2025-10-19T16:00:56.203Z"
+  },
+  "c9\\s2_segment_03_quality_teaser.wav": {
+    "narrationText": "And there's even better news: the unified prompt optimization we discussed will soon roll out, delivering even higher quality highlights with improved detail and natural flow.",
+    "generatedAt": "2025-10-19T16:00:56.206Z"
+  },
+  "c9\\s2_segment_04_step1.wav": {
+    "narrationText": "Getting started is simple. First, open BizChat.",
+    "generatedAt": "2025-10-19T16:00:56.209Z"
+  },
+  "c9\\s2_segment_05_step2.wav": {
+    "narrationText": "Next, type forward slash to bring up the mention menu, and select the meeting you want recapped.",
+    "generatedAt": "2025-10-19T16:00:56.211Z"
+  },
+  "c9\\s2_segment_06_step3.wav": {
+    "narrationText": "Then just ask for a recap. Your personalized highlight video will appear at the bottom of the response.",
+    "generatedAt": "2025-10-19T16:00:56.215Z"
+  },
+  "c9\\s2_segment_07_cta.wav": {
+    "narrationText": "Try it today and see why users love Meeting Highlights!",
+    "generatedAt": "2025-10-19T16:00:56.219Z"
   }
 }

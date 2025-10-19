@@ -52,12 +52,119 @@ function saveCache(cacheFile: string, cache: NarrationCache) {
   fs.writeFileSync(cacheFile, JSON.stringify(cache, null, 2));
 }
 
+// Scan for orphaned audio files and cache entries
+function cleanupUnusedAudio(outputDir: string, cache: NarrationCache): {
+  orphanedFiles: string[];
+  orphanedCacheKeys: string[];
+} {
+  const result = {
+    orphanedFiles: [] as string[],
+    orphanedCacheKeys: [] as string[]
+  };
+
+  // Build set of expected filepaths from all slides
+  const expectedFiles = new Set<string>();
+  for (const slide of allSlides) {
+    const { chapter, slide: slideNum, audioSegments } = slide.metadata;
+    if (!audioSegments || audioSegments.length === 0) continue;
+
+    for (let i = 0; i < audioSegments.length; i++) {
+      const segment = audioSegments[i];
+      if (!segment.narrationText) continue;
+
+      const filename = `s${slideNum}_segment_${String(i + 1).padStart(2, '0')}_${segment.id}.wav`;
+      const chapterDir = path.join(outputDir, `c${chapter}`);
+      const filepath = path.join(chapterDir, filename);
+      const relativeFilepath = path.relative(outputDir, filepath);
+      expectedFiles.add(relativeFilepath.replace(/\\/g, '/'));
+    }
+  }
+
+  // Scan audio directories for actual files
+  const chapterDirs = fs.readdirSync(outputDir).filter(name =>
+    name.startsWith('c') && fs.statSync(path.join(outputDir, name)).isDirectory()
+  );
+
+  for (const chapterDir of chapterDirs) {
+    const chapterPath = path.join(outputDir, chapterDir);
+    const files = fs.readdirSync(chapterPath);
+    
+    for (const file of files) {
+      if (!file.endsWith('.wav')) continue;
+      
+      const filepath = path.join(chapterPath, file);
+      const relativeFilepath = path.relative(outputDir, filepath).replace(/\\/g, '/');
+      
+      if (!expectedFiles.has(relativeFilepath)) {
+        result.orphanedFiles.push(relativeFilepath);
+      }
+    }
+  }
+
+  // Check cache for orphaned entries
+  for (const cacheKey of Object.keys(cache)) {
+    const normalizedKey = cacheKey.replace(/\\/g, '/');
+    if (!expectedFiles.has(normalizedKey)) {
+      result.orphanedCacheKeys.push(cacheKey);
+    }
+  }
+
+  return result;
+}
+
 // Main function with batch processing
 async function generateTTS(config: TTSConfig) {
   console.log('🎙️  Starting TTS Batch Generation...\n');
   
   // Load cache
   const cache = loadCache(config.cacheFile);
+  
+  // Check for unused audio files
+  console.log('🔍 Scanning for unused audio files...\n');
+  const cleanup = cleanupUnusedAudio(config.outputDir, cache);
+  
+  if (cleanup.orphanedFiles.length > 0 || cleanup.orphanedCacheKeys.length > 0) {
+    console.log('⚠️  Found unused audio files and/or cache entries:\n');
+    
+    if (cleanup.orphanedFiles.length > 0) {
+      console.log(`📁 Orphaned audio files: ${cleanup.orphanedFiles.length}`);
+      cleanup.orphanedFiles.forEach(file => {
+        console.log(`   - ${file}`);
+      });
+      console.log();
+    }
+    
+    if (cleanup.orphanedCacheKeys.length > 0) {
+      console.log(`🗑️  Orphaned cache entries: ${cleanup.orphanedCacheKeys.length}`);
+      cleanup.orphanedCacheKeys.forEach(key => {
+        console.log(`   - ${key}`);
+      });
+      console.log();
+    }
+    
+    // Delete orphaned files
+    for (const relativeFile of cleanup.orphanedFiles) {
+      const fullPath = path.join(config.outputDir, relativeFile);
+      try {
+        fs.unlinkSync(fullPath);
+        console.log(`✅ Deleted: ${relativeFile}`);
+      } catch (error: any) {
+        console.error(`❌ Failed to delete ${relativeFile}: ${error.message}`);
+      }
+    }
+    
+    // Remove orphaned cache entries
+    for (const key of cleanup.orphanedCacheKeys) {
+      delete cache[key];
+    }
+    
+    if (cleanup.orphanedFiles.length > 0 || cleanup.orphanedCacheKeys.length > 0) {
+      console.log(`\n💾 Cleaned up ${cleanup.orphanedFiles.length} files and ${cleanup.orphanedCacheKeys.length} cache entries\n`);
+      saveCache(config.cacheFile, cache);
+    }
+  } else {
+    console.log('✅ No unused audio files found\n');
+  }
   
   // Check server health
   console.log(`Connecting to TTS server at ${config.serverUrl}...`);

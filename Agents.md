@@ -1,5 +1,41 @@
 # Agents - Meeting Highlights COGS Reduction Presentation
 
+## Recent Changes
+
+### 2025-01-20: Automatic Cleanup of Unused Audio Files
+**Added Orphaned File Detection and Removal:**
+- **Enhanced TTS Generation Script** ([`generate-tts.ts`](react_cogs_demo/scripts/generate-tts.ts))
+  - Added `cleanupUnusedAudio()` function to scan for orphaned audio files
+  - Detects WAV files in `public/audio/c*/` not referenced in any slide
+  - Identifies orphaned cache entries for non-existent slides
+  - Automatically deletes orphaned files and removes cache entries
+  - Reports cleanup: "Cleaned up X files and Y cache entries"
+
+- **Enhanced Cache Check Script** ([`check-tts-cache.ts`](react_cogs_demo/scripts/check-tts-cache.ts))
+  - Added `detectOrphanedAudio()` function for pre-flight cleanup check
+  - Prompts user before deletion: "Do you want to remove these unused files? (y/n)"
+  - Shows list of orphaned files (up to 5, with "... and X more")
+  - Cleans up both files and cache entries on confirmation
+  - Runs before checking for narration changes
+
+- **Updated Documentation**
+  - [`README.md`](README.md) - Added cleanup workflow explanation
+  - Section "TTS Cleanup Workflow" with 6-step process
+  - Smart caching system now includes automatic cleanup feature
+
+**Rationale:**
+- Keeps audio directory synchronized with slide content
+- Prevents accumulation of unused files from refactored/deleted slides
+- Reduces storage usage and improves project organization
+- Automatic detection prevents manual file management
+
+**Technical Implementation:**
+- Scans all chapter directories (`c0/` through `c9/`)
+- Builds set of expected files from `SlidesRegistry.ts`
+- Compares actual filesystem against expected files
+- Normalizes paths (handles Windows backslashes)
+- User confirmation required before deletion
+
 ## ⚠️ IMPORTANT: Documentation Maintenance
 
 **When making changes to the project, ALWAYS update both:**
@@ -92,7 +128,7 @@ Interactive presentation slides built with React, Framer Motion, and TypeScript:
   - **Chapter6.tsx** (266 lines) - Optimization Solution (3 slides)
   - **Chapter7.tsx** (812 lines) - Business Impact (5 slides)
   - **Chapter8.tsx** (118 lines) - User Reception (1 slide)
-  - **Chapter9.tsx** (251 lines) - Future Improvements (2 slides)
+  - **Chapter9.tsx** (290 lines) - Testimonials & Try It Out (2 slides)
 - **src/slides/SlidesRegistry.ts** - Central registry importing all slides from chapter files
 - **src/slides/SlideStyles.ts** - Shared styling utilities
 - **src/slides/AnimationVariants.ts** - Shared animation definitions
@@ -166,6 +202,23 @@ Interactive presentation slides built with React, Framer Motion, and TypeScript:
 - **70%+** estimated COGS reduction overall
 
 ## Recent Changes
+
+### 2025-01-20: Replaced "Future Improvements" with "Try It Yourself" Call-to-Action Slide
+**Created Engaging Closing Slide:**
+- **Replaced**: Ch9_S2_FutureImprovements with Ch9_S2_TryItYourself
+- **New Design**: 7-segment progressive reveal leveraging social proof and quality teaser
+  - Segment 0: Title "Ready to Experience It?" with 80% satisfaction hook
+  - Segment 1: Large 80% metric visualization with 5 stars
+  - Segment 2: "Coming Soon" banner teasing unified prompt quality improvements
+  - Segments 3-5: Three-step instructions (Open BizChat → Reference meeting → Ask for recap)
+  - Segment 6: Pulsing call-to-action button "Try It Today in BizChat! 🚀"
+- **Rationale**: All-hands audience benefits more from invitation to try the product than feature roadmap
+- **Connects story**: Links user satisfaction (Ch8) → quality improvements (Ch7) → actionable next step
+- **Updated files**:
+  - [`Chapter9.tsx`](react_cogs_demo/src/slides/chapters/Chapter9.tsx) - New slide component with 7 audio segments
+  - [`SlidesRegistry.ts`](react_cogs_demo/src/slides/SlidesRegistry.ts) - Updated import/export names
+  - [`README.md`](README.md) - Updated slide descriptions
+  - [`Agents.md`](Agents.md) - This entry
 
 ### 2025-01-20: Removed Individual Prompt Detail Slides
 **Streamlined Chapter 5 Content:**
@@ -409,10 +462,6 @@ The presentation is designed for an all-hands meeting where:
 - get-audio-duration for audio analysis
 - ffmpeg for silence generation
 
-## Future Improvements
+## Call to Action
 
-As mentioned in chapter 9, user requests include:
-- More detailed and specific highlights
-- Deeper Teams Recap integration
-- Action items inclusion
-- Additional language support
+The presentation closes with an invitation for users to try Meeting Highlights themselves through BizChat, reinforcing the product value demonstrated throughout the presentation. The closing slide teases upcoming quality improvements from the unified prompt optimization discussed in Chapter 7.

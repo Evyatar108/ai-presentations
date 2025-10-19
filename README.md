@@ -117,6 +117,11 @@ npm run tts:generate
 - Only regenerates audio when narration text changes
 - Skips unchanged segments automatically
 - Pre-flight check before `npm run dev` detects changes and prompts for regeneration
+- **Automatic cleanup of unused audio files:**
+  - Detects audio files no longer referenced in slides
+  - Removes orphaned cache entries
+  - Prompts before deletion during both generation and pre-flight check
+  - Keeps audio directory clean and synchronized with slide content
 
 **Features:**
 - **Batch processing**: Generates 10 segments per batch for efficiency
@@ -188,7 +193,7 @@ public/audio/
   - Quality comparison metrics
   - Path to GA rollout
 - **Ch8**: User satisfaction (80% useful, 96% likely to reuse)
-- **Ch9** (2 slides): Testimonials and future improvements
+- **Ch9** (2 slides): Testimonials and call-to-action to try Meeting Highlights
 **Accessibility**
 - Reduced-motion toggle (top-left corner) respects `prefers-reduced-motion`
 - All animations gracefully degrade to instant transitions when reduced motion is enabled
@@ -210,7 +215,7 @@ public/audio/
   - [`Chapter6.tsx`](react_cogs_demo/src/slides/chapters/Chapter6.tsx) - Optimization Solution (3 slides)
   - [`Chapter7.tsx`](react_cogs_demo/src/slides/chapters/Chapter7.tsx) - Business Impact (5 slides)
   - [`Chapter8.tsx`](react_cogs_demo/src/slides/chapters/Chapter8.tsx) - User Reception (1 slide)
-  - [`Chapter9.tsx`](react_cogs_demo/src/slides/chapters/Chapter9.tsx) - Future Improvements (2 slides)
+  - [`Chapter9.tsx`](react_cogs_demo/src/slides/chapters/Chapter9.tsx) - Testimonials & Try It Out (2 slides)
 - [`src/slides/SlidesRegistry.ts`](react_cogs_demo/src/slides/SlidesRegistry.ts) - Central registry importing all chapter slides
 - [`src/slides/SlideStyles.ts`](react_cogs_demo/src/slides/SlideStyles.ts) - Shared styling utilities
 - [`src/slides/AnimationVariants.ts`](react_cogs_demo/src/slides/AnimationVariants.ts) - Shared animation definitions
@@ -238,9 +243,17 @@ public/audio/
 - `npm run preview` - Preview production build
 
 **TTS Generation:**
-- `npm run tts:generate` - Generate all TTS audio files
+- `npm run tts:generate` - Generate all TTS audio files (cleans up unused files first)
 - `npm run tts:generate -- --skip-existing` - Only generate changed/new files (smart cache)
 - `npm run tts:duration` - Calculate and report audio durations
+
+**TTS Cleanup Workflow:**
+1. Scans `public/audio/` directories for WAV files
+2. Compares against slides in `SlidesRegistry.ts`
+3. Identifies orphaned files (not referenced by any slide)
+4. Identifies orphaned cache entries (no corresponding slide)
+5. Prompts: "Do you want to remove these unused files? (y/n)"
+6. Deletes files and updates cache on confirmation
 
 **Output:**
 - `public/audio/` - Generated audio files organized by chapter
