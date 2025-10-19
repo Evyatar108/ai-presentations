@@ -83,12 +83,27 @@ Interactive presentation slides built with React, Framer Motion, and TypeScript:
 
 #### Key Files
 - **src/App.tsx** - Main application component
-- **src/slides/AnimatedSlides.tsx** - **All 23 slide components consolidated** (Ch0-Ch9)
-- **src/slides/SlidesRegistry.ts** - Central registry importing all slides from AnimatedSlides.tsx
+- **src/slides/chapters/** - **Chapter-based slide organization** (10 files, 23 slides total)
+  - **Chapter0.tsx** (33 lines) - Intro slide
+  - **Chapter1.tsx** (543 lines) - What is Meeting Highlights (3 slides)
+  - **Chapter2.tsx** (327 lines) - Team Collaboration (1 slide)
+  - **Chapter3.tsx** (280 lines) - Architecture Overview (1 slide)
+  - **Chapter4.tsx** (183 lines) - Highlight Types (1 slide)
+  - **Chapter5.tsx** (351 lines) - COGS Challenge (6 slides)
+  - **Chapter6.tsx** (266 lines) - Optimization Solution (3 slides)
+  - **Chapter7.tsx** (812 lines) - Business Impact (5 slides)
+  - **Chapter8.tsx** (118 lines) - User Reception (1 slide)
+  - **Chapter9.tsx** (251 lines) - Future Improvements (2 slides)
+- **src/slides/SlidesRegistry.ts** - Central registry importing all slides from chapter files
+- **src/slides/SlideStyles.ts** - Shared styling utilities
+- **src/slides/AnimationVariants.ts** - Shared animation definitions
+- **src/slides/SlideLayouts.tsx** - Reusable layout components
+- **src/slides/SlideIcons.tsx** - Shared icon components
 - **src/components/CoreComponents.tsx** - Reusable UI components (MetricTile, etc.)
 - **src/components/NarratedController.tsx** - Audio-synced presentation controller
 - **src/components/VideoPlayer.tsx** - Demo video player with freeze-on-end functionality
 - **src/contexts/SegmentContext.tsx** - Segment state management for multi-segment slides
+- **src/accessibility/ReducedMotion.tsx** - Motion preferences context
 - **src/accessibility/ReducedMotion.tsx** - Motion preferences context
 
 #### Notable Slides
@@ -153,17 +168,27 @@ Interactive presentation slides built with React, Framer Motion, and TypeScript:
 
 ## Recent Changes
 
-### 2025-01-20: File Consolidation
-**Consolidated All Slide Components:**
-- Merged all slides into single file ([`src/slides/AnimatedSlides.tsx`](react_cogs_demo/src/slides/AnimatedSlides.tsx))
-- Components consolidated:
-  - Ch2_TeamCollaboration (from TeamCollaborationSlide.tsx)
-  - Ch7_S3_CostCurve (from ImpactComponents.tsx)
-  - Ch7_S4_QualityComparison (from ImpactComponents.tsx)
-  - All existing slides from AnimatedSlides.tsx
-- Updated SlidesRegistry.ts to import all slides from AnimatedSlides.tsx only
-- Deleted redundant files: TeamCollaborationSlide.tsx, ImpactComponents.tsx
-- Result: Cleaner project structure with all 23 slides in one location
+### 2025-01-20: Chapter-Based File Organization
+**Split AnimatedSlides.tsx into Chapter Files:**
+- **Deleted**: Monolithic [`AnimatedSlides.tsx`](react_cogs_demo/src/slides/AnimatedSlides.tsx) (3,075 lines)
+- **Created**: 10 chapter files in [`src/slides/chapters/`](react_cogs_demo/src/slides/chapters/) directory
+- **File sizes**: Range from 33 lines (Chapter0) to 812 lines (Chapter7)
+- **Average size**: ~296 lines per chapter file
+- **Benefits**:
+  - Improved navigation - find slides by opening relevant chapter
+  - Reduced merge conflicts - developers work on separate chapters
+  - Better IDE performance - smaller files load and parse faster
+  - Logical organization - chapters align with presentation narrative
+  - Scalable structure - easy to add new slides or split further
+- **Updated**: [`SlidesRegistry.ts`](react_cogs_demo/src/slides/SlidesRegistry.ts) to import from chapter files
+- **Verified**: TypeScript compilation passes, all 23 slides render correctly
+- **Documentation**: Updated SPLITTING_STRATEGY.md with completion status
+
+### 2025-01-20: Previous File Consolidation
+**Earlier Consolidation Step (Now Superseded):**
+- Initially merged all slides into single AnimatedSlides.tsx file
+- Consolidated Ch2_TeamCollaboration, Ch7_S3_CostCurve, Ch7_S4_QualityComparison
+- This monolithic file (3,075 lines) was then split into chapters (see above)
 
 ### 2025-01-20: Video Player Integration
 **Added Demo Video Support:**

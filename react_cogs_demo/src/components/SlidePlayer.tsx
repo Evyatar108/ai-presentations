@@ -308,7 +308,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
                 fontFamily: 'Inter, system-ui, sans-serif'
               }}
             >
-              {currentIndex + 1} / {slides.length}
+              {currentIndex} / {slides.length - 1}
             </div>
           </div>
 

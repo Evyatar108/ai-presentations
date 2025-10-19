@@ -200,8 +200,22 @@ public/audio/
 - [`src/main.tsx`](react_cogs_demo/src/main.tsx) - React initialization
 - [`src/App.tsx`](react_cogs_demo/src/App.tsx) - Main app with slide registry
 - [`src/components/SlidePlayer.tsx`](react_cogs_demo/src/components/SlidePlayer.tsx) - Slide navigation & transitions
-- [`src/slides/AnimatedSlides.tsx`](react_cogs_demo/src/slides/AnimatedSlides.tsx) - **All 23 slide components** (consolidated)
-- [`src/slides/SlidesRegistry.ts`](react_cogs_demo/src/slides/SlidesRegistry.ts) - Central registry importing all slides
+- **[`src/slides/chapters/`](react_cogs_demo/src/slides/chapters/)** - **Chapter-based slide organization (10 files, 23 slides)**
+  - [`Chapter0.tsx`](react_cogs_demo/src/slides/chapters/Chapter0.tsx) - Intro slide
+  - [`Chapter1.tsx`](react_cogs_demo/src/slides/chapters/Chapter1.tsx) - What is Meeting Highlights (3 slides)
+  - [`Chapter2.tsx`](react_cogs_demo/src/slides/chapters/Chapter2.tsx) - Team Collaboration (1 slide)
+  - [`Chapter3.tsx`](react_cogs_demo/src/slides/chapters/Chapter3.tsx) - Architecture Overview (1 slide)
+  - [`Chapter4.tsx`](react_cogs_demo/src/slides/chapters/Chapter4.tsx) - Highlight Types (1 slide)
+  - [`Chapter5.tsx`](react_cogs_demo/src/slides/chapters/Chapter5.tsx) - COGS Challenge (6 slides)
+  - [`Chapter6.tsx`](react_cogs_demo/src/slides/chapters/Chapter6.tsx) - Optimization Solution (3 slides)
+  - [`Chapter7.tsx`](react_cogs_demo/src/slides/chapters/Chapter7.tsx) - Business Impact (5 slides)
+  - [`Chapter8.tsx`](react_cogs_demo/src/slides/chapters/Chapter8.tsx) - User Reception (1 slide)
+  - [`Chapter9.tsx`](react_cogs_demo/src/slides/chapters/Chapter9.tsx) - Future Improvements (2 slides)
+- [`src/slides/SlidesRegistry.ts`](react_cogs_demo/src/slides/SlidesRegistry.ts) - Central registry importing all chapter slides
+- [`src/slides/SlideStyles.ts`](react_cogs_demo/src/slides/SlideStyles.ts) - Shared styling utilities
+- [`src/slides/AnimationVariants.ts`](react_cogs_demo/src/slides/AnimationVariants.ts) - Shared animation definitions
+- [`src/slides/SlideLayouts.tsx`](react_cogs_demo/src/slides/SlideLayouts.tsx) - Reusable layout components
+- [`src/slides/SlideIcons.tsx`](react_cogs_demo/src/slides/SlideIcons.tsx) - Shared icon components
 - [`src/components/CoreComponents.tsx`](react_cogs_demo/src/components/CoreComponents.tsx) - Reusable UI components (MetricTile, etc.)
 - [`src/accessibility/ReducedMotion.tsx`](react_cogs_demo/src/accessibility/ReducedMotion.tsx) - Motion preferences context
 - [`src/components/VideoPlayer.tsx`](react_cogs_demo/src/components/VideoPlayer.tsx) - Demo video player component
