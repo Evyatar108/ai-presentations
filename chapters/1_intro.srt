@@ -1,11 +1,31 @@
 1
 00:00:01,120 --> 00:00:08,641
-Meeting Highlights transforms lengthy Teams meetings into dynamic, bite-sized video recaps, allowing users to quickly catch up on what matters most.
+Meeting Highlights is a new Microsoft Teams feature that delivers a dynamic, bite-sized video recap of your meeting, typically 3 to 5 minutes long.
 
 2
 00:00:09,841 --> 00:00:17,521
-Combining AI-generated voiceover summaries with authentic video snippets, it captures important moments while preserving the original tone and flow.
+It uses AI to automatically identify and stitch together the most important moments from your Teams meetings, creating an engaging highlights video.
 
 3
-00:00:18,802 --> 00:00:24,882
-Thanks to this approach, users can review key topics and the overall meeting atmosphere without having to watch the entire recording.
+00:00:18,802 --> 00:00:26,882
+The feature combines AI-generated voiceover summaries with authentic video snippets from the actual meeting, preserving the original tone, reactions, and flow.
+
+4
+00:00:27,882 --> 00:00:35,362
+Users can access Meeting Highlights through Microsoft 365 Copilot, Teams Recap, and other M365 entry points after a meeting is recorded.
+
+5
+00:00:36,362 --> 00:00:44,842
+The video includes subtitles for accessibility and allows users to navigate between highlight segments, making it easy to jump to specific topics of interest.
+
+6
+00:00:45,842 --> 00:00:53,322
+This solves a critical problem: catching up on missed meetings without watching hour-long recordings or reading lengthy transcripts.
+
+7
+00:00:54,322 --> 00:01:02,802
+Internal users have called it magical, with over 80% rating it as extremely useful or very useful, and 96% likely to use it again.
+
+8
+00:01:03,802 --> 00:01:11,282
+The feature is currently in preview for enterprise customers with Microsoft 365 Copilot licenses, with general availability planned for 2024.

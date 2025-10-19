@@ -7,17 +7,13 @@ Cost efficiency while maintaining quality is critical for scaling meeting highli
 The initial implementation required 4 sequential LLM calls per meeting, creating significant computational costs.
 
 3
-00:02:02,730 --> 00:02:05,851
-The first prompt segmented transcripts into one to seven key topics.
+00:02:02,730 --> 00:02:08,851
+This multi-step approach meant higher GPU requirements, estimated at around 600 GPUs to support global availability.
 
 4
-00:02:06,931 --> 00:02:12,171
-The second prompt extracted up to ten self-contained utterance blocks, capturing key feedback, news, or demonstrations.
+00:02:09,931 --> 00:02:15,171
+Each additional prompt call added latency, complexity, and token overhead to the generation pipeline.
 
 5
-00:02:13,211 --> 00:02:17,932
-The third prompt ranked utterance blocks by quality, clarity, intelligibility, self-containment, and interest.
-
-6
-00:02:19,052 --> 00:02:24,252
-The fourth prompt synthesized a cohesive narrative with smooth transitions between abstractive and extractive sections.
+00:02:16,211 --> 00:02:22,932
+To make Meeting Highlights economically viable at scale, we needed to dramatically reduce these computational costs without sacrificing quality.
