@@ -4,6 +4,7 @@ import { SlidePlayer, Slide } from './components/SlidePlayer';
 import { NarratedController } from './components/NarratedController';
 import { allSlides } from './slides/SlidesRegistry';
 import { SegmentProvider } from './contexts/SegmentContext';
+import 'reactflow/dist/style.css';
 
 export const App: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState<{ chapter: number; slide: number } | undefined>(undefined);

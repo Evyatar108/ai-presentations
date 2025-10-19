@@ -5,6 +5,7 @@ import { useSegmentedAnimation } from '../contexts/SegmentContext';
 import { MetricTile } from '../components/CoreComponents';
 import { VideoPlayer } from '../components/VideoPlayer';
 import { SlideComponentWithMetadata } from './SlideMetadata';
+import { Ch2_ArchitectureDiagram } from './Ch2_ArchitectureDiagram';
 
 /**
  * ALL SLIDE COMPONENTS FOR MEETING HIGHLIGHTS PRESENTATION
@@ -2201,14 +2202,14 @@ Ch3_S1_ArchitectureOverview.metadata = {
       audioFilePath: "/audio/c3/s1_segment_03_odsp.wav",
       srtSegmentNumber: 3,
       visualDescription: "ODSP component highlights with arrow from recording",
-      narrationText: "ODSP, our storage and orchestration layer, detects the recording and initiates the highlight generation process."
+      narrationText: "O-D-S-P, our storage and orchestration layer, detects the recording and initiates the highlight generation process."
     },
     {
       id: "tmr",
       audioFilePath: "/audio/c3/s1_segment_04_tmr.wav",
       srtSegmentNumber: 4,
       visualDescription: "TMR Processor component highlights with arrow from ODSP",
-      narrationText: "The TMR processor retrieves the meeting transcript and calls our LLM."
+      narrationText: "The M-S-A-I processor receives the meeting transcript and calls the LLM using our prompts."
     },
     {
       id: "llm",
@@ -2229,7 +2230,7 @@ Ch3_S1_ArchitectureOverview.metadata = {
       audioFilePath: "/audio/c3/s1_segment_07_storage.wav",
       srtSegmentNumber: 7,
       visualDescription: "Final storage in ODSP with access icons (BizChat, Teams)",
-      narrationText: "Finally, all the metadata, audio, and captions are securely stored in ODSP and made available through BizChat and Teams."
+      narrationText: "Finally, all the metadata, audio, and captions are securely stored in ODSP and made available to users through BizChat and Teams."
     }
   ]
 };
@@ -2948,20 +2949,6 @@ const teams: TeamInfo[] = [
     description: 'Processes transcripts using LLM technology'
   },
   {
-    id: 'clipchamp',
-    name: 'Clipchamp',
-    logo: '/images/logos/ClipChamp.png',
-    role: 'Video Player',
-    description: 'Owns the highlights player component'
-  },
-  {
-    id: 'loop',
-    name: 'Loop',
-    logo: '/images/logos/Loop.png',
-    role: 'Integration Layer',
-    description: 'Enables seamless player embedding'
-  },
-  {
     id: 'bizchat',
     name: 'BizChat',
     logo: '/images/logos/BizChat.png',
@@ -2976,6 +2963,20 @@ const teams: TeamInfo[] = [
     description: 'Delivers within Teams ecosystem'
   },
   {
+    id: 'loop',
+    name: 'Loop',
+    logo: '/images/logos/Loop.png',
+    role: 'Integration Layer',
+    description: 'Enables seamless player embedding'
+  },
+  {
+    id: 'clipchamp',
+    name: 'Clipchamp',
+    logo: '/images/logos/ClipChamp.png',
+    role: 'Video Player',
+    description: 'Owns the highlights player component'
+  },
+  {
     id: 'conclusion',
     name: 'True Collaboration',
     logo: '',
@@ -2985,249 +2986,273 @@ const teams: TeamInfo[] = [
 ];
 
 /**
- * Chapter 2 - Team Collaboration
- * Demonstrates multi-segment slide with progressive logo reveals
- */
-export const Ch2_TeamCollaboration: SlideComponentWithMetadata = () => {
-  const { reduced } = useReducedMotion();
-  const { currentSegmentIndex, isSegmentVisible } = useSegmentedAnimation();
-
-  const visibleTeams = teams.filter((_, index) => isSegmentVisible(index));
-  const currentTeam = teams[currentSegmentIndex];
-  const isIntroOrConclusion = currentTeam?.id === 'intro' || currentTeam?.id === 'conclusion';
-
-  return (
-    <div
-      style={{
-        background: '#0f172a',
-        minHeight: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '2rem',
-        fontFamily: 'Inter, system-ui, sans-serif'
-      }}
-    >
-      <motion.h1
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        style={{
-          color: '#f1f5f9',
-          marginBottom: '3rem',
-          fontSize: 36,
-          textAlign: 'center'
-        }}
-      >
-        Meeting Highlights - Team Collaboration
-      </motion.h1>
-
-      {isIntroOrConclusion && (
-        <motion.div
-          key={currentTeam.id}
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.9 }}
-          transition={{ duration: reduced ? 0.3 : 0.6 }}
-          style={{
-            textAlign: 'center',
-            maxWidth: 600,
-            marginBottom: '3rem'
-          }}
-        >
-          <p
-            style={{
-              color: '#e2e8f0',
-              fontSize: 24,
-              lineHeight: 1.6
-            }}
-          >
-            {currentTeam.description}
-          </p>
-        </motion.div>
-      )}
-
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: '2rem',
-          maxWidth: 900,
-          width: '100%'
-        }}
-      >
-        <AnimatePresence mode="popLayout">
-          {visibleTeams
-            .filter(team => team.logo)
-            .map((team) => {
-              const isCurrentTeam = team.id === currentTeam?.id;
-              
-              return (
-                <motion.div
-                  key={team.id}
-                  initial={{ opacity: 0, scale: 0.8, y: 20 }}
-                  animate={{
-                    opacity: 1,
-                    scale: isCurrentTeam ? 1.05 : 1,
-                    y: 0
-                  }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  transition={{
-                    duration: reduced ? 0.3 : 0.6,
-                    type: 'spring',
-                    stiffness: 100
-                  }}
-                  style={{
-                    background: isCurrentTeam
-                      ? 'linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))'
-                      : '#1e293b',
-                    borderRadius: 16,
-                    padding: '2rem',
-                    border: isCurrentTeam ? '2px solid #00B7C3' : '1px solid #334155',
-                    boxShadow: isCurrentTeam && !reduced
-                      ? '0 0 30px rgba(0, 183, 195, 0.4)'
-                      : '0 4px 12px rgba(0, 0, 0, 0.3)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    textAlign: 'center',
-                    position: 'relative'
-                  }}
-                >
-                  <motion.div
-                    style={{
-                      width: 105,
-                      height: 95,
-                      borderRadius: '50%',
-                      background: '#ffffff',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      marginBottom: '1rem',
-                      padding: '0.75rem',
-                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
-                    }}
-                    animate={
-                      isCurrentTeam && !reduced
-                        ? {
-                            scale: [1, 1.05, 1],
-                            transition: { duration: 2, repeat: Infinity }
-                          }
-                        : {}
-                    }
-                  >
-                    <img
-                      src={team.logo}
-                      alt={team.name}
-                      style={{
-                        width: 80,
-                        height: 80,
-                        objectFit: 'contain'
-                      }}
-                    />
-                  </motion.div>
-
-                  <h3
-                    style={{
-                      color: '#f1f5f9',
-                      fontSize: 20,
-                      fontWeight: 600,
-                      margin: '0.5rem 0'
-                    }}
-                  >
-                    {team.name}
-                  </h3>
-
-                  <p
-                    style={{
-                      color: '#00B7C3',
-                      fontSize: 14,
-                      fontWeight: 500,
-                      margin: '0.25rem 0 0.75rem'
-                    }}
-                  >
-                    {team.role}
-                  </p>
-
-                  <AnimatePresence>
-                    {isCurrentTeam && (
-                      <motion.p
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: reduced ? 0.2 : 0.4 }}
-                        style={{
-                          color: '#94a3b8',
-                          fontSize: 13,
-                          lineHeight: 1.5,
-                          margin: 0
-                        }}
-                      >
-                        {team.description}
-                      </motion.p>
-                    )}
-                  </AnimatePresence>
-
-                  {isCurrentTeam && (
-                    <motion.div
-                      initial={{ scale: 0, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      exit={{ scale: 0, opacity: 0 }}
-                      transition={{ type: 'spring', stiffness: 200 }}
-                      style={{
-                        position: 'absolute',
-                        top: -10,
-                        right: -10,
-                        width: 30,
-                        height: 30,
-                        borderRadius: '50%',
-                        background: '#10b981',
-                        border: '3px solid #0f172a',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: 16,
-                        color: '#fff'
-                      }}
-                    >
-                      ✓
-                    </motion.div>
-                  )}
-                </motion.div>
-              );
-            })}
-        </AnimatePresence>
-      </div>
-
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.5 }}
-        style={{
-          marginTop: '3rem',
-          display: 'flex',
-          gap: '0.5rem',
-          alignItems: 'center'
-        }}
-      >
-        {teams.map((team, index) => (
-          <div
-            key={team.id}
-            style={{
-              width: 10,
-              height: 10,
-              borderRadius: '50%',
-              background: isSegmentVisible(index) ? '#00B7C3' : '#334155',
-              border: index === currentSegmentIndex ? '2px solid #f1f5f9' : 'none',
-              transition: 'all 0.3s ease'
-            }}
-          />
-        ))}
-      </motion.div>
-    </div>
-  );
-};
-
+ /**
+  * Chapter 2 - Team Collaboration
+  * Demonstrates multi-segment slide with progressive logo reveals
+  */
+ export const Ch2_TeamCollaboration: SlideComponentWithMetadata = () => {
+   const { reduced } = useReducedMotion();
+   const { currentSegmentIndex, isSegmentVisible } = useSegmentedAnimation();
+ 
+   const visibleTeams = teams.filter((_, index) => isSegmentVisible(index));
+   const currentTeam = teams[currentSegmentIndex];
+   const isIntroSegment = currentTeam?.id === 'intro';
+   const shouldShowDiagram = currentSegmentIndex >= 1; // Show diagram from segment 1 onwards
+ 
+   return (
+     <div
+       style={{
+         background: '#0f172a',
+         minHeight: '100vh',
+         display: 'flex',
+         flexDirection: 'column',
+         alignItems: 'center',
+         justifyContent: 'center',
+         padding: '2rem',
+         fontFamily: 'Inter, system-ui, sans-serif'
+       }}
+     >
+       <motion.h1
+         initial={{ opacity: 0, y: -20 }}
+         animate={{ opacity: 1, y: 0 }}
+         style={{
+           color: '#f1f5f9',
+           marginBottom: '3rem',
+           fontSize: 36,
+           textAlign: 'center'
+         }}
+       >
+         Meeting Highlights - Team Collaboration
+       </motion.h1>
+ 
+       {isIntroSegment && (
+         <motion.div
+           key={currentTeam.id}
+           initial={{ opacity: 0, scale: 0.9 }}
+           animate={{ opacity: 1, scale: 1 }}
+           exit={{ opacity: 0, scale: 0.9 }}
+           transition={{ duration: reduced ? 0.3 : 0.6 }}
+           style={{
+             textAlign: 'center',
+             maxWidth: 600,
+             marginBottom: '3rem'
+           }}
+         >
+           <p
+             style={{
+               color: '#e2e8f0',
+               fontSize: 24,
+               lineHeight: 1.6
+             }}
+           >
+             {currentTeam.description}
+           </p>
+         </motion.div>
+       )}
+ 
+       {/* Show architectural diagram from segment 1 onwards */}
+       <AnimatePresence mode="wait">
+         {shouldShowDiagram ? (
+           <motion.div
+             key="diagram"
+             initial={{ opacity: 0, scale: 0.95 }}
+             animate={{ opacity: 1, scale: 1 }}
+             exit={{ opacity: 0, scale: 0.95 }}
+             transition={{ duration: reduced ? 0.3 : 0.6 }}
+           >
+             <Ch2_ArchitectureDiagram
+               currentSegmentIndex={currentSegmentIndex}
+               isSegmentVisible={isSegmentVisible}
+               currentTeamId={currentTeam?.id}
+               reduced={reduced}
+             />
+           </motion.div>
+         ) : (
+           <motion.div
+             key="cards"
+             initial={{ opacity: 0 }}
+             animate={{ opacity: 1 }}
+             exit={{ opacity: 0 }}
+             style={{
+               display: 'grid',
+               gridTemplateColumns: 'repeat(3, 1fr)',
+               gap: '2rem',
+               maxWidth: 900,
+               width: '100%'
+             }}
+           >
+             <AnimatePresence mode="popLayout">
+               {visibleTeams
+                 .filter(team => team.logo)
+                 .map((team) => {
+                   const isCurrentTeam = team.id === currentTeam?.id;
+                   return (
+                     <motion.div
+                       key={team.id}
+                       initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                       animate={{
+                         opacity: 1,
+                         scale: isCurrentTeam ? 1.05 : 1,
+                         y: 0
+                       }}
+                       exit={{ opacity: 0, scale: 0.8 }}
+                       transition={{
+                         duration: reduced ? 0.3 : 0.6,
+                         type: 'spring',
+                         stiffness: 100
+                       }}
+                       style={{
+                         background: isCurrentTeam
+                           ? 'linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))'
+                           : '#1e293b',
+                         borderRadius: 16,
+                         padding: '2rem',
+                         border: isCurrentTeam ? '2px solid #00B7C3' : '1px solid #334155',
+                         boxShadow: isCurrentTeam && !reduced
+                           ? '0 0 30px rgba(0, 183, 195, 0.4)'
+                           : '0 4px 12px rgba(0, 0, 0, 0.3)',
+                         display: 'flex',
+                         flexDirection: 'column',
+                         alignItems: 'center',
+                         textAlign: 'center',
+                         position: 'relative'
+                       }}
+                     >
+                       <motion.div
+                         style={{
+                           width: 100,
+                           height: 100,
+                           borderRadius: '50%',
+                           background: '#ffffff',
+                           display: 'flex',
+                           alignItems: 'center',
+                           justifyContent: 'center',
+                           marginBottom: '1rem',
+                           padding: '0.75rem',
+                           boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
+                         }}
+                         animate={
+                           isCurrentTeam && !reduced
+                             ? {
+                                 scale: [1, 1.05, 1],
+                                 transition: { duration: 2, repeat: Infinity }
+                               }
+                             : {}
+                         }
+                       >
+                         <img
+                           src={team.logo}
+                           alt={team.name}
+                           style={{
+                             width: '100%',
+                             height: '100%',
+                             objectFit: 'contain'
+                           }}
+                         />
+                       </motion.div>
+ 
+                       <h3
+                         style={{
+                           color: '#f1f5f9',
+                           fontSize: 20,
+                           fontWeight: 600,
+                           margin: '0.5rem 0'
+                         }}
+                       >
+                         {team.name}
+                       </h3>
+ 
+                       <p
+                         style={{
+                           color: '#00B7C3',
+                           fontSize: 14,
+                           fontWeight: 500,
+                           margin: '0.25rem 0 0.75rem'
+                         }}
+                       >
+                         {team.role}
+                       </p>
+ 
+                       <AnimatePresence>
+                         {isCurrentTeam && (
+                           <motion.p
+                             initial={{ opacity: 0, height: 0 }}
+                             animate={{ opacity: 1, height: 'auto' }}
+                             exit={{ opacity: 0, height: 0 }}
+                             transition={{ duration: reduced ? 0.2 : 0.4 }}
+                             style={{
+                               color: '#94a3b8',
+                               fontSize: 13,
+                               lineHeight: 1.5,
+                               margin: 0
+                             }}
+                           >
+                             {team.description}
+                           </motion.p>
+                         )}
+                       </AnimatePresence>
+ 
+                       {isCurrentTeam && (
+                         <motion.div
+                           initial={{ scale: 0, opacity: 0 }}
+                           animate={{ scale: 1, opacity: 1 }}
+                           exit={{ scale: 0, opacity: 0 }}
+                           transition={{ type: 'spring', stiffness: 200 }}
+                           style={{
+                             position: 'absolute',
+                             top: -10,
+                             right: -10,
+                             width: 30,
+                             height: 30,
+                             borderRadius: '50%',
+                             background: '#10b981',
+                             border: '3px solid #0f172a',
+                             display: 'flex',
+                             alignItems: 'center',
+                             justifyContent: 'center',
+                             fontSize: 16,
+                             color: '#fff'
+                           }}
+                         >
+                           ✓
+                         </motion.div>
+                       )}
+                     </motion.div>
+                   );
+                 })}
+             </AnimatePresence>
+           </motion.div>
+         )}
+       </AnimatePresence>
+ 
+       <motion.div
+         initial={{ opacity: 0 }}
+         animate={{ opacity: 1 }}
+         transition={{ delay: 0.5 }}
+         style={{
+           marginTop: '2rem',
+           display: 'flex',
+           gap: '0.5rem',
+           alignItems: 'center'
+         }}
+       >
+         {teams.map((team, index) => (
+           <div
+             key={team.id}
+             style={{
+               width: 10,
+               height: 10,
+               borderRadius: '50%',
+               background: isSegmentVisible(index) ? '#00B7C3' : '#334155',
+               border: index === currentSegmentIndex ? '2px solid #f1f5f9' : 'none',
+               transition: 'all 0.3s ease'
+             }}
+           />
+         ))}
+       </motion.div>
+     </div>
+   );
+ };
 Ch2_TeamCollaboration.metadata = {
   chapter: 2,
   slide: 1,
@@ -3250,16 +3275,6 @@ Ch2_TeamCollaboration.metadata = {
       narrationText: 'M-S-A-I Hive processes meeting transcripts using Large Language Model technology to generate highlight content.'
     },
     {
-      id: 'clipchamp',
-      audioFilePath: '/audio/c2/s1_segment_04_clipchamp.wav',
-      narrationText: 'Clipchamp owns the highlights player component, delivering the visual playback experience.'
-    },
-    {
-      id: 'loop',
-      audioFilePath: '/audio/c2/s1_segment_05_loop.wav',
-      narrationText: 'Loop enables seamless embedding of the Clipchamp player within different application surfaces.'
-    },
-    {
       id: 'bizchat',
       audioFilePath: '/audio/c2/s1_segment_06_bizchat.wav',
       narrationText: 'BizChat provides the primary user interface with natural language access to highlights.'
@@ -3267,7 +3282,17 @@ Ch2_TeamCollaboration.metadata = {
     {
       id: 'teams',
       audioFilePath: '/audio/c2/s1_segment_07_teams.wav',
-      narrationText: 'Teams integration is planned to deliver highlights within the Teams ecosystem using the same player technology via Loop.'
+      narrationText: 'Teams integration is planned to deliver highlights within the Teams ecosystem.'
+    },
+    {
+      id: 'loop',
+      audioFilePath: '/audio/c2/s1_segment_05_loop.wav',
+      narrationText: 'Loop enables seamless embedding of the Clipchamp player within different application surfaces.'
+    },
+    {
+      id: 'clipchamp',
+      audioFilePath: '/audio/c2/s1_segment_04_clipchamp.wav',
+      narrationText: 'Clipchamp owns the highlights player component, delivering the visual playback experience.'
     },
     {
       id: 'conclusion',
