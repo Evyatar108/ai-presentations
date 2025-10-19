@@ -1547,7 +1547,7 @@ Ch1_S1_WhatIsMeetingHighlights.metadata = {
       audioFilePath: "/audio/c1/s1_segment_02_ai_generation.wav",
       srtSegmentNumber: 2,
       visualDescription: "Animation showing meeting recording transforming into short highlight video",
-      narrationText: "It uses AI to automatically generate a short highlights video, typically 3 to 5 minutes long."
+      narrationText: "It uses AI to automatically generate a short highlights video, typically 2 to 3 minutes long."
     },
     {
       id: "combination",
@@ -1805,7 +1805,7 @@ export const Ch1_S3_UserValue: SlideComponentWithMetadata = () => {
     {
       icon: '⏱️',
       title: 'Time Savings',
-      description: '60 minutes → 3-5 minutes',
+      description: '60 minutes → 2-3 minutes',
       detail: 'Catch up without watching full recordings'
     },
     {
@@ -1930,7 +1930,7 @@ Ch1_S3_UserValue.metadata = {
       audioFilePath: "/audio/c1/s3_segment_02_time.wav",
       srtSegmentNumber: 2,
       visualDescription: "Card 1 highlights - clock icon with \"60 min → 3 min\"",
-      narrationText: "First, massive time savings. Instead of watching a 60-minute recording, catch up in 3 to 5 minutes."
+      narrationText: "First, massive time savings. Instead of watching a 60-minute recording, catch up in 2 to 3 minutes."
     },
     {
       id: "engagement",

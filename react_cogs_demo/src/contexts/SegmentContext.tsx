@@ -34,69 +34,62 @@ const SegmentContext = createContext<SegmentContextValue | null>(null);
  * Provider component for segment state management
  */
 export const SegmentProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [state, setState] = useState<SegmentState>({
+  const [state, setState] = useState<SegmentState & { segments: AudioSegment[] }>({
     currentSegmentIndex: 0,
     currentSegment: null,
     totalSegments: 0,
     isSegmentActive: false,
-    slideKey: ''
+    slideKey: '',
+    segments: []
   });
-
-  const [segments, setSegments] = useState<AudioSegment[]>([]);
 
   const initializeSegments = useCallback((slideKey: string, newSegments: AudioSegment[]) => {
     console.log(`[SegmentContext] Initializing segments for ${slideKey}, count: ${newSegments.length}`);
     
-    // Update both segments and state in single batch
-    setSegments(newSegments);
     setState({
       currentSegmentIndex: 0,
       currentSegment: newSegments[0] || null,
       totalSegments: newSegments.length,
       isSegmentActive: newSegments.length > 0,
-      slideKey
+      slideKey,
+      segments: newSegments
     });
     
-    // Return the segments so caller knows initialization is complete
     return newSegments;
   }, []);
 
   const setCurrentSegment = useCallback((index: number) => {
-    // Use functional update to get latest segments from closure
     setState(prev => {
-      // Get current segments from the latest state
-      const currentSegments = segments.length > 0 ? segments : [];
-      
-      if (index < 0 || index >= currentSegments.length) {
-        console.warn(`[SegmentContext] Invalid segment index: ${index}, segments length: ${currentSegments.length}`);
+      if (index < 0 || index >= prev.segments.length) {
+        console.warn(`[SegmentContext] Invalid segment index: ${index}, segments length: ${prev.segments.length}`);
         return prev;
       }
       
-      console.log(`[SegmentContext] Setting segment index to ${index} (${currentSegments[index]?.id})`);
+      console.log(`[SegmentContext] Setting segment index to ${index} (${prev.segments[index]?.id})`);
       return {
         ...prev,
         currentSegmentIndex: index,
-        currentSegment: currentSegments[index]
+        currentSegment: prev.segments[index]
       };
     });
-  }, [segments]);
+  }, []);
 
   const nextSegment = useCallback(() => {
     setState(prev => {
       const nextIndex = prev.currentSegmentIndex + 1;
-      if (nextIndex >= segments.length) {
+      if (nextIndex >= prev.segments.length) {
         console.log('[SegmentContext] Already at last segment');
         return prev;
       }
       
-      console.log(`[SegmentContext] Moving to next segment: ${nextIndex} (${segments[nextIndex]?.id})`);
+      console.log(`[SegmentContext] Moving to next segment: ${nextIndex} (${prev.segments[nextIndex]?.id})`);
       return {
         ...prev,
         currentSegmentIndex: nextIndex,
-        currentSegment: segments[nextIndex]
+        currentSegment: prev.segments[nextIndex]
       };
     });
-  }, [segments]);
+  }, []);
 
   const previousSegment = useCallback(() => {
     setState(prev => {
@@ -106,23 +99,25 @@ export const SegmentProvider: React.FC<{ children: ReactNode }> = ({ children })
         return prev;
       }
       
-      console.log(`[SegmentContext] Moving to previous segment: ${prevIndex} (${segments[prevIndex]?.id})`);
+      console.log(`[SegmentContext] Moving to previous segment: ${prevIndex} (${prev.segments[prevIndex]?.id})`);
       return {
         ...prev,
         currentSegmentIndex: prevIndex,
-        currentSegment: segments[prevIndex]
+        currentSegment: prev.segments[prevIndex]
       };
     });
-  }, [segments]);
+  }, []);
 
   const resetSegments = useCallback(() => {
-    console.log('[SegmentContext] Resetting segments to index 0');
-    setState(prev => ({
-      ...prev,
-      currentSegmentIndex: 0,
-      currentSegment: segments[0] || null
-    }));
-  }, [segments]);
+    setState(prev => {
+      console.log('[SegmentContext] Resetting segments to index 0');
+      return {
+        ...prev,
+        currentSegmentIndex: 0,
+        currentSegment: prev.segments[0] || null
+      };
+    });
+  }, []);
 
   const contextValue: SegmentContextValue = {
     ...state,

@@ -275,16 +275,29 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
       if (!isActive) return; // Effect was cleaned up
       
       audioRef.current = audio;
-      
       audio.onended = () => {
         setError(null);
-        // Auto-advance to next slide if on last segment and enabled
-        if (autoAdvanceOnAudioEnd && currentSegmentIdx === segments.length - 1) {
-          const nextIndex = currentIndexRef.current + 1;
-          if (nextIndex < allSlides.length) {
-            lastAutoAdvanceFromIndexRef.current = currentIndexRef.current;
-            setCurrentIndex(nextIndex);
-            onSlideChange(allSlides[nextIndex].metadata.chapter, allSlides[nextIndex].metadata.slide);
+        
+        // Auto-advance logic when enabled
+        if (autoAdvanceOnAudioEnd) {
+          // If not on last segment, advance to next segment with 50ms delay
+          if (currentSegmentIdx < segments.length - 1) {
+            console.log(`[Manual+Audio] Auto-advancing to segment ${currentSegmentIdx + 1}`);
+            setTimeout(() => {
+              segmentContext.nextSegment();
+            }, 50);
+          }
+          // If on last segment, advance to next slide with 50ms delay
+          else {
+            const nextIndex = currentIndexRef.current + 1;
+            if (nextIndex < allSlides.length) {
+              console.log(`[Manual+Audio] Auto-advancing to next slide ${nextIndex}`);
+              setTimeout(() => {
+                lastAutoAdvanceFromIndexRef.current = currentIndexRef.current;
+                setCurrentIndex(nextIndex);
+                onSlideChange(allSlides[nextIndex].metadata.chapter, allSlides[nextIndex].metadata.slide);
+              }, 50);
+            }
           }
         }
       };
