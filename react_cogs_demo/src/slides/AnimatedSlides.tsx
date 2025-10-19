@@ -389,86 +389,171 @@ Ch6_U1_UnifiedConvergence.metadata = {
 };
 
 /**
- * Chapter 7, Utterance 1 - Call Reduction Dial
- */
-export const Ch7_U1_CallReduction: SlideComponentWithMetadata = () => {
-  const { reduced } = useReducedMotion();
-
-  return (
-    <div style={{
-      background: '#0f172a',
-      minHeight: '100vh',
-      width: '100%',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '2rem',
-      fontFamily: 'Inter, system-ui, sans-serif'
-    }}>
-      <div style={{ maxWidth: 600, width: '100%', textAlign: 'center' }}>
-        <h1 style={{ color: '#f1f5f9', marginBottom: '3rem' }}>
-          LLM Call Reduction
-        </h1>
-
-        <svg width="300" height="300" viewBox="0 0 300 300" style={{ margin: '0 auto' }}>
-          {/* Dial background */}
-          <circle cx="150" cy="150" r="120" fill="#1e293b" stroke="#334155" strokeWidth="2" />
-          
-          {/* 4 segments */}
-          {[0, 1, 2, 3].map((seg) => (
-            <motion.path
-              key={seg}
-              d={`M 150 150 L ${150 + 100 * Math.cos((seg * 90 - 90) * Math.PI / 180)} ${150 + 100 * Math.sin((seg * 90 - 90) * Math.PI / 180)} A 100 100 0 0 1 ${150 + 100 * Math.cos(((seg + 1) * 90 - 90) * Math.PI / 180)} ${150 + 100 * Math.sin(((seg + 1) * 90 - 90) * Math.PI / 180)} Z`}
-              fill={seg === 0 ? '#00B7C3' : '#1e293b'}
-              stroke="#334155"
-              strokeWidth="2"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: seg * (reduced ? 0.05 : 0.2), duration: reduced ? 0.2 : 0.4 }}
-            />
-          ))}
-
-          {/* Needle */}
-          <motion.line
-            x1="150"
-            y1="150"
-            x2="150"
-            y2="60"
-            stroke="#f1f5f9"
-            strokeWidth="4"
-            strokeLinecap="round"
-            initial={{ rotate: reduced ? 0 : 270 }}
-            animate={{ rotate: 0 }}
-            transition={{ duration: reduced ? 0.3 : 1.5, type: 'spring' }}
-            style={{ transformOrigin: '150px 150px' }}
-          />
-          
-          {/* Center dot */}
-          <circle cx="150" cy="150" r="8" fill="#f1f5f9" />
-        </svg>
-
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: reduced ? 0.3 : 1.5, duration: 0.5 }}
-          style={{
-            marginTop: '2rem',
-            fontSize: 42,
-            fontWeight: 'bold',
-            color: '#00B7C3'
-          }}
-        >
-          75% Reduction
-        </motion.div>
-
-        <p style={{ color: '#94a3b8', marginTop: '1rem', fontSize: 16 }}>
-          From 4 sequential calls to 1 unified invocation
-        </p>
-      </div>
-    </div>
-  );
-};
-
+ /**
+  * Chapter 7, Utterance 1 - Call & Token Reduction
+  */
+ export const Ch7_U1_CallReduction: SlideComponentWithMetadata = () => {
+   const { reduced } = useReducedMotion();
+ 
+   return (
+     <div style={{
+       background: '#0f172a',
+       minHeight: '100vh',
+       width: '100%',
+       display: 'flex',
+       alignItems: 'center',
+       justifyContent: 'center',
+       padding: '2rem',
+       fontFamily: 'Inter, system-ui, sans-serif'
+     }}>
+       <div style={{ maxWidth: 1000, width: '100%' }}>
+         <h1 style={{ color: '#f1f5f9', marginBottom: '3rem', textAlign: 'center' }}>
+           Optimization Impact
+         </h1>
+ 
+         <div style={{ display: 'flex', gap: '3rem', justifyContent: 'center', alignItems: 'center' }}>
+           {/* LLM Call Reduction Dial */}
+           <div style={{ textAlign: 'center' }}>
+             <h2 style={{ color: '#f1f5f9', fontSize: 20, marginBottom: '1.5rem' }}>
+               LLM Call Reduction
+             </h2>
+             <svg width="280" height="280" viewBox="0 0 300 300">
+               {/* Dial background */}
+               <circle cx="150" cy="150" r="120" fill="#1e293b" stroke="#334155" strokeWidth="2" />
+               
+               {/* 4 segments */}
+               {[0, 1, 2, 3].map((seg) => (
+                 <motion.path
+                   key={seg}
+                   d={`M 150 150 L ${150 + 100 * Math.cos((seg * 90 - 90) * Math.PI / 180)} ${150 + 100 * Math.sin((seg * 90 - 90) * Math.PI / 180)} A 100 100 0 0 1 ${150 + 100 * Math.cos(((seg + 1) * 90 - 90) * Math.PI / 180)} ${150 + 100 * Math.sin(((seg + 1) * 90 - 90) * Math.PI / 180)} Z`}
+                   fill={seg === 0 ? '#00B7C3' : '#1e293b'}
+                   stroke="#334155"
+                   strokeWidth="2"
+                   initial={{ opacity: 0 }}
+                   animate={{ opacity: 1 }}
+                   transition={{ delay: seg * (reduced ? 0.05 : 0.2), duration: reduced ? 0.2 : 0.4 }}
+                 />
+               ))}
+ 
+               {/* Needle */}
+               <motion.line
+                 x1="150"
+                 y1="150"
+                 x2="150"
+                 y2="60"
+                 stroke="#f1f5f9"
+                 strokeWidth="4"
+                 strokeLinecap="round"
+                 initial={{ rotate: reduced ? 0 : 270 }}
+                 animate={{ rotate: 0 }}
+                 transition={{ duration: reduced ? 0.3 : 1.5, type: 'spring' }}
+                 style={{ transformOrigin: '150px 150px' }}
+               />
+               
+               {/* Center dot */}
+               <circle cx="150" cy="150" r="8" fill="#f1f5f9" />
+             </svg>
+ 
+             <motion.div
+               initial={{ opacity: 0, scale: 0.8 }}
+               animate={{ opacity: 1, scale: 1 }}
+               transition={{ delay: reduced ? 0.3 : 1.5, duration: 0.5 }}
+               style={{
+                 marginTop: '1rem',
+                 fontSize: 36,
+                 fontWeight: 'bold',
+                 color: '#00B7C3'
+               }}
+             >
+               75%
+             </motion.div>
+             <p style={{ color: '#94a3b8', marginTop: '0.5rem', fontSize: 14 }}>
+               4 → 1 calls
+             </p>
+           </div>
+ 
+           {/* Token Reduction Bar */}
+           <div style={{ textAlign: 'center' }}>
+             <h2 style={{ color: '#f1f5f9', fontSize: 20, marginBottom: '1.5rem' }}>
+               Input Token Reduction
+             </h2>
+             
+             <div style={{ position: 'relative', width: 280, height: 280, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+               {/* Token bars */}
+               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
+                 {/* Before bar */}
+                 <motion.div
+                   initial={{ width: 0 }}
+                   animate={{ width: 240 }}
+                   transition={{ duration: reduced ? 0.3 : 1, delay: reduced ? 0 : 0.3 }}
+                   style={{
+                     height: 40,
+                     background: '#475569',
+                     borderRadius: 8,
+                     position: 'relative',
+                     display: 'flex',
+                     alignItems: 'center',
+                     justifyContent: 'center'
+                   }}
+                 >
+                   <span style={{ color: '#fff', fontSize: 14, fontWeight: 600 }}>100%</span>
+                 </motion.div>
+ 
+                 {/* Arrow down */}
+                 <motion.svg
+                   width="40"
+                   height="40"
+                   viewBox="0 0 40 40"
+                   initial={{ opacity: 0 }}
+                   animate={{ opacity: 1 }}
+                   transition={{ delay: reduced ? 0.2 : 1.3 }}
+                 >
+                   <path d="M20 5 L20 30 M10 20 L20 30 L30 20" stroke="#00B7C3" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                 </motion.svg>
+ 
+                 {/* After bar */}
+                 <motion.div
+                   initial={{ width: 0 }}
+                   animate={{ width: 96 }}
+                   transition={{ duration: reduced ? 0.3 : 1, delay: reduced ? 0.3 : 1.5 }}
+                   style={{
+                     height: 40,
+                     background: 'linear-gradient(135deg, #00B7C3, #0078D4)',
+                     borderRadius: 8,
+                     position: 'relative',
+                     display: 'flex',
+                     alignItems: 'center',
+                     justifyContent: 'center',
+                     boxShadow: reduced ? 'none' : '0 0 20px rgba(0, 183, 195, 0.5)'
+                   }}
+                 >
+                   <span style={{ color: '#fff', fontSize: 14, fontWeight: 600 }}>40%</span>
+                 </motion.div>
+               </div>
+             </div>
+ 
+             <motion.div
+               initial={{ opacity: 0, scale: 0.8 }}
+               animate={{ opacity: 1, scale: 1 }}
+               transition={{ delay: reduced ? 0.4 : 2, duration: 0.5 }}
+               style={{
+                 marginTop: '1rem',
+                 fontSize: 36,
+                 fontWeight: 'bold',
+                 color: '#00B7C3'
+               }}
+             >
+               60%
+             </motion.div>
+             <p style={{ color: '#94a3b8', marginTop: '0.5rem', fontSize: 14 }}>
+               token reduction
+             </p>
+           </div>
+         </div>
+       </div>
+     </div>
+   );
+ };
 Ch7_U1_CallReduction.metadata = {
   chapter: 7,
   utterance: 1,

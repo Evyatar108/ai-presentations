@@ -11,9 +11,9 @@ Dedicated tuning preserved the original algorithm as an internal reasoning chain
 The model executes this sequence in a single invocation instead of four external calls.
 
 4
-00:02:41,293 --> 00:02:43,694
-We trimmed input size significantly for lower cost.
+00:02:41,293 --> 00:02:47,694
+We also optimized input tokens by switching from verbose JSON to compact schema and eliminating pre-computed candidate ranges.
 
 5
-00:02:44,174 --> 00:02:49,374
+00:02:48,174 --> 00:02:54,374
 Separate tuning adapted the model to the slimmer schema and token budget while maintaining valid output for video generation.
