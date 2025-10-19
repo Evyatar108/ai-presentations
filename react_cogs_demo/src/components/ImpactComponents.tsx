@@ -260,7 +260,11 @@ Ch7_S3_CostCurve.metadata = {
   chapter: 7,
   slide: 3,
   title: "Cost Savings",
-  audioSegments: [{ id: "main", audioFilePath: "/audio/12-Audio 12.wav" }]
+  audioSegments: [{
+    id: "main",
+    audioFilePath: "/audio/12-Audio 12.wav",
+    narrationText: "Combined, this is estimated to cut COGS by over 70%, enabling economically viable worldwide rollout."
+  }]
 };
 
 /**
@@ -398,7 +402,11 @@ Ch7_S4_QualityComparison.metadata = {
   chapter: 7,
   slide: 4,
   title: "Quality Improvement",
-  audioSegments: [{ id: "main", audioFilePath: "/audio/13-Audio 13.wav" }]
+  audioSegments: [{
+    id: "main",
+    audioFilePath: "/audio/13-Audio 13.wav",
+    narrationText: "The unified prompt produces higher-quality highlights that internal reviewers strongly prefer over the multi-prompt version."
+  }]
 };
 
 /* RoadmapSlide removed per user request: animations complete; slide omitted. */

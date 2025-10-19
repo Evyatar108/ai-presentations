@@ -1,0 +1,548 @@
+{
+  "totalDuration": 334.5333320000001,
+  "slides": [
+    {
+      "chapter": 0,
+      "slide": 0,
+      "title": "Intro",
+      "duration": 0,
+      "segments": []
+    },
+    {
+      "chapter": 1,
+      "slide": 1,
+      "title": "What is Meeting Highlights",
+      "duration": 29.333333,
+      "segments": [
+        {
+          "id": "intro",
+          "filepath": "s1_segment_01_intro.wav",
+          "duration": 6.533333,
+          "narrationText": "Meeting Highlights is a new Microsoft Teams feature that delivers a dynamic, bite-sized video recap of your meeting."
+        },
+        {
+          "id": "ai_generation",
+          "filepath": "s1_segment_02_ai_generation.wav",
+          "duration": 6,
+          "narrationText": "It uses AI to automatically generate a short highlights video, typically 3 to 5 minutes long."
+        },
+        {
+          "id": "combination",
+          "filepath": "s1_segment_03_combination.wav",
+          "duration": 6.133333,
+          "narrationText": "The feature combines AI-generated voiceover summaries with authentic video snippets from the actual meeting."
+        },
+        {
+          "id": "preservation",
+          "filepath": "s1_segment_04_preservation.wav",
+          "duration": 3.466667,
+          "narrationText": "This preserves the original tone, reactions, and flow of the discussion."
+        },
+        {
+          "id": "problem",
+          "filepath": "s1_segment_05_problem.wav",
+          "duration": 7.2,
+          "narrationText": "It solves a critical problem: catching up on missed meetings without watching hour-long recordings or reading lengthy transcripts."
+        }
+      ]
+    },
+    {
+      "chapter": 1,
+      "slide": 2,
+      "title": "How to Access",
+      "duration": 30.266667000000005,
+      "segments": [
+        {
+          "id": "intro",
+          "filepath": "s2_segment_01_intro.wav",
+          "duration": 3.066667,
+          "narrationText": "Let me show you how to access Meeting Highlights through BizChat."
+        },
+        {
+          "id": "bizchat",
+          "filepath": "s2_segment_02_bizchat.wav",
+          "duration": 3.866667,
+          "narrationText": "Open BizChat and ask it to recap a specific meeting."
+        },
+        {
+          "id": "ciq",
+          "filepath": "s2_segment_03_ciq.wav",
+          "duration": 4.133333,
+          "narrationText": "You can reference specific meetings using Contextual Instant Query by typing slash."
+        },
+        {
+          "id": "select",
+          "filepath": "s2_segment_04_select.wav",
+          "duration": 4.4,
+          "narrationText": "This opens a menu to select and search for meetings to add to your message."
+        },
+        {
+          "id": "player",
+          "filepath": "s2_segment_05_player.wav",
+          "duration": 5.6,
+          "narrationText": "BizChat will return a reply to your query and a video player with the meeting highlights appears at the bottom."
+        },
+        {
+          "id": "note",
+          "filepath": "s2_segment_06_note.wav",
+          "duration": 4.8,
+          "narrationText": "Note: If the meeting is a series meeting, BizChat currently won't show the highlights player yet."
+        },
+        {
+          "id": "future",
+          "filepath": "s2_segment_07_future.wav",
+          "duration": 4.4,
+          "narrationText": "We're working on additional ways to surface highlights via BizChat and Teams."
+        }
+      ]
+    },
+    {
+      "chapter": 1,
+      "slide": 3,
+      "title": "User Value",
+      "duration": 29.866667,
+      "segments": [
+        {
+          "id": "intro",
+          "filepath": "s3_segment_01_intro.wav",
+          "duration": 3.6,
+          "narrationText": "Meeting Highlights delivers three key benefits to users."
+        },
+        {
+          "id": "time",
+          "filepath": "s3_segment_02_time.wav",
+          "duration": 7.866667,
+          "narrationText": "First, massive time savings. Instead of watching a 60-minute recording, catch up in 3 to 5 minutes."
+        },
+        {
+          "id": "engagement",
+          "filepath": "s3_segment_03_engagement.wav",
+          "duration": 5.733333,
+          "narrationText": "Second, better engagement and retention through audiovisual content that caters to all learning styles."
+        },
+        {
+          "id": "dynamics",
+          "filepath": "s3_segment_04_dynamics.wav",
+          "duration": 7.066667,
+          "narrationText": "Third, preserved meeting dynamics. You get the tone and vibe of discussions, not just facts."
+        },
+        {
+          "id": "testimonial",
+          "filepath": "s3_segment_05_testimonial.wav",
+          "duration": 5.6,
+          "narrationText": "Internal users have called it magical, with one manager saying it saved hours of reviewing transcripts."
+        }
+      ]
+    },
+    {
+      "chapter": 2,
+      "slide": 1,
+      "title": "Team Collaboration",
+      "duration": 39.333334,
+      "segments": [
+        {
+          "id": "intro",
+          "filepath": "s1_segment_01_intro.wav",
+          "duration": 4.266667,
+          "narrationText": "Meeting Highlights brings together six Microsoft teams in a cross-organizational collaboration."
+        },
+        {
+          "id": "odsp",
+          "filepath": "s1_segment_02_odsp.wav",
+          "duration": 5.866667,
+          "narrationText": "ODSP handles storage and orchestration, initiating highlights generation when recordings are created."
+        },
+        {
+          "id": "msai",
+          "filepath": "s1_segment_03_msai.wav",
+          "duration": 3.866667,
+          "narrationText": "MSAI-Hive processes meeting transcripts using Large Language Model technology to generate highlight content."
+        },
+        {
+          "id": "clipchamp",
+          "filepath": "s1_segment_04_clipchamp.wav",
+          "duration": 4.533333,
+          "narrationText": "Clipchamp owns the highlights player component, delivering the visual playback experience."
+        },
+        {
+          "id": "loop",
+          "filepath": "s1_segment_05_loop.wav",
+          "duration": 4.533333,
+          "narrationText": "Loop enables seamless embedding of the Clipchamp player within different application surfaces."
+        },
+        {
+          "id": "bizchat",
+          "filepath": "s1_segment_06_bizchat.wav",
+          "duration": 5.066667,
+          "narrationText": "BizChat provides the primary user interface with natural language access to highlights."
+        },
+        {
+          "id": "teams",
+          "filepath": "s1_segment_07_teams.wav",
+          "duration": 5.6,
+          "narrationText": "Teams delivers highlights within the Teams ecosystem, sharing the same player technology via Loop."
+        },
+        {
+          "id": "conclusion",
+          "filepath": "s1_segment_08_conclusion.wav",
+          "duration": 5.6,
+          "narrationText": "Together, these teams deliver a unified user experience that showcases true Microsoft collaboration."
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "slide": 1,
+      "title": "Architecture Overview",
+      "duration": 34.933332,
+      "segments": [
+        {
+          "id": "intro",
+          "filepath": "s1_segment_01_intro.wav",
+          "duration": 3.066667,
+          "narrationText": "Let me walk you through the architecture behind Meeting Highlights."
+        },
+        {
+          "id": "recording",
+          "filepath": "s1_segment_02_recording.wav",
+          "duration": 3.733333,
+          "narrationText": "It starts when a Teams meeting ends and a recording exists."
+        },
+        {
+          "id": "odsp",
+          "filepath": "s1_segment_03_odsp.wav",
+          "duration": 6.133333,
+          "narrationText": "ODSP, our storage and orchestration layer, detects the recording and initiates the highlight generation process."
+        },
+        {
+          "id": "tmr",
+          "filepath": "s1_segment_04_tmr.wav",
+          "duration": 4,
+          "narrationText": "The TMR processor retrieves the meeting transcript and calls our LLM."
+        },
+        {
+          "id": "llm",
+          "filepath": "s1_segment_05_llm.wav",
+          "duration": 5.733333,
+          "narrationText": "The LLM analyzes the transcript and returns structured metadata describing the highlights."
+        },
+        {
+          "id": "acs",
+          "filepath": "s1_segment_06_acs.wav",
+          "duration": 5.333333,
+          "narrationText": "Azure Cognitive Services then converts the narration text into audio using text-to-speech."
+        },
+        {
+          "id": "storage",
+          "filepath": "s1_segment_07_storage.wav",
+          "duration": 6.933333,
+          "narrationText": "Finally, all the metadata, audio, and captions are securely stored in ODSP and made available through BizChat and Teams."
+        }
+      ]
+    },
+    {
+      "chapter": 4,
+      "slide": 1,
+      "title": "Highlight Types",
+      "duration": 40.399998999999994,
+      "segments": [
+        {
+          "id": "intro",
+          "filepath": "s1_segment_01_intro.wav",
+          "duration": 4.533333,
+          "narrationText": "Meeting Highlights combines two distinct types of highlights to create a comprehensive recap."
+        },
+        {
+          "id": "abstractive",
+          "filepath": "s1_segment_02_abstractive.wav",
+          "duration": 8.266667,
+          "narrationText": "First, abstractive highlights. These are AI-generated summaries that capture the key topics discussed in the meeting."
+        },
+        {
+          "id": "key_moments",
+          "filepath": "s1_segment_03_key_moments.wav",
+          "duration": 6.133333,
+          "narrationText": "Second, key moments. These are significant verbatim segments extracted directly from the meeting recording."
+        },
+        {
+          "id": "timestamps",
+          "filepath": "s1_segment_04_timestamps.wav",
+          "duration": 4.8,
+          "narrationText": "Each highlight is a 20 to 30 second segment with precise timestamps and accompanying narration."
+        },
+        {
+          "id": "audio",
+          "filepath": "s1_segment_05_audio.wav",
+          "duration": 6.533333,
+          "narrationText": "The narration text is converted to natural-sounding audio using Azure Cognitive Services text-to-speech."
+        },
+        {
+          "id": "storage",
+          "filepath": "s1_segment_06_storage.wav",
+          "duration": 5.333333,
+          "narrationText": "All the metadata, audio files, and caption data are securely stored in ODSP."
+        },
+        {
+          "id": "platforms",
+          "filepath": "s1_segment_07_platforms.wav",
+          "duration": 4.8,
+          "narrationText": "Making highlights available across Microsoft 365 platforms wherever users work."
+        }
+      ]
+    },
+    {
+      "chapter": 5,
+      "slide": 1,
+      "title": "Challenge Framing",
+      "duration": 4.4,
+      "segments": [
+        {
+          "id": "main",
+          "filepath": "s1_segment_01_main.wav",
+          "duration": 4.4,
+          "narrationText": "Cost efficiency while maintaining quality is critical for scaling meeting highlights globally."
+        }
+      ]
+    },
+    {
+      "chapter": 5,
+      "slide": 2,
+      "title": "Four-Prompt Pipeline",
+      "duration": 7.6,
+      "segments": [
+        {
+          "id": "main",
+          "filepath": "s2_segment_01_main.wav",
+          "duration": 7.6,
+          "narrationText": "The initial implementation required 4 sequential LLM calls per meeting, creating significant computational costs."
+        }
+      ]
+    },
+    {
+      "chapter": 6,
+      "slide": 1,
+      "title": "Unified Convergence",
+      "duration": 4.8,
+      "segments": [
+        {
+          "id": "main",
+          "filepath": "s1_segment_01_main.wav",
+          "duration": 4.8,
+          "narrationText": "We collapsed the four-step pipeline into one unified prompt with leaner input."
+        }
+      ]
+    },
+    {
+      "chapter": 6,
+      "slide": 2,
+      "title": "Unified Flow Details",
+      "duration": 8.533333,
+      "segments": [
+        {
+          "id": "main",
+          "filepath": "s2_segment_01_main.wav",
+          "duration": 8.533333,
+          "narrationText": "Dedicated tuning preserved the original algorithm as an internal reasoning chain: segment, extract, rank, compose."
+        }
+      ]
+    },
+    {
+      "chapter": 6,
+      "slide": 4,
+      "title": "Token Optimization",
+      "duration": 8.266667,
+      "segments": [
+        {
+          "id": "main",
+          "filepath": "s4_segment_01_main.wav",
+          "duration": 8.266667,
+          "narrationText": "We also optimized input tokens by switching from verbose JSON to compact schema and eliminating pre-computed candidate ranges."
+        }
+      ]
+    },
+    {
+      "chapter": 7,
+      "slide": 1,
+      "title": "Call Reduction",
+      "duration": 8.4,
+      "segments": [
+        {
+          "id": "main",
+          "filepath": "s1_segment_01_main.wav",
+          "duration": 8.4,
+          "narrationText": "The impact: 75% fewer model invocations per meeting, and 60% reduction in input tokens."
+        }
+      ]
+    },
+    {
+      "chapter": 7,
+      "slide": 2,
+      "title": "GPU Optimization",
+      "duration": 4.266667,
+      "segments": [
+        {
+          "id": "main",
+          "filepath": "s2_segment_01_main.wav",
+          "duration": 4.266667,
+          "narrationText": "Estimated GPU requirements drop from 600 to 200 for global availability."
+        }
+      ]
+    },
+    {
+      "chapter": 7,
+      "slide": 3,
+      "title": "Cost Savings",
+      "duration": 0.933333,
+      "segments": [
+        {
+          "id": "main",
+          "filepath": "s3_segment_01_main.wav",
+          "duration": 0.933333,
+          "narrationText": "Combined, this is estimated to cut COGS by over 70%, enabling economically viable worldwide rollout."
+        }
+      ]
+    },
+    {
+      "chapter": 7,
+      "slide": 4,
+      "title": "Quality Improvement",
+      "duration": 6.666667,
+      "segments": [
+        {
+          "id": "main",
+          "filepath": "s4_segment_01_main.wav",
+          "duration": 6.666667,
+          "narrationText": "The unified prompt produces higher-quality highlights that internal reviewers strongly prefer over the multi-prompt version."
+        }
+      ]
+    },
+    {
+      "chapter": 7,
+      "slide": 5,
+      "title": "Path to GA",
+      "duration": 6,
+      "segments": [
+        {
+          "id": "main",
+          "filepath": "s5_segment_01_main.wav",
+          "duration": 6,
+          "narrationText": "These improvements unblock private preview and enable general availability within capacity constraints."
+        }
+      ]
+    },
+    {
+      "chapter": 8,
+      "slide": 1,
+      "title": "User Satisfaction",
+      "duration": 19.733333000000002,
+      "segments": [
+        {
+          "id": "intro",
+          "filepath": "s1_segment_01_intro.wav",
+          "duration": 4.8,
+          "narrationText": "Meeting Highlights has received overwhelmingly positive feedback in recent MS Elite surveys."
+        },
+        {
+          "id": "useful",
+          "filepath": "s1_segment_02_useful.wav",
+          "duration": 6,
+          "narrationText": "More than 80 percent of users rated Meeting Highlights as extremely useful or very useful."
+        },
+        {
+          "id": "likely",
+          "filepath": "s1_segment_03_likely.wav",
+          "duration": 4.533333,
+          "narrationText": "96 percent shared that they are very likely or likely to use the feature again."
+        },
+        {
+          "id": "fit",
+          "filepath": "s1_segment_04_fit.wav",
+          "duration": 4.4,
+          "narrationText": "This points to strong product-market fit and daily habit formation among our users."
+        }
+      ]
+    },
+    {
+      "chapter": 9,
+      "slide": 1,
+      "title": "Testimonials",
+      "duration": 27.6,
+      "segments": [
+        {
+          "id": "intro",
+          "filepath": "s1_segment_01_intro.wav",
+          "duration": 3.866667,
+          "narrationText": "Users have shared enthusiastic feedback about Meeting Highlights."
+        },
+        {
+          "id": "kevin",
+          "filepath": "s1_segment_02_kevin.wav",
+          "duration": 6.8,
+          "narrationText": "Kevin C. commented: \"Love this feature. Great way to catch up on a recap without watching the full thing.\""
+        },
+        {
+          "id": "ryan1",
+          "filepath": "s1_segment_03_ryan1.wav",
+          "duration": 6.666667,
+          "narrationText": "Ryan Roslonsky added: \"Beyond the awesome text recap, there is literally a two-minute narrated video about the meeting.\""
+        },
+        {
+          "id": "ryan2",
+          "filepath": "s1_segment_04_ryan2.wav",
+          "duration": 5.733333,
+          "narrationText": "\"It's mind-blowing and an engaging way to recap a meeting for a richer understanding of the conversation.\""
+        },
+        {
+          "id": "anonymous",
+          "filepath": "s1_segment_05_anonymous.wav",
+          "duration": 4.533333,
+          "narrationText": "Another user shared: \"Saved me hours of reviewing the transcript. This is magical.\""
+        }
+      ]
+    },
+    {
+      "chapter": 9,
+      "slide": 2,
+      "title": "Future Improvements",
+      "duration": 23.200000000000003,
+      "segments": [
+        {
+          "id": "intro",
+          "filepath": "s2_segment_01_intro.wav",
+          "duration": 3.6,
+          "narrationText": "Based on user feedback, we have an exciting roadmap ahead."
+        },
+        {
+          "id": "detail",
+          "filepath": "s2_segment_02_detail.wav",
+          "duration": 4.133333,
+          "narrationText": "Users want more detailed and specific highlights that capture nuanced discussions."
+        },
+        {
+          "id": "teams",
+          "filepath": "s2_segment_03_teams.wav",
+          "duration": 3.466667,
+          "narrationText": "Deeper integration with Teams Recap for seamless access to highlights."
+        },
+        {
+          "id": "action",
+          "filepath": "s2_segment_04_action.wav",
+          "duration": 4,
+          "narrationText": "Including action items and decisions to make highlights more actionable."
+        },
+        {
+          "id": "languages",
+          "filepath": "s2_segment_05_languages.wav",
+          "duration": 3.6,
+          "narrationText": "And additional language support to serve our global user base."
+        },
+        {
+          "id": "roadmap",
+          "filepath": "s2_segment_06_roadmap.wav",
+          "duration": 4.4,
+          "narrationText": "These improvements are on our roadmap as we work toward general availability in 2024."
+        }
+      ]
+    }
+  ]
+}

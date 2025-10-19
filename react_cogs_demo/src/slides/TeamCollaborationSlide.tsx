@@ -316,13 +316,45 @@ Ch2_TeamCollaboration.metadata = {
   title: 'Team Collaboration',
   srtFilePath: 'highlights_demo/chapters/c2/s1_team_collaboration.srt',
   audioSegments: [
-    { id: 'intro', audioFilePath: '/audio/00-Silence.mp3' },
-    { id: 'odsp', audioFilePath: '/audio/00-Silence.mp3' },
-    { id: 'msai', audioFilePath: '/audio/00-Silence.mp3' },
-    { id: 'clipchamp', audioFilePath: '/audio/00-Silence.mp3' },
-    { id: 'loop', audioFilePath: '/audio/00-Silence.mp3' },
-    { id: 'bizchat', audioFilePath: '/audio/00-Silence.mp3' },
-    { id: 'teams', audioFilePath: '/audio/00-Silence.mp3' },
-    { id: 'conclusion', audioFilePath: '/audio/00-Silence.mp3' }
+    {
+      id: 'intro',
+      audioFilePath: '/audio/00-Silence.mp3',
+      narrationText: 'Meeting Highlights brings together six Microsoft teams in a cross-organizational collaboration.'
+    },
+    {
+      id: 'odsp',
+      audioFilePath: '/audio/00-Silence.mp3',
+      narrationText: 'ODSP handles storage and orchestration, initiating highlights generation when recordings are created.'
+    },
+    {
+      id: 'msai',
+      audioFilePath: '/audio/00-Silence.mp3',
+      narrationText: 'MSAI-Hive processes meeting transcripts using Large Language Model technology to generate highlight content.'
+    },
+    {
+      id: 'clipchamp',
+      audioFilePath: '/audio/00-Silence.mp3',
+      narrationText: 'Clipchamp owns the highlights player component, delivering the visual playback experience.'
+    },
+    {
+      id: 'loop',
+      audioFilePath: '/audio/00-Silence.mp3',
+      narrationText: 'Loop enables seamless embedding of the Clipchamp player within different application surfaces.'
+    },
+    {
+      id: 'bizchat',
+      audioFilePath: '/audio/00-Silence.mp3',
+      narrationText: 'BizChat provides the primary user interface with natural language access to highlights.'
+    },
+    {
+      id: 'teams',
+      audioFilePath: '/audio/00-Silence.mp3',
+      narrationText: 'Teams delivers highlights within the Teams ecosystem, sharing the same player technology via Loop.'
+    },
+    {
+      id: 'conclusion',
+      audioFilePath: '/audio/00-Silence.mp3',
+      narrationText: 'Together, these teams deliver a unified user experience that showcases true Microsoft collaboration.'
+    }
   ]
 };

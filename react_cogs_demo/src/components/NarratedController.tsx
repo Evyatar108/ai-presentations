@@ -4,6 +4,32 @@ import { allSlides } from '../slides/SlidesRegistry';
 import { hasAudioSegments } from '../slides/SlideMetadata';
 import { useSegmentContext } from '../contexts/SegmentContext';
 
+// Fallback audio file for missing segments
+const FALLBACK_AUDIO = '/audio/silence-1s.mp3';
+
+// Helper to load audio with fallback
+const loadAudioWithFallback = async (primaryPath: string, segmentId: string): Promise<HTMLAudioElement> => {
+  const audio = new Audio(primaryPath);
+  
+  return new Promise((resolve) => {
+    const handleError = () => {
+      console.warn(`[Audio] File not found: ${primaryPath}, using fallback silence for segment: ${segmentId}`);
+      // Create fallback audio
+      const fallbackAudio = new Audio(FALLBACK_AUDIO);
+      resolve(fallbackAudio);
+    };
+    
+    const handleSuccess = () => {
+      audio.removeEventListener('error', handleError);
+      audio.removeEventListener('canplaythrough', handleSuccess);
+      resolve(audio);
+    };
+    
+    audio.addEventListener('error', handleError);
+    audio.addEventListener('canplaythrough', handleSuccess);
+  });
+};
+
 interface NarratedControllerProps {
   onSlideChange: (chapter: number, slide: number) => void;
   onPlaybackStart?: () => void;
@@ -117,48 +143,48 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
         audioRef.current.onerror = null;
         audioRef.current.onplay = null;
       }
-      
-      // Create new audio element for this segment
-      const audio = new Audio(segment.audioFilePath);
-      audioRef.current = audio;
-      
-      // Setup event handlers
-      audio.onended = () => {
-        console.log(`[NarratedController] Segment ${segmentIndex} (${segment.id}) ended`);
-        setError(null);
-        currentSegmentIndex++;
-        // Small delay between segments for smoother transitions
-        setTimeout(() => playSegment(currentSegmentIndex), 100);
-      };
-      
-      audio.onerror = (e) => {
-        console.error(`[NarratedController] Failed to load segment ${segmentIndex} (${segment.id}):`, e);
-        setError(`Failed to load segment: ${segment.id}`);
-        setIsLoading(false);
-        // Skip failed segment after 2 seconds
-        setTimeout(() => {
+      // Load audio with fallback support
+      setIsLoading(true);
+      loadAudioWithFallback(segment.audioFilePath, segment.id).then(audio => {
+        audioRef.current = audio;
+        
+        // Setup event handlers
+        audio.onended = () => {
+          console.log(`[NarratedController] Segment ${segmentIndex} (${segment.id}) ended`);
           setError(null);
           currentSegmentIndex++;
-          playSegment(currentSegmentIndex);
-        }, 2000);
-      };
-      
-      audio.onplay = () => {
-        console.log(`[NarratedController] Segment ${segmentIndex} (${segment.id}) playing`);
-        setError(null);
-        setIsLoading(false);
-      };
-      
-      audio.oncanplaythrough = () => {
-        setIsLoading(false);
-      };
-      
-      // Start playing
-      setIsLoading(true);
-      audio.play().catch(err => {
-        console.error(`[NarratedController] Segment playback failed for ${segment.id}:`, err);
-        setError(`Segment playback failed: ${segment.id}`);
-        setIsLoading(false);
+          // Small delay between segments for smoother transitions
+          setTimeout(() => playSegment(currentSegmentIndex), 100);
+        };
+        
+        audio.onerror = (e) => {
+          console.error(`[NarratedController] Playback error for segment ${segmentIndex} (${segment.id}):`, e);
+          setError(`Playback error: ${segment.id}`);
+          setIsLoading(false);
+          // Skip to next segment after brief delay
+          setTimeout(() => {
+            setError(null);
+            currentSegmentIndex++;
+            playSegment(currentSegmentIndex);
+          }, 1000);
+        };
+        
+        audio.onplay = () => {
+          console.log(`[NarratedController] Segment ${segmentIndex} (${segment.id}) playing`);
+          setError(null);
+          setIsLoading(false);
+        };
+        
+        audio.oncanplaythrough = () => {
+          setIsLoading(false);
+        };
+        
+        // Start playing
+        audio.play().catch(err => {
+          console.error(`[NarratedController] Segment playback failed for ${segment.id}:`, err);
+          setError(`Playback failed: ${segment.id}`);
+          setIsLoading(false);
+        });
       });
     };
     
@@ -229,51 +255,55 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
       return;
     }
     
-    // Create new audio element from first segment
-    const audio = new Audio(slide.audioSegments[0].audioFilePath);
-    audioRef.current = audio;
+    // Load audio with fallback support
+    const firstSegment = slide.audioSegments[0];
+    loadAudioWithFallback(firstSegment.audioFilePath, firstSegment.id).then(audio => {
+      audioRef.current = audio;
 
-    // Setup event handlers - use ref to get current index at time of onended
-    audio.onended = () => {
-      const indexAtEnd = currentIndexRef.current;
-      console.log(`[Manual+Audio] onended chapter=${slide.chapter} slide=${slide.slide} indexAtEnd=${indexAtEnd}`);
-      
-      // Auto-advance if enabled
-      if (autoAdvanceOnAudioEnd) {
-        const nextIndex = indexAtEnd + 1;
-        if (nextIndex < allSlides.length) {
-          console.log('[Manual+Audio] auto-advancing from', indexAtEnd, 'to', nextIndex);
-          lastAutoAdvanceFromIndexRef.current = indexAtEnd;
-          setCurrentIndex(nextIndex);
-          const nextSlide = allSlides[nextIndex].metadata;
-          onSlideChange(nextSlide.chapter, nextSlide.slide);
-        } else {
-          console.log('[Manual+Audio] reached end, not advancing');
+      // Setup event handlers - use ref to get current index at time of onended
+      audio.onended = () => {
+        const indexAtEnd = currentIndexRef.current;
+        console.log(`[Manual+Audio] onended chapter=${slide.chapter} slide=${slide.slide} indexAtEnd=${indexAtEnd}`);
+        
+        // Auto-advance if enabled
+        if (autoAdvanceOnAudioEnd) {
+          const nextIndex = indexAtEnd + 1;
+          if (nextIndex < allSlides.length) {
+            console.log('[Manual+Audio] auto-advancing from', indexAtEnd, 'to', nextIndex);
+            lastAutoAdvanceFromIndexRef.current = indexAtEnd;
+            setCurrentIndex(nextIndex);
+            const nextSlide = allSlides[nextIndex].metadata;
+            onSlideChange(nextSlide.chapter, nextSlide.slide);
+          } else {
+            console.log('[Manual+Audio] reached end, not advancing');
+          }
         }
-      }
-    };
+      };
 
-    audio.onerror = (e: any) => {
-      console.error(`Failed to load audio for chapter ${slide.chapter}, slide ${slide.slide}:`, e);
-      setError(`Failed to load audio for chapter ${slide.chapter}, slide ${slide.slide}`);
-    };
+      audio.onerror = (e: any) => {
+        console.error(`[Manual+Audio] Playback error for chapter ${slide.chapter}, slide ${slide.slide}:`, e);
+        setError(`Playback error for slide ${slide.slide}`);
+      };
 
-    audio.onplay = () => {
-      console.log(`[Manual+Audio] playing chapter=${slide.chapter} slide=${slide.slide} index=${currentIndex}`);
-      setError(null);
-    };
+      audio.onplay = () => {
+        console.log(`[Manual+Audio] playing chapter=${slide.chapter} slide=${slide.slide} index=${currentIndex}`);
+        setError(null);
+      };
 
-    audio.play().catch(err => {
-      console.error('Audio playback failed:', err);
-      setError('Audio playback failed');
+      audio.play().catch(err => {
+        console.error('[Manual+Audio] Audio playback failed:', err);
+        setError('Audio playback failed');
+      });
     });
 
     // Cleanup
     return () => {
-      audio.pause();
-      audio.onended = null;
-      audio.onerror = null;
-      audio.onplay = null;
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.onended = null;
+        audioRef.current.onerror = null;
+        audioRef.current.onplay = null;
+      }
     };
   }, [currentIndex, isManualMode, isManualWithAudio, autoAdvanceOnAudioEnd, onSlideChange]);
 
