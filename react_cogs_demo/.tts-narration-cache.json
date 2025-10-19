@@ -208,12 +208,12 @@
     "generatedAt": "2025-10-19T22:28:41.717Z"
   },
   "c4\\s1_segment_02_abstractive.wav": {
-    "narrationText": "First, abstractive highlights. These are AI-generated summaries that capture the key topics discussed in the meeting. The narration is powered by Azure Cognitive Services text-to-speech.",
-    "generatedAt": "2025-10-19T23:14:23.672Z"
+    "narrationText": "First, abstractive highlights. These are AI-generated summaries that capture the key topics discussed in the meeting, using original video from the meeting. The narration is powered by Azure Cognitive Services text-to-speech.",
+    "generatedAt": "2025-10-19T23:18:49.664Z"
   },
   "c4\\s1_segment_03_key_moments.wav": {
-    "narrationText": "Second, key moments. These are significant verbatim segments extracted directly from the meeting recording.",
-    "generatedAt": "2025-10-19T22:28:53.952Z"
+    "narrationText": "Second, key moments. These are significant verbatim segments extracted directly from the meeting, using the original audio and video from the recording.",
+    "generatedAt": "2025-10-19T23:16:54.006Z"
   },
   "c4\\s1_segment_04_timestamps.wav": {
     "narrationText": "Each highlight is a 20 to 30 second segment with precise timestamps and accompanying narration.",

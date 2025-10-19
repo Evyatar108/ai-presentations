@@ -69,7 +69,7 @@ export const Ch4_S1_HighlightTypes: SlideComponentWithMetadata = () => {
                 AI-generated summaries of discussion topics
               </p>
               <p style={{ ...typography.caption, fontSize: 14, marginTop: '0.5rem', color: '#00B7C3' }}>
-                Narration powered by Azure Cognitive Services
+                Narration powered by Azure Cognitive Services, and uses video from the meeting
               </p>
             </motion.div>
           )}
@@ -98,6 +98,9 @@ export const Ch4_S1_HighlightTypes: SlideComponentWithMetadata = () => {
               </h2>
               <p style={{ ...typography.caption, fontSize: 16 }}>
                 Significant verbatim segments from the meeting
+              </p>
+              <p style={{ ...typography.caption, fontSize: 14, marginTop: '0.5rem', color: '#00B7C3' }}>
+                Uses original audio and video from the recording
               </p>
             </motion.div>
           )}
@@ -171,14 +174,14 @@ Ch4_S1_HighlightTypes.metadata = {
       audioFilePath: "/audio/c4/s1_segment_02_abstractive.wav",
       srtSegmentNumber: 2,
       visualDescription: "Left card appears - Abstractive Highlights with summary icon",
-      narrationText: "First, abstractive highlights. These are AI-generated summaries that capture the key topics discussed in the meeting. The narration is powered by Azure Cognitive Services text-to-speech."
+      narrationText: "First, abstractive highlights. These are AI-generated summaries that capture the key topics discussed in the meeting, using original video from the meeting. The narration is powered by Azure Cognitive Services text-to-speech."
     },
     {
       id: "key_moments",
       audioFilePath: "/audio/c4/s1_segment_03_key_moments.wav",
       srtSegmentNumber: 3,
       visualDescription: "Right card appears - Key Moments with video clip icon",
-      narrationText: "Second, key moments. These are significant verbatim segments extracted directly from the meeting recording."
+      narrationText: "Second, key moments. These are significant verbatim segments extracted directly from the meeting, using the original audio and video from the recording."
     },
     {
       id: "timestamps",
