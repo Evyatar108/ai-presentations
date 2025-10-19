@@ -312,7 +312,7 @@ export const Ch7_S2_GPUReduction: SlideComponentWithMetadata = () => {
           style={{ marginTop: '3rem' }}
         >
           <div style={{ fontSize: 42, fontWeight: 'bold', color: '#00B7C3' }}>
-            ~600 → ~200 GPUs
+            ~600 → &lt;200 GPUs
           </div>
           <p style={{ color: '#94a3b8', marginTop: '1rem', fontSize: 16 }}>
             67% capacity reduction through architectural consolidation
@@ -330,7 +330,7 @@ Ch7_S2_GPUReduction.metadata = {
   audioSegments: [{
     id: "main",
     audioFilePath: "/audio/c7/s2_segment_01_main.wav",
-    narrationText: "GPU capacity requirements dropped from roughly 600 to 200, a 67% reduction."
+    narrationText: "GPU capacity requirements dropped from roughly 600 to <200, over 70% reduction."
   }]
 };
 
@@ -455,7 +455,7 @@ export const Ch7_S3_CostCurve: SlideComponentWithMetadata = () => {
       <div style={{fontSize:28, color:'#94a3b8', display:'flex', alignItems:'center'}}>+</div>
       <MetricTile label="Extractive Input" before="Candidates" after="Direct" note="Model selects ranges" />
       <div style={{fontSize:28, color:'#94a3b8', display:'flex', alignItems:'center'}}>=</div>
-      <MetricTile label="GPU Capacity" before="~600" after="~200" emphasis note="Resulting capacity" />
+      <MetricTile label="GPU Capacity" before="~600" after="<200" emphasis note="Resulting capacity" />
     </motion.div>
   );
   
@@ -497,7 +497,7 @@ export const Ch7_S3_CostCurve: SlideComponentWithMetadata = () => {
           transition={{ delay: reduced ? 0 : 0.3, duration: reduced ? 0.2 : 0.5 }}
           style={{fontSize:14, lineHeight:1.5, opacity:0.85}}
         >
-          Unified prompt consolidation combines three major levers (call reduction, compact transcript format, direct extractive range selection) yielding a {savingsPct}%+ variable cost reduction and enabling GPU capacity drop (~600→~200).
+          Unified prompt consolidation combines three major levers (call reduction, compact transcript format, direct extractive range selection) yielding a {savingsPct}%+ variable cost reduction and enabling GPU capacity drop (~600→&lt;200).
         </motion.p>
   <div style={{ minHeight: 120 }}>
     <StackedBars />

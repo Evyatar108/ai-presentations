@@ -69,15 +69,15 @@
   },
   "c2\\s1_segment_01_intro.wav": {
     "narrationText": "Meeting Highlights brings together six Microsoft teams in a cross-organizational collaboration. Let me show you both how teams work together and the backend architecture flow.",
-    "generatedAt": "2025-10-19T12:46:28.702Z"
+    "generatedAt": "2025-10-19T15:01:00.321Z"
   },
   "c2\\s1_segment_02_odsp.wav": {
     "narrationText": "O-D-S-P handles storage and orchestration. When a Teams meeting ends with a recording, ODSP detects it and initiates the highlight generation process.",
-    "generatedAt": "2025-10-19T12:46:28.706Z"
+    "generatedAt": "2025-10-19T15:01:00.324Z"
   },
   "c2\\s1_segment_03_msai.wav": {
     "narrationText": "M-S-A-I Hive processes meeting transcripts using Large Language Model technology. Our processor receives the transcript and calls the LLM with our prompts, which analyzes the content and returns structured metadata describing the highlights.",
-    "generatedAt": "2025-10-19T12:46:28.709Z"
+    "generatedAt": "2025-10-19T15:01:00.327Z"
   },
   "c2\\s1_segment_04_clipchamp.wav": {
     "narrationText": "Clipchamp owns the highlights player component, delivering the visual playback experience.",
@@ -273,14 +273,30 @@
   },
   "c2\\s1_segment_04_acs.wav": {
     "narrationText": "We use Azure Cognitive Services to convert the narration text into natural-sounding audio using text-to-speech technology.",
-    "generatedAt": "2025-10-19T12:46:28.711Z"
+    "generatedAt": "2025-10-19T15:01:00.328Z"
   },
   "c2\\s1_segment_05_bizchat.wav": {
     "narrationText": "BizChat provides the primary user interface with natural language access to highlights through conversational queries.",
-    "generatedAt": "2025-10-19T12:46:28.713Z"
+    "generatedAt": "2025-10-19T15:01:00.330Z"
   },
   "c2\\s1_segment_06_loop_storage.wav": {
     "narrationText": "Loop enables seamless embedding of the Clipchamp player within different application surfaces. All metadata, audio, and captions are securely stored in ODSP and made available through BizChat and Teams.",
     "generatedAt": "2025-10-19T12:46:28.716Z"
+  },
+  "c2\\s1_segment_06_teams.wav": {
+    "narrationText": "We are also planning to provide access to highlights directly within the Teams ecosystem as another interface option.",
+    "generatedAt": "2025-10-19T15:14:11.569Z"
+  },
+  "c2\\s1_segment_07_loop_storage.wav": {
+    "narrationText": "Loop enables seamless embedding of the Clipchamp player within different application surfaces. All metadata, audio, and captions are securely stored in ODSP and made available through BizChat and Teams.",
+    "generatedAt": "2025-10-19T15:01:00.336Z"
+  },
+  "c2\\s1_segment_08_clipchamp.wav": {
+    "narrationText": "Clipchamp owns the highlights player component, delivering the rich visual playback experience users see, without requiring us to create a new video file.",
+    "generatedAt": "2025-10-19T15:01:00.338Z"
+  },
+  "c2\\s1_segment_09_conclusion.wav": {
+    "narrationText": "Together, these teams deliver a unified end-to-end experience from recording through AI processing to user access, showcasing true Microsoft collaboration.",
+    "generatedAt": "2025-10-19T15:01:00.341Z"
   }
 }

@@ -3,14 +3,14 @@ import { motion } from 'framer-motion';
 import { useReducedMotion } from '../../accessibility/ReducedMotion';
 import { MetricTile } from '../../components/CoreComponents';
 import { SlideComponentWithMetadata } from '../SlideMetadata';
-import { SlideContainer, ContentCard } from '../SlideLayouts';
-import { typography, gradientBox, circularBadge, layouts } from '../SlideStyles';
-import { staggerContainer, tileVariants, arrowVariants, targetVariants, promptVariants, fadeUp } from '../AnimationVariants';
+import { SlideContainer } from '../SlideLayouts';
+import { typography, gradientBox, layouts } from '../SlideStyles';
+import { staggerContainer, tileVariants, arrowVariants, targetVariants, promptVariants } from '../AnimationVariants';
 import { ArrowDown, ArrowRight } from '../SlideIcons';
 
 /**
  * Chapter 5: COGS Challenge
- * 6 slides showing the original four-prompt pipeline and its challenges
+ * 2 slides showing the four-prompt pipeline challenge and goal
  */
 
 /**
@@ -60,7 +60,7 @@ export const Ch5_S1_ChallengeFraming: SlideComponentWithMetadata = () => {
         >
           <h2 style={{ color: '#fff', margin: 0, fontSize: 24 }}>Unified Single Prompt</h2>
           <p style={{ color: '#fff', margin: '0.5rem 0 0', fontSize: 18 }}>
-            1 Call • ~200 GPUs • Fewer Tokens
+            1 Call • &lt;200 GPUs • Fewer Tokens
           </p>
         </motion.div>
 
@@ -157,181 +157,4 @@ Ch5_S2_FourPrompts.metadata = {
     audioFilePath: "/audio/c5/s2_segment_01_main.wav",
     narrationText: "The initial implementation required 4 sequential LLM calls per meeting, creating significant computational costs."
   }]
-};
-
-/**
- * Chapter 5, Slide 3 - Topic Abstraction (First Prompt)
- */
-export const Ch5_S3_TopicAbstraction: SlideComponentWithMetadata = () => {
-  const { reduced } = useReducedMotion();
-
-  return (
-    <SlideContainer maxWidth={800}>
-      <motion.div variants={fadeUp(reduced)} initial="hidden" animate="visible">
-        <div style={layouts.flexRow()}>
-          <div style={circularBadge()}>1</div>
-          <h1 style={typography.h1}>Prompt 1: Topic Abstraction</h1>
-        </div>
-      </motion.div>
-
-      <motion.div
-        variants={fadeUp(reduced)}
-        initial="hidden"
-        animate="visible"
-        transition={{ delay: reduced ? 0 : 0.2 }}
-      >
-        <ContentCard>
-          <p style={{ ...typography.body, marginTop: 0 }}>
-            The first prompt analyzed the transcript to segment it into key topics, identifying one to seven distinct discussion areas within each meeting.
-          </p>
-          <ul style={{ ...typography.caption, fontSize: 16, lineHeight: 1.8 }}>
-            <li>Segments transcript into 1-7 topics</li>
-            <li>Generates narration summaries</li>
-            <li>Selects video playback anchors</li>
-            <li>Categorizes topics by type</li>
-            <li>Assesses interest levels</li>
-          </ul>
-        </ContentCard>
-      </motion.div>
-    </SlideContainer>
-  );
-};
-
-Ch5_S3_TopicAbstraction.metadata = {
-  chapter: 5,
-  slide: 3,
-  title: "Prompt 1: Topic Abstraction",
-  audioSegments: [{ id: "main", audioFilePath: "/audio/c5/s3_segment_01_main.wav" }]
-};
-
-/**
- * Chapter 5, Slide 4 - Extractive Selection (Second Prompt)
- */
-export const Ch5_S4_ExtractiveSelection: SlideComponentWithMetadata = () => {
-  const { reduced } = useReducedMotion();
-
-  return (
-    <SlideContainer maxWidth={800}>
-      <motion.div variants={fadeUp(reduced)} initial="hidden" animate="visible">
-        <div style={layouts.flexRow()}>
-          <div style={circularBadge()}>2</div>
-          <h1 style={typography.h1}>Prompt 2: Extractive Selection</h1>
-        </div>
-      </motion.div>
-      
-      <motion.div
-        variants={fadeUp(reduced)}
-        initial="hidden"
-        animate="visible"
-        transition={{ delay: reduced ? 0 : 0.2 }}
-      >
-        <ContentCard>
-          <p style={{ ...typography.body, marginTop: 0 }}>
-            The second prompt extracted engaging verbatim moments from the meeting, selecting up to ten self-contained utterance blocks that captured important feedback, exciting news, or demonstration segments.
-          </p>
-          <ul style={{ ...typography.caption, fontSize: 16, lineHeight: 1.8 }}>
-            <li>Identifies engaging verbatim moments</li>
-            <li>Selects up to 10 self-contained blocks</li>
-            <li>Filters by content type (feedback/news/demo)</li>
-            <li>Ensures coherent boundaries</li>
-          </ul>
-        </ContentCard>
-      </motion.div>
-    </SlideContainer>
-  );
-};
-
-Ch5_S4_ExtractiveSelection.metadata = {
-  chapter: 5,
-  slide: 4,
-  title: "Prompt 2: Extractive Selection",
-  audioSegments: [{ id: "main", audioFilePath: "/audio/c5/s4_segment_01_main.wav" }]
-};
-
-/**
- * Chapter 5, Slide 5 - Quality Ranking (Third Prompt)
- */
-export const Ch5_S5_QualityRanking: SlideComponentWithMetadata = () => {
-  const { reduced } = useReducedMotion();
-
-  return (
-    <SlideContainer maxWidth={800}>
-      <motion.div variants={fadeUp(reduced)} initial="hidden" animate="visible">
-        <div style={layouts.flexRow()}>
-          <div style={circularBadge()}>3</div>
-          <h1 style={typography.h1}>Prompt 3: Quality Ranking</h1>
-        </div>
-      </motion.div>
-      
-      <motion.div
-        variants={fadeUp(reduced)}
-        initial="hidden"
-        animate="visible"
-        transition={{ delay: reduced ? 0 : 0.2 }}
-      >
-        <ContentCard>
-          <p style={{ ...typography.body, marginTop: 0 }}>
-            The third prompt ranked these extracted moments by quality, assessing clarity, intelligibility, self-containment, and overall interest level.
-          </p>
-          <ul style={{ ...typography.caption, fontSize: 16, lineHeight: 1.8 }}>
-            <li>Assesses clarity and intelligibility</li>
-            <li>Evaluates self-containment</li>
-            <li>Scores interest level (0-100)</li>
-            <li>Provides overall quality ranking</li>
-          </ul>
-        </ContentCard>
-      </motion.div>
-    </SlideContainer>
-  );
-};
-
-Ch5_S5_QualityRanking.metadata = {
-  chapter: 5,
-  slide: 5,
-  title: "Prompt 3: Quality Ranking",
-  audioSegments: [{ id: "main", audioFilePath: "/audio/c5/s5_segment_01_main.wav" }]
-};
-
-/**
- * Chapter 5, Slide 6 - Narrative Synthesis (Fourth Prompt)
- */
-export const Ch5_S6_NarrativeSynthesis: SlideComponentWithMetadata = () => {
-  const { reduced } = useReducedMotion();
-
-  return (
-    <SlideContainer maxWidth={800}>
-      <motion.div variants={fadeUp(reduced)} initial="hidden" animate="visible">
-        <div style={layouts.flexRow()}>
-          <div style={circularBadge()}>4</div>
-          <h1 style={typography.h1}>Prompt 4: Narrative Synthesis</h1>
-        </div>
-      </motion.div>
-      
-      <motion.div
-        variants={fadeUp(reduced)}
-        initial="hidden"
-        animate="visible"
-        transition={{ delay: reduced ? 0 : 0.2 }}
-      >
-        <ContentCard>
-          <p style={{ ...typography.body, marginTop: 0 }}>
-            The fourth prompt synthesized everything into a cohesive narrative, rephrasing summaries and creating smooth transitions between abstractive and extractive sections.
-          </p>
-          <ul style={{ ...typography.caption, fontSize: 16, lineHeight: 1.8 }}>
-            <li>Rephrases narrations for story flow</li>
-            <li>Creates transition sentences</li>
-            <li>Unifies abstractive + extractive sections</li>
-            <li>Ensures gender-neutral language</li>
-          </ul>
-        </ContentCard>
-      </motion.div>
-    </SlideContainer>
-  );
-};
-
-Ch5_S6_NarrativeSynthesis.metadata = {
-  chapter: 5,
-  slide: 6,
-  title: "Prompt 4: Narrative Synthesis",
-  audioSegments: [{ id: "main", audioFilePath: "/audio/c5/s6_segment_01_main.wav" }]
 };

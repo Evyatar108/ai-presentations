@@ -89,7 +89,7 @@ export const PipelineComparison: React.FC = () => {
           <li>Removes intermediate JSON stitching</li>
         </ul>
         <p style={{fontSize:12, opacity:0.7}}>
-          Result: Calls 4→1, GPUs ~600→~200, better narrative cohesion.
+          Result: Calls 4→1, GPUs ~600→ &lt; 200, better narrative cohesion.
         </p>
       </div>
     </div>
@@ -160,7 +160,7 @@ export const UnifiedPromptConvergence: React.FC = () => {
       </div>
       <div style={{display:'flex', gap:'1rem', marginTop:'0.5rem', flexWrap:'wrap'}}>
         <MetricTile label="LLM Calls" before="4" after="1" emphasis />
-        <MetricTile label="Estimated GPUs" before="~600" after="~200" emphasis note="Capacity plan delta" />
+        <MetricTile label="Estimated GPUs" before="~600" after="<200" emphasis note="Capacity plan delta" />
         <MetricTile label="Latency / session" before="High" after="Lower" note="Fewer round trips" />
         <MetricTile label="Quality" before="Baseline" after="Preferred" note="Early reviewer preference" />
       </div>

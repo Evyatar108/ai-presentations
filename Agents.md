@@ -83,13 +83,12 @@ Interactive presentation slides built with React, Framer Motion, and TypeScript:
 
 #### Key Files
 - **src/App.tsx** - Main application component
-- **src/slides/chapters/** - **Chapter-based slide organization** (10 files, 23 slides total)
+- **src/slides/chapters/** - **Chapter-based slide organization** (9 files, 22 slides total)
   - **Chapter0.tsx** (33 lines) - Intro slide
   - **Chapter1.tsx** (543 lines) - What is Meeting Highlights (3 slides)
-  - **Chapter2.tsx** (327 lines) - Team Collaboration (1 slide)
-  - **Chapter3.tsx** (280 lines) - Architecture Overview (1 slide)
+  - **Chapter2.tsx** (657 lines) - Team Collaboration with inline ReactFlow diagram (1 slide, 9 segments)
   - **Chapter4.tsx** (183 lines) - Highlight Types (1 slide)
-  - **Chapter5.tsx** (351 lines) - COGS Challenge (6 slides)
+  - **Chapter5.tsx** (160 lines) - COGS Challenge (2 slides)
   - **Chapter6.tsx** (266 lines) - Optimization Solution (3 slides)
   - **Chapter7.tsx** (812 lines) - Business Impact (5 slides)
   - **Chapter8.tsx** (118 lines) - User Reception (1 slide)
@@ -114,7 +113,7 @@ Interactive presentation slides built with React, Framer Motion, and TypeScript:
 - **Ch7_S2_GPUReduction** - GPU optimization visualization (600→200)
 - **Ch7_S3_CostCurve** - Cost reduction curve
 - **Ch7_S4_QualityComparison** - Quality comparison metrics
-- **Ch2_S1_TeamCollaboration** - Multi-segment slide with 8 progressive team reveals
+- **Ch2_S1_TeamCollaboration** - Multi-segment slide with 9 segments showing team collaboration and architecture flow with dual visualization (ReactFlow diagram + Backend Flow)
 
 ### TTS (Text-to-Speech) System
 
@@ -167,6 +166,64 @@ Interactive presentation slides built with React, Framer Motion, and TypeScript:
 - **70%+** estimated COGS reduction overall
 
 ## Recent Changes
+
+### 2025-01-20: Removed Individual Prompt Detail Slides
+**Streamlined Chapter 5 Content:**
+- **Deleted 4 slides**: Ch5_S3_TopicAbstraction, Ch5_S4_ExtractiveSelection, Ch5_S5_QualityRanking, Ch5_S6_NarrativeSynthesis
+- **Reason**: All-hands presentation should focus on high-level business impact, not detailed prompt implementations
+- **Kept**: Ch5_S1_ChallengeFraming (shows the problem) and Ch5_S2_FourPrompts (shows the 4-prompt pipeline overview)
+- **Result**: Chapter 5 now has 2 slides (down from 6), faster pacing, clearer narrative
+- **Updated**: [`SlidesRegistry.ts`](react_cogs_demo/src/slides/SlidesRegistry.ts) and [`Chapter5.tsx`](react_cogs_demo/src/slides/chapters/Chapter5.tsx)
+- **Total slides**: Presentation now has 18 slides (down from 22)
+
+### 2025-01-20: Chapter 2 Team Collaboration Slide Refactoring
+**Fixed Narration-Visual Synchronization Issues:**
+- **Problem**: Mismatch between narration audio and visual component reveals in Chapter 2 slide
+- **Root cause**: Team array ordering didn't match segment indices, causing wrong cards to highlight
+- **Fixed team array**: Reordered so Teams at index 5, Loop at index 6 (matching segment numbers)
+- **Updated architecture diagram**: All ReactFlow nodes and edges now aligned with narration timing
+- **Added MSAI duplicate**: Keeps MSAI-Hive card highlighted during ACS narration (segment 3)
+
+**Code Consolidation:**
+- **Inlined architecture diagram**: Moved ReactFlow component from separate [`Ch2_ArchitectureDiagram.tsx`](react_cogs_demo/src/slides/Ch2_ArchitectureDiagram.tsx) into [`Chapter2.tsx`](react_cogs_demo/src/slides/chapters/Chapter2.tsx)
+- **Deleted separate file**: Removed redundant Ch2_ArchitectureDiagram.tsx (323 lines)
+- **Added ReactFlow imports**: All dependencies now in single chapter file
+- **Result**: Cleaner file structure, easier maintenance
+
+**Audio File Path Corrections:**
+- Fixed segment numbering to match actual generated files:
+  - Teams: `s1_segment_06_teams.wav` (was 05)
+  - Loop: `s1_segment_07_loop_storage.wav` (was 06)
+  - Clipchamp: `s1_segment_08_clipchamp.wav` (was 07)
+  - Conclusion: `s1_segment_09_conclusion.wav` (was 08)
+
+**Teams Feature Clarification:**
+- **Updated narration**: "We are also planning to provide access to highlights directly within the Teams ecosystem as another interface option"
+- **Updated labels**: Changed from "Alternative UI" to "Planned UI" throughout
+- **Reflects reality**: Teams access is planned, not yet implemented (BizChat is current primary UI)
+
+**UI Enhancements:**
+- **Sticky header**: "Backend Flow" header remains visible during scrolling
+- **Auto-scroll**: Backend flow automatically scrolls to show newest items as they appear
+- **Better layout**: Flexbox structure with fixed header and scrollable content area
+
+**Final Segment Configuration (9 segments):**
+- Segment 0: Intro
+- Segment 1: ODSP
+- Segment 2: MSAI-Hive
+- Segment 3: ACS (keeps MSAI highlighted)
+- Segment 4: BizChat
+- Segment 5: Teams (with audio)
+- Segment 6: Loop
+- Segment 7: Clipchamp
+- Segment 8: Conclusion
+
+### 2025-01-20: Architecture Overview Slide Removal
+**Removed Redundant Architecture Slide:**
+- **Deleted**: [`Chapter3.tsx`](react_cogs_demo/src/slides/chapters/Chapter3.tsx) (Architecture Overview slide)
+- **Reason**: Slide was redundant and not needed for all-hands presentation focused on business impact
+- **Updated**: [`SlidesRegistry.ts`](react_cogs_demo/src/slides/SlidesRegistry.ts) to remove Ch3_S1_ArchitectureOverview import and reference
+- **Result**: Presentation now has 22 slides (down from 23), streamlined flow from Team Collaboration directly to Highlight Types
 
 ### 2025-01-20: Chapter-Based File Organization
 **Split AnimatedSlides.tsx into Chapter Files:**

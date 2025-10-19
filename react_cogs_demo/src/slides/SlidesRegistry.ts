@@ -8,15 +8,10 @@ import {
   Ch1_S3_UserValue
 } from './chapters/Chapter1';
 import { Ch2_TeamCollaboration } from './chapters/Chapter2';
-import { Ch3_S1_ArchitectureOverview } from './chapters/Chapter3';
 import { Ch4_S1_HighlightTypes } from './chapters/Chapter4';
 import {
   Ch5_S1_ChallengeFraming,
-  Ch5_S2_FourPrompts,
-  Ch5_S3_TopicAbstraction,
-  Ch5_S4_ExtractiveSelection,
-  Ch5_S5_QualityRanking,
-  Ch5_S6_NarrativeSynthesis
+  Ch5_S2_FourPrompts
 } from './chapters/Chapter5';
 import {
   Ch6_S1_UnifiedConvergence,
@@ -49,14 +44,9 @@ export const allSlides: SlideComponentWithMetadata[] = [
   Ch1_S2_HowToAccess,
   Ch1_S3_UserValue,
   Ch2_TeamCollaboration,
-  Ch3_S1_ArchitectureOverview,
   Ch4_S1_HighlightTypes,
   Ch5_S1_ChallengeFraming,
   Ch5_S2_FourPrompts,
-  Ch5_S3_TopicAbstraction,
-  Ch5_S4_ExtractiveSelection,
-  Ch5_S5_QualityRanking,
-  Ch5_S6_NarrativeSynthesis,
   Ch6_S1_UnifiedConvergence,
   Ch6_S2_UnifiedFlow,
   Ch6_S4_TokenOptimization,
