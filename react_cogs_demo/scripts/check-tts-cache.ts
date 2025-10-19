@@ -182,10 +182,10 @@ async function checkTTSCache(): Promise<void> {
   const shouldRegenerate = await promptUser('Do you want to regenerate? (y/n): ');
   
   if (shouldRegenerate) {
-    console.log('\n🔊 Starting TTS generation...\n');
+    console.log('\n🔊 Starting TTS generation (smart cache - only changed segments)...\n');
     try {
-      // Run TTS generation script
-      execSync('npm run tts:generate', {
+      // Run TTS generation script with --skip-existing flag for smart caching
+      execSync('npm run tts:generate -- --skip-existing', {
         stdio: 'inherit', // Show output in real-time
         cwd: path.join(__dirname, '..')
       });

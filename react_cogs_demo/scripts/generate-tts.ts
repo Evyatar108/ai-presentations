@@ -15,6 +15,14 @@ interface TTSConfig {
   outputDir: string;          // public/audio
   skipExisting: boolean;      // Skip files that already exist
   batchSize: number;          // Number of segments per batch request
+  cacheFile: string;          // Path to narration cache file
+}
+
+interface NarrationCache {
+  [filepath: string]: {
+    narrationText: string;
+    generatedAt: string;
+  };
 }
 
 interface SegmentToGenerate {
@@ -26,9 +34,30 @@ interface SegmentToGenerate {
   filepath: string;
 }
 
+// Load cache
+function loadCache(cacheFile: string): NarrationCache {
+  if (fs.existsSync(cacheFile)) {
+    try {
+      const content = fs.readFileSync(cacheFile, 'utf-8');
+      return JSON.parse(content);
+    } catch (error) {
+      return {};
+    }
+  }
+  return {};
+}
+
+// Save cache
+function saveCache(cacheFile: string, cache: NarrationCache) {
+  fs.writeFileSync(cacheFile, JSON.stringify(cache, null, 2));
+}
+
 // Main function with batch processing
 async function generateTTS(config: TTSConfig) {
   console.log('🎙️  Starting TTS Batch Generation...\n');
+  
+  // Load cache
+  const cache = loadCache(config.cacheFile);
   
   // Check server health
   console.log(`Connecting to TTS server at ${config.serverUrl}...`);
@@ -76,10 +105,23 @@ async function generateTTS(config: TTSConfig) {
       // Generate filename
       const filename = `s${slideNum}_segment_${String(i + 1).padStart(2, '0')}_${segment.id}.wav`;
       const filepath = path.join(chapterDir, filename);
+      const relativeFilepath = path.relative(config.outputDir, filepath);
       
-      // Skip if file exists
+      // Check if we should skip this segment
+      let shouldSkip = false;
+      
       if (config.skipExisting && fs.existsSync(filepath)) {
-        skippedCount++;
+        // File exists - check if narration has changed
+        const cachedEntry = cache[relativeFilepath];
+        if (cachedEntry && cachedEntry.narrationText === segment.narrationText) {
+          // Narration hasn't changed - skip
+          shouldSkip = true;
+          skippedCount++;
+        }
+        // If narration changed or not in cache, regenerate
+      }
+      
+      if (shouldSkip) {
         continue;
       }
       
@@ -152,6 +194,13 @@ async function generateTTS(config: TTSConfig) {
           fs.writeFileSync(item.filepath, audioBuffer);
           console.log(`  ✅ [${i + 1}/${batch.length}] Saved: ${item.filename}`);
           generatedCount++;
+          
+          // Update cache
+          const relativeFilepath = path.relative(config.outputDir, item.filepath);
+          cache[relativeFilepath] = {
+            narrationText: item.segment.narrationText!,
+            generatedAt: new Date().toISOString()
+          };
         }
         
       } else {
@@ -183,6 +232,12 @@ async function generateTTS(config: TTSConfig) {
   console.log(`❌ Errors: ${errorCount}`);
   console.log(`📦 Batches processed: ${batches.length}`);
   console.log('='.repeat(60) + '\n');
+  
+  // Save updated cache
+  if (generatedCount > 0) {
+    saveCache(config.cacheFile, cache);
+    console.log(`💾 Cache updated with ${generatedCount} new entries\n`);
+  }
 }
 
 // Utility function to split array into chunks
@@ -216,7 +271,8 @@ const config: TTSConfig = {
   serverUrl: process.env.TTS_SERVER_URL || loadServerConfig(),
   outputDir: path.join(__dirname, '../public/audio'),
   skipExisting: process.argv.includes('--skip-existing'),
-  batchSize: parseInt(process.env.BATCH_SIZE || '10', 10) // 10 segments per batch
+  batchSize: parseInt(process.env.BATCH_SIZE || '10', 10), // 10 segments per batch
+  cacheFile: path.join(__dirname, '../.tts-narration-cache.json')
 };
 
 generateTTS(config).catch(console.error);
