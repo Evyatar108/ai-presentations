@@ -1,0 +1,6 @@
+# React Component: Ch6_S6_NarrativeSynthesis
+# Location: react_cogs_demo/src/slides/AnimatedSlides.tsx:946
+
+1 - Single invocation replaces four calls
+00:02:36,133 --> 00:02:40,093
+The model executes this sequence in a single invocation instead of four external calls.

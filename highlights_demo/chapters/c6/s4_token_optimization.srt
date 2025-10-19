@@ -1,0 +1,6 @@
+# React Component: Ch6_S4_TokenOptimization
+# Location: react_cogs_demo/src/slides/AnimatedSlides.tsx:1119
+
+1 - Input token reduction shown
+00:02:41,293 --> 00:02:47,694
+We also optimized input tokens by switching from verbose JSON to compact schema and eliminating pre-computed candidate ranges.

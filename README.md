@@ -140,14 +140,89 @@ Detailed technical decisions and component structure: [`ARCHITECTURE.md`](react_
 ### Summary
 The consolidation from 4 calls to 1, combined with 60% input token reduction, reduced projected GPU needs (~600 → ~200) and is estimated to cut COGS by over 70%. This produced higher-quality highlight videos (detailed vs generic, natural vs robotic), directly enabling scaled rollout within approved capacity constraints. Internal reviewers strongly prefer the unified prompt output.
 
-### Chapter Files
-The presentation includes narrated subtitle files in the `chapters/` directory:
-- Chapter 1: Product introduction (8 captions)
-- Chapter 2: Team collaboration (4 captions)
-- Chapter 3: Generation workflow (6 captions)
-- Chapter 4: Highlight types and storage (5 captions)
-- Chapter 5: COGS challenge (5 captions)
-- Chapter 6: Optimization solution (5 captions)
-- Chapter 7: Business impact (5 captions)
-- Chapter 8: User reception (4 captions)
-- Chapter 9: Testimonials and future (7 captions)
+### Chapter Files & Slide Structure
+
+The presentation includes narrated subtitle files organized in chapter-specific folders under [`highlights_demo/chapters/`](highlights_demo/chapters/).
+
+#### Directory Structure
+```
+highlights_demo/chapters/
+├── c2/                    # Chapter 2: Team Collaboration
+│   └── s1_team_collaboration.srt
+├── c5/                    # Chapter 5: COGS Challenge
+│   ├── s1_challenge_framing.srt
+│   ├── s2_four_prompts.srt
+│   ├── s3_gpu_requirements.srt
+│   ├── s4_latency_complexity.srt
+│   └── s5_need_reduction.srt
+├── c6/                    # Chapter 6: Optimization Solution
+│   ├── s1_unified_convergence.srt
+│   ├── s2_unified_flow.srt
+│   ├── s3_single_invocation.srt
+│   ├── s4_token_optimization.srt
+│   └── s5_model_tuning.srt
+└── c7/                    # Chapter 7: Business Impact
+    ├── s1_call_reduction.srt
+    ├── s2_gpu_reduction.srt
+    ├── s3_cost_curve.srt
+    ├── s4_quality_comparison.srt
+    └── s5_path_to_ga.srt
+```
+
+#### File Naming Convention
+- **Folder**: `cX/` where X is the chapter number
+- **File**: `sY_description.srt` where Y is the slide number within that chapter
+- Each file represents one slide in the presentation
+- Each slide may contain multiple segments (utterances) with timing information
+
+#### Slide File Format
+Each slide file includes:
+1. **React Component Reference** (comment lines at top)
+   ```
+   # React Component: Ch5_S1_ChallengeFraming
+   # Location: react_cogs_demo/src/slides/AnimatedSlides.tsx:52
+   ```
+2. **Segment entries** with visual descriptions and narration:
+   ```
+   1 - Visual description
+   00:00:00,000 --> 00:00:04,000
+   Narration text for this segment
+   ```
+
+Each segment includes:
+- **Segment number and visual description** - What appears on screen during this utterance
+- **Timing information** - Start and end timestamps in SRT format
+- **Narration text** - The spoken content for this segment
+
+#### Current Chapters
+
+**Chapter 2: Team Collaboration**
+- [`s1_team_collaboration.srt`](highlights_demo/chapters/c2/s1_team_collaboration.srt) - 8 segments showing team logos (ODSP, MSAI-Hive, Clipchamp, Loop, BizChat, Teams)
+
+**Chapter 5: COGS Challenge** (5 slides)
+- [`s1_challenge_framing.srt`](highlights_demo/chapters/c5/s1_challenge_framing.srt) - Cost efficiency critical for scale
+- [`s2_four_prompts.srt`](highlights_demo/chapters/c5/s2_four_prompts.srt) - Four LLM calls visualization
+- [`s3_gpu_requirements.srt`](highlights_demo/chapters/c5/s3_gpu_requirements.srt) - GPU requirements (~600)
+- [`s4_latency_complexity.srt`](highlights_demo/chapters/c5/s4_latency_complexity.srt) - Latency and complexity impact
+- [`s5_need_reduction.srt`](highlights_demo/chapters/c5/s5_need_reduction.srt) - Need for dramatic cost reduction
+
+**Chapter 6: Optimization Solution** (5 slides)
+- [`s1_unified_convergence.srt`](highlights_demo/chapters/c6/s1_unified_convergence.srt) - Four prompts collapse into one
+- [`s2_unified_flow.srt`](highlights_demo/chapters/c6/s2_unified_flow.srt) - Algorithm preserved as reasoning chain
+- [`s3_single_invocation.srt`](highlights_demo/chapters/c6/s3_single_invocation.srt) - Single invocation replaces four calls
+- [`s4_token_optimization.srt`](highlights_demo/chapters/c6/s4_token_optimization.srt) - 60% input token reduction
+- [`s5_model_tuning.srt`](highlights_demo/chapters/c6/s5_model_tuning.srt) - Model tuning for slimmer schema
+
+**Chapter 7: Business Impact** (5 slides)
+- [`s1_call_reduction.srt`](highlights_demo/chapters/c7/s1_call_reduction.srt) - 75% call reduction + 60% token reduction
+- [`s2_gpu_reduction.srt`](highlights_demo/chapters/c7/s2_gpu_reduction.srt) - GPU reduction (600→200)
+- [`s3_cost_curve.srt`](highlights_demo/chapters/c7/s3_cost_curve.srt) - 70% COGS reduction curve
+- [`s4_quality_comparison.srt`](highlights_demo/chapters/c7/s4_quality_comparison.srt) - Quality metrics comparison
+- [`s5_path_to_ga.srt`](highlights_demo/chapters/c7/s5_path_to_ga.srt) - Enables preview and GA rollout
+
+**Other Chapters** (Legacy SRT format - to be migrated):
+- **Chapter 1**: Product introduction (8 captions)
+- **Chapter 3**: Generation workflow (6 captions)
+- **Chapter 4**: Highlight types and storage (5 captions)
+- **Chapter 8**: User reception (4 captions)
+- **Chapter 9**: Testimonials and future (7 captions)

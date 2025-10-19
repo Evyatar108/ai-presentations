@@ -1,0 +1,37 @@
+# React Component: Ch4_S1_HighlightTypes
+# Location: react_cogs_demo/src/slides/AnimatedSlides.tsx (to be created)
+
+1
+00:00:00,000 --> 00:00:07,000
+Visual: Two highlight type cards appear side by side
+Meeting highlights are generated in two distinct categories.
+
+2
+00:00:07,500 --> 00:00:15,000
+Visual: Left card highlights - "Abstractive" with summary icon
+Abstractive highlights provide succinct AI-generated summaries of discussion topics.
+
+3
+00:00:15,500 --> 00:00:23,000
+Visual: Right card highlights - "Key Moments" with timestamp icon
+Key moments pinpoint significant verbatim segments from the original meeting.
+
+4
+00:00:23,500 --> 00:00:31,000
+Visual: Example highlight card showing timestamps "2:15-2:45" and narration text
+Each highlight includes timestamps covering 20 to 30 second segments and narration text.
+
+5
+00:00:31,500 --> 00:00:39,000
+Visual: Azure Cognitive Services logo with audio waveform
+The narration text is converted into audio using Azure Cognitive Services.
+
+6
+00:00:39,500 --> 00:00:47,000
+Visual: ODSP storage icon with metadata, audio, and caption files
+All metadata, timestamps, narrated audio, and captions are securely stored in ODSP.
+
+7
+00:00:47,500 --> 00:00:55,000
+Visual: Icons for M365 Chat, Clipchamp, Teams Recap accessing ODSP
+This ensures highlights are readily available across Microsoft 365 platforms.

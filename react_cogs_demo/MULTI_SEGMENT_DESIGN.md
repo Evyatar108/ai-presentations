@@ -4,6 +4,49 @@
 
 This document outlines the architecture for supporting **multi-segment slides** - slides that progressively reveal content synchronized with multiple sequential audio files and animations. This enables complex narratives like team introductions where each team's logo and description appears as the narrator discusses them.
 
+## File Organization
+
+### Slide Files (SRT Format)
+Slide definitions are organized in chapter folders under `highlights_demo/chapters/`:
+
+```
+highlights_demo/chapters/
+├── c2/                           # Chapter 2: Team Collaboration
+│   └── s1_team_collaboration.srt # Slide 1 with 8 segments
+├── c5/                           # Chapter 5: COGS Challenge
+│   ├── s1_challenge_framing.srt
+│   ├── s2_four_prompts.srt
+│   └── ...
+└── c7/                           # Chapter 7: Business Impact
+    ├── s1_call_reduction.srt
+    └── ...
+```
+
+Each SRT file contains:
+- React component reference (comment)
+- Multiple segments with timing and narration
+- Visual descriptions for each segment
+
+### Audio Files
+Audio segments organized by chapter and slide:
+
+```
+public/audio/
+├── c2/                           # Chapter 2 audio
+│   ├── s1_segment_01_intro.mp3
+│   ├── s1_segment_02_odsp.mp3
+│   └── ...
+├── c5/                           # Chapter 5 audio
+│   └── ...
+└── c7/                           # Chapter 7 audio
+    └── ...
+```
+
+Naming convention: `sX_segment_YY_description.mp3` where:
+- `X` = slide number
+- `YY` = segment number (zero-padded)
+- `description` = brief segment identifier
+
 ## Current Architecture Analysis
 
 ### Existing System
@@ -171,20 +214,20 @@ export const Ch2_TeamCollaboration: SlideComponentWithMetadata = () => {
   );
 };
 
-Ch2_TeamCollaboration.metadata = {
+Ch2_S1_TeamCollaboration.metadata = {
   chapter: 2,
-  utterance: 1,
+  slide: 1,
   title: "Team Collaboration",
   isMultiSegment: true,
   audioSegments: [
-    { id: "intro", audioFilePath: "/audio/ch2_intro.mp3" },
-    { id: "odsp", audioFilePath: "/audio/ch2_odsp.mp3" },
-    { id: "msai", audioFilePath: "/audio/ch2_msai.mp3" },
-    { id: "clipchamp", audioFilePath: "/audio/ch2_clipchamp.mp3" },
-    { id: "loop", audioFilePath: "/audio/ch2_loop.mp3" },
-    { id: "bizchat", audioFilePath: "/audio/ch2_bizchat.mp3" },
-    { id: "teams", audioFilePath: "/audio/ch2_teams.mp3" },
-    { id: "conclusion", audioFilePath: "/audio/ch2_conclusion.mp3" }
+    { id: "intro", audioFilePath: "/audio/c2/s1_segment_01_intro.mp3" },
+    { id: "odsp", audioFilePath: "/audio/c2/s1_segment_02_odsp.mp3" },
+    { id: "msai", audioFilePath: "/audio/c2/s1_segment_03_msai.mp3" },
+    { id: "clipchamp", audioFilePath: "/audio/c2/s1_segment_04_clipchamp.mp3" },
+    { id: "loop", audioFilePath: "/audio/c2/s1_segment_05_loop.mp3" },
+    { id: "bizchat", audioFilePath: "/audio/c2/s1_segment_06_bizchat.mp3" },
+    { id: "teams", audioFilePath: "/audio/c2/s1_segment_07_teams.mp3" },
+    { id: "conclusion", audioFilePath: "/audio/c2/s1_segment_08_conclusion.mp3" }
   ]
 };
 ```

@@ -1,0 +1,6 @@
+# React Component: Ch5_S1_ChallengeFraming
+# Location: react_cogs_demo/src/slides/AnimatedSlides.tsx:52
+
+1 - Cost efficiency critical for scale
+00:01:50,649 --> 00:01:54,570
+Cost efficiency while maintaining quality is critical for scaling meeting highlights globally.

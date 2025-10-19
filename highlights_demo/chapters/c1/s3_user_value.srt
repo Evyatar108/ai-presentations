@@ -1,0 +1,27 @@
+# React Component: Ch1_S3_UserValue
+# Location: react_cogs_demo/src/slides/AnimatedSlides.tsx (to be created)
+
+1
+00:00:00,000 --> 00:00:07,000
+Visual: 3 value proposition cards appear
+Meeting Highlights delivers three key benefits to users.
+
+2
+00:00:07,500 --> 00:00:14,000
+Visual: Card 1 highlights - clock icon with "60 min → 3 min"
+First, massive time savings. Instead of watching a 60-minute recording, catch up in 3 to 5 minutes.
+
+3
+00:00:14,500 --> 00:00:21,000
+Visual: Card 2 highlights - engagement icons (eyes, ears, text)
+Second, better engagement and retention through audiovisual content that caters to all learning styles.
+
+4
+00:00:21,500 --> 00:00:28,000
+Visual: Card 3 highlights - mood/vibe icons showing emotions
+Third, preserved meeting dynamics. You get the tone and vibe of discussions, not just facts.
+
+5
+00:00:28,500 --> 00:00:36,000
+Visual: User testimonial quote appears
+Internal users have called it magical, with one manager saying it saved hours of reviewing transcripts.

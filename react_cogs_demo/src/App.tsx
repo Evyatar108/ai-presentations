@@ -3,6 +3,7 @@ import { ReducedMotionToggle } from './accessibility/ReducedMotion';
 import { SlidePlayer, Slide } from './components/SlidePlayer';
 import { NarratedController } from './components/NarratedController';
 import { allSlides } from './slides/SlidesRegistry';
+import { SegmentProvider } from './contexts/SegmentContext';
 
 export const App: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState<{ chapter: number; utterance: number } | undefined>(undefined);
@@ -41,24 +42,26 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div style={{ position: 'relative' }}>
-      {/* Narrated Controller (manages audio and slide progression) */}
-      <NarratedController
-        onSlideChange={handleSlideChange}
-        onPlaybackStart={handlePlaybackStart}
-        onPlaybackEnd={handlePlaybackEnd}
-        manualSlideChange={manualSlideChange}
-      />
+    <SegmentProvider>
+      <div style={{ position: 'relative' }}>
+        {/* Narrated Controller (manages audio and slide progression) */}
+        <NarratedController
+          onSlideChange={handleSlideChange}
+          onPlaybackStart={handlePlaybackStart}
+          onPlaybackEnd={handlePlaybackEnd}
+          manualSlideChange={manualSlideChange}
+        />
 
-      {/* Slide presentation */}
-      <SlidePlayer
-        slides={slides}
-        autoAdvance={false}
-        externalSlide={currentSlide}
-        onSlideChange={handleManualSlideChange}
-        disableManualNav={isNarratedMode}
-      />
-    </div>
+        {/* Slide presentation */}
+        <SlidePlayer
+          slides={slides}
+          autoAdvance={false}
+          externalSlide={currentSlide}
+          onSlideChange={handleManualSlideChange}
+          disableManualNav={isNarratedMode}
+        />
+      </div>
+    </SegmentProvider>
   );
 };
 

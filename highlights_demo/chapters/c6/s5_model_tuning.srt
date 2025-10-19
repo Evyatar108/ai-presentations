@@ -1,0 +1,6 @@
+# React Component: (No specific component - part of optimization narrative)
+# Location: N/A
+
+1 - Model tuning for slimmer schema
+00:02:48,174 --> 00:02:54,374
+Separate tuning adapted the model to the slimmer schema and token budget while maintaining valid output for video generation.

@@ -1,0 +1,37 @@
+# React Component: Ch1_S2_HowToAccess
+# Location: react_cogs_demo/src/slides/AnimatedSlides.tsx (to be created)
+
+1
+00:00:00,000 --> 00:00:06,000
+Visual: BizChat interface screenshot
+Let me show you how to access Meeting Highlights through BizChat.
+
+2
+00:00:06,500 --> 00:00:13,000
+Visual: Embedded MP4 demo video showing BizChat interaction
+Open BizChat and ask it to recap a specific meeting.
+
+3
+00:00:13,500 --> 00:00:20,000
+Visual: Demo continues - showing "/" menu for CIQ
+You can reference specific meetings using Contextual Instant Query by typing slash.
+
+4
+00:00:20,500 --> 00:00:27,000
+Visual: Demo shows meeting selection from menu
+This opens a menu to select and search for meetings to add to your message.
+
+5
+00:00:27,500 --> 00:00:35,000
+Visual: Demo shows BizChat response with video player at bottom
+BizChat will return a reply to your query and a video player with the meeting highlights appears at the bottom.
+
+6
+00:00:35,500 --> 00:00:42,000
+Visual: Note callout appears
+Note: If the meeting is a series meeting, BizChat currently won't show the highlights player yet.
+
+7
+00:00:42,500 --> 00:00:50,000
+Visual: Icons showing Teams, BizChat, M365 Copilot entry points
+We're working on additional ways to surface highlights via BizChat and Teams.

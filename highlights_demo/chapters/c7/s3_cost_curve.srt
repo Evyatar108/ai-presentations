@@ -1,0 +1,6 @@
+# React Component: Ch7_S3_CostCurve
+# Location: react_cogs_demo/src/components/ImpactComponents.tsx:67
+
+1 - Cost reduction curve showing 70% COGS reduction
+00:03:06,375 --> 00:03:11,215
+Combined, this is estimated to cut COGS by over 70%, enabling economically viable worldwide rollout.

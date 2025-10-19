@@ -15,18 +15,46 @@ This project contains materials for an all-hands presentation about Meeting High
 - **highlights_demo/context/what is meeting highlights.md** - Comprehensive product explanation
 - **highlights_demo/context/how can users try meeting highlights.md** - Instructions for accessing Meeting Highlights via BizChat
 
-### Chapter SRT Files (`highlights_demo/chapters/`)
-Subtitle files for the narrated presentation video, organized by chapter:
+### Chapter & Slide Files (`highlights_demo/chapters/`)
 
-1. **1_intro.srt** (8 captions) - Product introduction explaining what Meeting Highlights is, user experience, access points, and availability
-2. **2_teams.srt** (4 captions) - Team collaboration across Microsoft (ODSP, MSAI Hive, Clipchamp, Loop, BizChat, Teams)
-3. **3_generation_workflow.srt** (6 captions) - Backend workflow for generating highlights
-4. **4_highlight_types_and_storage.srt** (5 captions) - Highlight types and storage architecture
-5. **5_cogs_challenge.srt** (5 captions) - Cost challenges with original 4-prompt pipeline
-6. **6_optimization_solution.srt** (5 captions) - Unified prompt solution with 60% token reduction
-7. **7_business_impact.srt** (5 captions) - Business impact: 75% fewer calls, 60% token reduction, 70% COGS reduction
-8. **8_user_reception.srt** (4 captions) - User feedback and satisfaction metrics
-9. **9_testimonials_and_future.srt** (7 captions) - User testimonials and future improvements
+Slide files are organized in chapter-specific folders. Each slide file represents one complete slide in the presentation and may contain multiple segments (utterances) for progressive content reveal.
+
+#### File Organization
+```
+highlights_demo/chapters/
+├── c2/                           # Chapter 2: Team Collaboration
+│   └── s1_team_collaboration.srt
+├── c5/                           # Chapter 5: COGS Challenge
+│   ├── s1_challenge_framing.srt
+│   ├── s2_four_prompts.srt
+│   ├── s3_gpu_requirements.srt
+│   ├── s4_latency_complexity.srt
+│   └── s5_need_reduction.srt
+├── c6/                           # Chapter 6: Optimization Solution
+│   ├── s1_unified_convergence.srt
+│   ├── s2_unified_flow.srt
+│   ├── s3_single_invocation.srt
+│   ├── s4_token_optimization.srt
+│   └── s5_model_tuning.srt
+└── c7/                           # Chapter 7: Business Impact
+    ├── s1_call_reduction.srt
+    ├── s2_gpu_reduction.srt
+    ├── s3_cost_curve.srt
+    ├── s4_quality_comparison.srt
+    └── s5_path_to_ga.srt
+```
+
+#### File Format
+Each slide file includes:
+- **React Component Reference** - Link to implementing component (e.g., `Ch5_S1_ChallengeFraming`)
+- **Segments** - Numbered with visual descriptions, timestamps, and narration text
+
+#### Legacy Files (To Be Migrated)
+- **1_intro.srt** (8 captions) - Product introduction
+- **3_generation_workflow.srt** (6 captions) - Backend workflow
+- **4_highlight_types_and_storage.srt** (5 captions) - Highlight types
+- **8_user_reception.srt** (4 captions) - User feedback
+- **9_testimonials_and_future.srt** (7 captions) - Testimonials
 
 ### Highlights Demo Materials (`highlights_demo/`)
 - **audio/** - Audio files for narrated presentation
@@ -54,13 +82,14 @@ Interactive presentation slides built with React, Framer Motion, and TypeScript:
 - **src/components/NarratedController.tsx** - Audio-synced presentation controller
 
 #### Notable Slides
-- **Ch5_U1_ChallengeFraming** - Shows initial metrics (4 calls, ~600 GPUs, high tokens)
-- **Ch5_U2_FourPrompts** - Visualizes original 4-prompt pipeline
-- **Ch6_U1_UnifiedConvergence** - Shows convergence to unified single prompt
-- **Ch7_U1_CallReduction** - **Dual visualization**: LLM call reduction (75%) + Token reduction (60%)
-- **Ch7_U2_GPUReduction** - GPU optimization visualization (600→200)
-- **Ch7_U3_CostCurve** - Cost reduction curve
-- **Ch7_U4_QualityComparison** - Quality comparison metrics
+- **Ch5_S1_ChallengeFraming** - Shows initial metrics (4 calls, ~600 GPUs, high tokens)
+- **Ch5_S2_FourPrompts** - Visualizes original 4-prompt pipeline
+- **Ch6_S1_UnifiedConvergence** - Shows convergence to unified single prompt
+- **Ch7_S1_CallReduction** - **Dual visualization**: LLM call reduction (75%) + Token reduction (60%)
+- **Ch7_S2_GPUReduction** - GPU optimization visualization (600→200)
+- **Ch7_S3_CostCurve** - Cost reduction curve
+- **Ch7_S4_QualityComparison** - Quality comparison metrics
+- **Ch2_S1_TeamCollaboration** - Multi-segment slide with 8 progressive team reveals
 
 ### TTS (Text-to-Speech) System (`tts/`)
 Python-based TTS service for generating narration audio:
@@ -96,9 +125,12 @@ Python-based TTS service for generating narration audio:
 5. **Enhanced React Slide** - Ch7_U1 now shows both call reduction dial AND token reduction bar chart side-by-side
 
 ### Code Changes
-- Removed 4 detailed prompt slides (Ch5_U3-U6) from SlidesRegistry
+- Renamed all slide components from `_U` (Utterance) to `_S` (Slide) convention
+- Removed 4 detailed prompt slides (Ch5_S3-S6 for individual prompts) from SlidesRegistry
 - Deleted unused SlideRegistry.ts file
-- Updated Ch7_U1_CallReduction to "Optimization Impact" with dual visualizations
+- Updated Ch7_S1_CallReduction to "Optimization Impact" with dual visualizations
+- Implemented multi-segment slide support for progressive content reveal
+- Organized slide definitions by chapter in `highlights_demo/chapters/cX/` folders
 
 ## Development
 

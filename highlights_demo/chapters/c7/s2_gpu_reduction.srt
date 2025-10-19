@@ -1,0 +1,6 @@
+# React Component: Ch7_S2_GPUReduction
+# Location: react_cogs_demo/src/slides/AnimatedSlides.tsx:567
+
+1 - GPU reduction visualization (600→200)
+00:03:01,815 --> 00:03:05,255
+Estimated GPU requirements drop from 600 to 200 for global availability.

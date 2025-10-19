@@ -1,0 +1,6 @@
+# React Component: Ch7_S1_CallReduction
+# Location: react_cogs_demo/src/slides/AnimatedSlides.tsx:395
+
+1 - 75% call reduction + 60% token reduction
+00:02:55,414 --> 00:03:00,775
+The impact: 75% fewer model invocations per meeting, and 60% reduction in input tokens.

@@ -1,16 +1,16 @@
 import { SlideComponentWithMetadata } from './SlideMetadata';
 import {
   BlankIntro,
-  Ch5_U1_ChallengeFraming,
-  Ch5_U2_FourPrompts,
-  Ch6_U1_UnifiedConvergence,
-  Ch6_U2_UnifiedFlow,
-  Ch6_U4_TokenOptimization,
-  Ch7_U1_CallReduction,
-  Ch7_U2_GPUReduction,
-  Ch7_U5_PathToGA
+  Ch5_S1_ChallengeFraming,
+  Ch5_S2_FourPrompts,
+  Ch6_S1_UnifiedConvergence,
+  Ch6_S2_UnifiedFlow,
+  Ch6_S4_TokenOptimization,
+  Ch7_S1_CallReduction,
+  Ch7_S2_GPUReduction,
+  Ch7_S5_PathToGA
 } from './AnimatedSlides';
-import { Ch7_U3_CostCurve, Ch7_U4_QualityComparison } from '../components/ImpactComponents';
+import { Ch7_S3_CostCurve, Ch7_S4_QualityComparison } from '../components/ImpactComponents';
 
 /**
  * Central registry of all slide components with their metadata.
@@ -21,16 +21,16 @@ import { Ch7_U3_CostCurve, Ch7_U4_QualityComparison } from '../components/Impact
  */
 export const allSlides: SlideComponentWithMetadata[] = [
   BlankIntro,
-  Ch5_U1_ChallengeFraming,
-  Ch5_U2_FourPrompts,
-  Ch6_U1_UnifiedConvergence,
-  Ch6_U2_UnifiedFlow,
-  Ch6_U4_TokenOptimization,
-  Ch7_U1_CallReduction,
-  Ch7_U2_GPUReduction,
-  Ch7_U3_CostCurve,
-  Ch7_U4_QualityComparison,
-  Ch7_U5_PathToGA
+  Ch5_S1_ChallengeFraming,
+  Ch5_S2_FourPrompts,
+  Ch6_S1_UnifiedConvergence,
+  Ch6_S2_UnifiedFlow,
+  Ch6_S4_TokenOptimization,
+  Ch7_S1_CallReduction,
+  Ch7_S2_GPUReduction,
+  Ch7_S3_CostCurve,
+  Ch7_S4_QualityComparison,
+  Ch7_S5_PathToGA
 ].sort((a, b) => {
   // Sort by chapter first, then by utterance
   if (a.metadata.chapter !== b.metadata.chapter) {

@@ -64,7 +64,7 @@ export const GPUReduction: React.FC = () => {
  * Fixed Stacked Bar Comparison Only
  * Simplified to a single visualization focusing on component cost reduction.
  */
-export const Ch7_U3_CostCurve: SlideComponentWithMetadata = () => {
+export const Ch7_S3_CostCurve: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
   // Relative component magnitudes (illustrative only)
   const v1 = { calls: 40, orchestration: 18, tokens: 22, gpuPadding: 20 };
@@ -256,18 +256,18 @@ export const Ch7_U3_CostCurve: SlideComponentWithMetadata = () => {
   );
 };
 
-Ch7_U3_CostCurve.metadata = {
+Ch7_S3_CostCurve.metadata = {
   chapter: 7,
   utterance: 3,
   title: "Cost Savings",
-  audioFilePath: "/audio/12-Audio 12.wav"
+  audioSegments: [{ id: "main", audioFilePath: "/audio/12-Audio 12.wav" }]
 };
 
 /**
  * Chapter 7, Utterance 4 - Quality Comparison
  * Animated qualitative preference shift toward unified prompt outputs.
  */
-export const Ch7_U4_QualityComparison: SlideComponentWithMetadata = () => {
+export const Ch7_S4_QualityComparison: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
   
   const containerVariants = {
@@ -394,11 +394,11 @@ export const Ch7_U4_QualityComparison: SlideComponentWithMetadata = () => {
   );
 };
 
-Ch7_U4_QualityComparison.metadata = {
+Ch7_S4_QualityComparison.metadata = {
   chapter: 7,
   utterance: 4,
   title: "Quality Improvement",
-  audioFilePath: "/audio/13-Audio 13.wav"
+  audioSegments: [{ id: "main", audioFilePath: "/audio/13-Audio 13.wav" }]
 };
 
 /* RoadmapSlide removed per user request: animations complete; slide omitted. */
@@ -408,6 +408,6 @@ Ch7_U4_QualityComparison.metadata = {
  */
 export const ImpactComponents = {
   GPUReduction,
-  Ch7_U3_CostCurve,
-  Ch7_U4_QualityComparison
+  Ch7_S3_CostCurve,
+  Ch7_S4_QualityComparison
 };

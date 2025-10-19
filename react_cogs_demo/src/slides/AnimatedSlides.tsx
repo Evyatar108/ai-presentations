@@ -42,14 +42,14 @@ BlankIntro.metadata = {
   chapter: 0,
   utterance: 0,
   title: "Intro",
-  audioFilePath: "/audio/00-Silence.mp3"
+  audioSegments: [{ id: "main", audioFilePath: "/audio/00-Silence.mp3" }]
 };
 
 /**
  * Chapter 5, Utterance 1 - Challenge Framing
  * BEFORE metrics → TARGET unified approach
  */
-export const Ch5_U1_ChallengeFraming: SlideComponentWithMetadata = () => {
+export const Ch5_S1_ChallengeFraming: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
   
   const containerVariants = {
@@ -161,17 +161,17 @@ export const Ch5_U1_ChallengeFraming: SlideComponentWithMetadata = () => {
   );
 };
 
-Ch5_U1_ChallengeFraming.metadata = {
+Ch5_S1_ChallengeFraming.metadata = {
   chapter: 5,
   utterance: 1,
   title: "Challenge Framing",
-  audioFilePath: "/audio/01-Audio 1.wav"
+  audioSegments: [{ id: "main", audioFilePath: "/audio/01-Audio 1.wav" }]
 };
 
 /**
  * Chapter 5, Utterance 2 - Four Prompt Chain
  */
-export const Ch5_U2_FourPrompts: SlideComponentWithMetadata = () => {
+export const Ch5_S2_FourPrompts: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
 
   const prompts = [
@@ -269,17 +269,17 @@ export const Ch5_U2_FourPrompts: SlideComponentWithMetadata = () => {
   );
 };
 
-Ch5_U2_FourPrompts.metadata = {
+Ch5_S2_FourPrompts.metadata = {
   chapter: 5,
   utterance: 2,
   title: "Four-Prompt Pipeline",
-  audioFilePath: "/audio/02-Audio 2.wav"
+  audioSegments: [{ id: "main", audioFilePath: "/audio/02-Audio 2.wav" }]
 };
 
 /**
  * Chapter 6, Utterance 1 - Unified Convergence
  */
-export const Ch6_U1_UnifiedConvergence: SlideComponentWithMetadata = () => {
+export const Ch6_S1_UnifiedConvergence: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
 
   return (
@@ -381,18 +381,18 @@ export const Ch6_U1_UnifiedConvergence: SlideComponentWithMetadata = () => {
   );
 };
 
-Ch6_U1_UnifiedConvergence.metadata = {
+Ch6_S1_UnifiedConvergence.metadata = {
   chapter: 6,
   utterance: 1,
   title: "Unified Convergence",
-  audioFilePath: "/audio/07-Audio 7.wav"
+  audioSegments: [{ id: "main", audioFilePath: "/audio/07-Audio 7.wav" }]
 };
 
 /**
  /**
   * Chapter 7, Utterance 1 - Call & Token Reduction
   */
- export const Ch7_U1_CallReduction: SlideComponentWithMetadata = () => {
+ export const Ch7_S1_CallReduction: SlideComponentWithMetadata = () => {
    const { reduced } = useReducedMotion();
  
    return (
@@ -554,17 +554,17 @@ Ch6_U1_UnifiedConvergence.metadata = {
      </div>
    );
  };
-Ch7_U1_CallReduction.metadata = {
+Ch7_S1_CallReduction.metadata = {
   chapter: 7,
   utterance: 1,
   title: "Call Reduction",
-  audioFilePath: "/audio/10-Audio 10.wav"
+  audioSegments: [{ id: "main", audioFilePath: "/audio/10-Audio 10.wav" }]
 };
 
 /**
  * Chapter 7, Utterance 2 - GPU Reduction
  */
-export const Ch7_U2_GPUReduction: SlideComponentWithMetadata = () => {
+export const Ch7_S2_GPUReduction: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
 
   return (
@@ -698,17 +698,17 @@ export const Ch7_U2_GPUReduction: SlideComponentWithMetadata = () => {
   );
 };
 
-Ch7_U2_GPUReduction.metadata = {
+Ch7_S2_GPUReduction.metadata = {
   chapter: 7,
   utterance: 2,
   title: "GPU Optimization",
-  audioFilePath: "/audio/11-Audio 11.wav"
+  audioSegments: [{ id: "main", audioFilePath: "/audio/11-Audio 11.wav" }]
 };
 
 /**
  * Chapter 5, Utterance 3 - First Prompt: Topic Abstraction
  */
-export const Ch5_U3_TopicAbstraction: SlideComponentWithMetadata = () => {
+export const Ch5_S3_TopicAbstraction: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
 
   return (
@@ -777,17 +777,17 @@ export const Ch5_U3_TopicAbstraction: SlideComponentWithMetadata = () => {
   );
 };
 
-Ch5_U3_TopicAbstraction.metadata = {
+Ch5_S3_TopicAbstraction.metadata = {
   chapter: 5,
   utterance: 3,
   title: "Prompt 1: Topic Abstraction",
-  audioFilePath: "/audio/03-Audio 3.wav"
+  audioSegments: [{ id: "main", audioFilePath: "/audio/03-Audio 3.wav" }]
 };
 
 /**
  * Chapter 5, Utterance 4 - Second Prompt: Extractive Selection
  */
-export const Ch5_U4_ExtractiveSelection: SlideComponentWithMetadata = () => {
+export const Ch5_S4_ExtractiveSelection: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
 
   return (
@@ -855,17 +855,17 @@ export const Ch5_U4_ExtractiveSelection: SlideComponentWithMetadata = () => {
   );
 };
 
-Ch5_U4_ExtractiveSelection.metadata = {
+Ch5_S4_ExtractiveSelection.metadata = {
   chapter: 5,
   utterance: 4,
   title: "Prompt 2: Extractive Selection",
-  audioFilePath: "/audio/04-Audio 4.wav"
+  audioSegments: [{ id: "main", audioFilePath: "/audio/04-Audio 4.wav" }]
 };
 
 /**
  * Chapter 5, Utterance 5 - Third Prompt: Quality Ranking
  */
-export const Ch5_U5_QualityRanking: SlideComponentWithMetadata = () => {
+export const Ch5_S5_QualityRanking: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
 
   return (
@@ -933,17 +933,17 @@ export const Ch5_U5_QualityRanking: SlideComponentWithMetadata = () => {
   );
 };
 
-Ch5_U5_QualityRanking.metadata = {
+Ch5_S5_QualityRanking.metadata = {
   chapter: 5,
   utterance: 5,
   title: "Prompt 3: Quality Ranking",
-  audioFilePath: "/audio/05-Audio 5.wav"
+  audioSegments: [{ id: "main", audioFilePath: "/audio/05-Audio 5.wav" }]
 };
 
 /**
  * Chapter 5, Utterance 6 - Fourth Prompt: Narrative Synthesis
  */
-export const Ch5_U6_NarrativeSynthesis: SlideComponentWithMetadata = () => {
+export const Ch5_S6_NarrativeSynthesis: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
 
   return (
@@ -1011,17 +1011,17 @@ export const Ch5_U6_NarrativeSynthesis: SlideComponentWithMetadata = () => {
   );
 };
 
-Ch5_U6_NarrativeSynthesis.metadata = {
+Ch5_S6_NarrativeSynthesis.metadata = {
   chapter: 5,
   utterance: 6,
   title: "Prompt 4: Narrative Synthesis",
-  audioFilePath: "/audio/06-Audio 6.wav"
+  audioSegments: [{ id: "main", audioFilePath: "/audio/06-Audio 6.wav" }]
 };
 
 /**
  * Chapter 6, Utterance 2 - Unified Flow Details
  */
-export const Ch6_U2_UnifiedFlow: SlideComponentWithMetadata = () => {
+export const Ch6_S2_UnifiedFlow: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
 
   return (
@@ -1106,17 +1106,17 @@ export const Ch6_U2_UnifiedFlow: SlideComponentWithMetadata = () => {
   );
 };
 
-Ch6_U2_UnifiedFlow.metadata = {
+Ch6_S2_UnifiedFlow.metadata = {
   chapter: 6,
   utterance: 2,
   title: "Unified Flow Details",
-  audioFilePath: "/audio/08-Audio 8.wav"
+  audioSegments: [{ id: "main", audioFilePath: "/audio/08-Audio 8.wav" }]
 };
 
 /**
  * Chapter 6, Utterance 4 - Token Optimization
  */
-export const Ch6_U4_TokenOptimization: SlideComponentWithMetadata = () => {
+export const Ch6_S4_TokenOptimization: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
 
   return (
@@ -1166,17 +1166,17 @@ export const Ch6_U4_TokenOptimization: SlideComponentWithMetadata = () => {
   );
 };
 
-Ch6_U4_TokenOptimization.metadata = {
+Ch6_S4_TokenOptimization.metadata = {
   chapter: 6,
   utterance: 4,
   title: "Token Optimization",
-  audioFilePath: "/audio/09-Audio 9.wav"
+  audioSegments: [{ id: "main", audioFilePath: "/audio/09-Audio 9.wav" }]
 };
 
 /**
  * Chapter 7, Utterance 5 - Path to General Availability
  */
-export const Ch7_U5_PathToGA: SlideComponentWithMetadata = () => {
+export const Ch7_S5_PathToGA: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
 
   return (
@@ -1323,11 +1323,11 @@ export const Ch7_U5_PathToGA: SlideComponentWithMetadata = () => {
   );
 };
 
-Ch7_U5_PathToGA.metadata = {
+Ch7_S5_PathToGA.metadata = {
   chapter: 7,
   utterance: 5,
   title: "Path to GA",
-  audioFilePath: "/audio/14-Audio 14.wav"
+  audioSegments: [{ id: "main", audioFilePath: "/audio/14-Audio 14.wav" }]
 };
 
 /**
@@ -1336,16 +1336,16 @@ Ch7_U5_PathToGA.metadata = {
   */
  export const AnimatedSlides = {
    BlankIntro,
-   Ch5_U1_ChallengeFraming,
-   Ch5_U2_FourPrompts,
-   Ch5_U3_TopicAbstraction,
-   Ch5_U4_ExtractiveSelection,
-   Ch5_U5_QualityRanking,
-   Ch5_U6_NarrativeSynthesis,
-   Ch6_U1_UnifiedConvergence,
-   Ch6_U2_UnifiedFlow,
-   Ch6_U4_TokenOptimization,
-   Ch7_U1_CallReduction,
-   Ch7_U2_GPUReduction,
-   Ch7_U5_PathToGA
+   Ch5_S1_ChallengeFraming,
+   Ch5_S2_FourPrompts,
+   Ch5_S3_TopicAbstraction,
+   Ch5_S4_ExtractiveSelection,
+   Ch5_S5_QualityRanking,
+   Ch5_S6_NarrativeSynthesis,
+   Ch6_S1_UnifiedConvergence,
+   Ch6_S2_UnifiedFlow,
+   Ch6_S4_TokenOptimization,
+   Ch7_S1_CallReduction,
+   Ch7_S2_GPUReduction,
+   Ch7_S5_PathToGA
  };

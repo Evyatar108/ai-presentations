@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { allSlides } from '../slides/SlidesRegistry';
+import { hasAudioSegments } from '../slides/SlideMetadata';
+import { useSegmentContext } from '../contexts/SegmentContext';
 
 interface NarratedControllerProps {
   onSlideChange: (chapter: number, utterance: number) => void;
@@ -28,6 +30,9 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const currentIndexRef = useRef(currentIndex);
   const lastAutoAdvanceFromIndexRef = useRef<number | null>(null);
+  
+  // Segment context for multi-segment slides
+  const segmentContext = useSegmentContext();
 
   // Keep ref in sync with state
   useEffect(() => {
@@ -51,73 +56,115 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     
     setCurrentIndex(nextIndex);
   }, [onPlaybackEnd]);
-  
-  // Play audio for current slide in narrated mode
+  // Play audio for current slide in narrated mode (all slides use segments now)
   useEffect(() => {
     if (!isPlaying || currentIndex >= allSlides.length || isManualMode) return;
     
     const currentSlide = allSlides[currentIndex].metadata;
+    const slideKey = `Ch${currentSlide.chapter}:U${currentSlide.utterance}`;
     
-    // Stop any existing audio
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.onended = null;
-      audioRef.current.onplay = null;
-    }
-    
-    // Create new audio element for this slide
-    const audio = new Audio(currentSlide.audioFilePath);
-    audioRef.current = audio;
-    
-    // Setup event handlers
-    audio.onended = () => {
-      console.log(`Audio ended for chapter ${currentSlide.chapter}, utterance ${currentSlide.utterance}`);
-      setError(null);
-      advanceSlide();
-    };
-    
-    audio.onerror = (e) => {
-      console.error(`Failed to load audio for chapter ${currentSlide.chapter}, utterance ${currentSlide.utterance}:`, e);
-      setError(`Failed to load audio for chapter ${currentSlide.chapter}, utterance ${currentSlide.utterance}`);
-      setIsLoading(false);
-      // Fallback: advance after 10 seconds
-      setTimeout(() => {
-        setError(null);
-        advanceSlide();
-      }, 10000);
-    };
-    
-    audio.onplay = () => {
-      console.log(`Audio playing for chapter ${currentSlide.chapter}, utterance ${currentSlide.utterance}`);
-      setError(null);
-      setIsLoading(false);
-    };
-    
-    audio.oncanplaythrough = () => {
-      setIsLoading(false);
-    };
+    console.log(`[NarratedController] Playing slide: ${slideKey} with ${currentSlide.audioSegments.length} segment(s)`);
+    playSlideSegments(currentSlide, slideKey);
     
     // Update slide display
     onSlideChange(currentSlide.chapter, currentSlide.utterance);
     
-    // Start playing
-    setIsLoading(true);
-    audio.play().catch(err => {
-      console.error('Audio playback failed:', err);
-      setError('Audio playback failed');
-      setIsLoading(false);
-    });
-    
-    // Cleanup
+    // Cleanup function
     return () => {
-      audio.pause();
-      audio.onended = null;
-      audio.onerror = null;
-      audio.onplay = null;
-      audio.oncanplaythrough = null;
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.onended = null;
+        audioRef.current.onerror = null;
+        audioRef.current.onplay = null;
+        audioRef.current.oncanplaythrough = null;
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPlaying, currentIndex, isManualMode]);
+  
+  // Play slide segments (all slides use this now)
+  const playSlideSegments = useCallback((slideMetadata: typeof allSlides[0]['metadata'], slideKey: string) => {
+    const segments = slideMetadata.audioSegments;
+    
+    if (!segments || segments.length === 0) {
+      console.warn(`[NarratedController] No audio segments for ${slideKey}, advancing immediately`);
+      setTimeout(advanceSlide, 100);
+      return;
+    }
+    
+    // Initialize segment context
+    segmentContext.initializeSegments(slideKey, segments);
+    
+    let currentSegmentIndex = 0;
+    
+    const playSegment = (segmentIndex: number) => {
+      if (segmentIndex >= segments.length) {
+        console.log(`[NarratedController] All segments complete for ${slideKey}, advancing to next slide`);
+        advanceSlide();
+        return;
+      }
+      
+      const segment = segments[segmentIndex];
+      console.log(`[NarratedController] Playing segment ${segmentIndex}/${segments.length - 1}: ${segment.id}`);
+      
+      // Update segment context
+      segmentContext.setCurrentSegment(segmentIndex);
+      
+      // Stop any existing audio
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.onended = null;
+        audioRef.current.onerror = null;
+        audioRef.current.onplay = null;
+      }
+      
+      // Create new audio element for this segment
+      const audio = new Audio(segment.audioFilePath);
+      audioRef.current = audio;
+      
+      // Setup event handlers
+      audio.onended = () => {
+        console.log(`[NarratedController] Segment ${segmentIndex} (${segment.id}) ended`);
+        setError(null);
+        currentSegmentIndex++;
+        // Small delay between segments for smoother transitions
+        setTimeout(() => playSegment(currentSegmentIndex), 100);
+      };
+      
+      audio.onerror = (e) => {
+        console.error(`[NarratedController] Failed to load segment ${segmentIndex} (${segment.id}):`, e);
+        setError(`Failed to load segment: ${segment.id}`);
+        setIsLoading(false);
+        // Skip failed segment after 2 seconds
+        setTimeout(() => {
+          setError(null);
+          currentSegmentIndex++;
+          playSegment(currentSegmentIndex);
+        }, 2000);
+      };
+      
+      audio.onplay = () => {
+        console.log(`[NarratedController] Segment ${segmentIndex} (${segment.id}) playing`);
+        setError(null);
+        setIsLoading(false);
+      };
+      
+      audio.oncanplaythrough = () => {
+        setIsLoading(false);
+      };
+      
+      // Start playing
+      setIsLoading(true);
+      audio.play().catch(err => {
+        console.error(`[NarratedController] Segment playback failed for ${segment.id}:`, err);
+        setError(`Segment playback failed: ${segment.id}`);
+        setIsLoading(false);
+      });
+    };
+    
+    // Start with first segment
+    playSegment(0);
+  }, [advanceSlide, segmentContext]);
 
   // Start narrated playback
   const handleStart = () => {
@@ -176,8 +223,14 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
       audioRef.current.onplay = null;
     }
     
-    // Create new audio element
-    const audio = new Audio(slide.audioFilePath);
+    // Play first segment (simplified for manual mode)
+    if (!hasAudioSegments(slide) || slide.audioSegments.length === 0) {
+      console.warn('[Manual+Audio] No audio segments for slide');
+      return;
+    }
+    
+    // Create new audio element from first segment
+    const audio = new Audio(slide.audioSegments[0].audioFilePath);
     audioRef.current = audio;
 
     // Setup event handlers - use ref to get current index at time of onended

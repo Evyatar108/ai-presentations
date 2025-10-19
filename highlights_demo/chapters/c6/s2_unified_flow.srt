@@ -1,0 +1,6 @@
+# React Component: Ch6_S2_UnifiedFlow
+# Location: react_cogs_demo/src/slides/AnimatedSlides.tsx:1024
+
+1 - Algorithm preserved as reasoning chain
+00:02:29,373 --> 00:02:35,133
+Dedicated tuning preserved the original algorithm as an internal reasoning chain: segment, extract, rank, compose.
