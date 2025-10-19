@@ -14,6 +14,7 @@ interface RegenerateSegmentParams {
   segmentIndex: number;
   segmentId: string;
   narrationText: string;
+  addPauses?: boolean; // Optional flag to add " . ." at the end
 }
 
 interface RegenerateResult {
@@ -146,7 +147,7 @@ export async function regenerateSegment(
         },
         body: JSON.stringify({
           texts: [
-            `Speaker 0: ${params.narrationText} . .`,  // Actual narration with pauses at end
+            `Speaker 0: ${params.narrationText}${params.addPauses !== false ? ' . .' : ''}`,  // Add pauses by default
           ]
         }),
         // Add timeout and better error handling

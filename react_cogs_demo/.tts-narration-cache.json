@@ -208,8 +208,8 @@
     "generatedAt": "2025-10-19T22:28:41.717Z"
   },
   "c4\\s1_segment_02_abstractive.wav": {
-    "narrationText": "First, abstractive highlights. These are AI-generated summaries that capture the key topics discussed in the meeting.",
-    "generatedAt": "2025-10-19T22:28:53.950Z"
+    "narrationText": "First, abstractive highlights. These are AI-generated summaries that capture the key topics discussed in the meeting. The narration is powered by Azure Cognitive Services text-to-speech.",
+    "generatedAt": "2025-10-19T23:14:23.672Z"
   },
   "c4\\s1_segment_03_key_moments.wav": {
     "narrationText": "Second, key moments. These are significant verbatim segments extracted directly from the meeting recording.",
@@ -218,18 +218,6 @@
   "c4\\s1_segment_04_timestamps.wav": {
     "narrationText": "Each highlight is a 20 to 30 second segment with precise timestamps and accompanying narration.",
     "generatedAt": "2025-10-19T22:28:53.953Z"
-  },
-  "c4\\s1_segment_05_audio.wav": {
-    "narrationText": "The narration text is converted to natural-sounding audio using Azure Cognitive Services text-to-speech.",
-    "generatedAt": "2025-10-19T22:28:53.955Z"
-  },
-  "c4\\s1_segment_06_storage.wav": {
-    "narrationText": "All the metadata, audio files, and caption data are securely stored in ODSP.",
-    "generatedAt": "2025-10-19T22:28:53.957Z"
-  },
-  "c4\\s1_segment_07_platforms.wav": {
-    "narrationText": "Making highlights available across Microsoft 365 platforms wherever users work.",
-    "generatedAt": "2025-10-19T22:28:53.958Z"
   },
   "c1/s2_segment_01_intro.wav": {
     "narrationText": "Access Meeting Highlights through BizChat.",
@@ -257,10 +245,18 @@
   },
   "c4/s1_segment_01_intro.wav": {
     "narrationText": "Meeting Highlights combines two distinct types of highlights to create a comprehensive recap.",
-    "generatedAt": "2025-10-19T22:42:29.938Z"
+    "generatedAt": "2025-10-19T23:10:03.159Z"
   },
   "c1/s1_segment_02_combination.wav": {
     "narrationText": "It combines AI summaries with authentic video clips, preserving tone and discussion flow.",
     "generatedAt": "2025-10-19T22:58:04.574Z"
+  },
+  "c4\\s1_segment_05_narrative.wav": {
+    "narrationText": "The AI weaves these highlights together into a cohesive narrative, creating an engaging story that connects the abstractive summaries and key moments.",
+    "generatedAt": "2025-10-19T23:10:55.993Z"
+  },
+  "c4/s1_segment_03_key_moments.wav": {
+    "narrationText": "Second, key moments. These are significant verbatim segments extracted directly from the meeting recording.",
+    "generatedAt": "2025-10-19T23:14:59.490Z"
   }
 }

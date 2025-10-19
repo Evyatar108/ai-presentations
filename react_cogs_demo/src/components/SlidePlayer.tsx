@@ -176,8 +176,8 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
     segmentContext.previousSegment();
   }, [disableManualNav, hasMultipleSegments, segmentContext]);
   
-  // Regenerate audio for current segment
-  const handleRegenerateSegment = useCallback(async () => {
+  // Regenerate audio for current segment (with pauses by default)
+  const handleRegenerateSegment = useCallback(async (addPauses: boolean = true) => {
     const segment = currentSlideMetadata?.audioSegments[segmentContext.currentSegmentIndex];
     
     if (!segment?.narrationText || !currentSlideMetadata) {
@@ -194,13 +194,15 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
     
     try {
       console.log('[SlidePlayer] Starting regeneration for:', segment.id);
+      console.log('[SlidePlayer] Add pauses:', addPauses);
       
       const result = await ttsClient.regenerateSegment({
         chapter: currentSlideMetadata.chapter,
         slide: currentSlideMetadata.slide,
         segmentIndex: segmentContext.currentSegmentIndex,
         segmentId: segment.id,
-        narrationText: segment.narrationText
+        narrationText: segment.narrationText,
+        addPauses
       });
       
       if (result.success) {
@@ -511,13 +513,12 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
                   />
                 </>
               )}
-              
-              {/* Regenerate button - always shown for any slide with segments */}
+              {/* Regenerate buttons - always shown for any slide with segments */}
               <button
-                onClick={handleRegenerateSegment}
+                onClick={() => handleRegenerateSegment(true)}
                 disabled={regeneratingSegment}
-                title="Regenerate audio for current segment"
-                aria-label="Regenerate audio"
+                title="Regenerate audio WITH pauses (adds ' . .' at end)"
+                aria-label="Regenerate audio with pauses"
                 style={{
                   background: 'none',
                   border: 'none',
@@ -532,6 +533,26 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
                 }}
               >
                 {regeneratingSegment ? '⏳' : '🔄'}
+              </button>
+              <button
+                onClick={() => handleRegenerateSegment(false)}
+                disabled={regeneratingSegment}
+                title="Regenerate audio WITHOUT pauses (exact narration text)"
+                aria-label="Regenerate audio without pauses"
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: regeneratingSegment ? '#94a3b8' : '#f59e0b',
+                  cursor: regeneratingSegment ? 'wait' : 'pointer',
+                  fontSize: 16,
+                  padding: '0.25rem 0.4rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  opacity: regeneratingSegment ? 0.6 : 1,
+                  transition: 'opacity 0.2s ease'
+                }}
+              >
+                {regeneratingSegment ? '⏳' : '🔁'}
               </button>
             </div>
           )}

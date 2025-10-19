@@ -68,6 +68,9 @@ export const Ch4_S1_HighlightTypes: SlideComponentWithMetadata = () => {
               <p style={{ ...typography.caption, fontSize: 16 }}>
                 AI-generated summaries of discussion topics
               </p>
+              <p style={{ ...typography.caption, fontSize: 14, marginTop: '0.5rem', color: '#00B7C3' }}>
+                Narration powered by Azure Cognitive Services
+              </p>
             </motion.div>
           )}
         </AnimatePresence>
@@ -140,7 +143,7 @@ export const Ch4_S1_HighlightTypes: SlideComponentWithMetadata = () => {
               }}
             >
               <p style={{ ...typography.body, margin: 0 }}>
-                🎙️ Narration text converted to audio using <strong style={{ color: '#00B7C3' }}>Azure Cognitive Services</strong>
+                📖 AI weaves highlights into a <strong style={{ color: '#00B7C3' }}>cohesive narrative</strong>, connecting abstractive summaries and key moments into an engaging story
               </p>
             </div>
           </motion.div>
@@ -168,7 +171,7 @@ Ch4_S1_HighlightTypes.metadata = {
       audioFilePath: "/audio/c4/s1_segment_02_abstractive.wav",
       srtSegmentNumber: 2,
       visualDescription: "Left card appears - Abstractive Highlights with summary icon",
-      narrationText: "First, abstractive highlights. These are AI-generated summaries that capture the key topics discussed in the meeting."
+      narrationText: "First, abstractive highlights. These are AI-generated summaries that capture the key topics discussed in the meeting. The narration is powered by Azure Cognitive Services text-to-speech."
     },
     {
       id: "key_moments",
@@ -185,11 +188,11 @@ Ch4_S1_HighlightTypes.metadata = {
       narrationText: "Each highlight is a 20 to 30 second segment with precise timestamps and accompanying narration."
     },
     {
-      id: "audio",
+      id: "narrative",
       audioFilePath: "/audio/c4/s1_segment_05_audio.wav",
       srtSegmentNumber: 5,
-      visualDescription: "Azure Cognitive Services logo with audio waveform",
-      narrationText: "The narration text is converted to natural-sounding audio using Azure Cognitive Services text-to-speech."
+      visualDescription: "Narrative storytelling icon connecting highlights",
+      narrationText: "The AI weaves these highlights together into a cohesive narrative, creating an engaging story that connects the abstractive summaries and key moments."
     }
   ]
 };
