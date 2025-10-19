@@ -41,7 +41,6 @@ react_cogs_demo/dist/
 tts/server_config.json
 tts/output/
 tts/venv/
-*.wav
 *.mp3
 
 # Python cache
