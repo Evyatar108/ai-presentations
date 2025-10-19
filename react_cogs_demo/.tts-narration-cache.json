@@ -242,5 +242,13 @@
   "c9/s2_segment_03_feedback.wav": {
     "narrationText": "We welcome your feedback. Send ideas or issues to meeting H-L devs at microsoft.com.",
     "generatedAt": "2025-10-19T19:00:12.102Z"
+  },
+  "c1/s2_segment_05_player.wav": {
+    "narrationText": "BizChat will return a reply to your query and a video player with the meeting highlights appears at the bottom.",
+    "generatedAt": "2025-10-19T19:18:50.779Z"
+  },
+  "c8/s1_segment_01_intro.wav": {
+    "narrationText": "Meeting Highlights has received overwhelmingly positive feedback in recent MS Elite surveys.",
+    "generatedAt": "2025-10-19T19:21:05.835Z"
   }
 }

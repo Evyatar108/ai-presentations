@@ -108,9 +108,6 @@ export const Ch6_S1_UnifiedConvergence: SlideComponentWithMetadata = () => {
             <MetricTile label="Success Rate" before="92%" after="99%" emphasis note="Improved in local testing" />
           </div>
 
-          <p style={{ color: '#94a3b8', marginTop: '1.5rem', fontSize: 16 }}>
-            All stages executed in one inference
-          </p>
         </motion.div>
       </div>
     </div>

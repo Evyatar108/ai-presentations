@@ -1,0 +1,12 @@
+{
+  version: 2,
+  mediaFileName: 's1_segment_05_teams.wav',
+  cutSegments: [
+    {
+      start: 0.4925607452667814,
+      end: 4.422260705679863,
+      name: '',
+      selected: true,
+    },
+  ],
+}

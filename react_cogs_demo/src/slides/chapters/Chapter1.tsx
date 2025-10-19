@@ -252,11 +252,17 @@ export const Ch1_S2_HowToAccess: SlideComponentWithMetadata = () => {
 
               <AnimatePresence>
                 {isSegmentVisible(4) && (
-                  <GradientHighlightBox reduced={reduced} style={{ padding: '1.5rem' }}>
-                    <p style={{ color: '#e2e8f0', fontSize: 15, margin: 0 }}>
-                      🎬 Video player with highlights appears at the bottom
-                    </p>
-                  </GradientHighlightBox>
+                  <motion.div
+                    variants={fadeRight(reduced)}
+                    initial="hidden"
+                    animate="visible"
+                  >
+                    <GradientHighlightBox reduced={reduced} style={{ padding: '1.5rem' }}>
+                      <p style={{ color: '#e2e8f0', fontSize: 15, margin: 0 }}>
+                        🎬 Video player with highlights appears at the bottom
+                      </p>
+                    </GradientHighlightBox>
+                  </motion.div>
                 )}
               </AnimatePresence>
 

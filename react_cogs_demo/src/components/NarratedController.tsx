@@ -503,30 +503,6 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
         )}
       </AnimatePresence>
 
-      {/* Loading indicator */}
-      <AnimatePresence>
-        {isLoading && isPlaying && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
-            style={{
-              position: 'fixed',
-              bottom: 100,
-              right: 20,
-              background: 'rgba(0, 0, 0, 0.8)',
-              color: '#f1f5f9',
-              padding: '0.75rem 1rem',
-              borderRadius: 8,
-              fontSize: 14,
-              zIndex: 1000
-            }}
-          >
-            Loading narration...
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       {/* Progress indicator */}
       {(isPlaying || isManualMode) && !hideInterface && (
         <motion.div

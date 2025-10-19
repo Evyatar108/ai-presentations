@@ -122,7 +122,7 @@ export const Ch9_S1_Testimonials: SlideComponentWithMetadata = () => {
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
-                fontSize: 56,
+                fontSize: 42,
                 marginBottom: '0.5rem',
                 position: 'relative',
                 zIndex: 1
@@ -137,7 +137,7 @@ export const Ch9_S1_Testimonials: SlideComponentWithMetadata = () => {
               transition={{ delay: 0.3, duration: 0.5 }}
               style={{
                 color: '#94a3b8',
-                fontSize: 18,
+                fontSize: 16,
                 fontStyle: 'italic',
                 position: 'relative',
                 zIndex: 1
@@ -176,8 +176,8 @@ export const Ch9_S1_Testimonials: SlideComponentWithMetadata = () => {
                 }}
                 style={{
                   background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
-                  borderRadius: 20,
-                  padding: '2rem',
+                  borderRadius: 16,
+                  padding: '1.5rem',
                   border: '2px solid #334155',
                   display: 'flex',
                   flexDirection: 'column',
@@ -213,8 +213,8 @@ export const Ch9_S1_Testimonials: SlideComponentWithMetadata = () => {
                     }}
                     transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
                     style={{
-                      fontSize: 48,
-                      marginBottom: '1.5rem',
+                      fontSize: 36,
+                      marginBottom: '1rem',
                       textAlign: 'center'
                     }}
                   >
@@ -222,11 +222,11 @@ export const Ch9_S1_Testimonials: SlideComponentWithMetadata = () => {
                   </motion.div>
 
                   {/* Quote text with shimmer */}
-                  <div style={{ position: 'relative', marginBottom: '1.5rem' }}>
+                  <div style={{ position: 'relative', marginBottom: '1rem' }}>
                     <p style={{
                       color: '#e2e8f0',
-                      fontSize: 17,
-                      lineHeight: 1.7,
+                      fontSize: 15,
+                      lineHeight: 1.6,
                       fontStyle: 'italic',
                       flex: 1,
                       margin: 0,
@@ -259,7 +259,7 @@ export const Ch9_S1_Testimonials: SlideComponentWithMetadata = () => {
                     }} />
                     <div style={{
                       color: '#00B7C3',
-                      fontSize: 15,
+                      fontSize: 14,
                       fontWeight: 600,
                       letterSpacing: '0.3px'
                     }}>
@@ -360,7 +360,7 @@ export const Ch9_S2_ClosingThanks: SlideComponentWithMetadata = () => {
               type: 'spring',
               stiffness: 100
             }}
-            style={{ textAlign: 'center', marginBottom: '2rem', position: 'relative' }}
+            style={{ textAlign: 'center', marginBottom: '0rem', position: 'relative' }}
           >
             {/* Glow effect behind text */}
             {!reduced && (
@@ -417,7 +417,7 @@ export const Ch9_S2_ClosingThanks: SlideComponentWithMetadata = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: reduced ? 0.3 : 0.6 }}
-            style={{ textAlign: 'center', marginBottom: '3rem' }}
+            style={{ textAlign: 'center', marginBottom: '2rem' }}
           >
             <motion.div
               initial={{ scale: 0, rotate: -180 }}
@@ -477,7 +477,7 @@ export const Ch9_S2_ClosingThanks: SlideComponentWithMetadata = () => {
               border: '2px solid #334155',
               borderRadius: 16,
               padding: '2.5rem',
-              marginBottom: '2.5rem',
+              marginBottom: '1.5rem',
               textAlign: 'center',
               position: 'relative',
               overflow: 'hidden',
