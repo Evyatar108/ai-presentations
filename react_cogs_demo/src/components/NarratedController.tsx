@@ -125,8 +125,9 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     
     const playSegment = (segmentIndex: number) => {
       if (segmentIndex >= segments.length) {
-        console.log(`[NarratedController] All segments complete for ${slideKey}, advancing to next slide`);
-        advanceSlide();
+        console.log(`[NarratedController] All segments complete for ${slideKey}, advancing to next slide after delay`);
+        // Add 500ms delay between slides for smoother transitions
+        setTimeout(advanceSlide, 500);
         return;
       }
       
@@ -287,7 +288,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
               segmentContext.nextSegment();
             }, 50);
           }
-          // If on last segment, advance to next slide with 50ms delay
+          // If on last segment, advance to next slide with 500ms delay
           else {
             const nextIndex = currentIndexRef.current + 1;
             if (nextIndex < allSlides.length) {
@@ -296,7 +297,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
                 lastAutoAdvanceFromIndexRef.current = currentIndexRef.current;
                 setCurrentIndex(nextIndex);
                 onSlideChange(allSlides[nextIndex].metadata.chapter, allSlides[nextIndex].metadata.slide);
-              }, 50);
+              }, 500);
             }
           }
         }

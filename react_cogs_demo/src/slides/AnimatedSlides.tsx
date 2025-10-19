@@ -1402,36 +1402,31 @@ export const Ch1_S1_WhatIsMeetingHighlights: SlideComponentWithMetadata = () => 
         </motion.div>
         
         {/* Thumbnail image - large in segment 0, small afterwards */}
-        <motion.div
-          layout
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            marginTop: isOnSegment(0) ? '0.5rem' : '0.5rem',
-            marginBottom: isOnSegment(0) ? '2rem' : '0.5rem'
-          }}
-        >
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          marginTop: '0.5rem',
+          marginBottom: isOnSegment(0) ? '2rem' : '0.5rem'
+        }}>
           <motion.img
-            layout
+            key={`image-${isOnSegment(0) ? 'large' : 'small'}`}
             src="/images/meeting_highlights_thumbnail.jpeg"
             alt="Meeting Highlights example"
             initial={{ opacity: 0, scale: 0.95 }}
-            animate={{
-              opacity: isOnSegment(0) ? 1 : 0.5,
-              width: isOnSegment(0) ? '100%' : '35%'
-            }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: reduced ? 0.3 : 0.6 }}
             style={{
+              width: isOnSegment(0) ? '100%' : '35%',
               maxWidth: '600px',
               borderRadius: '12px',
               boxShadow: isOnSegment(0) ? '0 8px 24px rgba(0, 0, 0, 0.4)' : 'none',
               border: '1px solid #334155',
               display: 'block',
-              zIndex: isOnSegment(0) ? 1 : 0,
-              pointerEvents: isOnSegment(0) ? 'auto' : 'none'
+              opacity: isOnSegment(0) ? 1 : 0.5
             }}
           />
-        </motion.div>
+        </div>
 
         <AnimatePresence>
           {isSegmentVisible(1) && (
