@@ -42,88 +42,71 @@ export const Ch1_S1_WhatIsMeetingHighlights: SlideComponentWithMetadata = () => 
           display: 'flex',
           justifyContent: 'center',
           marginTop: '0.5rem',
-          marginBottom: isOnSegment(0) ? '2rem' : '0.5rem'
+          marginBottom: isOnSegment(0) ? '2rem' : '0.5rem',
+          transition: reduced ? 'none' : 'margin 0.6s ease'
         }}>
           <motion.img
-            key={`image-${isOnSegment(0) ? 'large' : 'small'}`}
             src="/images/meeting_highlights_thumbnail.jpeg"
             alt="Meeting Highlights example"
             initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: reduced ? 0.3 : 0.6 }}
+            animate={{
+              opacity: isOnSegment(0) ? 1 : 0.5,
+              scale: 1,
+              width: isOnSegment(0) ? '100%' : '35%'
+            }}
+            transition={{ duration: reduced ? 0.3 : 0.6, ease: 'easeInOut' }}
             style={{
-              width: isOnSegment(0) ? '100%' : '35%',
               maxWidth: '600px',
               borderRadius: '12px',
               boxShadow: isOnSegment(0) ? '0 8px 24px rgba(0, 0, 0, 0.4)' : 'none',
               border: '1px solid #334155',
-              display: 'block',
-              opacity: isOnSegment(0) ? 1 : 0.5
+              display: 'block'
             }}
           />
         </div>
 
         <AnimatePresence>
           {isSegmentVisible(1) && (
-            <motion.div
-              variants={scaleIn(reduced)}
-              initial="hidden"
-              animate="visible"
-              transition={{ delay: reduced ? 0 : 0.2 }}
-            >
-              <ContentCard style={{ marginBottom: '2rem' }}>
-                <p style={{ ...typography.body, fontSize: 18, margin: 0 }}>
-                  Automatically generates a <strong style={{ color: '#00B7C3' }}>2-3 minute video recap</strong> of your meeting
-                </p>
-              </ContentCard>
-            </motion.div>
+            <>
+              <motion.div
+                variants={fadeLeft(reduced)}
+                initial="hidden"
+                animate="visible"
+                style={{ display: 'flex', justifyContent: 'center', gap: '2rem', marginBottom: '1rem' }}
+              >
+                <div style={{ ...gradientBox, padding: '1.5rem', flex: 1, maxWidth: 240 }}>
+                  <div style={{ color: '#fff', fontSize: 16, fontWeight: 600 }}>
+                    AI-Generated<br/>Summaries
+                  </div>
+                </div>
+                <div style={{
+                  background: 'linear-gradient(135deg, #0078D4, #00B7C3)',
+                  borderRadius: 12,
+                  padding: '1.5rem',
+                  flex: 1,
+                  maxWidth: 240
+                }}>
+                  <div style={{ color: '#fff', fontSize: 16, fontWeight: 600 }}>
+                    Authentic<br/>Video Clips
+                  </div>
+                </div>
+              </motion.div>
+              
+              <motion.p
+                variants={fadeUp(reduced)}
+                initial="hidden"
+                animate="visible"
+                transition={{ delay: reduced ? 0 : 0.4 }}
+                style={{ ...typography.caption, fontSize: 16, marginBottom: '2rem' }}
+              >
+                Preserves original tone, reactions, and discussion flow
+              </motion.p>
+            </>
           )}
         </AnimatePresence>
 
         <AnimatePresence>
           {isSegmentVisible(2) && (
-            <motion.div
-              variants={fadeLeft(reduced)}
-              initial="hidden"
-              animate="visible"
-              style={{ display: 'flex', justifyContent: 'center', gap: '2rem', marginBottom: '2rem' }}
-            >
-              <div style={{ ...gradientBox, padding: '1.5rem', flex: 1, maxWidth: 200 }}>
-                <div style={{ color: '#fff', fontSize: 16, fontWeight: 600 }}>
-                  AI-Generated<br/>Summaries
-                </div>
-              </div>
-              <div style={{
-                background: 'linear-gradient(135deg, #0078D4, #00B7C3)',
-                borderRadius: 12,
-                padding: '1.5rem',
-                flex: 1,
-                maxWidth: 200
-              }}>
-                <div style={{ color: '#fff', fontSize: 16, fontWeight: 600 }}>
-                  Authentic<br/>Video Clips
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        <AnimatePresence>
-          {isSegmentVisible(3) && (
-            <motion.p
-              variants={fadeUp(reduced)}
-              initial="hidden"
-              animate="visible"
-              style={{ ...typography.caption, fontSize: 16, marginBottom: '2rem' }}
-            >
-              Preserves original tone, reactions, and discussion flow
-            </motion.p>
-          )}
-        </AnimatePresence>
-
-        <AnimatePresence>
-          {isSegmentVisible(4) && (
             <motion.div
               initial={{ opacity: 0, y: 30, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -166,35 +149,21 @@ Ch1_S1_WhatIsMeetingHighlights.metadata = {
       audioFilePath: "/audio/c1/s1_segment_01_intro.wav",
       srtSegmentNumber: 1,
       visualDescription: "Title slide \"Meeting Highlights\"",
-      narrationText: "Meeting Highlights is a new feature that delivers AI-generated short video recaps of your meetings."
-    },
-    {
-      id: "ai_generation",
-      audioFilePath: "/audio/c1/s1_segment_02_ai_generation.wav",
-      srtSegmentNumber: 2,
-      visualDescription: "Animation showing meeting recording transforming into short highlight video",
-      narrationText: "It uses AI to automatically generate a short highlights video, typically 2 to 3 minutes long."
+      narrationText: "Meeting Highlights is a new feature that automatically generates a 2 to 3 minute video recap of your meetings."
     },
     {
       id: "combination",
-      audioFilePath: "/audio/c1/s1_segment_03_combination.wav",
-      srtSegmentNumber: 3,
-      visualDescription: "Split screen showing hour-long meeting vs 3-minute highlights",
-      narrationText: "The feature combines AI-generated voiceover summaries with authentic video snippets from the actual meeting."
-    },
-    {
-      id: "preservation",
-      audioFilePath: "/audio/c1/s1_segment_04_preservation.wav",
-      srtSegmentNumber: 4,
-      visualDescription: "Example clips showing speakers, reactions, screen shares",
-      narrationText: "This preserves the original tone, reactions, and flow of the discussion."
+      audioFilePath: "/audio/c1/s1_segment_02_combination.wav",
+      srtSegmentNumber: 2,
+      visualDescription: "Split screen showing AI summaries + authentic video clips",
+      narrationText: "It combines AI-generated voiceover summaries with authentic video clips, preserving the original tone, reactions, and discussion flow."
     },
     {
       id: "problem",
-      audioFilePath: "/audio/c1/s1_segment_05_problem.wav",
-      srtSegmentNumber: 5,
-      visualDescription: "Pain point icons: clock (time), search (finding content), mood (missing context)",
-      narrationText: "It solves a critical problem: catching up on missed meetings without watching hour-long recordings or reading lengthy transcripts."
+      audioFilePath: "/audio/c1/s1_segment_03_problem.wav",
+      srtSegmentNumber: 3,
+      visualDescription: "Value prop highlight box appears",
+      narrationText: "This lets you catch up on missed meetings without watching hour-long recordings."
     }
   ]
 };

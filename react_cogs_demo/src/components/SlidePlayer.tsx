@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSegmentContext } from '../contexts/SegmentContext';
 import { allSlides } from '../slides/SlidesRegistry';
+import * as ttsClient from '../utils/ttsClient';
 
 export interface Slide {
   chapter: number;
@@ -29,6 +30,13 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
+  
+  // TTS regeneration states
+  const [regeneratingSegment, setRegeneratingSegment] = useState(false);
+  const [regenerationStatus, setRegenerationStatus] = useState<{
+    type: 'success' | 'error';
+    message: string;
+  } | null>(null);
   
   // Get segment context for segment navigation (needs to be declared early for use in callbacks)
   const segmentContext = useSegmentContext();
@@ -166,6 +174,76 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
     if (disableManualNav || !hasMultipleSegments) return;
     segmentContext.previousSegment();
   }, [disableManualNav, hasMultipleSegments, segmentContext]);
+  
+  // Regenerate audio for current segment
+  const handleRegenerateSegment = useCallback(async () => {
+    const segment = currentSlideMetadata?.audioSegments[segmentContext.currentSegmentIndex];
+    
+    if (!segment?.narrationText || !currentSlideMetadata) {
+      setRegenerationStatus({
+        type: 'error',
+        message: 'No narration text available'
+      });
+      setTimeout(() => setRegenerationStatus(null), 5000);
+      return;
+    }
+    
+    setRegeneratingSegment(true);
+    setRegenerationStatus(null);
+    
+    try {
+      console.log('[SlidePlayer] Starting regeneration for:', segment.id);
+      
+      const result = await ttsClient.regenerateSegment({
+        chapter: currentSlideMetadata.chapter,
+        slide: currentSlideMetadata.slide,
+        segmentIndex: segmentContext.currentSegmentIndex,
+        segmentId: segment.id,
+        narrationText: segment.narrationText
+      });
+      
+      if (result.success) {
+        console.log('[SlidePlayer] Regeneration successful:', result.filePath);
+        
+        setRegenerationStatus({
+          type: 'success',
+          message: `✓ Regenerated ${segment.id}`
+        });
+        
+        // Update audio path with cache-busting timestamp
+        const basePath = segment.audioFilePath.split('?')[0]; // Remove any existing query params
+        segment.audioFilePath = `${basePath}?t=${result.timestamp}`;
+        
+        // Force audio reload by re-setting the current segment
+        // This triggers the audio effect in NarratedController if in manual+audio mode
+        segmentContext.setCurrentSegment(segmentContext.currentSegmentIndex);
+        
+        // Auto-clear success message after 3s
+        setTimeout(() => setRegenerationStatus(null), 3000);
+      } else {
+        console.error('[SlidePlayer] Regeneration failed:', result.error);
+        
+        setRegenerationStatus({
+          type: 'error',
+          message: result.error || 'Generation failed'
+        });
+        
+        // Clear error after 5s
+        setTimeout(() => setRegenerationStatus(null), 5000);
+      }
+    } catch (error: any) {
+      console.error('[SlidePlayer] Regeneration exception:', error);
+      
+      setRegenerationStatus({
+        type: 'error',
+        message: error.message || 'Network error'
+      });
+      
+      setTimeout(() => setRegenerationStatus(null), 5000);
+    } finally {
+      setRegeneratingSegment(false);
+    }
+  }, [currentSlideMetadata, segmentContext]);
 
   const variants = {
     enter: {
@@ -401,6 +479,36 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
               >
                 {segmentContext.currentSegmentIndex + 1} / {segments.length}
               </div>
+              
+              {/* Regenerate button */}
+              <div
+                style={{
+                  width: '1px',
+                  height: '16px',
+                  background: '#475569',
+                  margin: '0 0.3rem'
+                }}
+              />
+              <button
+                onClick={handleRegenerateSegment}
+                disabled={regeneratingSegment}
+                title="Regenerate audio for current segment"
+                aria-label="Regenerate audio"
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: regeneratingSegment ? '#94a3b8' : '#00B7C3',
+                  cursor: regeneratingSegment ? 'wait' : 'pointer',
+                  fontSize: 16,
+                  padding: '0.25rem 0.4rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  opacity: regeneratingSegment ? 0.6 : 1,
+                  transition: 'opacity 0.2s ease'
+                }}
+              >
+                {regeneratingSegment ? '⏳' : '🔄'}
+              </button>
             </div>
           )}
         </div>
@@ -424,6 +532,42 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
           Use ← → or Space to navigate
         </div>
       )}
+      
+      {/* Regeneration status toast */}
+      <AnimatePresence>
+        {regenerationStatus && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+            style={{
+              position: 'fixed',
+              top: 80,
+              right: 20,
+              background: regenerationStatus.type === 'success'
+                ? 'rgba(34, 197, 94, 0.95)'
+                : 'rgba(239, 68, 68, 0.95)',
+              color: '#fff',
+              padding: '0.75rem 1rem',
+              borderRadius: 8,
+              fontSize: 14,
+              zIndex: 1001,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
+              fontFamily: 'Inter, system-ui, sans-serif',
+              maxWidth: '300px'
+            }}
+          >
+            <span style={{ fontSize: 16 }}>
+              {regenerationStatus.type === 'success' ? '✓' : '✗'}
+            </span>
+            <span>{regenerationStatus.message}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

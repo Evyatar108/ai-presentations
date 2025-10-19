@@ -1,23 +1,7 @@
 {
   "c1\\s1_segment_01_intro.wav": {
-    "narrationText": "Meeting Highlights is a new feature that delivers AI-generated short video recaps of your meetings.",
-    "generatedAt": "2025-10-19T10:33:29.625Z"
-  },
-  "c1\\s1_segment_02_ai_generation.wav": {
-    "narrationText": "It uses AI to automatically generate a short highlights video, typically 2 to 3 minutes long.",
-    "generatedAt": "2025-10-19T10:31:50.587Z"
-  },
-  "c1\\s1_segment_03_combination.wav": {
-    "narrationText": "The feature combines AI-generated voiceover summaries with authentic video snippets from the actual meeting.",
-    "generatedAt": "2025-10-19T08:26:13.571Z"
-  },
-  "c1\\s1_segment_04_preservation.wav": {
-    "narrationText": "This preserves the original tone, reactions, and flow of the discussion.",
-    "generatedAt": "2025-10-19T08:26:13.573Z"
-  },
-  "c1\\s1_segment_05_problem.wav": {
-    "narrationText": "It solves a critical problem: catching up on missed meetings without watching hour-long recordings or reading lengthy transcripts.",
-    "generatedAt": "2025-10-19T08:26:13.576Z"
+    "narrationText": "Meeting Highlights is a new feature that automatically generates a 2 to 3 minute video recap of your meetings.",
+    "generatedAt": "2025-10-19T17:09:21.893Z"
   },
   "c1\\s2_segment_01_intro.wav": {
     "narrationText": "Let me show you how to access Meeting Highlights through BizChat.",
@@ -214,5 +198,13 @@
   "c9\\s2_segment_04_cta.wav": {
     "narrationText": "You can try Meeting Highlights now in BizChat. Give it a spin on your next meeting.",
     "generatedAt": "2025-10-19T16:25:00.602Z"
+  },
+  "c1\\s1_segment_02_combination.wav": {
+    "narrationText": "It combines AI-generated voiceover summaries with authentic video clips, preserving the original tone, reactions, and discussion flow.",
+    "generatedAt": "2025-10-19T17:07:28.467Z"
+  },
+  "c1\\s1_segment_03_problem.wav": {
+    "narrationText": "This lets you catch up on missed meetings without watching hour-long recordings.",
+    "generatedAt": "2025-10-19T17:07:28.469Z"
   }
 }

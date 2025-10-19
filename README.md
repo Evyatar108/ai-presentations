@@ -138,6 +138,61 @@ public/audio/
 └── silence-1s.mp3         # Fallback for missing files
 ```
 
+### Audio Regeneration in Manual Mode (Dev Feature)
+
+While presenting in Manual or Manual+Audio mode, you can regenerate audio for any segment on the fly:
+
+**Setup:**
+1. Ensure your remote TTS server is running (see [`tts/README.md`](tts/README.md))
+2. Configure server URL in [`public/tts-config.json`](react_cogs_demo/public/tts-config.json):
+   ```json
+   {
+     "remoteTTSServerUrl": "http://192.168.1.100:5000"
+   }
+   ```
+3. Start the dev server: `npm run dev`
+
+**Usage:**
+1. Navigate to any multi-segment slide in Manual or Manual+Audio mode
+2. Click the 🔄 button in the segment navigation bar (bottom of screen)
+3. Wait for generation (button shows ⏳ spinner)
+4. Audio file is automatically:
+   - Generated on remote TTS server
+   - Saved to local `public/audio/` directory
+   - Updated in `.tts-narration-cache.json`
+   - Loaded in browser with cache-busting
+5. In Manual+Audio mode, the new audio plays immediately
+
+**How It Works:**
+- **Remote TTS Server**: Generates audio from narration text
+- **Local Vite Plugin**: Writes audio file to disk via `/api/save-audio` endpoint
+- **Browser Client**: Coordinates between remote generation and local storage
+- **Cache-Busting**: Adds timestamp query param to force browser reload
+
+**Visual Feedback:**
+- ⏳ Loading spinner during generation
+- ✓ Green success toast with segment name
+- ✗ Red error toast if generation fails
+- All toasts auto-dismiss after 3-5 seconds
+
+**Use Cases:**
+- Quick iteration on narration without full rebuild
+- Fix audio issues during presentation rehearsal
+- Experiment with different narration styles
+- Test TTS quality for specific segments
+
+**Technical Details:**
+- Only works in development mode (Vite dev server required)
+- Requires remote TTS server accessibility
+- Files persist across browser refreshes
+- Cache stays synchronized automatically
+
+**Troubleshooting:**
+- If button shows error: Check TTS server is running and accessible
+- If audio doesn't reload: Try navigating away and back to the segment
+- If files don't save: Check file permissions on `public/audio/` directory
+- For network issues: Verify TTS server URL in `public/tts-config.json`
+
 ### Demo Features
 
 **Presentation Modes:**
@@ -156,6 +211,7 @@ public/audio/
    - Plays audio for each slide you visit
    - Optional auto-advance when audio ends
    - Prevents audio overlap with smart cleanup
+   - **Audio regeneration**: Regenerate audio for current segment on-the-fly (see below)
 
 **Navigation:**
 - Arrow keys: Previous/Next slide

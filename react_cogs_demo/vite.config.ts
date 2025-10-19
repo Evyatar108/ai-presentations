@@ -1,8 +1,12 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { audioWriterPlugin } from './vite-plugin-audio-writer';
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    audioWriterPlugin()  // Enables /api/save-audio endpoint for TTS regeneration
+  ],
   server: {
     port: 5173,
     open: false
