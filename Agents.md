@@ -80,6 +80,7 @@ Interactive presentation slides built with React, Framer Motion, and TypeScript:
 - **src/components/CoreComponents.tsx** - Reusable UI components (MetricTile, etc.)
 - **src/components/ImpactComponents.tsx** - Business impact visualizations
 - **src/components/NarratedController.tsx** - Audio-synced presentation controller
+- **src/components/VideoPlayer.tsx** - Demo video player with freeze-on-end functionality
 
 #### Notable Slides
 - **Ch5_S1_ChallengeFraming** - Shows initial metrics (4 calls, ~600 GPUs, high tokens)
@@ -91,12 +92,38 @@ Interactive presentation slides built with React, Framer Motion, and TypeScript:
 - **Ch7_S4_QualityComparison** - Quality comparison metrics
 - **Ch2_S1_TeamCollaboration** - Multi-segment slide with 8 progressive team reveals
 
-### TTS (Text-to-Speech) System (`tts/`)
-Python-based TTS service for generating narration audio:
-- **server.py** - TTS server
-- **client.py** - TTS client
-- **generate_audio.py** - Audio generation script
-- Configuration and setup documentation
+### TTS (Text-to-Speech) System
+
+**Python TTS Server (`tts/`)**
+- **server.py** - Flask server running VibeVoice model on GPU
+- **client.py** - Python reference client with batch processing
+- **generate_audio.py** - Legacy audio generation script
+- **README.md** - Setup and configuration instructions
+- **NETWORK_SETUP.md** - Remote server configuration guide
+
+**TypeScript TTS Scripts (`react_cogs_demo/scripts/`)**
+- **generate-tts.ts** - Main TTS generation script with batch processing and smart caching
+- **calculate-durations.ts** - Audio duration analysis and reporting
+- **check-tts-cache.ts** - Pre-flight cache validation (runs before `npm run dev`)
+
+**Smart Caching System:**
+- Tracks narration text in `.tts-narration-cache.json`
+- Detects changes and only regenerates modified segments
+- Pre-flight check before dev server start
+- Prompts user: "Do you want to regenerate? (y/n)"
+- Auto-runs generation if user answers "y"
+
+**Batch Processing:**
+- Default: 10 segments per batch (configurable via `BATCH_SIZE` env var)
+- Efficient GPU utilization
+- Progress tracking with percentage completion
+- Error recovery with retry capability
+
+**Audio Fallback System:**
+- Missing files fall back to 1-second silence (`public/audio/silence-1s.mp3`)
+- Prevents presentation crashes
+- Console warnings for debugging
+- Graceful degradation in all presentation modes
 
 ### Implementation Files
 - **highlights_demo/context/v1/** - Original implementation ([`HighlightsPromptMaper.py`](highlights_demo/context/v1/HighlightsPromptMaper.py))
@@ -115,7 +142,53 @@ Python-based TTS service for generating narration audio:
 - **67%** reduction in GPU capacity (~600 → ~200 GPUs)
 - **70%+** estimated COGS reduction overall
 
-## Recent Changes (2025-01-19)
+## Recent Changes
+
+### 2025-01-20: Video Player Integration
+**Added Demo Video Support:**
+- Created VideoPlayer component ([`src/components/VideoPlayer.tsx`](react_cogs_demo/src/components/VideoPlayer.tsx))
+- Freeze-on-end playback (pauses on last frame)
+- Synchronized with slide narration
+- Framer Motion animations
+- Responsive sizing and positioning
+- Videos stored in `public/videos/` directory
+- MP4 format support
+- Referenced via `videoPath` in slide metadata
+
+**Available Demo Videos:**
+- **`meeting_highlights_usage_in_bizchat.mp4`** - Shows how users access Meeting Highlights through BizChat, demonstrating the CIQ (Conversation Intelligence Query) interface and the Meeting Highlights player experience
+
+### 2025-01-20: TTS System & Audio Playback Fixes
+1. **Implemented Smart TTS Caching**
+   - Narration text change detection
+   - Only regenerate modified segments
+   - Batch processing (10 segments/batch)
+   - Cache stored in `.tts-narration-cache.json`
+
+2. **Pre-flight Cache Validation**
+   - Automatic check before `npm run dev`
+   - Detects changed narration text
+   - Prompts for regeneration with clear message
+   - Auto-runs generation if user confirms
+
+3. **Fixed Audio Overlap Bug**
+   - Manual+Audio mode was playing multiple audios simultaneously
+   - Root cause: Async audio loading race condition
+   - Solution: Implemented `isActive` flag to cancel stale audio loads
+   - Comprehensive cleanup of all audio references and event listeners
+
+4. **Audio Fallback System**
+   - Created `silence-1s.mp3` fallback file
+   - Graceful handling of missing audio files
+   - Console warnings for debugging
+   - No presentation crashes
+
+5. **Updated All Audio File Paths**
+   - Migrated from placeholder paths to actual TTS-generated files
+   - Pattern: `/audio/c{chapter}/s{slide}_segment_{number}_{id}.wav`
+   - ~65 audio file references updated across all slides
+
+### 2025-01-19: Content Restructuring
 
 ### Content Restructuring
 1. **Enhanced Introduction** - Expanded from 3 to 8 captions to comprehensively explain Meeting Highlights for all-hands audience
@@ -140,12 +213,70 @@ cd react_cogs_demo
 npm install
 npm run dev
 ```
+### TTS Audio Generation
 
-### Generating Audio
+**Start Python TTS Server:**
 ```bash
 cd tts
-python generate_audio.py
+python server.py --voice-sample path/to/voice.wav
 ```
+
+**Generate Audio Files:**
+```bash
+cd react_cogs_demo
+
+# Generate all files (uses smart cache to skip unchanged)
+npm run tts:generate
+
+# Force regenerate all files
+npm run tts:generate -- --force
+
+# Calculate durations
+npm run tts:duration
+```
+
+**Development Workflow:**
+1. Edit narration text in slide components
+2. Run `npm run dev`
+3. Pre-flight check detects changes
+4. Answer "y" to regenerate automatically
+5. Server starts with updated audio
+
+**Cache Management:**
+- Cache file: `react_cogs_demo/.tts-narration-cache.json`
+- Duration report: `react_cogs_demo/duration-report.json`
+- Audio files: `react_cogs_demo/public/audio/c{0-9}/`
+```
+
+## Presentation Modes
+
+The React demo supports three presentation modes:
+
+**1. Narrated Mode (▶ Narrated)**
+- Auto-advances through all slides
+- Plays all audio segments sequentially
+- Synchronized animations with narration
+- Ideal for unattended playback or recording
+- ~4 minute duration
+
+**2. Manual Mode (⌨ Manual Silent)**
+- Navigate with arrow keys
+- No audio playback
+- Instant slide transitions
+- Best for quick review
+
+**3. Manual + Audio Mode (⌨ Manual + Audio)**
+- Navigate manually with arrow keys
+- Plays audio for each visited slide
+- Optional auto-advance on audio end
+- Smart audio cleanup prevents overlap
+- Best for interactive presentations
+
+**Interface Options:**
+- "Hide interface" checkbox for clean recording
+- Auto-advance toggle in Manual+Audio mode
+- Restart button available in all modes
+- Slide counter shows position (e.g., "Slide 5 of 20 (Ch1:S2)")
 
 ## Target Audience
 
@@ -154,6 +285,26 @@ The presentation is designed for an all-hands meeting where:
 - Focus is on **product value** and **business impact**
 - Technical details are high-level, not implementation-specific
 - Emphasis on user satisfaction and cost optimization enabling global rollout
+
+## Technical Stack
+
+**Frontend:**
+- React 18 + TypeScript
+- Vite for dev server and build
+- Framer Motion for animations
+- Inline CSS-in-JS styling
+
+**TTS System:**
+- Python Flask server with VibeVoice model
+- TypeScript batch client
+- Smart caching with narration text tracking
+- WAV audio output (24kHz mono)
+
+**Development Tools:**
+- tsx for TypeScript script execution
+- axios for HTTP requests
+- get-audio-duration for audio analysis
+- ffmpeg for silence generation
 
 ## Future Improvements
 

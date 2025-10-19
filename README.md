@@ -83,31 +83,112 @@ npm run build
 
 # Preview production build
 npm run preview
+
+# Generate TTS audio files (requires Python TTS server running)
+npm run tts:generate
+
+# Calculate audio durations
+npm run tts:duration
 ```
 
 Open http://localhost:5173 to view the demo.
+
+### TTS Audio Generation System
+
+The presentation includes an automated TTS (Text-to-Speech) generation system for creating narration audio:
+
+**Prerequisites:**
+1. Python TTS server must be running (see [`tts/README.md`](tts/README.md))
+2. Server configuration in `tts/server_config.json`
+
+**Generate Audio Files:**
+```bash
+# Start Python TTS server (in tts/ directory)
+cd tts
+python server.py --voice-sample path/to/voice.wav
+
+# Generate all audio files (in react_cogs_demo/ directory)
+cd react_cogs_demo
+npm run tts:generate
+```
+
+**Smart Caching System:**
+- Tracks narration text changes in `.tts-narration-cache.json`
+- Only regenerates audio when narration text changes
+- Skips unchanged segments automatically
+- Pre-flight check before `npm run dev` detects changes and prompts for regeneration
+
+**Features:**
+- **Batch processing**: Generates 10 segments per batch for efficiency
+- **Fallback audio**: Uses 1-second silence for missing files
+- **Progress tracking**: Shows real-time generation progress
+- **Duration calculation**: `npm run tts:duration` analyzes all audio files
+- **Automatic cache updates**: Saves narration text + timestamps after generation
+
+**File Organization:**
+```
+public/audio/
+├── c0/ - c9/              # Chapter-based folders
+│   └── sX_segment_YY_id.wav  # Slide X, segment YY, segment ID
+└── silence-1s.mp3         # Fallback for missing files
+```
+
 ### Demo Features
 
-**Interactive Presentation**
-- Narrated slides covering the COGS reduction journey from product intro through business impact
-- Smooth crossfade transitions between slides
-- Keyboard navigation: Arrow keys, Space, or number keys
+**Presentation Modes:**
+1. **Narrated Mode** (▶ Narrated)
+   - Auto-advances through slides with synchronized audio
+   - Plays all audio segments sequentially
+   - Ideal for hands-free viewing or recording
+
+2. **Manual Mode** (⌨ Manual Silent)
+   - Navigate slides with arrow keys
+   - No audio playback
+   - Best for quick review or exploration
+
+3. **Manual + Audio** (⌨ Manual + Audio)
+   - Navigate slides manually with arrow keys
+   - Plays audio for each slide you visit
+   - Optional auto-advance when audio ends
+   - Prevents audio overlap with smart cleanup
+
+**Navigation:**
+- Arrow keys: Previous/Next slide
+- Space: Next slide
+- Number keys: Jump to slide
 - Visual progress indicators with clickable dots
-- Slide counter showing current position
+- Slide counter showing current position (Ch:S format)
 
 **Animated Visualizations**
-- **Ch1**: Comprehensive product introduction explaining Meeting Highlights (what it is, how it works, where to access it)
-- **Ch5_U1**: Challenge framing with initial metrics (4 calls, ~600 GPUs, high tokens)
-- **Ch5_U2**: Four-prompt pipeline visualization showing the original 4-step approach
-- **Ch6_U1**: Unified convergence animation with pulsing glow and success rate metrics
-- **Ch7_U1**: Dual visualization showing both 75% LLM call reduction AND 60% token reduction side-by-side
-- **Ch7_U2**: GPU rack visualization with fade-out animation (~600 → ~200 GPUs)
-- **Ch7_U3**: Cost impact curve showing estimated 70% COGS reduction
-- **Ch7_U4**: Quality comparison metrics
-- **Ch8**: User satisfaction metrics (80% extremely useful, 96% likely to reuse)
-- **Ch9**: User testimonials and future improvements
-- **Slide 32**: Implementation roadmap
-
+**Animated Visualizations:**
+- **Ch0**: Blank intro slide
+- **Ch1** (3 slides): Comprehensive product introduction
+  - What is Meeting Highlights
+  - How to access via BizChat
+  - User value proposition
+- **Ch2**: Team collaboration (8-segment progressive reveal with team logos)
+- **Ch3**: Architecture overview
+- **Ch4**: Highlight types (extractive vs abstractive)
+- **Ch5** (5 slides): COGS Challenge
+  - Challenge framing with initial metrics
+  - Four-prompt pipeline visualization
+  - GPU requirements (~600)
+  - Latency and complexity impact
+  - Need for reduction
+- **Ch6** (5 slides): Optimization Solution
+  - Unified convergence animation
+  - Algorithm flow preservation
+  - Single invocation benefit
+  - 60% token optimization
+  - Model tuning approach
+- **Ch7** (5 slides): Business Impact
+  - Dual visualization: 75% call + 60% token reduction
+  - GPU reduction animation (600→200)
+  - Cost curve showing 70% COGS reduction
+  - Quality comparison metrics
+  - Path to GA rollout
+- **Ch8**: User satisfaction (80% useful, 96% likely to reuse)
+- **Ch9** (2 slides): Testimonials and future improvements
 **Accessibility**
 - Reduced-motion toggle (top-left corner) respects `prefers-reduced-motion`
 - All animations gracefully degrade to instant transitions when reduced motion is enabled
@@ -123,6 +204,10 @@ Open http://localhost:5173 to view the demo.
 - [`src/components/CoreComponents.tsx`](react_cogs_demo/src/components/CoreComponents.tsx) - Reusable UI components
 - [`src/components/ImpactComponents.tsx`](react_cogs_demo/src/components/ImpactComponents.tsx) - Impact visualization slides
 - [`src/accessibility/ReducedMotion.tsx`](react_cogs_demo/src/accessibility/ReducedMotion.tsx) - Motion preferences context
+- [`src/components/VideoPlayer.tsx`](react_cogs_demo/src/components/VideoPlayer.tsx) - Demo video player component
+- [`scripts/generate-tts.ts`](react_cogs_demo/scripts/generate-tts.ts) - TTS audio generation with smart caching
+- [`scripts/calculate-durations.ts`](react_cogs_demo/scripts/calculate-durations.ts) - Audio duration calculation
+- [`scripts/check-tts-cache.ts`](react_cogs_demo/scripts/check-tts-cache.ts) - Pre-flight cache validation
 
 ### Technology Stack
 - **React 18** + **TypeScript** for type-safe UI components
@@ -130,9 +215,63 @@ Open http://localhost:5173 to view the demo.
 - **Framer Motion** for sophisticated animations and transitions
 - **CSS-in-JS** inline styles for component-scoped styling
 
-### Script Reference
-### Planning & Script Reference
-Planning documents and scripts are available in the project for reference during development.
+### npm Scripts
+
+**Development:**
+- `npm run dev` - Start development server (checks TTS cache first)
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+
+**TTS Generation:**
+- `npm run tts:generate` - Generate all TTS audio files
+- `npm run tts:generate -- --skip-existing` - Only generate changed/new files (smart cache)
+- `npm run tts:duration` - Calculate and report audio durations
+
+**Output:**
+- `public/audio/` - Generated audio files organized by chapter
+- `public/videos/` - Demo video files (MP4 format)
+- `.tts-narration-cache.json` - Narration text cache for change detection
+- `duration-report.json` - Audio duration analysis
+
+### Demo Video Integration
+
+The presentation includes an embedded video player component for displaying Meeting Highlights demo videos:
+
+**Video Player Component:**
+- **Location**: [`src/components/VideoPlayer.tsx`](react_cogs_demo/src/components/VideoPlayer.tsx)
+- **Features**:
+  - Freeze-on-end playback (video pauses on last frame)
+  - Synchronized with slide narration segments
+  - Framer Motion animations for smooth entry/exit
+  - Responsive sizing and positioning
+  - Multiple video support across different slides
+
+**Video Storage:**
+- Videos stored in `public/videos/` directory
+- Format: MP4
+- Referenced in slide metadata via `videoPath` property
+
+**Available Demo Videos:**
+- **`meeting_highlights_usage_in_bizchat.mp4`** - Demonstrates how users access Meeting Highlights through BizChat, showing the CIQ interface and Meeting Highlights player in action
+
+**Usage in Slides:**
+```typescript
+export const Ch1_S2_HowToAccess = {
+  metadata: {
+    chapter: 1,
+    slide: 2,
+    title: "How to Access",
+    videoPath: '/videos/meeting_highlights_usage_in_bizchat.mp4',
+    audioSegments: [
+      {
+        id: 'intro',
+        narrationText: 'Let me show you how Meeting Highlights works...',
+        audioFilePath: '/audio/c1/s2_segment_01_intro.wav'
+      }
+    ]
+  }
+}
+```
 
 ### Architecture Documentation
 Detailed technical decisions and component structure: [`ARCHITECTURE.md`](react_cogs_demo/ARCHITECTURE.md)

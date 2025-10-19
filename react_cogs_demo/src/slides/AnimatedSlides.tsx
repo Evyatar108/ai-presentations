@@ -1413,7 +1413,7 @@ export const Ch1_S1_WhatIsMeetingHighlights: SlideComponentWithMetadata = () => 
               }}
             >
               <p style={{ color: '#e2e8f0', fontSize: 18, lineHeight: 1.6 }}>
-                Automatically generates a <strong style={{ color: '#00B7C3' }}>3-5 minute video recap</strong> of your meeting
+                Automatically generates a <strong style={{ color: '#00B7C3' }}>2-3 minute video recap</strong> of your meeting
               </p>
             </motion.div>
           )}
@@ -1727,7 +1727,7 @@ Ch1_S2_HowToAccess.metadata = {
       audioFilePath: "/audio/c1/s2_segment_03_ciq.wav",
       srtSegmentNumber: 3,
       visualDescription: "Demo continues - showing \"/\" menu for CIQ",
-      narrationText: "You can reference specific meetings using CIQ by typing a forward slash."
+      narrationText: "You can reference specific meetings using C-I-Q by typing a forward slash."
     },
     {
       id: "select",

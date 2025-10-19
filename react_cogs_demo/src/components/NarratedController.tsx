@@ -242,11 +242,19 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     
     const slide = allSlides[currentIndex].metadata;
     
-    // Stop any existing audio
+    console.log(`[Manual+Audio] Loading slide index=${currentIndex}, Ch${slide.chapter}:S${slide.slide}`);
+    
+    // CRITICAL: Stop and fully clean up any existing audio BEFORE creating new one
     if (audioRef.current) {
+      console.log('[Manual+Audio] Stopping previous audio');
       audioRef.current.pause();
+      audioRef.current.currentTime = 0;
       audioRef.current.onended = null;
+      audioRef.current.onerror = null;
       audioRef.current.onplay = null;
+      audioRef.current.oncanplaythrough = null;
+      audioRef.current.src = '';
+      audioRef.current = null; // Clear reference immediately
     }
     
     // Play first segment (simplified for manual mode)
@@ -255,9 +263,23 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
       return;
     }
     
+    // Track if this effect is still active (prevent stale audio from starting)
+    let isActive = true;
+    
     // Load audio with fallback support
     const firstSegment = slide.audioSegments[0];
+    console.log(`[Manual+Audio] Loading audio: ${firstSegment.audioFilePath}`);
+    
     loadAudioWithFallback(firstSegment.audioFilePath, firstSegment.id).then(audio => {
+      // Check if this effect is still active (user hasn't navigated away)
+      if (!isActive) {
+        console.log('[Manual+Audio] Effect cancelled, not playing audio');
+        audio.pause();
+        audio.src = '';
+        return;
+      }
+      
+      console.log(`[Manual+Audio] Audio loaded, setting as current`);
       audioRef.current = audio;
 
       // Setup event handlers - use ref to get current index at time of onended
@@ -296,13 +318,21 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
       });
     });
 
-    // Cleanup
+    // Cleanup function - runs when currentIndex changes or component unmounts
     return () => {
+      console.log(`[Manual+Audio] Cleanup for index=${currentIndex}`);
+      isActive = false; // Mark effect as inactive
+      
       if (audioRef.current) {
+        console.log('[Manual+Audio] Cleanup: stopping audio');
         audioRef.current.pause();
+        audioRef.current.currentTime = 0;
         audioRef.current.onended = null;
         audioRef.current.onerror = null;
         audioRef.current.onplay = null;
+        audioRef.current.oncanplaythrough = null;
+        audioRef.current.src = '';
+        audioRef.current = null;
       }
     };
   }, [currentIndex, isManualMode, isManualWithAudio, autoAdvanceOnAudioEnd, onSlideChange]);
