@@ -1466,12 +1466,43 @@ Ch1_S1_WhatIsMeetingHighlights.metadata = {
   chapter: 1,
   slide: 1,
   title: "What is Meeting Highlights",
+  srtFilePath: "highlights_demo/chapters/c1/s1_what_is_meeting_highlights.srt",
   audioSegments: [
-    { id: "intro", audioFilePath: "/audio/00-Silence.mp3" },
-    { id: "ai_generation", audioFilePath: "/audio/00-Silence.mp3" },
-    { id: "combination", audioFilePath: "/audio/00-Silence.mp3" },
-    { id: "preservation", audioFilePath: "/audio/00-Silence.mp3" },
-    { id: "problem", audioFilePath: "/audio/00-Silence.mp3" }
+    {
+      id: "intro",
+      audioFilePath: "/audio/00-Silence.mp3",
+      srtSegmentNumber: 1,
+      visualDescription: "Title slide \"Meeting Highlights\" with Teams logo",
+      narrationText: "Meeting Highlights is a new Microsoft Teams feature that delivers a dynamic, bite-sized video recap of your meeting."
+    },
+    {
+      id: "ai_generation",
+      audioFilePath: "/audio/00-Silence.mp3",
+      srtSegmentNumber: 2,
+      visualDescription: "Animation showing meeting recording transforming into short highlight video",
+      narrationText: "It uses AI to automatically generate a short highlights video, typically 3 to 5 minutes long."
+    },
+    {
+      id: "combination",
+      audioFilePath: "/audio/00-Silence.mp3",
+      srtSegmentNumber: 3,
+      visualDescription: "Split screen showing hour-long meeting vs 3-minute highlights",
+      narrationText: "The feature combines AI-generated voiceover summaries with authentic video snippets from the actual meeting."
+    },
+    {
+      id: "preservation",
+      audioFilePath: "/audio/00-Silence.mp3",
+      srtSegmentNumber: 4,
+      visualDescription: "Example clips showing speakers, reactions, screen shares",
+      narrationText: "This preserves the original tone, reactions, and flow of the discussion."
+    },
+    {
+      id: "problem",
+      audioFilePath: "/audio/00-Silence.mp3",
+      srtSegmentNumber: 5,
+      visualDescription: "Pain point icons: clock (time), search (finding content), mood (missing context)",
+      narrationText: "It solves a critical problem: catching up on missed meetings without watching hour-long recordings or reading lengthy transcripts."
+    }
   ]
 };
 
@@ -1645,14 +1676,57 @@ Ch1_S2_HowToAccess.metadata = {
   chapter: 1,
   slide: 2,
   title: "How to Access",
+  srtFilePath: "highlights_demo/chapters/c1/s2_how_to_access.srt",
   audioSegments: [
-    { id: "intro", audioFilePath: "/audio/00-Silence.mp3" },
-    { id: "bizchat", audioFilePath: "/audio/00-Silence.mp3" },
-    { id: "ciq", audioFilePath: "/audio/00-Silence.mp3" },
-    { id: "select", audioFilePath: "/audio/00-Silence.mp3" },
-    { id: "player", audioFilePath: "/audio/00-Silence.mp3" },
-    { id: "note", audioFilePath: "/audio/00-Silence.mp3" },
-    { id: "future", audioFilePath: "/audio/00-Silence.mp3" }
+    {
+      id: "intro",
+      audioFilePath: "/audio/00-Silence.mp3",
+      srtSegmentNumber: 1,
+      visualDescription: "BizChat interface screenshot",
+      narrationText: "Let me show you how to access Meeting Highlights through BizChat."
+    },
+    {
+      id: "bizchat",
+      audioFilePath: "/audio/00-Silence.mp3",
+      srtSegmentNumber: 2,
+      visualDescription: "Embedded MP4 demo video showing BizChat interaction",
+      narrationText: "Open BizChat and ask it to recap a specific meeting."
+    },
+    {
+      id: "ciq",
+      audioFilePath: "/audio/00-Silence.mp3",
+      srtSegmentNumber: 3,
+      visualDescription: "Demo continues - showing \"/\" menu for CIQ",
+      narrationText: "You can reference specific meetings using Contextual Instant Query by typing slash."
+    },
+    {
+      id: "select",
+      audioFilePath: "/audio/00-Silence.mp3",
+      srtSegmentNumber: 4,
+      visualDescription: "Demo shows meeting selection from menu",
+      narrationText: "This opens a menu to select and search for meetings to add to your message."
+    },
+    {
+      id: "player",
+      audioFilePath: "/audio/00-Silence.mp3",
+      srtSegmentNumber: 5,
+      visualDescription: "Demo shows BizChat response with video player at bottom",
+      narrationText: "BizChat will return a reply to your query and a video player with the meeting highlights appears at the bottom."
+    },
+    {
+      id: "note",
+      audioFilePath: "/audio/00-Silence.mp3",
+      srtSegmentNumber: 6,
+      visualDescription: "Note callout appears",
+      narrationText: "Note: If the meeting is a series meeting, BizChat currently won't show the highlights player yet."
+    },
+    {
+      id: "future",
+      audioFilePath: "/audio/00-Silence.mp3",
+      srtSegmentNumber: 7,
+      visualDescription: "Icons showing Teams, BizChat, M365 Copilot entry points",
+      narrationText: "We're working on additional ways to surface highlights via BizChat and Teams."
+    }
   ]
 };
 
@@ -1778,12 +1852,43 @@ Ch1_S3_UserValue.metadata = {
   chapter: 1,
   slide: 3,
   title: "User Value",
+  srtFilePath: "highlights_demo/chapters/c1/s3_user_value.srt",
   audioSegments: [
-    { id: "intro", audioFilePath: "/audio/00-Silence.mp3" },
-    { id: "time", audioFilePath: "/audio/00-Silence.mp3" },
-    { id: "engagement", audioFilePath: "/audio/00-Silence.mp3" },
-    { id: "dynamics", audioFilePath: "/audio/00-Silence.mp3" },
-    { id: "testimonial", audioFilePath: "/audio/00-Silence.mp3" }
+    {
+      id: "intro",
+      audioFilePath: "/audio/00-Silence.mp3",
+      srtSegmentNumber: 1,
+      visualDescription: "3 value proposition cards appear",
+      narrationText: "Meeting Highlights delivers three key benefits to users."
+    },
+    {
+      id: "time",
+      audioFilePath: "/audio/00-Silence.mp3",
+      srtSegmentNumber: 2,
+      visualDescription: "Card 1 highlights - clock icon with \"60 min → 3 min\"",
+      narrationText: "First, massive time savings. Instead of watching a 60-minute recording, catch up in 3 to 5 minutes."
+    },
+    {
+      id: "engagement",
+      audioFilePath: "/audio/00-Silence.mp3",
+      srtSegmentNumber: 3,
+      visualDescription: "Card 2 highlights - engagement icons (eyes, ears, text)",
+      narrationText: "Second, better engagement and retention through audiovisual content that caters to all learning styles."
+    },
+    {
+      id: "dynamics",
+      audioFilePath: "/audio/00-Silence.mp3",
+      srtSegmentNumber: 4,
+      visualDescription: "Card 3 highlights - mood/vibe icons showing emotions",
+      narrationText: "Third, preserved meeting dynamics. You get the tone and vibe of discussions, not just facts."
+    },
+    {
+      id: "testimonial",
+      audioFilePath: "/audio/00-Silence.mp3",
+      srtSegmentNumber: 5,
+      visualDescription: "User testimonial quote appears",
+      narrationText: "Internal users have called it magical, with one manager saying it saved hours of reviewing transcripts."
+    }
   ]
 };
 
@@ -1991,14 +2096,57 @@ Ch3_S1_ArchitectureOverview.metadata = {
   chapter: 3,
   slide: 1,
   title: "Architecture Overview",
+  srtFilePath: "highlights_demo/chapters/c3/s1_architecture_overview.srt",
   audioSegments: [
-    { id: "intro", audioFilePath: "/audio/00-Silence.mp3" },
-    { id: "recording", audioFilePath: "/audio/00-Silence.mp3" },
-    { id: "odsp", audioFilePath: "/audio/00-Silence.mp3" },
-    { id: "tmr", audioFilePath: "/audio/00-Silence.mp3" },
-    { id: "llm", audioFilePath: "/audio/00-Silence.mp3" },
-    { id: "acs", audioFilePath: "/audio/00-Silence.mp3" },
-    { id: "storage", audioFilePath: "/audio/00-Silence.mp3" }
+    {
+      id: "intro",
+      audioFilePath: "/audio/00-Silence.mp3",
+      srtSegmentNumber: 1,
+      visualDescription: "Title \"Architecture Overview\" with system diagram placeholder",
+      narrationText: "Let me walk you through the architecture behind Meeting Highlights."
+    },
+    {
+      id: "recording",
+      audioFilePath: "/audio/00-Silence.mp3",
+      srtSegmentNumber: 2,
+      visualDescription: "Teams recording icon appears - starting point of flow",
+      narrationText: "It starts when a Teams meeting ends and a recording exists."
+    },
+    {
+      id: "odsp",
+      audioFilePath: "/audio/00-Silence.mp3",
+      srtSegmentNumber: 3,
+      visualDescription: "ODSP component highlights with arrow from recording",
+      narrationText: "ODSP, our storage and orchestration layer, detects the recording and initiates the highlight generation process."
+    },
+    {
+      id: "tmr",
+      audioFilePath: "/audio/00-Silence.mp3",
+      srtSegmentNumber: 4,
+      visualDescription: "TMR Processor component highlights with arrow from ODSP",
+      narrationText: "The TMR processor retrieves the meeting transcript and calls our LLM."
+    },
+    {
+      id: "llm",
+      audioFilePath: "/audio/00-Silence.mp3",
+      srtSegmentNumber: 5,
+      visualDescription: "LLM component highlights - central AI processing node",
+      narrationText: "The LLM analyzes the transcript and returns structured metadata describing the highlights."
+    },
+    {
+      id: "acs",
+      audioFilePath: "/audio/00-Silence.mp3",
+      srtSegmentNumber: 6,
+      visualDescription: "Azure Cognitive Services component with TTS icon",
+      narrationText: "Azure Cognitive Services then converts the narration text into audio using text-to-speech."
+    },
+    {
+      id: "storage",
+      audioFilePath: "/audio/00-Silence.mp3",
+      srtSegmentNumber: 7,
+      visualDescription: "Final storage in ODSP with access icons (BizChat, Teams)",
+      narrationText: "Finally, all the metadata, audio, and captions are securely stored in ODSP and made available through BizChat and Teams."
+    }
   ]
 };
 
@@ -2177,14 +2325,57 @@ Ch4_S1_HighlightTypes.metadata = {
   chapter: 4,
   slide: 1,
   title: "Highlight Types",
+  srtFilePath: "highlights_demo/chapters/c4/s1_highlight_types.srt",
   audioSegments: [
-    { id: "intro", audioFilePath: "/audio/00-Silence.mp3" },
-    { id: "abstractive", audioFilePath: "/audio/00-Silence.mp3" },
-    { id: "key_moments", audioFilePath: "/audio/00-Silence.mp3" },
-    { id: "timestamps", audioFilePath: "/audio/00-Silence.mp3" },
-    { id: "audio", audioFilePath: "/audio/00-Silence.mp3" },
-    { id: "storage", audioFilePath: "/audio/00-Silence.mp3" },
-    { id: "platforms", audioFilePath: "/audio/00-Silence.mp3" }
+    {
+      id: "intro",
+      audioFilePath: "/audio/00-Silence.mp3",
+      srtSegmentNumber: 1,
+      visualDescription: "Title \"Two Types of Highlights\"",
+      narrationText: "Meeting Highlights combines two distinct types of highlights to create a comprehensive recap."
+    },
+    {
+      id: "abstractive",
+      audioFilePath: "/audio/00-Silence.mp3",
+      srtSegmentNumber: 2,
+      visualDescription: "Left card appears - Abstractive Highlights with summary icon",
+      narrationText: "First, abstractive highlights. These are AI-generated summaries that capture the key topics discussed in the meeting."
+    },
+    {
+      id: "key_moments",
+      audioFilePath: "/audio/00-Silence.mp3",
+      srtSegmentNumber: 3,
+      visualDescription: "Right card appears - Key Moments with video clip icon",
+      narrationText: "Second, key moments. These are significant verbatim segments extracted directly from the meeting recording."
+    },
+    {
+      id: "timestamps",
+      audioFilePath: "/audio/00-Silence.mp3",
+      srtSegmentNumber: 4,
+      visualDescription: "Detail callout showing 20-30 second segments",
+      narrationText: "Each highlight is a 20 to 30 second segment with precise timestamps and accompanying narration."
+    },
+    {
+      id: "audio",
+      audioFilePath: "/audio/00-Silence.mp3",
+      srtSegmentNumber: 5,
+      visualDescription: "Azure Cognitive Services logo with audio waveform",
+      narrationText: "The narration text is converted to natural-sounding audio using Azure Cognitive Services text-to-speech."
+    },
+    {
+      id: "storage",
+      audioFilePath: "/audio/00-Silence.mp3",
+      srtSegmentNumber: 6,
+      visualDescription: "ODSP storage icon with security badge",
+      narrationText: "All the metadata, audio files, and caption data are securely stored in ODSP."
+    },
+    {
+      id: "platforms",
+      audioFilePath: "/audio/00-Silence.mp3",
+      srtSegmentNumber: 7,
+      visualDescription: "M365 platform icons (Teams, BizChat, Copilot)",
+      narrationText: "Making highlights available across Microsoft 365 platforms wherever users work."
+    }
   ]
 };
 
@@ -2553,13 +2744,50 @@ Ch9_S2_FutureImprovements.metadata = {
   chapter: 9,
   slide: 2,
   title: "Future Improvements",
+  srtFilePath: "highlights_demo/chapters/c9/s2_future_improvements.srt",
   audioSegments: [
-    { id: "intro", audioFilePath: "/audio/00-Silence.mp3" },
-    { id: "detail", audioFilePath: "/audio/00-Silence.mp3" },
-    { id: "teams", audioFilePath: "/audio/00-Silence.mp3" },
-    { id: "action", audioFilePath: "/audio/00-Silence.mp3" },
-    { id: "languages", audioFilePath: "/audio/00-Silence.mp3" },
-    { id: "roadmap", audioFilePath: "/audio/00-Silence.mp3" }
+    {
+      id: "intro",
+      audioFilePath: "/audio/00-Silence.mp3",
+      srtSegmentNumber: 1,
+      visualDescription: "Title \"Future Improvements\" with roadmap icon",
+      narrationText: "Based on user feedback, we have an exciting roadmap ahead."
+    },
+    {
+      id: "detail",
+      audioFilePath: "/audio/00-Silence.mp3",
+      srtSegmentNumber: 2,
+      visualDescription: "Card 1 appears - Detail & Specificity with magnifying glass icon",
+      narrationText: "Users want more detailed and specific highlights that capture nuanced discussions."
+    },
+    {
+      id: "teams",
+      audioFilePath: "/audio/00-Silence.mp3",
+      srtSegmentNumber: 3,
+      visualDescription: "Card 2 appears - Teams Integration with integration icon",
+      narrationText: "Deeper integration with Teams Recap for seamless access to highlights."
+    },
+    {
+      id: "action",
+      audioFilePath: "/audio/00-Silence.mp3",
+      srtSegmentNumber: 4,
+      visualDescription: "Card 3 appears - Action Items with checkmark icon",
+      narrationText: "Including action items and decisions to make highlights more actionable."
+    },
+    {
+      id: "languages",
+      audioFilePath: "/audio/00-Silence.mp3",
+      srtSegmentNumber: 5,
+      visualDescription: "Card 4 appears - Languages with globe icon",
+      narrationText: "And additional language support to serve our global user base."
+    },
+    {
+      id: "roadmap",
+      audioFilePath: "/audio/00-Silence.mp3",
+      srtSegmentNumber: 6,
+      visualDescription: "Summary banner appears with timeline",
+      narrationText: "These improvements are on our roadmap as we work toward general availability in 2024."
+    }
   ]
 };
 

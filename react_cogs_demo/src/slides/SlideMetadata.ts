@@ -8,6 +8,7 @@ export interface AudioSegment {
   animationTrigger?: string;     // Animation key to trigger when this segment starts
   srtSegmentNumber?: number;     // Reference to segment number in SRT file (e.g., 1 for "1 - Intro")
   visualDescription?: string;    // Description of what appears visually (from SRT file)
+  narrationText?: string;        // Actual narration text to be spoken (for TTS generation)
 }
 
 /**
