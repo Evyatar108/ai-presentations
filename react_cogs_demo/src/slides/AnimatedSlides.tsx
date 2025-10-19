@@ -1799,105 +1799,123 @@ Ch1_S2_HowToAccess.metadata = {
 /**
  * Chapter 1, Slide 3 - User Value Proposition
  */
-export const Ch1_S3_UserValue: SlideComponentWithMetadata = () => {
-  const { reduced } = useReducedMotion();
-  const { isSegmentVisible } = useSegmentedAnimation();
-
-  const benefits = [
-    {
-      icon: '⏱️',
-      title: 'Time Savings',
-      description: '60 minutes → 2-3 minutes',
-      detail: 'Catch up without watching full recordings'
-    },
-    {
-      icon: '🎯',
-      title: 'Better Engagement',
-      description: 'Audiovisual content',
-      detail: 'Caters to all learning styles'
-    },
-    {
-      icon: '💬',
-      title: 'Meeting Dynamics',
-      description: 'Tone and vibe preserved',
-      detail: 'Not just facts, but context'
-    }
-  ];
-
-  return (
-    <div style={{
-      background: '#0f172a',
-      minHeight: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '2rem',
-      fontFamily: 'Inter, system-ui, sans-serif'
-    }}>
-      <div style={{ maxWidth: 1100, width: '100%' }}>
-        <AnimatePresence>
-          {isSegmentVisible(0) && (
-            <motion.h1
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: reduced ? 0.2 : 0.5 }}
-              style={{ color: '#f1f5f9', marginBottom: '3rem', textAlign: 'center' }}
-            >
-              Three Key Benefits
-            </motion.h1>
-          )}
-        </AnimatePresence>
-
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: '2rem',
-          marginBottom: '3rem'
-        }}>
-          {benefits.map((benefit, index) => (
-            <AnimatePresence key={benefit.title}>
-              {isSegmentVisible(index + 1) && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20, scale: 0.9 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{ duration: reduced ? 0.3 : 0.6, type: 'spring' }}
-                  style={{
-                    background: index === 0 ? 'linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))' : '#1e293b',
-                    borderRadius: 16,
-                    padding: '2rem',
-                    textAlign: 'center',
-                    border: index === 0 ? '2px solid #00B7C3' : '1px solid #334155',
-                    boxShadow: index === 0 && !reduced ? '0 0 30px rgba(0, 183, 195, 0.3)' : 'none'
-                  }}
-                >
-                  <div style={{ fontSize: 48, marginBottom: '1rem' }}>{benefit.icon}</div>
-                  <h3 style={{ color: '#f1f5f9', fontSize: 20, marginBottom: '0.5rem' }}>
-                    {benefit.title}
-                  </h3>
-                  <div style={{ color: '#00B7C3', fontSize: 18, fontWeight: 600, marginBottom: '0.75rem' }}>
-                    {benefit.description}
-                  </div>
-                  <p style={{ color: '#94a3b8', fontSize: 14, margin: 0 }}>
-                    {benefit.detail}
-                  </p>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          ))}
+ export const Ch1_S3_UserValue: SlideComponentWithMetadata = () => {
+   const { reduced } = useReducedMotion();
+   const { isSegmentVisible, isOnSegment } = useSegmentedAnimation();
+ 
+   const benefits = [
+     {
+       icon: '⏱️',
+       title: 'Time Savings',
+       description: '60 minutes → 2-3 minutes',
+       detail: 'Catch up without watching full recordings'
+     },
+     {
+       icon: '🎯',
+       title: 'Better Engagement',
+       description: 'Audiovisual content',
+       detail: 'Caters to all learning styles'
+     },
+     {
+       icon: '💬',
+       title: 'Meeting Dynamics',
+       description: 'Tone and vibe preserved',
+       detail: 'Not just facts, but context'
+     }
+   ];
+ 
+   return (
+     <div style={{
+       background: '#0f172a',
+       minHeight: '100vh',
+       display: 'flex',
+       alignItems: 'center',
+       justifyContent: 'center',
+       padding: '2rem',
+       fontFamily: 'Inter, system-ui, sans-serif'
+     }}>
+       <div style={{ maxWidth: 1100, width: '100%' }}>
+         <AnimatePresence>
+           {isSegmentVisible(0) && (
+             <motion.h1
+               initial={{ opacity: 0, y: -20 }}
+               animate={{ opacity: 1, y: 0 }}
+               transition={{ duration: reduced ? 0.2 : 0.5 }}
+               style={{ color: '#f1f5f9', marginBottom: '3rem', textAlign: 'center' }}
+             >
+               Three Key Benefits
+             </motion.h1>
+           )}
+         </AnimatePresence>
+ 
+         <div style={{
+           display: 'grid',
+           gridTemplateColumns: 'repeat(3, 1fr)',
+           gap: '2rem',
+           marginBottom: '3rem'
+         }}>
+           {benefits.map((benefit, index) => {
+             // Each benefit corresponds to segments 1, 2, 3
+             const isHighlighted = isOnSegment(index + 1);
+             
+             return (
+               <AnimatePresence key={benefit.title}>
+                 {isSegmentVisible(index + 1) && (
+                   <motion.div
+                     initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                     animate={{
+                       opacity: 1,
+                       y: 0,
+                       scale: isHighlighted ? 1.05 : 1
+                     }}
+                     transition={{ duration: reduced ? 0.3 : 0.6, type: 'spring' }}
+                     style={{
+                       background: isHighlighted
+                         ? 'linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))'
+                         : '#1e293b',
+                       borderRadius: 16,
+                       padding: '2rem',
+                       textAlign: 'center',
+                       border: isHighlighted ? '2px solid #00B7C3' : '1px solid #334155',
+                       boxShadow: isHighlighted && !reduced ? '0 0 30px rgba(0, 183, 195, 0.3)' : 'none'
+                     }}
+                   >
+                     <div style={{ fontSize: 48, marginBottom: '1rem' }}>{benefit.icon}</div>
+                     <h3 style={{ color: '#f1f5f9', fontSize: 20, marginBottom: '0.5rem' }}>
+                       {benefit.title}
+                     </h3>
+                     <div style={{ color: '#00B7C3', fontSize: 18, fontWeight: 600, marginBottom: '0.75rem' }}>
+                       {benefit.description}
+                     </div>
+                     <p style={{ color: '#94a3b8', fontSize: 14, margin: 0 }}>
+                       {benefit.detail}
+                     </p>
+                   </motion.div>
+                 )}
+               </AnimatePresence>
+             );
+           })}
         </div>
 
         <AnimatePresence>
           {isSegmentVisible(4) && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              animate={{
+                opacity: 1,
+                y: 0,
+                scale: isOnSegment(4) ? 1.02 : 1
+              }}
               transition={{ duration: reduced ? 0.3 : 0.6 }}
               style={{
-                background: '#1e293b',
+                background: isOnSegment(4)
+                  ? 'linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))'
+                  : '#1e293b',
                 borderRadius: 16,
                 padding: '2rem',
                 textAlign: 'center',
-                border: '1px solid #334155'
+                border: isOnSegment(4) ? '2px solid #00B7C3' : '1px solid #334155',
+                boxShadow: isOnSegment(4) && !reduced ? '0 0 30px rgba(0, 183, 195, 0.3)' : 'none'
               }}
             >
               <p style={{ color: '#e2e8f0', fontSize: 18, fontStyle: 'italic', marginBottom: '1rem' }}>
@@ -3210,12 +3228,12 @@ Ch2_TeamCollaboration.metadata = {
     {
       id: 'odsp',
       audioFilePath: '/audio/c2/s1_segment_02_odsp.wav',
-      narrationText: 'ODSP handles storage and orchestration, initiating highlights generation when recordings are created.'
+      narrationText: 'O-D-S-P handles storage and orchestration, initiating highlights generation when recordings are created.'
     },
     {
       id: 'msai',
       audioFilePath: '/audio/c2/s1_segment_03_msai.wav',
-      narrationText: 'MSAI-Hive processes meeting transcripts using Large Language Model technology to generate highlight content.'
+      narrationText: 'M-S-A-I Hive processes meeting transcripts using Large Language Model technology to generate highlight content.'
     },
     {
       id: 'clipchamp',
@@ -3235,7 +3253,7 @@ Ch2_TeamCollaboration.metadata = {
     {
       id: 'teams',
       audioFilePath: '/audio/c2/s1_segment_07_teams.wav',
-      narrationText: 'Teams delivers highlights within the Teams ecosystem, sharing the same player technology via Loop.'
+      narrationText: 'Teams integration is planned to deliver highlights within the Teams ecosystem using the same player technology via Loop.'
     },
     {
       id: 'conclusion',

@@ -72,12 +72,12 @@
     "generatedAt": "2025-10-19T08:26:44.881Z"
   },
   "c2\\s1_segment_02_odsp.wav": {
-    "narrationText": "ODSP handles storage and orchestration, initiating highlights generation when recordings are created.",
-    "generatedAt": "2025-10-19T08:26:44.884Z"
+    "narrationText": "O-D-S-P handles storage and orchestration, initiating highlights generation when recordings are created.",
+    "generatedAt": "2025-10-19T10:40:44.347Z"
   },
   "c2\\s1_segment_03_msai.wav": {
-    "narrationText": "MSAI-Hive processes meeting transcripts using Large Language Model technology to generate highlight content.",
-    "generatedAt": "2025-10-19T08:26:44.887Z"
+    "narrationText": "M-S-A-I Hive processes meeting transcripts using Large Language Model technology to generate highlight content.",
+    "generatedAt": "2025-10-19T10:40:44.350Z"
   },
   "c2\\s1_segment_04_clipchamp.wav": {
     "narrationText": "Clipchamp owns the highlights player component, delivering the visual playback experience.",
