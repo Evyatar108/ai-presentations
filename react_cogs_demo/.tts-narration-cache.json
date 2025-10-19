@@ -47,34 +47,6 @@
     "narrationText": "M-S-A-I Hive processes meeting transcripts using Large Language Model technology. Our processor receives the transcript and calls the LLM with our prompts, which analyzes the content and returns structured metadata describing the highlights.",
     "generatedAt": "2025-10-19T17:21:04.927Z"
   },
-  "c4\\s1_segment_01_intro.wav": {
-    "narrationText": "Meeting Highlights combines two distinct types of highlights to create a comprehensive recap.",
-    "generatedAt": "2025-10-19T08:27:41.558Z"
-  },
-  "c4\\s1_segment_02_abstractive.wav": {
-    "narrationText": "First, abstractive highlights. These are AI-generated summaries that capture the key topics discussed in the meeting.",
-    "generatedAt": "2025-10-19T08:27:41.560Z"
-  },
-  "c4\\s1_segment_03_key_moments.wav": {
-    "narrationText": "Second, key moments. These are significant verbatim segments extracted directly from the meeting recording.",
-    "generatedAt": "2025-10-19T08:27:41.562Z"
-  },
-  "c4\\s1_segment_04_timestamps.wav": {
-    "narrationText": "Each highlight is a 20 to 30 second segment with precise timestamps and accompanying narration.",
-    "generatedAt": "2025-10-19T08:27:41.565Z"
-  },
-  "c4\\s1_segment_05_audio.wav": {
-    "narrationText": "The narration text is converted to natural-sounding audio using Azure Cognitive Services text-to-speech.",
-    "generatedAt": "2025-10-19T08:27:41.568Z"
-  },
-  "c4\\s1_segment_06_storage.wav": {
-    "narrationText": "All the metadata, audio files, and caption data are securely stored in ODSP.",
-    "generatedAt": "2025-10-19T08:27:41.571Z"
-  },
-  "c4\\s1_segment_07_platforms.wav": {
-    "narrationText": "Making highlights available across Microsoft 365 platforms wherever users work.",
-    "generatedAt": "2025-10-19T08:27:41.576Z"
-  },
   "c5\\s1_segment_01_main.wav": {
     "narrationText": "Cost efficiency while maintaining quality is critical for scaling meeting highlights globally.",
     "generatedAt": "2025-10-19T08:27:41.578Z"
@@ -152,8 +124,8 @@
     "generatedAt": "2025-10-19T16:25:00.597Z"
   },
   "c9\\s2_segment_03_feedback.wav": {
-    "narrationText": "We welcome your feedback. Send ideas or issues to meetinghldevs@microsoft.com.",
-    "generatedAt": "2025-10-19T16:25:00.599Z"
+    "narrationText": "We welcome your feedback. Send ideas or issues to meeting H-L devs at microsoft.com.",
+    "generatedAt": "2025-10-19T18:59:53.938Z"
   },
   "c9\\s2_segment_04_cta.wav": {
     "narrationText": "You can try Meeting Highlights now in BizChat. Give it a spin on your next meeting.",
@@ -181,7 +153,7 @@
   },
   "c1/s3_segment_01_intro.wav": {
     "narrationText": "Meeting Highlights delivers four key benefits to users.",
-    "generatedAt": "2025-10-19T17:45:51.902Z"
+    "generatedAt": "2025-10-19T18:35:44.393Z"
   },
   "c1\\s3_segment_02_triage.wav": {
     "narrationText": "First, smart triage. The highlights help you decide whether you need to watch the full recording or if the recap is sufficient.",
@@ -236,15 +208,39 @@
     "generatedAt": "2025-10-19T18:08:15.453Z"
   },
   "c2\\s1_segment_08_conclusion.wav": {
-    "narrationText": "Together, these teams deliver a unified end-to-end experience from recording through AI processing to user access, showcasing true Microsoft collaboration. . .",
-    "generatedAt": "2025-10-19T18:23:17.345Z"
+    "narrationText": "Together, these teams deliver a unified end-to-end experience from recording through AI processing to user access, showcasing true Microsoft collaboration.",
+    "generatedAt": "2025-10-19T18:35:16.658Z"
   },
   "c2/s1_segment_06_loop_storage.wav": {
     "narrationText": "Loop enables seamless embedding of the Clipchamp player within different application surfaces.",
     "generatedAt": "2025-10-19T18:26:10.619Z"
   },
   "c2/s1_segment_08_conclusion.wav": {
-    "narrationText": "Together, these teams deliver a unified end-to-end experience from recording through AI processing to user access, showcasing true Microsoft collaboration. . .",
-    "generatedAt": "2025-10-19T18:24:11.550Z"
+    "narrationText": "Together, these teams deliver a unified end-to-end experience from recording through AI processing to user access, showcasing true Microsoft collaboration.",
+    "generatedAt": "2025-10-19T18:37:59.866Z"
+  },
+  "c6/s1_segment_01_main.wav": {
+    "narrationText": "We collapsed the four-step pipeline into one unified prompt with leaner input.",
+    "generatedAt": "2025-10-19T18:42:58.358Z"
+  },
+  "c7/s2_segment_01_main.wav": {
+    "narrationText": "GPU capacity requirements are estimated to have dropped from roughly 600 to less than 200, over 70% reduction.",
+    "generatedAt": "2025-10-19T18:44:19.876Z"
+  },
+  "c8/s1_segment_04_fit.wav": {
+    "narrationText": "This points to strong product-market fit and daily habit formation among our users.",
+    "generatedAt": "2025-10-19T18:47:52.946Z"
+  },
+  "c9/s1_segment_03_ryan1.wav": {
+    "narrationText": "Ryan Roslonsky added: \"Beyond the awesome text recap, there is literally a two-minute narrated video about the meeting.\"",
+    "generatedAt": "2025-10-19T18:53:59.926Z"
+  },
+  "c9/s2_segment_02_value.wav": {
+    "narrationText": "Our goal is simple: help you reclaim time and stay aligned asynchronously.",
+    "generatedAt": "2025-10-19T18:56:51.772Z"
+  },
+  "c9/s2_segment_03_feedback.wav": {
+    "narrationText": "We welcome your feedback. Send ideas or issues to meeting H-L devs at microsoft.com.",
+    "generatedAt": "2025-10-19T19:00:12.102Z"
   }
 }

@@ -1,0 +1,12 @@
+{
+  version: 2,
+  mediaFileName: 's3_segment_01_intro.wav',
+  cutSegments: [
+    {
+      start: 0,
+      end: 2.822107324153758,
+      name: '',
+      selected: true,
+    },
+  ],
+}

@@ -1,0 +1,12 @@
+{
+  version: 2,
+  mediaFileName: 's2_segment_01_main.wav',
+  cutSegments: [
+    {
+      start: 0,
+      end: 6.719908204245555,
+      name: '',
+      selected: true,
+    },
+  ],
+}

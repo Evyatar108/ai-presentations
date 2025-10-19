@@ -315,7 +315,7 @@ export const Ch7_S2_GPUReduction: SlideComponentWithMetadata = () => {
             ~600 → &lt;200 GPUs
           </div>
           <p style={{ color: '#94a3b8', marginTop: '1rem', fontSize: 16 }}>
-            67% capacity reduction through architectural consolidation
+            70% capacity reduction through architectural consolidation
           </p>
         </motion.div>
       </div>

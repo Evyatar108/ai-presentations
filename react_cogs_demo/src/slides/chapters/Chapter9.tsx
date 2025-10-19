@@ -559,47 +559,6 @@ export const Ch9_S2_ClosingThanks: SlideComponentWithMetadata = () => {
             }}
             style={{ textAlign: 'center', position: 'relative' }}
           >
-            {/* Pulsing rings around badge */}
-            {!reduced && (
-              <>
-                <motion.div
-                  animate={{
-                    scale: [1, 1.4],
-                    opacity: [0.4, 0]
-                  }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                  style={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    width: 300,
-                    height: 140,
-                    borderRadius: 70,
-                    border: '3px solid #00B7C3',
-                    pointerEvents: 'none'
-                  }}
-                />
-                <motion.div
-                  animate={{
-                    scale: [1, 1.4],
-                    opacity: [0.4, 0]
-                  }}
-                  transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
-                  style={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    width: 300,
-                    height: 140,
-                    borderRadius: 70,
-                    border: '3px solid #0078D4',
-                    pointerEvents: 'none'
-                  }}
-                />
-              </>
-            )}
 
             <motion.div
               animate={reduced ? {} : {
@@ -739,7 +698,7 @@ Ch9_S2_ClosingThanks.metadata = {
     {
       id: "feedback",
       audioFilePath: "/audio/c9/s2_segment_03_feedback.wav",
-      narrationText: "We welcome your feedback. Send ideas or issues to meetinghldevs@microsoft.com."
+      narrationText: "We welcome your feedback. Send ideas or issues to meeting H-L devs at microsoft.com."
     },
     {
       id: "cta",

@@ -154,10 +154,11 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
   const currentSlide = slides[currentIndex];
   const CurrentComponent = currentSlide.Component;
   
-  // Get metadata for current slide to check if it has multiple segments
+  // Get metadata for current slide to check segments
   const currentSlideMetadata = allSlides[currentIndex]?.metadata;
-  const hasMultipleSegments = currentSlideMetadata?.audioSegments && currentSlideMetadata.audioSegments.length > 1;
   const segments = currentSlideMetadata?.audioSegments || [];
+  const hasSegments = segments.length > 0;
+  const hasMultipleSegments = segments.length > 1;
   
   // Segment navigation handlers
   const goToSegment = useCallback((segmentIndex: number) => {
@@ -407,8 +408,8 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
             </div>
           </div>
 
-          {/* Segment navigation (only if multi-segment) BELOW slide nav */}
-          {hasMultipleSegments && (
+          {/* Segment navigation (shown if slide has any segments) BELOW slide nav */}
+          {hasSegments && (
             <div
               style={{
                 display: 'flex',
@@ -421,91 +422,97 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
                 marginTop: '-12px'
               }}
             >
-              <button
-                onClick={goToPrevSegment}
-                disabled={segmentContext.currentSegmentIndex === 0}
-                aria-label="Previous segment"
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: segmentContext.currentSegmentIndex === 0 ? '#475569' : '#f1f5f9',
-                  cursor: segmentContext.currentSegmentIndex === 0 ? 'not-allowed' : 'pointer',
-                  fontSize: 20,
-                  padding: '0.25rem 0.4rem',
-                  display: 'flex',
-                  alignItems: 'center'
-                }}
-              >
-                ◀
-              </button>
-              <div
-                style={{
-                  color: '#94a3b8',
-                  fontSize: 11,
-                  fontFamily: 'Inter, system-ui, sans-serif',
-                  marginRight: '0.3rem'
-                }}
-              >
-                Segment:
-              </div>
-              <div style={{ display: 'flex', gap: '0.4rem' }}>
-                {segments.map((segment, idx) => (
+              {/* Only show segment navigation controls if multiple segments */}
+              {hasMultipleSegments && (
+                <>
                   <button
-                    key={segment.id}
-                    onClick={() => goToSegment(idx)}
-                    aria-label={`Go to segment ${idx + 1}: ${segment.id}`}
-                    aria-current={idx === segmentContext.currentSegmentIndex ? 'true' : 'false'}
-                    title={segment.id}
+                    onClick={goToPrevSegment}
+                    disabled={segmentContext.currentSegmentIndex === 0}
+                    aria-label="Previous segment"
                     style={{
-                      width: idx === segmentContext.currentSegmentIndex ? 20 : 8,
-                      height: 8,
-                      borderRadius: 4,
-                      background: idx === segmentContext.currentSegmentIndex ? '#00B7C3' : '#475569',
+                      background: 'none',
                       border: 'none',
-                      cursor: 'pointer',
-                      transition: 'all 0.3s ease',
-                      padding: 0
+                      color: segmentContext.currentSegmentIndex === 0 ? '#475569' : '#f1f5f9',
+                      cursor: segmentContext.currentSegmentIndex === 0 ? 'not-allowed' : 'pointer',
+                      fontSize: 20,
+                      padding: '0.25rem 0.4rem',
+                      display: 'flex',
+                      alignItems: 'center'
+                    }}
+                  >
+                    ◀
+                  </button>
+                  <div
+                    style={{
+                      color: '#94a3b8',
+                      fontSize: 11,
+                      fontFamily: 'Inter, system-ui, sans-serif',
+                      marginRight: '0.3rem'
+                    }}
+                  >
+                    Segment:
+                  </div>
+                  <div style={{ display: 'flex', gap: '0.4rem' }}>
+                    {segments.map((segment, idx) => (
+                      <button
+                        key={segment.id}
+                        onClick={() => goToSegment(idx)}
+                        aria-label={`Go to segment ${idx + 1}: ${segment.id}`}
+                        aria-current={idx === segmentContext.currentSegmentIndex ? 'true' : 'false'}
+                        title={segment.id}
+                        style={{
+                          width: idx === segmentContext.currentSegmentIndex ? 20 : 8,
+                          height: 8,
+                          borderRadius: 4,
+                          background: idx === segmentContext.currentSegmentIndex ? '#00B7C3' : '#475569',
+                          border: 'none',
+                          cursor: 'pointer',
+                          transition: 'all 0.3s ease',
+                          padding: 0
+                        }}
+                      />
+                    ))}
+                  </div>
+                  <button
+                    onClick={goToNextSegment}
+                    disabled={segmentContext.currentSegmentIndex === segments.length - 1}
+                    aria-label="Next segment"
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      color: segmentContext.currentSegmentIndex === segments.length - 1 ? '#475569' : '#f1f5f9',
+                      cursor: segmentContext.currentSegmentIndex === segments.length - 1 ? 'not-allowed' : 'pointer',
+                      fontSize: 20,
+                      padding: '0.25rem 0.4rem',
+                      display: 'flex',
+                      alignItems: 'center'
+                    }}
+                  >
+                    ▶
+                  </button>
+                  <div
+                    style={{
+                      color: '#94a3b8',
+                      fontSize: 12,
+                      marginLeft: '0.3rem',
+                      fontFamily: 'Inter, system-ui, sans-serif'
+                    }}
+                  >
+                    {segmentContext.currentSegmentIndex + 1} / {segments.length}
+                  </div>
+                  {/* Divider before regenerate button */}
+                  <div
+                    style={{
+                      width: '1px',
+                      height: '16px',
+                      background: '#475569',
+                      margin: '0 0.3rem'
                     }}
                   />
-                ))}
-              </div>
-              <button
-                onClick={goToNextSegment}
-                disabled={segmentContext.currentSegmentIndex === segments.length - 1}
-                aria-label="Next segment"
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: segmentContext.currentSegmentIndex === segments.length - 1 ? '#475569' : '#f1f5f9',
-                  cursor: segmentContext.currentSegmentIndex === segments.length - 1 ? 'not-allowed' : 'pointer',
-                  fontSize: 20,
-                  padding: '0.25rem 0.4rem',
-                  display: 'flex',
-                  alignItems: 'center'
-                }}
-              >
-                ▶
-              </button>
-              <div
-                style={{
-                  color: '#94a3b8',
-                  fontSize: 12,
-                  marginLeft: '0.3rem',
-                  fontFamily: 'Inter, system-ui, sans-serif'
-                }}
-              >
-                {segmentContext.currentSegmentIndex + 1} / {segments.length}
-              </div>
+                </>
+              )}
               
-              {/* Regenerate button */}
-              <div
-                style={{
-                  width: '1px',
-                  height: '16px',
-                  background: '#475569',
-                  margin: '0 0.3rem'
-                }}
-              />
+              {/* Regenerate button - always shown for any slide with segments */}
               <button
                 onClick={handleRegenerateSegment}
                 disabled={regeneratingSegment}
