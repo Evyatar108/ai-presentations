@@ -3094,24 +3094,38 @@ export const Ch2_TeamCollaboration: SlideComponentWithMetadata = () => {
                     position: 'relative'
                   }}
                 >
-                  <motion.img
-                    src={team.logo}
-                    alt={team.name}
+                  <motion.div
                     style={{
-                      width: 80,
-                      height: 80,
-                      objectFit: 'contain',
-                      marginBottom: '1rem'
+                      width: 105,
+                      height: 95,
+                      borderRadius: '50%',
+                      background: '#ffffff',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginBottom: '1rem',
+                      padding: '0.75rem',
+                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
                     }}
                     animate={
                       isCurrentTeam && !reduced
                         ? {
-                            scale: [1, 1.1, 1],
+                            scale: [1, 1.05, 1],
                             transition: { duration: 2, repeat: Infinity }
                           }
                         : {}
                     }
-                  />
+                  >
+                    <img
+                      src={team.logo}
+                      alt={team.name}
+                      style={{
+                        width: 80,
+                        height: 80,
+                        objectFit: 'contain'
+                      }}
+                    />
+                  </motion.div>
 
                   <h3
                     style={{
