@@ -673,7 +673,7 @@ Ch2_TeamCollaboration.metadata = {
     {
       id: 'intro',
       audioFilePath: '/audio/c2/s1_segment_01_intro.wav',
-      narrationText: 'Six Microsoft teams collaborate. Here\'s how they work together.'
+      narrationText: 'Meeting Highlights required the collaboration of six teams within Microsoft for a cross-organizational effort. Let me show you how they work together and the backend architecture flow.'
     },
     {
       id: 'odsp',
@@ -693,7 +693,7 @@ Ch2_TeamCollaboration.metadata = {
     {
       id: 'sharepoint',
       audioFilePath: '/audio/c2/s1_segment_05_sharepoint.wav',
-      narrationText: 'SharePoint offers direct access from meeting recap pages.'
+      narrationText: 'SharePoint offers direct access from meeting recap pages. This interface was implemented by the Clipchamp team.'
     },
     {
       id: 'teams',

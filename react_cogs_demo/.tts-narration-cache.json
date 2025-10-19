@@ -28,8 +28,8 @@
     "generatedAt": "2025-10-19T22:28:14.648Z"
   },
   "c2\\s1_segment_01_intro.wav": {
-    "narrationText": "Six Microsoft teams collaborate. Here's how they work together.",
-    "generatedAt": "2025-10-19T22:28:41.702Z"
+    "narrationText": "Meeting Highlights required the collaboration of six teams within Microsoft for a cross-organizational effort. Let me show you how they work together and the backend architecture flow.",
+    "generatedAt": "2025-10-19T23:53:13.805Z"
   },
   "c2\\s1_segment_02_odsp.wav": {
     "narrationText": "ODSP handles storage. When meetings end, it initiates highlight generation.",
@@ -132,12 +132,12 @@
     "generatedAt": "2025-10-19T22:28:14.638Z"
   },
   "c2/s1_segment_01_intro.wav": {
-    "narrationText": "Meeting Highlights brings together six Microsoft teams in a cross-organizational collaboration. Let me show you both how teams work together and the backend architecture flow.",
-    "generatedAt": "2025-10-19T17:47:44.133Z"
+    "narrationText": "Meeting Highlights required the collaboration of Microsoft teams in a cross-organizational effort. Let me show you both how teams work together and the backend architecture flow.",
+    "generatedAt": "2025-10-19T23:50:04.335Z"
   },
   "c2/s1_segment_02_odsp.wav": {
-    "narrationText": "O-D-S-P handles storage and orchestration. When a Teams meeting ends with a recording, ODSP detects it and initiates the highlight generation process.",
-    "generatedAt": "2025-10-19T17:48:28.054Z"
+    "narrationText": "ODSP handles storage. When meetings end, it initiates highlight generation.",
+    "generatedAt": "2025-10-19T23:46:17.739Z"
   },
   "c2/s1_segment_03_msai.wav": {
     "narrationText": "M-S-A-I Hive processes meeting transcripts using Large Language Model technology. Our processor receives the transcript and calls the LLM with our prompts, which analyzes the content and returns structured metadata describing the highlights.",
@@ -184,8 +184,8 @@
     "generatedAt": "2025-10-19T22:28:29.018Z"
   },
   "c2\\s1_segment_05_sharepoint.wav": {
-    "narrationText": "SharePoint offers direct access from meeting recap pages.",
-    "generatedAt": "2025-10-19T22:28:41.707Z"
+    "narrationText": "SharePoint offers direct access from meeting recap pages. This interface was implemented by the Clipchamp team.",
+    "generatedAt": "2025-10-19T23:37:37.581Z"
   },
   "c2\\s1_segment_06_teams.wav": {
     "narrationText": "Teams access planned as another interface option.",
@@ -216,20 +216,20 @@
     "generatedAt": "2025-10-19T23:16:54.006Z"
   },
   "c4\\s1_segment_04_timestamps.wav": {
-    "narrationText": "Each highlight is a 20 to 30 second segment with precise timestamps and accompanying narration.",
-    "generatedAt": "2025-10-19T22:28:53.953Z"
+    "narrationText": "Each highlight is a 20 to 40 second segment with precise timestamps and accompanying narration.",
+    "generatedAt": "2025-10-19T23:21:05.245Z"
   },
   "c1/s2_segment_01_intro.wav": {
     "narrationText": "Access Meeting Highlights through BizChat.",
-    "generatedAt": "2025-10-19T22:36:47.940Z"
+    "generatedAt": "2025-10-19T23:22:08.623Z"
   },
   "c1/s3_segment_01_intro.wav": {
     "narrationText": "You can also access Meeting Highlights directly from SharePoint.",
     "generatedAt": "2025-10-19T22:38:53.863Z"
   },
   "c1\\s3_segment_02_video.wav": {
-    "narrationText": "Open BizChat and ask for a meeting recap.",
-    "generatedAt": "2025-10-19T22:41:14.872Z"
+    "narrationText": "Open the meeting chat in Teams.",
+    "generatedAt": "2025-10-19T23:39:17.096Z"
   },
   "c1\\s3_segment_03_sharepoint.wav": {
     "narrationText": "Navigate to the meeting recording recap page by clicking the recording link or via the Recap tab.",
@@ -240,8 +240,8 @@
     "generatedAt": "2025-10-19T22:41:14.877Z"
   },
   "c1\\s3_segment_05_play.wav": {
-    "narrationText": "Then click Play highlights to view your meeting recap.",
-    "generatedAt": "2025-10-19T22:41:14.879Z"
+    "narrationText": "Then click Play highlights. A new page should open with the highlights player ready to recap your meeting.",
+    "generatedAt": "2025-10-19T23:45:33.147Z"
   },
   "c4/s1_segment_01_intro.wav": {
     "narrationText": "Meeting Highlights combines two distinct types of highlights to create a comprehensive recap.",
@@ -258,5 +258,13 @@
   "c4/s1_segment_03_key_moments.wav": {
     "narrationText": "Second, key moments. These are significant verbatim segments extracted directly from the meeting recording.",
     "generatedAt": "2025-10-19T23:14:59.490Z"
+  },
+  "c1/s3_segment_03_sharepoint.wav": {
+    "narrationText": "Navigate to the meeting recording recap page by clicking the recording link or via the Recap tab.",
+    "generatedAt": "2025-10-19T23:31:59.218Z"
+  },
+  "c1/s3_segment_02_video.wav": {
+    "narrationText": "Open the meeting chat in Teams.",
+    "generatedAt": "2025-10-19T23:40:05.422Z"
   }
 }

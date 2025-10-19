@@ -69,7 +69,7 @@ export const Ch4_S1_HighlightTypes: SlideComponentWithMetadata = () => {
                 AI-generated summaries of discussion topics
               </p>
               <p style={{ ...typography.caption, fontSize: 14, marginTop: '0.5rem', color: '#00B7C3' }}>
-                Narration powered by Azure Cognitive Services, and uses video from the meeting
+                Narration by Azure Cognitive Services • Video from meeting
               </p>
             </motion.div>
           )}
@@ -123,7 +123,7 @@ export const Ch4_S1_HighlightTypes: SlideComponentWithMetadata = () => {
               }}
             >
               <p style={{ ...typography.body, margin: 0 }}>
-                ⏱️ Each highlight covers <strong style={{ color: '#00B7C3' }}>20-30 second segments</strong> with timestamps and narration
+                ⏱️ Each highlight covers <strong style={{ color: '#00B7C3' }}>20-40 second segments</strong> with timestamps and narration
               </p>
             </div>
           </motion.div>
@@ -188,7 +188,7 @@ Ch4_S1_HighlightTypes.metadata = {
       audioFilePath: "/audio/c4/s1_segment_04_timestamps.wav",
       srtSegmentNumber: 4,
       visualDescription: "Detail callout showing 20-30 second segments",
-      narrationText: "Each highlight is a 20 to 30 second segment with precise timestamps and accompanying narration."
+      narrationText: "Each highlight is a 20 to 40 second segment with precise timestamps and accompanying narration."
     },
     {
       id: "narrative",

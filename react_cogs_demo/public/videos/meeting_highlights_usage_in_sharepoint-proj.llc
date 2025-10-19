@@ -1,0 +1,30 @@
+{
+  version: 2,
+  mediaFileName: 'meeting_highlights_usage_in_sharepoint.mp4',
+  cutSegments: [
+    {
+      start: 2.0321490068104424,
+      end: 11.830572900113507,
+      name: '',
+      selected: true,
+    },
+    {
+      start: 13.579166231555051,
+      end: 14.933932236095346,
+      name: '',
+      selected: true,
+    },
+    {
+      start: 16.1985,
+      end: 16.80855031214529,
+      name: '',
+      selected: true,
+    },
+    {
+      start: 19.817391089670828,
+      end: 22.526923098751418,
+      name: '',
+      selected: true,
+    },
+  ],
+}

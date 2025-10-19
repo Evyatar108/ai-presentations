@@ -467,7 +467,7 @@ Ch1_S3_HowToAccessSharePoint.metadata = {
       audioFilePath: "/audio/c1/s3_segment_02_video.wav",
       srtSegmentNumber: 2,
       visualDescription: "Video player appears showing SharePoint demo",
-      narrationText: "Open BizChat and ask for a meeting recap."
+      narrationText: "Open the meeting chat in Teams."
     },
     {
       id: "sharepoint",
@@ -488,7 +488,7 @@ Ch1_S3_HowToAccessSharePoint.metadata = {
       audioFilePath: "/audio/c1/s3_segment_05_play.wav",
       srtSegmentNumber: 5,
       visualDescription: "Demo shows 'Play highlights' button",
-      narrationText: "Then click Play highlights to view your meeting recap."
+      narrationText: "Then click Play highlights. A new page should open with the highlights player ready to recap your meeting."
     }
   ]
 };
