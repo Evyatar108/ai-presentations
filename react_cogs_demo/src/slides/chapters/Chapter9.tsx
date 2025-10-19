@@ -21,84 +21,258 @@ export const Ch9_S1_Testimonials: SlideComponentWithMetadata = () => {
   const testimonials = [
     {
       author: "Kevin C.",
-      quote: "Love this feature. Great way to catch up on a recap without watching the full thing."
+      quote: "Love this feature. Great way to catch up on a recap without watching the full thing.",
+      emoji: "💖"
     },
     {
       author: "Ryan Roslonsky",
-      quote: "Beyond the awesome text recap, there is literally a two-minute narrated video about the meeting."
+      quote: "Beyond the awesome text recap, there is literally a two-minute narrated video about the meeting.",
+      emoji: "🎥"
     },
     {
       author: "Ryan Roslonsky",
-      quote: "It's mind-blowing and an engaging way to recap a meeting for a richer understanding of the conversation."
+      quote: "It's mind-blowing and an engaging way to recap a meeting for a richer understanding of the conversation.",
+      emoji: "🤯"
     },
     {
       author: "Anonymous User",
-      quote: "Saved me hours of reviewing the transcript. This is magical."
+      quote: "Saved me hours of reviewing the transcript. This is magical.",
+      emoji: "✨"
     }
   ];
 
   return (
-    <div style={{
-      background: '#0f172a',
-      minHeight: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '2rem',
-      fontFamily: 'Inter, system-ui, sans-serif'
-    }}>
-      <div style={{ maxWidth: 1000, width: '100%' }}>
-        <AnimatePresence>
-          {isSegmentVisible(0) && (
+    <SlideContainer maxWidth={1100}>
+      {/* Animated background particles */}
+      <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
+        {!reduced && [...Array(15)].map((_, i) => (
+          <motion.div
+            key={i}
+            initial={{
+              x: Math.random() * window.innerWidth,
+              y: Math.random() * window.innerHeight,
+              opacity: 0
+            }}
+            animate={{
+              y: [null, Math.random() * window.innerHeight],
+              opacity: [0, 0.2, 0],
+            }}
+            transition={{
+              duration: 4 + Math.random() * 2,
+              repeat: Infinity,
+              delay: i * 0.3,
+              ease: 'linear'
+            }}
+            style={{
+              position: 'absolute',
+              width: 3,
+              height: 3,
+              borderRadius: '50%',
+              background: i % 3 === 0 ? '#00B7C3' : i % 3 === 1 ? '#0078D4' : '#8B5CF6',
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Title with gradient and glow */}
+      <AnimatePresence>
+        {isSegmentVisible(0) && (
+          <motion.div
+            initial={{ opacity: 0, y: -30, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{
+              duration: reduced ? 0.3 : 0.7,
+              type: 'spring',
+              stiffness: 120
+            }}
+            style={{ textAlign: 'center', marginBottom: '3rem', position: 'relative' }}
+          >
+            {/* Glow effect */}
+            {!reduced && (
+              <motion.div
+                animate={{
+                  scale: [1, 1.3, 1],
+                  opacity: [0.2, 0.4, 0.2]
+                }}
+                transition={{ duration: 3, repeat: Infinity }}
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  width: 500,
+                  height: 80,
+                  borderRadius: '50%',
+                  background: 'radial-gradient(circle, rgba(0, 183, 195, 0.4), transparent)',
+                  filter: 'blur(30px)',
+                  zIndex: 0
+                }}
+              />
+            )}
+            
             <motion.h1
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: reduced ? 0.2 : 0.5 }}
-              style={{ color: '#f1f5f9', marginBottom: '3rem', textAlign: 'center' }}
+              animate={reduced ? {} : {
+                backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
+              }}
+              transition={{ duration: 5, repeat: Infinity, ease: 'linear' }}
+              style={{
+                ...typography.h1,
+                background: 'linear-gradient(90deg, #00B7C3, #0078D4, #8B5CF6, #00B7C3)',
+                backgroundSize: '200% auto',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                fontSize: 56,
+                marginBottom: '0.5rem',
+                position: 'relative',
+                zIndex: 1
+              }}
             >
               User Testimonials
             </motion.h1>
-          )}
-        </AnimatePresence>
+            
+            <motion.div
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+              style={{
+                color: '#94a3b8',
+                fontSize: 18,
+                fontStyle: 'italic',
+                position: 'relative',
+                zIndex: 1
+              }}
+            >
+              Real feedback from real users
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '2rem' }}>
-          {testimonials.map((testimonial, index) => (
-            <AnimatePresence key={index}>
-              {isSegmentVisible(index + 1) && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{ duration: reduced ? 0.3 : 0.6, type: 'spring' }}
-                  style={{
-                    background: '#1e293b',
-                    borderRadius: 16,
-                    padding: '2rem',
-                    border: '1px solid #334155',
-                    display: 'flex',
-                    flexDirection: 'column'
-                  }}
-                >
-                  <div style={{ fontSize: 32, marginBottom: '1rem' }}>💬</div>
-                  <p style={{
-                    color: '#e2e8f0',
-                    fontSize: 16,
-                    lineHeight: 1.6,
-                    fontStyle: 'italic',
-                    flex: 1,
-                    marginBottom: '1rem'
-                  }}>
-                    "{testimonial.quote}"
-                  </p>
-                  <div style={{ color: '#00B7C3', fontSize: 14, fontWeight: 600 }}>
-                    — {testimonial.author}
+      {/* Testimonial Cards Grid */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(2, 1fr)',
+        gap: '2rem',
+        position: 'relative',
+        zIndex: 1
+      }}>
+        {testimonials.map((testimonial, index) => (
+          <AnimatePresence key={index}>
+            {isSegmentVisible(index + 1) && (
+              <motion.div
+                initial={{ opacity: 0, y: 30, scale: 0.9, rotateX: -10 }}
+                animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
+                transition={{
+                  duration: reduced ? 0.3 : 0.7,
+                  type: 'spring',
+                  stiffness: 100,
+                  delay: 0.1 * index
+                }}
+                whileHover={reduced ? {} : {
+                  scale: 1.03,
+                  y: -5,
+                  boxShadow: '0 20px 40px rgba(0, 183, 195, 0.25)'
+                }}
+                style={{
+                  background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
+                  borderRadius: 20,
+                  padding: '2rem',
+                  border: '2px solid #334155',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)'
+                }}
+              >
+                {/* Animated gradient border glow */}
+                {!reduced && (
+                  <motion.div
+                    animate={{
+                      opacity: [0.2, 0.4, 0.2],
+                    }}
+                    transition={{ duration: 3, repeat: Infinity, delay: index * 0.5 }}
+                    style={{
+                      position: 'absolute',
+                      inset: -2,
+                      background: `linear-gradient(135deg, #00B7C3, #0078D4, #8B5CF6)`,
+                      borderRadius: 20,
+                      zIndex: 0,
+                      filter: 'blur(10px)'
+                    }}
+                  />
+                )}
+
+                <div style={{ position: 'relative', zIndex: 1 }}>
+                  {/* Emoji with animation */}
+                  <motion.div
+                    animate={reduced ? {} : {
+                      rotate: [-5, 5, -5],
+                      scale: [1, 1.1, 1]
+                    }}
+                    transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
+                    style={{
+                      fontSize: 48,
+                      marginBottom: '1.5rem',
+                      textAlign: 'center'
+                    }}
+                  >
+                    {testimonial.emoji}
+                  </motion.div>
+
+                  {/* Quote text with shimmer */}
+                  <div style={{ position: 'relative', marginBottom: '1.5rem' }}>
+                    <p style={{
+                      color: '#e2e8f0',
+                      fontSize: 17,
+                      lineHeight: 1.7,
+                      fontStyle: 'italic',
+                      flex: 1,
+                      margin: 0,
+                      position: 'relative',
+                      zIndex: 1
+                    }}>
+                      "{testimonial.quote}"
+                    </p>
                   </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          ))}
-        </div>
+
+                  {/* Author with gradient */}
+                  <motion.div
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.3 + index * 0.1 }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      paddingTop: '1rem',
+                      borderTop: '1px solid #334155'
+                    }}
+                  >
+                    <div style={{
+                      width: 8,
+                      height: 8,
+                      borderRadius: '50%',
+                      background: 'linear-gradient(135deg, #00B7C3, #0078D4)',
+                      boxShadow: '0 0 10px rgba(0, 183, 195, 0.5)'
+                    }} />
+                    <div style={{
+                      color: '#00B7C3',
+                      fontSize: 15,
+                      fontWeight: 600,
+                      letterSpacing: '0.3px'
+                    }}>
+                      {testimonial.author}
+                    </div>
+                  </motion.div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        ))}
       </div>
-    </div>
+    </SlideContainer>
   );
 };
 
