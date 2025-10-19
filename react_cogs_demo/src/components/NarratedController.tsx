@@ -236,106 +236,77 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     onSlideChange(allSlides[0].metadata.chapter, allSlides[0].metadata.slide);
   };
 
-  // Play audio for current slide in manual+audio mode
+  // Initialize segments when slide changes in manual+audio mode
   useEffect(() => {
     if (!isManualMode || !isManualWithAudio || currentIndex >= allSlides.length) return;
     
     const slide = allSlides[currentIndex].metadata;
+    const slideKey = `Ch${slide.chapter}:S${slide.slide}`;
     
-    console.log(`[Manual+Audio] Loading slide index=${currentIndex}, Ch${slide.chapter}:S${slide.slide}`);
+    if (!hasAudioSegments(slide) || slide.audioSegments.length === 0) return;
     
-    // CRITICAL: Stop and fully clean up any existing audio BEFORE creating new one
-    if (audioRef.current) {
-      console.log('[Manual+Audio] Stopping previous audio');
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-      audioRef.current.onended = null;
-      audioRef.current.onerror = null;
-      audioRef.current.onplay = null;
-      audioRef.current.oncanplaythrough = null;
-      audioRef.current.src = '';
-      audioRef.current = null; // Clear reference immediately
-    }
+    // Initialize segment context (resets to segment 0) - only when slide changes
+    console.log(`[Manual+Audio] Initializing segments for ${slideKey}`);
+    segmentContext.initializeSegments(slideKey, slide.audioSegments);
+  }, [currentIndex, isManualMode, isManualWithAudio]); // eslint-disable-line react-hooks/exhaustive-deps
+  
+  // Play audio for current segment in manual+audio mode
+  useEffect(() => {
+    if (!isManualMode || !isManualWithAudio || currentIndex >= allSlides.length) return;
     
-    // Play first segment (simplified for manual mode)
-    if (!hasAudioSegments(slide) || slide.audioSegments.length === 0) {
-      console.warn('[Manual+Audio] No audio segments for slide');
+    const slide = allSlides[currentIndex].metadata;
+    const currentSegmentIdx = segmentContext.currentSegmentIndex;
+    
+    if (!hasAudioSegments(slide) || slide.audioSegments.length === 0) return;
+    
+    const segments = slide.audioSegments;
+    const segment = segments[currentSegmentIdx];
+    
+    if (!segment) {
+      console.warn(`[Manual+Audio] Invalid segment index ${currentSegmentIdx}`);
       return;
     }
     
-    // Track if this effect is still active (prevent stale audio from starting)
+    // Track if this effect is still active
     let isActive = true;
     
-    // Load audio with fallback support
-    const firstSegment = slide.audioSegments[0];
-    console.log(`[Manual+Audio] Loading audio: ${firstSegment.audioFilePath}`);
-    
-    loadAudioWithFallback(firstSegment.audioFilePath, firstSegment.id).then(audio => {
-      // Check if this effect is still active (user hasn't navigated away)
-      if (!isActive) {
-        console.log('[Manual+Audio] Effect cancelled, not playing audio');
-        audio.pause();
-        audio.src = '';
-        return;
-      }
+    // Load and play segment audio
+    loadAudioWithFallback(segment.audioFilePath, segment.id).then(audio => {
+      if (!isActive) return; // Effect was cleaned up
       
-      console.log(`[Manual+Audio] Audio loaded, setting as current`);
       audioRef.current = audio;
-
-      // Setup event handlers - use ref to get current index at time of onended
+      
       audio.onended = () => {
-        const indexAtEnd = currentIndexRef.current;
-        console.log(`[Manual+Audio] onended chapter=${slide.chapter} slide=${slide.slide} indexAtEnd=${indexAtEnd}`);
-        
-        // Auto-advance if enabled
-        if (autoAdvanceOnAudioEnd) {
-          const nextIndex = indexAtEnd + 1;
+        setError(null);
+        // Auto-advance to next slide if on last segment and enabled
+        if (autoAdvanceOnAudioEnd && currentSegmentIdx === segments.length - 1) {
+          const nextIndex = currentIndexRef.current + 1;
           if (nextIndex < allSlides.length) {
-            console.log('[Manual+Audio] auto-advancing from', indexAtEnd, 'to', nextIndex);
-            lastAutoAdvanceFromIndexRef.current = indexAtEnd;
+            lastAutoAdvanceFromIndexRef.current = currentIndexRef.current;
             setCurrentIndex(nextIndex);
-            const nextSlide = allSlides[nextIndex].metadata;
-            onSlideChange(nextSlide.chapter, nextSlide.slide);
-          } else {
-            console.log('[Manual+Audio] reached end, not advancing');
+            onSlideChange(allSlides[nextIndex].metadata.chapter, allSlides[nextIndex].metadata.slide);
           }
         }
       };
-
-      audio.onerror = (e: any) => {
-        console.error(`[Manual+Audio] Playback error for chapter ${slide.chapter}, slide ${slide.slide}:`, e);
-        setError(`Playback error for slide ${slide.slide}`);
-      };
-
-      audio.onplay = () => {
-        console.log(`[Manual+Audio] playing chapter=${slide.chapter} slide=${slide.slide} index=${currentIndex}`);
-        setError(null);
-      };
-
-      audio.play().catch(err => {
-        console.error('[Manual+Audio] Audio playback failed:', err);
-        setError('Audio playback failed');
-      });
+      
+      audio.onerror = () => setError(`Playback error: ${segment.id}`);
+      audio.onplay = () => setError(null);
+      
+      audio.play().catch(() => setError(`Playback failed: ${segment.id}`));
     });
 
-    // Cleanup function - runs when currentIndex changes or component unmounts
+    // Cleanup when slide or segment changes
     return () => {
-      console.log(`[Manual+Audio] Cleanup for index=${currentIndex}`);
-      isActive = false; // Mark effect as inactive
-      
+      isActive = false;
       if (audioRef.current) {
-        console.log('[Manual+Audio] Cleanup: stopping audio');
         audioRef.current.pause();
-        audioRef.current.currentTime = 0;
         audioRef.current.onended = null;
         audioRef.current.onerror = null;
         audioRef.current.onplay = null;
-        audioRef.current.oncanplaythrough = null;
-        audioRef.current.src = '';
         audioRef.current = null;
       }
     };
-  }, [currentIndex, isManualMode, isManualWithAudio, autoAdvanceOnAudioEnd, onSlideChange]);
+  }, [currentIndex, isManualMode, isManualWithAudio, autoAdvanceOnAudioEnd, onSlideChange, segmentContext.currentSegmentIndex]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Consume external manual slide changes (manual+audio mode)
   useEffect(() => {
