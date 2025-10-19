@@ -2,6 +2,7 @@ import React from 'react';
 import { MetricTile } from './CoreComponents';
 import { motion } from 'framer-motion';
 import { useReducedMotion } from '../accessibility/ReducedMotion';
+import { SlideComponentWithMetadata } from '../slides/SlideMetadata';
 
 /**
  * GPUReduction
@@ -59,10 +60,11 @@ export const GPUReduction: React.FC = () => {
 };
 
 /**
- * CostCurve (Slide 30) - Fixed Stacked Bar Comparison Only
+ * Chapter 7, Utterance 3 - Cost Curve
+ * Fixed Stacked Bar Comparison Only
  * Simplified to a single visualization focusing on component cost reduction.
  */
-export const CostCurve: React.FC = () => {
+export const Ch7_U3_CostCurve: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
   // Relative component magnitudes (illustrative only)
   const v1 = { calls: 40, orchestration: 18, tokens: 22, gpuPadding: 20 };
@@ -254,11 +256,18 @@ export const CostCurve: React.FC = () => {
   );
 };
 
+Ch7_U3_CostCurve.metadata = {
+  chapter: 7,
+  utterance: 3,
+  title: "Cost Savings",
+  audioFilePath: "/audio/12-Audio 12.wav"
+};
+
 /**
- * QualityComparison
+ * Chapter 7, Utterance 4 - Quality Comparison
  * Animated qualitative preference shift toward unified prompt outputs.
  */
-export const QualityComparison: React.FC = () => {
+export const Ch7_U4_QualityComparison: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
   
   const containerVariants = {
@@ -385,6 +394,13 @@ export const QualityComparison: React.FC = () => {
   );
 };
 
+Ch7_U4_QualityComparison.metadata = {
+  chapter: 7,
+  utterance: 4,
+  title: "Quality Improvement",
+  audioFilePath: "/audio/13-Audio 13.wav"
+};
+
 /* RoadmapSlide removed per user request: animations complete; slide omitted. */
 
 /**
@@ -392,6 +408,6 @@ export const QualityComparison: React.FC = () => {
  */
 export const ImpactComponents = {
   GPUReduction,
-  CostCurve,
-  QualityComparison
+  Ch7_U3_CostCurve,
+  Ch7_U4_QualityComparison
 };

@@ -2,13 +2,15 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useReducedMotion } from '../accessibility/ReducedMotion';
 import { MetricTile } from '../components/CoreComponents';
+import { SlideComponentWithMetadata } from './SlideMetadata';
 
 /**
- * Slide 18 - Empty/Blank Intro Slide
- * Simple dark screen to start narration cleanly
- */
-export const Slide18Blank: React.FC = () => {
-  return (
+ /**
+  * Blank Intro Slide
+  * Simple dark screen to start narration cleanly
+  */
+ export const BlankIntro: SlideComponentWithMetadata = () => {
+   return (
     <div style={{
       background: '#0f172a',
       minHeight: '100vh',
@@ -36,11 +38,18 @@ export const Slide18Blank: React.FC = () => {
   );
 };
 
+BlankIntro.metadata = {
+  chapter: 0,
+  utterance: 0,
+  title: "Intro",
+  audioFilePath: "/audio/00-Silence.mp3"
+};
+
 /**
- * Slide 19 - Challenge Framing
+ * Chapter 5, Utterance 1 - Challenge Framing
  * BEFORE metrics → TARGET unified approach
  */
-export const Slide19Challenge: React.FC = () => {
+export const Ch5_U1_ChallengeFraming: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
   
   const containerVariants = {
@@ -152,10 +161,17 @@ export const Slide19Challenge: React.FC = () => {
   );
 };
 
+Ch5_U1_ChallengeFraming.metadata = {
+  chapter: 5,
+  utterance: 1,
+  title: "Challenge Framing",
+  audioFilePath: "/audio/01-Audio 1.wav"
+};
+
 /**
- * Slide 20 - Four Prompt Chain
+ * Chapter 5, Utterance 2 - Four Prompt Chain
  */
-export const Slide20FourPrompts: React.FC = () => {
+export const Ch5_U2_FourPrompts: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
 
   const prompts = [
@@ -253,10 +269,17 @@ export const Slide20FourPrompts: React.FC = () => {
   );
 };
 
+Ch5_U2_FourPrompts.metadata = {
+  chapter: 5,
+  utterance: 2,
+  title: "Four-Prompt Pipeline",
+  audioFilePath: "/audio/02-Audio 2.wav"
+};
+
 /**
- * Slide 25 - Unified Convergence
+ * Chapter 6, Utterance 1 - Unified Convergence
  */
-export const Slide25Convergence: React.FC = () => {
+export const Ch6_U1_UnifiedConvergence: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
 
   return (
@@ -358,10 +381,17 @@ export const Slide25Convergence: React.FC = () => {
   );
 };
 
+Ch6_U1_UnifiedConvergence.metadata = {
+  chapter: 6,
+  utterance: 1,
+  title: "Unified Convergence",
+  audioFilePath: "/audio/07-Audio 7.wav"
+};
+
 /**
- * Slide 28 - Call Reduction Dial
+ * Chapter 7, Utterance 1 - Call Reduction Dial
  */
-export const Slide28CallReduction: React.FC = () => {
+export const Ch7_U1_CallReduction: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
 
   return (
@@ -439,10 +469,17 @@ export const Slide28CallReduction: React.FC = () => {
   );
 };
 
+Ch7_U1_CallReduction.metadata = {
+  chapter: 7,
+  utterance: 1,
+  title: "Call Reduction",
+  audioFilePath: "/audio/10-Audio 10.wav"
+};
+
 /**
- * Slide 29 - GPU Reduction
+ * Chapter 7, Utterance 2 - GPU Reduction
  */
-export const Slide29GPUReduction: React.FC = () => {
+export const Ch7_U2_GPUReduction: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
 
   return (
@@ -576,10 +613,17 @@ export const Slide29GPUReduction: React.FC = () => {
   );
 };
 
+Ch7_U2_GPUReduction.metadata = {
+  chapter: 7,
+  utterance: 2,
+  title: "GPU Optimization",
+  audioFilePath: "/audio/11-Audio 11.wav"
+};
+
 /**
- * Slide 21 - First Prompt: Topic Abstraction
+ * Chapter 5, Utterance 3 - First Prompt: Topic Abstraction
  */
-export const Slide21TopicAbstraction: React.FC = () => {
+export const Ch5_U3_TopicAbstraction: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
 
   return (
@@ -648,10 +692,17 @@ export const Slide21TopicAbstraction: React.FC = () => {
   );
 };
 
+Ch5_U3_TopicAbstraction.metadata = {
+  chapter: 5,
+  utterance: 3,
+  title: "Prompt 1: Topic Abstraction",
+  audioFilePath: "/audio/03-Audio 3.wav"
+};
+
 /**
- * Slide 22 - Second Prompt: Extractive Selection
+ * Chapter 5, Utterance 4 - Second Prompt: Extractive Selection
  */
-export const Slide22ExtractiveSelection: React.FC = () => {
+export const Ch5_U4_ExtractiveSelection: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
 
   return (
@@ -719,10 +770,17 @@ export const Slide22ExtractiveSelection: React.FC = () => {
   );
 };
 
+Ch5_U4_ExtractiveSelection.metadata = {
+  chapter: 5,
+  utterance: 4,
+  title: "Prompt 2: Extractive Selection",
+  audioFilePath: "/audio/04-Audio 4.wav"
+};
+
 /**
- * Slide 23 - Third Prompt: Quality Ranking
+ * Chapter 5, Utterance 5 - Third Prompt: Quality Ranking
  */
-export const Slide23QualityRanking: React.FC = () => {
+export const Ch5_U5_QualityRanking: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
 
   return (
@@ -790,10 +848,17 @@ export const Slide23QualityRanking: React.FC = () => {
   );
 };
 
+Ch5_U5_QualityRanking.metadata = {
+  chapter: 5,
+  utterance: 5,
+  title: "Prompt 3: Quality Ranking",
+  audioFilePath: "/audio/05-Audio 5.wav"
+};
+
 /**
- * Slide 24 - Fourth Prompt: Narrative Synthesis
+ * Chapter 5, Utterance 6 - Fourth Prompt: Narrative Synthesis
  */
-export const Slide24NarrativeSynthesis: React.FC = () => {
+export const Ch5_U6_NarrativeSynthesis: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
 
   return (
@@ -861,10 +926,17 @@ export const Slide24NarrativeSynthesis: React.FC = () => {
   );
 };
 
+Ch5_U6_NarrativeSynthesis.metadata = {
+  chapter: 5,
+  utterance: 6,
+  title: "Prompt 4: Narrative Synthesis",
+  audioFilePath: "/audio/06-Audio 6.wav"
+};
+
 /**
- * Slide 26 - Unified Flow Details
+ * Chapter 6, Utterance 2 - Unified Flow Details
  */
-export const Slide26UnifiedFlow: React.FC = () => {
+export const Ch6_U2_UnifiedFlow: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
 
   return (
@@ -949,10 +1021,17 @@ export const Slide26UnifiedFlow: React.FC = () => {
   );
 };
 
+Ch6_U2_UnifiedFlow.metadata = {
+  chapter: 6,
+  utterance: 2,
+  title: "Unified Flow Details",
+  audioFilePath: "/audio/08-Audio 8.wav"
+};
+
 /**
- * Slide 27 - Token Optimization
+ * Chapter 6, Utterance 4 - Token Optimization
  */
-export const Slide27TokenOptimization: React.FC = () => {
+export const Ch6_U4_TokenOptimization: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
 
   return (
@@ -1002,10 +1081,17 @@ export const Slide27TokenOptimization: React.FC = () => {
   );
 };
 
+Ch6_U4_TokenOptimization.metadata = {
+  chapter: 6,
+  utterance: 4,
+  title: "Token Optimization",
+  audioFilePath: "/audio/09-Audio 9.wav"
+};
+
 /**
- * Slide 32 - Path to General Availability
+ * Chapter 7, Utterance 5 - Path to General Availability
  */
-export const Slide32PathToGA: React.FC = () => {
+export const Ch7_U5_PathToGA: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
 
   return (
@@ -1152,21 +1238,29 @@ export const Slide32PathToGA: React.FC = () => {
   );
 };
 
-/**
- * Export all animated slides
- */
-export const AnimatedSlides = {
-  Slide18Blank,
-  Slide19Challenge,
-  Slide20FourPrompts,
-  Slide21TopicAbstraction,
-  Slide22ExtractiveSelection,
-  Slide23QualityRanking,
-  Slide24NarrativeSynthesis,
-  Slide25Convergence,
-  Slide26UnifiedFlow,
-  Slide27TokenOptimization,
-  Slide28CallReduction,
-  Slide29GPUReduction,
-  Slide32PathToGA
+Ch7_U5_PathToGA.metadata = {
+  chapter: 7,
+  utterance: 5,
+  title: "Path to GA",
+  audioFilePath: "/audio/14-Audio 14.wav"
 };
+
+/**
+ /**
+  * Export all animated slides
+  */
+ export const AnimatedSlides = {
+   BlankIntro,
+   Ch5_U1_ChallengeFraming,
+   Ch5_U2_FourPrompts,
+   Ch5_U3_TopicAbstraction,
+   Ch5_U4_ExtractiveSelection,
+   Ch5_U5_QualityRanking,
+   Ch5_U6_NarrativeSynthesis,
+   Ch6_U1_UnifiedConvergence,
+   Ch6_U2_UnifiedFlow,
+   Ch6_U4_TokenOptimization,
+   Ch7_U1_CallReduction,
+   Ch7_U2_GPUReduction,
+   Ch7_U5_PathToGA
+ };

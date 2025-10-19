@@ -2,7 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export interface Slide {
-  id: number;
+  chapter: number;
+  utterance: number;
   title: string;
   Component: React.FC;
 }
@@ -11,8 +12,8 @@ interface SlidePlayerProps {
   slides: Slide[];
   autoAdvance?: boolean;
   autoAdvanceDelay?: number;
-  externalSlideId?: number;
-  onSlideChange?: (slideId: number) => void;
+  externalSlide?: { chapter: number; utterance: number };
+  onSlideChange?: (chapter: number, utterance: number) => void;
   disableManualNav?: boolean;
 }
 
@@ -20,7 +21,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
   slides,
   autoAdvance = false,
   autoAdvanceDelay = 8000,
-  externalSlideId,
+  externalSlide,
   onSlideChange,
   disableManualNav = false
 }) => {
@@ -29,21 +30,22 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
 
   // Handle external slide control
   useEffect(() => {
-    if (externalSlideId !== undefined) {
-      const index = slides.findIndex(s => s.id === externalSlideId);
+    if (externalSlide !== undefined) {
+      const index = slides.findIndex(s => s.chapter === externalSlide.chapter && s.utterance === externalSlide.utterance);
       if (index !== -1 && index !== currentIndex) {
         setDirection(index > currentIndex ? 1 : -1);
         setCurrentIndex(index);
       }
     }
-  }, [externalSlideId, slides, currentIndex]);
+  }, [externalSlide, slides, currentIndex]);
 
   const goToNext = useCallback(() => {
     if (disableManualNav) return;
     if (currentIndex < slides.length - 1) {
       setDirection(1);
       setCurrentIndex(prev => prev + 1);
-      onSlideChange?.(slides[currentIndex + 1].id);
+      const nextSlide = slides[currentIndex + 1];
+      onSlideChange?.(nextSlide.chapter, nextSlide.utterance);
     }
   }, [currentIndex, slides, disableManualNav, onSlideChange]);
 
@@ -52,7 +54,8 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
     if (currentIndex > 0) {
       setDirection(-1);
       setCurrentIndex(prev => prev - 1);
-      onSlideChange?.(slides[currentIndex - 1].id);
+      const prevSlide = slides[currentIndex - 1];
+      onSlideChange?.(prevSlide.chapter, prevSlide.utterance);
     }
   }, [currentIndex, slides, disableManualNav, onSlideChange]);
 
@@ -61,7 +64,8 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
     if (index >= 0 && index < slides.length) {
       setDirection(index > currentIndex ? 1 : -1);
       setCurrentIndex(index);
-      onSlideChange?.(slides[index].id);
+      const slide = slides[index];
+      onSlideChange?.(slide.chapter, slide.utterance);
     }
   }, [currentIndex, slides, disableManualNav, onSlideChange]);
 
@@ -180,7 +184,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
         <div style={{ display: 'flex', gap: '0.5rem' }}>
           {slides.map((slide, idx) => (
             <button
-              key={slide.id}
+              key={`${slide.chapter}-${slide.utterance}`}
               onClick={() => goToSlide(idx)}
               aria-label={`Go to slide ${idx + 1}: ${slide.title}`}
               aria-current={idx === currentIndex ? 'true' : 'false'}

@@ -1,55 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { ReducedMotionToggle } from './accessibility/ReducedMotion';
 import { SlidePlayer, Slide } from './components/SlidePlayer';
 import { NarratedController } from './components/NarratedController';
-import {
-  Slide18Blank,
-  Slide19Challenge,
-  Slide20FourPrompts,
-  Slide21TopicAbstraction,
-  Slide22ExtractiveSelection,
-  Slide23QualityRanking,
-  Slide24NarrativeSynthesis,
-  Slide25Convergence,
-  Slide26UnifiedFlow,
-  Slide27TokenOptimization,
-  Slide28CallReduction,
-  Slide29GPUReduction,
-  Slide32PathToGA
-} from './slides/AnimatedSlides';
-import { CostCurve, QualityComparison } from './components/ImpactComponents';
-
-const slides: Slide[] = [
-  { id: 18, title: 'Intro', Component: Slide18Blank },
-  { id: 19, title: 'Challenge Framing', Component: Slide19Challenge },
-  { id: 20, title: 'Four-Prompt Pipeline', Component: Slide20FourPrompts },
-  { id: 21, title: 'Prompt 1: Topic Abstraction', Component: Slide21TopicAbstraction },
-  { id: 22, title: 'Prompt 2: Extractive Selection', Component: Slide22ExtractiveSelection },
-  { id: 23, title: 'Prompt 3: Quality Ranking', Component: Slide23QualityRanking },
-  { id: 24, title: 'Prompt 4: Narrative Synthesis', Component: Slide24NarrativeSynthesis },
-  { id: 25, title: 'Unified Convergence', Component: Slide25Convergence },
-  { id: 26, title: 'Unified Flow Details', Component: Slide26UnifiedFlow },
-  { id: 27, title: 'Token Optimization', Component: Slide27TokenOptimization },
-  { id: 28, title: 'Call Reduction', Component: Slide28CallReduction },
-  { id: 29, title: 'GPU Optimization', Component: Slide29GPUReduction },
-  { id: 30, title: 'Cost Savings', Component: CostCurve },
-  { id: 31, title: 'Quality Improvement', Component: QualityComparison },
-  { id: 32, title: 'Path to GA', Component: Slide32PathToGA }
-];
+import { allSlides } from './slides/SlidesRegistry';
 
 export const App: React.FC = () => {
-  const [currentSlideId, setCurrentSlideId] = useState<number | undefined>(undefined);
+  const [currentSlide, setCurrentSlide] = useState<{ chapter: number; utterance: number } | undefined>(undefined);
   const [isNarratedMode, setIsNarratedMode] = useState(false);
-  const [manualSlideChange, setManualSlideChange] = useState<number | null>(null);
+  const [manualSlideChange, setManualSlideChange] = useState<{ chapter: number; utterance: number } | null>(null);
 
-  const handleSlideChange = (slideId: number) => {
-    setCurrentSlideId(slideId);
+  // Build slides from component metadata
+  const slides = useMemo((): Slide[] => {
+    const builtSlides = allSlides.map(slideComponent => ({
+      chapter: slideComponent.metadata.chapter,
+      utterance: slideComponent.metadata.utterance,
+      title: slideComponent.metadata.title,
+      Component: slideComponent
+    }));
+    console.log('[App] Built slides from metadata:', builtSlides.map(s => `Ch${s.chapter}:U${s.utterance}`));
+    return builtSlides;
+  }, []);
+
+  const handleSlideChange = (chapter: number, utterance: number) => {
+    setCurrentSlide({ chapter, utterance });
   };
 
-  const handleManualSlideChange = (slideId: number) => {
+  const handleManualSlideChange = (chapter: number, utterance: number) => {
     // This is called by SlidePlayer when user manually navigates
-    setManualSlideChange(slideId);
-    setCurrentSlideId(slideId);
+    setManualSlideChange({ chapter, utterance });
+    setCurrentSlide({ chapter, utterance });
   };
 
   const handlePlaybackStart = () => {
@@ -58,7 +37,7 @@ export const App: React.FC = () => {
 
   const handlePlaybackEnd = () => {
     setIsNarratedMode(false);
-    setCurrentSlideId(undefined);
+    setCurrentSlide(undefined);
   };
 
   return (
@@ -75,7 +54,7 @@ export const App: React.FC = () => {
       <SlidePlayer
         slides={slides}
         autoAdvance={false}
-        externalSlideId={currentSlideId}
+        externalSlide={currentSlide}
         onSlideChange={handleManualSlideChange}
         disableManualNav={isNarratedMode}
       />
