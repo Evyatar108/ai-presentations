@@ -1,0 +1,15 @@
+1
+00:03:16,257 --> 00:03:20,097
+The Meeting Highlights feature has received overwhelmingly positive feedback in a recent Ms.
+
+2
+00:03:20,097 --> 00:03:24,097
+Elite survey, underscoring its growing impact and daily use among our users.
+
+3
+00:03:25,297 --> 00:03:30,018
+More than 80% of users rated Meeting Highlights as extremely useful or very useful.
+
+4
+00:03:30,338 --> 00:03:37,538
+In addition, 96% shared that they are very likely or likely to use the feature again, pointing to strong product-market fit and daily habit formation.

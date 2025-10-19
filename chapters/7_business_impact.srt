@@ -1,0 +1,19 @@
+1
+00:02:50,414 --> 00:02:53,775
+The impact: 75% fewer model invocations per meeting.
+
+2
+00:02:54,815 --> 00:02:58,255
+GPU requirements dropped from 600 to 200 for global availability.
+
+3
+00:02:59,375 --> 00:03:03,215
+This cut COGS by over 50% enabling economically viable worldwide rollout.
+
+4
+00:03:04,656 --> 00:03:09,856
+The unified prompt produces higher-quality highlights internal reviewers strongly prefer it over the multi-prompt version.
+
+5
+00:03:11,056 --> 00:03:15,216
+These improvements unblock private preview and enable general availability within capacity constraints.

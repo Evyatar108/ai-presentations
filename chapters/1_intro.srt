@@ -1,0 +1,11 @@
+1
+00:00:01,120 --> 00:00:08,641
+Meeting Highlights transforms lengthy Teams meetings into dynamic, bite-sized video recaps, allowing users to quickly catch up on what matters most.
+
+2
+00:00:09,841 --> 00:00:17,521
+Combining AI-generated voiceover summaries with authentic video snippets, it captures important moments while preserving the original tone and flow.
+
+3
+00:00:18,802 --> 00:00:24,882
+Thanks to this approach, users can review key topics and the overall meeting atmosphere without having to watch the entire recording.

@@ -1,0 +1,23 @@
+1
+00:01:50,649 --> 00:01:54,570
+Cost efficiency while maintaining quality is critical for scaling meeting highlights globally.
+
+2
+00:01:55,930 --> 00:02:01,450
+The initial implementation required 4 sequential LLM calls per meeting, creating significant computational costs.
+
+3
+00:02:02,730 --> 00:02:05,851
+The first prompt segmented transcripts into one to seven key topics.
+
+4
+00:02:06,931 --> 00:02:12,171
+The second prompt extracted up to ten self-contained utterance blocks, capturing key feedback, news, or demonstrations.
+
+5
+00:02:13,211 --> 00:02:17,932
+The third prompt ranked utterance blocks by quality, clarity, intelligibility, self-containment, and interest.
+
+6
+00:02:19,052 --> 00:02:24,252
+The fourth prompt synthesized a cohesive narrative with smooth transitions between abstractive and extractive sections.

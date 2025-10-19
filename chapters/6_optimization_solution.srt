@@ -1,0 +1,19 @@
+1
+00:02:25,452 --> 00:02:28,893
+We collapsed the four-step pipeline into one unified prompt with leaner input.
+
+2
+00:02:29,373 --> 00:02:35,133
+Dedicated tuning preserved the original algorithm as an internal reasoning chain: segment, extract, rank, compose.
+
+3
+00:02:36,133 --> 00:02:40,093
+The model executes this sequence in a single invocation instead of four external calls.
+
+4
+00:02:41,293 --> 00:02:43,694
+We trimmed input size significantly for lower cost.
+
+5
+00:02:44,174 --> 00:02:49,374
+Separate tuning adapted the model to the slimmer schema and token budget while maintaining valid output for video generation.

@@ -1,0 +1,180 @@
+1
+00:00:01,120 --> 00:00:08,641
+Meeting Highlights transforms lengthy Teams meetings into dynamic, bite-sized video recaps, allowing users to quickly catch up on what matters most.
+
+2
+00:00:09,841 --> 00:00:17,521
+Combining AI-generated voiceover summaries with authentic video snippets, it captures important moments while preserving the original tone and flow.
+
+3
+00:00:18,802 --> 00:00:24,882
+Thanks to this approach, users can review key topics and the overall meeting atmosphere without having to watch the entire recording.
+
+4
+00:00:26,642 --> 00:00:30,643
+Developing meeting highlights was a complex collaboration across Microsoft.
+
+5
+00:00:30,803 --> 00:00:33,283
+ODSP handled back and streaming and storage.
+
+6
+00:00:33,483 --> 00:00:38,963
+MSAI Hive led content generation and scenario ownership, while Clipchamp and Loop enabled playback.
+
+7
+00:00:39,203 --> 00:00:41,924
+BizChat and Teams provide easy access for users.
+
+8
+00:00:42,884 --> 00:00:47,604
+Let's take a closer look at how backend systems orchestrate the process of generating meeting highlights.
+
+9
+00:00:48,164 --> 00:00:51,284
+When a Teams meeting recording finishes, a backend event is triggered.
+
+10
+00:00:51,524 --> 00:00:54,005
+This event initiates the highlight generation workflow.
+
+11
+00:00:54,245 --> 00:01:00,805
+The textual transcription of the meeting is sent directly to a large language model, which analyzes the content to identify key moments and topics.
+
+12
+00:01:00,965 --> 00:01:05,525
+The model returns a structured list of textual metadata objects, with each representing a highlight.
+
+13
+00:01:05,766 --> 00:01:13,606
+Highlights fall into two categories: abstractive, which provides succinct summaries of discussion topics, and key moments, which pinpoint significant points in the original meeting.
+
+14
+00:01:14,326 --> 00:01:20,567
+Each highlight includes unique timestamps covering 20 to 30-second segments and a narration text that summarizes the key content.
+
+15
+00:01:20,807 --> 00:01:25,127
+This narration text is then converted into audio using Azure Cognitive Services.
+
+16
+00:01:25,527 --> 00:01:32,088
+Once generated, all highlight metadata, timestamps, narrated audio, and captions are securely stored in OneDrive SharePoint ODSP.
+
+17
+00:01:32,488 --> 00:01:39,448
+This approach ensures that the highlights are readily available to various platforms like M365 Chat, Clipchamp Web, and the team's recap page.
+
+18
+00:01:39,688 --> 00:01:49,929
+Importantly, the process does not create any new video files only metadata is generated and stored, providing efficient access to key meeting moments across Microsoft 365 without additional storage overhead.
+
+19
+00:01:50,649 --> 00:01:54,570
+Cost efficiency while maintaining quality is critical for scaling meeting highlights globally.
+
+20
+00:01:55,930 --> 00:02:01,450
+The initial implementation required 4 sequential LLM calls per meeting, creating significant computational costs.
+
+21
+00:02:02,730 --> 00:02:05,851
+The first prompt segmented transcripts into one to seven key topics.
+
+22
+00:02:06,931 --> 00:02:12,171
+The second prompt extracted up to ten self-contained utterance blocks, capturing key feedback, news, or demonstrations.
+
+23
+00:02:13,211 --> 00:02:17,932
+The third prompt ranked utterance blocks by quality, clarity, intelligibility, self-containment, and interest.
+
+24
+00:02:19,052 --> 00:02:24,252
+The fourth prompt synthesized a cohesive narrative with smooth transitions between abstractive and extractive sections.
+
+25
+00:02:25,452 --> 00:02:28,893
+We collapsed the four-step pipeline into one unified prompt with leaner input.
+
+26
+00:02:29,373 --> 00:02:35,133
+Dedicated tuning preserved the original algorithm as an internal reasoning chain: segment, extract, rank, compose.
+
+27
+00:02:36,133 --> 00:02:40,093
+The model executes this sequence in a single invocation instead of four external calls.
+
+28
+00:02:41,293 --> 00:02:43,694
+We trimmed input size significantly for lower cost.
+
+29
+00:02:44,174 --> 00:02:49,374
+Separate tuning adapted the model to the slimmer schema and token budget while maintaining valid output for video generation.
+
+30
+00:02:50,414 --> 00:02:53,775
+The impact: 75% fewer model invocations per meeting.
+
+31
+00:02:54,815 --> 00:02:58,255
+GPU requirements dropped from 600 to 200 for global availability.
+
+32
+00:02:59,375 --> 00:03:03,215
+This cut COGS by over 50% enabling economically viable worldwide rollout.
+
+33
+00:03:04,656 --> 00:03:09,856
+The unified prompt produces higher-quality highlights internal reviewers strongly prefer it over the multi-prompt version.
+
+34
+00:03:11,056 --> 00:03:15,216
+These improvements unblock private preview and enable general availability within capacity constraints.
+
+35
+00:03:16,257 --> 00:03:20,097
+The Meeting Highlights feature has received overwhelmingly positive feedback in a recent Ms.
+
+36
+00:03:20,097 --> 00:03:24,097
+Elite survey, underscoring its growing impact and daily use among our users.
+
+37
+00:03:25,297 --> 00:03:30,018
+More than 80% of users rated Meeting Highlights as extremely useful or very useful.
+
+38
+00:03:30,338 --> 00:03:37,538
+In addition, 96% shared that they are very likely or likely to use the feature again, pointing to strong product-market fit and daily habit formation.
+
+39
+00:03:39,138 --> 00:03:41,219
+Users have shared enthusiastic feedback.
+
+40
+00:03:41,459 --> 00:03:43,539
+Kevin C commented, Love this feature.
+
+41
+00:03:44,019 --> 00:03:46,499
+Great way to catch up on a recap without watching the full thing.
+
+42
+00:03:46,739 --> 00:03:52,420
+Ryan Roslonsky added, Beyond the awesome text recap, there is literally a two-minute narrated video about the meeting.
+
+43
+00:03:52,660 --> 00:03:57,060
+It's mind-blowing and an engaging way to recap a meeting for a richer understanding of the conversation.
+
+44
+00:03:58,820 --> 00:04:03,220
+While the core experience is resonating, users also expressed valuable requests for improvement.
+
+45
+00:04:03,541 --> 00:04:11,461
+Suggestions include making highlights more detailed and specific, integrating highlights more directly into Teams Recap, including action items, and supporting additional languages.
+
