@@ -17,6 +17,12 @@ The audio regeneration feature allows you to regenerate TTS audio for individual
 
 Your TTS server must be running on a remote machine (or localhost). The server generates audio from text.
 
+**Install CORS support (required for browser access):**
+```bash
+cd tts
+pip install flask-cors
+```
+
 **Start the server:**
 ```bash
 cd tts
@@ -208,13 +214,26 @@ This forces the browser to reload the audio file instead of using a cached versi
 **Symptoms:** Red error toast showing "Cannot reach TTS server at http://..."
 
 **Solutions:**
-1. Verify TTS server is running:
+1. **Verify CORS is enabled:**
+   - Check if `flask-cors` is installed: `pip list | grep flask-cors`
+   - Verify [`server.py`](../tts/server.py) imports CORS: `from flask_cors import CORS`
+   - Server logs should show both OPTIONS and POST requests:
+     ```
+     OPTIONS /generate_batch HTTP/1.1" 200
+     POST /generate_batch HTTP/1.1" 200
+     ```
+   - If you only see OPTIONS requests, CORS is blocking the POST
+
+2. Verify TTS server is running:
    ```bash
    curl http://your-server-ip:5000/health
    ```
-2. Check firewall settings allow port 5000
-3. Verify IP address in `public/tts-config.json`
-4. Try accessing server from browser: `http://your-server-ip:5000/health`
+   
+3. Check firewall settings allow port 5000
+
+4. Verify IP address in `public/tts-config.json`
+
+5. Try accessing server from browser: `http://your-server-ip:5000/health`
 
 ### "Save failed" Error
 

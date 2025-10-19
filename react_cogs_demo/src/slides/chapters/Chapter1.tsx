@@ -367,6 +367,12 @@ export const Ch1_S3_UserValue: SlideComponentWithMetadata = () => {
 
   const benefits = [
     {
+      icon: '🔍',
+      title: 'Smart Triage',
+      description: 'Decide what to watch',
+      detail: 'Know if you need the full recording'
+    },
+    {
       icon: '⏱️',
       title: 'Time Savings',
       description: '60 minutes → 2-3 minutes',
@@ -391,15 +397,15 @@ export const Ch1_S3_UserValue: SlideComponentWithMetadata = () => {
       <AnimatePresence>
         {isSegmentVisible(0) && (
           <SlideTitle reduced={reduced}>
-            Three Key Benefits
+            Four Key Benefits
           </SlideTitle>
         )}
       </AnimatePresence>
 
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(3, 1fr)',
-        gap: '2rem',
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        gap: '1.5rem',
         marginBottom: '3rem'
       }}>
         {benefits.map((benefit, index) => (
@@ -418,24 +424,24 @@ export const Ch1_S3_UserValue: SlideComponentWithMetadata = () => {
       </div>
 
       <AnimatePresence>
-        {isSegmentVisible(4) && (
+        {isSegmentVisible(5) && (
           <motion.div
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{
               opacity: 1,
               y: 0,
-              scale: isOnSegment(4) ? 1.02 : 1
+              scale: isOnSegment(5) ? 1.02 : 1
             }}
             transition={{ duration: reduced ? 0.3 : 0.6, type: 'spring' }}
             style={{
-              background: isOnSegment(4)
+              background: isOnSegment(5)
                 ? 'linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))'
                 : '#1e293b',
               borderRadius: 16,
               padding: '2rem',
               textAlign: 'center',
-              border: isOnSegment(4) ? '2px solid #00B7C3' : '1px solid #334155',
-              boxShadow: isOnSegment(4) && !reduced ? '0 0 30px rgba(0, 183, 195, 0.3)' : 'none'
+              border: isOnSegment(5) ? '2px solid #00B7C3' : '1px solid #334155',
+              boxShadow: isOnSegment(5) && !reduced ? '0 0 30px rgba(0, 183, 195, 0.3)' : 'none'
             }}
           >
             <p style={{
@@ -460,7 +466,7 @@ export const Ch1_S3_UserValue: SlideComponentWithMetadata = () => {
 Ch1_S3_UserValue.metadata = {
   chapter: 1,
   slide: 3,
-  title: "User Value",
+  title: "Four Key Benefits",
   srtFilePath: "highlights_demo/chapters/c1/s3_user_value.srt",
   audioSegments: [
     {
@@ -468,33 +474,40 @@ Ch1_S3_UserValue.metadata = {
       audioFilePath: "/audio/c1/s3_segment_01_intro.wav",
       srtSegmentNumber: 1,
       visualDescription: "3 value proposition cards appear",
-      narrationText: "Meeting Highlights delivers three key benefits to users."
+      narrationText: "Meeting Highlights delivers four key benefits to users."
+    },
+    {
+      id: "triage",
+      audioFilePath: "/audio/c1/s3_segment_02_triage.wav",
+      srtSegmentNumber: 2,
+      visualDescription: "Card 1 highlights - magnifying glass with decision arrows",
+      narrationText: "First, smart triage. The highlights help you decide whether you need to watch the full recording or if the recap is sufficient."
     },
     {
       id: "time",
-      audioFilePath: "/audio/c1/s3_segment_02_time.wav",
-      srtSegmentNumber: 2,
-      visualDescription: "Card 1 highlights - clock icon with \"60 min → 3 min\"",
-      narrationText: "First, massive time savings. Instead of watching a 60-minute recording, catch up in 2 to 3 minutes."
+      audioFilePath: "/audio/c1/s3_segment_03_time.wav",
+      srtSegmentNumber: 3,
+      visualDescription: "Card 2 highlights - clock icon with \"60 min → 3 min\"",
+      narrationText: "Second, massive time savings. If based on the triage you're satisfied with the highlights, you save time by not needing to watch the full recording."
     },
     {
       id: "engagement",
-      audioFilePath: "/audio/c1/s3_segment_03_engagement.wav",
-      srtSegmentNumber: 3,
-      visualDescription: "Card 2 highlights - engagement icons (eyes, ears, text)",
-      narrationText: "Second, better engagement and retention through audiovisual content that caters to all learning styles."
+      audioFilePath: "/audio/c1/s3_segment_04_engagement.wav",
+      srtSegmentNumber: 4,
+      visualDescription: "Card 3 highlights - engagement icons (eyes, ears, text)",
+      narrationText: "Third, better engagement and retention through audiovisual content that caters to all learning styles."
     },
     {
       id: "dynamics",
-      audioFilePath: "/audio/c1/s3_segment_04_dynamics.wav",
-      srtSegmentNumber: 4,
-      visualDescription: "Card 3 highlights - mood/vibe icons showing emotions",
-      narrationText: "Third, preserved meeting dynamics. You get the tone and vibe of discussions, not just facts."
+      audioFilePath: "/audio/c1/s3_segment_05_dynamics.wav",
+      srtSegmentNumber: 5,
+      visualDescription: "Card 4 highlights - mood/vibe icons showing emotions",
+      narrationText: "Fourth, preserved meeting dynamics. You get the tone and vibe of discussions, not just facts."
     },
     {
       id: "testimonial",
-      audioFilePath: "/audio/c1/s3_segment_05_testimonial.wav",
-      srtSegmentNumber: 5,
+      audioFilePath: "/audio/c1/s3_segment_06_testimonial.wav",
+      srtSegmentNumber: 6,
       visualDescription: "User testimonial quote appears",
       narrationText: "Internal users have called it magical, with one manager saying it saved hours of reviewing transcripts."
     }

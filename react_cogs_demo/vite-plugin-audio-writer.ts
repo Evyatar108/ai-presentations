@@ -25,6 +25,25 @@ interface SaveAudioResponse {
 export function audioWriterPlugin(): Plugin {
   return {
     name: 'audio-writer',
+    
+    // Copy server_config.json to public/ on dev server start
+    configResolved() {
+      const projectRoot = process.cwd();
+      const sourceConfig = path.join(projectRoot, '..', 'tts', 'server_config.json');
+      const destConfig = path.join(projectRoot, 'public', 'server_config.json');
+      
+      try {
+        if (fs.existsSync(sourceConfig)) {
+          fs.copyFileSync(sourceConfig, destConfig);
+          console.log('[audio-writer] Copied tts/server_config.json to public/');
+        } else {
+          console.warn('[audio-writer] Warning: tts/server_config.json not found');
+        }
+      } catch (error: any) {
+        console.error('[audio-writer] Failed to copy server_config.json:', error.message);
+      }
+    },
+    
     configureServer(server) {
       server.middlewares.use('/api/save-audio', async (req, res) => {
         // Only allow POST requests

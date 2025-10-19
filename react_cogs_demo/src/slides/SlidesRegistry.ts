@@ -8,7 +8,6 @@ import {
   Ch1_S3_UserValue
 } from './chapters/Chapter1';
 import { Ch2_TeamCollaboration } from './chapters/Chapter2';
-import { Ch4_S1_HighlightTypes } from './chapters/Chapter4';
 import {
   Ch5_S1_ChallengeFraming,
   Ch5_S2_FourPrompts
@@ -42,7 +41,6 @@ export const allSlides: SlideComponentWithMetadata[] = [
   Ch1_S2_HowToAccess,
   Ch1_S3_UserValue,
   Ch2_TeamCollaboration,
-  Ch4_S1_HighlightTypes,
   Ch5_S1_ChallengeFraming,
   Ch5_S2_FourPrompts,
   Ch6_S1_UnifiedConvergence,

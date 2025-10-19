@@ -34,7 +34,7 @@ interface TTSServerHealthResponse {
 let cachedConfig: TTSConfig | null = null;
 
 /**
- * Load TTS configuration from public/tts-config.json
+ * Load TTS configuration from tts/server_config.json (same as CLI tools)
  * Falls back to localhost if config file doesn't exist
  */
 async function loadConfig(): Promise<TTSConfig> {
@@ -43,21 +43,22 @@ async function loadConfig(): Promise<TTSConfig> {
   }
 
   try {
-    const response = await fetch('/tts-config.json');
+    // Try to load from the same config file used by tts/generate-tts.ts
+    const response = await fetch('/server_config.json');
     if (!response.ok) {
       throw new Error('Config file not found');
     }
     
     const config = await response.json();
     cachedConfig = {
-      remoteTTSServerUrl: config.remoteTTSServerUrl || 'http://localhost:5000',
+      remoteTTSServerUrl: config.server_url || 'http://localhost:5000',
       localSaveEndpoint: '/api/save-audio'
     };
     
-    console.log('[TTS] Loaded config:', cachedConfig);
+    console.log('[TTS] Loaded config from server_config.json:', cachedConfig);
     return cachedConfig;
   } catch (error) {
-    console.warn('[TTS] Failed to load config, using defaults');
+    console.warn('[TTS] Failed to load server_config.json, using localhost default');
     cachedConfig = {
       remoteTTSServerUrl: 'http://localhost:5000',
       localSaveEndpoint: '/api/save-audio'
@@ -131,7 +132,10 @@ export async function regenerateSegment(
   
   try {
     // Step 1: Call remote TTS server to generate audio
+    // Send TWO texts in bulk: actual narration + simple test text
+    // This helps diagnose if truncation is related to text length
     console.log(`[TTS] Calling remote server: ${config.remoteTTSServerUrl}/generate_batch`);
+    console.log(`[TTS] Sending bulk request with 2 texts (actual + test "Hey")`);
     
     const ttsResponse = await fetch(
       `${config.remoteTTSServerUrl}/generate_batch`,
@@ -141,8 +145,12 @@ export async function regenerateSegment(
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          texts: [`Speaker 0: ${params.narrationText}`]
-        })
+          texts: [
+            `Speaker 0: ${params.narrationText} . .`,  // Actual narration with pauses at end
+          ]
+        }),
+        // Add timeout and better error handling
+        signal: AbortSignal.timeout(60000) // 60 second timeout
       }
     );
     
@@ -160,6 +168,7 @@ export async function regenerateSegment(
       throw new Error('No audio data received from server');
     }
     
+    // We now send only 1 text with " . ." appended for pauses
     const audioBase64 = ttsData.audios[0];
     console.log(`[TTS] Received audio data: ${audioBase64.length} characters (base64)`);
     
@@ -206,9 +215,22 @@ export async function regenerateSegment(
   } catch (error: any) {
     console.error('[TTS] Regeneration error:', error);
     
+    // Provide more helpful error messages
+    let errorMessage = error.message || 'Unknown error occurred';
+    
+    if (error.name === 'TypeError' && errorMessage.includes('fetch')) {
+      errorMessage = `Cannot connect to TTS server at ${config.remoteTTSServerUrl}. Please check:\n` +
+                    `1. TTS server is running on the remote machine\n` +
+                    `2. Server URL in public/tts-config.json is correct\n` +
+                    `3. Firewall allows connections to port 5000\n` +
+                    `4. Network connectivity between machines`;
+    } else if (error.name === 'AbortError') {
+      errorMessage = 'Request timed out (60s). TTS generation took too long or server is not responding.';
+    }
+    
     return {
       success: false,
-      error: error.message || 'Unknown error occurred'
+      error: errorMessage
     };
   }
 }

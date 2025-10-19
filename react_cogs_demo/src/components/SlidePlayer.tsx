@@ -212,10 +212,27 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
         
         // Update audio path with cache-busting timestamp
         const basePath = segment.audioFilePath.split('?')[0]; // Remove any existing query params
-        segment.audioFilePath = `${basePath}?t=${result.timestamp}`;
+        const newAudioPath = `${basePath}?t=${result.timestamp}`;
+        segment.audioFilePath = newAudioPath;
         
-        // Force audio reload by re-setting the current segment
-        // This triggers the audio effect in NarratedController if in manual+audio mode
+        // Play the newly generated audio immediately
+        console.log('[SlidePlayer] Playing regenerated audio:', newAudioPath);
+        const audio = new Audio(newAudioPath);
+        audio.onended = () => {
+          console.log('[SlidePlayer] Regenerated audio playback completed');
+        };
+        audio.onerror = (e) => {
+          console.error('[SlidePlayer] Failed to play regenerated audio:', e);
+          setRegenerationStatus({
+            type: 'error',
+            message: 'Audio playback failed'
+          });
+        };
+        audio.play().catch(err => {
+          console.error('[SlidePlayer] Audio play() rejected:', err);
+        });
+        
+        // Force segment context update (triggers audio in NarratedController if in manual+audio mode)
         segmentContext.setCurrentSegment(segmentContext.currentSegmentIndex);
         
         // Auto-clear success message after 3s
