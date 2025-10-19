@@ -1,6 +1,0 @@
-# React Component: Ch7_S4_QualityComparison
-# Location: react_cogs_demo/src/components/ImpactComponents.tsx:270
-
-1 - Quality metrics comparison
-00:03:12,656 --> 00:03:17,856
-The unified prompt produces higher-quality highlights that internal reviewers strongly prefer over the multi-prompt version.

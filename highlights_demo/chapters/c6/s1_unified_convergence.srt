@@ -1,6 +1,0 @@
-# React Component: Ch6_S1_UnifiedConvergence
-# Location: react_cogs_demo/src/slides/AnimatedSlides.tsx:282
-
-1 - Four prompts collapse into one
-00:02:25,452 --> 00:02:28,893
-We collapsed the four-step pipeline into one unified prompt with leaner input.

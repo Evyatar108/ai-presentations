@@ -1,6 +1,0 @@
-# React Component: Ch5_S2_FourPrompts
-# Location: react_cogs_demo/src/slides/AnimatedSlides.tsx:174
-
-1 - Four LLM calls visualization
-00:01:55,930 --> 00:02:01,450
-The initial implementation required 4 sequential LLM calls per meeting, creating significant computational costs.

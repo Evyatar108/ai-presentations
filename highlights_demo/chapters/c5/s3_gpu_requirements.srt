@@ -1,6 +1,0 @@
-# React Component: Ch5_S3_TopicAbstraction
-# Location: react_cogs_demo/src/slides/AnimatedSlides.tsx:711
-
-1 - GPU requirements appear (~600)
-00:02:02,730 --> 00:02:08,851
-This multi-step approach meant higher GPU requirements, estimated at around 600 GPUs to support global availability.

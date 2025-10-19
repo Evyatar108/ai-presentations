@@ -1,6 +1,0 @@
-# React Component: Ch5_S5_QualityRanking
-# Location: react_cogs_demo/src/slides/AnimatedSlides.tsx:868
-
-1 - Need for dramatic reduction
-00:02:16,211 --> 00:02:22,932
-To make Meeting Highlights economically viable at scale, we needed to dramatically reduce these computational costs without sacrificing quality.

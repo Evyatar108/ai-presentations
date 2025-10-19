@@ -1,6 +1,0 @@
-# React Component: Ch7_S5_PathToGA
-# Location: react_cogs_demo/src/slides/AnimatedSlides.tsx:1179
-
-1 - Enables preview and GA rollout
-00:03:18,856 --> 00:03:23,216
-These improvements unblock private preview and enable general availability within capacity constraints.

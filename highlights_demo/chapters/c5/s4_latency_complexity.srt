@@ -1,6 +1,0 @@
-# React Component: Ch5_S4_ExtractiveSelection
-# Location: react_cogs_demo/src/slides/AnimatedSlides.tsx:790
-
-1 - Latency and complexity shown
-00:02:09,931 --> 00:02:15,171
-Each additional prompt call added latency, complexity, and token overhead to the generation pipeline.

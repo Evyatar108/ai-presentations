@@ -1374,7 +1374,7 @@ Ch7_S5_PathToGA.metadata = {
  */
 export const Ch1_S1_WhatIsMeetingHighlights: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
-  const { isSegmentVisible } = useSegmentedAnimation();
+  const { isSegmentVisible, isOnSegment } = useSegmentedAnimation();
 
   return (
     <div style={{
@@ -1387,22 +1387,51 @@ export const Ch1_S1_WhatIsMeetingHighlights: SlideComponentWithMetadata = () => 
       fontFamily: 'Inter, system-ui, sans-serif'
     }}>
       <div style={{ maxWidth: 900, width: '100%', textAlign: 'center' }}>
-        <AnimatePresence>
-          {isSegmentVisible(0) && (
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: reduced ? 0.2 : 0.6 }}
-            >
-              <h1 style={{ color: '#f1f5f9', marginBottom: '2rem', fontSize: 48 }}>
-                Meeting Highlights
-              </h1>
-              <p style={{ color: '#94a3b8', fontSize: 20, marginBottom: '3rem' }}>
-                A new Microsoft Teams feature
-              </p>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {/* Title and subtitle - always visible */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: reduced ? 0.2 : 0.6 }}
+        >
+          <h1 style={{ color: '#f1f5f9', marginBottom: '0.5rem', fontSize: 48 }}>
+            Meeting Highlights
+          </h1>
+          <p style={{ color: '#94a3b8', fontSize: 20, marginBottom: '0.5rem' }}>
+            AI-generated short video recaps for meetings
+          </p>
+        </motion.div>
+        
+        {/* Thumbnail image - large in segment 0, small afterwards */}
+        <motion.div
+          layout
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            marginTop: isOnSegment(0) ? '0.5rem' : '0.5rem',
+            marginBottom: isOnSegment(0) ? '2rem' : '0.5rem'
+          }}
+        >
+          <motion.img
+            layout
+            src="/images/meeting_highlights_thumbnail.jpeg"
+            alt="Meeting Highlights example"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{
+              opacity: isOnSegment(0) ? 1 : 0.5,
+              width: isOnSegment(0) ? '100%' : '35%'
+            }}
+            transition={{ duration: reduced ? 0.3 : 0.6 }}
+            style={{
+              maxWidth: '600px',
+              borderRadius: '12px',
+              boxShadow: isOnSegment(0) ? '0 8px 24px rgba(0, 0, 0, 0.4)' : 'none',
+              border: '1px solid #334155',
+              display: 'block',
+              zIndex: isOnSegment(0) ? 1 : 0,
+              pointerEvents: isOnSegment(0) ? 'auto' : 'none'
+            }}
+          />
+        </motion.div>
 
         <AnimatePresence>
           {isSegmentVisible(1) && (
@@ -1510,8 +1539,8 @@ Ch1_S1_WhatIsMeetingHighlights.metadata = {
       id: "intro",
       audioFilePath: "/audio/c1/s1_segment_01_intro.wav",
       srtSegmentNumber: 1,
-      visualDescription: "Title slide \"Meeting Highlights\" with Teams logo",
-      narrationText: "Meeting Highlights is a new Microsoft Teams feature that delivers a dynamic, bite-sized video recap of your meeting."
+      visualDescription: "Title slide \"Meeting Highlights\"",
+      narrationText: "Meeting Highlights delivers AI-generated short video recaps of your meetings."
     },
     {
       id: "ai_generation",
