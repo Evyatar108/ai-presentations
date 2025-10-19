@@ -26,7 +26,7 @@ import {
 import { Ch8_S1_UserSatisfaction } from './chapters/Chapter8';
 import {
   Ch9_S1_Testimonials,
-  Ch9_S2_TryItYourself
+  Ch9_S2_ClosingThanks,
 } from './chapters/Chapter9';
 
 /**
@@ -53,7 +53,7 @@ export const allSlides: SlideComponentWithMetadata[] = [
   Ch7_S5_PathToGA,
   Ch8_S1_UserSatisfaction,
   Ch9_S1_Testimonials,
-  Ch9_S2_TryItYourself
+  Ch9_S2_ClosingThanks,
 ].sort((a, b) => {
   // Sort by chapter first, then by slide
   if (a.metadata.chapter !== b.metadata.chapter) {

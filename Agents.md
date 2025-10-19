@@ -1,6 +1,24 @@
 # Agents - Meeting Highlights COGS Reduction Presentation
 
 ## Recent Changes
+### 2025-01-20: Streamlined Closing Slide - Removed Repetitive Content
+**Refactored Ch9_S2 from "Try It Yourself" to "What's Next":**
+- **Removed**: Repeated 80% satisfaction metric (already shown in Ch8_S1)
+- **Removed**: Detailed BizChat usage instructions (already covered in Ch1_S2)
+- **New Focus**: Forward-looking content on GA rollout, quality improvements, and ongoing innovation
+- **New Structure**: 5 segments (down from 7)
+  - Segment 0: Title "What's Next?"
+  - Segment 1: Path to GA with unified prompt enabling global rollout
+  - Segment 2: Enhanced quality from unified architecture
+  - Segment 3: Ongoing optimization commitment
+  - Segment 4: Simple CTA "Try Meeting Highlights Today!"
+- **Rationale**: Closing slide should advance the narrative, not repeat earlier content
+- **Result**: More impactful ending that emphasizes momentum and future improvements
+- **Updated files**:
+  - [`Chapter9.tsx`](react_cogs_demo/src/slides/chapters/Chapter9.tsx) - Renamed Ch9_S2_TryItYourself to Ch9_S2_WhatsNext
+  - [`SlidesRegistry.ts`](react_cogs_demo/src/slides/SlidesRegistry.ts) - Updated import and reference
+  - [`Agents.md`](Agents.md) - This entry
+
 
 ### 2025-01-20: Automatic Cleanup of Unused Audio Files
 **Added Orphaned File Detection and Removal:**

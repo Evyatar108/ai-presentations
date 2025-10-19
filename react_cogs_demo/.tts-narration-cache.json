@@ -176,8 +176,8 @@
     "generatedAt": "2025-10-19T08:28:42.320Z"
   },
   "c9\\s2_segment_01_intro.wav": {
-    "narrationText": "More than 80 percent of users find Meeting Highlights extremely useful, and we want you to experience it too.",
-    "generatedAt": "2025-10-19T16:00:56.200Z"
+    "narrationText": "Thank you for taking the time to explore Meeting Highlights.",
+    "generatedAt": "2025-10-19T16:25:00.594Z"
   },
   "c2\\s1_segment_04_acs.wav": {
     "narrationText": "We use Azure Cognitive Services to convert the narration text into natural-sounding audio using text-to-speech technology.",
@@ -203,28 +203,16 @@
     "narrationText": "Together, these teams deliver a unified end-to-end experience from recording through AI processing to user access, showcasing true Microsoft collaboration.",
     "generatedAt": "2025-10-19T15:01:00.341Z"
   },
-  "c9\\s2_segment_02_satisfaction.wav": {
-    "narrationText": "With such high user satisfaction, Meeting Highlights is already making a significant impact.",
-    "generatedAt": "2025-10-19T16:00:56.203Z"
+  "c9\\s2_segment_02_value.wav": {
+    "narrationText": "Our goal is simple: help you reclaim time and stay aligned asynchronously.",
+    "generatedAt": "2025-10-19T16:25:00.597Z"
   },
-  "c9\\s2_segment_03_quality_teaser.wav": {
-    "narrationText": "And there's even better news: the unified prompt optimization we discussed will soon roll out, delivering even higher quality highlights with improved detail and natural flow.",
-    "generatedAt": "2025-10-19T16:00:56.206Z"
+  "c9\\s2_segment_03_feedback.wav": {
+    "narrationText": "We welcome your feedback. Send ideas or issues to meetinghldevs@microsoft.com.",
+    "generatedAt": "2025-10-19T16:25:00.599Z"
   },
-  "c9\\s2_segment_04_step1.wav": {
-    "narrationText": "Getting started is simple. First, open BizChat.",
-    "generatedAt": "2025-10-19T16:00:56.209Z"
-  },
-  "c9\\s2_segment_05_step2.wav": {
-    "narrationText": "Next, type forward slash to bring up the mention menu, and select the meeting you want recapped.",
-    "generatedAt": "2025-10-19T16:00:56.211Z"
-  },
-  "c9\\s2_segment_06_step3.wav": {
-    "narrationText": "Then just ask for a recap. Your personalized highlight video will appear at the bottom of the response.",
-    "generatedAt": "2025-10-19T16:00:56.215Z"
-  },
-  "c9\\s2_segment_07_cta.wav": {
-    "narrationText": "Try it today and see why users love Meeting Highlights!",
-    "generatedAt": "2025-10-19T16:00:56.219Z"
+  "c9\\s2_segment_04_cta.wav": {
+    "narrationText": "You can try Meeting Highlights now in BizChat. Give it a spin on your next meeting.",
+    "generatedAt": "2025-10-19T16:25:00.602Z"
   }
 }

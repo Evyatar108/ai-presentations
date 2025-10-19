@@ -136,176 +136,410 @@ Ch9_S1_Testimonials.metadata = {
 };
 
 /**
- * Chapter 9, Slide 2 - Try It Yourself
+ * Chapter 9, Slide 2 - Thank You & Closing
  */
-export const Ch9_S2_TryItYourself: SlideComponentWithMetadata = () => {
+export const Ch9_S2_ClosingThanks: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
   const { isSegmentVisible } = useSegmentedAnimation();
 
-  const steps = [
-    {
-      number: '1️⃣',
-      title: 'Open BizChat',
-      description: 'Navigate to BizChat in your Microsoft 365 apps'
-    },
-    {
-      number: '2️⃣',
-      title: 'Reference a Meeting',
-      description: 'Type / to open the mention menu and select your meeting'
-    },
-    {
-      number: '3️⃣',
-      title: 'Ask for a Recap',
-      description: 'Request a meeting summary and watch your highlight video appear!'
-    }
-  ];
-
   return (
-    <SlideContainer maxWidth={1000}>
-      <AnimatePresence>
-        {isSegmentVisible(0) && (
+    <SlideContainer maxWidth={900}>
+      {/* Animated background particles */}
+      <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
+        {!reduced && [...Array(20)].map((_, i) => (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: reduced ? 0.2 : 0.5 }}
-            style={{ textAlign: 'center', marginBottom: '3rem' }}
-          >
-            <h1 style={{ ...typography.h1, marginBottom: '1rem' }}>
-              Ready to Experience It?
-            </h1>
-            <p style={{ ...typography.body, fontSize: 18, color: '#94a3b8' }}>
-              Join the <span style={{ color: '#00B7C3', fontWeight: 600 }}>80%</span> who find it extremely useful
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Satisfaction Metric */}
-      <AnimatePresence>
-        {isSegmentVisible(1) && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: reduced ? 0.3 : 0.6 }}
-            style={{
-              background: 'linear-gradient(135deg, #00B7C3, #0078D4)',
-              borderRadius: 16,
-              padding: '2rem',
-              textAlign: 'center',
-              marginBottom: '2rem',
-              boxShadow: reduced ? 'none' : '0 0 40px rgba(0, 183, 195, 0.3)'
+            key={i}
+            initial={{
+              x: Math.random() * window.innerWidth,
+              y: Math.random() * window.innerHeight,
+              opacity: 0
             }}
-          >
-            <div style={{
-              fontSize: 64,
-              fontWeight: 'bold',
-              color: '#fff',
-              marginBottom: '0.5rem',
-              textShadow: '0 0 20px rgba(255, 255, 255, 0.5)'
-            }}>
-              80%
-            </div>
-            <div style={{ color: '#fff', fontSize: 18, marginBottom: '0.5rem' }}>
-              find it extremely useful
-            </div>
-            <div style={{ fontSize: 24 }}>⭐⭐⭐⭐⭐</div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Coming Soon Banner */}
-      <AnimatePresence>
-        {isSegmentVisible(2) && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: reduced ? 0.3 : 0.6 }}
-            style={{
-              background: '#1e293b',
-              border: '2px solid #00B7C3',
-              borderRadius: 12,
-              padding: '1.5rem',
-              marginBottom: '2rem',
-              textAlign: 'center'
+            animate={{
+              y: [null, Math.random() * window.innerHeight],
+              opacity: [0, 0.3, 0],
             }}
-          >
-            <div style={{ fontSize: 24, marginBottom: '0.5rem' }}>🚀</div>
-            <div style={{ ...typography.h2, marginBottom: '0.5rem', color: '#00B7C3' }}>
-              Coming Soon: Even Better Quality
-            </div>
-            <p style={{ ...typography.body, fontSize: 16, margin: 0, color: '#cbd5e1' }}>
-              The unified prompt optimization will roll out with higher satisfaction scores
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Steps */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '2rem' }}>
-        {steps.map((step, index) => (
-          <AnimatePresence key={step.title}>
-            {isSegmentVisible(index + 3) && (
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: reduced ? 0.3 : 0.5 }}
-                style={{
-                  background: '#1e293b',
-                  borderRadius: 12,
-                  padding: '1.5rem',
-                  border: '1px solid #334155',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '1.5rem'
-                }}
-              >
-                <div style={{ fontSize: 36, flexShrink: 0 }}>
-                  {step.number}
-                </div>
-                <div>
-                  <div style={{ ...typography.h2, fontSize: 20, marginBottom: '0.5rem' }}>
-                    {step.title}
-                  </div>
-                  <p style={{ ...typography.body, fontSize: 14, margin: 0, color: '#94a3b8' }}>
-                    {step.description}
-                  </p>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+            transition={{
+              duration: 3 + Math.random() * 2,
+              repeat: Infinity,
+              delay: i * 0.2,
+              ease: 'linear'
+            }}
+            style={{
+              position: 'absolute',
+              width: 4,
+              height: 4,
+              borderRadius: '50%',
+              background: i % 2 === 0 ? '#00B7C3' : '#0078D4',
+            }}
+          />
         ))}
       </div>
 
-      {/* Call to Action */}
+      {/* Title: Thank You with animated gradient */}
       <AnimatePresence>
-        {isSegmentVisible(6) && (
+        {isSegmentVisible(0) && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: reduced ? 0.3 : 0.6 }}
-            style={{ textAlign: 'center' }}
+            initial={{ opacity: 0, y: -30, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{
+              duration: reduced ? 0.3 : 0.8,
+              type: 'spring',
+              stiffness: 100
+            }}
+            style={{ textAlign: 'center', marginBottom: '2rem', position: 'relative' }}
           >
-            <motion.div
+            {/* Glow effect behind text */}
+            {!reduced && (
+              <motion.div
+                animate={{
+                  scale: [1, 1.2, 1],
+                  opacity: [0.3, 0.6, 0.3]
+                }}
+                transition={{ duration: 2, repeat: Infinity }}
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  width: 400,
+                  height: 100,
+                  borderRadius: '50%',
+                  background: 'radial-gradient(circle, rgba(0, 183, 195, 0.4), transparent)',
+                  filter: 'blur(40px)',
+                  zIndex: 0
+                }}
+              />
+            )}
+            
+            <motion.h1
               animate={reduced ? {} : {
-                boxShadow: [
-                  '0 0 20px rgba(0, 183, 195, 0.3)',
-                  '0 0 40px rgba(0, 183, 195, 0.6)',
-                  '0 0 20px rgba(0, 183, 195, 0.3)'
-                ]
+                backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
               }}
-              transition={{ duration: 2, repeat: Infinity }}
+              transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
               style={{
-                display: 'inline-block',
-                background: 'linear-gradient(135deg, #00B7C3, #0078D4)',
-                borderRadius: 12,
-                padding: '1.5rem 3rem',
-                cursor: 'pointer'
+                ...typography.h1,
+                background: 'linear-gradient(90deg, #00B7C3, #0078D4, #00B7C3, #0078D4)',
+                backgroundSize: '200% auto',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                fontSize: 72,
+                marginBottom: 0,
+                position: 'relative',
+                zIndex: 1,
+                textShadow: '0 0 40px rgba(0, 183, 195, 0.3)'
               }}
             >
-              <div style={{ ...typography.h2, fontSize: 24, color: '#fff', margin: 0 }}>
-                Try It Today in BizChat! 🚀
+              Thank You
+            </motion.h1>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Value Statement with icon animation */}
+      <AnimatePresence>
+        {isSegmentVisible(1) && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: reduced ? 0.3 : 0.6 }}
+            style={{ textAlign: 'center', marginBottom: '3rem' }}
+          >
+            <motion.div
+              initial={{ scale: 0, rotate: -180 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{
+                duration: reduced ? 0.3 : 0.6,
+                type: 'spring',
+                delay: 0.2
+              }}
+              style={{ display: 'inline-flex', gap: '1.5rem', alignItems: 'center' }}
+            >
+              <motion.div
+                animate={reduced ? {} : { rotate: [0, 5, -5, 0] }}
+                transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
+                style={{ fontSize: 28 }}
+              >
+                ⏱️
+              </motion.div>
+              <p style={{
+                ...typography.body,
+                fontSize: 20,
+                color: '#e2e8f0',
+                fontWeight: 600,
+                margin: 0,
+                letterSpacing: '0.5px'
+              }}>
+                Reclaim time. Stay aligned.
+              </p>
+              <motion.div
+                animate={reduced ? {} : { scale: [1, 1.2, 1] }}
+                transition={{ duration: 2, repeat: Infinity, repeatDelay: 1, delay: 0.5 }}
+                style={{ fontSize: 28 }}
+              >
+                🎯
+              </motion.div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Enhanced Feedback Card with hover effect */}
+      <AnimatePresence>
+        {isSegmentVisible(2) && (
+          <motion.div
+            initial={{ opacity: 0, y: 30, rotateX: -15 }}
+            animate={{ opacity: 1, y: 0, rotateX: 0 }}
+            transition={{
+              duration: reduced ? 0.3 : 0.7,
+              type: 'spring'
+            }}
+            whileHover={reduced ? {} : {
+              scale: 1.02,
+              boxShadow: '0 20px 40px rgba(0, 183, 195, 0.3)'
+            }}
+            style={{
+              background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
+              border: '2px solid #334155',
+              borderRadius: 16,
+              padding: '2.5rem',
+              marginBottom: '2.5rem',
+              textAlign: 'center',
+              position: 'relative',
+              overflow: 'hidden',
+              boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)'
+            }}
+          >
+            {/* Animated border glow */}
+            {!reduced && (
+              <motion.div
+                animate={{
+                  opacity: [0.3, 0.6, 0.3],
+                }}
+                transition={{ duration: 2, repeat: Infinity }}
+                style={{
+                  position: 'absolute',
+                  inset: -2,
+                  background: 'linear-gradient(45deg, #00B7C3, #0078D4, #00B7C3)',
+                  borderRadius: 16,
+                  zIndex: 0,
+                  filter: 'blur(8px)'
+                }}
+              />
+            )}
+            
+            <div style={{ position: 'relative', zIndex: 1 }}>
+              <motion.div
+                animate={reduced ? {} : {
+                  rotate: [0, 10, -10, 0],
+                  scale: [1, 1.1, 1]
+                }}
+                transition={{ duration: 2, repeat: Infinity, repeatDelay: 2 }}
+                style={{ fontSize: 48, marginBottom: '1rem' }}
+              >
+                📧
+              </motion.div>
+              <div style={{
+                ...typography.h2,
+                fontSize: 22,
+                marginBottom: '1.5rem',
+                color: '#f1f5f9',
+                fontWeight: 700
+              }}>
+                Share Your Feedback
+              </div>
+              <motion.div
+                whileHover={reduced ? {} : { scale: 1.05 }}
+                style={{
+                  ...typography.body,
+                  fontSize: 18,
+                  color: '#00B7C3',
+                  fontFamily: 'monospace',
+                  letterSpacing: '0.5px',
+                  background: 'rgba(0, 183, 195, 0.1)',
+                  padding: '0.75rem 1.5rem',
+                  borderRadius: 8,
+                  display: 'inline-block',
+                  border: '1px solid rgba(0, 183, 195, 0.3)',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                meetinghldevs@microsoft.com
+              </motion.div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Enhanced Call to Action - Video-friendly Badge */}
+      <AnimatePresence>
+        {isSegmentVisible(3) && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{
+              duration: reduced ? 0.3 : 0.6,
+              type: 'spring',
+              stiffness: 150
+            }}
+            style={{ textAlign: 'center', position: 'relative' }}
+          >
+            {/* Pulsing rings around badge */}
+            {!reduced && (
+              <>
+                <motion.div
+                  animate={{
+                    scale: [1, 1.4],
+                    opacity: [0.4, 0]
+                  }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  style={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: 300,
+                    height: 140,
+                    borderRadius: 70,
+                    border: '3px solid #00B7C3',
+                    pointerEvents: 'none'
+                  }}
+                />
+                <motion.div
+                  animate={{
+                    scale: [1, 1.4],
+                    opacity: [0.4, 0]
+                  }}
+                  transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+                  style={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: 300,
+                    height: 140,
+                    borderRadius: 70,
+                    border: '3px solid #0078D4',
+                    pointerEvents: 'none'
+                  }}
+                />
+              </>
+            )}
+
+            <motion.div
+              animate={reduced ? {} : {
+                scale: [1, 1.03, 1],
+              }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+              style={{
+                position: 'relative',
+                background: 'linear-gradient(135deg, #00B7C3, #0078D4)',
+                borderRadius: 20,
+                padding: '2rem 3.5rem',
+                display: 'inline-block',
+                boxShadow: '0 10px 40px rgba(0, 183, 195, 0.5)',
+                overflow: 'hidden'
+              }}
+            >
+              {/* Animated shine effect */}
+              {!reduced && (
+                <motion.div
+                  animate={{
+                    x: ['-200%', '200%']
+                  }}
+                  transition={{
+                    duration: 2.5,
+                    repeat: Infinity,
+                    repeatDelay: 1,
+                    ease: 'easeInOut'
+                  }}
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '50%',
+                    height: '100%',
+                    background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)',
+                    transform: 'skewX(-20deg)',
+                    zIndex: 1
+                  }}
+                />
+              )}
+              
+              <div style={{ position: 'relative', zIndex: 2 }}>
+                <motion.div
+                  animate={reduced ? {} : {
+                    rotate: [0, 10, -10, 0],
+                    scale: [1, 1.1, 1]
+                  }}
+                  transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
+                  style={{ fontSize: 40, marginBottom: '0.75rem' }}
+                >
+                  🚀
+                </motion.div>
+                <div style={{
+                  fontSize: 26,
+                  fontWeight: 700,
+                  color: '#fff',
+                  fontFamily: 'Inter, system-ui, sans-serif',
+                  marginBottom: '0.25rem',
+                  letterSpacing: '0.5px'
+                }}>
+                  Try Meeting Highlights
+                </div>
+                <motion.div
+                  animate={reduced ? {} : {
+                    opacity: [0.7, 1, 0.7]
+                  }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  style={{
+                    fontSize: 16,
+                    color: 'rgba(255, 255, 255, 0.9)',
+                    fontFamily: 'Inter, system-ui, sans-serif',
+                    fontWeight: 500
+                  }}
+                >
+                  Available now in BizChat
+                </motion.div>
               </div>
             </motion.div>
+
+            {/* Floating icons around the badge */}
+            {!reduced && (
+              <>
+                <motion.div
+                  animate={{
+                    y: [-10, 10, -10],
+                    rotate: [0, 10, 0]
+                  }}
+                  transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+                  style={{
+                    position: 'absolute',
+                    top: 20,
+                    left: '20%',
+                    fontSize: 28
+                  }}
+                >
+                  ✨
+                </motion.div>
+                <motion.div
+                  animate={{
+                    y: [-10, 10, -10],
+                    rotate: [0, -10, 0]
+                  }}
+                  transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
+                  style={{
+                    position: 'absolute',
+                    top: 20,
+                    right: '20%',
+                    fontSize: 28
+                  }}
+                >
+                  💡
+                </motion.div>
+              </>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
@@ -313,45 +547,30 @@ export const Ch9_S2_TryItYourself: SlideComponentWithMetadata = () => {
   );
 };
 
-Ch9_S2_TryItYourself.metadata = {
+Ch9_S2_ClosingThanks.metadata = {
   chapter: 9,
   slide: 2,
-  title: "Try It Yourself",
+  title: "Thank You",
   audioSegments: [
     {
       id: "intro",
       audioFilePath: "/audio/c9/s2_segment_01_intro.wav",
-      narrationText: "More than 80 percent of users find Meeting Highlights extremely useful, and we want you to experience it too."
+      narrationText: "Thank you for taking the time to explore Meeting Highlights."
     },
     {
-      id: "satisfaction",
-      audioFilePath: "/audio/c9/s2_segment_02_satisfaction.wav",
-      narrationText: "With such high user satisfaction, Meeting Highlights is already making a significant impact."
+      id: "value",
+      audioFilePath: "/audio/c9/s2_segment_02_value.wav",
+      narrationText: "Our goal is simple: help you reclaim time and stay aligned asynchronously."
     },
     {
-      id: "quality_teaser",
-      audioFilePath: "/audio/c9/s2_segment_03_quality_teaser.wav",
-      narrationText: "And there's even better news: the unified prompt optimization we discussed will soon roll out, delivering even higher quality highlights with improved detail and natural flow."
-    },
-    {
-      id: "step1",
-      audioFilePath: "/audio/c9/s2_segment_04_step1.wav",
-      narrationText: "Getting started is simple. First, open BizChat."
-    },
-    {
-      id: "step2",
-      audioFilePath: "/audio/c9/s2_segment_05_step2.wav",
-      narrationText: "Next, type forward slash to bring up the mention menu, and select the meeting you want recapped."
-    },
-    {
-      id: "step3",
-      audioFilePath: "/audio/c9/s2_segment_06_step3.wav",
-      narrationText: "Then just ask for a recap. Your personalized highlight video will appear at the bottom of the response."
+      id: "feedback",
+      audioFilePath: "/audio/c9/s2_segment_03_feedback.wav",
+      narrationText: "We welcome your feedback. Send ideas or issues to meetinghldevs@microsoft.com."
     },
     {
       id: "cta",
-      audioFilePath: "/audio/c9/s2_segment_07_cta.wav",
-      narrationText: "Try it today and see why users love meeting highlights!"
+      audioFilePath: "/audio/c9/s2_segment_04_cta.wav",
+      narrationText: "You can try Meeting Highlights now in BizChat. Give it a spin on your next meeting."
     }
   ]
 };
