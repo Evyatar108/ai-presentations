@@ -183,42 +183,6 @@
     "narrationText": "You can also access Meeting Highlights directly from SharePoint.",
     "generatedAt": "2025-10-19T22:28:29.018Z"
   },
-  "c1\\s3_segment_02_sharepoint.wav": {
-    "narrationText": "Navigate to the meeting recording recap page by clicking the recording link or via the Recap tab.",
-    "generatedAt": "2025-10-19T22:28:29.019Z"
-  },
-  "c1\\s3_segment_03_browser.wav": {
-    "narrationText": "Click the Watch in browser button.",
-    "generatedAt": "2025-10-19T22:28:29.020Z"
-  },
-  "c1\\s3_segment_04_play.wav": {
-    "narrationText": "Then click Play highlights to view your meeting recap.",
-    "generatedAt": "2025-10-19T22:28:29.022Z"
-  },
-  "c1\\s4_segment_01_intro.wav": {
-    "narrationText": "Meeting Highlights delivers four key benefits to users.",
-    "generatedAt": "2025-10-19T22:28:29.023Z"
-  },
-  "c1\\s4_segment_02_triage.wav": {
-    "narrationText": "First, smart triage. The highlights help you decide whether you need to watch the full recording or if the recap is sufficient.",
-    "generatedAt": "2025-10-19T22:28:29.025Z"
-  },
-  "c1\\s4_segment_03_time.wav": {
-    "narrationText": "Second, massive time savings. If based on the triage you're satisfied with the highlights, you save time by not needing to watch the full recording.",
-    "generatedAt": "2025-10-19T22:28:29.027Z"
-  },
-  "c1\\s4_segment_04_engagement.wav": {
-    "narrationText": "Third, better engagement and retention through audiovisual content that caters to all learning styles.",
-    "generatedAt": "2025-10-19T22:28:29.028Z"
-  },
-  "c1\\s4_segment_05_dynamics.wav": {
-    "narrationText": "Fourth, preserved meeting dynamics. You get the tone and vibe of discussions, not just facts.",
-    "generatedAt": "2025-10-19T22:28:29.031Z"
-  },
-  "c1\\s4_segment_06_testimonial.wav": {
-    "narrationText": "Internal users have called it magical, with one manager saying it saved hours of reviewing transcripts.",
-    "generatedAt": "2025-10-19T22:28:29.033Z"
-  },
   "c2\\s1_segment_05_sharepoint.wav": {
     "narrationText": "SharePoint offers direct access from meeting recap pages.",
     "generatedAt": "2025-10-19T22:28:41.707Z"
@@ -273,6 +237,26 @@
   },
   "c1/s3_segment_01_intro.wav": {
     "narrationText": "You can also access Meeting Highlights directly from SharePoint.",
-    "generatedAt": "2025-10-19T22:37:51.313Z"
+    "generatedAt": "2025-10-19T22:38:53.863Z"
+  },
+  "c1\\s3_segment_02_video.wav": {
+    "narrationText": "Open BizChat and ask for a meeting recap.",
+    "generatedAt": "2025-10-19T22:41:14.872Z"
+  },
+  "c1\\s3_segment_03_sharepoint.wav": {
+    "narrationText": "Navigate to the meeting recording recap page by clicking the recording link or via the Recap tab.",
+    "generatedAt": "2025-10-19T22:41:14.875Z"
+  },
+  "c1\\s3_segment_04_browser.wav": {
+    "narrationText": "Click the Watch in browser button.",
+    "generatedAt": "2025-10-19T22:41:14.877Z"
+  },
+  "c1\\s3_segment_05_play.wav": {
+    "narrationText": "Then click Play highlights to view your meeting recap.",
+    "generatedAt": "2025-10-19T22:41:14.879Z"
+  },
+  "c4/s1_segment_01_intro.wav": {
+    "narrationText": "Meeting Highlights combines two distinct types of highlights to create a comprehensive recap.",
+    "generatedAt": "2025-10-19T22:42:29.938Z"
   }
 }

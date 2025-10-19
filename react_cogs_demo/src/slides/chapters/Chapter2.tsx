@@ -59,7 +59,7 @@ const teams: TeamInfo[] = [
   {
     id: 'sharepoint',
     name: 'SharePoint',
-    logo: '/images/logos/odsp.png',
+    logo: '/images/logos/sharepoint.png',
     role: 'Web UI',
     description: 'Direct access from meeting recap page'
   },
@@ -204,7 +204,7 @@ const ArchitectureDiagram: React.FC<{
         logo: '/images/logos/odsp.png',
         segment: 1
       },
-      position: { x: 400, y: 120 }
+      position: { x: 400, y: 100 }
     },
     {
       id: 'msai',
@@ -215,7 +215,7 @@ const ArchitectureDiagram: React.FC<{
         logo: '/images/logos/msai-hive.png',
         segment: 2
       },
-      position: { x: 100, y: 20 }
+      position: { x: 100, y: 10 }
     },
     {
       id: 'bizchat',
@@ -226,7 +226,7 @@ const ArchitectureDiagram: React.FC<{
         logo: '/images/logos/BizChat.png',
         segment: 3
       },
-      position: { x: 50, y: 420 }
+      position: { x: 100, y: 420 }
     },
     {
       id: 'sharepoint',
@@ -234,10 +234,10 @@ const ArchitectureDiagram: React.FC<{
       data: {
         label: 'SharePoint',
         role: 'Web UI',
-        logo: '/images/logos/odsp.png',
+        logo: '/images/logos/sharepoint.png',
         segment: 4
       },
-      position: { x: 350, y: 420 }
+      position: { x: 400, y: 460 }
     },
     {
       id: 'teams',
@@ -259,7 +259,7 @@ const ArchitectureDiagram: React.FC<{
         logo: '/images/logos/Loop.png',
         segment: 6
       },
-      position: { x: 400, y: 320 }
+      position: { x: 400, y: 280 }
     },
     {
       id: 'clipchamp',
