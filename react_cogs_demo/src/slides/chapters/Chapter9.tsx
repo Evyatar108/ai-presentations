@@ -284,7 +284,7 @@ Ch9_S1_Testimonials.metadata = {
     {
       id: "intro",
       audioFilePath: "/audio/c9/s1_segment_01_intro.wav",
-      narrationText: "Users have shared enthusiastic feedback about Meeting Highlights."
+      narrationText: "Enthusiastic user feedback."
     },
     {
       id: "kevin",
@@ -688,22 +688,22 @@ Ch9_S2_ClosingThanks.metadata = {
     {
       id: "intro",
       audioFilePath: "/audio/c9/s2_segment_01_intro.wav",
-      narrationText: "Thank you for taking the time to explore Meeting Highlights."
+      narrationText: "Thank you for exploring Meeting Highlights."
     },
     {
       id: "value",
       audioFilePath: "/audio/c9/s2_segment_02_value.wav",
-      narrationText: "Our goal is simple: help you reclaim time and stay aligned asynchronously."
+      narrationText: "Our goal: reclaim time, stay aligned."
     },
     {
       id: "feedback",
       audioFilePath: "/audio/c9/s2_segment_03_feedback.wav",
-      narrationText: "We welcome your feedback. Send ideas or issues to meeting H-L devs at microsoft.com."
+      narrationText: "Send feedback to meetinghldevs at microsoft.com."
     },
     {
       id: "cta",
       audioFilePath: "/audio/c9/s2_segment_04_cta.wav",
-      narrationText: "You can try Meeting Highlights now in BizChat. Give it a spin on your next meeting."
+      narrationText: "Try it now in BizChat."
     }
   ]
 };

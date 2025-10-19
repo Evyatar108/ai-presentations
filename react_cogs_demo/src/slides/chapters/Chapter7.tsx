@@ -182,7 +182,7 @@ Ch7_S1_CallReduction.metadata = {
   audioSegments: [{
     id: "main",
     audioFilePath: "/audio/c7/s1_segment_01_main.wav",
-    narrationText: "The impact: 75% fewer model invocations per meeting, and 60% reduction in input tokens."
+    narrationText: "75% fewer calls, 60% fewer tokens per meeting."
   }]
 };
 
@@ -330,7 +330,7 @@ Ch7_S2_GPUReduction.metadata = {
   audioSegments: [{
     id: "main",
     audioFilePath: "/audio/c7/s2_segment_01_main.wav",
-    narrationText: "GPU capacity requirements are estimated to have dropped from roughly 600 to less than 200, over 70% reduction."
+    narrationText: "GPU capacity dropped 70%: from 600 to under 200."
   }]
 };
 
@@ -472,7 +472,7 @@ Ch7_S4_QualityComparison.metadata = {
   audioSegments: [{
     id: "main",
     audioFilePath: "/audio/c7/s4_segment_01_main.wav",
-    narrationText: "The unified prompt produces higher-quality highlights that internal reviewers strongly prefer over the multi-prompt version."
+    narrationText: "Unified prompt produces higher quality—reviewers strongly prefer it."
   }]
 };
 
@@ -633,6 +633,6 @@ Ch7_S5_PathToGA.metadata = {
   audioSegments: [{
     id: "main",
     audioFilePath: "/audio/c7/s5_segment_01_main.wav",
-    narrationText: "These improvements unblock private preview and enable general availability within capacity constraints."
+    narrationText: "These improvements enable GA within capacity constraints."
   }]
 };

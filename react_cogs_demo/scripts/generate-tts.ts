@@ -378,7 +378,7 @@ const config: TTSConfig = {
   serverUrl: process.env.TTS_SERVER_URL || loadServerConfig(),
   outputDir: path.join(__dirname, '../public/audio'),
   skipExisting: process.argv.includes('--skip-existing'),
-  batchSize: parseInt(process.env.BATCH_SIZE || '999', 10), // Send all in one batch (default 999, effectively unlimited)
+  batchSize: parseInt(process.env.BATCH_SIZE || '10', 10), // Default 10 segments per batch
   cacheFile: path.join(__dirname, '../.tts-narration-cache.json')
 };
 

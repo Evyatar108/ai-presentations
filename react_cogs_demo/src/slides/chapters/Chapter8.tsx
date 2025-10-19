@@ -299,22 +299,22 @@ Ch8_S1_UserSatisfaction.metadata = {
     {
       id: "intro",
       audioFilePath: "/audio/c8/s1_segment_01_intro.wav",
-      narrationText: "Meeting Highlights has received overwhelmingly positive feedback in recent MS Elite surveys."
+      narrationText: "Overwhelmingly positive feedback in MS Elite surveys."
     },
     {
       id: "useful",
       audioFilePath: "/audio/c8/s1_segment_02_useful.wav",
-      narrationText: "More than 80 percent of users rated Meeting Highlights as extremely useful or very useful."
+      narrationText: "80% rated it extremely or very useful."
     },
     {
       id: "likely",
       audioFilePath: "/audio/c8/s1_segment_03_likely.wav",
-      narrationText: "96 percent shared that they are very likely or likely to use the feature again."
+      narrationText: "96% likely to use again."
     },
     {
       id: "fit",
       audioFilePath: "/audio/c8/s1_segment_04_fit.wav",
-      narrationText: "This points to strong product-market fit and daily habit formation among our users."
+      narrationText: "Strong product-market fit and habit formation."
     }
   ]
 };

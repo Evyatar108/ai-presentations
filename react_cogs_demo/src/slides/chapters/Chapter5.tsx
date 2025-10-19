@@ -145,7 +145,7 @@ Ch5_S1_ChallengeFraming.metadata = {
   audioSegments: [{
     id: "main",
     audioFilePath: "/audio/c5/s1_segment_01_main.wav",
-    narrationText: "Cost efficiency while maintaining quality is critical for scaling meeting highlights globally."
+    narrationText: "Cost efficiency is critical for global scaling."
   }]
 };
 
@@ -221,6 +221,6 @@ Ch5_S2_FourPrompts.metadata = {
   audioSegments: [{
     id: "main",
     audioFilePath: "/audio/c5/s2_segment_01_main.wav",
-    narrationText: "The initial implementation required 4 sequential LLM calls per meeting, creating significant computational costs."
+    narrationText: "Initial implementation: 4 sequential LLM calls, high computational costs."
   }]
 };

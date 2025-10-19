@@ -1,103 +1,95 @@
 {
   "c1\\s1_segment_01_intro.wav": {
-    "narrationText": "Meeting Highlights is a new feature that automatically generates a 2 to 3 minute video recap of your meetings.",
-    "generatedAt": "2025-10-19T17:20:42.132Z"
+    "narrationText": "Meeting Highlights automatically generates 2-3 minute video recaps of your meetings.",
+    "generatedAt": "2025-10-19T22:28:14.633Z"
   },
   "c1\\s2_segment_01_intro.wav": {
-    "narrationText": "Let me show you how to access Meeting Highlights through BizChat.",
-    "generatedAt": "2025-10-19T17:20:42.139Z"
+    "narrationText": "Access Meeting Highlights through BizChat.",
+    "generatedAt": "2025-10-19T22:28:14.639Z"
   },
   "c1\\s2_segment_02_bizchat.wav": {
-    "narrationText": "Open BizChat and ask it to recap a specific meeting.",
-    "generatedAt": "2025-10-19T17:20:42.140Z"
+    "narrationText": "Open BizChat and ask for a meeting recap.",
+    "generatedAt": "2025-10-19T22:28:14.641Z"
   },
   "c1\\s2_segment_03_ciq.wav": {
-    "narrationText": "You can reference specific meetings using C-I-Q by typing a forward slash.",
-    "generatedAt": "2025-10-19T17:20:42.142Z"
+    "narrationText": "Type forward slash to reference meetings using C-I-Q.",
+    "generatedAt": "2025-10-19T22:28:14.643Z"
   },
   "c1\\s2_segment_04_select.wav": {
-    "narrationText": "This opens a menu to select and search for meetings to add to your message.",
-    "generatedAt": "2025-10-19T17:20:42.145Z"
+    "narrationText": "Select and search for meetings from the menu.",
+    "generatedAt": "2025-10-19T22:28:14.644Z"
   },
   "c1\\s2_segment_05_player.wav": {
-    "narrationText": "BizChat will return a reply to your query and a video player with the meeting highlights appears at the bottom.",
-    "generatedAt": "2025-10-19T17:20:42.146Z"
+    "narrationText": "The highlights player appears at the bottom.",
+    "generatedAt": "2025-10-19T22:28:14.646Z"
   },
   "c1\\s2_segment_06_note.wav": {
-    "narrationText": "Note: If the meeting is a series meeting, BizChat currently won't show the highlights player yet.",
-    "generatedAt": "2025-10-19T17:20:42.148Z"
-  },
-  "c1\\s2_segment_07_future.wav": {
-    "narrationText": "We're working on additional ways to surface highlights via BizChat and Teams.",
-    "generatedAt": "2025-10-19T17:20:42.152Z"
-  },
-  "c1\\s3_segment_01_intro.wav": {
-    "narrationText": "Meeting Highlights delivers four key benefits to users.",
-    "generatedAt": "2025-10-19T17:21:04.911Z"
+    "narrationText": "For series meetings, click the arrow to view instances, then select one.",
+    "generatedAt": "2025-10-19T22:28:14.648Z"
   },
   "c2\\s1_segment_01_intro.wav": {
-    "narrationText": "Meeting Highlights brings together six Microsoft teams in a cross-organizational collaboration. Let me show you both how teams work together and the backend architecture flow.",
-    "generatedAt": "2025-10-19T17:21:04.922Z"
+    "narrationText": "Six Microsoft teams collaborate. Here's how they work together.",
+    "generatedAt": "2025-10-19T22:28:41.702Z"
   },
   "c2\\s1_segment_02_odsp.wav": {
-    "narrationText": "O-D-S-P handles storage and orchestration. When a Teams meeting ends with a recording, ODSP detects it and initiates the highlight generation process.",
-    "generatedAt": "2025-10-19T17:21:04.925Z"
+    "narrationText": "ODSP handles storage. When meetings end, it initiates highlight generation.",
+    "generatedAt": "2025-10-19T22:28:41.703Z"
   },
   "c2\\s1_segment_03_msai.wav": {
-    "narrationText": "M-S-A-I Hive processes meeting transcripts using Large Language Model technology. Our processor receives the transcript and calls the LLM with our prompts, which analyzes the content and returns structured metadata describing the highlights.",
-    "generatedAt": "2025-10-19T17:21:04.927Z"
+    "narrationText": "MSAI-Hive processes transcripts using LLMs to generate highlight metadata.",
+    "generatedAt": "2025-10-19T22:28:41.704Z"
   },
   "c5\\s1_segment_01_main.wav": {
-    "narrationText": "Cost efficiency while maintaining quality is critical for scaling meeting highlights globally.",
-    "generatedAt": "2025-10-19T08:27:41.578Z"
+    "narrationText": "Cost efficiency is critical for global scaling.",
+    "generatedAt": "2025-10-19T22:28:53.960Z"
   },
   "c5\\s2_segment_01_main.wav": {
-    "narrationText": "The initial implementation required 4 sequential LLM calls per meeting, creating significant computational costs.",
-    "generatedAt": "2025-10-19T08:28:14.268Z"
+    "narrationText": "Initial implementation: 4 sequential LLM calls, high computational costs.",
+    "generatedAt": "2025-10-19T22:28:53.962Z"
   },
   "c6\\s1_segment_01_main.wav": {
-    "narrationText": "We collapsed the four-step pipeline into one unified prompt with leaner input.",
-    "generatedAt": "2025-10-19T08:28:14.269Z"
+    "narrationText": "Collapsed four steps into one unified prompt.",
+    "generatedAt": "2025-10-19T22:28:53.963Z"
   },
   "c6\\s4_segment_01_main.wav": {
-    "narrationText": "We also optimized input tokens by switching from verbose JSON to compact schema and eliminating pre-computed candidate ranges.",
-    "generatedAt": "2025-10-19T08:28:14.272Z"
+    "narrationText": "Optimized tokens: compact schema, direct selection, no pre-computed ranges.",
+    "generatedAt": "2025-10-19T22:28:53.966Z"
   },
   "c7\\s1_segment_01_main.wav": {
-    "narrationText": "The impact: 75% fewer model invocations per meeting, and 60% reduction in input tokens.",
-    "generatedAt": "2025-10-19T08:28:14.275Z"
+    "narrationText": "75% fewer calls, 60% fewer tokens per meeting.",
+    "generatedAt": "2025-10-19T22:29:05.755Z"
   },
   "c7\\s2_segment_01_main.wav": {
-    "narrationText": "GPU capacity requirements are estimated to have dropped from roughly 600 to less than 200, over 70% reduction.",
-    "generatedAt": "2025-10-19T16:00:56.196Z"
+    "narrationText": "GPU capacity dropped 70%: from 600 to under 200.",
+    "generatedAt": "2025-10-19T22:29:05.756Z"
   },
   "c7\\s4_segment_01_main.wav": {
-    "narrationText": "The unified prompt produces higher-quality highlights that internal reviewers strongly prefer over the multi-prompt version.",
-    "generatedAt": "2025-10-19T08:28:14.280Z"
+    "narrationText": "Unified prompt produces higher quality—reviewers strongly prefer it.",
+    "generatedAt": "2025-10-19T22:29:05.758Z"
   },
   "c7\\s5_segment_01_main.wav": {
-    "narrationText": "These improvements unblock private preview and enable general availability within capacity constraints.",
-    "generatedAt": "2025-10-19T08:28:14.286Z"
+    "narrationText": "These improvements enable GA within capacity constraints.",
+    "generatedAt": "2025-10-19T22:29:05.759Z"
   },
   "c8\\s1_segment_01_intro.wav": {
-    "narrationText": "Meeting Highlights has received overwhelmingly positive feedback in recent MS Elite surveys.",
-    "generatedAt": "2025-10-19T08:28:14.288Z"
+    "narrationText": "Overwhelmingly positive feedback in MS Elite surveys.",
+    "generatedAt": "2025-10-19T22:29:05.760Z"
   },
   "c8\\s1_segment_02_useful.wav": {
-    "narrationText": "More than 80 percent of users rated Meeting Highlights as extremely useful or very useful.",
-    "generatedAt": "2025-10-19T08:28:42.306Z"
+    "narrationText": "80% rated it extremely or very useful.",
+    "generatedAt": "2025-10-19T22:29:05.762Z"
   },
   "c8\\s1_segment_03_likely.wav": {
-    "narrationText": "96 percent shared that they are very likely or likely to use the feature again.",
-    "generatedAt": "2025-10-19T08:28:42.307Z"
+    "narrationText": "96% likely to use again.",
+    "generatedAt": "2025-10-19T22:29:05.764Z"
   },
   "c8\\s1_segment_04_fit.wav": {
-    "narrationText": "This points to strong product-market fit and daily habit formation among our users.",
-    "generatedAt": "2025-10-19T08:28:42.309Z"
+    "narrationText": "Strong product-market fit and habit formation.",
+    "generatedAt": "2025-10-19T22:29:05.765Z"
   },
   "c9\\s1_segment_01_intro.wav": {
-    "narrationText": "Users have shared enthusiastic feedback about Meeting Highlights.",
-    "generatedAt": "2025-10-19T08:28:42.311Z"
+    "narrationText": "Enthusiastic user feedback.",
+    "generatedAt": "2025-10-19T22:29:05.767Z"
   },
   "c9\\s1_segment_02_kevin.wav": {
     "narrationText": "Kevin C. commented: \"Love this feature. Great way to catch up on a recap without watching the full thing.\"",
@@ -116,68 +108,28 @@
     "generatedAt": "2025-10-19T08:28:42.320Z"
   },
   "c9\\s2_segment_01_intro.wav": {
-    "narrationText": "Thank you for taking the time to explore Meeting Highlights.",
-    "generatedAt": "2025-10-19T16:25:00.594Z"
+    "narrationText": "Thank you for exploring Meeting Highlights.",
+    "generatedAt": "2025-10-19T22:29:05.769Z"
   },
   "c9\\s2_segment_02_value.wav": {
-    "narrationText": "Our goal is simple: help you reclaim time and stay aligned asynchronously.",
-    "generatedAt": "2025-10-19T16:25:00.597Z"
+    "narrationText": "Our goal: reclaim time, stay aligned.",
+    "generatedAt": "2025-10-19T22:29:09.676Z"
   },
   "c9\\s2_segment_03_feedback.wav": {
-    "narrationText": "We welcome your feedback. Send ideas or issues to meeting H-L devs at microsoft.com.",
-    "generatedAt": "2025-10-19T18:59:53.938Z"
+    "narrationText": "Send feedback to meetinghldevs at microsoft.com.",
+    "generatedAt": "2025-10-19T22:29:09.678Z"
   },
   "c9\\s2_segment_04_cta.wav": {
-    "narrationText": "You can try Meeting Highlights now in BizChat. Give it a spin on your next meeting.",
-    "generatedAt": "2025-10-19T16:25:00.602Z"
+    "narrationText": "Try it now in BizChat.",
+    "generatedAt": "2025-10-19T22:29:09.679Z"
   },
   "c1\\s1_segment_02_combination.wav": {
-    "narrationText": "It combines AI-generated voiceover summaries with authentic video clips, preserving the original tone, reactions, and discussion flow.",
-    "generatedAt": "2025-10-19T17:20:42.136Z"
+    "narrationText": "It combines AI summaries with authentic video clips, preserving tone and discussion flow.",
+    "generatedAt": "2025-10-19T22:28:14.636Z"
   },
   "c1\\s1_segment_03_problem.wav": {
-    "narrationText": "This lets you catch up on missed meetings without watching hour-long recordings.",
-    "generatedAt": "2025-10-19T17:20:42.137Z"
-  },
-  "c1\\s3_segment_04_engagement.wav": {
-    "narrationText": "Third, better engagement and retention through audiovisual content that caters to all learning styles.",
-    "generatedAt": "2025-10-19T17:21:04.916Z"
-  },
-  "c1\\s3_segment_05_dynamics.wav": {
-    "narrationText": "Fourth, preserved meeting dynamics. You get the tone and vibe of discussions, not just facts.",
-    "generatedAt": "2025-10-19T17:21:04.918Z"
-  },
-  "c1\\s3_segment_06_testimonial.wav": {
-    "narrationText": "Internal users have called it magical, with one manager saying it saved hours of reviewing transcripts.",
-    "generatedAt": "2025-10-19T17:21:04.920Z"
-  },
-  "c1/s3_segment_01_intro.wav": {
-    "narrationText": "Meeting Highlights delivers four key benefits to users.",
-    "generatedAt": "2025-10-19T18:35:44.393Z"
-  },
-  "c1\\s3_segment_02_triage.wav": {
-    "narrationText": "First, smart triage. The highlights help you decide whether you need to watch the full recording or if the recap is sufficient.",
-    "generatedAt": "2025-10-19T17:45:00.350Z"
-  },
-  "c1\\s3_segment_03_time.wav": {
-    "narrationText": "Second, massive time savings. If based on the triage you're satisfied with the highlights, you save time by not needing to watch the full recording.",
-    "generatedAt": "2025-10-19T17:45:00.354Z"
-  },
-  "c1/s3_segment_02_triage.wav": {
-    "narrationText": "First, smart triage. The highlights help you decide whether you need to watch the full recording or if the recap is sufficient.",
-    "generatedAt": "2025-10-19T17:45:36.171Z"
-  },
-  "c1/s3_segment_04_engagement.wav": {
-    "narrationText": "Third, better engagement and retention through audiovisual content that caters to all learning styles.",
-    "generatedAt": "2025-10-19T17:46:19.711Z"
-  },
-  "c1/s3_segment_05_dynamics.wav": {
-    "narrationText": "Fourth, preserved meeting dynamics. You get the tone and vibe of discussions, not just facts.",
-    "generatedAt": "2025-10-19T17:46:47.956Z"
-  },
-  "c1/s3_segment_06_testimonial.wav": {
-    "narrationText": "Internal users have called it magical, with one manager saying it saved hours of reviewing transcripts.",
-    "generatedAt": "2025-10-19T17:47:22.576Z"
+    "narrationText": "Catch up on meetings without watching hour-long recordings.",
+    "generatedAt": "2025-10-19T22:28:14.638Z"
   },
   "c2/s1_segment_01_intro.wav": {
     "narrationText": "Meeting Highlights brings together six Microsoft teams in a cross-organizational collaboration. Let me show you both how teams work together and the backend architecture flow.",
@@ -192,32 +144,8 @@
     "generatedAt": "2025-10-19T17:49:05.128Z"
   },
   "c2\\s1_segment_04_bizchat.wav": {
-    "narrationText": "BizChat provides the primary user interface with natural language access to highlights through conversational queries.",
-    "generatedAt": "2025-10-19T18:08:15.443Z"
-  },
-  "c2\\s1_segment_05_teams.wav": {
-    "narrationText": "We are also planning to provide access to highlights directly within the Teams ecosystem as another interface option.",
-    "generatedAt": "2025-10-19T18:08:15.447Z"
-  },
-  "c2\\s1_segment_06_loop_storage.wav": {
-    "narrationText": "Loop enables seamless embedding of the Clipchamp player within different application surfaces.",
-    "generatedAt": "2025-10-19T18:23:17.342Z"
-  },
-  "c2\\s1_segment_07_clipchamp.wav": {
-    "narrationText": "Clipchamp owns the highlights player component, delivering the rich visual playback experience users see, without requiring us to create a new video file.",
-    "generatedAt": "2025-10-19T18:08:15.453Z"
-  },
-  "c2\\s1_segment_08_conclusion.wav": {
-    "narrationText": "Together, these teams deliver a unified end-to-end experience from recording through AI processing to user access, showcasing true Microsoft collaboration.",
-    "generatedAt": "2025-10-19T18:35:16.658Z"
-  },
-  "c2/s1_segment_06_loop_storage.wav": {
-    "narrationText": "Loop enables seamless embedding of the Clipchamp player within different application surfaces.",
-    "generatedAt": "2025-10-19T18:26:10.619Z"
-  },
-  "c2/s1_segment_08_conclusion.wav": {
-    "narrationText": "Together, these teams deliver a unified end-to-end experience from recording through AI processing to user access, showcasing true Microsoft collaboration.",
-    "generatedAt": "2025-10-19T18:37:59.866Z"
+    "narrationText": "BizChat provides natural language access through conversational queries.",
+    "generatedAt": "2025-10-19T22:28:41.705Z"
   },
   "c6/s1_segment_01_main.wav": {
     "narrationText": "We collapsed the four-step pipeline into one unified prompt with leaner input.",
@@ -250,5 +178,101 @@
   "c8/s1_segment_01_intro.wav": {
     "narrationText": "Meeting Highlights has received overwhelmingly positive feedback in recent MS Elite surveys.",
     "generatedAt": "2025-10-19T19:21:05.835Z"
+  },
+  "c1\\s3_segment_01_intro.wav": {
+    "narrationText": "You can also access Meeting Highlights directly from SharePoint.",
+    "generatedAt": "2025-10-19T22:28:29.018Z"
+  },
+  "c1\\s3_segment_02_sharepoint.wav": {
+    "narrationText": "Navigate to the meeting recording recap page by clicking the recording link or via the Recap tab.",
+    "generatedAt": "2025-10-19T22:28:29.019Z"
+  },
+  "c1\\s3_segment_03_browser.wav": {
+    "narrationText": "Click the Watch in browser button.",
+    "generatedAt": "2025-10-19T22:28:29.020Z"
+  },
+  "c1\\s3_segment_04_play.wav": {
+    "narrationText": "Then click Play highlights to view your meeting recap.",
+    "generatedAt": "2025-10-19T22:28:29.022Z"
+  },
+  "c1\\s4_segment_01_intro.wav": {
+    "narrationText": "Meeting Highlights delivers four key benefits to users.",
+    "generatedAt": "2025-10-19T22:28:29.023Z"
+  },
+  "c1\\s4_segment_02_triage.wav": {
+    "narrationText": "First, smart triage. The highlights help you decide whether you need to watch the full recording or if the recap is sufficient.",
+    "generatedAt": "2025-10-19T22:28:29.025Z"
+  },
+  "c1\\s4_segment_03_time.wav": {
+    "narrationText": "Second, massive time savings. If based on the triage you're satisfied with the highlights, you save time by not needing to watch the full recording.",
+    "generatedAt": "2025-10-19T22:28:29.027Z"
+  },
+  "c1\\s4_segment_04_engagement.wav": {
+    "narrationText": "Third, better engagement and retention through audiovisual content that caters to all learning styles.",
+    "generatedAt": "2025-10-19T22:28:29.028Z"
+  },
+  "c1\\s4_segment_05_dynamics.wav": {
+    "narrationText": "Fourth, preserved meeting dynamics. You get the tone and vibe of discussions, not just facts.",
+    "generatedAt": "2025-10-19T22:28:29.031Z"
+  },
+  "c1\\s4_segment_06_testimonial.wav": {
+    "narrationText": "Internal users have called it magical, with one manager saying it saved hours of reviewing transcripts.",
+    "generatedAt": "2025-10-19T22:28:29.033Z"
+  },
+  "c2\\s1_segment_05_sharepoint.wav": {
+    "narrationText": "SharePoint offers direct access from meeting recap pages.",
+    "generatedAt": "2025-10-19T22:28:41.707Z"
+  },
+  "c2\\s1_segment_06_teams.wav": {
+    "narrationText": "Teams access planned as another interface option.",
+    "generatedAt": "2025-10-19T22:28:41.709Z"
+  },
+  "c2\\s1_segment_07_loop_storage.wav": {
+    "narrationText": "Loop embeds the Clipchamp player across applications.",
+    "generatedAt": "2025-10-19T22:28:41.711Z"
+  },
+  "c2\\s1_segment_08_clipchamp.wav": {
+    "narrationText": "Clipchamp delivers the player experience without creating new video files.",
+    "generatedAt": "2025-10-19T22:28:41.712Z"
+  },
+  "c2\\s1_segment_09_conclusion.wav": {
+    "narrationText": "Together delivering end-to-end experience—true Microsoft collaboration.",
+    "generatedAt": "2025-10-19T22:28:41.714Z"
+  },
+  "c4\\s1_segment_01_intro.wav": {
+    "narrationText": "Meeting Highlights combines two distinct types of highlights to create a comprehensive recap.",
+    "generatedAt": "2025-10-19T22:28:41.717Z"
+  },
+  "c4\\s1_segment_02_abstractive.wav": {
+    "narrationText": "First, abstractive highlights. These are AI-generated summaries that capture the key topics discussed in the meeting.",
+    "generatedAt": "2025-10-19T22:28:53.950Z"
+  },
+  "c4\\s1_segment_03_key_moments.wav": {
+    "narrationText": "Second, key moments. These are significant verbatim segments extracted directly from the meeting recording.",
+    "generatedAt": "2025-10-19T22:28:53.952Z"
+  },
+  "c4\\s1_segment_04_timestamps.wav": {
+    "narrationText": "Each highlight is a 20 to 30 second segment with precise timestamps and accompanying narration.",
+    "generatedAt": "2025-10-19T22:28:53.953Z"
+  },
+  "c4\\s1_segment_05_audio.wav": {
+    "narrationText": "The narration text is converted to natural-sounding audio using Azure Cognitive Services text-to-speech.",
+    "generatedAt": "2025-10-19T22:28:53.955Z"
+  },
+  "c4\\s1_segment_06_storage.wav": {
+    "narrationText": "All the metadata, audio files, and caption data are securely stored in ODSP.",
+    "generatedAt": "2025-10-19T22:28:53.957Z"
+  },
+  "c4\\s1_segment_07_platforms.wav": {
+    "narrationText": "Making highlights available across Microsoft 365 platforms wherever users work.",
+    "generatedAt": "2025-10-19T22:28:53.958Z"
+  },
+  "c1/s2_segment_01_intro.wav": {
+    "narrationText": "Access Meeting Highlights through BizChat.",
+    "generatedAt": "2025-10-19T22:36:47.940Z"
+  },
+  "c1/s3_segment_01_intro.wav": {
+    "narrationText": "You can also access Meeting Highlights directly from SharePoint.",
+    "generatedAt": "2025-10-19T22:37:51.313Z"
   }
 }

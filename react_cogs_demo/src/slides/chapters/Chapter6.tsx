@@ -121,7 +121,7 @@ Ch6_S1_UnifiedConvergence.metadata = {
   audioSegments: [{
     id: "main",
     audioFilePath: "/audio/c6/s1_segment_01_main.wav",
-    narrationText: "We collapsed the four-step pipeline into one unified prompt with leaner input."
+    narrationText: "Collapsed four steps into one unified prompt."
   }]
 };
 
@@ -165,6 +165,6 @@ Ch6_S4_TokenOptimization.metadata = {
   audioSegments: [{
     id: "main",
     audioFilePath: "/audio/c6/s4_segment_01_main.wav",
-    narrationText: "We also optimized input tokens by switching from verbose JSON to compact schema and eliminating pre-computed candidate ranges."
+    narrationText: "Optimized tokens: compact schema, direct selection, no pre-computed ranges."
   }]
 };

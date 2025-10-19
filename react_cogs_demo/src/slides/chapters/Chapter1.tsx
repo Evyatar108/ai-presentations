@@ -149,21 +149,21 @@ Ch1_S1_WhatIsMeetingHighlights.metadata = {
       audioFilePath: "/audio/c1/s1_segment_01_intro.wav",
       srtSegmentNumber: 1,
       visualDescription: "Title slide \"Meeting Highlights\"",
-      narrationText: "Meeting Highlights is a new feature that automatically generates a 2 to 3 minute video recap of your meetings."
+      narrationText: "Meeting Highlights automatically generates 2-3 minute video recaps of your meetings."
     },
     {
       id: "combination",
       audioFilePath: "/audio/c1/s1_segment_02_combination.wav",
       srtSegmentNumber: 2,
       visualDescription: "Split screen showing AI summaries + authentic video clips",
-      narrationText: "It combines AI-generated voiceover summaries with authentic video clips, preserving the original tone, reactions, and discussion flow."
+      narrationText: "It combines AI summaries with authentic video clips, preserving tone and discussion flow."
     },
     {
       id: "problem",
       audioFilePath: "/audio/c1/s1_segment_03_problem.wav",
       srtSegmentNumber: 3,
       visualDescription: "Value prop highlight box appears",
-      narrationText: "This lets you catch up on missed meetings without watching hour-long recordings."
+      narrationText: "Catch up on meetings without watching hour-long recordings."
     }
   ]
 };
@@ -180,7 +180,7 @@ export const Ch1_S2_HowToAccess: SlideComponentWithMetadata = () => {
       <AnimatePresence>
         {isSegmentVisible(0) && (
           <SlideTitle reduced={reduced}>
-            How to Access Meeting Highlights
+            How to Access Meeting Highlights via BizChat
           </SlideTitle>
         )}
       </AnimatePresence>
@@ -199,14 +199,14 @@ export const Ch1_S2_HowToAccess: SlideComponentWithMetadata = () => {
             }}
           >
             {/* Left column: Video */}
-            <ContentCard style={{ padding: '2rem' }}>
+            <ContentCard style={{ padding: '0.5rem' }}>
               <p style={{ ...typography.body, fontSize: 18, marginBottom: '1.5rem', marginTop: 0 }}>
                 Open <strong style={{ color: '#00B7C3' }}>BizChat</strong> and ask it to recap a specific meeting
               </p>
               <div style={{
                 background: '#0f172a',
                 borderRadius: 12,
-                padding: '1.5rem'
+                padding: '0.5rem'
               }}>
                 <VideoPlayer
                   videoPath="/videos/meeting_highlights_usage_in_bizchat.mp4"
@@ -273,29 +273,16 @@ export const Ch1_S2_HowToAccess: SlideComponentWithMetadata = () => {
                     initial="hidden"
                     animate="visible"
                     style={{
-                      background: '#78350f',
+                      background: '#1e40af',
                       borderRadius: 12,
                       padding: '1.25rem',
-                      border: '1px solid #fbbf24'
+                      border: '1px solid #60a5fa'
                     }}
                   >
-                    <p style={{ color: '#fef3c7', fontSize: 14, margin: 0 }}>
-                      ⚠️ Note: Series meetings don't show the highlights player yet
+                    <p style={{ color: '#dbeafe', fontSize: 14, margin: 0 }}>
+                      💡 For meeting series: Click the arrow on the right side of the series to open the list of instances, then select a recorded instance
                     </p>
                   </motion.div>
-                )}
-              </AnimatePresence>
-
-              <AnimatePresence>
-                {isSegmentVisible(6) && (
-                  <motion.p
-                    variants={fadeRight(reduced)}
-                    initial="hidden"
-                    animate="visible"
-                    style={{ ...typography.caption, fontSize: 13, marginTop: '0.5rem', marginBottom: 0 }}
-                  >
-                    Additional entry points via Teams and M365 Copilot coming soon
-                  </motion.p>
                 )}
               </AnimatePresence>
             </div>
@@ -309,7 +296,7 @@ export const Ch1_S2_HowToAccess: SlideComponentWithMetadata = () => {
 Ch1_S2_HowToAccess.metadata = {
   chapter: 1,
   slide: 2,
-  title: "How to Access",
+  title: "How to Access via BizChat",
   srtFilePath: "highlights_demo/chapters/c1/s2_how_to_access.srt",
   audioSegments: [
     {
@@ -317,57 +304,199 @@ Ch1_S2_HowToAccess.metadata = {
       audioFilePath: "/audio/c1/s2_segment_01_intro.wav",
       srtSegmentNumber: 1,
       visualDescription: "BizChat interface screenshot",
-      narrationText: "Let me show you how to access Meeting Highlights through BizChat."
+      narrationText: "Access Meeting Highlights through BizChat."
     },
     {
       id: "bizchat",
       audioFilePath: "/audio/c1/s2_segment_02_bizchat.wav",
       srtSegmentNumber: 2,
       visualDescription: "Embedded MP4 demo video showing BizChat interaction",
-      narrationText: "Open BizChat and ask it to recap a specific meeting."
+      narrationText: "Open BizChat and ask for a meeting recap."
     },
     {
       id: "ciq",
       audioFilePath: "/audio/c1/s2_segment_03_ciq.wav",
       srtSegmentNumber: 3,
       visualDescription: "Demo continues - showing \"/\" menu for CIQ",
-      narrationText: "You can reference specific meetings using C-I-Q by typing a forward slash."
+      narrationText: "Type forward slash to reference meetings using C-I-Q."
     },
     {
       id: "select",
       audioFilePath: "/audio/c1/s2_segment_04_select.wav",
       srtSegmentNumber: 4,
       visualDescription: "Demo shows meeting selection from menu",
-      narrationText: "This opens a menu to select and search for meetings to add to your message."
+      narrationText: "Select and search for meetings from the menu."
     },
     {
       id: "player",
       audioFilePath: "/audio/c1/s2_segment_05_player.wav",
       srtSegmentNumber: 5,
       visualDescription: "Demo shows BizChat response with video player at bottom",
-      narrationText: "BizChat will return a reply to your query and a video player with the meeting highlights appears at the bottom."
+      narrationText: "The highlights player appears at the bottom."
     },
     {
       id: "note",
       audioFilePath: "/audio/c1/s2_segment_06_note.wav",
       srtSegmentNumber: 6,
-      visualDescription: "Note callout appears",
-      narrationText: "Note: If the meeting is a series meeting, BizChat currently won't show the highlights player yet."
-    },
-    {
-      id: "future",
-      audioFilePath: "/audio/c1/s2_segment_07_future.wav",
-      srtSegmentNumber: 7,
-      visualDescription: "Icons showing Teams, BizChat, M365 Copilot entry points",
-      narrationText: "We're working on additional ways to surface highlights via BizChat and Teams."
+      visualDescription: "Note callout appears with info icon",
+      narrationText: "For series meetings, click the arrow to view instances, then select one."
     }
   ]
 };
 
 /**
- * Chapter 1, Slide 3 - User Value Proposition
+ * Chapter 1, Slide 3 - How to Access via SharePoint
  */
-export const Ch1_S3_UserValue: SlideComponentWithMetadata = () => {
+export const Ch1_S3_HowToAccessSharePoint: SlideComponentWithMetadata = () => {
+  const { reduced } = useReducedMotion();
+  const { isSegmentVisible } = useSegmentedAnimation();
+
+  return (
+    <SlideContainer maxWidth={1200}>
+      <AnimatePresence>
+        {isSegmentVisible(0) && (
+          <SlideTitle reduced={reduced}>
+            How to Access Meeting Highlights via SharePoint
+          </SlideTitle>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {isSegmentVisible(1) && (
+          <motion.div
+            variants={scaleIn(reduced)}
+            initial="hidden"
+            animate="visible"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1.2fr 1fr',
+              gap: '2rem',
+              alignItems: 'start'
+            }}
+          >
+            {/* Left column: Video */}
+            <ContentCard style={{ padding: '0.5rem' }}>
+              <p style={{ ...typography.body, fontSize: 18, marginBottom: '1.5rem', marginTop: 0 }}>
+                Access highlights directly from <strong style={{ color: '#00B7C3' }}>SharePoint</strong> meeting recap page
+              </p>
+              <div style={{
+                background: '#0f172a',
+                borderRadius: 12,
+                padding: '0.5rem'
+              }}>
+                <VideoPlayer
+                  videoPath="/videos/meeting_highlights_usage_in_sharepoint.mp4"
+                  isPlaying={isSegmentVisible(1)}
+                  freezeOnEnd={true}
+                />
+              </div>
+            </ContentCard>
+
+            {/* Right column: Instructions */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <AnimatePresence>
+                {isSegmentVisible(2) && (
+                  <motion.div
+                    variants={fadeRight(reduced)}
+                    initial="hidden"
+                    animate="visible"
+                  >
+                    <ContentCard style={{ padding: '1.5rem' }}>
+                      <p style={{ ...typography.body, fontSize: 15, margin: 0 }}>
+                        📝 Go to meeting recording recap page via recording link or Recap tab
+                      </p>
+                    </ContentCard>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              <AnimatePresence>
+                {isSegmentVisible(3) && (
+                  <motion.div
+                    variants={fadeRight(reduced)}
+                    initial="hidden"
+                    animate="visible"
+                  >
+                    <ContentCard style={{ padding: '1.5rem' }}>
+                      <p style={{ ...typography.body, fontSize: 15, margin: 0 }}>
+                        🌐 Click <strong style={{ color: '#00B7C3' }}>"Watch in browser"</strong> button
+                      </p>
+                    </ContentCard>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              <AnimatePresence>
+                {isSegmentVisible(4) && (
+                  <motion.div
+                    variants={fadeRight(reduced)}
+                    initial="hidden"
+                    animate="visible"
+                  >
+                    <GradientHighlightBox reduced={reduced} style={{ padding: '1.5rem' }}>
+                      <p style={{ color: '#e2e8f0', fontSize: 15, margin: 0 }}>
+                        🎬 Click <strong>"Play highlights"</strong> button to view
+                      </p>
+                    </GradientHighlightBox>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </SlideContainer>
+  );
+};
+
+Ch1_S3_HowToAccessSharePoint.metadata = {
+  chapter: 1,
+  slide: 3,
+  title: "How to Access via SharePoint",
+  srtFilePath: "highlights_demo/chapters/c1/s3_how_to_access_sharepoint.srt",
+  audioSegments: [
+    {
+      id: "intro",
+      audioFilePath: "/audio/c1/s3_segment_01_intro.wav",
+      srtSegmentNumber: 1,
+      visualDescription: "SharePoint interface screenshot",
+      narrationText: "You can also access Meeting Highlights directly from SharePoint."
+    },
+    {
+      id: "video",
+      audioFilePath: "/audio/c1/s3_segment_02_video.wav",
+      srtSegmentNumber: 2,
+      visualDescription: "Video player appears showing SharePoint demo",
+      narrationText: "Open BizChat and ask for a meeting recap."
+    },
+    {
+      id: "sharepoint",
+      audioFilePath: "/audio/c1/s3_segment_03_sharepoint.wav",
+      srtSegmentNumber: 3,
+      visualDescription: "First instruction card appears",
+      narrationText: "Navigate to the meeting recording recap page by clicking the recording link or via the Recap tab."
+    },
+    {
+      id: "browser",
+      audioFilePath: "/audio/c1/s3_segment_04_browser.wav",
+      srtSegmentNumber: 4,
+      visualDescription: "Demo shows 'Watch in browser' button",
+      narrationText: "Click the Watch in browser button."
+    },
+    {
+      id: "play",
+      audioFilePath: "/audio/c1/s3_segment_05_play.wav",
+      srtSegmentNumber: 5,
+      visualDescription: "Demo shows 'Play highlights' button",
+      narrationText: "Then click Play highlights to view your meeting recap."
+    }
+  ]
+};
+
+/**
+ * Chapter 1, Slide 4 - User Value Proposition
+ */
+export const Ch1_S4_UserValue: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
   const { isSegmentVisible, isOnSegment } = useSegmentedAnimation();
 
@@ -469,9 +598,9 @@ export const Ch1_S3_UserValue: SlideComponentWithMetadata = () => {
   );
 };
 
-Ch1_S3_UserValue.metadata = {
+Ch1_S4_UserValue.metadata = {
   chapter: 1,
-  slide: 3,
+  slide: 4,
   title: "Four Key Benefits",
   srtFilePath: "highlights_demo/chapters/c1/s3_user_value.srt",
   audioSegments: [

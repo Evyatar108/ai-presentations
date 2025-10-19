@@ -57,6 +57,13 @@ const teams: TeamInfo[] = [
     description: 'Provides natural language access'
   },
   {
+    id: 'sharepoint',
+    name: 'SharePoint',
+    logo: '/images/logos/odsp.png',
+    role: 'Web UI',
+    description: 'Direct access from meeting recap page'
+  },
+  {
     id: 'teams',
     name: 'Teams',
     logo: '/images/logos/Teams.png',
@@ -219,7 +226,18 @@ const ArchitectureDiagram: React.FC<{
         logo: '/images/logos/BizChat.png',
         segment: 3
       },
-      position: { x: 150, y: 420 }
+      position: { x: 50, y: 420 }
+    },
+    {
+      id: 'sharepoint',
+      type: 'archNode',
+      data: {
+        label: 'SharePoint',
+        role: 'Web UI',
+        logo: '/images/logos/odsp.png',
+        segment: 4
+      },
+      position: { x: 350, y: 420 }
     },
     {
       id: 'teams',
@@ -228,7 +246,7 @@ const ArchitectureDiagram: React.FC<{
         label: 'Teams',
         role: 'Planned UI',
         logo: '/images/logos/Teams.png',
-        segment: 4
+        segment: 5
       },
       position: { x: 650, y: 420 }
     },
@@ -239,7 +257,7 @@ const ArchitectureDiagram: React.FC<{
         label: 'Loop',
         role: 'Integration Layer',
         logo: '/images/logos/Loop.png',
-        segment: 5
+        segment: 6
       },
       position: { x: 400, y: 320 }
     },
@@ -300,7 +318,16 @@ const ArchitectureDiagram: React.FC<{
       target: 'loop',
       targetHandle: 'left',
       label: '(2) Requests player',
-      data: { segment: 5 }
+      data: { segment: 6 }
+    },
+    {
+      id: 'sharepoint-loop',
+      source: 'sharepoint',
+      sourceHandle: 'top',
+      target: 'loop',
+      targetHandle: 'bottom',
+      label: '(2) Requests player',
+      data: { segment: 6 }
     },
     {
       id: 'teams-loop',
@@ -309,7 +336,7 @@ const ArchitectureDiagram: React.FC<{
       target: 'loop',
       targetHandle: 'right',
       label: '(2) Requests player',
-      data: { segment: 5 }
+      data: { segment: 6 }
     },
     {
       id: 'loop-clipchamp',
@@ -345,14 +372,14 @@ const ArchitectureDiagram: React.FC<{
           const edgeSegment = (e.data as any)?.segment || 0;
           const edgeId = e.id;
           
-          const isRequestsPlayer = edgeId === 'bizchat-loop' || edgeId === 'teams-loop';
+          const isRequestsPlayer = edgeId === 'bizchat-loop' || edgeId === 'sharepoint-loop' || edgeId === 'teams-loop';
           const isLoopClipchamp = edgeId === 'loop-clipchamp';
           const isClipchampOdsp = edgeId === 'clipchamp-odsp';
           
           const shouldAnimate =
             (edgeSegment === currentSegmentIndex) ||
-            (currentSegmentIndex === 5 && isRequestsPlayer) ||
-            (currentSegmentIndex === 6 && (isLoopClipchamp || isClipchampOdsp));
+            (currentSegmentIndex === 6 && isRequestsPlayer) ||
+            (currentSegmentIndex === 7 && (isLoopClipchamp || isClipchampOdsp));
           
           const strokeColor = shouldAnimate ? '#0078D4' : '#00B7C3';
           
@@ -441,16 +468,17 @@ export const Ch2_TeamCollaboration: SlideComponentWithMetadata = () => {
    }
  }, [currentSegmentIndex, shouldShowDualView]);
   // Architecture flow steps that progressively reveal - aligned with narration
-  // Segments: 0=intro, 1=ODSP, 2=MSAI, 3=BizChat, 4=Teams, 5=Loop, 6=Clipchamp, 7=conclusion
+  // Segments: 0=intro, 1=ODSP, 2=MSAI, 3=BizChat, 4=SharePoint, 5=Teams, 6=Loop, 7=Clipchamp, 8=conclusion
   const archFlowSteps = [
     { id: 'recording', icon: '📹', label: 'Teams Recording', desc: 'Meeting ends, event triggered', segment: 1 },
     { id: 'odsp-init', icon: '🗄️', label: 'ODSP', desc: 'Initiates highlight generation', segment: 1 },
     { id: 'tmr', icon: '⚙️', label: 'MSAI Processor', desc: 'Calls LLM with transcript', segment: 2 },
     { id: 'llm', icon: '🤖', label: 'LLM Analysis', desc: 'Returns highlights metadata', segment: 2 },
     { id: 'bizchat', icon: '💬', label: 'BizChat Access', desc: 'Natural language interface', segment: 3 },
-    { id: 'teams-access', icon: '👥', label: 'Teams Access', desc: 'Planned interface option', segment: 4 },
-    { id: 'loop', icon: '🔗', label: 'Loop Integration', desc: 'Embeds player component', segment: 5 },
-    { id: 'clipchamp', icon: '🎬', label: 'Clipchamp Player', desc: 'Delivers playback experience', segment: 6 }
+    { id: 'sharepoint-access', icon: '🌐', label: 'SharePoint Access', desc: 'Direct web interface', segment: 4 },
+    { id: 'teams-access', icon: '👥', label: 'Teams Access', desc: 'Planned interface option', segment: 5 },
+    { id: 'loop', icon: '🔗', label: 'Loop Integration', desc: 'Embeds player component', segment: 6 },
+    { id: 'clipchamp', icon: '🎬', label: 'Clipchamp Player', desc: 'Delivers playback experience', segment: 7 }
   ];
 
  return (
@@ -645,42 +673,47 @@ Ch2_TeamCollaboration.metadata = {
     {
       id: 'intro',
       audioFilePath: '/audio/c2/s1_segment_01_intro.wav',
-      narrationText: 'Meeting Highlights brings together six Microsoft teams in a cross-organizational collaboration. Let me show you both how teams work together and the backend architecture flow.'
+      narrationText: 'Six Microsoft teams collaborate. Here\'s how they work together.'
     },
     {
       id: 'odsp',
       audioFilePath: '/audio/c2/s1_segment_02_odsp.wav',
-      narrationText: 'O-D-S-P handles storage and orchestration. When a Teams meeting ends with a recording, ODSP detects it and initiates the highlight generation process.'
+      narrationText: 'ODSP handles storage. When meetings end, it initiates highlight generation.'
     },
     {
       id: 'msai',
       audioFilePath: '/audio/c2/s1_segment_03_msai.wav',
-      narrationText: 'M-S-A-I Hive processes meeting transcripts using Large Language Model technology. Our processor receives the transcript and calls the LLM with our prompts, which analyzes the content and returns structured metadata describing the highlights.'
+      narrationText: 'MSAI-Hive processes transcripts using LLMs to generate highlight metadata.'
     },
     {
       id: 'bizchat',
       audioFilePath: '/audio/c2/s1_segment_04_bizchat.wav',
-      narrationText: 'BizChat provides the primary user interface with natural language access to highlights through conversational queries.'
+      narrationText: 'BizChat provides natural language access through conversational queries.'
+    },
+    {
+      id: 'sharepoint',
+      audioFilePath: '/audio/c2/s1_segment_05_sharepoint.wav',
+      narrationText: 'SharePoint offers direct access from meeting recap pages.'
     },
     {
       id: 'teams',
-      audioFilePath: '/audio/c2/s1_segment_05_teams.wav',
-      narrationText: 'We are also planning to provide access to highlights directly within the Teams ecosystem as another interface option.'
+      audioFilePath: '/audio/c2/s1_segment_06_teams.wav',
+      narrationText: 'Teams access planned as another interface option.'
     },
     {
       id: 'loop_storage',
-      audioFilePath: '/audio/c2/s1_segment_06_loop_storage.wav',
-      narrationText: 'Loop enables seamless embedding of the Clipchamp player within different application surfaces.'
+      audioFilePath: '/audio/c2/s1_segment_07_loop_storage.wav',
+      narrationText: 'Loop embeds the Clipchamp player across applications.'
     },
     {
       id: 'clipchamp',
-      audioFilePath: '/audio/c2/s1_segment_07_clipchamp.wav',
-      narrationText: 'Clipchamp owns the highlights player component, delivering the rich visual playback experience users see, without requiring us to create a new video file.'
+      audioFilePath: '/audio/c2/s1_segment_08_clipchamp.wav',
+      narrationText: 'Clipchamp delivers the player experience without creating new video files.'
     },
     {
       id: 'conclusion',
-      audioFilePath: '/audio/c2/s1_segment_08_conclusion.wav',
-      narrationText: 'Together, these teams deliver a unified end-to-end experience from recording through AI processing to user access, showcasing true Microsoft collaboration.'
+      audioFilePath: '/audio/c2/s1_segment_09_conclusion.wav',
+      narrationText: 'Together delivering end-to-end experience—true Microsoft collaboration.'
     }
   ]
 };
