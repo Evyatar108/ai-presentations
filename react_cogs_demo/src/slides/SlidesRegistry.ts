@@ -4,6 +4,7 @@ import {
   Ch1_S1_WhatIsMeetingHighlights,
   Ch1_S2_HowToAccess,
   Ch1_S3_UserValue,
+  Ch2_TeamCollaboration,
   Ch3_S1_ArchitectureOverview,
   Ch4_S1_HighlightTypes,
   Ch5_S1_ChallengeFraming,
@@ -13,13 +14,13 @@ import {
   Ch6_S4_TokenOptimization,
   Ch7_S1_CallReduction,
   Ch7_S2_GPUReduction,
+  Ch7_S3_CostCurve,
+  Ch7_S4_QualityComparison,
   Ch7_S5_PathToGA,
   Ch8_S1_UserSatisfaction,
   Ch9_S1_Testimonials,
   Ch9_S2_FutureImprovements
 } from './AnimatedSlides';
-import { Ch2_TeamCollaboration } from './TeamCollaborationSlide';
-import { Ch7_S3_CostCurve, Ch7_S4_QualityComparison } from '../components/ImpactComponents';
 /**
  * Central registry of all slide components with their metadata.
  * Components are automatically sorted by chapter and slide number.

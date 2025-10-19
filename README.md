@@ -200,11 +200,12 @@ public/audio/
 - [`src/main.tsx`](react_cogs_demo/src/main.tsx) - React initialization
 - [`src/App.tsx`](react_cogs_demo/src/App.tsx) - Main app with slide registry
 - [`src/components/SlidePlayer.tsx`](react_cogs_demo/src/components/SlidePlayer.tsx) - Slide navigation & transitions
-- [`src/slides/AnimatedSlides.tsx`](react_cogs_demo/src/slides/AnimatedSlides.tsx) - Framer Motion animated slides
-- [`src/components/CoreComponents.tsx`](react_cogs_demo/src/components/CoreComponents.tsx) - Reusable UI components
-- [`src/components/ImpactComponents.tsx`](react_cogs_demo/src/components/ImpactComponents.tsx) - Impact visualization slides
+- [`src/slides/AnimatedSlides.tsx`](react_cogs_demo/src/slides/AnimatedSlides.tsx) - **All 23 slide components** (consolidated)
+- [`src/slides/SlidesRegistry.ts`](react_cogs_demo/src/slides/SlidesRegistry.ts) - Central registry importing all slides
+- [`src/components/CoreComponents.tsx`](react_cogs_demo/src/components/CoreComponents.tsx) - Reusable UI components (MetricTile, etc.)
 - [`src/accessibility/ReducedMotion.tsx`](react_cogs_demo/src/accessibility/ReducedMotion.tsx) - Motion preferences context
 - [`src/components/VideoPlayer.tsx`](react_cogs_demo/src/components/VideoPlayer.tsx) - Demo video player component
+- [`src/components/NarratedController.tsx`](react_cogs_demo/src/components/NarratedController.tsx) - Audio-synced presentation controller
 - [`scripts/generate-tts.ts`](react_cogs_demo/scripts/generate-tts.ts) - TTS audio generation with smart caching
 - [`scripts/calculate-durations.ts`](react_cogs_demo/scripts/calculate-durations.ts) - Audio duration calculation
 - [`scripts/check-tts-cache.ts`](react_cogs_demo/scripts/check-tts-cache.ts) - Pre-flight cache validation

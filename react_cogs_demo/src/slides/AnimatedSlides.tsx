@@ -7,6 +7,11 @@ import { VideoPlayer } from '../components/VideoPlayer';
 import { SlideComponentWithMetadata } from './SlideMetadata';
 
 /**
+ * ALL SLIDE COMPONENTS FOR MEETING HIGHLIGHTS PRESENTATION
+ * Consolidated from AnimatedSlides.tsx, ImpactComponents.tsx, and TeamCollaborationSlide.tsx
+ */
+
+/**
  /**
   * Blank Intro Slide
   * Simple dark screen to start narration cleanly
@@ -2858,6 +2863,716 @@ Ch9_S2_FutureImprovements.metadata = {
 };
 
 /**
+ * ============================================================================
+ * CHAPTER 2: TEAM COLLABORATION
+ * ============================================================================
+ */
+
+interface TeamInfo {
+  id: string;
+  name: string;
+  logo: string;
+  role: string;
+  description: string;
+}
+
+const teams: TeamInfo[] = [
+  {
+    id: 'intro',
+    name: 'Cross-Team Collaboration',
+    logo: '',
+    role: '',
+    description: 'Meeting Highlights brings together six Microsoft teams'
+  },
+  {
+    id: 'odsp',
+    name: 'ODSP',
+    logo: '/images/logos/odsp.png',
+    role: 'Storage & Orchestration',
+    description: 'Initiates highlights generation and stores all data'
+  },
+  {
+    id: 'msai',
+    name: 'MSAI-Hive',
+    logo: '/images/logos/msai-hive.png',
+    role: 'AI Generation',
+    description: 'Processes transcripts using LLM technology'
+  },
+  {
+    id: 'clipchamp',
+    name: 'Clipchamp',
+    logo: '/images/logos/ClipChamp.png',
+    role: 'Video Player',
+    description: 'Owns the highlights player component'
+  },
+  {
+    id: 'loop',
+    name: 'Loop',
+    logo: '/images/logos/Loop.png',
+    role: 'Integration Layer',
+    description: 'Enables seamless player embedding'
+  },
+  {
+    id: 'bizchat',
+    name: 'BizChat',
+    logo: '/images/logos/BizChat.png',
+    role: 'Primary UI',
+    description: 'Provides natural language access'
+  },
+  {
+    id: 'teams',
+    name: 'Teams',
+    logo: '/images/logos/Teams.png',
+    role: 'Alternative UI',
+    description: 'Delivers within Teams ecosystem'
+  },
+  {
+    id: 'conclusion',
+    name: 'True Collaboration',
+    logo: '',
+    role: '',
+    description: 'Together delivering a seamless user experience'
+  }
+];
+
+/**
+ * Chapter 2 - Team Collaboration
+ * Demonstrates multi-segment slide with progressive logo reveals
+ */
+export const Ch2_TeamCollaboration: SlideComponentWithMetadata = () => {
+  const { reduced } = useReducedMotion();
+  const { currentSegmentIndex, isSegmentVisible } = useSegmentedAnimation();
+
+  const visibleTeams = teams.filter((_, index) => isSegmentVisible(index));
+  const currentTeam = teams[currentSegmentIndex];
+  const isIntroOrConclusion = currentTeam?.id === 'intro' || currentTeam?.id === 'conclusion';
+
+  return (
+    <div
+      style={{
+        background: '#0f172a',
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '2rem',
+        fontFamily: 'Inter, system-ui, sans-serif'
+      }}
+    >
+      <motion.h1
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        style={{
+          color: '#f1f5f9',
+          marginBottom: '3rem',
+          fontSize: 36,
+          textAlign: 'center'
+        }}
+      >
+        Meeting Highlights - Team Collaboration
+      </motion.h1>
+
+      {isIntroOrConclusion && (
+        <motion.div
+          key={currentTeam.id}
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.9 }}
+          transition={{ duration: reduced ? 0.3 : 0.6 }}
+          style={{
+            textAlign: 'center',
+            maxWidth: 600,
+            marginBottom: '3rem'
+          }}
+        >
+          <p
+            style={{
+              color: '#e2e8f0',
+              fontSize: 24,
+              lineHeight: 1.6
+            }}
+          >
+            {currentTeam.description}
+          </p>
+        </motion.div>
+      )}
+
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(3, 1fr)',
+          gap: '2rem',
+          maxWidth: 900,
+          width: '100%'
+        }}
+      >
+        <AnimatePresence mode="popLayout">
+          {visibleTeams
+            .filter(team => team.logo)
+            .map((team) => {
+              const isCurrentTeam = team.id === currentTeam?.id;
+              
+              return (
+                <motion.div
+                  key={team.id}
+                  initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                  animate={{
+                    opacity: 1,
+                    scale: isCurrentTeam ? 1.05 : 1,
+                    y: 0
+                  }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{
+                    duration: reduced ? 0.3 : 0.6,
+                    type: 'spring',
+                    stiffness: 100
+                  }}
+                  style={{
+                    background: isCurrentTeam
+                      ? 'linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))'
+                      : '#1e293b',
+                    borderRadius: 16,
+                    padding: '2rem',
+                    border: isCurrentTeam ? '2px solid #00B7C3' : '1px solid #334155',
+                    boxShadow: isCurrentTeam && !reduced
+                      ? '0 0 30px rgba(0, 183, 195, 0.4)'
+                      : '0 4px 12px rgba(0, 0, 0, 0.3)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    textAlign: 'center',
+                    position: 'relative'
+                  }}
+                >
+                  <motion.img
+                    src={team.logo}
+                    alt={team.name}
+                    style={{
+                      width: 80,
+                      height: 80,
+                      objectFit: 'contain',
+                      marginBottom: '1rem'
+                    }}
+                    animate={
+                      isCurrentTeam && !reduced
+                        ? {
+                            scale: [1, 1.1, 1],
+                            transition: { duration: 2, repeat: Infinity }
+                          }
+                        : {}
+                    }
+                  />
+
+                  <h3
+                    style={{
+                      color: '#f1f5f9',
+                      fontSize: 20,
+                      fontWeight: 600,
+                      margin: '0.5rem 0'
+                    }}
+                  >
+                    {team.name}
+                  </h3>
+
+                  <p
+                    style={{
+                      color: '#00B7C3',
+                      fontSize: 14,
+                      fontWeight: 500,
+                      margin: '0.25rem 0 0.75rem'
+                    }}
+                  >
+                    {team.role}
+                  </p>
+
+                  <AnimatePresence>
+                    {isCurrentTeam && (
+                      <motion.p
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: reduced ? 0.2 : 0.4 }}
+                        style={{
+                          color: '#94a3b8',
+                          fontSize: 13,
+                          lineHeight: 1.5,
+                          margin: 0
+                        }}
+                      >
+                        {team.description}
+                      </motion.p>
+                    )}
+                  </AnimatePresence>
+
+                  {isCurrentTeam && (
+                    <motion.div
+                      initial={{ scale: 0, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      exit={{ scale: 0, opacity: 0 }}
+                      transition={{ type: 'spring', stiffness: 200 }}
+                      style={{
+                        position: 'absolute',
+                        top: -10,
+                        right: -10,
+                        width: 30,
+                        height: 30,
+                        borderRadius: '50%',
+                        background: '#10b981',
+                        border: '3px solid #0f172a',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: 16,
+                        color: '#fff'
+                      }}
+                    >
+                      ✓
+                    </motion.div>
+                  )}
+                </motion.div>
+              );
+            })}
+        </AnimatePresence>
+      </div>
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.5 }}
+        style={{
+          marginTop: '3rem',
+          display: 'flex',
+          gap: '0.5rem',
+          alignItems: 'center'
+        }}
+      >
+        {teams.map((team, index) => (
+          <div
+            key={team.id}
+            style={{
+              width: 10,
+              height: 10,
+              borderRadius: '50%',
+              background: isSegmentVisible(index) ? '#00B7C3' : '#334155',
+              border: index === currentSegmentIndex ? '2px solid #f1f5f9' : 'none',
+              transition: 'all 0.3s ease'
+            }}
+          />
+        ))}
+      </motion.div>
+    </div>
+  );
+};
+
+Ch2_TeamCollaboration.metadata = {
+  chapter: 2,
+  slide: 1,
+  title: 'Team Collaboration',
+  srtFilePath: 'highlights_demo/chapters/c2/s1_team_collaboration.srt',
+  audioSegments: [
+    {
+      id: 'intro',
+      audioFilePath: '/audio/c2/s1_segment_01_intro.wav',
+      narrationText: 'Meeting Highlights brings together six Microsoft teams in a cross-organizational collaboration.'
+    },
+    {
+      id: 'odsp',
+      audioFilePath: '/audio/c2/s1_segment_02_odsp.wav',
+      narrationText: 'ODSP handles storage and orchestration, initiating highlights generation when recordings are created.'
+    },
+    {
+      id: 'msai',
+      audioFilePath: '/audio/c2/s1_segment_03_msai.wav',
+      narrationText: 'MSAI-Hive processes meeting transcripts using Large Language Model technology to generate highlight content.'
+    },
+    {
+      id: 'clipchamp',
+      audioFilePath: '/audio/c2/s1_segment_04_clipchamp.wav',
+      narrationText: 'Clipchamp owns the highlights player component, delivering the visual playback experience.'
+    },
+    {
+      id: 'loop',
+      audioFilePath: '/audio/c2/s1_segment_05_loop.wav',
+      narrationText: 'Loop enables seamless embedding of the Clipchamp player within different application surfaces.'
+    },
+    {
+      id: 'bizchat',
+      audioFilePath: '/audio/c2/s1_segment_06_bizchat.wav',
+      narrationText: 'BizChat provides the primary user interface with natural language access to highlights.'
+    },
+    {
+      id: 'teams',
+      audioFilePath: '/audio/c2/s1_segment_07_teams.wav',
+      narrationText: 'Teams delivers highlights within the Teams ecosystem, sharing the same player technology via Loop.'
+    },
+    {
+      id: 'conclusion',
+      audioFilePath: '/audio/c2/s1_segment_08_conclusion.wav',
+      narrationText: 'Together, these teams deliver a unified user experience that showcases true Microsoft collaboration.'
+    }
+  ]
+};
+
+/**
+ * ============================================================================
+ * CHAPTER 7: COST CURVE & QUALITY COMPARISON (from ImpactComponents.tsx)
+ * ============================================================================
+ */
+
+/**
+ * Chapter 7, Slide 3 - Cost Curve
+ * Stacked bar comparison showing component cost reduction
+ */
+export const Ch7_S3_CostCurve: SlideComponentWithMetadata = () => {
+  const { reduced } = useReducedMotion();
+  const v1 = { calls: 40, orchestration: 18, tokens: 22, gpuPadding: 20 };
+  const v2 = { calls: 10, orchestration: 2, tokens: 12, gpuPadding: 8 };
+  const savingsPct = 70;
+  
+  const hScale = 2.4;
+  const barStyle: React.CSSProperties = {
+    width: 140,
+    borderRadius: 10,
+    display:'flex',
+    flexDirection:'column-reverse',
+    overflow:'hidden',
+    border:'1px solid #334155',
+    background:'#0f172a'
+  };
+  
+  const v1Segments = [
+    { key:'calls', color:'#ef4444', h:v1.calls, label:'LLM Calls' },
+    { key:'orch', color:'#f59e0b', h:v1.orchestration, label:'Orchestration' },
+    { key:'tokens', color:'#6366f1', h:v1.tokens, label:'Tokens' },
+    { key:'gpu', color:'#94a3b8', h:v1.gpuPadding, label:'GPU Padding' }
+  ];
+  const v2Segments = [
+    { key:'calls', color:'#22c55e', h:v2.calls, label:'LLM Calls' },
+    { key:'orch', color:'#10b981', h:v2.orchestration, label:'Orchestration' },
+    { key:'tokens', color:'#0ea5e9', h:v2.tokens, label:'Tokens' },
+    { key:'gpu', color:'#64748b', h:v2.gpuPadding, label:'GPU Padding' }
+  ];
+  
+  const StackedBars: React.FC = () => {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -12 }}
+        transition={{ duration: reduced ? 0.2 : 0.3 }}
+        style={{display:'flex', gap:'4rem', justifyContent:'center', alignItems:'flex-end', marginTop:'2rem', height: 250}}
+      >
+        <motion.div style={{textAlign:'center'}}>
+          <motion.div style={barStyle}>
+            {v1Segments.map((seg, idx) => (
+              <motion.div
+                key={seg.key}
+                title={seg.label}
+                initial={{ height: 0 }}
+                animate={{ height: seg.h * hScale }}
+                exit={{ height: 0 }}
+                transition={{
+                  duration: reduced ? 0.2 : 0.4,
+                  delay: reduced ? 0 : idx * 0.05,
+                  ease: 'easeOut'
+                }}
+                style={{ background: seg.color }}
+              />
+            ))}
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: reduced ? 0 : 0.7 }}
+            style={{color:'#94a3b8', fontSize:12, marginTop:6}}
+          >
+            V1 Total
+          </motion.div>
+        </motion.div>
+        <motion.div style={{textAlign:'center'}}>
+          <motion.div style={barStyle}>
+            {v2Segments.map((seg, idx) => (
+              <motion.div
+                key={seg.key}
+                title={seg.label}
+                initial={{ height: 0 }}
+                animate={{ height: seg.h * hScale }}
+                exit={{ height: 0 }}
+                transition={{
+                  duration: reduced ? 0.2 : 0.4,
+                  delay: reduced ? 0 : idx * 0.05,
+                  ease: 'easeOut'
+                }}
+                style={{ background: seg.color }}
+              />
+            ))}
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: reduced ? 0 : 0.7 }}
+            style={{color:'#94a3b8', fontSize:12, marginTop:6}}
+          >
+            Unified V2
+          </motion.div>
+        </motion.div>
+      </motion.div>
+    );
+  };
+  
+  const commonTileRow = (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: reduced ? 0.2 : 0.5, delay: reduced ? 0 : 1 }}
+      style={{
+        display:'flex',
+        gap:'0.75rem',
+        marginTop:'1.5rem',
+        flexWrap:'wrap',
+        justifyContent:'center',
+        alignItems:'stretch'
+      }}
+    >
+      <MetricTile label="LLM Calls" before="4" after="1" emphasis note="Call collapse" />
+      <div style={{fontSize:28, color:'#94a3b8', display:'flex', alignItems:'center'}}>+</div>
+      <MetricTile label="Transcript Format" before="Verbose" after="Compact" note="Schema redesign" />
+      <div style={{fontSize:28, color:'#94a3b8', display:'flex', alignItems:'center'}}>+</div>
+      <MetricTile label="Extractive Input" before="Candidates" after="Direct" note="Model selects ranges" />
+      <div style={{fontSize:28, color:'#94a3b8', display:'flex', alignItems:'center'}}>=</div>
+      <MetricTile label="GPU Capacity" before="~600" after="~200" emphasis note="Resulting capacity" />
+    </motion.div>
+  );
+  
+  return (
+    <div style={{
+      background: '#0f172a',
+      minHeight: '100vh',
+      width: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '2rem',
+      fontFamily: 'Inter, system-ui, sans-serif'
+    }}>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: reduced ? 0.2 : 0.6 }}
+        style={{
+          color:'#f1f5f9',
+          border:'1px solid #334155',
+          borderRadius:16,
+          padding:'1.5rem',
+          maxWidth:1000,
+          width: '100%'
+        }}
+      >
+        <motion.h2
+          initial={{ y: -12, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: reduced ? 0.2 : 0.5 }}
+          style={{marginTop:0}}
+        >
+          COGS Impact: Multi-Call vs Unified Prompt
+        </motion.h2>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: reduced ? 0 : 0.3, duration: reduced ? 0.2 : 0.5 }}
+          style={{fontSize:14, lineHeight:1.5, opacity:0.85}}
+        >
+          Unified prompt consolidation combines three major levers (call reduction, compact transcript format, direct extractive range selection) yielding a {savingsPct}%+ variable cost reduction and enabling GPU capacity drop (~600→~200).
+        </motion.p>
+  <div style={{ minHeight: 120 }}>
+    <StackedBars />
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0 }}
+      transition={{ delay: reduced ? 0 : 0.9, duration: 0.4 }}
+      style={{marginTop:'1.5rem', textAlign:'center', fontSize:16, color:'#94a3b8'}}
+    >
+      Estimated Cost Reduction:{' '}
+      <motion.span
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ delay: reduced ? 0 : 1.1, type:'spring', duration:0.6 }}
+        style={{color:'#22c55e', fontWeight:600}}
+      >
+        {savingsPct}%+
+      </motion.span>
+    </motion.div>
+  </div>
+
+  
+        {commonTileRow}
+      </motion.div>
+    </div>
+  );
+};
+
+Ch7_S3_CostCurve.metadata = {
+  chapter: 7,
+  slide: 3,
+  title: "Cost Savings",
+  audioSegments: [{
+    id: "main",
+    audioFilePath: "/audio/c7/s3_segment_01_main.wav",
+    narrationText: "Combined, this is estimated to cut COGS by over 70%, enabling economically viable worldwide rollout."
+  }]
+};
+
+/**
+ * Chapter 7, Slide 4 - Quality Comparison
+ * Animated qualitative preference shift toward unified prompt outputs
+ */
+export const Ch7_S4_QualityComparison: SlideComponentWithMetadata = () => {
+  const { reduced } = useReducedMotion();
+  
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: reduced ? 0 : 0.12,
+        delayChildren: reduced ? 0 : 0.25
+      }
+    }
+  };
+  const fadeUp = {
+    hidden: { opacity: 0, y: reduced ? 0 : 12 },
+    visible: { opacity: 1, y: 0, transition: { duration: reduced ? 0.2 : 0.5 } }
+  };
+  const tileVariants = {
+    hidden: { opacity: 0, scale: reduced ? 1 : 0.85 },
+    visible: { opacity: 1, scale: 1, transition: { duration: reduced ? 0.25 : 0.6 } }
+  };
+  
+  return (
+    <div style={{
+      background: '#0f172a',
+      minHeight: '100vh',
+      width: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '2rem',
+      fontFamily: 'Inter, system-ui, sans-serif'
+    }}>
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        style={{
+          color:'#f1f5f9',
+          border:'1px solid #334155',
+          borderRadius:16,
+          padding:'1.5rem',
+          maxWidth:900,
+          width: '100%'
+        }}
+      >
+        <motion.h2 variants={fadeUp} style={{marginTop:0}}>
+          Quality Shift: Unified Prompt Preference
+        </motion.h2>
+        <motion.p
+          variants={fadeUp}
+          style={{fontSize:14, lineHeight:1.5, opacity:0.85}}
+        >
+          Early internal feedback strongly prefers unified prompt highlight videos over the multi-call pipeline output. Gains center on depth and natural flow.
+        </motion.p>
+        
+        <motion.div
+          variants={fadeUp}
+          style={{display:'flex', gap:'1rem', flexWrap:'wrap', marginTop:'1rem', justifyContent:'center'}}
+          aria-label="Unified prompt quality improvements"
+        >
+          <motion.div variants={tileVariants}>
+            <MetricTile label="Detail Level" before="Surface/Generic" after="Detailed" />
+          </motion.div>
+          <motion.div variants={tileVariants}>
+            <MetricTile label="Redundancy" before="Higher" after="Lower" />
+          </motion.div>
+          <motion.div variants={tileVariants}>
+            <MetricTile label="Narrative Style" before="Plain/Robotic" after="Natural/Flowing" />
+          </motion.div>
+          
+          <motion.div
+            variants={tileVariants}
+            initial={{ opacity: 0, scale: reduced ? 1 : 0.9 }}
+            animate={reduced ? {} : { opacity: 1, scale: 1 }}
+            style={{
+              background: 'linear-gradient(135deg, #00B7C3, #0078D4)',
+              borderRadius: 12,
+              padding: '1rem',
+              minWidth: 180,
+              textAlign: 'center',
+              boxShadow: reduced ? 'none' : '0 4px 12px rgba(0, 183, 195, 0.3)',
+              position:'relative'
+            }}
+            aria-label="Internal reviewers strongly prefer unified prompt output"
+          >
+            <motion.div
+              style={{ position:'absolute', inset:0, borderRadius:12 }}
+              initial={{ opacity:0 }}
+              animate={reduced ? {} : { opacity:[0.15,0.35,0.15] }}
+              transition={{ duration:2.5, repeat:Infinity }}
+            />
+            <div style={{ fontSize: 14, fontWeight: 600, color: '#fff', marginBottom: '0.5rem' }}>
+              Internal Reviewers
+            </div>
+            <motion.div
+              initial={{ scale: reduced ? 1 : 0.92 }}
+              animate={reduced ? {} : { scale: [1, 1.12, 1], opacity: [1, 1, 1] }}
+              transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+              style={{
+                fontSize: 24,
+                fontWeight: 'bold',
+                color: '#fff',
+                display: 'inline-block',
+                willChange: 'transform',
+                transformOrigin: 'center center'
+              }}
+            >
+              Strongly Prefer
+            </motion.div>
+            <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.9)', marginTop: '0.5rem' }}>
+              Unified Prompt Output
+            </div>
+          </motion.div>
+        </motion.div>
+        
+        <motion.div
+          variants={fadeUp}
+          style={{marginTop:'1.5rem', textAlign:'center', fontSize:12, opacity:0.55}}
+        >
+          The unified prompt improved cohesion, detail depth, and reduced redundancy based on initial feedback.
+        </motion.div>
+      </motion.div>
+    </div>
+  );
+};
+
+Ch7_S4_QualityComparison.metadata = {
+  chapter: 7,
+  slide: 4,
+  title: "Quality Improvement",
+  audioSegments: [{
+    id: "main",
+    audioFilePath: "/audio/c7/s4_segment_01_main.wav",
+    narrationText: "The unified prompt produces higher-quality highlights that internal reviewers strongly prefer over the multi-prompt version."
+  }]
+};
+
+/**
+ * ============================================================================
+ * EXPORTS
+ * ============================================================================
+ */
+
+/**
  * Export all animated slides
  */
 export const AnimatedSlides = {
@@ -2865,6 +3580,7 @@ export const AnimatedSlides = {
   Ch1_S1_WhatIsMeetingHighlights,
   Ch1_S2_HowToAccess,
   Ch1_S3_UserValue,
+  Ch2_TeamCollaboration,
   Ch3_S1_ArchitectureOverview,
   Ch4_S1_HighlightTypes,
   Ch5_S1_ChallengeFraming,
@@ -2878,6 +3594,8 @@ export const AnimatedSlides = {
   Ch6_S4_TokenOptimization,
   Ch7_S1_CallReduction,
   Ch7_S2_GPUReduction,
+  Ch7_S3_CostCurve,
+  Ch7_S4_QualityComparison,
   Ch7_S5_PathToGA,
   Ch8_S1_UserSatisfaction,
   Ch9_S1_Testimonials,

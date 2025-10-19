@@ -1,5 +1,13 @@
 # Agents - Meeting Highlights COGS Reduction Presentation
 
+## ⚠️ IMPORTANT: Documentation Maintenance
+
+**When making changes to the project, ALWAYS update both:**
+1. [`README.md`](README.md) - Main project documentation
+2. [`Agents.md`](Agents.md) - This file (AI agent context & recent changes)
+
+These files must stay synchronized with the codebase to provide accurate context for future work.
+
 ## Project Overview
 
 This project contains materials for an all-hands presentation about Meeting Highlights feature and its COGS (Cost of Goods Sold) optimization. The presentation explains what Meeting Highlights is as a product and details the technical optimizations that reduced computational costs by over 70%.
@@ -75,12 +83,13 @@ Interactive presentation slides built with React, Framer Motion, and TypeScript:
 
 #### Key Files
 - **src/App.tsx** - Main application component
-- **src/slides/AnimatedSlides.tsx** - All animated slide components
-- **src/slides/SlidesRegistry.ts** - Central registry of slides with metadata
+- **src/slides/AnimatedSlides.tsx** - **All 23 slide components consolidated** (Ch0-Ch9)
+- **src/slides/SlidesRegistry.ts** - Central registry importing all slides from AnimatedSlides.tsx
 - **src/components/CoreComponents.tsx** - Reusable UI components (MetricTile, etc.)
-- **src/components/ImpactComponents.tsx** - Business impact visualizations
 - **src/components/NarratedController.tsx** - Audio-synced presentation controller
 - **src/components/VideoPlayer.tsx** - Demo video player with freeze-on-end functionality
+- **src/contexts/SegmentContext.tsx** - Segment state management for multi-segment slides
+- **src/accessibility/ReducedMotion.tsx** - Motion preferences context
 
 #### Notable Slides
 - **Ch5_S1_ChallengeFraming** - Shows initial metrics (4 calls, ~600 GPUs, high tokens)
@@ -143,6 +152,18 @@ Interactive presentation slides built with React, Framer Motion, and TypeScript:
 - **70%+** estimated COGS reduction overall
 
 ## Recent Changes
+
+### 2025-01-20: File Consolidation
+**Consolidated All Slide Components:**
+- Merged all slides into single file ([`src/slides/AnimatedSlides.tsx`](react_cogs_demo/src/slides/AnimatedSlides.tsx))
+- Components consolidated:
+  - Ch2_TeamCollaboration (from TeamCollaborationSlide.tsx)
+  - Ch7_S3_CostCurve (from ImpactComponents.tsx)
+  - Ch7_S4_QualityComparison (from ImpactComponents.tsx)
+  - All existing slides from AnimatedSlides.tsx
+- Updated SlidesRegistry.ts to import all slides from AnimatedSlides.tsx only
+- Deleted redundant files: TeamCollaborationSlide.tsx, ImpactComponents.tsx
+- Result: Cleaner project structure with all 23 slides in one location
 
 ### 2025-01-20: Video Player Integration
 **Added Demo Video Support:**
