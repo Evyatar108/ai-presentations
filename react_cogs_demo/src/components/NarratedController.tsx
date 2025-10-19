@@ -5,10 +5,10 @@ import { hasAudioSegments } from '../slides/SlideMetadata';
 import { useSegmentContext } from '../contexts/SegmentContext';
 
 interface NarratedControllerProps {
-  onSlideChange: (chapter: number, utterance: number) => void;
+  onSlideChange: (chapter: number, slide: number) => void;
   onPlaybackStart?: () => void;
   onPlaybackEnd?: () => void;
-  manualSlideChange?: { chapter: number; utterance: number } | null;
+  manualSlideChange?: { chapter: number; slide: number } | null;
 }
 
 export const NarratedController: React.FC<NarratedControllerProps> = ({
@@ -61,13 +61,13 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     if (!isPlaying || currentIndex >= allSlides.length || isManualMode) return;
     
     const currentSlide = allSlides[currentIndex].metadata;
-    const slideKey = `Ch${currentSlide.chapter}:U${currentSlide.utterance}`;
+    const slideKey = `Ch${currentSlide.chapter}:U${currentSlide.slide}`;
     
     console.log(`[NarratedController] Playing slide: ${slideKey} with ${currentSlide.audioSegments.length} segment(s)`);
     playSlideSegments(currentSlide, slideKey);
     
     // Update slide display
-    onSlideChange(currentSlide.chapter, currentSlide.utterance);
+    onSlideChange(currentSlide.chapter, currentSlide.slide);
     
     // Cleanup function
     return () => {
@@ -192,7 +192,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     setIsManualMode(true);
     setIsManualWithAudio(false);
     setCurrentIndex(0);
-    onSlideChange(allSlides[0].metadata.chapter, allSlides[0].metadata.utterance);
+    onSlideChange(allSlides[0].metadata.chapter, allSlides[0].metadata.slide);
   };
 
   // Start manual mode with audio
@@ -207,7 +207,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     setIsManualMode(true);
     setIsManualWithAudio(true);
     setCurrentIndex(0);
-    onSlideChange(allSlides[0].metadata.chapter, allSlides[0].metadata.utterance);
+    onSlideChange(allSlides[0].metadata.chapter, allSlides[0].metadata.slide);
   };
 
   // Play audio for current slide in manual+audio mode
@@ -236,7 +236,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     // Setup event handlers - use ref to get current index at time of onended
     audio.onended = () => {
       const indexAtEnd = currentIndexRef.current;
-      console.log(`[Manual+Audio] onended chapter=${slide.chapter} utterance=${slide.utterance} indexAtEnd=${indexAtEnd}`);
+      console.log(`[Manual+Audio] onended chapter=${slide.chapter} slide=${slide.slide} indexAtEnd=${indexAtEnd}`);
       
       // Auto-advance if enabled
       if (autoAdvanceOnAudioEnd) {
@@ -246,7 +246,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
           lastAutoAdvanceFromIndexRef.current = indexAtEnd;
           setCurrentIndex(nextIndex);
           const nextSlide = allSlides[nextIndex].metadata;
-          onSlideChange(nextSlide.chapter, nextSlide.utterance);
+          onSlideChange(nextSlide.chapter, nextSlide.slide);
         } else {
           console.log('[Manual+Audio] reached end, not advancing');
         }
@@ -254,12 +254,12 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     };
 
     audio.onerror = (e: any) => {
-      console.error(`Failed to load audio for chapter ${slide.chapter}, utterance ${slide.utterance}:`, e);
-      setError(`Failed to load audio for chapter ${slide.chapter}, utterance ${slide.utterance}`);
+      console.error(`Failed to load audio for chapter ${slide.chapter}, slide ${slide.slide}:`, e);
+      setError(`Failed to load audio for chapter ${slide.chapter}, slide ${slide.slide}`);
     };
 
     audio.onplay = () => {
-      console.log(`[Manual+Audio] playing chapter=${slide.chapter} utterance=${slide.utterance} index=${currentIndex}`);
+      console.log(`[Manual+Audio] playing chapter=${slide.chapter} slide=${slide.slide} index=${currentIndex}`);
       setError(null);
     };
 
@@ -281,7 +281,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
   useEffect(() => {
     if (!isManualMode || !isManualWithAudio || manualSlideChange == null) return;
     const slideIndex = allSlides.findIndex(s =>
-      s.metadata.chapter === manualSlideChange.chapter && s.metadata.utterance === manualSlideChange.utterance
+      s.metadata.chapter === manualSlideChange.chapter && s.metadata.slide === manualSlideChange.slide
     );
     if (slideIndex === -1) return;
 
@@ -504,7 +504,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
           }}
         >
           <span>
-            Slide {currentIndex + 1} of {allSlides.length} (Ch{allSlides[currentIndex].metadata.chapter}:U{allSlides[currentIndex].metadata.utterance})
+            Slide {currentIndex + 1} of {allSlides.length} (Ch{allSlides[currentIndex].metadata.chapter}:S{allSlides[currentIndex].metadata.slide})
           </span>
           
           {/* Auto-advance toggle (only in manual+audio mode) */}

@@ -6,30 +6,30 @@ import { allSlides } from './slides/SlidesRegistry';
 import { SegmentProvider } from './contexts/SegmentContext';
 
 export const App: React.FC = () => {
-  const [currentSlide, setCurrentSlide] = useState<{ chapter: number; utterance: number } | undefined>(undefined);
+  const [currentSlide, setCurrentSlide] = useState<{ chapter: number; slide: number } | undefined>(undefined);
   const [isNarratedMode, setIsNarratedMode] = useState(false);
-  const [manualSlideChange, setManualSlideChange] = useState<{ chapter: number; utterance: number } | null>(null);
+  const [manualSlideChange, setManualSlideChange] = useState<{ chapter: number; slide: number } | null>(null);
 
+  // Build slides from component metadata
   // Build slides from component metadata
   const slides = useMemo((): Slide[] => {
     const builtSlides = allSlides.map(slideComponent => ({
       chapter: slideComponent.metadata.chapter,
-      utterance: slideComponent.metadata.utterance,
+      slide: slideComponent.metadata.slide,
       title: slideComponent.metadata.title,
       Component: slideComponent
     }));
-    console.log('[App] Built slides from metadata:', builtSlides.map(s => `Ch${s.chapter}:U${s.utterance}`));
+    console.log('[App] Built slides from metadata:', builtSlides.map(s => `Ch${s.chapter}:S${s.slide}`));
     return builtSlides;
   }, []);
-
-  const handleSlideChange = (chapter: number, utterance: number) => {
-    setCurrentSlide({ chapter, utterance });
+  const handleSlideChange = (chapter: number, slide: number) => {
+    setCurrentSlide({ chapter, slide });
   };
 
-  const handleManualSlideChange = (chapter: number, utterance: number) => {
+  const handleManualSlideChange = (chapter: number, slide: number) => {
     // This is called by SlidePlayer when user manually navigates
-    setManualSlideChange({ chapter, utterance });
-    setCurrentSlide({ chapter, utterance });
+    setManualSlideChange({ chapter, slide });
+    setCurrentSlide({ chapter, slide });
   };
 
   const handlePlaybackStart = () => {

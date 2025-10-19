@@ -16,7 +16,7 @@ export interface AudioSegment {
   */
  export interface SlideMetadata {
    chapter: number;
-   utterance: number;
+   slide: number;
    title: string;
    
    // Reference to slide definition SRT file

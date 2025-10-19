@@ -312,17 +312,17 @@ export const Ch2_TeamCollaboration: SlideComponentWithMetadata = () => {
 
 Ch2_TeamCollaboration.metadata = {
   chapter: 2,
-  utterance: 1,
+  slide: 1,
   title: 'Team Collaboration',
-  isMultiSegment: true,
+  srtFilePath: 'highlights_demo/chapters/c2/s1_team_collaboration.srt',
   audioSegments: [
-    { id: 'intro', audioFilePath: '/audio/ch2_intro.mp3' },
-    { id: 'odsp', audioFilePath: '/audio/ch2_odsp.mp3' },
-    { id: 'msai', audioFilePath: '/audio/ch2_msai.mp3' },
-    { id: 'clipchamp', audioFilePath: '/audio/ch2_clipchamp.mp3' },
-    { id: 'loop', audioFilePath: '/audio/ch2_loop.mp3' },
-    { id: 'bizchat', audioFilePath: '/audio/ch2_bizchat.mp3' },
-    { id: 'teams', audioFilePath: '/audio/ch2_teams.mp3' },
-    { id: 'conclusion', audioFilePath: '/audio/ch2_conclusion.mp3' }
+    { id: 'intro', audioFilePath: '/audio/00-Silence.mp3' },
+    { id: 'odsp', audioFilePath: '/audio/00-Silence.mp3' },
+    { id: 'msai', audioFilePath: '/audio/00-Silence.mp3' },
+    { id: 'clipchamp', audioFilePath: '/audio/00-Silence.mp3' },
+    { id: 'loop', audioFilePath: '/audio/00-Silence.mp3' },
+    { id: 'bizchat', audioFilePath: '/audio/00-Silence.mp3' },
+    { id: 'teams', audioFilePath: '/audio/00-Silence.mp3' },
+    { id: 'conclusion', audioFilePath: '/audio/00-Silence.mp3' }
   ]
 };

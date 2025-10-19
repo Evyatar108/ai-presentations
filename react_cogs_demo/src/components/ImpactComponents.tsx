@@ -258,7 +258,7 @@ export const Ch7_S3_CostCurve: SlideComponentWithMetadata = () => {
 
 Ch7_S3_CostCurve.metadata = {
   chapter: 7,
-  utterance: 3,
+  slide: 3,
   title: "Cost Savings",
   audioSegments: [{ id: "main", audioFilePath: "/audio/12-Audio 12.wav" }]
 };
@@ -396,7 +396,7 @@ export const Ch7_S4_QualityComparison: SlideComponentWithMetadata = () => {
 
 Ch7_S4_QualityComparison.metadata = {
   chapter: 7,
-  utterance: 4,
+  slide: 4,
   title: "Quality Improvement",
   audioSegments: [{ id: "main", audioFilePath: "/audio/13-Audio 13.wav" }]
 };

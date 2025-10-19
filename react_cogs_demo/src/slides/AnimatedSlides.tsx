@@ -1,6 +1,7 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useReducedMotion } from '../accessibility/ReducedMotion';
+import { useSegmentedAnimation } from '../contexts/SegmentContext';
 import { MetricTile } from '../components/CoreComponents';
 import { SlideComponentWithMetadata } from './SlideMetadata';
 
@@ -40,7 +41,7 @@ import { SlideComponentWithMetadata } from './SlideMetadata';
 
 BlankIntro.metadata = {
   chapter: 0,
-  utterance: 0,
+  slide: 0,
   title: "Intro",
   audioSegments: [{ id: "main", audioFilePath: "/audio/00-Silence.mp3" }]
 };
@@ -163,7 +164,7 @@ export const Ch5_S1_ChallengeFraming: SlideComponentWithMetadata = () => {
 
 Ch5_S1_ChallengeFraming.metadata = {
   chapter: 5,
-  utterance: 1,
+  slide: 1,
   title: "Challenge Framing",
   audioSegments: [{ id: "main", audioFilePath: "/audio/01-Audio 1.wav" }]
 };
@@ -271,7 +272,7 @@ export const Ch5_S2_FourPrompts: SlideComponentWithMetadata = () => {
 
 Ch5_S2_FourPrompts.metadata = {
   chapter: 5,
-  utterance: 2,
+  slide: 2,
   title: "Four-Prompt Pipeline",
   audioSegments: [{ id: "main", audioFilePath: "/audio/02-Audio 2.wav" }]
 };
@@ -383,7 +384,7 @@ export const Ch6_S1_UnifiedConvergence: SlideComponentWithMetadata = () => {
 
 Ch6_S1_UnifiedConvergence.metadata = {
   chapter: 6,
-  utterance: 1,
+  slide: 1,
   title: "Unified Convergence",
   audioSegments: [{ id: "main", audioFilePath: "/audio/07-Audio 7.wav" }]
 };
@@ -556,7 +557,7 @@ Ch6_S1_UnifiedConvergence.metadata = {
  };
 Ch7_S1_CallReduction.metadata = {
   chapter: 7,
-  utterance: 1,
+  slide: 1,
   title: "Call Reduction",
   audioSegments: [{ id: "main", audioFilePath: "/audio/10-Audio 10.wav" }]
 };
@@ -700,7 +701,7 @@ export const Ch7_S2_GPUReduction: SlideComponentWithMetadata = () => {
 
 Ch7_S2_GPUReduction.metadata = {
   chapter: 7,
-  utterance: 2,
+  slide: 2,
   title: "GPU Optimization",
   audioSegments: [{ id: "main", audioFilePath: "/audio/11-Audio 11.wav" }]
 };
@@ -779,7 +780,7 @@ export const Ch5_S3_TopicAbstraction: SlideComponentWithMetadata = () => {
 
 Ch5_S3_TopicAbstraction.metadata = {
   chapter: 5,
-  utterance: 3,
+  slide: 3,
   title: "Prompt 1: Topic Abstraction",
   audioSegments: [{ id: "main", audioFilePath: "/audio/03-Audio 3.wav" }]
 };
@@ -857,7 +858,7 @@ export const Ch5_S4_ExtractiveSelection: SlideComponentWithMetadata = () => {
 
 Ch5_S4_ExtractiveSelection.metadata = {
   chapter: 5,
-  utterance: 4,
+  slide: 4,
   title: "Prompt 2: Extractive Selection",
   audioSegments: [{ id: "main", audioFilePath: "/audio/04-Audio 4.wav" }]
 };
@@ -935,7 +936,7 @@ export const Ch5_S5_QualityRanking: SlideComponentWithMetadata = () => {
 
 Ch5_S5_QualityRanking.metadata = {
   chapter: 5,
-  utterance: 5,
+  slide: 5,
   title: "Prompt 3: Quality Ranking",
   audioSegments: [{ id: "main", audioFilePath: "/audio/05-Audio 5.wav" }]
 };
@@ -1013,7 +1014,7 @@ export const Ch5_S6_NarrativeSynthesis: SlideComponentWithMetadata = () => {
 
 Ch5_S6_NarrativeSynthesis.metadata = {
   chapter: 5,
-  utterance: 6,
+  slide: 6,
   title: "Prompt 4: Narrative Synthesis",
   audioSegments: [{ id: "main", audioFilePath: "/audio/06-Audio 6.wav" }]
 };
@@ -1108,7 +1109,7 @@ export const Ch6_S2_UnifiedFlow: SlideComponentWithMetadata = () => {
 
 Ch6_S2_UnifiedFlow.metadata = {
   chapter: 6,
-  utterance: 2,
+  slide: 2,
   title: "Unified Flow Details",
   audioSegments: [{ id: "main", audioFilePath: "/audio/08-Audio 8.wav" }]
 };
@@ -1168,7 +1169,7 @@ export const Ch6_S4_TokenOptimization: SlideComponentWithMetadata = () => {
 
 Ch6_S4_TokenOptimization.metadata = {
   chapter: 6,
-  utterance: 4,
+  slide: 4,
   title: "Token Optimization",
   audioSegments: [{ id: "main", audioFilePath: "/audio/09-Audio 9.wav" }]
 };
@@ -1325,27 +1326,1266 @@ export const Ch7_S5_PathToGA: SlideComponentWithMetadata = () => {
 
 Ch7_S5_PathToGA.metadata = {
   chapter: 7,
-  utterance: 5,
+  slide: 5,
   title: "Path to GA",
   audioSegments: [{ id: "main", audioFilePath: "/audio/14-Audio 14.wav" }]
 };
 
 /**
- /**
-  * Export all animated slides
-  */
- export const AnimatedSlides = {
-   BlankIntro,
-   Ch5_S1_ChallengeFraming,
-   Ch5_S2_FourPrompts,
-   Ch5_S3_TopicAbstraction,
-   Ch5_S4_ExtractiveSelection,
-   Ch5_S5_QualityRanking,
-   Ch5_S6_NarrativeSynthesis,
-   Ch6_S1_UnifiedConvergence,
-   Ch6_S2_UnifiedFlow,
-   Ch6_S4_TokenOptimization,
-   Ch7_S1_CallReduction,
-   Ch7_S2_GPUReduction,
-   Ch7_S5_PathToGA
- };
+ * Chapter 1, Slide 1 - What is Meeting Highlights
+ */
+export const Ch1_S1_WhatIsMeetingHighlights: SlideComponentWithMetadata = () => {
+  const { reduced } = useReducedMotion();
+  const { isSegmentVisible } = useSegmentedAnimation();
+
+  return (
+    <div style={{
+      background: '#0f172a',
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '2rem',
+      fontFamily: 'Inter, system-ui, sans-serif'
+    }}>
+      <div style={{ maxWidth: 900, width: '100%', textAlign: 'center' }}>
+        <AnimatePresence>
+          {isSegmentVisible(0) && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: reduced ? 0.2 : 0.6 }}
+            >
+              <h1 style={{ color: '#f1f5f9', marginBottom: '2rem', fontSize: 48 }}>
+                Meeting Highlights
+              </h1>
+              <p style={{ color: '#94a3b8', fontSize: 20, marginBottom: '3rem' }}>
+                A new Microsoft Teams feature
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {isSegmentVisible(1) && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: reduced ? 0.3 : 0.6, delay: reduced ? 0 : 0.2 }}
+              style={{
+                background: '#1e293b',
+                borderRadius: 16,
+                padding: '2rem',
+                marginBottom: '2rem'
+              }}
+            >
+              <p style={{ color: '#e2e8f0', fontSize: 18, lineHeight: 1.6 }}>
+                Automatically generates a <strong style={{ color: '#00B7C3' }}>3-5 minute video recap</strong> of your meeting
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {isSegmentVisible(2) && (
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: reduced ? 0.3 : 0.5 }}
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                gap: '2rem',
+                marginBottom: '2rem'
+              }}
+            >
+              <div style={{
+                background: 'linear-gradient(135deg, #00B7C3, #0078D4)',
+                borderRadius: 12,
+                padding: '1.5rem',
+                flex: 1,
+                maxWidth: 200
+              }}>
+                <div style={{ color: '#fff', fontSize: 16, fontWeight: 600 }}>
+                  AI-Generated<br/>Summaries
+                </div>
+              </div>
+              <div style={{
+                background: 'linear-gradient(135deg, #0078D4, #00B7C3)',
+                borderRadius: 12,
+                padding: '1.5rem',
+                flex: 1,
+                maxWidth: 200
+              }}>
+                <div style={{ color: '#fff', fontSize: 16, fontWeight: 600 }}>
+                  Authentic<br/>Video Clips
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {isSegmentVisible(3) && (
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: reduced ? 0.2 : 0.5 }}
+              style={{ color: '#94a3b8', fontSize: 16, marginBottom: '2rem' }}
+            >
+              Preserves original tone, reactions, and discussion flow
+            </motion.p>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {isSegmentVisible(4) && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: reduced ? 0.3 : 0.6 }}
+              style={{
+                background: '#1e293b',
+                borderRadius: 16,
+                padding: '1.5rem',
+                border: '2px solid #00B7C3'
+              }}
+            >
+              <p style={{ color: '#00B7C3', fontSize: 20, fontWeight: 600, margin: 0 }}>
+                Catch up on missed meetings without watching hour-long recordings
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+};
+
+Ch1_S1_WhatIsMeetingHighlights.metadata = {
+  chapter: 1,
+  slide: 1,
+  title: "What is Meeting Highlights",
+  audioSegments: [
+    { id: "intro", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "ai_generation", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "combination", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "preservation", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "problem", audioFilePath: "/audio/00-Silence.mp3" }
+  ]
+};
+
+/**
+ * Chapter 1, Slide 2 - How to Access via BizChat
+ */
+export const Ch1_S2_HowToAccess: SlideComponentWithMetadata = () => {
+  const { reduced } = useReducedMotion();
+  const { isSegmentVisible } = useSegmentedAnimation();
+
+  return (
+    <div style={{
+      background: '#0f172a',
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '2rem',
+      fontFamily: 'Inter, system-ui, sans-serif'
+    }}>
+      <div style={{ maxWidth: 1000, width: '100%' }}>
+        <AnimatePresence>
+          {isSegmentVisible(0) && (
+            <motion.h1
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: reduced ? 0.2 : 0.5 }}
+              style={{ color: '#f1f5f9', marginBottom: '3rem', textAlign: 'center' }}
+            >
+              How to Access Meeting Highlights
+            </motion.h1>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {isSegmentVisible(1) && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: reduced ? 0.3 : 0.6 }}
+              style={{
+                background: '#1e293b',
+                borderRadius: 16,
+                padding: '2rem',
+                marginBottom: '2rem',
+                textAlign: 'center'
+              }}
+            >
+              <p style={{ color: '#e2e8f0', fontSize: 20, marginBottom: '1.5rem' }}>
+                Open <strong style={{ color: '#00B7C3' }}>BizChat</strong> and ask it to recap a specific meeting
+              </p>
+              <div style={{
+                background: '#0f172a',
+                borderRadius: 12,
+                padding: '3rem',
+                minHeight: 300,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <p style={{ color: '#64748b', fontSize: 16 }}>
+                  [Demo video placeholder - BizChat interaction]
+                </p>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {isSegmentVisible(2) && (
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: reduced ? 0.2 : 0.5 }}
+              style={{
+                background: '#1e293b',
+                borderRadius: 12,
+                padding: '1.5rem',
+                marginBottom: '1rem',
+                border: '1px solid #334155'
+              }}
+            >
+              <p style={{ color: '#e2e8f0', fontSize: 16, margin: 0 }}>
+                💡 Use <strong style={{ color: '#00B7C3' }}>/</strong> (slash) for Contextual Instant Query
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {isSegmentVisible(3) && (
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: reduced ? 0.2 : 0.5 }}
+              style={{
+                background: '#1e293b',
+                borderRadius: 12,
+                padding: '1.5rem',
+                marginBottom: '1rem',
+                border: '1px solid #334155'
+              }}
+            >
+              <p style={{ color: '#e2e8f0', fontSize: 16, margin: 0 }}>
+                📋 Select and search for meetings from the menu
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {isSegmentVisible(4) && (
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: reduced ? 0.2 : 0.5 }}
+              style={{
+                background: 'linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))',
+                borderRadius: 12,
+                padding: '1.5rem',
+                marginBottom: '1rem',
+                border: '2px solid #00B7C3'
+              }}
+            >
+              <p style={{ color: '#e2e8f0', fontSize: 16, margin: 0 }}>
+                🎬 Video player with highlights appears at the bottom
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {isSegmentVisible(5) && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: reduced ? 0.3 : 0.5 }}
+              style={{
+                background: '#78350f',
+                borderRadius: 12,
+                padding: '1rem',
+                marginBottom: '1rem',
+                border: '1px solid #fbbf24'
+              }}
+            >
+              <p style={{ color: '#fef3c7', fontSize: 14, margin: 0 }}>
+                ⚠️ Note: Series meetings don't show the highlights player yet
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {isSegmentVisible(6) && (
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: reduced ? 0.2 : 0.5 }}
+              style={{ color: '#94a3b8', textAlign: 'center', fontSize: 14, marginTop: '2rem' }}
+            >
+              Additional entry points via Teams and M365 Copilot coming soon
+            </motion.p>
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+};
+
+Ch1_S2_HowToAccess.metadata = {
+  chapter: 1,
+  slide: 2,
+  title: "How to Access",
+  audioSegments: [
+    { id: "intro", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "bizchat", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "ciq", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "select", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "player", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "note", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "future", audioFilePath: "/audio/00-Silence.mp3" }
+  ]
+};
+
+/**
+ * Chapter 1, Slide 3 - User Value Proposition
+ */
+export const Ch1_S3_UserValue: SlideComponentWithMetadata = () => {
+  const { reduced } = useReducedMotion();
+  const { isSegmentVisible } = useSegmentedAnimation();
+
+  const benefits = [
+    {
+      icon: '⏱️',
+      title: 'Time Savings',
+      description: '60 minutes → 3-5 minutes',
+      detail: 'Catch up without watching full recordings'
+    },
+    {
+      icon: '🎯',
+      title: 'Better Engagement',
+      description: 'Audiovisual content',
+      detail: 'Caters to all learning styles'
+    },
+    {
+      icon: '💬',
+      title: 'Meeting Dynamics',
+      description: 'Tone and vibe preserved',
+      detail: 'Not just facts, but context'
+    }
+  ];
+
+  return (
+    <div style={{
+      background: '#0f172a',
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '2rem',
+      fontFamily: 'Inter, system-ui, sans-serif'
+    }}>
+      <div style={{ maxWidth: 1100, width: '100%' }}>
+        <AnimatePresence>
+          {isSegmentVisible(0) && (
+            <motion.h1
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: reduced ? 0.2 : 0.5 }}
+              style={{ color: '#f1f5f9', marginBottom: '3rem', textAlign: 'center' }}
+            >
+              Three Key Benefits
+            </motion.h1>
+          )}
+        </AnimatePresence>
+
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(3, 1fr)',
+          gap: '2rem',
+          marginBottom: '3rem'
+        }}>
+          {benefits.map((benefit, index) => (
+            <AnimatePresence key={benefit.title}>
+              {isSegmentVisible(index + 1) && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: reduced ? 0.3 : 0.6, type: 'spring' }}
+                  style={{
+                    background: index === 0 ? 'linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))' : '#1e293b',
+                    borderRadius: 16,
+                    padding: '2rem',
+                    textAlign: 'center',
+                    border: index === 0 ? '2px solid #00B7C3' : '1px solid #334155',
+                    boxShadow: index === 0 && !reduced ? '0 0 30px rgba(0, 183, 195, 0.3)' : 'none'
+                  }}
+                >
+                  <div style={{ fontSize: 48, marginBottom: '1rem' }}>{benefit.icon}</div>
+                  <h3 style={{ color: '#f1f5f9', fontSize: 20, marginBottom: '0.5rem' }}>
+                    {benefit.title}
+                  </h3>
+                  <div style={{ color: '#00B7C3', fontSize: 18, fontWeight: 600, marginBottom: '0.75rem' }}>
+                    {benefit.description}
+                  </div>
+                  <p style={{ color: '#94a3b8', fontSize: 14, margin: 0 }}>
+                    {benefit.detail}
+                  </p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          ))}
+        </div>
+
+        <AnimatePresence>
+          {isSegmentVisible(4) && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: reduced ? 0.3 : 0.6 }}
+              style={{
+                background: '#1e293b',
+                borderRadius: 16,
+                padding: '2rem',
+                textAlign: 'center',
+                border: '1px solid #334155'
+              }}
+            >
+              <p style={{ color: '#e2e8f0', fontSize: 18, fontStyle: 'italic', marginBottom: '1rem' }}>
+                "Saved me hours of reviewing the transcript. This is magical."
+              </p>
+              <p style={{ color: '#94a3b8', fontSize: 14, margin: 0 }}>
+                — Internal User Feedback
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+};
+
+Ch1_S3_UserValue.metadata = {
+  chapter: 1,
+  slide: 3,
+  title: "User Value",
+  audioSegments: [
+    { id: "intro", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "time", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "engagement", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "dynamics", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "testimonial", audioFilePath: "/audio/00-Silence.mp3" }
+  ]
+};
+
+/**
+ * Chapter 3, Slide 1 - Architecture Overview
+ */
+export const Ch3_S1_ArchitectureOverview: SlideComponentWithMetadata = () => {
+  const { reduced } = useReducedMotion();
+  const { isSegmentVisible } = useSegmentedAnimation();
+
+  return (
+    <div style={{
+      background: '#0f172a',
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '2rem',
+      fontFamily: 'Inter, system-ui, sans-serif'
+    }}>
+      <div style={{ maxWidth: 1000, width: '100%' }}>
+        <AnimatePresence>
+          {isSegmentVisible(0) && (
+            <motion.h1
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: reduced ? 0.2 : 0.5 }}
+              style={{ color: '#f1f5f9', marginBottom: '3rem', textAlign: 'center' }}
+            >
+              Architecture Overview
+            </motion.h1>
+          )}
+        </AnimatePresence>
+
+        {/* Architecture flow diagram */}
+        <div style={{
+          background: '#1e293b',
+          borderRadius: 16,
+          padding: '2rem',
+          border: '1px solid #334155'
+        }}>
+          <AnimatePresence>
+            {isSegmentVisible(1) && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: reduced ? 0.3 : 0.6 }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '1rem',
+                  marginBottom: '1.5rem',
+                  padding: '1rem',
+                  background: 'rgba(0, 183, 195, 0.1)',
+                  borderRadius: 8
+                }}
+              >
+                <div style={{ fontSize: 32 }}>📹</div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ color: '#f1f5f9', fontWeight: 600 }}>Teams Recording</div>
+                  <div style={{ color: '#94a3b8', fontSize: 14 }}>Meeting ends, event triggered</div>
+                </div>
+                <div style={{ color: '#00B7C3', fontSize: 24 }}>→</div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {isSegmentVisible(2) && (
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: reduced ? 0.3 : 0.5 }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '1rem',
+                  marginBottom: '1.5rem',
+                  padding: '1rem',
+                  background: 'rgba(0, 183, 195, 0.1)',
+                  borderRadius: 8
+                }}
+              >
+                <div style={{ fontSize: 32 }}>🗄️</div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ color: '#f1f5f9', fontWeight: 600 }}>ODSP</div>
+                  <div style={{ color: '#94a3b8', fontSize: 14 }}>Initiates highlight generation</div>
+                </div>
+                <div style={{ color: '#00B7C3', fontSize: 24 }}>→</div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {isSegmentVisible(3) && (
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: reduced ? 0.3 : 0.5 }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '1rem',
+                  marginBottom: '1.5rem',
+                  padding: '1rem',
+                  background: 'rgba(0, 183, 195, 0.1)',
+                  borderRadius: 8
+                }}
+              >
+                <div style={{ fontSize: 32 }}>⚙️</div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ color: '#f1f5f9', fontWeight: 600 }}>TMR Processor</div>
+                  <div style={{ color: '#94a3b8', fontSize: 14 }}>Calls LLM with transcript</div>
+                </div>
+                <div style={{ color: '#00B7C3', fontSize: 24 }}>→</div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {isSegmentVisible(4) && (
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: reduced ? 0.3 : 0.5 }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '1rem',
+                  marginBottom: '1.5rem',
+                  padding: '1rem',
+                  background: 'linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))',
+                  borderRadius: 8,
+                  border: '2px solid #00B7C3'
+                }}
+              >
+                <div style={{ fontSize: 32 }}>🤖</div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ color: '#f1f5f9', fontWeight: 600 }}>LLM Analysis</div>
+                  <div style={{ color: '#94a3b8', fontSize: 14 }}>Returns highlights metadata</div>
+                </div>
+                <div style={{ color: '#00B7C3', fontSize: 24 }}>→</div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {isSegmentVisible(5) && (
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: reduced ? 0.3 : 0.5 }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '1rem',
+                  marginBottom: '1.5rem',
+                  padding: '1rem',
+                  background: 'rgba(0, 183, 195, 0.1)',
+                  borderRadius: 8
+                }}
+              >
+                <div style={{ fontSize: 32 }}>🎙️</div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ color: '#f1f5f9', fontWeight: 600 }}>Azure Cognitive Services</div>
+                  <div style={{ color: '#94a3b8', fontSize: 14 }}>Generates narration audio</div>
+                </div>
+                <div style={{ color: '#00B7C3', fontSize: 24 }}>→</div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {isSegmentVisible(6) && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: reduced ? 0.3 : 0.6 }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '1rem',
+                  padding: '1rem',
+                  background: 'linear-gradient(135deg, #10b981, #059669)',
+                  borderRadius: 8
+                }}
+              >
+                <div style={{ fontSize: 32 }}>✅</div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ color: '#fff', fontWeight: 600 }}>Storage & Access</div>
+                  <div style={{ color: 'rgba(255,255,255,0.8)', fontSize: 14 }}>
+                    Available via BizChat and Teams
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+Ch3_S1_ArchitectureOverview.metadata = {
+  chapter: 3,
+  slide: 1,
+  title: "Architecture Overview",
+  audioSegments: [
+    { id: "intro", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "recording", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "odsp", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "tmr", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "llm", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "acs", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "storage", audioFilePath: "/audio/00-Silence.mp3" }
+  ]
+};
+
+/**
+ * Chapter 4, Slide 1 - Highlight Types
+ */
+export const Ch4_S1_HighlightTypes: SlideComponentWithMetadata = () => {
+  const { reduced } = useReducedMotion();
+  const { isSegmentVisible } = useSegmentedAnimation();
+
+  return (
+    <div style={{
+      background: '#0f172a',
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '2rem',
+      fontFamily: 'Inter, system-ui, sans-serif'
+    }}>
+      <div style={{ maxWidth: 1100, width: '100%' }}>
+        <AnimatePresence>
+          {isSegmentVisible(0) && (
+            <motion.h1
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: reduced ? 0.2 : 0.5 }}
+              style={{ color: '#f1f5f9', marginBottom: '3rem', textAlign: 'center' }}
+            >
+              Two Types of Highlights
+            </motion.h1>
+          )}
+        </AnimatePresence>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '2rem', marginBottom: '3rem' }}>
+          <AnimatePresence>
+            {isSegmentVisible(1) && (
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: reduced ? 0.3 : 0.6, type: 'spring' }}
+                style={{
+                  background: 'linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))',
+                  borderRadius: 16,
+                  padding: '2rem',
+                  border: '2px solid #00B7C3',
+                  textAlign: 'center'
+                }}
+              >
+                <div style={{ fontSize: 48, marginBottom: '1rem' }}>📝</div>
+                <h2 style={{ color: '#f1f5f9', fontSize: 24, marginBottom: '1rem' }}>
+                  Abstractive Highlights
+                </h2>
+                <p style={{ color: '#94a3b8', fontSize: 16 }}>
+                  AI-generated summaries of discussion topics
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {isSegmentVisible(2) && (
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: reduced ? 0.3 : 0.6, type: 'spring' }}
+                style={{
+                  background: '#1e293b',
+                  borderRadius: 16,
+                  padding: '2rem',
+                  border: '1px solid #334155',
+                  textAlign: 'center'
+                }}
+              >
+                <div style={{ fontSize: 48, marginBottom: '1rem' }}>🎬</div>
+                <h2 style={{ color: '#f1f5f9', fontSize: 24, marginBottom: '1rem' }}>
+                  Key Moments
+                </h2>
+                <p style={{ color: '#94a3b8', fontSize: 16 }}>
+                  Significant verbatim segments from the meeting
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        <AnimatePresence>
+          {isSegmentVisible(3) && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: reduced ? 0.3 : 0.5 }}
+              style={{
+                background: '#1e293b',
+                borderRadius: 16,
+                padding: '1.5rem',
+                marginBottom: '1.5rem',
+                border: '1px solid #334155'
+              }}
+            >
+              <p style={{ color: '#e2e8f0', fontSize: 16, margin: 0 }}>
+                ⏱️ Each highlight covers <strong style={{ color: '#00B7C3' }}>20-30 second segments</strong> with timestamps and narration
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {isSegmentVisible(4) && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: reduced ? 0.3 : 0.5 }}
+              style={{
+                background: '#1e293b',
+                borderRadius: 16,
+                padding: '1.5rem',
+                marginBottom: '1.5rem',
+                border: '1px solid #334155'
+              }}
+            >
+              <p style={{ color: '#e2e8f0', fontSize: 16, margin: 0 }}>
+                🎙️ Narration text converted to audio using <strong style={{ color: '#00B7C3' }}>Azure Cognitive Services</strong>
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {isSegmentVisible(5) && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: reduced ? 0.3 : 0.5 }}
+              style={{
+                background: '#1e293b',
+                borderRadius: 16,
+                padding: '1.5rem',
+                marginBottom: '1.5rem',
+                border: '1px solid #334155'
+              }}
+            >
+              <p style={{ color: '#e2e8f0', fontSize: 16, margin: 0 }}>
+                🗄️ All metadata, audio, and captions <strong style={{ color: '#00B7C3' }}>securely stored in ODSP</strong>
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {isSegmentVisible(6) && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: reduced ? 0.3 : 0.6 }}
+              style={{
+                background: 'linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))',
+                borderRadius: 16,
+                padding: '1.5rem',
+                border: '2px solid #00B7C3',
+                textAlign: 'center'
+              }}
+            >
+              <p style={{ color: '#e2e8f0', fontSize: 16, margin: 0 }}>
+                📱 Available across <strong style={{ color: '#00B7C3' }}>Microsoft 365 platforms</strong>
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+};
+
+Ch4_S1_HighlightTypes.metadata = {
+  chapter: 4,
+  slide: 1,
+  title: "Highlight Types",
+  audioSegments: [
+    { id: "intro", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "abstractive", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "key_moments", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "timestamps", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "audio", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "storage", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "platforms", audioFilePath: "/audio/00-Silence.mp3" }
+  ]
+};
+
+/**
+ * Chapter 8, Slide 1 - User Satisfaction
+ */
+export const Ch8_S1_UserSatisfaction: SlideComponentWithMetadata = () => {
+  const { reduced } = useReducedMotion();
+  const { isSegmentVisible } = useSegmentedAnimation();
+
+  return (
+    <div style={{
+      background: '#0f172a',
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '2rem',
+      fontFamily: 'Inter, system-ui, sans-serif'
+    }}>
+      <div style={{ maxWidth: 900, width: '100%', textAlign: 'center' }}>
+        <AnimatePresence>
+          {isSegmentVisible(0) && (
+            <motion.h1
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: reduced ? 0.2 : 0.5 }}
+              style={{ color: '#f1f5f9', marginBottom: '1rem' }}
+            >
+              User Reception
+            </motion.h1>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {isSegmentVisible(0) && (
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: reduced ? 0.2 : 0.5, delay: reduced ? 0 : 0.2 }}
+              style={{ color: '#94a3b8', fontSize: 16, marginBottom: '3rem' }}
+            >
+              MS Elite Survey Results
+            </motion.p>
+          )}
+        </AnimatePresence>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '2rem', marginBottom: '3rem' }}>
+          <AnimatePresence>
+            {isSegmentVisible(1) && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: reduced ? 0.3 : 0.8, type: 'spring' }}
+                style={{
+                  background: 'linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))',
+                  borderRadius: 16,
+                  padding: '3rem 2rem',
+                  border: '2px solid #00B7C3',
+                  boxShadow: !reduced ? '0 0 40px rgba(0, 183, 195, 0.3)' : 'none'
+                }}
+              >
+                <div style={{ fontSize: 72, fontWeight: 'bold', color: '#00B7C3', marginBottom: '1rem' }}>
+                  80%
+                </div>
+                <div style={{ color: '#f1f5f9', fontSize: 18, marginBottom: '0.5rem' }}>
+                  Extremely/Very Useful
+                </div>
+                <div style={{ color: '#94a3b8', fontSize: 14 }}>
+                  ⭐⭐⭐⭐⭐
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {isSegmentVisible(2) && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: reduced ? 0.3 : 0.8, type: 'spring' }}
+                style={{
+                  background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.2))',
+                  borderRadius: 16,
+                  padding: '3rem 2rem',
+                  border: '2px solid #10b981',
+                  boxShadow: !reduced ? '0 0 40px rgba(16, 185, 129, 0.3)' : 'none'
+                }}
+              >
+                <div style={{ fontSize: 72, fontWeight: 'bold', color: '#10b981', marginBottom: '1rem' }}>
+                  96%
+                </div>
+                <div style={{ color: '#f1f5f9', fontSize: 18, marginBottom: '0.5rem' }}>
+                  Likely to Use Again
+                </div>
+                <div style={{ color: '#94a3b8', fontSize: 14 }}>
+                  👍👍👍
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        <AnimatePresence>
+          {isSegmentVisible(3) && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: reduced ? 0.3 : 0.6 }}
+              style={{
+                background: '#1e293b',
+                borderRadius: 16,
+                padding: '2rem',
+                border: '1px solid #334155'
+              }}
+            >
+              <p style={{ color: '#e2e8f0', fontSize: 20, fontWeight: 600, margin: 0 }}>
+                Strong product-market fit and daily habit formation
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+};
+
+Ch8_S1_UserSatisfaction.metadata = {
+  chapter: 8,
+  slide: 1,
+  title: "User Satisfaction",
+  audioSegments: [
+    { id: "intro", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "useful", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "likely", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "fit", audioFilePath: "/audio/00-Silence.mp3" }
+  ]
+};
+
+/**
+ * Chapter 9, Slide 1 - Testimonials
+ */
+export const Ch9_S1_Testimonials: SlideComponentWithMetadata = () => {
+  const { reduced } = useReducedMotion();
+  const { isSegmentVisible } = useSegmentedAnimation();
+
+  const testimonials = [
+    {
+      author: "Kevin C.",
+      quote: "Love this feature. Great way to catch up on a recap without watching the full thing."
+    },
+    {
+      author: "Ryan Roslonsky",
+      quote: "Beyond the awesome text recap, there is literally a two-minute narrated video about the meeting."
+    },
+    {
+      author: "Ryan Roslonsky",
+      quote: "It's mind-blowing and an engaging way to recap a meeting for a richer understanding of the conversation."
+    },
+    {
+      author: "Anonymous User",
+      quote: "Saved me hours of reviewing the transcript. This is magical."
+    }
+  ];
+
+  return (
+    <div style={{
+      background: '#0f172a',
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '2rem',
+      fontFamily: 'Inter, system-ui, sans-serif'
+    }}>
+      <div style={{ maxWidth: 1000, width: '100%' }}>
+        <AnimatePresence>
+          {isSegmentVisible(0) && (
+            <motion.h1
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: reduced ? 0.2 : 0.5 }}
+              style={{ color: '#f1f5f9', marginBottom: '3rem', textAlign: 'center' }}
+            >
+              User Testimonials
+            </motion.h1>
+          )}
+        </AnimatePresence>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '2rem' }}>
+          {testimonials.map((testimonial, index) => (
+            <AnimatePresence key={index}>
+              {isSegmentVisible(index + 1) && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: reduced ? 0.3 : 0.6, type: 'spring' }}
+                  style={{
+                    background: '#1e293b',
+                    borderRadius: 16,
+                    padding: '2rem',
+                    border: '1px solid #334155',
+                    display: 'flex',
+                    flexDirection: 'column'
+                  }}
+                >
+                  <div style={{ fontSize: 32, marginBottom: '1rem' }}>💬</div>
+                  <p style={{
+                    color: '#e2e8f0',
+                    fontSize: 16,
+                    lineHeight: 1.6,
+                    fontStyle: 'italic',
+                    flex: 1,
+                    marginBottom: '1rem'
+                  }}>
+                    "{testimonial.quote}"
+                  </p>
+                  <div style={{ color: '#00B7C3', fontSize: 14, fontWeight: 600 }}>
+                    — {testimonial.author}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+Ch9_S1_Testimonials.metadata = {
+  chapter: 9,
+  slide: 1,
+  title: "Testimonials",
+  audioSegments: [
+    { id: "intro", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "kevin", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "ryan1", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "ryan2", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "anonymous", audioFilePath: "/audio/00-Silence.mp3" }
+  ]
+};
+
+/**
+ * Chapter 9, Slide 2 - Future Improvements
+ */
+export const Ch9_S2_FutureImprovements: SlideComponentWithMetadata = () => {
+  const { reduced } = useReducedMotion();
+  const { isSegmentVisible } = useSegmentedAnimation();
+
+  const improvements = [
+    {
+      icon: '🔍',
+      title: 'Detail & Specificity',
+      description: 'More detailed highlights capturing nuanced discussions'
+    },
+    {
+      icon: '📊',
+      title: 'Teams Integration',
+      description: 'Deeper integration with Teams Recap for seamless access'
+    },
+    {
+      icon: '✅',
+      title: 'Action Items',
+      description: 'Include action items and decisions for actionable outcomes'
+    },
+    {
+      icon: '🌍',
+      title: 'Languages',
+      description: 'Additional language support for global users'
+    }
+  ];
+
+  return (
+    <div style={{
+      background: '#0f172a',
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '2rem',
+      fontFamily: 'Inter, system-ui, sans-serif'
+    }}>
+      <div style={{ maxWidth: 1100, width: '100%' }}>
+        <AnimatePresence>
+          {isSegmentVisible(0) && (
+            <motion.h1
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: reduced ? 0.2 : 0.5 }}
+              style={{ color: '#f1f5f9', marginBottom: '1rem', textAlign: 'center' }}
+            >
+              Future Improvements
+            </motion.h1>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {isSegmentVisible(0) && (
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: reduced ? 0.2 : 0.5, delay: reduced ? 0 : 0.2 }}
+              style={{ color: '#94a3b8', fontSize: 16, marginBottom: '3rem', textAlign: 'center' }}
+            >
+              User feedback drives our roadmap
+            </motion.p>
+          )}
+        </AnimatePresence>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '2rem', marginBottom: '3rem' }}>
+          {improvements.map((improvement, index) => (
+            <AnimatePresence key={improvement.title}>
+              {isSegmentVisible(index + 1) && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: reduced ? 0.3 : 0.6, type: 'spring' }}
+                  style={{
+                    background: '#1e293b',
+                    borderRadius: 16,
+                    padding: '2rem',
+                    border: '1px solid #334155',
+                    textAlign: 'center'
+                  }}
+                >
+                  <div style={{ fontSize: 48, marginBottom: '1rem' }}>{improvement.icon}</div>
+                  <h3 style={{ color: '#f1f5f9', fontSize: 20, marginBottom: '0.75rem' }}>
+                    {improvement.title}
+                  </h3>
+                  <p style={{ color: '#94a3b8', fontSize: 14, margin: 0 }}>
+                    {improvement.description}
+                  </p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          ))}
+        </div>
+
+        <AnimatePresence>
+          {isSegmentVisible(5) && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: reduced ? 0.3 : 0.6 }}
+              style={{
+                background: 'linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))',
+                borderRadius: 16,
+                padding: '2rem',
+                textAlign: 'center',
+                border: '2px solid #00B7C3'
+              }}
+            >
+              <p style={{ color: '#e2e8f0', fontSize: 20, fontWeight: 600, margin: 0 }}>
+                On our roadmap for general availability in 2024
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+};
+
+Ch9_S2_FutureImprovements.metadata = {
+  chapter: 9,
+  slide: 2,
+  title: "Future Improvements",
+  audioSegments: [
+    { id: "intro", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "detail", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "teams", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "action", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "languages", audioFilePath: "/audio/00-Silence.mp3" },
+    { id: "roadmap", audioFilePath: "/audio/00-Silence.mp3" }
+  ]
+};
+
+/**
+ * Export all animated slides
+ */
+export const AnimatedSlides = {
+  BlankIntro,
+  Ch1_S1_WhatIsMeetingHighlights,
+  Ch1_S2_HowToAccess,
+  Ch1_S3_UserValue,
+  Ch3_S1_ArchitectureOverview,
+  Ch4_S1_HighlightTypes,
+  Ch5_S1_ChallengeFraming,
+  Ch5_S2_FourPrompts,
+  Ch5_S3_TopicAbstraction,
+  Ch5_S4_ExtractiveSelection,
+  Ch5_S5_QualityRanking,
+  Ch5_S6_NarrativeSynthesis,
+  Ch6_S1_UnifiedConvergence,
+  Ch6_S2_UnifiedFlow,
+  Ch6_S4_TokenOptimization,
+  Ch7_S1_CallReduction,
+  Ch7_S2_GPUReduction,
+  Ch7_S5_PathToGA,
+  Ch8_S1_UserSatisfaction,
+  Ch9_S1_Testimonials,
+  Ch9_S2_FutureImprovements
+};
