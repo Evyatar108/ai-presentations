@@ -5,7 +5,6 @@ import {
   Ch1_S2_HowToAccess,
   Ch1_S3_UserValue,
   Ch2_TeamCollaboration,
-  Ch3_S1_ArchitectureOverview,
   Ch4_S1_HighlightTypes,
   Ch5_S1_ChallengeFraming,
   Ch5_S2_FourPrompts,
@@ -25,6 +24,7 @@ import {
  * Central registry of all slide components with their metadata.
  * Components are automatically sorted by chapter and slide number.
  *
+ * NOTE: Ch3_S1_ArchitectureOverview removed - architecture content merged into Ch2_TeamCollaboration
  * NOTE: Removed detailed prompt breakdown slides (Ch5_S3-S6) per feedback
  * to focus on product intro and high-level COGS reduction story.
  */
@@ -34,7 +34,6 @@ export const allSlides: SlideComponentWithMetadata[] = [
   Ch1_S2_HowToAccess,
   Ch1_S3_UserValue,
   Ch2_TeamCollaboration,
-  Ch3_S1_ArchitectureOverview,
   Ch4_S1_HighlightTypes,
   Ch5_S1_ChallengeFraming,
   Ch5_S2_FourPrompts,

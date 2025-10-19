@@ -1652,7 +1652,7 @@ export const Ch1_S2_HowToAccess: SlideComponentWithMetadata = () => {
                       }}
                     >
                       <p style={{ color: '#e2e8f0', fontSize: 15, margin: 0 }}>
-                        💡 Use <strong style={{ color: '#00B7C3' }}>/</strong> (slash) for Contextual Instant Query
+                        💡 Use <strong style={{ color: '#00B7C3' }}>/</strong> (slash) for CIA (Contextual Instant Query)
                       </p>
                     </motion.div>
                   )}
@@ -2986,318 +2986,239 @@ const teams: TeamInfo[] = [
 ];
 
 /**
- /**
-  * Chapter 2 - Team Collaboration
-  * Demonstrates multi-segment slide with progressive logo reveals
-  */
- export const Ch2_TeamCollaboration: SlideComponentWithMetadata = () => {
-   const { reduced } = useReducedMotion();
-   const { currentSegmentIndex, isSegmentVisible } = useSegmentedAnimation();
- 
-   const visibleTeams = teams.filter((_, index) => isSegmentVisible(index));
-   const currentTeam = teams[currentSegmentIndex];
-   const isIntroSegment = currentTeam?.id === 'intro';
-   const shouldShowDiagram = currentSegmentIndex >= 1; // Show diagram from segment 1 onwards
- 
-   return (
-     <div
+* Chapter 2 - Team Collaboration & Architecture
+* Merged slide showing team collaboration diagram (left) and architecture flow (right)
+*/
+export const Ch2_TeamCollaboration: SlideComponentWithMetadata = () => {
+ const { reduced } = useReducedMotion();
+ const { currentSegmentIndex, isSegmentVisible } = useSegmentedAnimation();
+
+ const currentTeam = teams[currentSegmentIndex];
+ const isIntroSegment = currentTeam?.id === 'intro';
+ const shouldShowDualView = currentSegmentIndex >= 1; // Show both diagrams from segment 1 onwards
+
+ // Architecture flow steps that progressively reveal
+ const archFlowSteps = [
+   { id: 'recording', icon: '📹', label: 'Teams Recording', desc: 'Meeting ends, event triggered', segment: 1 },
+   { id: 'odsp-init', icon: '🗄️', label: 'ODSP', desc: 'Initiates highlight generation', segment: 2 },
+   { id: 'tmr', icon: '⚙️', label: 'TMR Processor', desc: 'Calls LLM with transcript', segment: 3 },
+   { id: 'llm', icon: '🤖', label: 'LLM Analysis', desc: 'Returns highlights metadata', segment: 3 },
+   { id: 'acs', icon: '🎙️', label: 'Azure Cognitive Services', desc: 'Generates narration audio', segment: 4 },
+   { id: 'bizchat', icon: '💬', label: 'BizChat Access', desc: 'Natural language interface', segment: 5 },
+   { id: 'storage', icon: '✅', label: 'Storage & Access', desc: 'Available via BizChat and Teams', segment: 6 }
+ ];
+
+ return (
+   <div
+     style={{
+       background: '#0f172a',
+       minHeight: '100vh',
+       display: 'flex',
+       flexDirection: 'column',
+       alignItems: 'center',
+       justifyContent: 'center',
+       padding: '2rem',
+       fontFamily: 'Inter, system-ui, sans-serif'
+     }}
+   >
+     <motion.h1
+       initial={{ opacity: 0, y: -20 }}
+       animate={{ opacity: 1, y: 0 }}
        style={{
-         background: '#0f172a',
-         minHeight: '100vh',
-         display: 'flex',
-         flexDirection: 'column',
-         alignItems: 'center',
-         justifyContent: 'center',
-         padding: '2rem',
-         fontFamily: 'Inter, system-ui, sans-serif'
+         color: '#f1f5f9',
+         marginBottom: '2rem',
+         fontSize: 36,
+         textAlign: 'center'
        }}
      >
-       <motion.h1
-         initial={{ opacity: 0, y: -20 }}
-         animate={{ opacity: 1, y: 0 }}
+       Meeting Highlights - Team Collaboration & Architecture
+     </motion.h1>
+
+     {isIntroSegment && (
+       <motion.div
+         key={currentTeam.id}
+         initial={{ opacity: 0, scale: 0.9 }}
+         animate={{ opacity: 1, scale: 1 }}
+         exit={{ opacity: 0, scale: 0.9 }}
+         transition={{ duration: reduced ? 0.3 : 0.6 }}
          style={{
-           color: '#f1f5f9',
-           marginBottom: '3rem',
-           fontSize: 36,
-           textAlign: 'center'
+           textAlign: 'center',
+           maxWidth: 800,
+           marginBottom: '2rem'
          }}
        >
-         Meeting Highlights - Team Collaboration
-       </motion.h1>
- 
-       {isIntroSegment && (
-         <motion.div
-           key={currentTeam.id}
-           initial={{ opacity: 0, scale: 0.9 }}
-           animate={{ opacity: 1, scale: 1 }}
-           exit={{ opacity: 0, scale: 0.9 }}
-           transition={{ duration: reduced ? 0.3 : 0.6 }}
+         <p
            style={{
-             textAlign: 'center',
-             maxWidth: 600,
-             marginBottom: '3rem'
+             color: '#e2e8f0',
+             fontSize: 24,
+             lineHeight: 1.6
            }}
          >
-           <p
-             style={{
-               color: '#e2e8f0',
-               fontSize: 24,
-               lineHeight: 1.6
-             }}
-           >
-             {currentTeam.description}
-           </p>
-         </motion.div>
-       )}
- 
-       {/* Show architectural diagram from segment 1 onwards */}
-       <AnimatePresence mode="wait">
-         {shouldShowDiagram ? (
-           <motion.div
-             key="diagram"
-             initial={{ opacity: 0, scale: 0.95 }}
-             animate={{ opacity: 1, scale: 1 }}
-             exit={{ opacity: 0, scale: 0.95 }}
-             transition={{ duration: reduced ? 0.3 : 0.6 }}
-           >
+           {currentTeam.description}
+         </p>
+       </motion.div>
+     )}
+
+     {/* Dual view: ReactFlow diagram (left) + Architecture flow (right) */}
+     <AnimatePresence mode="wait">
+       {shouldShowDualView && (
+         <motion.div
+           key="dual-view"
+           initial={{ opacity: 0, scale: 0.95 }}
+           animate={{ opacity: 1, scale: 1 }}
+           exit={{ opacity: 0, scale: 0.95 }}
+           transition={{ duration: reduced ? 0.3 : 0.6 }}
+           style={{
+             display: 'grid',
+             gridTemplateColumns: '1.2fr 1fr',
+             gap: '2rem',
+             width: '100%',
+             maxWidth: 1400,
+             alignItems: 'start'
+           }}
+         >
+           {/* Left: ReactFlow Team Diagram */}
+           <div>
              <Ch2_ArchitectureDiagram
                currentSegmentIndex={currentSegmentIndex}
                isSegmentVisible={isSegmentVisible}
                currentTeamId={currentTeam?.id}
                reduced={reduced}
              />
-           </motion.div>
-         ) : (
-           <motion.div
-             key="cards"
-             initial={{ opacity: 0 }}
-             animate={{ opacity: 1 }}
-             exit={{ opacity: 0 }}
+           </div>
+
+           {/* Right: Architecture Flow */}
+           <div
              style={{
-               display: 'grid',
-               gridTemplateColumns: 'repeat(3, 1fr)',
-               gap: '2rem',
-               maxWidth: 900,
-               width: '100%'
+               background: '#1e293b',
+               borderRadius: 16,
+               padding: '1.5rem',
+               border: '1px solid #334155',
+               height: '500px',
+               overflowY: 'auto'
              }}
            >
-             <AnimatePresence mode="popLayout">
-               {visibleTeams
-                 .filter(team => team.logo)
-                 .map((team) => {
-                   const isCurrentTeam = team.id === currentTeam?.id;
-                   return (
+             <h2 style={{ color: '#f1f5f9', fontSize: 20, marginTop: 0, marginBottom: '1.5rem' }}>
+               Backend Flow
+             </h2>
+             
+             {archFlowSteps.map((step, index) => {
+               const isVisible = isSegmentVisible(step.segment);
+               const isCurrent = step.segment === currentSegmentIndex;
+               
+               return (
+                 <AnimatePresence key={step.id}>
+                   {isVisible && (
                      <motion.div
-                       key={team.id}
-                       initial={{ opacity: 0, scale: 0.8, y: 20 }}
-                       animate={{
-                         opacity: 1,
-                         scale: isCurrentTeam ? 1.05 : 1,
-                         y: 0
-                       }}
-                       exit={{ opacity: 0, scale: 0.8 }}
-                       transition={{
-                         duration: reduced ? 0.3 : 0.6,
-                         type: 'spring',
-                         stiffness: 100
-                       }}
+                       initial={{ opacity: 0, x: -20 }}
+                       animate={{ opacity: 1, x: 0 }}
+                       exit={{ opacity: 0, x: -20 }}
+                       transition={{ duration: reduced ? 0.3 : 0.5, delay: reduced ? 0 : index * 0.05 }}
                        style={{
-                         background: isCurrentTeam
-                           ? 'linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))'
-                           : '#1e293b',
-                         borderRadius: 16,
-                         padding: '2rem',
-                         border: isCurrentTeam ? '2px solid #00B7C3' : '1px solid #334155',
-                         boxShadow: isCurrentTeam && !reduced
-                           ? '0 0 30px rgba(0, 183, 195, 0.4)'
-                           : '0 4px 12px rgba(0, 0, 0, 0.3)',
                          display: 'flex',
-                         flexDirection: 'column',
                          alignItems: 'center',
-                         textAlign: 'center',
-                         position: 'relative'
+                         gap: '1rem',
+                         marginBottom: '1rem',
+                         padding: '1rem',
+                         background: isCurrent
+                           ? 'linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))'
+                           : 'rgba(0, 183, 195, 0.1)',
+                         borderRadius: 8,
+                         border: isCurrent ? '2px solid #00B7C3' : 'none',
+                         boxShadow: isCurrent && !reduced ? '0 0 20px rgba(0, 183, 195, 0.3)' : 'none'
                        }}
                      >
-                       <motion.div
-                         style={{
-                           width: 100,
-                           height: 100,
-                           borderRadius: '50%',
-                           background: '#ffffff',
-                           display: 'flex',
-                           alignItems: 'center',
-                           justifyContent: 'center',
-                           marginBottom: '1rem',
-                           padding: '0.75rem',
-                           boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
-                         }}
-                         animate={
-                           isCurrentTeam && !reduced
-                             ? {
-                                 scale: [1, 1.05, 1],
-                                 transition: { duration: 2, repeat: Infinity }
-                               }
-                             : {}
-                         }
-                       >
-                         <img
-                           src={team.logo}
-                           alt={team.name}
-                           style={{
-                             width: '100%',
-                             height: '100%',
-                             objectFit: 'contain'
-                           }}
-                         />
-                       </motion.div>
- 
-                       <h3
-                         style={{
-                           color: '#f1f5f9',
-                           fontSize: 20,
-                           fontWeight: 600,
-                           margin: '0.5rem 0'
-                         }}
-                       >
-                         {team.name}
-                       </h3>
- 
-                       <p
-                         style={{
-                           color: '#00B7C3',
-                           fontSize: 14,
-                           fontWeight: 500,
-                           margin: '0.25rem 0 0.75rem'
-                         }}
-                       >
-                         {team.role}
-                       </p>
- 
-                       <AnimatePresence>
-                         {isCurrentTeam && (
-                           <motion.p
-                             initial={{ opacity: 0, height: 0 }}
-                             animate={{ opacity: 1, height: 'auto' }}
-                             exit={{ opacity: 0, height: 0 }}
-                             transition={{ duration: reduced ? 0.2 : 0.4 }}
-                             style={{
-                               color: '#94a3b8',
-                               fontSize: 13,
-                               lineHeight: 1.5,
-                               margin: 0
-                             }}
-                           >
-                             {team.description}
-                           </motion.p>
-                         )}
-                       </AnimatePresence>
- 
-                       {isCurrentTeam && (
-                         <motion.div
-                           initial={{ scale: 0, opacity: 0 }}
-                           animate={{ scale: 1, opacity: 1 }}
-                           exit={{ scale: 0, opacity: 0 }}
-                           transition={{ type: 'spring', stiffness: 200 }}
-                           style={{
-                             position: 'absolute',
-                             top: -10,
-                             right: -10,
-                             width: 30,
-                             height: 30,
-                             borderRadius: '50%',
-                             background: '#10b981',
-                             border: '3px solid #0f172a',
-                             display: 'flex',
-                             alignItems: 'center',
-                             justifyContent: 'center',
-                             fontSize: 16,
-                             color: '#fff'
-                           }}
-                         >
-                           ✓
-                         </motion.div>
+                       <div style={{ fontSize: 28, flexShrink: 0 }}>{step.icon}</div>
+                       <div style={{ flex: 1 }}>
+                         <div style={{ color: '#f1f5f9', fontWeight: 600, fontSize: 14 }}>{step.label}</div>
+                         <div style={{ color: '#94a3b8', fontSize: 12, marginTop: 2 }}>{step.desc}</div>
+                       </div>
+                       {index < archFlowSteps.length - 1 && (
+                         <div style={{ color: '#00B7C3', fontSize: 20 }}>↓</div>
                        )}
                      </motion.div>
-                   );
-                 })}
-             </AnimatePresence>
-           </motion.div>
-         )}
-       </AnimatePresence>
- 
-       <motion.div
-         initial={{ opacity: 0 }}
-         animate={{ opacity: 1 }}
-         transition={{ delay: 0.5 }}
-         style={{
-           marginTop: '2rem',
-           display: 'flex',
-           gap: '0.5rem',
-           alignItems: 'center'
-         }}
-       >
-         {teams.map((team, index) => (
-           <div
-             key={team.id}
-             style={{
-               width: 10,
-               height: 10,
-               borderRadius: '50%',
-               background: isSegmentVisible(index) ? '#00B7C3' : '#334155',
-               border: index === currentSegmentIndex ? '2px solid #f1f5f9' : 'none',
-               transition: 'all 0.3s ease'
-             }}
-           />
-         ))}
-       </motion.div>
-     </div>
-   );
- };
+                   )}
+                 </AnimatePresence>
+               );
+             })}
+           </div>
+         </motion.div>
+       )}
+     </AnimatePresence>
+
+     <motion.div
+       initial={{ opacity: 0 }}
+       animate={{ opacity: 1 }}
+       transition={{ delay: 0.5 }}
+       style={{
+         marginTop: '2rem',
+         display: 'flex',
+         gap: '0.5rem',
+         alignItems: 'center'
+       }}
+     >
+       {teams.map((team, index) => (
+         <div
+           key={team.id}
+           style={{
+             width: 10,
+             height: 10,
+             borderRadius: '50%',
+             background: isSegmentVisible(index) ? '#00B7C3' : '#334155',
+             border: index === currentSegmentIndex ? '2px solid #f1f5f9' : 'none',
+             transition: 'all 0.3s ease'
+           }}
+         />
+       ))}
+     </motion.div>
+   </div>
+ );
+};
 Ch2_TeamCollaboration.metadata = {
   chapter: 2,
   slide: 1,
-  title: 'Team Collaboration',
+  title: 'Team Collaboration & Architecture',
   srtFilePath: 'highlights_demo/chapters/c2/s1_team_collaboration.srt',
   audioSegments: [
     {
       id: 'intro',
       audioFilePath: '/audio/c2/s1_segment_01_intro.wav',
-      narrationText: 'Meeting Highlights brings together six Microsoft teams in a cross-organizational collaboration.'
+      narrationText: 'Meeting Highlights brings together six Microsoft teams in a cross-organizational collaboration. Let me show you both how teams work together and the backend architecture flow.'
     },
     {
       id: 'odsp',
       audioFilePath: '/audio/c2/s1_segment_02_odsp.wav',
-      narrationText: 'O-D-S-P handles storage and orchestration, initiating highlights generation when recordings are created.'
+      narrationText: 'O-D-S-P handles storage and orchestration. When a Teams meeting ends with a recording, ODSP detects it and initiates the highlight generation process.'
     },
     {
       id: 'msai',
       audioFilePath: '/audio/c2/s1_segment_03_msai.wav',
-      narrationText: 'M-S-A-I Hive processes meeting transcripts using Large Language Model technology to generate highlight content.'
+      narrationText: 'M-S-A-I Hive processes meeting transcripts using Large Language Model technology. Our processor receives the transcript and calls the LLM with our prompts, which analyzes the content and returns structured metadata describing the highlights.'
+    },
+    {
+      id: 'acs',
+      audioFilePath: '/audio/c2/s1_segment_04_acs.wav',
+      narrationText: 'We use Azure Cognitive Services to convert the narration text into natural-sounding audio using text-to-speech technology.'
     },
     {
       id: 'bizchat',
-      audioFilePath: '/audio/c2/s1_segment_06_bizchat.wav',
-      narrationText: 'BizChat provides the primary user interface with natural language access to highlights.'
+      audioFilePath: '/audio/c2/s1_segment_05_bizchat.wav',
+      narrationText: 'BizChat provides the primary user interface with natural language access to highlights through conversational queries.'
     },
     {
-      id: 'teams',
-      audioFilePath: '/audio/c2/s1_segment_07_teams.wav',
-      narrationText: 'Teams integration is planned to deliver highlights within the Teams ecosystem.'
-    },
-    {
-      id: 'loop',
-      audioFilePath: '/audio/c2/s1_segment_05_loop.wav',
-      narrationText: 'Loop enables seamless embedding of the Clipchamp player within different application surfaces.'
+      id: 'loop_storage',
+      audioFilePath: '/audio/c2/s1_segment_06_loop.wav',
+      narrationText: 'Loop enables seamless embedding of the Clipchamp player within different application surfaces. All metadata, audio, and captions are securely stored in ODSP and made available through BizChat and Teams.'
     },
     {
       id: 'clipchamp',
-      audioFilePath: '/audio/c2/s1_segment_04_clipchamp.wav',
-      narrationText: 'Clipchamp owns the highlights player component, delivering the visual playback experience.'
+      audioFilePath: '/audio/c2/s1_segment_07_clipchamp.wav',
+      narrationText: 'Clipchamp owns the highlights player component, delivering the rich visual playback experience users see, without requiring us to create a new video file.'
     },
     {
       id: 'conclusion',
       audioFilePath: '/audio/c2/s1_segment_08_conclusion.wav',
-      narrationText: 'Together, these teams deliver a unified user experience that showcases true Microsoft collaboration.'
+      narrationText: 'Together, these teams deliver a unified end-to-end experience from recording through AI processing to user access, showcasing true Microsoft collaboration.'
     }
   ]
 };
