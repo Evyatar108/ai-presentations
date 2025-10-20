@@ -10,15 +10,13 @@ import {
 import { Ch2_TeamCollaboration } from './chapters/Chapter2';
 import { Ch4_S1_HighlightTypes } from './chapters/Chapter4';
 import {
-  Ch5_S1_ChallengeFraming,
-  Ch5_S2_FourPrompts
+  Ch5_S1_ChallengeFraming
 } from './chapters/Chapter5';
 import {
   Ch6_S1_UnifiedConvergence,
   Ch6_S4_TokenOptimization
 } from './chapters/Chapter6';
 import {
-  Ch7_S1_CallReduction,
   Ch7_S2_GPUReduction,
   Ch7_S4_QualityComparison,
   Ch7_S5_PathToGA
@@ -45,10 +43,8 @@ import {
    Ch1_S3_HowToAccessSharePoint,
    Ch2_TeamCollaboration,
    Ch5_S1_ChallengeFraming,
-   Ch5_S2_FourPrompts,
    Ch6_S1_UnifiedConvergence,
    Ch6_S4_TokenOptimization,
-   Ch7_S1_CallReduction,
    Ch7_S2_GPUReduction,
    Ch7_S4_QualityComparison,
    Ch7_S5_PathToGA,

@@ -103,11 +103,6 @@ export const Ch6_S1_UnifiedConvergence: SlideComponentWithMetadata = () => {
           <div style={{ fontSize: 48, fontWeight: 'bold', color: '#00B7C3', marginBottom: '1rem' }}>
             <span style={{ textDecoration: 'line-through', opacity: 0.6 }}>4</span> → 1 Call
           </div>
-          
-          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '2rem' }}>
-            <MetricTile label="Success Rate" before="92%" after="99%" emphasis note="Improved in local testing" />
-          </div>
-
         </motion.div>
       </div>
     </div>
@@ -121,7 +116,7 @@ Ch6_S1_UnifiedConvergence.metadata = {
   audioSegments: [{
     id: "main",
     audioFilePath: "/audio/c6/s1_segment_01_main.wav",
-    narrationText: "Collapsed four steps into one unified prompt."
+    narrationText: "Our solution was to collapse the four sequential steps into one unified prompt. By designing a single comprehensive prompt that accomplishes the same four steps in one L-L-M call."
   }]
 };
 
@@ -165,6 +160,6 @@ Ch6_S4_TokenOptimization.metadata = {
   audioSegments: [{
     id: "main",
     audioFilePath: "/audio/c6/s4_segment_01_main.wav",
-    narrationText: "Optimized tokens: compact schema, direct selection, no pre-computed ranges."
+    narrationText: "Beyond reducing L-L-M calls, we optimized the input tokens themselves, which reduced input tokens by more than 60 percent."
   }]
 };

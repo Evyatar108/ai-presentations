@@ -10,7 +10,7 @@ import { ArrowDown, ArrowRight } from '../SlideIcons';
 
 /**
  * Chapter 5: COGS Challenge
- * 2 slides showing the four-prompt pipeline challenge and goal
+ * 1 slide showing the cost optimization challenge
  */
 
 /**
@@ -145,82 +145,6 @@ Ch5_S1_ChallengeFraming.metadata = {
   audioSegments: [{
     id: "main",
     audioFilePath: "/audio/c5/s1_segment_01_main.wav",
-    narrationText: "Cost efficiency is critical for global scaling."
-  }]
-};
-
-/**
- * Chapter 5, Slide 2 - Four Prompt Chain
- */
-export const Ch5_S2_FourPrompts: SlideComponentWithMetadata = () => {
-  const { reduced } = useReducedMotion();
-
-  const prompts = [
-    { id: 1, label: 'Topic Abstraction' },
-    { id: 2, label: 'Extractive Selection' },
-    { id: 3, label: 'Quality Ranking' },
-    { id: 4, label: 'Narrative Synthesis' }
-  ];
-
-  return (
-    <SlideContainer maxWidth={1000}>
-      <h1 style={typography.h1}>Original Four-Prompt Pipeline</h1>
-
-      <motion.div
-        variants={staggerContainer(reduced)}
-        initial="hidden"
-        animate="visible"
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: '1rem'
-        }}
-      >
-        {prompts.map((prompt, idx) => (
-          <React.Fragment key={prompt.id}>
-            <motion.div
-              variants={promptVariants(reduced)}
-              style={{
-                background: '#1e3a52',
-                borderRadius: 12,
-                padding: '1.5rem',
-                flex: 1,
-                textAlign: 'center',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
-              }}
-            >
-              <div style={{ color: '#00B7C3', fontSize: 36, fontWeight: 'bold' }}>
-                {prompt.id}
-              </div>
-              <div style={{ color: '#f1f5f9', fontSize: 14, marginTop: '0.5rem' }}>
-                {prompt.label}
-              </div>
-            </motion.div>
-            
-            {idx < prompts.length - 1 && (
-              <motion.div variants={promptVariants(reduced)}>
-                <ArrowRight />
-              </motion.div>
-            )}
-          </React.Fragment>
-        ))}
-      </motion.div>
-
-      <p style={{ ...typography.caption, textAlign: 'center', marginTop: '2rem', fontSize: 16 }}>
-        Sequential calls drove high COGs and complexity
-      </p>
-    </SlideContainer>
-  );
-};
-
-Ch5_S2_FourPrompts.metadata = {
-  chapter: 5,
-  slide: 2,
-  title: "Four-Prompt Pipeline",
-  audioSegments: [{
-    id: "main",
-    audioFilePath: "/audio/c5/s2_segment_01_main.wav",
-    narrationText: "Initial implementation: 4 sequential LLM calls, high computational costs."
+    narrationText: "Our current Meeting Highlights implementation makes 4 sequential calls to L-L-M, with a large amount of tokens. To enable global scaling, we needed to dramatically reduce these computational costs."
   }]
 };

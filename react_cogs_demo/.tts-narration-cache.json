@@ -40,32 +40,24 @@
     "generatedAt": "2025-10-19T22:28:41.704Z"
   },
   "c5\\s1_segment_01_main.wav": {
-    "narrationText": "Cost efficiency is critical for global scaling.",
-    "generatedAt": "2025-10-19T22:28:53.960Z"
-  },
-  "c5\\s2_segment_01_main.wav": {
-    "narrationText": "Initial implementation: 4 sequential LLM calls, high computational costs.",
-    "generatedAt": "2025-10-19T22:28:53.962Z"
+    "narrationText": "Our current Meeting Highlights implementation makes 4 sequential calls to L-L-M, with a large amount of tokens. To enable global scaling, we needed to dramatically reduce these computational costs.",
+    "generatedAt": "2025-10-20T00:15:55.321Z"
   },
   "c6\\s1_segment_01_main.wav": {
-    "narrationText": "Collapsed four steps into one unified prompt.",
-    "generatedAt": "2025-10-19T22:28:53.963Z"
+    "narrationText": "Our solution was to collapse the four sequential steps into one unified prompt. By designing a single comprehensive prompt that accomplishes the same four steps in one L-L-M call.",
+    "generatedAt": "2025-10-20T00:15:55.324Z"
   },
   "c6\\s4_segment_01_main.wav": {
-    "narrationText": "Optimized tokens: compact schema, direct selection, no pre-computed ranges.",
-    "generatedAt": "2025-10-19T22:28:53.966Z"
-  },
-  "c7\\s1_segment_01_main.wav": {
-    "narrationText": "75% fewer calls, 60% fewer tokens per meeting.",
-    "generatedAt": "2025-10-19T22:29:05.755Z"
+    "narrationText": "Beyond reducing L-L-M calls, we optimized the input tokens themselves, which reduced input tokens by more than 60 percent.",
+    "generatedAt": "2025-10-20T00:15:55.325Z"
   },
   "c7\\s2_segment_01_main.wav": {
     "narrationText": "GPU capacity dropped 70%: from 600 to under 200.",
     "generatedAt": "2025-10-19T22:29:05.756Z"
   },
   "c7\\s4_segment_01_main.wav": {
-    "narrationText": "Unified prompt produces higher quality—reviewers strongly prefer it.",
-    "generatedAt": "2025-10-19T22:29:05.758Z"
+    "narrationText": "Early internal feedback strongly prefers unified prompt highlight videos over the multi-call pipeline output. Gains center on depth and natural flow.",
+    "generatedAt": "2025-10-20T00:15:55.327Z"
   },
   "c7\\s5_segment_01_main.wav": {
     "narrationText": "These improvements enable GA within capacity constraints.",
@@ -253,7 +245,7 @@
   },
   "c4\\s1_segment_05_narrative.wav": {
     "narrationText": "The AI weaves these highlights together into a cohesive narrative, creating an engaging story that connects the abstractive summaries and key moments.",
-    "generatedAt": "2025-10-19T23:10:55.993Z"
+    "generatedAt": "2025-10-20T00:22:17.616Z"
   },
   "c4/s1_segment_03_key_moments.wav": {
     "narrationText": "Second, key moments. These are significant verbatim segments extracted directly from the meeting recording.",
@@ -270,5 +262,21 @@
   "c2/s1_segment_07_loop_storage.wav": {
     "narrationText": "Loop embeds the Clipchamp player across applications.",
     "generatedAt": "2025-10-19T23:57:24.062Z"
+  },
+  "c1/s1_segment_01_intro.wav": {
+    "narrationText": "Meeting Highlights automatically generates 2-3 minute video recaps of your meetings.",
+    "generatedAt": "2025-10-20T00:16:31.232Z"
+  },
+  "c1/s1_segment_03_problem.wav": {
+    "narrationText": "Catch up on meetings without watching hour-long recordings.",
+    "generatedAt": "2025-10-20T00:18:56.170Z"
+  },
+  "c4/s1_segment_04_timestamps.wav": {
+    "narrationText": "Each highlight is a 20 to 40 second segment with precise timestamps and accompanying narration.",
+    "generatedAt": "2025-10-20T00:20:22.405Z"
+  },
+  "c4/s1_segment_05_narrative.wav": {
+    "narrationText": "The AI weaves these highlights together into a cohesive narrative, creating an engaging story that connects the abstractive summaries and key moments.",
+    "generatedAt": "2025-10-20T00:22:37.430Z"
   }
 }
