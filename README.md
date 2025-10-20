@@ -220,36 +220,24 @@ While presenting in Manual or Manual+Audio mode, you can regenerate audio for an
 - Visual progress indicators with clickable dots
 - Slide counter showing current position (Ch:S format)
 
-**Animated Visualizations**
 **Animated Visualizations:**
 - **Ch0**: Blank intro slide
 - **Ch1** (3 slides): Comprehensive product introduction
   - What is Meeting Highlights
   - How to access via BizChat
-  - User value proposition
-- **Ch2**: Team collaboration (8-segment progressive reveal with team logos)
-- **Ch3**: Architecture overview
+  - How to access via SharePoint
+- **Ch2**: Team collaboration (9-segment progressive reveal with team logos and architecture flow)
 - **Ch4**: Highlight types (extractive vs abstractive)
-- **Ch5** (5 slides): COGS Challenge
-  - Challenge framing with initial metrics
-  - Four-prompt pipeline visualization
-  - GPU requirements (~600)
-  - Latency and complexity impact
-  - Need for reduction
-- **Ch6** (5 slides): Optimization Solution
-  - Unified convergence animation
-  - Algorithm flow preservation
-  - Single invocation benefit
+- **Ch5** (1 slide): COGS Challenge - challenge framing with initial metrics
+- **Ch6** (2 slides): Optimization Solution
+  - Unified convergence animation (4→1 call)
   - 60% token optimization
-  - Model tuning approach
-- **Ch7** (5 slides): Business Impact
-  - Dual visualization: 75% call + 60% token reduction
+- **Ch7** (3 slides): Business Impact
   - GPU reduction animation (600→200)
-  - Cost curve showing 70% COGS reduction
   - Quality comparison metrics
   - Path to GA rollout
 - **Ch8**: User satisfaction (80% useful, 96% likely to reuse)
-- **Ch9** (2 slides): Testimonials and call-to-action to try Meeting Highlights
+- **Ch9** (2 slides): Testimonials and thank you/call-to-action
 **Accessibility**
 - Reduced-motion toggle (top-left corner) respects `prefers-reduced-motion`
 - All animations gracefully degrade to instant transitions when reduced motion is enabled
@@ -261,17 +249,16 @@ While presenting in Manual or Manual+Audio mode, you can regenerate audio for an
 - [`src/main.tsx`](react_cogs_demo/src/main.tsx) - React initialization
 - [`src/App.tsx`](react_cogs_demo/src/App.tsx) - Main app with slide registry
 - [`src/components/SlidePlayer.tsx`](react_cogs_demo/src/components/SlidePlayer.tsx) - Slide navigation & transitions
-- **[`src/slides/chapters/`](react_cogs_demo/src/slides/chapters/)** - **Chapter-based slide organization (10 files, 23 slides)**
-  - [`Chapter0.tsx`](react_cogs_demo/src/slides/chapters/Chapter0.tsx) - Intro slide
+- **[`src/slides/chapters/`](react_cogs_demo/src/slides/chapters/)** - **Chapter-based slide organization (9 files, 15 slides total)**
+  - [`Chapter0.tsx`](react_cogs_demo/src/slides/chapters/Chapter0.tsx) - Intro slide (1 slide)
   - [`Chapter1.tsx`](react_cogs_demo/src/slides/chapters/Chapter1.tsx) - What is Meeting Highlights (3 slides)
-  - [`Chapter2.tsx`](react_cogs_demo/src/slides/chapters/Chapter2.tsx) - Team Collaboration (1 slide)
-  - [`Chapter3.tsx`](react_cogs_demo/src/slides/chapters/Chapter3.tsx) - Architecture Overview (1 slide)
+  - [`Chapter2.tsx`](react_cogs_demo/src/slides/chapters/Chapter2.tsx) - Team Collaboration (1 slide with 9 segments)
   - [`Chapter4.tsx`](react_cogs_demo/src/slides/chapters/Chapter4.tsx) - Highlight Types (1 slide)
-  - [`Chapter5.tsx`](react_cogs_demo/src/slides/chapters/Chapter5.tsx) - COGS Challenge (6 slides)
-  - [`Chapter6.tsx`](react_cogs_demo/src/slides/chapters/Chapter6.tsx) - Optimization Solution (3 slides)
-  - [`Chapter7.tsx`](react_cogs_demo/src/slides/chapters/Chapter7.tsx) - Business Impact (5 slides)
+  - [`Chapter5.tsx`](react_cogs_demo/src/slides/chapters/Chapter5.tsx) - COGS Challenge (1 slide)
+  - [`Chapter6.tsx`](react_cogs_demo/src/slides/chapters/Chapter6.tsx) - Optimization Solution (2 slides)
+  - [`Chapter7.tsx`](react_cogs_demo/src/slides/chapters/Chapter7.tsx) - Business Impact (3 slides)
   - [`Chapter8.tsx`](react_cogs_demo/src/slides/chapters/Chapter8.tsx) - User Reception (1 slide)
-  - [`Chapter9.tsx`](react_cogs_demo/src/slides/chapters/Chapter9.tsx) - Testimonials & Try It Out (2 slides)
+  - [`Chapter9.tsx`](react_cogs_demo/src/slides/chapters/Chapter9.tsx) - Testimonials & Thank You (2 slides)
 - [`src/slides/SlidesRegistry.ts`](react_cogs_demo/src/slides/SlidesRegistry.ts) - Central registry importing all chapter slides
 - [`src/slides/SlideStyles.ts`](react_cogs_demo/src/slides/SlideStyles.ts) - Shared styling utilities
 - [`src/slides/AnimationVariants.ts`](react_cogs_demo/src/slides/AnimationVariants.ts) - Shared animation definitions
