@@ -268,7 +268,7 @@ const ArchitectureDiagram: React.FC<{
         label: 'Clipchamp',
         role: 'Video Player',
         logo: '/images/logos/ClipChamp.png',
-        segment: 6
+        segment: 7
       },
       position: { x: 700, y: 120 }
     }

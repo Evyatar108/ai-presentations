@@ -140,8 +140,8 @@
     "generatedAt": "2025-10-19T22:28:41.705Z"
   },
   "c6/s1_segment_01_main.wav": {
-    "narrationText": "We collapsed the four-step pipeline into one unified prompt with leaner input.",
-    "generatedAt": "2025-10-19T18:42:58.358Z"
+    "narrationText": "Our solution was to collapse the four sequential steps into one unified prompt. By designing a single comprehensive prompt that accomplishes the same four steps in one L-L-M call.",
+    "generatedAt": "2025-10-20T02:24:18.616Z"
   },
   "c7/s2_segment_01_main.wav": {
     "narrationText": "Required GPU capacity dropped 70%: from 600 to under 200.",
