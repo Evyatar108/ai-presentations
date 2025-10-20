@@ -1,12 +1,12 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useReducedMotion } from '../../accessibility/ReducedMotion';
-import { useSegmentedAnimation } from '../../contexts/SegmentContext';
-import { VideoPlayer } from '../../components/VideoPlayer';
-import { SlideComponentWithMetadata } from '../SlideMetadata';
-import { SlideContainer, ContentCard, GradientHighlightBox, SlideTitle, BenefitCard } from '../SlideLayouts';
-import { typography, gradientBox } from '../SlideStyles';
-import { fadeUp, fadeLeft, fadeRight, scaleIn } from '../AnimationVariants';
+import { useReducedMotion } from '../../../../accessibility/ReducedMotion';
+import { useSegmentedAnimation } from '../../../../contexts/SegmentContext';
+import { VideoPlayer } from '../../../../components/VideoPlayer';
+import { SlideComponentWithMetadata } from '../../../../slides/SlideMetadata';
+import { SlideContainer, ContentCard, GradientHighlightBox, SlideTitle, BenefitCard } from '../../../../slides/SlideLayouts';
+import { typography, gradientBox } from '../../../../slides/SlideStyles';
+import { fadeUp, fadeLeft, fadeRight, scaleIn } from '../../../../slides/AnimationVariants';
 
 /**
  * Chapter 1: What is Meeting Highlights
@@ -46,7 +46,7 @@ export const Ch1_S1_WhatIsMeetingHighlights: SlideComponentWithMetadata = () => 
           transition: reduced ? 'none' : 'margin 0.6s ease'
         }}>
           <motion.img
-            src="/images/meeting_highlights_thumbnail.jpeg"
+            src="/images/meeting-highlights/meeting_highlights_thumbnail.jpeg"
             alt="Meeting Highlights example"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{
@@ -146,21 +146,21 @@ Ch1_S1_WhatIsMeetingHighlights.metadata = {
   audioSegments: [
     {
       id: "intro",
-      audioFilePath: "/audio/c1/s1_segment_01_intro.wav",
+      audioFilePath: "/audio/meeting-highlights/c1/s1_segment_01_intro.wav",
       srtSegmentNumber: 1,
       visualDescription: "Title slide \"Meeting Highlights\"",
       narrationText: "Meeting Highlights automatically generates 2-3 minute video recaps of your meetings."
     },
     {
       id: "combination",
-      audioFilePath: "/audio/c1/s1_segment_02_combination.wav",
+      audioFilePath: "/audio/meeting-highlights/c1/s1_segment_02_combination.wav",
       srtSegmentNumber: 2,
       visualDescription: "Split screen showing AI summaries + authentic video clips",
       narrationText: "It combines AI summaries with authentic video clips, preserving tone and discussion flow."
     },
     {
       id: "problem",
-      audioFilePath: "/audio/c1/s1_segment_03_problem.wav",
+      audioFilePath: "/audio/meeting-highlights/c1/s1_segment_03_problem.wav",
       srtSegmentNumber: 3,
       visualDescription: "Value prop highlight box appears",
       narrationText: "Catch up on meetings without watching hour-long recordings."
@@ -209,7 +209,7 @@ export const Ch1_S2_HowToAccess: SlideComponentWithMetadata = () => {
                 padding: '0.5rem'
               }}>
                 <VideoPlayer
-                  videoPath="/videos/meeting_highlights_usage_in_bizchat.mp4"
+                  videoPath="/videos/meeting-highlights/meeting_highlights_usage_in_bizchat.mp4"
                   isPlaying={isSegmentVisible(1)}
                   freezeOnEnd={true}
                 />
@@ -301,42 +301,42 @@ Ch1_S2_HowToAccess.metadata = {
   audioSegments: [
     {
       id: "intro",
-      audioFilePath: "/audio/c1/s2_segment_01_intro.wav",
+      audioFilePath: "/audio/meeting-highlights/c1/s2_segment_01_intro.wav",
       srtSegmentNumber: 1,
       visualDescription: "BizChat interface screenshot",
       narrationText: "Access Meeting Highlights through BizChat."
     },
     {
       id: "bizchat",
-      audioFilePath: "/audio/c1/s2_segment_02_bizchat.wav",
+      audioFilePath: "/audio/meeting-highlights/c1/s2_segment_02_bizchat.wav",
       srtSegmentNumber: 2,
       visualDescription: "Embedded MP4 demo video showing BizChat interaction",
       narrationText: "Open BizChat and ask for a meeting recap."
     },
     {
       id: "ciq",
-      audioFilePath: "/audio/c1/s2_segment_03_ciq.wav",
+      audioFilePath: "/audio/meeting-highlights/c1/s2_segment_03_ciq.wav",
       srtSegmentNumber: 3,
       visualDescription: "Demo continues - showing \"/\" menu for CIQ",
       narrationText: "Tip: Type forward slash to easily reference meetings using C-I-Q."
     },
     {
       id: "select",
-      audioFilePath: "/audio/c1/s2_segment_04_select.wav",
+      audioFilePath: "/audio/meeting-highlights/c1/s2_segment_04_select.wav",
       srtSegmentNumber: 4,
       visualDescription: "Demo shows meeting selection from menu",
       narrationText: "Select and search for meetings from the menu."
     },
     {
       id: "player",
-      audioFilePath: "/audio/c1/s2_segment_05_player.wav",
+      audioFilePath: "/audio/meeting-highlights/c1/s2_segment_05_player.wav",
       srtSegmentNumber: 5,
       visualDescription: "Demo shows BizChat response with video player at bottom",
       narrationText: "The highlights player appears at the bottom."
     },
     {
       id: "note",
-      audioFilePath: "/audio/c1/s2_segment_06_note.wav",
+      audioFilePath: "/audio/meeting-highlights/c1/s2_segment_06_note.wav",
       srtSegmentNumber: 6,
       visualDescription: "Note callout appears with info icon",
       narrationText: "For series meetings, click the arrow to view instances, then select one."
@@ -385,7 +385,7 @@ export const Ch1_S3_HowToAccessSharePoint: SlideComponentWithMetadata = () => {
                 padding: '0.5rem'
               }}>
                 <VideoPlayer
-                  videoPath="/videos/meeting_highlights_usage_in_sharepoint.mp4"
+                  videoPath="/videos/meeting-highlights/meeting_highlights_usage_in_sharepoint.mp4"
                   isPlaying={isSegmentVisible(1)}
                   freezeOnEnd={true}
                 />
@@ -457,35 +457,35 @@ Ch1_S3_HowToAccessSharePoint.metadata = {
   audioSegments: [
     {
       id: "intro",
-      audioFilePath: "/audio/c1/s3_segment_01_intro.wav",
+      audioFilePath: "/audio/meeting-highlights/c1/s3_segment_01_intro.wav",
       srtSegmentNumber: 1,
       visualDescription: "SharePoint interface screenshot",
       narrationText: "You can also access Meeting Highlights directly from SharePoint."
     },
     {
       id: "video",
-      audioFilePath: "/audio/c1/s3_segment_02_video.wav",
+      audioFilePath: "/audio/meeting-highlights/c1/s3_segment_02_video.wav",
       srtSegmentNumber: 2,
       visualDescription: "Video player appears showing SharePoint demo",
       narrationText: "Open the meeting chat in Teams."
     },
     {
       id: "sharepoint",
-      audioFilePath: "/audio/c1/s3_segment_03_sharepoint.wav",
+      audioFilePath: "/audio/meeting-highlights/c1/s3_segment_03_sharepoint.wav",
       srtSegmentNumber: 3,
       visualDescription: "First instruction card appears",
       narrationText: "Navigate to the meeting recording recap page by clicking the recording link or via the Recap tab."
     },
     {
       id: "browser",
-      audioFilePath: "/audio/c1/s3_segment_04_browser.wav",
+      audioFilePath: "/audio/meeting-highlights/c1/s3_segment_04_browser.wav",
       srtSegmentNumber: 4,
       visualDescription: "Demo shows 'Watch in browser' button",
       narrationText: "Click the Watch in browser button."
     },
     {
       id: "play",
-      audioFilePath: "/audio/c1/s3_segment_05_play.wav",
+      audioFilePath: "/audio/meeting-highlights/c1/s3_segment_05_play.wav",
       srtSegmentNumber: 5,
       visualDescription: "Demo shows 'Play highlights' button",
       narrationText: "Then click Play highlights. A new page should open with the highlights player ready to recap your meeting."
@@ -606,42 +606,42 @@ Ch1_S4_UserValue.metadata = {
   audioSegments: [
     {
       id: "intro",
-      audioFilePath: "/audio/c1/s3_segment_01_intro.wav",
+      audioFilePath: "/audio/meeting-highlights/c1/s3_segment_01_intro.wav",
       srtSegmentNumber: 1,
       visualDescription: "3 value proposition cards appear",
       narrationText: "Meeting Highlights delivers four key benefits to users."
     },
     {
       id: "triage",
-      audioFilePath: "/audio/c1/s3_segment_02_triage.wav",
+      audioFilePath: "/audio/meeting-highlights/c1/s3_segment_02_triage.wav",
       srtSegmentNumber: 2,
       visualDescription: "Card 1 highlights - magnifying glass with decision arrows",
       narrationText: "First, smart triage. The highlights help you decide whether you need to watch the full recording or if the recap is sufficient."
     },
     {
       id: "time",
-      audioFilePath: "/audio/c1/s3_segment_03_time.wav",
+      audioFilePath: "/audio/meeting-highlights/c1/s3_segment_03_time.wav",
       srtSegmentNumber: 3,
       visualDescription: "Card 2 highlights - clock icon with \"60 min → 3 min\"",
       narrationText: "Second, massive time savings. If based on the triage you're satisfied with the highlights, you save time by not needing to watch the full recording."
     },
     {
       id: "engagement",
-      audioFilePath: "/audio/c1/s3_segment_04_engagement.wav",
+      audioFilePath: "/audio/meeting-highlights/c1/s3_segment_04_engagement.wav",
       srtSegmentNumber: 4,
       visualDescription: "Card 3 highlights - engagement icons (eyes, ears, text)",
       narrationText: "Third, better engagement and retention through audiovisual content that caters to all learning styles."
     },
     {
       id: "dynamics",
-      audioFilePath: "/audio/c1/s3_segment_05_dynamics.wav",
+      audioFilePath: "/audio/meeting-highlights/c1/s3_segment_05_dynamics.wav",
       srtSegmentNumber: 5,
       visualDescription: "Card 4 highlights - mood/vibe icons showing emotions",
       narrationText: "Fourth, preserved meeting dynamics. You get the tone and vibe of discussions, not just facts."
     },
     {
       id: "testimonial",
-      audioFilePath: "/audio/c1/s3_segment_06_testimonial.wav",
+      audioFilePath: "/audio/meeting-highlights/c1/s3_segment_06_testimonial.wav",
       srtSegmentNumber: 6,
       visualDescription: "User testimonial quote appears",
       narrationText: "Internal users have called it magical, with one manager saying it saved hours of reviewing transcripts."

@@ -3,8 +3,7 @@ import * as path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import axios from 'axios';
-import { allSlides } from '../src/slides/SlidesRegistry';
-import { AudioSegment } from '../src/slides/SlideMetadata';
+import { AudioSegment, SlideComponentWithMetadata } from '../src/slides/SlideMetadata';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -16,22 +15,53 @@ interface TTSConfig {
   skipExisting: boolean;      // Skip files that already exist
   batchSize: number;          // Number of segments per batch request
   cacheFile: string;          // Path to narration cache file
+  demoFilter?: string;        // Optional: generate only for specific demo
 }
 
 interface NarrationCache {
-  [filepath: string]: {
-    narrationText: string;
-    generatedAt: string;
+  [demoId: string]: {
+    [filepath: string]: {
+      narrationText: string;
+      generatedAt: string;
+    };
   };
 }
 
 interface SegmentToGenerate {
+  demoId: string;
   chapter: number;
   slide: number;
   segmentIndex: number;
   segment: AudioSegment;
   filename: string;
   filepath: string;
+}
+
+// Get all demo IDs by scanning the demos directory
+async function getAllDemoIds(): Promise<string[]> {
+  const demosDir = path.join(__dirname, '../src/demos');
+  const entries = fs.readdirSync(demosDir, { withFileTypes: true });
+  
+  return entries
+    .filter(entry => entry.isDirectory() && entry.name !== 'types.ts')
+    .map(entry => entry.name)
+    .filter(name => {
+      // Verify it has an index.ts file
+      const indexPath = path.join(demosDir, name, 'index.ts');
+      return fs.existsSync(indexPath);
+    });
+}
+
+// Load slides for a specific demo
+async function loadDemoSlides(demoId: string): Promise<SlideComponentWithMetadata[]> {
+  try {
+    const slidesRegistryPath = `../src/demos/${demoId}/slides/SlidesRegistry.js`;
+    const module = await import(slidesRegistryPath);
+    return module.allSlides || [];
+  } catch (error: any) {
+    console.warn(`⚠️  Could not load slides for demo '${demoId}': ${error.message}`);
+    return [];
+  }
 }
 
 // Load cache
@@ -52,8 +82,13 @@ function saveCache(cacheFile: string, cache: NarrationCache) {
   fs.writeFileSync(cacheFile, JSON.stringify(cache, null, 2));
 }
 
-// Scan for orphaned audio files and cache entries
-function cleanupUnusedAudio(outputDir: string, cache: NarrationCache): {
+// Scan for orphaned audio files and cache entries for a specific demo
+function cleanupUnusedAudio(
+  demoId: string,
+  outputDir: string,
+  cache: NarrationCache,
+  allSlides: SlideComponentWithMetadata[]
+): {
   orphanedFiles: string[];
   orphanedCacheKeys: string[];
 } {
@@ -61,6 +96,11 @@ function cleanupUnusedAudio(outputDir: string, cache: NarrationCache): {
     orphanedFiles: [] as string[],
     orphanedCacheKeys: [] as string[]
   };
+
+  const demoOutputDir = path.join(outputDir, demoId);
+  if (!fs.existsSync(demoOutputDir)) {
+    return result;
+  }
 
   // Build set of expected filepaths from all slides
   const expectedFiles = new Set<string>();
@@ -73,27 +113,27 @@ function cleanupUnusedAudio(outputDir: string, cache: NarrationCache): {
       if (!segment.narrationText) continue;
 
       const filename = `s${slideNum}_segment_${String(i + 1).padStart(2, '0')}_${segment.id}.wav`;
-      const chapterDir = path.join(outputDir, `c${chapter}`);
+      const chapterDir = path.join(demoOutputDir, `c${chapter}`);
       const filepath = path.join(chapterDir, filename);
-      const relativeFilepath = path.relative(outputDir, filepath);
+      const relativeFilepath = path.relative(demoOutputDir, filepath);
       expectedFiles.add(relativeFilepath.replace(/\\/g, '/'));
     }
   }
 
   // Scan audio directories for actual files
-  const chapterDirs = fs.readdirSync(outputDir).filter(name =>
-    name.startsWith('c') && fs.statSync(path.join(outputDir, name)).isDirectory()
+  const chapterDirs = fs.readdirSync(demoOutputDir).filter(name =>
+    name.startsWith('c') && fs.statSync(path.join(demoOutputDir, name)).isDirectory()
   );
 
   for (const chapterDir of chapterDirs) {
-    const chapterPath = path.join(outputDir, chapterDir);
+    const chapterPath = path.join(demoOutputDir, chapterDir);
     const files = fs.readdirSync(chapterPath);
     
     for (const file of files) {
       if (!file.endsWith('.wav')) continue;
       
       const filepath = path.join(chapterPath, file);
-      const relativeFilepath = path.relative(outputDir, filepath).replace(/\\/g, '/');
+      const relativeFilepath = path.relative(demoOutputDir, filepath).replace(/\\/g, '/');
       
       if (!expectedFiles.has(relativeFilepath)) {
         result.orphanedFiles.push(relativeFilepath);
@@ -102,7 +142,8 @@ function cleanupUnusedAudio(outputDir: string, cache: NarrationCache): {
   }
 
   // Check cache for orphaned entries
-  for (const cacheKey of Object.keys(cache)) {
+  const demoCache = cache[demoId] || {};
+  for (const cacheKey of Object.keys(demoCache)) {
     const normalizedKey = cacheKey.replace(/\\/g, '/');
     if (!expectedFiles.has(normalizedKey)) {
       result.orphanedCacheKeys.push(cacheKey);
@@ -114,57 +155,28 @@ function cleanupUnusedAudio(outputDir: string, cache: NarrationCache): {
 
 // Main function with batch processing
 async function generateTTS(config: TTSConfig) {
-  console.log('🎙️  Starting TTS Batch Generation...\n');
+  console.log('🎙️  Starting TTS Batch Generation (Multi-Demo Support)...\n');
   
   // Load cache
   const cache = loadCache(config.cacheFile);
   
-  // Check for unused audio files
-  console.log('🔍 Scanning for unused audio files...\n');
-  const cleanup = cleanupUnusedAudio(config.outputDir, cache);
+  // Get demos to process
+  const allDemoIds = await getAllDemoIds();
+  const demosToProcess = config.demoFilter
+    ? allDemoIds.filter(id => id === config.demoFilter)
+    : allDemoIds;
   
-  if (cleanup.orphanedFiles.length > 0 || cleanup.orphanedCacheKeys.length > 0) {
-    console.log('⚠️  Found unused audio files and/or cache entries:\n');
-    
-    if (cleanup.orphanedFiles.length > 0) {
-      console.log(`📁 Orphaned audio files: ${cleanup.orphanedFiles.length}`);
-      cleanup.orphanedFiles.forEach(file => {
-        console.log(`   - ${file}`);
-      });
-      console.log();
+  if (demosToProcess.length === 0) {
+    if (config.demoFilter) {
+      console.error(`❌ Demo '${config.demoFilter}' not found.`);
+      console.log(`\nAvailable demos: ${allDemoIds.join(', ')}\n`);
+    } else {
+      console.error('❌ No demos found in src/demos/\n');
     }
-    
-    if (cleanup.orphanedCacheKeys.length > 0) {
-      console.log(`🗑️  Orphaned cache entries: ${cleanup.orphanedCacheKeys.length}`);
-      cleanup.orphanedCacheKeys.forEach(key => {
-        console.log(`   - ${key}`);
-      });
-      console.log();
-    }
-    
-    // Delete orphaned files
-    for (const relativeFile of cleanup.orphanedFiles) {
-      const fullPath = path.join(config.outputDir, relativeFile);
-      try {
-        fs.unlinkSync(fullPath);
-        console.log(`✅ Deleted: ${relativeFile}`);
-      } catch (error: any) {
-        console.error(`❌ Failed to delete ${relativeFile}: ${error.message}`);
-      }
-    }
-    
-    // Remove orphaned cache entries
-    for (const key of cleanup.orphanedCacheKeys) {
-      delete cache[key];
-    }
-    
-    if (cleanup.orphanedFiles.length > 0 || cleanup.orphanedCacheKeys.length > 0) {
-      console.log(`\n💾 Cleaned up ${cleanup.orphanedFiles.length} files and ${cleanup.orphanedCacheKeys.length} cache entries\n`);
-      saveCache(config.cacheFile, cache);
-    }
-  } else {
-    console.log('✅ No unused audio files found\n');
+    return;
   }
+  
+  console.log(`📦 Processing ${demosToProcess.length} demo(s): ${demosToProcess.join(', ')}\n`);
   
   // Check server health
   console.log(`Connecting to TTS server at ${config.serverUrl}...`);
@@ -181,169 +193,260 @@ async function generateTTS(config: TTSConfig) {
     return;
   }
   
-  // Collect all segments that need generation
-  const segmentsToGenerate: SegmentToGenerate[] = [];
-  let totalSegments = 0;
-  let skippedCount = 0;
+  // Process each demo
+  let totalGenerated = 0;
+  let totalSkipped = 0;
+  let totalErrors = 0;
   
-  console.log('Scanning slides for segments to generate...\n');
-  
-  for (const slide of allSlides) {
-    const { chapter, slide: slideNum, title, audioSegments } = slide.metadata;
+  for (const demoId of demosToProcess) {
+    console.log('\n' + '═'.repeat(70));
+    console.log(`📁 Demo: ${demoId}`);
+    console.log('═'.repeat(70) + '\n');
     
-    if (!audioSegments || audioSegments.length === 0) continue;
+    // Load slides for this demo
+    const allSlides = await loadDemoSlides(demoId);
     
-    // Create chapter directory
-    const chapterDir = path.join(config.outputDir, `c${chapter}`);
-    fs.mkdirSync(chapterDir, { recursive: true });
-    
-    // Check each segment
-    for (let i = 0; i < audioSegments.length; i++) {
-      const segment = audioSegments[i];
-      totalSegments++;
-      
-      // Skip if no narration text
-      if (!segment.narrationText) {
-        console.log(`⚠️  Ch${chapter}/S${slideNum} Segment ${i + 1}: No narration text`);
-        skippedCount++;
-        continue;
-      }
-      
-      // Generate filename
-      const filename = `s${slideNum}_segment_${String(i + 1).padStart(2, '0')}_${segment.id}.wav`;
-      const filepath = path.join(chapterDir, filename);
-      const relativeFilepath = path.relative(config.outputDir, filepath);
-      
-      // Check if we should skip this segment
-      let shouldSkip = false;
-      
-      if (config.skipExisting && fs.existsSync(filepath)) {
-        // File exists - check if narration has changed
-        const cachedEntry = cache[relativeFilepath];
-        if (cachedEntry && cachedEntry.narrationText === segment.narrationText) {
-          // Narration hasn't changed - skip
-          shouldSkip = true;
-          skippedCount++;
-        }
-        // If narration changed or not in cache, regenerate
-      }
-      
-      if (shouldSkip) {
-        continue;
-      }
-      
-      // Add to generation queue
-      segmentsToGenerate.push({
-        chapter,
-        slide: slideNum,
-        segmentIndex: i,
-        segment,
-        filename,
-        filepath
-      });
+    if (allSlides.length === 0) {
+      console.log(`⚠️  No slides found for demo '${demoId}', skipping...\n`);
+      continue;
     }
-  }
-  
-  console.log(`Found ${segmentsToGenerate.length} segments to generate (${skippedCount} skipped)\n`);
-  
-  if (segmentsToGenerate.length === 0) {
-    console.log('✅ No segments need generation. All done!\n');
-    return;
-  }
-  
-  // Process in batches
-  let generatedCount = 0;
-  let errorCount = 0;
-  const batches = chunkArray(segmentsToGenerate, config.batchSize);
-  
-  console.log(`Processing ${batches.length} batches (${config.batchSize} segments per batch)...\n`);
-  
-  for (let batchIdx = 0; batchIdx < batches.length; batchIdx++) {
-    const batch = batches[batchIdx];
-    const batchNum = batchIdx + 1;
     
-    console.log(`\n${'='.repeat(60)}`);
-    console.log(`📦 Batch ${batchNum}/${batches.length} (${batch.length} segments)`);
-    console.log('='.repeat(60));
+    console.log(`   Found ${allSlides.length} slides\n`);
     
-    // Show what's in this batch
-    batch.forEach((item, idx) => {
-      const preview = item.segment.narrationText!.substring(0, 50);
-      console.log(`  ${idx + 1}. Ch${item.chapter}/S${item.slide} (${item.segment.id}): "${preview}..."`);
-    });
+    // Ensure demo cache exists
+    if (!cache[demoId]) {
+      cache[demoId] = {};
+    }
     
-    try {
-      console.log(`\n🔊 Sending batch request to server...`);
+    // Check for unused audio files
+    console.log('🔍 Scanning for unused audio files...\n');
+    const cleanup = cleanupUnusedAudio(demoId, config.outputDir, cache, allSlides);
+    
+    if (cleanup.orphanedFiles.length > 0 || cleanup.orphanedCacheKeys.length > 0) {
+      console.log('⚠️  Found unused audio files and/or cache entries:\n');
       
-      // Prepare texts for batch request (matches Python client format)
-      const texts = batch.map(item => `Speaker 0: ${item.segment.narrationText}`);
+      if (cleanup.orphanedFiles.length > 0) {
+        console.log(`📁 Orphaned audio files: ${cleanup.orphanedFiles.length}`);
+        cleanup.orphanedFiles.forEach(file => {
+          console.log(`   - ${file}`);
+        });
+        console.log();
+      }
       
-      // Call batch endpoint
-      const response = await axios.post(`${config.serverUrl}/generate_batch`, {
-        texts
-      }, {
-        timeout: 900000 // 15 minute timeout for batch
-      });
+      if (cleanup.orphanedCacheKeys.length > 0) {
+        console.log(`🗑️  Orphaned cache entries: ${cleanup.orphanedCacheKeys.length}`);
+        cleanup.orphanedCacheKeys.forEach(key => {
+          console.log(`   - ${key}`);
+        });
+        console.log();
+      }
       
-      if (response.data.success) {
-        const audios = response.data.audios; // Array of base64-encoded WAV files
-        const sampleRate = response.data.sample_rate;
+      // Delete orphaned files
+      const demoOutputDir = path.join(config.outputDir, demoId);
+      for (const relativeFile of cleanup.orphanedFiles) {
+        const fullPath = path.join(demoOutputDir, relativeFile);
+        try {
+          fs.unlinkSync(fullPath);
+          console.log(`✅ Deleted: ${relativeFile}`);
+        } catch (error: any) {
+          console.error(`❌ Failed to delete ${relativeFile}: ${error.message}`);
+        }
+      }
+      
+      // Remove orphaned cache entries
+      for (const key of cleanup.orphanedCacheKeys) {
+        delete cache[demoId][key];
+      }
+      
+      if (cleanup.orphanedFiles.length > 0 || cleanup.orphanedCacheKeys.length > 0) {
+        console.log(`\n💾 Cleaned up ${cleanup.orphanedFiles.length} files and ${cleanup.orphanedCacheKeys.length} cache entries\n`);
+        saveCache(config.cacheFile, cache);
+      }
+    } else {
+      console.log('✅ No unused audio files found\n');
+    }
+    
+    // Collect all segments that need generation
+    const segmentsToGenerate: SegmentToGenerate[] = [];
+    let totalSegments = 0;
+    let skippedCount = 0;
+    
+    console.log('Scanning slides for segments to generate...\n');
+    
+    const demoOutputDir = path.join(config.outputDir, demoId);
+    
+    for (const slide of allSlides) {
+      const { chapter, slide: slideNum, title, audioSegments } = slide.metadata;
+      
+      if (!audioSegments || audioSegments.length === 0) continue;
+      
+      // Create chapter directory
+      const chapterDir = path.join(demoOutputDir, `c${chapter}`);
+      fs.mkdirSync(chapterDir, { recursive: true });
+      
+      // Check each segment
+      for (let i = 0; i < audioSegments.length; i++) {
+        const segment = audioSegments[i];
+        totalSegments++;
         
-        console.log(`✅ Received ${audios.length} audio files from server`);
-        console.log(`   Sample rate: ${sampleRate} Hz\n`);
-        
-        // Save each audio file
-        for (let i = 0; i < batch.length; i++) {
-          const item = batch[i];
-          const audioBase64 = audios[i];
-          const audioBuffer = Buffer.from(audioBase64, 'base64');
-          
-          fs.writeFileSync(item.filepath, audioBuffer);
-          console.log(`  ✅ [${i + 1}/${batch.length}] Saved: ${item.filename}`);
-          generatedCount++;
-          
-          // Update cache
-          const relativeFilepath = path.relative(config.outputDir, item.filepath);
-          cache[relativeFilepath] = {
-            narrationText: item.segment.narrationText!,
-            generatedAt: new Date().toISOString()
-          };
+        // Skip if no narration text
+        if (!segment.narrationText) {
+          console.log(`⚠️  ${demoId} Ch${chapter}/S${slideNum} Segment ${i + 1}: No narration text`);
+          skippedCount++;
+          continue;
         }
         
-      } else {
-        console.error(`❌ Server error: ${response.data.error || 'Unknown error'}`);
+        // Generate filename
+        const filename = `s${slideNum}_segment_${String(i + 1).padStart(2, '0')}_${segment.id}.wav`;
+        const filepath = path.join(chapterDir, filename);
+        const relativeFilepath = path.relative(demoOutputDir, filepath);
+        
+        // Check if we should skip this segment
+        let shouldSkip = false;
+        
+        if (config.skipExisting && fs.existsSync(filepath)) {
+          // File exists - check if narration has changed
+          const cachedEntry = cache[demoId][relativeFilepath];
+          if (cachedEntry && cachedEntry.narrationText === segment.narrationText) {
+            // Narration hasn't changed - skip
+            shouldSkip = true;
+            skippedCount++;
+          }
+          // If narration changed or not in cache, regenerate
+        }
+        
+        if (shouldSkip) {
+          continue;
+        }
+        
+        // Add to generation queue
+        segmentsToGenerate.push({
+          demoId,
+          chapter,
+          slide: slideNum,
+          segmentIndex: i,
+          segment,
+          filename,
+          filepath
+        });
+      }
+    }
+    
+    console.log(`Found ${segmentsToGenerate.length} segments to generate (${skippedCount} skipped)\n`);
+    
+    if (segmentsToGenerate.length === 0) {
+      console.log('✅ No segments need generation for this demo.\n');
+      totalSkipped += skippedCount;
+      continue;
+    }
+    
+    // Process in batches
+    let generatedCount = 0;
+    let errorCount = 0;
+    const batches = chunkArray(segmentsToGenerate, config.batchSize);
+    
+    console.log(`Processing ${batches.length} batches (${config.batchSize} segments per batch)...\n`);
+    
+    for (let batchIdx = 0; batchIdx < batches.length; batchIdx++) {
+      const batch = batches[batchIdx];
+      const batchNum = batchIdx + 1;
+      
+      console.log(`\n${'='.repeat(60)}`);
+      console.log(`📦 Batch ${batchNum}/${batches.length} (${batch.length} segments)`);
+      console.log('='.repeat(60));
+      
+      // Show what's in this batch
+      batch.forEach((item, idx) => {
+        const preview = item.segment.narrationText!.substring(0, 50);
+        console.log(`  ${idx + 1}. Ch${item.chapter}/S${item.slide} (${item.segment.id}): "${preview}..."`);
+      });
+      
+      try {
+        console.log(`\n🔊 Sending batch request to server...`);
+        
+        // Prepare texts for batch request
+        const texts = batch.map(item => `Speaker 0: ${item.segment.narrationText}`);
+        
+        // Call batch endpoint
+        const response = await axios.post(`${config.serverUrl}/generate_batch`, {
+          texts
+        }, {
+          timeout: 900000 // 15 minute timeout for batch
+        });
+        
+        if (response.data.success) {
+          const audios = response.data.audios;
+          const sampleRate = response.data.sample_rate;
+          
+          console.log(`✅ Received ${audios.length} audio files from server`);
+          console.log(`   Sample rate: ${sampleRate} Hz\n`);
+          
+          // Save each audio file
+          for (let i = 0; i < batch.length; i++) {
+            const item = batch[i];
+            const audioBase64 = audios[i];
+            const audioBuffer = Buffer.from(audioBase64, 'base64');
+            
+            fs.writeFileSync(item.filepath, audioBuffer);
+            console.log(`  ✅ [${i + 1}/${batch.length}] Saved: ${item.filename}`);
+            generatedCount++;
+            
+            // Update cache
+            const relativeFilepath = path.relative(path.join(config.outputDir, item.demoId), item.filepath);
+            cache[item.demoId][relativeFilepath] = {
+              narrationText: item.segment.narrationText!,
+              generatedAt: new Date().toISOString()
+            };
+          }
+          
+        } else {
+          console.error(`❌ Server error: ${response.data.error || 'Unknown error'}`);
+          errorCount += batch.length;
+        }
+        
+      } catch (error: any) {
+        if (error.code === 'ECONNABORTED') {
+          console.error(`❌ Batch timeout (took > 15 minutes)`);
+        } else {
+          console.error(`❌ Error: ${error.message}`);
+        }
         errorCount += batch.length;
       }
       
-    } catch (error: any) {
-      if (error.code === 'ECONNABORTED') {
-        console.error(`❌ Batch timeout (took > 15 minutes)`);
-      } else {
-        console.error(`❌ Error: ${error.message}`);
-      }
-      errorCount += batch.length;
+      // Show progress
+      const progressPct = ((batchNum / batches.length) * 100).toFixed(1);
+      console.log(`\n📊 Progress: ${generatedCount}/${segmentsToGenerate.length} segments (${progressPct}%)`);
     }
     
-    // Show progress
-    const progressPct = ((batchNum / batches.length) * 100).toFixed(1);
-    console.log(`\n📊 Progress: ${generatedCount}/${segmentsToGenerate.length} segments (${progressPct}%)`);
+    // Demo summary
+    console.log('\n' + '-'.repeat(60));
+    console.log(`📊 Demo '${demoId}' Summary`);
+    console.log('-'.repeat(60));
+    console.log(`Total segments scanned: ${totalSegments}`);
+    console.log(`⏭️  Skipped (already exist): ${skippedCount}`);
+    console.log(`✅ Generated: ${generatedCount}`);
+    console.log(`❌ Errors: ${errorCount}`);
+    console.log('-'.repeat(60) + '\n');
+    
+    totalGenerated += generatedCount;
+    totalSkipped += skippedCount;
+    totalErrors += errorCount;
   }
   
   // Final summary
-  console.log('\n' + '='.repeat(60));
-  console.log('📊 TTS Batch Generation Summary');
-  console.log('='.repeat(60));
-  console.log(`Total segments scanned: ${totalSegments}`);
-  console.log(`⏭️  Skipped (already exist): ${skippedCount}`);
-  console.log(`✅ Generated: ${generatedCount}`);
-  console.log(`❌ Errors: ${errorCount}`);
-  console.log(`📦 Batches processed: ${batches.length}`);
-  console.log('='.repeat(60) + '\n');
+  console.log('\n' + '═'.repeat(70));
+  console.log('📊 TTS Multi-Demo Generation Summary');
+  console.log('═'.repeat(70));
+  console.log(`Demos processed: ${demosToProcess.length}`);
+  console.log(`⏭️  Total skipped: ${totalSkipped}`);
+  console.log(`✅ Total generated: ${totalGenerated}`);
+  console.log(`❌ Total errors: ${totalErrors}`);
+  console.log('═'.repeat(70) + '\n');
   
   // Save updated cache
-  if (generatedCount > 0) {
+  if (totalGenerated > 0) {
     saveCache(config.cacheFile, cache);
-    console.log(`💾 Cache updated with ${generatedCount} new entries\n`);
+    console.log(`💾 Cache updated with ${totalGenerated} new entries\n`);
   }
 }
 
@@ -373,13 +476,31 @@ function loadServerConfig(): string {
   return 'http://localhost:5000';
 }
 
+// Parse CLI arguments
+function parseCLIArgs(): { demoFilter?: string; skipExisting: boolean } {
+  const args = process.argv.slice(2);
+  const result: { demoFilter?: string; skipExisting: boolean } = {
+    skipExisting: args.includes('--skip-existing')
+  };
+  
+  // Check for --demo parameter
+  const demoIndex = args.indexOf('--demo');
+  if (demoIndex !== -1 && args[demoIndex + 1]) {
+    result.demoFilter = args[demoIndex + 1];
+  }
+  
+  return result;
+}
+
 // CLI execution
+const cliArgs = parseCLIArgs();
 const config: TTSConfig = {
   serverUrl: process.env.TTS_SERVER_URL || loadServerConfig(),
   outputDir: path.join(__dirname, '../public/audio'),
-  skipExisting: process.argv.includes('--skip-existing'),
-  batchSize: parseInt(process.env.BATCH_SIZE || '10', 10), // Default 10 segments per batch
-  cacheFile: path.join(__dirname, '../.tts-narration-cache.json')
+  skipExisting: cliArgs.skipExisting,
+  batchSize: parseInt(process.env.BATCH_SIZE || '10', 10),
+  cacheFile: path.join(__dirname, '../.tts-narration-cache.json'),
+  demoFilter: cliArgs.demoFilter
 };
 
 generateTTS(config).catch(console.error);

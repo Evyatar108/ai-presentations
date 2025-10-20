@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useReducedMotion } from '../../accessibility/ReducedMotion';
-import { SlideComponentWithMetadata } from '../SlideMetadata';
-import { SlideContainer } from '../SlideLayouts';
+import { useReducedMotion } from '../../../../accessibility/ReducedMotion';
+import { SlideComponentWithMetadata } from '../../../../slides/SlideMetadata';
+import { SlideContainer } from '../../../../slides/SlideLayouts';
 
 /**
  * Chapter 0: Introduction
@@ -30,5 +30,5 @@ BlankIntro.metadata = {
   chapter: 0,
   slide: 0,
   title: "Intro",
-  audioSegments: [{ id: "main", audioFilePath: "/audio/c0/s0_segment_01_main.wav" }]
+  audioSegments: [{ id: "main", audioFilePath: "/audio/meeting-highlights/c0/s0_segment_01_main.wav" }]
 };

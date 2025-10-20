@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useReducedMotion } from '../../accessibility/ReducedMotion';
-import { useSegmentedAnimation } from '../../contexts/SegmentContext';
-import { SlideComponentWithMetadata } from '../SlideMetadata';
+import { useReducedMotion } from '../../../../accessibility/ReducedMotion';
+import { useSegmentedAnimation } from '../../../../contexts/SegmentContext';
+import { SlideComponentWithMetadata } from '../../../../slides/SlideMetadata';
 import {
   ReactFlow,
   Background,
@@ -38,49 +38,49 @@ const teams: TeamInfo[] = [
   {
     id: 'odsp',
     name: 'ODSP',
-    logo: '/images/logos/odsp.png',
+    logo: '/images/meeting-highlights/logos/odsp.png',
     role: 'Storage & Orchestration',
     description: 'Initiates generation, stores data, manages video manifest'
   },
   {
     id: 'msai',
     name: 'MSAI-Hive',
-    logo: '/images/logos/msai-hive.png',
+    logo: '/images/meeting-highlights/logos/msai-hive.png',
     role: 'AI Generation',
     description: 'Processes transcripts using LLM technology'
   },
   {
     id: 'bizchat',
     name: 'BizChat',
-    logo: '/images/logos/BizChat.png',
+    logo: '/images/meeting-highlights/logos/BizChat.png',
     role: 'Primary UI',
     description: 'Provides natural language access'
   },
   {
     id: 'sharepoint',
     name: 'SharePoint',
-    logo: '/images/logos/sharepoint.png',
+    logo: '/images/meeting-highlights/logos/sharepoint.png',
     role: 'Web UI',
     description: 'Direct access from meeting recap page'
   },
   {
     id: 'teams',
     name: 'Teams',
-    logo: '/images/logos/Teams.png',
+    logo: '/images/meeting-highlights/logos/Teams.png',
     role: 'Planned UI',
     description: 'Planned interface within Teams ecosystem'
   },
   {
     id: 'loop',
     name: 'Loop',
-    logo: '/images/logos/Loop.png',
+    logo: '/images/meeting-highlights/logos/Loop.png',
     role: 'Integration Layer',
     description: 'Enables seamless player embedding'
   },
   {
     id: 'clipchamp',
     name: 'Clipchamp',
-    logo: '/images/logos/ClipChamp.png',
+    logo: '/images/meeting-highlights/logos/ClipChamp.png',
     role: 'Video Player',
     description: 'Owns the highlights player component'
   },
@@ -201,7 +201,7 @@ const ArchitectureDiagram: React.FC<{
       data: {
         label: 'ODSP',
         role: 'Storage & Manifest',
-        logo: '/images/logos/odsp.png',
+        logo: '/images/meeting-highlights/logos/odsp.png',
         segment: 1
       },
       position: { x: 400, y: 100 }
@@ -212,7 +212,7 @@ const ArchitectureDiagram: React.FC<{
       data: {
         label: 'MSAI-Hive',
         role: 'AI Generation',
-        logo: '/images/logos/msai-hive.png',
+        logo: '/images/meeting-highlights/logos/msai-hive.png',
         segment: 2
       },
       position: { x: 100, y: 10 }
@@ -223,7 +223,7 @@ const ArchitectureDiagram: React.FC<{
       data: {
         label: 'BizChat',
         role: 'Primary UI',
-        logo: '/images/logos/BizChat.png',
+        logo: '/images/meeting-highlights/logos/BizChat.png',
         segment: 3
       },
       position: { x: 100, y: 420 }
@@ -234,7 +234,7 @@ const ArchitectureDiagram: React.FC<{
       data: {
         label: 'SharePoint',
         role: 'Web UI',
-        logo: '/images/logos/sharepoint.png',
+        logo: '/images/meeting-highlights/logos/sharepoint.png',
         segment: 4
       },
       position: { x: 400, y: 460 }
@@ -245,7 +245,7 @@ const ArchitectureDiagram: React.FC<{
       data: {
         label: 'Teams',
         role: 'Planned UI',
-        logo: '/images/logos/Teams.png',
+        logo: '/images/meeting-highlights/logos/Teams.png',
         segment: 5
       },
       position: { x: 650, y: 420 }
@@ -256,7 +256,7 @@ const ArchitectureDiagram: React.FC<{
       data: {
         label: 'Loop',
         role: 'Integration Layer',
-        logo: '/images/logos/Loop.png',
+        logo: '/images/meeting-highlights/logos/Loop.png',
         segment: 6
       },
       position: { x: 400, y: 280 }
@@ -267,7 +267,7 @@ const ArchitectureDiagram: React.FC<{
       data: {
         label: 'Clipchamp',
         role: 'Video Player',
-        logo: '/images/logos/ClipChamp.png',
+        logo: '/images/meeting-highlights/logos/ClipChamp.png',
         segment: 7
       },
       position: { x: 700, y: 120 }
@@ -672,47 +672,47 @@ Ch2_TeamCollaboration.metadata = {
   audioSegments: [
     {
       id: 'intro',
-      audioFilePath: '/audio/c2/s1_segment_01_intro.wav',
+      audioFilePath: '/audio/meeting-highlights/c2/s1_segment_01_intro.wav',
       narrationText: 'Meeting Highlights required the collaboration of six teams within Microsoft for a cross-organizational effort. Let me show you how each team contribute to the project through the architecture.'
     },
     {
       id: 'odsp',
-      audioFilePath: '/audio/c2/s1_segment_02_odsp.wav',
+      audioFilePath: '/audio/meeting-highlights/c2/s1_segment_02_odsp.wav',
       narrationText: 'ODSP handles storage and video manifest. When meetings end, it initiates highlight generation.'
     },
     {
       id: 'msai',
-      audioFilePath: '/audio/c2/s1_segment_03_msai.wav',
+      audioFilePath: '/audio/meeting-highlights/c2/s1_segment_03_msai.wav',
       narrationText: 'MSAI-Hive processes transcripts using LLMs to generate highlight metadata.'
     },
     {
       id: 'bizchat',
-      audioFilePath: '/audio/c2/s1_segment_04_bizchat.wav',
+      audioFilePath: '/audio/meeting-highlights/c2/s1_segment_04_bizchat.wav',
       narrationText: 'BizChat provides natural language access through conversational queries.'
     },
     {
       id: 'sharepoint',
-      audioFilePath: '/audio/c2/s1_segment_05_sharepoint.wav',
+      audioFilePath: '/audio/meeting-highlights/c2/s1_segment_05_sharepoint.wav',
       narrationText: 'SharePoint offers direct access from meeting recap pages. This interface was implemented by the Clipchamp team.'
     },
     {
       id: 'teams',
-      audioFilePath: '/audio/c2/s1_segment_06_teams.wav',
+      audioFilePath: '/audio/meeting-highlights/c2/s1_segment_06_teams.wav',
       narrationText: 'Teams access planned as another interface option.'
     },
     {
       id: 'loop_storage',
-      audioFilePath: '/audio/c2/s1_segment_07_loop_storage.wav',
+      audioFilePath: '/audio/meeting-highlights/c2/s1_segment_07_loop_storage.wav',
       narrationText: 'Loop embeds the Clipchamp player across applications.'
     },
     {
       id: 'clipchamp',
-      audioFilePath: '/audio/c2/s1_segment_08_clipchamp.wav',
+      audioFilePath: '/audio/meeting-highlights/c2/s1_segment_08_clipchamp.wav',
       narrationText: 'Clipchamp delivers the player experience without creating new video files.'
     },
     {
       id: 'conclusion',
-      audioFilePath: '/audio/c2/s1_segment_09_conclusion.wav',
+      audioFilePath: '/audio/meeting-highlights/c2/s1_segment_09_conclusion.wav',
       narrationText: 'Together, these teams deliver a unified end-to-end experience from recording through AI processing to user access, showcasing true One Microsoft collaboration.'    }
   ]
 };

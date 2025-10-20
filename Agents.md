@@ -1,6 +1,87 @@
 # Agents - Meeting Highlights COGS Reduction Presentation
 
 ## Recent Changes
+
+### 2025-01-20: Multi-Demo Architecture Refactoring (Phases 5-7)
+**Completed multi-demo support system enabling multiple presentations:**
+
+**Phase 5: Placeholder Demos Created**
+- Created `example-demo-1` with 3 placeholder slides
+  - Simple gradient styling (purple, pink, blue)
+  - Demonstrates basic multi-demo structure
+  - Default mode: narrated
+- Created `example-demo-2` with 3 placeholder slides
+  - Dark theme with card layouts
+  - Alternative styling approach
+  - Default mode: manual
+- Both demos registered in [`DemoRegistry.ts`](react_cogs_demo/src/demos/DemoRegistry.ts)
+- Structure: metadata.ts, index.ts, slides/SlidesRegistry.ts, chapters/Chapter0.tsx, README.md
+
+**Phase 6: TTS Scripts Updated for Multi-Demo**
+- **[`generate-tts.ts`](react_cogs_demo/scripts/generate-tts.ts)**: Now supports multiple demos
+  - Scans `src/demos/*/` for all demos
+  - `--demo` CLI parameter for specific demo generation
+  - Multi-demo cache structure: `{ "demo-id": { "filepath": { ... } } }`
+  - Demo-specific output: `public/audio/{demo-id}/c{chapter}/`
+  - Cleanup per demo with orphaned file detection
+  - Commands: `npm run tts:generate` (all), `npm run tts:generate -- --demo meeting-highlights` (specific)
+
+- **[`check-tts-cache.ts`](react_cogs_demo/scripts/check-tts-cache.ts)**: Multi-demo cache validation
+  - Checks all demos for changes
+  - Reports changes per demo
+  - Prompts for regeneration with demo list
+  - Handles multi-demo cache structure
+
+- **[`calculate-durations.ts`](react_cogs_demo/scripts/calculate-durations.ts)**: Multi-demo duration reports
+  - Calculates durations per demo
+  - Grand totals across all demos
+  - `--demo` parameter for specific demo reports
+  - Output: `duration-report.json` or `duration-report-{demo-id}.json`
+
+**Phase 7: Documentation Updates**
+- Created comprehensive [`react_cogs_demo/README.md`](react_cogs_demo/README.md)
+  - Multi-demo architecture overview
+  - Demo organization and structure
+  - Step-by-step guide for adding new demos
+  - TTS script usage with multi-demo examples
+  - Asset management per demo
+  - Troubleshooting section
+- Updated [`Agents.md`](Agents.md) (this file) with refactoring details
+
+**Benefits:**
+- **Scalability**: Unlimited demos supported
+- **Independence**: Each demo has its own assets and configuration
+- **Lazy Loading**: Demos load on-demand for faster initial load
+- **Shared Infrastructure**: Common components reduce duplication
+- **Clean Organization**: Demo-specific directories prevent cross-contamination
+
+**Architecture:**
+- Demo registry with lazy loading (`DemoRegistry.ts`)
+- Welcome screen for demo selection (`WelcomeScreen.tsx`)
+- Demo-agnostic player components (`DemoPlayer.tsx`, `SlidePlayer.tsx`)
+- Type-safe demo configuration (`src/demos/types.ts`)
+
+**File Structure:**
+```
+src/demos/
+├── types.ts                    # Type definitions
+├── DemoRegistry.ts             # Central registry
+├── meeting-highlights/         # Migrated Meeting Highlights
+├── example-demo-1/             # Placeholder demo 1
+└── example-demo-2/             # Placeholder demo 2
+
+public/audio/
+├── meeting-highlights/         # Demo-specific audio
+├── example-demo-1/
+└── example-demo-2/
+```
+
+**Updated Files:**
+- All TTS scripts support multi-demo
+- Cache structure supports multiple demos
+- Project README documents new architecture
+- 3 demos now registered and functional
+
 ### 2025-01-20: Final Slide - Thank You & Call to Action
 **Ch9_S2_ClosingThanks Design:**
 - **4 segments** with progressive reveal

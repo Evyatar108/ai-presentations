@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { allSlides } from '../slides/SlidesRegistry';
-import { hasAudioSegments } from '../slides/SlideMetadata';
+import { hasAudioSegments, SlideComponentWithMetadata } from '../slides/SlideMetadata';
 import { useSegmentContext } from '../contexts/SegmentContext';
+import type { DemoMetadata } from '../demos/types';
 
 // Fallback audio file for missing segments
 const FALLBACK_AUDIO = '/audio/silence-1s.mp3';
@@ -31,18 +31,26 @@ const loadAudioWithFallback = async (primaryPath: string, segmentId: string): Pr
 };
 
 interface NarratedControllerProps {
+  demoMetadata: DemoMetadata;
+  slides: SlideComponentWithMetadata[];
   onSlideChange: (chapter: number, slide: number) => void;
   onPlaybackStart?: () => void;
   onPlaybackEnd?: () => void;
   manualSlideChange?: { chapter: number; slide: number } | null;
+  onBack?: () => void;
 }
 
 export const NarratedController: React.FC<NarratedControllerProps> = ({
+  demoMetadata,
+  slides,
   onSlideChange,
   onPlaybackStart,
   onPlaybackEnd,
-  manualSlideChange
+  manualSlideChange,
+  onBack
 }) => {
+  // Use provided slides or empty array if not loaded yet
+  const allSlides = slides || [];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -396,12 +404,16 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
               }}
             >
               <h1 style={{ color: '#f1f5f9', marginBottom: '1rem', fontSize: 32 }}>
-                Meeting Highlights COGS Reduction
+                {demoMetadata.title}
               </h1>
               <p style={{ color: '#94a3b8', marginBottom: '2rem', fontSize: 16 }}>
                 This presentation will auto-advance through {allSlides.length} slides with narration.
-                <br />
-                Duration: ~4 minutes
+                {demoMetadata.description && (
+                  <>
+                    <br />
+                    {demoMetadata.description}
+                  </>
+                )}
               </p>
               
               {error && (

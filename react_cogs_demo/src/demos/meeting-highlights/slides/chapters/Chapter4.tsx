@@ -1,10 +1,10 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useReducedMotion } from '../../accessibility/ReducedMotion';
-import { useSegmentedAnimation } from '../../contexts/SegmentContext';
-import { SlideComponentWithMetadata } from '../SlideMetadata';
-import { SlideContainer, ContentCard, GradientHighlightBox, SlideTitle } from '../SlideLayouts';
-import { typography, highlightBorder, layouts } from '../SlideStyles';
+import { useReducedMotion } from '../../../../accessibility/ReducedMotion';
+import { useSegmentedAnimation } from '../../../../contexts/SegmentContext';
+import { SlideComponentWithMetadata } from '../../../../slides/SlideMetadata';
+import { SlideContainer, ContentCard, GradientHighlightBox, SlideTitle } from '../../../../slides/SlideLayouts';
+import { typography, highlightBorder, layouts } from '../../../../slides/SlideStyles';
 
 /**
  * Chapter 4: Highlight Types
@@ -164,35 +164,35 @@ Ch4_S1_HighlightTypes.metadata = {
   audioSegments: [
     {
       id: "intro",
-      audioFilePath: "/audio/c4/s1_segment_01_intro.wav",
+      audioFilePath: "/audio/meeting-highlights/c4/s1_segment_01_intro.wav",
       srtSegmentNumber: 1,
       visualDescription: "Title \"Two Types of Highlights\"",
       narrationText: "Meeting Highlights combines two distinct types of highlights to create a comprehensive recap."
     },
     {
       id: "abstractive",
-      audioFilePath: "/audio/c4/s1_segment_02_abstractive.wav",
+      audioFilePath: "/audio/meeting-highlights/c4/s1_segment_02_abstractive.wav",
       srtSegmentNumber: 2,
       visualDescription: "Left card appears - Abstractive Highlights with summary icon",
       narrationText: "First, abstractive highlights. These are AI-generated summaries that capture the key topics discussed in the meeting, using original video from the meeting. The narration is powered by Azure Cognitive Services text-to-speech."
     },
     {
       id: "key_moments",
-      audioFilePath: "/audio/c4/s1_segment_03_key_moments.wav",
+      audioFilePath: "/audio/meeting-highlights/c4/s1_segment_03_key_moments.wav",
       srtSegmentNumber: 3,
       visualDescription: "Right card appears - Key Moments with video clip icon",
       narrationText: "Second, key moments. These are significant verbatim segments extracted directly from the meeting, using the original audio and video from the recording."
     },
     {
       id: "timestamps",
-      audioFilePath: "/audio/c4/s1_segment_04_timestamps.wav",
+      audioFilePath: "/audio/meeting-highlights/c4/s1_segment_04_timestamps.wav",
       srtSegmentNumber: 4,
       visualDescription: "Detail callout showing 20-30 second segments",
       narrationText: "Each highlight is a 20 to 40 second segment with precise timestamps and accompanying narration."
     },
     {
       id: "narrative",
-      audioFilePath: "/audio/c4/s1_segment_05_narrative.wav",
+      audioFilePath: "/audio/meeting-highlights/c4/s1_segment_05_narrative.wav",
       srtSegmentNumber: 5,
       visualDescription: "Narrative storytelling icon connecting highlights",
       narrationText: "The AI weaves these highlights together into a cohesive narrative, creating an engaging story that connects the abstractive summaries and key moments."

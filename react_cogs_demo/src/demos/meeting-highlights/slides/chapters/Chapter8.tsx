@@ -1,11 +1,11 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useReducedMotion } from '../../accessibility/ReducedMotion';
-import { useSegmentedAnimation } from '../../contexts/SegmentContext';
-import { SlideComponentWithMetadata } from '../SlideMetadata';
-import { SlideContainer, ContentCard, SlideTitle } from '../SlideLayouts';
-import { typography, gradientBox, successGradientBox } from '../SlideStyles';
-import { scaleIn, fadeUp } from '../AnimationVariants';
+import { useReducedMotion } from '../../../../accessibility/ReducedMotion';
+import { useSegmentedAnimation } from '../../../../contexts/SegmentContext';
+import { SlideComponentWithMetadata } from '../../../../slides/SlideMetadata';
+import { SlideContainer, ContentCard, SlideTitle } from '../../../../slides/SlideLayouts';
+import { typography, gradientBox, successGradientBox } from '../../../../slides/SlideStyles';
+import { scaleIn, fadeUp } from '../../../../slides/AnimationVariants';
 
 /**
  * Chapter 8: User Reception
@@ -298,22 +298,22 @@ Ch8_S1_UserSatisfaction.metadata = {
   audioSegments: [
     {
       id: "intro",
-      audioFilePath: "/audio/c8/s1_segment_01_intro.wav",
+      audioFilePath: "/audio/meeting-highlights/c8/s1_segment_01_intro.wav",
       narrationText: "Overwhelmingly positive feedback in MS Elite surveys."
     },
     {
       id: "useful",
-      audioFilePath: "/audio/c8/s1_segment_02_useful.wav",
+      audioFilePath: "/audio/meeting-highlights/c8/s1_segment_02_useful.wav",
       narrationText: "80% rated it extremely or very useful."
     },
     {
       id: "likely",
-      audioFilePath: "/audio/c8/s1_segment_03_likely.wav",
+      audioFilePath: "/audio/meeting-highlights/c8/s1_segment_03_likely.wav",
       narrationText: "96% likely to use again."
     },
     {
       id: "fit",
-      audioFilePath: "/audio/c8/s1_segment_04_fit.wav",
+      audioFilePath: "/audio/meeting-highlights/c8/s1_segment_04_fit.wav",
       narrationText: "This points to strong product-market fit and daily habit formation among our users."
     }
   ]

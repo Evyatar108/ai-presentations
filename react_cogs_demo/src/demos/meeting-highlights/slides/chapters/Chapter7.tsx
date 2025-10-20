@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useReducedMotion } from '../../accessibility/ReducedMotion';
-import { MetricTile } from '../../components/CoreComponents';
-import { SlideComponentWithMetadata } from '../SlideMetadata';
+import { useReducedMotion } from '../../../../accessibility/ReducedMotion';
+import { MetricTile } from '../../../../components/CoreComponents';
+import { SlideComponentWithMetadata } from '../../../../slides/SlideMetadata';
 
 /**
  * Chapter 7: Business Impact
@@ -152,7 +152,7 @@ Ch7_S2_GPUReduction.metadata = {
   title: "GPU Optimization",
   audioSegments: [{
     id: "main",
-    audioFilePath: "/audio/c7/s2_segment_01_main.wav",
+    audioFilePath: "/audio/meeting-highlights/c7/s2_segment_01_main.wav",
     narrationText: "Required GPU capacity dropped 70%: from 600 to under 200."
   }]
 };
@@ -294,7 +294,7 @@ Ch7_S4_QualityComparison.metadata = {
   title: "Quality Improvement",
   audioSegments: [{
     id: "main",
-    audioFilePath: "/audio/c7/s4_segment_01_main.wav",
+    audioFilePath: "/audio/meeting-highlights/c7/s4_segment_01_main.wav",
     narrationText: "Early internal feedback strongly prefers unified prompt highlight videos over the multi-call pipeline output. The gains center on depth and natural flow."
   }]
 };
@@ -455,7 +455,7 @@ Ch7_S5_PathToGA.metadata = {
   title: "Path to GA",
   audioSegments: [{
     id: "main",
-    audioFilePath: "/audio/c7/s5_segment_01_main.wav",
+    audioFilePath: "/audio/meeting-highlights/c7/s5_segment_01_main.wav",
     narrationText: "These improvements are the next step: enabling GA within capacity constraints."
   }]
 };

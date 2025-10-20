@@ -1,11 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useReducedMotion } from '../../accessibility/ReducedMotion';
-import { MetricTile } from '../../components/CoreComponents';
-import { SlideComponentWithMetadata } from '../SlideMetadata';
-import { SlideContainer, ContentCard, SlideTitle } from '../SlideLayouts';
-import { typography, gradientBox, layouts } from '../SlideStyles';
-import { fadeUp, scaleIn } from '../AnimationVariants';
+import { useReducedMotion } from '../../../../accessibility/ReducedMotion';
+import { MetricTile } from '../../../../components/CoreComponents';
+import { SlideComponentWithMetadata } from '../../../../slides/SlideMetadata';
+import { SlideContainer, ContentCard, SlideTitle } from '../../../../slides/SlideLayouts';
+import { typography, gradientBox, layouts } from '../../../../slides/SlideStyles';
+import { fadeUp, scaleIn } from '../../../../slides/AnimationVariants';
 
 /**
  * Chapter 6: Optimization Solution
@@ -115,7 +115,7 @@ Ch6_S1_UnifiedConvergence.metadata = {
   title: "Unified Convergence",
   audioSegments: [{
     id: "main",
-    audioFilePath: "/audio/c6/s1_segment_01_main.wav",
+    audioFilePath: "/audio/meeting-highlights/c6/s1_segment_01_main.wav",
     narrationText: "Our solution was to collapse the four sequential steps into one unified prompt. By designing a single comprehensive prompt that accomplishes the same four steps in one L-L-M call."
   }]
 };
@@ -159,7 +159,7 @@ Ch6_S4_TokenOptimization.metadata = {
   title: "Token Optimization",
   audioSegments: [{
     id: "main",
-    audioFilePath: "/audio/c6/s4_segment_01_main.wav",
+    audioFilePath: "/audio/meeting-highlights/c6/s4_segment_01_main.wav",
     narrationText: "Beyond reducing L-L-M calls, we optimized the input tokens themselves, which reduced input tokens by more than 60 percent."
   }]
 };

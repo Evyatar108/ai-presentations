@@ -1,12 +1,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useReducedMotion } from '../../accessibility/ReducedMotion';
-import { MetricTile } from '../../components/CoreComponents';
-import { SlideComponentWithMetadata } from '../SlideMetadata';
-import { SlideContainer } from '../SlideLayouts';
-import { typography, gradientBox, layouts } from '../SlideStyles';
-import { staggerContainer, tileVariants, arrowVariants, targetVariants, promptVariants } from '../AnimationVariants';
-import { ArrowDown, ArrowRight } from '../SlideIcons';
+import { useReducedMotion } from '../../../../accessibility/ReducedMotion';
+import { MetricTile } from '../../../../components/CoreComponents';
+import { SlideComponentWithMetadata } from '../../../../slides/SlideMetadata';
+import { SlideContainer } from '../../../../slides/SlideLayouts';
+import { typography, gradientBox, layouts } from '../../../../slides/SlideStyles';
+import { staggerContainer, tileVariants, arrowVariants, targetVariants, promptVariants } from '../../../../slides/AnimationVariants';
+import { ArrowDown, ArrowRight } from '../../../../slides/SlideIcons';
 
 /**
  * Chapter 5: COGS Challenge
@@ -144,7 +144,7 @@ Ch5_S1_ChallengeFraming.metadata = {
   title: "Challenge Framing",
   audioSegments: [{
     id: "main",
-    audioFilePath: "/audio/c5/s1_segment_01_main.wav",
+    audioFilePath: "/audio/meeting-highlights/c5/s1_segment_01_main.wav",
     narrationText: "Our current Meeting Highlights implementation makes 4 sequential calls to L-L-M, with a large amount of tokens. To enable global scaling, we needed to dramatically reduce these computational costs."
   }]
 };

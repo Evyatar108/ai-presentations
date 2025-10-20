@@ -1,68 +1,32 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { ReducedMotionToggle } from './accessibility/ReducedMotion';
-import { SlidePlayer, Slide } from './components/SlidePlayer';
-import { NarratedController } from './components/NarratedController';
-import { allSlides } from './slides/SlidesRegistry';
-import { SegmentProvider } from './contexts/SegmentContext';
+import { WelcomeScreen } from './components/WelcomeScreen';
+import { DemoPlayer } from './components/DemoPlayer';
 import 'reactflow/dist/style.css';
 
 export const App: React.FC = () => {
-  const [currentSlide, setCurrentSlide] = useState<{ chapter: number; slide: number } | undefined>(undefined);
-  const [isNarratedMode, setIsNarratedMode] = useState(false);
-  const [manualSlideChange, setManualSlideChange] = useState<{ chapter: number; slide: number } | null>(null);
+  const [selectedDemoId, setSelectedDemoId] = useState<string | null>(null);
 
-  // Build slides from component metadata
-  // Build slides from component metadata
-  const slides = useMemo((): Slide[] => {
-    const builtSlides = allSlides.map(slideComponent => ({
-      chapter: slideComponent.metadata.chapter,
-      slide: slideComponent.metadata.slide,
-      title: slideComponent.metadata.title,
-      Component: slideComponent
-    }));
-    console.log('[App] Built slides from metadata:', builtSlides.map(s => `Ch${s.chapter}:S${s.slide}`));
-    return builtSlides;
-  }, []);
-  const handleSlideChange = (chapter: number, slide: number) => {
-    setCurrentSlide({ chapter, slide });
+  const handleSelectDemo = (demoId: string) => {
+    setSelectedDemoId(demoId);
   };
 
-  const handleManualSlideChange = (chapter: number, slide: number) => {
-    // This is called by SlidePlayer when user manually navigates
-    setManualSlideChange({ chapter, slide });
-    setCurrentSlide({ chapter, slide });
-  };
-
-  const handlePlaybackStart = () => {
-    setIsNarratedMode(true);
-  };
-
-  const handlePlaybackEnd = () => {
-    setIsNarratedMode(false);
-    setCurrentSlide(undefined);
+  const handleBackToWelcome = () => {
+    setSelectedDemoId(null);
   };
 
   return (
-    <SegmentProvider>
-      <div style={{ position: 'relative' }}>
-        {/* Narrated Controller (manages audio and slide progression) */}
-        <NarratedController
-          onSlideChange={handleSlideChange}
-          onPlaybackStart={handlePlaybackStart}
-          onPlaybackEnd={handlePlaybackEnd}
-          manualSlideChange={manualSlideChange}
-        />
+    <div style={{ position: 'relative' }}>
+      {/* Reduced Motion Toggle (global) */}
+      <ReducedMotionToggle />
 
-        {/* Slide presentation */}
-        <SlidePlayer
-          slides={slides}
-          autoAdvance={false}
-          externalSlide={currentSlide}
-          onSlideChange={handleManualSlideChange}
-          disableManualNav={isNarratedMode}
-        />
-      </div>
-    </SegmentProvider>
+      {/* Show WelcomeScreen or DemoPlayer based on selection */}
+      {!selectedDemoId ? (
+        <WelcomeScreen onSelectDemo={handleSelectDemo} />
+      ) : (
+        <DemoPlayer demoId={selectedDemoId} onBack={handleBackToWelcome} />
+      )}
+    </div>
   );
 };
 

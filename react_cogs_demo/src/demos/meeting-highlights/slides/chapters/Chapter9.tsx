@@ -1,10 +1,10 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useReducedMotion } from '../../accessibility/ReducedMotion';
-import { useSegmentedAnimation } from '../../contexts/SegmentContext';
-import { SlideComponentWithMetadata } from '../SlideMetadata';
-import { SlideContainer, GradientHighlightBox, SlideTitle, ImprovementCard } from '../SlideLayouts';
-import { typography, layouts } from '../SlideStyles';
+import { useReducedMotion } from '../../../../accessibility/ReducedMotion';
+import { useSegmentedAnimation } from '../../../../contexts/SegmentContext';
+import { SlideComponentWithMetadata } from '../../../../slides/SlideMetadata';
+import { SlideContainer, GradientHighlightBox, SlideTitle, ImprovementCard } from '../../../../slides/SlideLayouts';
+import { typography, layouts } from '../../../../slides/SlideStyles';
 
 /**
  * Chapter 9: Future Improvements
@@ -283,27 +283,27 @@ Ch9_S1_Testimonials.metadata = {
   audioSegments: [
     {
       id: "intro",
-      audioFilePath: "/audio/c9/s1_segment_01_intro.wav",
+      audioFilePath: "/audio/meeting-highlights/c9/s1_segment_01_intro.wav",
       narrationText: "Enthusiastic user feedback."
     },
     {
       id: "kevin",
-      audioFilePath: "/audio/c9/s1_segment_02_kevin.wav",
+      audioFilePath: "/audio/meeting-highlights/c9/s1_segment_02_kevin.wav",
       narrationText: "Kevin C. commented: \"Love this feature. Great way to catch up on a recap without watching the full thing.\""
     },
     {
       id: "ryan1",
-      audioFilePath: "/audio/c9/s1_segment_03_ryan1.wav",
+      audioFilePath: "/audio/meeting-highlights/c9/s1_segment_03_ryan1.wav",
       narrationText: "Ryan Roslonsky added: \"Beyond the awesome text recap, there is literally a two-minute narrated video about the meeting.\""
     },
     {
       id: "ryan2",
-      audioFilePath: "/audio/c9/s1_segment_04_ryan2.wav",
+      audioFilePath: "/audio/meeting-highlights/c9/s1_segment_04_ryan2.wav",
       narrationText: "\"It's mind-blowing and an engaging way to recap a meeting for a richer understanding of the conversation.\""
     },
     {
       id: "anonymous",
-      audioFilePath: "/audio/c9/s1_segment_05_anonymous.wav",
+      audioFilePath: "/audio/meeting-highlights/c9/s1_segment_05_anonymous.wav",
       narrationText: "Another user shared: \"Saved me hours of reviewing the transcript. This is magical.\""
     }
   ]
@@ -687,22 +687,22 @@ Ch9_S2_ClosingThanks.metadata = {
   audioSegments: [
     {
       id: "intro",
-      audioFilePath: "/audio/c9/s2_segment_01_intro.wav",
+      audioFilePath: "/audio/meeting-highlights/c9/s2_segment_01_intro.wav",
       narrationText: "Thank you for exploring Meeting Highlights."
     },
     {
       id: "value",
-      audioFilePath: "/audio/c9/s2_segment_02_value.wav",
+      audioFilePath: "/audio/meeting-highlights/c9/s2_segment_02_value.wav",
       narrationText: "Our goal is simple: help you reclaim time and stay aligned."
     },
     {
       id: "feedback",
-      audioFilePath: "/audio/c9/s2_segment_03_feedback.wav",
+      audioFilePath: "/audio/meeting-highlights/c9/s2_segment_03_feedback.wav",
       narrationText: "Send feedback to meeting H-L feedback at microsoft.com"
     },
       {
         id: "cta",
-        audioFilePath: "/audio/c9/s2_segment_04_cta.wav",
+        audioFilePath: "/audio/meeting-highlights/c9/s2_segment_04_cta.wav",
         narrationText: "Try it now in BizChat and SharePoint."
       }
     ]
