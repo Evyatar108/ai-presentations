@@ -12,8 +12,8 @@
     "generatedAt": "2025-10-19T22:28:14.641Z"
   },
   "c1\\s2_segment_03_ciq.wav": {
-    "narrationText": "Type forward slash to reference meetings using C-I-Q.",
-    "generatedAt": "2025-10-19T22:28:14.643Z"
+    "narrationText": "Tip: Type forward slash to easily reference meetings using C-I-Q.",
+    "generatedAt": "2025-10-20T02:04:18.836Z"
   },
   "c1\\s2_segment_04_select.wav": {
     "narrationText": "Select and search for meetings from the menu.",
@@ -32,8 +32,8 @@
     "generatedAt": "2025-10-19T23:55:01.552Z"
   },
   "c2\\s1_segment_02_odsp.wav": {
-    "narrationText": "ODSP handles storage. When meetings end, it initiates highlight generation.",
-    "generatedAt": "2025-10-19T22:28:41.703Z"
+    "narrationText": "ODSP handles storage and video manifest. When meetings end, it initiates highlight generation.",
+    "generatedAt": "2025-10-20T02:04:18.839Z"
   },
   "c2\\s1_segment_03_msai.wav": {
     "narrationText": "MSAI-Hive processes transcripts using LLMs to generate highlight metadata.",
@@ -60,8 +60,8 @@
     "generatedAt": "2025-10-20T00:32:51.597Z"
   },
   "c7\\s5_segment_01_main.wav": {
-    "narrationText": "These improvements enable GA within capacity constraints.",
-    "generatedAt": "2025-10-19T22:29:05.759Z"
+    "narrationText": "These improvements are the next step: enabling GA within capacity constraints.",
+    "generatedAt": "2025-10-20T02:04:18.840Z"
   },
   "c8\\s1_segment_01_intro.wav": {
     "narrationText": "Overwhelmingly positive feedback in MS Elite surveys.",
@@ -108,8 +108,8 @@
     "generatedAt": "2025-10-20T00:42:46.601Z"
   },
   "c9\\s2_segment_03_feedback.wav": {
-    "narrationText": "Send feedback to meeting H-L Devs at microsoft.com.",
-    "generatedAt": "2025-10-20T00:42:46.604Z"
+    "narrationText": "Send feedback to meeting H-L feedback at microsoft.com",
+    "generatedAt": "2025-10-20T02:14:00.226Z"
   },
   "c9\\s2_segment_04_cta.wav": {
     "narrationText": "Try it now in BizChat and SharePoint.",
@@ -128,8 +128,8 @@
     "generatedAt": "2025-10-19T23:50:04.335Z"
   },
   "c2/s1_segment_02_odsp.wav": {
-    "narrationText": "ODSP handles storage. When meetings end, it initiates highlight generation.",
-    "generatedAt": "2025-10-19T23:46:17.739Z"
+    "narrationText": "ODSP handles storage and video manifest. When meetings end, it initiates highlight generation.",
+    "generatedAt": "2025-10-20T02:05:22.122Z"
   },
   "c2/s1_segment_03_msai.wav": {
     "narrationText": "M-S-A-I Hive processes meeting transcripts using Large Language Model technology. Our processor receives the transcript and calls the LLM with our prompts, which analyzes the content and returns structured metadata describing the highlights.",
@@ -160,8 +160,8 @@
     "generatedAt": "2025-10-20T00:43:31.650Z"
   },
   "c9/s2_segment_03_feedback.wav": {
-    "narrationText": "Send feedback to meeting H-L Devs at microsoft.com.",
-    "generatedAt": "2025-10-20T00:45:05.490Z"
+    "narrationText": "Send feedback to meeting H-L feedback at microsoft.com",
+    "generatedAt": "2025-10-20T02:15:08.588Z"
   },
   "c1/s2_segment_05_player.wav": {
     "narrationText": "BizChat will return a reply to your query and a video player with the meeting highlights appears at the bottom.",
@@ -192,8 +192,8 @@
     "generatedAt": "2025-10-19T22:28:41.712Z"
   },
   "c2\\s1_segment_09_conclusion.wav": {
-    "narrationText": "Together delivering end-to-end experience—true Microsoft collaboration.",
-    "generatedAt": "2025-10-19T22:28:41.714Z"
+    "narrationText": "Together, these teams deliver a unified end-to-end experience from recording through AI processing to user access, showcasing true One Microsoft collaboration.",
+    "generatedAt": "2025-10-20T01:19:04.195Z"
   },
   "c4\\s1_segment_01_intro.wav": {
     "narrationText": "Meeting Highlights combines two distinct types of highlights to create a comprehensive recap.",
@@ -294,5 +294,13 @@
   "c9/s2_segment_04_cta.wav": {
     "narrationText": "Try it now in BizChat and SharePoint.",
     "generatedAt": "2025-10-20T00:49:49.144Z"
+  },
+  "c1/s2_segment_04_select.wav": {
+    "narrationText": "Select and search for meetings from the menu.",
+    "generatedAt": "2025-10-20T01:06:12.460Z"
+  },
+  "c2/s1_segment_09_conclusion.wav": {
+    "narrationText": "Together, these teams deliver a unified end-to-end experience from recording through AI processing to user access, showcasing true One Microsoft collaboration.",
+    "generatedAt": "2025-10-20T01:19:42.689Z"
   }
 }

@@ -227,7 +227,7 @@ export const Ch1_S2_HowToAccess: SlideComponentWithMetadata = () => {
                   >
                     <ContentCard style={{ padding: '1.5rem' }}>
                       <p style={{ ...typography.body, fontSize: 15, margin: 0 }}>
-                        💡 Use <strong style={{ color: '#00B7C3' }}>/</strong> (slash) for CIA (Contextual Instant Query)
+                        💡 <em>Tip:</em> Use <strong style={{ color: '#00B7C3' }}>/</strong> (slash) for CIQ (Contextual Instant Query) - an easy way to reference meetings
                       </p>
                     </ContentCard>
                   </motion.div>
@@ -318,7 +318,7 @@ Ch1_S2_HowToAccess.metadata = {
       audioFilePath: "/audio/c1/s2_segment_03_ciq.wav",
       srtSegmentNumber: 3,
       visualDescription: "Demo continues - showing \"/\" menu for CIQ",
-      narrationText: "Type forward slash to reference meetings using C-I-Q."
+      narrationText: "Tip: Type forward slash to easily reference meetings using C-I-Q."
     },
     {
       id: "select",

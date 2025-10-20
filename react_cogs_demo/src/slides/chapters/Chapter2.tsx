@@ -40,7 +40,7 @@ const teams: TeamInfo[] = [
     name: 'ODSP',
     logo: '/images/logos/odsp.png',
     role: 'Storage & Orchestration',
-    description: 'Initiates highlights generation and stores all data'
+    description: 'Initiates generation, stores data, manages video manifest'
   },
   {
     id: 'msai',
@@ -200,7 +200,7 @@ const ArchitectureDiagram: React.FC<{
       type: 'archNode',
       data: {
         label: 'ODSP',
-        role: 'Storage & Orchestration',
+        role: 'Storage & Manifest',
         logo: '/images/logos/odsp.png',
         segment: 1
       },
@@ -678,7 +678,7 @@ Ch2_TeamCollaboration.metadata = {
     {
       id: 'odsp',
       audioFilePath: '/audio/c2/s1_segment_02_odsp.wav',
-      narrationText: 'ODSP handles storage. When meetings end, it initiates highlight generation.'
+      narrationText: 'ODSP handles storage and video manifest. When meetings end, it initiates highlight generation.'
     },
     {
       id: 'msai',
@@ -713,7 +713,6 @@ Ch2_TeamCollaboration.metadata = {
     {
       id: 'conclusion',
       audioFilePath: '/audio/c2/s1_segment_09_conclusion.wav',
-      narrationText: 'Together delivering end-to-end experience—true Microsoft collaboration.'
-    }
+      narrationText: 'Together, these teams deliver a unified end-to-end experience from recording through AI processing to user access, showcasing true One Microsoft collaboration.'    }
   ]
 };

@@ -339,7 +339,7 @@ export const Ch7_S5_PathToGA: SlideComponentWithMetadata = () => {
           }}
         >
           <p style={{ color: '#e2e8f0', fontSize: 18, lineHeight: 1.6, marginBottom: '2rem' }}>
-            These cost and quality improvements directly unblock the private preview release and pave the way for general availability within approved capacity constraints.
+            These cost and quality improvements are the <strong style={{ color: '#00B7C3' }}>next step</strong>: enabling private preview release and paving the way for general availability within approved capacity constraints.
           </p>
 
           {/* Roadmap arrow */}
@@ -372,7 +372,7 @@ export const Ch7_S5_PathToGA: SlideComponentWithMetadata = () => {
                 Private Preview
               </div>
               <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.8)' }}>
-                Enabled by COGS reduction
+                Next: Enabled by COGS reduction
               </div>
             </motion.div>
 
@@ -406,7 +406,7 @@ export const Ch7_S5_PathToGA: SlideComponentWithMetadata = () => {
                 General Availability
               </div>
               <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.8)' }}>
-                Within capacity limits
+                Will be within capacity limits
               </div>
               
               {/* Capacity check badge */}
@@ -442,7 +442,7 @@ export const Ch7_S5_PathToGA: SlideComponentWithMetadata = () => {
           transition={{ duration: reduced ? 0.2 : 0.5, delay: reduced ? 0 : 1.4 }}
           style={{ color: '#94a3b8', fontSize: 14 }}
         >
-          Unified prompt optimization enables scalable global rollout
+          Unified prompt optimization will enable scalable global rollout
         </motion.p>
       </div>
     </div>
@@ -456,6 +456,6 @@ Ch7_S5_PathToGA.metadata = {
   audioSegments: [{
     id: "main",
     audioFilePath: "/audio/c7/s5_segment_01_main.wav",
-    narrationText: "These improvements enable GA within capacity constraints."
+    narrationText: "These improvements are the next step: enabling GA within capacity constraints."
   }]
 };

@@ -126,8 +126,8 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     const playSegment = (segmentIndex: number) => {
       if (segmentIndex >= segments.length) {
         console.log(`[NarratedController] All segments complete for ${slideKey}, advancing to next slide after delay`);
-        // Add 500ms delay between slides for smoother transitions
-        setTimeout(advanceSlide, 500);
+        // Add 1000ms delay between slides for smoother transitions
+        setTimeout(advanceSlide, 1000);
         return;
       }
       
@@ -154,8 +154,8 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
           console.log(`[NarratedController] Segment ${segmentIndex} (${segment.id}) ended`);
           setError(null);
           currentSegmentIndex++;
-          // Small delay between segments for smoother transitions
-          setTimeout(() => playSegment(currentSegmentIndex), 100);
+          // 500ms delay between segments for smoother transitions
+          setTimeout(() => playSegment(currentSegmentIndex), 500);
         };
         
         audio.onerror = (e) => {
@@ -281,14 +281,14 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
         
         // Auto-advance logic when enabled
         if (autoAdvanceOnAudioEnd) {
-          // If not on last segment, advance to next segment with 50ms delay
+          // If not on last segment, advance to next segment with 500ms delay
           if (currentSegmentIdx < segments.length - 1) {
             console.log(`[Manual+Audio] Auto-advancing to segment ${currentSegmentIdx + 1}`);
             setTimeout(() => {
               segmentContext.nextSegment();
-            }, 50);
+            }, 500);
           }
-          // If on last segment, advance to next slide with 500ms delay
+          // If on last segment, advance to next slide with 1000ms delay
           else {
             const nextIndex = currentIndexRef.current + 1;
             if (nextIndex < allSlides.length) {
@@ -297,7 +297,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
                 lastAutoAdvanceFromIndexRef.current = currentIndexRef.current;
                 setCurrentIndex(nextIndex);
                 onSlideChange(allSlides[nextIndex].metadata.chapter, allSlides[nextIndex].metadata.slide);
-              }, 500);
+              }, 1000);
             }
           }
         }

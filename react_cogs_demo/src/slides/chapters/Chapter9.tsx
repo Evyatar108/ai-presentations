@@ -539,7 +539,7 @@ export const Ch9_S2_ClosingThanks: SlideComponentWithMetadata = () => {
                   transition: 'all 0.3s ease'
                 }}
               >
-                meetinghldevs@microsoft.com
+                meetinghlfeedback@microsoft.com
               </motion.div>
             </div>
           </motion.div>
@@ -698,7 +698,7 @@ Ch9_S2_ClosingThanks.metadata = {
     {
       id: "feedback",
       audioFilePath: "/audio/c9/s2_segment_03_feedback.wav",
-      narrationText: "Send feedback to meeting H-L Devs at microsoft.com."
+      narrationText: "Send feedback to meeting H-L feedback at microsoft.com"
     },
       {
         id: "cta",
