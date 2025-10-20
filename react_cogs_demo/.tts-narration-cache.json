@@ -52,12 +52,12 @@
     "generatedAt": "2025-10-20T00:15:55.325Z"
   },
   "c7\\s2_segment_01_main.wav": {
-    "narrationText": "GPU capacity dropped 70%: from 600 to under 200.",
-    "generatedAt": "2025-10-19T22:29:05.756Z"
+    "narrationText": "Required GPU capacity dropped 70%: from 600 to under 200.",
+    "generatedAt": "2025-10-20T00:31:13.406Z"
   },
   "c7\\s4_segment_01_main.wav": {
-    "narrationText": "Early internal feedback strongly prefers unified prompt highlight videos over the multi-call pipeline output. Gains center on depth and natural flow.",
-    "generatedAt": "2025-10-20T00:15:55.327Z"
+    "narrationText": "Early internal feedback strongly prefers unified prompt highlight videos over the multi-call pipeline output. The gains center on depth and natural flow.",
+    "generatedAt": "2025-10-20T00:32:51.597Z"
   },
   "c7\\s5_segment_01_main.wav": {
     "narrationText": "These improvements enable GA within capacity constraints.",
@@ -76,8 +76,8 @@
     "generatedAt": "2025-10-19T22:29:05.764Z"
   },
   "c8\\s1_segment_04_fit.wav": {
-    "narrationText": "Strong product-market fit and habit formation.",
-    "generatedAt": "2025-10-19T22:29:05.765Z"
+    "narrationText": "This points to strong product-market fit and daily habit formation among our users.",
+    "generatedAt": "2025-10-20T00:37:07.202Z"
   },
   "c9\\s1_segment_01_intro.wav": {
     "narrationText": "Enthusiastic user feedback.",
@@ -104,12 +104,12 @@
     "generatedAt": "2025-10-19T22:29:05.769Z"
   },
   "c9\\s2_segment_02_value.wav": {
-    "narrationText": "Our goal: reclaim time, stay aligned.",
-    "generatedAt": "2025-10-19T22:29:09.676Z"
+    "narrationText": "Our goal is simple: help you reclaim time and stay aligned.",
+    "generatedAt": "2025-10-20T00:42:46.601Z"
   },
   "c9\\s2_segment_03_feedback.wav": {
-    "narrationText": "Send feedback to meetinghldevs at microsoft.com.",
-    "generatedAt": "2025-10-19T22:29:09.678Z"
+    "narrationText": "Send feedback to meeting H-L Devs at microsoft.com.",
+    "generatedAt": "2025-10-20T00:42:46.604Z"
   },
   "c9\\s2_segment_04_cta.wav": {
     "narrationText": "Try it now in BizChat.",
@@ -144,32 +144,32 @@
     "generatedAt": "2025-10-19T18:42:58.358Z"
   },
   "c7/s2_segment_01_main.wav": {
-    "narrationText": "GPU capacity requirements are estimated to have dropped from roughly 600 to less than 200, over 70% reduction.",
-    "generatedAt": "2025-10-19T18:44:19.876Z"
+    "narrationText": "Required GPU capacity dropped 70%: from 600 to under 200.",
+    "generatedAt": "2025-10-20T00:31:31.683Z"
   },
   "c8/s1_segment_04_fit.wav": {
     "narrationText": "This points to strong product-market fit and daily habit formation among our users.",
-    "generatedAt": "2025-10-19T18:47:52.946Z"
+    "generatedAt": "2025-10-20T00:37:37.287Z"
   },
   "c9/s1_segment_03_ryan1.wav": {
     "narrationText": "Ryan Roslonsky added: \"Beyond the awesome text recap, there is literally a two-minute narrated video about the meeting.\"",
     "generatedAt": "2025-10-19T18:53:59.926Z"
   },
   "c9/s2_segment_02_value.wav": {
-    "narrationText": "Our goal is simple: help you reclaim time and stay aligned asynchronously.",
-    "generatedAt": "2025-10-19T18:56:51.772Z"
+    "narrationText": "Our goal is simple: help you reclaim time and stay aligned.",
+    "generatedAt": "2025-10-20T00:43:31.650Z"
   },
   "c9/s2_segment_03_feedback.wav": {
-    "narrationText": "We welcome your feedback. Send ideas or issues to meeting H-L devs at microsoft.com.",
-    "generatedAt": "2025-10-19T19:00:12.102Z"
+    "narrationText": "Send feedback to meeting H-L Devs at microsoft.com.",
+    "generatedAt": "2025-10-20T00:45:05.490Z"
   },
   "c1/s2_segment_05_player.wav": {
     "narrationText": "BizChat will return a reply to your query and a video player with the meeting highlights appears at the bottom.",
     "generatedAt": "2025-10-19T19:18:50.779Z"
   },
   "c8/s1_segment_01_intro.wav": {
-    "narrationText": "Meeting Highlights has received overwhelmingly positive feedback in recent MS Elite surveys.",
-    "generatedAt": "2025-10-19T19:21:05.835Z"
+    "narrationText": "Overwhelmingly positive feedback in MS Elite surveys.",
+    "generatedAt": "2025-10-20T00:35:28.239Z"
   },
   "c1\\s3_segment_01_intro.wav": {
     "narrationText": "You can also access Meeting Highlights directly from SharePoint.",
@@ -278,5 +278,17 @@
   "c4/s1_segment_05_narrative.wav": {
     "narrationText": "The AI weaves these highlights together into a cohesive narrative, creating an engaging story that connects the abstractive summaries and key moments.",
     "generatedAt": "2025-10-20T00:28:35.257Z"
+  },
+  "c7/s4_segment_01_main.wav": {
+    "narrationText": "Early internal feedback strongly prefers unified prompt highlight videos over the multi-call pipeline output. The gains center on depth and natural flow.",
+    "generatedAt": "2025-10-20T00:34:28.031Z"
+  },
+  "c7/s5_segment_01_main.wav": {
+    "narrationText": "These improvements enable GA within capacity constraints.",
+    "generatedAt": "2025-10-20T00:35:15.690Z"
+  },
+  "c8/s1_segment_03_likely.wav": {
+    "narrationText": "96% likely to use again.",
+    "generatedAt": "2025-10-20T00:35:40.828Z"
   }
 }

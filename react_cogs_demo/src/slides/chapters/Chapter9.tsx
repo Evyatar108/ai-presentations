@@ -693,12 +693,12 @@ Ch9_S2_ClosingThanks.metadata = {
     {
       id: "value",
       audioFilePath: "/audio/c9/s2_segment_02_value.wav",
-      narrationText: "Our goal: reclaim time, stay aligned."
+      narrationText: "Our goal is simple: help you reclaim time and stay aligned."
     },
     {
       id: "feedback",
       audioFilePath: "/audio/c9/s2_segment_03_feedback.wav",
-      narrationText: "Send feedback to meetinghldevs at microsoft.com."
+      narrationText: "Send feedback to meeting H-L Devs at microsoft.com."
     },
     {
       id: "cta",

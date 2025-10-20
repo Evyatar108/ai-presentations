@@ -153,7 +153,7 @@ Ch7_S2_GPUReduction.metadata = {
   audioSegments: [{
     id: "main",
     audioFilePath: "/audio/c7/s2_segment_01_main.wav",
-    narrationText: "GPU capacity dropped 70%: from 600 to under 200."
+    narrationText: "Required GPU capacity dropped 70%: from 600 to under 200."
   }]
 };
 
@@ -295,7 +295,7 @@ Ch7_S4_QualityComparison.metadata = {
   audioSegments: [{
     id: "main",
     audioFilePath: "/audio/c7/s4_segment_01_main.wav",
-    narrationText: "Early internal feedback strongly prefers unified prompt highlight videos over the multi-call pipeline output. Gains center on depth and natural flow."
+    narrationText: "Early internal feedback strongly prefers unified prompt highlight videos over the multi-call pipeline output. The gains center on depth and natural flow."
   }]
 };
 

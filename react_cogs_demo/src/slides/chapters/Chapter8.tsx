@@ -314,7 +314,7 @@ Ch8_S1_UserSatisfaction.metadata = {
     {
       id: "fit",
       audioFilePath: "/audio/c8/s1_segment_04_fit.wav",
-      narrationText: "Strong product-market fit and habit formation."
+      narrationText: "This points to strong product-market fit and daily habit formation among our users."
     }
   ]
 };
