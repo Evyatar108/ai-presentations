@@ -14,7 +14,7 @@ interface RegenerateSegmentParams {
   segmentIndex: number;
   segmentId: string;
   narrationText: string;
-  addPauses?: boolean; // Optional flag to add " . ." at the end
+  addPauses?: boolean; // Optional flag to add " Amazing." or ". Amazing." at the end
 }
 
 interface RegenerateResult {
@@ -147,7 +147,7 @@ export async function regenerateSegment(
         },
         body: JSON.stringify({
           texts: [
-            `Speaker 0: ${params.narrationText}${params.addPauses !== false ? ' . .' : ''}`,  // Add pauses by default
+            `Speaker 0: ${params.narrationText}${params.addPauses !== false ? (params.narrationText.trim().endsWith('.') ? ' Amazing.' : '. Amazing.') : ''}`,  // Add " Amazing." or ". Amazing." by default
           ]
         }),
         // Add timeout and better error handling
