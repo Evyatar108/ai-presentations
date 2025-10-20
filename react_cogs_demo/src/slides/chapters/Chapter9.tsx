@@ -633,7 +633,7 @@ export const Ch9_S2_ClosingThanks: SlideComponentWithMetadata = () => {
                     fontWeight: 500
                   }}
                 >
-                  Available now in BizChat
+                  Available now in BizChat & SharePoint
                 </motion.div>
               </div>
             </motion.div>
@@ -700,10 +700,10 @@ Ch9_S2_ClosingThanks.metadata = {
       audioFilePath: "/audio/c9/s2_segment_03_feedback.wav",
       narrationText: "Send feedback to meeting H-L Devs at microsoft.com."
     },
-    {
-      id: "cta",
-      audioFilePath: "/audio/c9/s2_segment_04_cta.wav",
-      narrationText: "Try it now in BizChat."
-    }
-  ]
+      {
+        id: "cta",
+        audioFilePath: "/audio/c9/s2_segment_04_cta.wav",
+        narrationText: "Try it now in BizChat and SharePoint."
+      }
+    ]
 };

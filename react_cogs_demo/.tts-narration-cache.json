@@ -112,8 +112,8 @@
     "generatedAt": "2025-10-20T00:42:46.604Z"
   },
   "c9\\s2_segment_04_cta.wav": {
-    "narrationText": "Try it now in BizChat.",
-    "generatedAt": "2025-10-19T22:29:09.679Z"
+    "narrationText": "Try it now in BizChat and SharePoint.",
+    "generatedAt": "2025-10-20T00:46:54.310Z"
   },
   "c1\\s1_segment_02_combination.wav": {
     "narrationText": "It combines AI summaries with authentic video clips, preserving tone and discussion flow.",
@@ -290,5 +290,9 @@
   "c8/s1_segment_03_likely.wav": {
     "narrationText": "96% likely to use again.",
     "generatedAt": "2025-10-20T00:35:40.828Z"
+  },
+  "c9/s2_segment_04_cta.wav": {
+    "narrationText": "Try it now in BizChat and SharePoint.",
+    "generatedAt": "2025-10-20T00:49:49.144Z"
   }
 }
