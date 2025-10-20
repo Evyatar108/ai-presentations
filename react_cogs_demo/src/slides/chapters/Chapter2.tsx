@@ -673,7 +673,7 @@ Ch2_TeamCollaboration.metadata = {
     {
       id: 'intro',
       audioFilePath: '/audio/c2/s1_segment_01_intro.wav',
-      narrationText: 'Meeting Highlights required the collaboration of six teams within Microsoft for a cross-organizational effort. Let me show you how they work together and the backend architecture flow.'
+      narrationText: 'Meeting Highlights required the collaboration of six teams within Microsoft for a cross-organizational effort. Let me show you how each team contribute to the project through the architecture.'
     },
     {
       id: 'odsp',

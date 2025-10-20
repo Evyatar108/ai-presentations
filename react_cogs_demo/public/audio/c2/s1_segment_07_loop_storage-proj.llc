@@ -1,0 +1,12 @@
+{
+  version: 2,
+  mediaFileName: 's1_segment_07_loop_storage.wav',
+  cutSegments: [
+    {
+      start: 0.7094211123723042,
+      end: 3.6662883087400684,
+      name: '',
+      selected: true,
+    },
+  ],
+}

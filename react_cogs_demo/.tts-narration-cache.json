@@ -28,8 +28,8 @@
     "generatedAt": "2025-10-19T22:28:14.648Z"
   },
   "c2\\s1_segment_01_intro.wav": {
-    "narrationText": "Meeting Highlights required the collaboration of six teams within Microsoft for a cross-organizational effort. Let me show you how they work together and the backend architecture flow.",
-    "generatedAt": "2025-10-19T23:53:13.805Z"
+    "narrationText": "Meeting Highlights required the collaboration of six teams within Microsoft for a cross-organizational effort. Let me show you how each team contribute to the project through the architecture.",
+    "generatedAt": "2025-10-19T23:55:01.552Z"
   },
   "c2\\s1_segment_02_odsp.wav": {
     "narrationText": "ODSP handles storage. When meetings end, it initiates highlight generation.",
@@ -266,5 +266,9 @@
   "c1/s3_segment_02_video.wav": {
     "narrationText": "Open the meeting chat in Teams.",
     "generatedAt": "2025-10-19T23:40:05.422Z"
+  },
+  "c2/s1_segment_07_loop_storage.wav": {
+    "narrationText": "Loop embeds the Clipchamp player across applications.",
+    "generatedAt": "2025-10-19T23:57:24.062Z"
   }
 }
