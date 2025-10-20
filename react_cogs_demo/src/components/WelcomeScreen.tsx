@@ -135,6 +135,21 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
                 </p>
               )}
 
+              {/* Duration */}
+              {demo.duration && demo.duration > 0 && (
+                <div style={{
+                  fontSize: 13,
+                  color: '#94a3b8',
+                  marginTop: '0.75rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem'
+                }}>
+                  <span>🕒</span>
+                  <span>~{Math.floor(demo.duration / 60)}:{String(Math.floor(demo.duration % 60)).padStart(2, '0')} (audio only)</span>
+                </div>
+              )}
+
               {/* Tags */}
               {demo.tags && demo.tags.length > 0 && (
                 <div style={{

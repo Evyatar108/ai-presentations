@@ -19,6 +19,8 @@ export interface DemoMetadata {
   thumbnail?: string;
   /** Categorical labels for filtering/organizing demos */
   tags?: string[];
+  /** Total duration in seconds (for narrated presentations) */
+  duration?: number;
 }
 
 /**

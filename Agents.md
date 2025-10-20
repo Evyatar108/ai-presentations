@@ -1,6 +1,46 @@
 # Agents - Meeting Highlights COGS Reduction Presentation
 
 ## Recent Changes
+### 2025-01-20: Phase 8 - Testing and Verification Complete ✅
+**Comprehensive testing completed for multi-demo architecture:**
+
+**Build & Compilation Tests:**
+- ✅ TypeScript compilation passes (`npx tsc --noEmit`)
+- ✅ Production build succeeds (`npm run build`)
+- ✅ All assets bundled correctly in `dist/`
+
+**Functional Tests:**
+- ✅ All 3 demos load and display correctly
+- ✅ Demo selection from WelcomeScreen works
+- ✅ Navigation between demos functional
+- ✅ All presentation modes work (Narrated, Manual, Manual+Audio)
+- ✅ Multi-segment slides work correctly (Chapter 2 with 9 segments)
+- ✅ Audio playback works for Meeting Highlights
+- ✅ Silence fallback works for placeholder demos
+- ✅ Video playback works (BizChat and SharePoint demos)
+- ✅ Back button returns to WelcomeScreen
+
+**Issues Fixed During Testing:**
+1. **TTS Cache Structure** - Migrated to nested multi-demo format
+2. **Narration Text Mismatches** - Fixed 5 discrepancies
+3. **Example Demo Warnings** - Removed narrationText to skip validation
+4. **Video File Paths** - Moved to demo-specific subdirectories
+
+**New Feature Added:**
+- **Duration Display** - Added duration field to [`DemoMetadata`](react_cogs_demo/src/demos/types.ts)
+- Meeting Highlights shows "~4:07 (audio only)" on WelcomeScreen
+- Note: Duration reflects audio length only, not including delays between segments/slides (actual runtime is longer)
+- Updated files:
+  - [`types.ts`](react_cogs_demo/src/demos/types.ts) - Added optional `duration?: number` field
+  - [`metadata.ts`](react_cogs_demo/src/demos/meeting-highlights/metadata.ts) - Added duration: 247 seconds with comment
+  - [`WelcomeScreen.tsx`](react_cogs_demo/src/components/WelcomeScreen.tsx) - Display duration with clock icon and "audio only" note
+
+**Final Status:**
+- ✅ Development ready - Dev server starts without prompts or errors
+- ✅ Production ready - Build completes successfully with all assets
+- ✅ All critical functionality validated
+- ✅ Multi-demo architecture fully operational
+
 
 ### 2025-01-20: Multi-Demo Architecture Refactoring (Phases 5-7)
 **Completed multi-demo support system enabling multiple presentations:**
@@ -98,38 +138,9 @@ public/audio/
 
 
 ### 2025-01-20: Automatic Cleanup of Unused Audio Files
-**Added Orphaned File Detection and Removal:**
-- **Enhanced TTS Generation Script** ([`generate-tts.ts`](react_cogs_demo/scripts/generate-tts.ts))
-  - Added `cleanupUnusedAudio()` function to scan for orphaned audio files
-  - Detects WAV files in `public/audio/c*/` not referenced in any slide
-  - Identifies orphaned cache entries for non-existent slides
-  - Automatically deletes orphaned files and removes cache entries
-  - Reports cleanup: "Cleaned up X files and Y cache entries"
-
-- **Enhanced Cache Check Script** ([`check-tts-cache.ts`](react_cogs_demo/scripts/check-tts-cache.ts))
-  - Added `detectOrphanedAudio()` function for pre-flight cleanup check
-  - Prompts user before deletion: "Do you want to remove these unused files? (y/n)"
-  - Shows list of orphaned files (up to 5, with "... and X more")
-  - Cleans up both files and cache entries on confirmation
-  - Runs before checking for narration changes
-
-- **Updated Documentation**
-  - [`README.md`](README.md) - Added cleanup workflow explanation
-  - Section "TTS Cleanup Workflow" with 6-step process
-  - Smart caching system now includes automatic cleanup feature
-
-**Rationale:**
-- Keeps audio directory synchronized with slide content
-- Prevents accumulation of unused files from refactored/deleted slides
-- Reduces storage usage and improves project organization
-- Automatic detection prevents manual file management
-
-**Technical Implementation:**
-- Scans all chapter directories (`c0/` through `c9/`)
-- Builds set of expected files from `SlidesRegistry.ts`
-- Compares actual filesystem against expected files
-- Normalizes paths (handles Windows backslashes)
-- User confirmation required before deletion
+- TTS scripts detect and remove orphaned audio files
+- Prompts before deletion with file list
+- Cleans up both files and cache entries
 
 ## ⚠️ IMPORTANT: Documentation Maintenance
 
@@ -154,46 +165,6 @@ This project contains materials for an all-hands presentation about Meeting High
 - **highlights_demo/context/what is meeting highlights.md** - Comprehensive product explanation
 - **highlights_demo/context/how can users try meeting highlights.md** - Instructions for accessing Meeting Highlights via BizChat
 
-### Chapter & Slide Files (`highlights_demo/chapters/`)
-
-Slide files are organized in chapter-specific folders. Each slide file represents one complete slide in the presentation and may contain multiple segments (utterances) for progressive content reveal.
-
-#### File Organization
-```
-highlights_demo/chapters/
-├── c2/                           # Chapter 2: Team Collaboration
-│   └── s1_team_collaboration.srt
-├── c5/                           # Chapter 5: COGS Challenge
-│   ├── s1_challenge_framing.srt
-│   ├── s2_four_prompts.srt
-│   ├── s3_gpu_requirements.srt
-│   ├── s4_latency_complexity.srt
-│   └── s5_need_reduction.srt
-├── c6/                           # Chapter 6: Optimization Solution
-│   ├── s1_unified_convergence.srt
-│   ├── s2_unified_flow.srt
-│   ├── s3_single_invocation.srt
-│   ├── s4_token_optimization.srt
-│   └── s5_model_tuning.srt
-└── c7/                           # Chapter 7: Business Impact
-    ├── s1_call_reduction.srt
-    ├── s2_gpu_reduction.srt
-    ├── s3_cost_curve.srt
-    ├── s4_quality_comparison.srt
-    └── s5_path_to_ga.srt
-```
-
-#### File Format
-Each slide file includes:
-- **React Component Reference** - Link to implementing component (e.g., `Ch5_S1_ChallengeFraming`)
-- **Segments** - Numbered with visual descriptions, timestamps, and narration text
-
-#### Legacy Files (To Be Migrated)
-- **1_intro.srt** (8 captions) - Product introduction
-- **3_generation_workflow.srt** (6 captions) - Backend workflow
-- **4_highlight_types_and_storage.srt** (5 captions) - Highlight types
-- **8_user_reception.srt** (4 captions) - User feedback
-- **9_testimonials_and_future.srt** (7 captions) - Testimonials
 
 ### Highlights Demo Materials (`highlights_demo/`)
 - **audio/** - Audio files for narrated presentation
@@ -212,74 +183,19 @@ Each slide file includes:
 ### React Demo Application (`react_cogs_demo/`)
 Interactive presentation slides built with React, Framer Motion, and TypeScript:
 
-#### Key Files
-- **src/App.tsx** - Main application component
-- **src/slides/chapters/** - **Chapter-based slide organization** (9 files, 15 slides total)
-  - **Chapter0.tsx** (33 lines) - Intro slide (1 slide)
-  - **Chapter1.tsx** (543 lines) - What is Meeting Highlights (3 slides)
-  - **Chapter2.tsx** (657 lines) - Team Collaboration with inline ReactFlow diagram (1 slide, 9 segments)
-  - **Chapter4.tsx** (183 lines) - Highlight Types (1 slide)
-  - **Chapter5.tsx** (150 lines) - COGS Challenge (1 slide)
-  - **Chapter6.tsx** (165 lines) - Optimization Solution (2 slides)
-  - **Chapter7.tsx** (461 lines) - Business Impact (3 slides)
-  - **Chapter8.tsx** (118 lines) - User Reception (1 slide)
-  - **Chapter9.tsx** (709 lines) - Testimonials & Thank You (2 slides)
-- **src/slides/SlidesRegistry.ts** - Central registry importing all slides from chapter files
-- **src/slides/SlideStyles.ts** - Shared styling utilities
-- **src/slides/AnimationVariants.ts** - Shared animation definitions
-- **src/slides/SlideLayouts.tsx** - Reusable layout components
-- **src/slides/SlideIcons.tsx** - Shared icon components
-- **src/components/CoreComponents.tsx** - Reusable UI components (MetricTile, etc.)
-- **src/components/NarratedController.tsx** - Audio-synced presentation controller
-- **src/components/VideoPlayer.tsx** - Demo video player with freeze-on-end functionality
-- **src/contexts/SegmentContext.tsx** - Segment state management for multi-segment slides
-- **src/accessibility/ReducedMotion.tsx** - Motion preferences context
-- **src/accessibility/ReducedMotion.tsx** - Motion preferences context
-
-#### Notable Slides
-- **Ch5_S1_ChallengeFraming** - Shows initial metrics (4 calls, ~600 GPUs, high tokens) with stacked complexity visualization
-- **Ch6_S1_UnifiedConvergence** - Shows convergence to unified single prompt (4→1)
-- **Ch6_S4_TokenOptimization** - 60% input token reduction explanation
-- **Ch7_S2_GPUReduction** - GPU optimization visualization (600→200, 70% reduction)
-- **Ch7_S4_QualityComparison** - Quality comparison metrics (internal reviewers strongly prefer unified output)
-- **Ch7_S5_PathToGA** - Path to general availability roadmap
-- **Ch2_TeamCollaboration** - Multi-segment slide with 9 segments showing team collaboration and architecture flow with dual visualization (ReactFlow diagram + Backend Flow)
-- **Ch8_S1_UserSatisfaction** - User satisfaction metrics (80% useful, 96% likely to reuse)
-- **Ch9_S1_Testimonials** - 4 user testimonials with animated cards
-- **Ch9_S2_ClosingThanks** - Thank you slide with feedback email and CTA
+#### React Demo Structure
+- **15 slides total** across 9 chapters
+- Chapter-based organization in `src/demos/meeting-highlights/slides/chapters/`
+- Shared utilities: SlideStyles, AnimationVariants, SlideLayouts, SlideIcons
+- Core components: DemoPlayer, SlidePlayer, NarratedController, VideoPlayer
 
 ### TTS (Text-to-Speech) System
-
-**Python TTS Server (`tts/`)**
-- **server.py** - Flask server running VibeVoice model on GPU
-- **client.py** - Python reference client with batch processing
-- **generate_audio.py** - Legacy audio generation script
-- **README.md** - Setup and configuration instructions
-- **NETWORK_SETUP.md** - Remote server configuration guide
-
-**TypeScript TTS Scripts (`react_cogs_demo/scripts/`)**
-- **generate-tts.ts** - Main TTS generation script with batch processing and smart caching
-- **calculate-durations.ts** - Audio duration analysis and reporting
-- **check-tts-cache.ts** - Pre-flight cache validation (runs before `npm run dev`)
-
-**Smart Caching System:**
-- Tracks narration text in `.tts-narration-cache.json`
-- Detects changes and only regenerates modified segments
-- Pre-flight check before dev server start
-- Prompts user: "Do you want to regenerate? (y/n)"
-- Auto-runs generation if user answers "y"
-
-**Batch Processing:**
-- Default: 10 segments per batch (configurable via `BATCH_SIZE` env var)
-- Efficient GPU utilization
-- Progress tracking with percentage completion
-- Error recovery with retry capability
-
-**Audio Fallback System:**
-- Missing files fall back to 1-second silence (`public/audio/silence-1s.mp3`)
-- Prevents presentation crashes
-- Console warnings for debugging
-- Graceful degradation in all presentation modes
+- Python Flask server with VibeVoice model (`tts/server.py`)
+- TypeScript generation scripts with smart caching (`scripts/generate-tts.ts`)
+- Multi-demo support with per-demo audio directories
+- Batch processing (10 segments/batch default)
+- Pre-flight cache validation before dev server
+- Audio fallback system (1-second silence for missing files)
 
 ### Implementation Files
 - **highlights_demo/context/v1/** - Original implementation ([`HighlightsPromptMaper.py`](highlights_demo/context/v1/HighlightsPromptMaper.py))
@@ -298,198 +214,23 @@ Interactive presentation slides built with React, Framer Motion, and TypeScript:
 - **67%** reduction in GPU capacity (~600 → ~200 GPUs)
 - **70%+** estimated COGS reduction overall
 
-## Content Evolution
 
-### 2025-01-20: Streamlined Presentation for All-Hands Audience
-**Major Simplifications:**
-- **Removed Chapter 3**: Architecture Overview slide (redundant with Ch2 team collaboration)
-- **Streamlined Chapter 5**: Reduced from 6 slides to 1 slide
-  - Kept only Ch5_S1_ChallengeFraming (shows the problem with metrics)
-  - Removed detailed prompt explanation slides (Ch5_S3-S6)
-  - Rationale: All-hands audience needs business impact, not implementation details
-- **Streamlined Chapter 6**: Reduced from 5 slides to 2 slides
-  - Kept Ch6_S1_UnifiedConvergence (4→1 call visualization)
-  - Kept Ch6_S4_TokenOptimization (60% reduction)
-  - Removed intermediate algorithm flow slides
-- **Streamlined Chapter 7**: Reduced from 5 slides to 3 slides
-  - Removed Ch7_S1_CallReduction (redundant with Ch6_S1)
-  - Removed Ch7_S3_CostCurve (metrics covered in other slides)
-  - Kept Ch7_S2_GPUReduction, Ch7_S4_QualityComparison, Ch7_S5_PathToGA
-- **Result**: **15 total slides** (down from 23), clearer narrative flow, better pacing for all-hands presentation
+## Development Commands
 
-### 2025-01-20: Chapter 2 Team Collaboration Slide Refactoring
-**Fixed Narration-Visual Synchronization Issues:**
-- **Problem**: Mismatch between narration audio and visual component reveals in Chapter 2 slide
-- **Root cause**: Team array ordering didn't match segment indices, causing wrong cards to highlight
-- **Fixed team array**: Reordered so Teams at index 5, Loop at index 6 (matching segment numbers)
-- **Updated architecture diagram**: All ReactFlow nodes and edges now aligned with narration timing
-- **Added MSAI duplicate**: Keeps MSAI-Hive card highlighted during ACS narration (segment 3)
-
-**Code Consolidation:**
-- **Inlined architecture diagram**: Moved ReactFlow component from separate [`Ch2_ArchitectureDiagram.tsx`](react_cogs_demo/src/slides/Ch2_ArchitectureDiagram.tsx) into [`Chapter2.tsx`](react_cogs_demo/src/slides/chapters/Chapter2.tsx)
-- **Deleted separate file**: Removed redundant Ch2_ArchitectureDiagram.tsx (323 lines)
-- **Added ReactFlow imports**: All dependencies now in single chapter file
-- **Result**: Cleaner file structure, easier maintenance
-
-**Audio File Path Corrections:**
-- Fixed segment numbering to match actual generated files:
-  - Teams: `s1_segment_06_teams.wav` (was 05)
-  - Loop: `s1_segment_07_loop_storage.wav` (was 06)
-  - Clipchamp: `s1_segment_08_clipchamp.wav` (was 07)
-  - Conclusion: `s1_segment_09_conclusion.wav` (was 08)
-
-**Teams Feature Clarification:**
-- **Updated narration**: "We are also planning to provide access to highlights directly within the Teams ecosystem as another interface option"
-- **Updated labels**: Changed from "Alternative UI" to "Planned UI" throughout
-- **Reflects reality**: Teams access is planned, not yet implemented (BizChat is current primary UI)
-
-**UI Enhancements:**
-- **Sticky header**: "Backend Flow" header remains visible during scrolling
-- **Auto-scroll**: Backend flow automatically scrolls to show newest items as they appear
-- **Better layout**: Flexbox structure with fixed header and scrollable content area
-
-**Final Segment Configuration (9 segments):**
-- Segment 0: Intro
-- Segment 1: ODSP
-- Segment 2: MSAI-Hive
-- Segment 3: ACS (keeps MSAI highlighted)
-- Segment 4: BizChat
-- Segment 5: Teams (with audio)
-- Segment 6: Loop
-- Segment 7: Clipchamp
-- Segment 8: Conclusion
-
-### 2025-01-20: Architecture Overview Slide Removal
-**Removed Redundant Architecture Slide:**
-- **Deleted**: [`Chapter3.tsx`](react_cogs_demo/src/slides/chapters/Chapter3.tsx) (Architecture Overview slide)
-- **Reason**: Slide was redundant and not needed for all-hands presentation focused on business impact
-- **Updated**: [`SlidesRegistry.ts`](react_cogs_demo/src/slides/SlidesRegistry.ts) to remove Ch3_S1_ArchitectureOverview import and reference
-- **Result**: Presentation now has 22 slides (down from 23), streamlined flow from Team Collaboration directly to Highlight Types
-
-### 2025-01-20: Chapter-Based File Organization
-**Split AnimatedSlides.tsx into Chapter Files:**
-- **Deleted**: Monolithic [`AnimatedSlides.tsx`](react_cogs_demo/src/slides/AnimatedSlides.tsx) (3,075 lines)
-- **Created**: 10 chapter files in [`src/slides/chapters/`](react_cogs_demo/src/slides/chapters/) directory
-- **File sizes**: Range from 33 lines (Chapter0) to 812 lines (Chapter7)
-- **Average size**: ~296 lines per chapter file
-- **Benefits**:
-  - Improved navigation - find slides by opening relevant chapter
-  - Reduced merge conflicts - developers work on separate chapters
-  - Better IDE performance - smaller files load and parse faster
-  - Logical organization - chapters align with presentation narrative
-  - Scalable structure - easy to add new slides or split further
-- **Updated**: [`SlidesRegistry.ts`](react_cogs_demo/src/slides/SlidesRegistry.ts) to import from chapter files
-- **Verified**: TypeScript compilation passes, all 23 slides render correctly
-- **Documentation**: Updated SPLITTING_STRATEGY.md with completion status
-
-### 2025-01-20: Previous File Consolidation
-**Earlier Consolidation Step (Now Superseded):**
-- Initially merged all slides into single AnimatedSlides.tsx file
-- Consolidated Ch2_TeamCollaboration, Ch7_S3_CostCurve, Ch7_S4_QualityComparison
-- This monolithic file (3,075 lines) was then split into chapters (see above)
-
-### 2025-01-20: Video Player Integration
-**Added Demo Video Support:**
-- Created VideoPlayer component ([`src/components/VideoPlayer.tsx`](react_cogs_demo/src/components/VideoPlayer.tsx))
-- Freeze-on-end playback (pauses on last frame)
-- Synchronized with slide narration
-- Framer Motion animations
-- Responsive sizing and positioning
-- Videos stored in `public/videos/` directory
-- MP4 format support
-- Referenced via `videoPath` in slide metadata
-
-**Available Demo Videos:**
-- **`meeting_highlights_usage_in_bizchat.mp4`** - Shows how users access Meeting Highlights through BizChat, demonstrating the CIQ (Conversation Intelligence Query) interface and the Meeting Highlights player experience
-
-### 2025-01-20: TTS System & Audio Playback Fixes
-1. **Implemented Smart TTS Caching**
-   - Narration text change detection
-   - Only regenerate modified segments
-   - Batch processing (10 segments/batch)
-   - Cache stored in `.tts-narration-cache.json`
-
-2. **Pre-flight Cache Validation**
-   - Automatic check before `npm run dev`
-   - Detects changed narration text
-   - Prompts for regeneration with clear message
-   - Auto-runs generation if user confirms
-
-3. **Fixed Audio Overlap Bug**
-   - Manual+Audio mode was playing multiple audios simultaneously
-   - Root cause: Async audio loading race condition
-   - Solution: Implemented `isActive` flag to cancel stale audio loads
-   - Comprehensive cleanup of all audio references and event listeners
-
-4. **Audio Fallback System**
-   - Created `silence-1s.mp3` fallback file
-   - Graceful handling of missing audio files
-   - Console warnings for debugging
-   - No presentation crashes
-
-5. **Updated All Audio File Paths**
-   - Migrated from placeholder paths to actual TTS-generated files
-   - Pattern: `/audio/c{chapter}/s{slide}_segment_{number}_{id}.wav`
-   - ~65 audio file references updated across all slides
-
-### 2025-01-19: Content Restructuring
-
-### Content Restructuring
-1. **Enhanced Introduction** - Expanded from 3 to 8 captions to comprehensively explain Meeting Highlights for all-hands audience
-2. **Simplified COGS Challenge** - Removed detailed explanations of each of the 4 prompts, focusing on high-level impact
-3. **Added Token Optimization Details** - Explicitly mentioned 60% input token reduction in both narration and slides
-4. **Updated Business Impact** - Changed from "over 50%" to "over 70%" COGS reduction with "estimated" framing
-5. **Enhanced React Slide** - Ch7_U1 now shows both call reduction dial AND token reduction bar chart side-by-side
-
-### Code Changes
-- Renamed all slide components from `_U` (Utterance) to `_S` (Slide) convention
-- Removed 4 detailed prompt slides (Ch5_S3-S6 for individual prompts) from SlidesRegistry
-- Deleted unused SlideRegistry.ts file
-- Updated Ch7_S1_CallReduction to "Optimization Impact" with dual visualizations
-- Implemented multi-segment slide support for progressive content reveal
-- Organized slide definitions by chapter in `highlights_demo/chapters/cX/` folders
-
-## Development
-
-### Running the React Demo
 ```bash
+# Development
 cd react_cogs_demo
 npm install
 npm run dev
-```
-### TTS Audio Generation
 
-**Start Python TTS Server:**
-```bash
-cd tts
-python server.py --voice-sample path/to/voice.wav
-```
-
-**Generate Audio Files:**
-```bash
-cd react_cogs_demo
-
-# Generate all files (uses smart cache to skip unchanged)
-npm run tts:generate
-
-# Force regenerate all files
-npm run tts:generate -- --force
-
-# Calculate durations
+# TTS Generation
+cd tts && python server.py --voice-sample path/to/voice.wav
+cd react_cogs_demo && npm run tts:generate
 npm run tts:duration
-```
 
-**Development Workflow:**
-1. Edit narration text in slide components
-2. Run `npm run dev`
-3. Pre-flight check detects changes
-4. Answer "y" to regenerate automatically
-5. Server starts with updated audio
-
-**Cache Management:**
-- Cache file: `react_cogs_demo/.tts-narration-cache.json`
-- Duration report: `react_cogs_demo/duration-report.json`
-- Audio files: `react_cogs_demo/public/audio/c{0-9}/`
+# Build
+npm run build
+npm run preview
 ```
 
 ## Presentation Modes
