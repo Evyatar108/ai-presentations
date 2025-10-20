@@ -192,7 +192,7 @@ Ch4_S1_HighlightTypes.metadata = {
     },
     {
       id: "narrative",
-      audioFilePath: "/audio/c4/s1_segment_05_audio.wav",
+      audioFilePath: "/audio/c4/s1_segment_05_narrative.wav",
       srtSegmentNumber: 5,
       visualDescription: "Narrative storytelling icon connecting highlights",
       narrationText: "The AI weaves these highlights together into a cohesive narrative, creating an engaging story that connects the abstractive summaries and key moments."
