@@ -1,6 +1,51 @@
 # Agents - Meeting Highlights COGS Reduction Presentation
 
 ## Recent Changes
+
+### 2025-01-20: Documentation Structure Standardization ✅
+**Established consistent documentation hierarchy for all demos:**
+
+**Created Documentation Guidelines:**
+- [`DEMO_DOCUMENTATION_STRUCTURE.md`](docs/DEMO_DOCUMENTATION_STRUCTURE.md) - Comprehensive documentation structure guide (consolidated from 3 separate files)
+- Updated [`ADDING_DEMOS.md`](docs/ADDING_DEMOS.md) with documentation requirements
+- Created PowerShell scaffolding script [`new-demo.ps1`](scripts/new-demo.ps1) for automated demo creation
+
+**Key Principle:** Demo ID consistency across all locations:
+- `docs/demos/{demo-id}/` - Documentation
+- `src/demos/{demo-id}/` - Implementation
+- `public/{audio|images|videos}/{demo-id}/` - Assets
+
+**Naming Conventions:**
+- Demo IDs: lowercase with hyphens (e.g., `meeting-highlights`)
+- Main doc file: `{demo-id}.md`
+- Context files: hyphenated lowercase (e.g., `team-collaboration.md`)
+- Directories must match demo ID exactly
+
+**Migration Completed for Meeting Highlights:**
+- ✅ Renamed `docs/demos/highlights/` → `docs/demos/meeting-highlights/`
+- ✅ Renamed `MEETING_HIGHLIGHTS_DEMO.md` → `meeting-highlights.md`
+- ✅ Standardized context files:
+  - `what is meeting highlights.md` → `what-is-meeting-highlights.md`
+  - `team collaboration.md` → `team-collaboration.md`
+  - `architecture comprehensive.md` → `architecture-comprehensive.md`
+  - `extractive vs abstractive highlights.md` → `extractive-vs-abstractive-highlights.md`
+  - `how can users try meeting highlights.md` → `how-can-users-try-meeting-highlights.md`
+  - `v2 goal and efforts.md` → `v2-goals-and-efforts.md`
+- ✅ Updated all cross-references in README.md, Agents.md, react_cogs_demo/README.md
+- ✅ Updated internal links in meeting-highlights.md
+
+**Example Demo Documentation Created:**
+- [`docs/demos/example-demo-1/`](docs/demos/example-demo-1/) - Full documentation with context guidelines
+- [`docs/demos/example-demo-2/`](docs/demos/example-demo-2/) - Alternative demo with dark theme docs
+
+**Benefits:**
+- **Predictability**: Given demo ID, immediately know all file locations
+- **Consistency**: All demos follow same pattern
+- **Maintainability**: Clear structure for updates
+- **Scalability**: Easy to add new demos
+- **Discoverability**: Hyphenated names easier to work with
+
+## Recent Changes
 ### 2025-01-20: Phase 8 - Testing and Verification Complete ✅
 **Comprehensive testing completed for multi-demo architecture:**
 
@@ -158,30 +203,35 @@ This project contains materials for an all-hands presentation about Meeting High
 
 ### Documentation Files
 - **README.md** - Main project documentation
-- **docs/demos/highlights/team collaboration.md** - Overview of 6+ teams collaborating on Meeting Highlights
-- **docs/demos/highlights/architecture comprehensive.md** - Comprehensive component reference with ICM teams and DRIs
-- **docs/demos/highlights/v2 goal and efforts.md** - Goals and efforts for v2 implementation
-- **docs/demos/highlights/extractive vs abstractive highlights.md** - Technical details on highlight types
-- **docs/demos/highlights/what is meeting highlights.md** - Comprehensive product explanation
-- **docs/demos/highlights/how can users try meeting highlights.md** - Instructions for accessing Meeting Highlights via BizChat
-- **docs/demos/highlights/MEETING_HIGHLIGHTS_DEMO.md** - Detailed demo documentation with slide structure and design system
-
-
+### Documentation Files
+- **README.md** - Main project documentation
+- **docs/demos/meeting-highlights/** - Meeting Highlights demo documentation
+  - **meeting-highlights.md** - Main demo documentation with slide structure and design system
+  - **context/** - Background materials for demo creation:
+    - **team-collaboration.md** - Overview of 6+ teams collaborating on Meeting Highlights
+    - **architecture-comprehensive.md** - Comprehensive component reference with ICM teams and DRIs
+    - **v2-goals-and-efforts.md** - Goals and efforts for v2 implementation
+    - **extractive-vs-abstractive-highlights.md** - Technical details on highlight types
+    - **what-is-meeting-highlights.md** - Comprehensive product explanation
+    - **how-can-users-try-meeting-highlights.md** - Instructions for accessing Meeting Highlights via BizChat
+    - **v1/** - Original implementation ([`HighlightsPromptMaper.py`](docs/demos/meeting-highlights/context/v1/HighlightsPromptMaper.py))
+    - **v2/** - Current implementation schemas
 ### Highlights Demo Materials (`highlights_demo/`)
 - **audio/** - Audio files for narrated presentation
 - **chapters/** - Subtitle files (SRT format) for each presentation chapter
 - **images/logos/** - Product logos (BizChat, ClipChamp, Loop, msai-hive, odsp, Teams)
 
-### Meeting Highlights Documentation (`docs/demos/highlights/`)
-- **team collaboration.md** - Team collaboration overview (ODSP, MSAI-Hive, Clipchamp, Loop, BizChat, Teams)
-- **architecture comprehensive.md** - Detailed component reference including all services (MeTA, TMR, BizChat, ODSP, VRoom, LLM, ACS, Loki, etc.), ICM teams, DRIs, and complete data flow
-- **extractive vs abstractive highlights.md** - Comparison of highlight approaches
-- **v2 goal and efforts.md** - V2 implementation goals
-- **what is meeting highlights.md** - Product overview
-- **how can users try meeting highlights.md** - User access instructions via BizChat
-- **MEETING_HIGHLIGHTS_DEMO.md** - Detailed demo documentation with slide structure and design system
-- **v1/** - Original implementation ([`HighlightsPromptMaper.py`](docs/demos/highlights/v1/HighlightsPromptMaper.py))
-- **v2/** - Current implementation schemas ([`prompt.md`](docs/demos/highlights/v2/prompt.md), [`prompt_output_schema.md`](docs/demos/highlights/v2/prompt_output_schema.md), [`TRANSCRIPT_TABLE_SCHEMA.md`](docs/demos/highlights/v2/TRANSCRIPT_TABLE_SCHEMA.md))
+### Meeting Highlights Documentation (`docs/demos/meeting-highlights/`)
+- **meeting-highlights.md** - Main demo documentation with slide structure and design system
+- **context/** - Background materials directory:
+  - **team-collaboration.md** - Team collaboration overview (ODSP, MSAI-Hive, Clipchamp, Loop, BizChat, Teams)
+  - **architecture-comprehensive.md** - Detailed component reference including all services (MeTA, TMR, BizChat, ODSP, VRoom, LLM, ACS, Loki, etc.), ICM teams, DRIs, and complete data flow
+  - **extractive-vs-abstractive-highlights.md** - Comparison of highlight approaches
+  - **v2-goals-and-efforts.md** - V2 implementation goals
+  - **what-is-meeting-highlights.md** - Product overview
+  - **how-can-users-try-meeting-highlights.md** - User access instructions via BizChat
+  - **v1/** - Original implementation ([`HighlightsPromptMaper.py`](docs/demos/meeting-highlights/context/v1/HighlightsPromptMaper.py))
+  - **v2/** - Current implementation schemas ([`prompt.md`](docs/demos/meeting-highlights/context/v2/prompt.md), [`prompt_output_schema.md`](docs/demos/meeting-highlights/context/v2/prompt_output_schema.md), [`TRANSCRIPT_TABLE_SCHEMA.md`](docs/demos/meeting-highlights/context/v2/TRANSCRIPT_TABLE_SCHEMA.md))
 
 ### React Demo Application (`react_cogs_demo/`)
 Interactive presentation slides built with React, Framer Motion, and TypeScript:
@@ -201,9 +251,9 @@ Interactive presentation slides built with React, Framer Motion, and TypeScript:
 - Audio fallback system (1-second silence for missing files)
 
 ### Implementation Files
-- **docs/demos/highlights/v1/** - Original implementation ([`HighlightsPromptMaper.py`](docs/demos/highlights/v1/HighlightsPromptMaper.py))
-- **docs/demos/highlights/v2/** - Current implementation with prompt schema and transcript table schema
-
+### Implementation Files
+- **docs/demos/meeting-highlights/context/v1/** - Original implementation ([`HighlightsPromptMaper.py`](docs/demos/meeting-highlights/context/v1/HighlightsPromptMaper.py))
+- **docs/demos/meeting-highlights/context/v2/** - Current implementation with prompt schema and transcript table schema
 ## Key Metrics
 
 ### Product Metrics

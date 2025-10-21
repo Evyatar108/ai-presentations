@@ -7,14 +7,15 @@ This repository contains work related to meeting highlights and COGS (Cost of Go
 ```
 cogs reduction/
 ├── README.md
-├── docs/demos/highlights/  # Meeting Highlights documentation
-│   ├── architecture comprehensive.md
-│   ├── extractive vs abstractive highlights.md
-│   ├── how can users try meeting highlights.md
-│   ├── MEETING_HIGHLIGHTS_DEMO.md
-│   ├── team collaboration.md
-│   ├── v2 goal and efforts.md
-│   ├── what is meeting highlights.md
+├── docs/demos/meeting-highlights/  # Meeting Highlights documentation
+│   ├── meeting-highlights.md
+│   └── context/
+│       ├── architecture-comprehensive.md
+│       ├── extractive-vs-abstractive-highlights.md
+│       ├── how-can-users-try-meeting-highlights.md
+│       ├── team-collaboration.md
+│       ├── v2-goals-and-efforts.md
+│       ├── what-is-meeting-highlights.md
 │   ├── v1/
 │   │   └── HighlightsPromptMaper.py
 │   └── v2/
@@ -37,14 +38,15 @@ Contains presentation materials and supporting documentation:
 - **images/logos/** - Product logos (Teams, BizChat, Loop, Clipchamp, ODSP, MSAI Hive)
 - **context/** - Technical documentation and implementation files
 
-### Documentation (`docs/demos/highlights/`)
-- **team collaboration.md** - Overview of the 6+ teams collaborating on Meeting Highlights (ODSP, MSAI-Hive, Clipchamp, Loop, BizChat, Teams)
-- **architecture comprehensive.md** - Comprehensive component reference with all services, ICM teams, DRIs, and detailed data flow
-- **extractive vs abstractive highlights.md** - Documentation comparing extractive and abstractive highlight approaches
-- **v2 goal and efforts.md** - Goals and efforts for version 2
-- **what is meeting highlights.md** - Overview of meeting highlights functionality
-- **how can users try meeting highlights.md** - Instructions for accessing Meeting Highlights via BizChat (includes CIQ usage)
-- **MEETING_HIGHLIGHTS_DEMO.md** - Detailed demo documentation with slide structure and design system
+### Documentation (`docs/demos/meeting-highlights/`)
+- **meeting-highlights.md** - Detailed demo documentation with slide structure and design system
+- **context/** - Background materials for demo creation:
+  - **team-collaboration.md** - Overview of the 6+ teams collaborating on Meeting Highlights (ODSP, MSAI-Hive, Clipchamp, Loop, BizChat, Teams)
+  - **architecture-comprehensive.md** - Comprehensive component reference with all services, ICM teams, DRIs, and detailed data flow
+  - **extractive-vs-abstractive-highlights.md** - Documentation comparing extractive and abstractive highlight approaches
+  - **v2-goals-and-efforts.md** - Goals and efforts for version 2
+  - **what-is-meeting-highlights.md** - Overview of meeting highlights functionality
+  - **how-can-users-try-meeting-highlights.md** - Instructions for accessing Meeting Highlights via BizChat (includes CIQ usage)
 - **v1/** - Original implementation
   - `HighlightsPromptMaper.py` - Python script for highlights prompt mapping (version 1)
 - **v2/** - Current implementation documentation
@@ -63,10 +65,10 @@ This project now includes an interactive React + Vite demo illustrating how meet
 - Quality: Internal reviewers strongly prefer unified prompt highlights vs multi-prompt V1 output (higher cohesion, less redundancy)
 
 ### V1 Four-Prompt Pipeline
-1. Abstractive Topics [`highlights_abstractives()`](docs/demos/highlights/v1/HighlightsPromptMaper.py:13)
-2. Extractive Selection [`highlights_extractives()`](docs/demos/highlights/v1/HighlightsPromptMaper.py:140)
-3. Quality Ranking [`highlights_extractive_ranking()`](docs/demos/highlights/v1/HighlightsPromptMaper.py:230)
-4. Final Narrative Synthesis [`highlights_final()`](docs/demos/highlights/v1/HighlightsPromptMaper.py:318)
+1. Abstractive Topics [`highlights_abstractives()`](docs/demos/meeting-highlights/context/v1/HighlightsPromptMaper.py:13)
+2. Extractive Selection [`highlights_extractives()`](docs/demos/meeting-highlights/context/v1/HighlightsPromptMaper.py:140)
+3. Quality Ranking [`highlights_extractive_ranking()`](docs/demos/meeting-highlights/context/v1/HighlightsPromptMaper.py:230)
+4. Final Narrative Synthesis [`highlights_final()`](docs/demos/meeting-highlights/context/v1/HighlightsPromptMaper.py:318)
 Each step invoked the LLM separately, adding latency padding, retry surface, token overhead, and GPU reservation pressure.
 
 ### Unified V2 Prompt

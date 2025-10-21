@@ -2,7 +2,32 @@
 
 This guide walks through creating a new presentation demo from scratch.
 
-## Step 1: Create Demo Directory
+## Quick Start
+
+**Recommended**: Use the PowerShell scaffolding script to create a complete demo structure automatically:
+
+```powershell
+.\scripts\new-demo.ps1 -DemoId "my-demo" [-DemoTitle "My Demo"]
+```
+
+The script creates all required files and directories with templates. See [`DEMO_DOCUMENTATION_STRUCTURE.md`](DEMO_DOCUMENTATION_STRUCTURE.md) for documentation structure details.
+ 
+**Manual approach**: Follow the implementation steps below if you need to understand the details or customize the structure.
+
+## Quick Start Checklist
+
+- [ ] Choose a demo ID (lowercase with hyphens, e.g., `my-feature-demo`)
+- [ ] Run PowerShell script OR create structure manually
+- [ ] Add context materials to `docs/demos/{demo-id}/context/`
+- [ ] Implement slides in `src/demos/{demo-id}/slides/chapters/`
+- [ ] Add assets to `public/{audio|images|videos}/{demo-id}/`
+- [ ] Register demo in `DemoRegistry.ts`
+- [ ] Generate TTS audio
+- [ ] Test the demo
+
+## Manual Implementation Steps
+
+### Step 1: Create Demo Directory
 
 Create a new directory under `src/demos/`:
 
@@ -10,7 +35,7 @@ Create a new directory under `src/demos/`:
 mkdir -p src/demos/your-demo-name/slides/chapters
 ```
 
-## Step 2: Create Metadata
+### Step 2: Create Metadata
 
 Create `src/demos/your-demo-name/metadata.ts`:
 
@@ -27,7 +52,7 @@ export const metadata: DemoMetadata = {
 };
 ```
 
-## Step 3: Create Demo Configuration
+### Step 3: Create Demo Configuration
 
 Create `src/demos/your-demo-name/index.ts`:
 
@@ -38,7 +63,6 @@ import { metadata } from './metadata';
 export const demo: DemoConfig = {
   id: 'your-demo-name',
   metadata,
-  defaultMode: 'narrated',  // or 'manual' or 'manual-audio'
   getSlides: async () => {
     const { allSlides } = await import('./slides/SlidesRegistry');
     return allSlides;
@@ -46,7 +70,7 @@ export const demo: DemoConfig = {
 };
 ```
 
-## Step 4: Create Slide Chapters
+### Step 4: Create Slide Chapters
 
 Create `src/demos/your-demo-name/slides/chapters/Chapter0.tsx`:
 
@@ -83,7 +107,7 @@ export const Ch0_S1_Welcome: SlideMetadata = {
 };
 ```
 
-## Step 5: Create Slides Registry
+### Step 5: Create Slides Registry
 
 Create `src/demos/your-demo-name/slides/SlidesRegistry.ts`:
 
@@ -97,7 +121,7 @@ export const allSlides: SlideMetadata[] = [
 ];
 ```
 
-## Step 6: Register Demo
+### Step 6: Register Demo
 
 Update `src/demos/DemoRegistry.ts`:
 
@@ -113,7 +137,7 @@ registerDemo({
 });
 ```
 
-## Step 7: Add Assets
+### Step 7: Add Assets
 
 Create asset directories:
 
@@ -128,33 +152,17 @@ Add your assets:
 - Audio files will be generated via TTS (see [TTS Guide](TTS_GUIDE.md))
 - Add any videos to `public/videos/your-demo-name/`
 
-## Step 8: Create Demo README
+### Step 8: Create Documentation
 
-Create `src/demos/your-demo-name/README.md`:
+Create documentation structure (see [`DEMO_DOCUMENTATION_STRUCTURE.md`](DEMO_DOCUMENTATION_STRUCTURE.md) for details):
 
-```markdown
-# Your Demo Name
-
-Description of the demo content and purpose.
-
-## Structure
-
-- Chapter 0: Introduction
-- Chapter 1: Main content
-- ...
-
-## Duration
-
-Approximately X minutes
-
-## Assets
-
-- Thumbnail: `/images/your-demo-name/thumbnail.jpeg`
-- Audio: Generated via TTS
-- Videos: (list any videos used)
+```bash
+mkdir -p docs/demos/your-demo-name/context
 ```
 
-## Step 9: Generate TTS Audio
+Create `docs/demos/your-demo-name/your-demo-name.md` with demo overview, structure, and context file references.
+
+### Step 9: Generate TTS Audio
 
 Generate audio for your demo (see [TTS Guide](TTS_GUIDE.md)):
 
@@ -162,7 +170,7 @@ Generate audio for your demo (see [TTS Guide](TTS_GUIDE.md)):
 npm run tts:generate -- --demo your-demo-name
 ```
 
-## Step 10: Test Your Demo
+### Step 10: Test Your Demo
 
 ```bash
 npm run dev
@@ -170,7 +178,7 @@ npm run dev
 
 Navigate to the demo selection screen and select your new demo.
 
-## Tips
+## Implementation Tips
 
 ### Multi-Segment Slides
 
@@ -226,3 +234,10 @@ Use shared components and utilities from `src/slides/`:
 - `AnimationVariants.ts` - Framer Motion configs
 - `SlideLayouts.tsx` - Layout components
 - `SlideIcons.tsx` - Icon components
+
+## Related Documentation
+
+- **[Demo Documentation Structure](DEMO_DOCUMENTATION_STRUCTURE.md)** - Documentation structure and philosophy
+- **[TTS Guide](TTS_GUIDE.md)** - Audio generation system
+- **[Architecture](ARCHITECTURE.md)** - Overall project architecture
+- **[Components](COMPONENTS.md)** - Shared component documentation

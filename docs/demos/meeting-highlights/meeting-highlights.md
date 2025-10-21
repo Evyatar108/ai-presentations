@@ -268,11 +268,11 @@ All slides carefully synchronized with TTS audio:
 
 ## Related Documentation
 
-- **Product Overview**: [`what is meeting highlights.md`](context/what is meeting highlights.md)
-- **Team Collaboration**: [`team collaboration.md`](context/team collaboration.md)
-- **Architecture**: [`architecture comprehensive.md`](context/architecture comprehensive.md)
+- **Product Overview**: [`what-is-meeting-highlights.md`](context/what-is-meeting-highlights.md)
+- **Team Collaboration**: [`team-collaboration.md`](context/team-collaboration.md)
+- **Architecture**: [`architecture-comprehensive.md`](context/architecture-comprehensive.md)
 - **V2 Implementation**: [`v2/`](context/v2/) directory
-- **User Access**: [`how can users try meeting highlights.md`](context/how can users try meeting highlights.md)
+- **User Access**: [`how-can-users-try-meeting-highlights.md`](context/how-can-users-try-meeting-highlights.md)
 
 ## Demo-Specific Commands
 
