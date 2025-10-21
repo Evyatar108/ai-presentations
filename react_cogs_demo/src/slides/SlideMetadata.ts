@@ -1,3 +1,5 @@
+import { TimingConfig } from '../demos/timing/types';
+
 /**
  * Represents a single audio segment within a multi-segment slide
  */
@@ -9,23 +11,41 @@ export interface AudioSegment {
   srtSegmentNumber?: number;     // Reference to segment number in SRT file (e.g., 1 for "1 - Intro")
   visualDescription?: string;    // Description of what appears visually (from SRT file)
   narrationText?: string;        // Actual narration text to be spoken (for TTS generation)
+  
+  /**
+   * Optional timing configuration for this specific segment.
+   * Overrides slide and demo timing for this segment only.
+   *
+   * @example
+   * timing: { betweenSegments: 1000 } // 1 second delay after this segment
+   */
+  timing?: TimingConfig;
 }
 
 /**
- /**
-  * Metadata interface that all narrated slide components must implement
-  */
- export interface SlideMetadata {
-   chapter: number;
-   slide: number;
-   title: string;
-   
-   // Reference to slide definition SRT file
-   srtFilePath?: string;              // Path to slide's SRT file (e.g., "highlights_demo/chapters/c2/s1_team_collaboration.srt")
-   
-   // Multi-segment audio support (all slides use segments)
-   audioSegments: AudioSegment[];     // Array of audio segments for this slide
- }
+ * Metadata interface that all narrated slide components must implement
+ */
+export interface SlideMetadata {
+  chapter: number;
+  slide: number;
+  title: string;
+  
+  // Reference to slide definition SRT file
+  srtFilePath?: string;              // Path to slide's SRT file (e.g., "highlights_demo/chapters/c2/s1_team_collaboration.srt")
+  
+  // Multi-segment audio support (all slides use segments)
+  audioSegments: AudioSegment[];     // Array of audio segments for this slide
+  
+  /**
+   * Optional timing configuration for this slide.
+   * Overrides demo timing for all segments in this slide.
+   * Individual segments can further override with their own timing.
+   *
+   * @example
+   * timing: { betweenSegments: 750, betweenSlides: 1500 }
+   */
+  timing?: TimingConfig;
+}
  
  /**
   * Type for a slide component with metadata

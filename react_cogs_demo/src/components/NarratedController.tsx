@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { hasAudioSegments, SlideComponentWithMetadata } from '../slides/SlideMetadata';
 import { useSegmentContext } from '../contexts/SegmentContext';
 import type { DemoMetadata } from '../demos/types';
+import { resolveTimingConfig, TimingConfig } from '../demos/timing/types';
 
 // Fallback audio file for missing segments
 const FALLBACK_AUDIO = '/audio/silence-1s.mp3';
@@ -32,6 +33,7 @@ const loadAudioWithFallback = async (primaryPath: string, segmentId: string): Pr
 
 interface NarratedControllerProps {
   demoMetadata: DemoMetadata;
+  demoTiming?: TimingConfig;
   slides: SlideComponentWithMetadata[];
   onSlideChange: (chapter: number, slide: number) => void;
   onPlaybackStart?: () => void;
@@ -42,6 +44,7 @@ interface NarratedControllerProps {
 
 export const NarratedController: React.FC<NarratedControllerProps> = ({
   demoMetadata,
+  demoTiming,
   slides,
   onSlideChange,
   onPlaybackStart,
@@ -60,6 +63,13 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
   const [isManualMode, setIsManualMode] = useState(false);
   const [isManualWithAudio, setIsManualWithAudio] = useState(false);
   const [autoAdvanceOnAudioEnd, setAutoAdvanceOnAudioEnd] = useState(false);
+
+  // Runtime timer (for validating timing calculations)
+  const [showRuntimeTimerOption, setShowRuntimeTimerOption] = useState(false);
+  const [runtimeStart, setRuntimeStart] = useState<number | null>(null);
+  const [elapsedMs, setElapsedMs] = useState(0);
+  // Persist final elapsed after presentation completes (so overlay can display it)
+  const [finalElapsedSeconds, setFinalElapsedSeconds] = useState<number | null>(null);
   
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const currentIndexRef = useRef(currentIndex);
@@ -69,9 +79,47 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
   const segmentContext = useSegmentContext();
 
   // Keep ref in sync with state
-  useEffect(() => {
-    currentIndexRef.current = currentIndex;
-  }, [currentIndex]);
+ useEffect(() => {
+   currentIndexRef.current = currentIndex;
+ }, [currentIndex]);
+
+ // Start / reset runtime timer when narrated playback begins (only if enabled)
+ useEffect(() => {
+   if (isPlaying && showRuntimeTimerOption) {
+     setRuntimeStart(performance.now());
+     setElapsedMs(0);
+   }
+   if (!isPlaying) {
+     setRuntimeStart(null);
+   }
+ }, [isPlaying, showRuntimeTimerOption]);
+
+ // Tick elapsed while narrated playback running
+ useEffect(() => {
+   if (!isPlaying || !showRuntimeTimerOption || runtimeStart == null) return;
+   let rafId: number;
+   const tick = () => {
+     setElapsedMs(performance.now() - runtimeStart);
+     rafId = requestAnimationFrame(tick);
+   };
+   rafId = requestAnimationFrame(tick);
+   return () => cancelAnimationFrame(rafId);
+ }, [isPlaying, showRuntimeTimerOption, runtimeStart]);
+
+ // Format seconds -> mm:ss
+ const formatMMSS = (totalSeconds: number) => {
+   const mins = Math.floor(totalSeconds / 60);
+   const secs = Math.floor(totalSeconds % 60);
+   return `${mins}:${secs.toString().padStart(2, '0')}`;
+ };
+
+ // Color coding for delta vs planned (tolerance bands)
+ const deltaColor = (deltaSeconds: number) => {
+   const abs = Math.abs(deltaSeconds);
+   if (abs <= 2) return '#22c55e';       // ±2s green
+   if (abs <= 5) return '#f59e0b';       // ±5s amber
+   return '#ef4444';                     // >5s red
+ };
 
   // Advance to next slide (narrated mode)
   const advanceSlide = useCallback(() => {
@@ -79,17 +127,41 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     const nextIndex = currentIdx + 1;
     
     if (nextIndex >= allSlides.length) {
-      // End of presentation - add delay before showing overlay
-      setIsPlaying(false);
+      // Use timing system for afterFinalSlide delay (keep isPlaying TRUE so timer includes final delay)
+      const lastSlide = allSlides[allSlides.length - 1].metadata;
+      const timing = resolveTimingConfig(
+        demoTiming,
+        lastSlide.timing
+      );
+
+      const plannedTotal = demoMetadata.durationInfo?.total ?? null;
+
       setTimeout(() => {
+        // Compute final elapsed (includes final delay)
+        let finalElapsedSec: number | null = null;
+        if (runtimeStart != null) {
+          finalElapsedSec = (performance.now() - runtimeStart) / 1000;
+          setFinalElapsedSeconds(finalElapsedSec);
+        }
+        // Stop timer now
+        setIsPlaying(false);
+        // Log final runtime stats
+        if (showRuntimeTimerOption && plannedTotal != null && finalElapsedSec != null) {
+          const delta = finalElapsedSec - plannedTotal;
+          console.log(
+            `[RuntimeTimer] Completed presentation. Elapsed=${finalElapsedSec.toFixed(2)}s Planned=${plannedTotal.toFixed(2)}s Δ=${delta.toFixed(2)}s`
+          );
+        } else if (showRuntimeTimerOption && finalElapsedSec != null) {
+          console.log(`[RuntimeTimer] Completed presentation. Elapsed=${finalElapsedSec.toFixed(2)}s (no planned total provided)`);
+        }
         setShowStartOverlay(true);
         onPlaybackEnd?.();
-      }, 2000); // 2 second delay after final slide
+      }, timing.afterFinalSlide);
       return;
     }
     
     setCurrentIndex(nextIndex);
-  }, [onPlaybackEnd]);
+  }, [onPlaybackEnd, demoMetadata.durationInfo?.total, showRuntimeTimerOption, runtimeStart, demoTiming, allSlides]);
   // Play audio for current slide in narrated mode (all slides use segments now)
   useEffect(() => {
     if (!isPlaying || currentIndex >= allSlides.length || isManualMode) return;
@@ -134,8 +206,14 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     const playSegment = (segmentIndex: number) => {
       if (segmentIndex >= segments.length) {
         console.log(`[NarratedController] All segments complete for ${slideKey}, advancing to next slide after delay`);
-        // Add 1000ms delay between slides for smoother transitions
-        setTimeout(advanceSlide, 1000);
+        
+        // Use timing system for betweenSlides delay
+        const timing = resolveTimingConfig(
+          demoTiming,
+          slideMetadata.timing
+        );
+        
+        setTimeout(advanceSlide, timing.betweenSlides);
         return;
       }
       
@@ -162,8 +240,15 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
           console.log(`[NarratedController] Segment ${segmentIndex} (${segment.id}) ended`);
           setError(null);
           currentSegmentIndex++;
-          // 500ms delay between segments for smoother transitions
-          setTimeout(() => playSegment(currentSegmentIndex), 500);
+          
+          // Use timing system for betweenSegments delay
+          const timing = resolveTimingConfig(
+            demoTiming,
+            slideMetadata.timing,
+            segment.timing
+          );
+          
+          setTimeout(() => playSegment(currentSegmentIndex), timing.betweenSegments);
         };
         
         audio.onerror = (e) => {
@@ -208,6 +293,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
       return;
     }
     
+    setFinalElapsedSeconds(null);
     setShowStartOverlay(false);
     setIsPlaying(true);
     setIsManualMode(false);
@@ -222,6 +308,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
       return;
     }
     
+    setFinalElapsedSeconds(null);
     setShowStartOverlay(false);
     setIsPlaying(false);
     setIsManualMode(true);
@@ -237,6 +324,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
       return;
     }
     
+    setFinalElapsedSeconds(null);
     setShowStartOverlay(false);
     setIsPlaying(false);
     setIsManualMode(true);
@@ -289,14 +377,21 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
         
         // Auto-advance logic when enabled
         if (autoAdvanceOnAudioEnd) {
-          // If not on last segment, advance to next segment with 500ms delay
+          // Resolve timing configuration for auto-advance delays
+          const timing = resolveTimingConfig(
+            demoTiming,
+            slide.timing,
+            segment.timing
+          );
+          
+          // If not on last segment, advance to next segment with betweenSegments delay
           if (currentSegmentIdx < segments.length - 1) {
             console.log(`[Manual+Audio] Auto-advancing to segment ${currentSegmentIdx + 1}`);
             setTimeout(() => {
               segmentContext.nextSegment();
-            }, 500);
+            }, timing.betweenSegments);
           }
-          // If on last segment, advance to next slide with 1000ms delay
+          // If on last segment, advance to next slide with betweenSlides delay
           else {
             const nextIndex = currentIndexRef.current + 1;
             if (nextIndex < allSlides.length) {
@@ -305,7 +400,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
                 lastAutoAdvanceFromIndexRef.current = currentIndexRef.current;
                 setCurrentIndex(nextIndex);
                 onSlideChange(allSlides[nextIndex].metadata.chapter, allSlides[nextIndex].metadata.slide);
-              }, 1000);
+              }, timing.betweenSlides);
             }
           }
         }
@@ -366,6 +461,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     setIsManualWithAudio(false);
     setAutoAdvanceOnAudioEnd(false);
     setError(null);
+    setFinalElapsedSeconds(null);
     setShowStartOverlay(true);
     onPlaybackEnd?.();
   };
@@ -421,38 +517,72 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
                   {error}
                 </p>
               )}
+
+              {/* Final elapsed summary if available (from previous run) */}
+              {showRuntimeTimerOption && finalElapsedSeconds != null && (
+                <div style={{
+                  marginBottom: '1rem',
+                  fontSize: 13,
+                  color: '#94a3b8',
+                  background: 'rgba(255,255,255,0.05)',
+                  padding: '0.5rem 0.75rem',
+                  borderRadius: 8,
+                  fontFamily: 'Inter, system-ui, sans-serif'
+                }}>
+                  <strong style={{ color: '#f1f5f9' }}>Last Run Timing:</strong>{' '}
+                  Elapsed {formatMMSS(finalElapsedSeconds)}
+                  {demoMetadata.durationInfo?.total && (
+                    <>
+                      {' / '}Planned {formatMMSS(demoMetadata.durationInfo.total)}{' '}
+                      ({(finalElapsedSeconds - demoMetadata.durationInfo.total).toFixed(1)}s Δ)
+                    </>
+                  )}
+                </div>
+              )}
               
-              {/* Hide Interface Option */}
-              <div style={{
-                marginBottom: '1.5rem',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '0.5rem'
-              }}>
-                <input
-                  type="checkbox"
-                  id="hideInterface"
-                  checked={hideInterface}
-                  onChange={(e) => setHideInterface(e.target.checked)}
-                  style={{
-                    width: 18,
-                    height: 18,
-                    cursor: 'pointer'
-                  }}
-                />
-                <label
-                  htmlFor="hideInterface"
-                  style={{
-                    color: '#94a3b8',
-                    fontSize: 14,
-                    cursor: 'pointer',
-                    userSelect: 'none'
-                  }}
-                >
-                  Hide interface (for recording)
-                </label>
-              </div>
+              {/* Options */}
+             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1.5rem' }}>
+               {/* Row 1 */}
+               <div style={{
+                 display: 'flex',
+                 alignItems: 'center',
+                 justifyContent: 'center',
+                 gap: '1.25rem',
+                 flexWrap: 'wrap'
+               }}>
+                 <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: 14, color: '#94a3b8' }}>
+                   <input
+                     type="checkbox"
+                     checked={hideInterface}
+                     onChange={(e) => setHideInterface(e.target.checked)}
+                     style={{ width: 18, height: 18, cursor: 'pointer' }}
+                   />
+                   <span>Hide interface (recording)</span>
+                 </label>
+
+                 <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: 14, color: '#94a3b8' }}>
+                   <input
+                     type="checkbox"
+                     checked={showRuntimeTimerOption}
+                     onChange={(e) => setShowRuntimeTimerOption(e.target.checked)}
+                     style={{ width: 18, height: 18, cursor: 'pointer' }}
+                   />
+                   <span>Show runtime timer (narrated)</span>
+                 </label>
+               </div>
+               {showRuntimeTimerOption && demoMetadata.durationInfo?.total && (
+                 <div style={{
+                   fontSize: 12,
+                   color: '#64748b',
+                   textAlign: 'center',
+                   maxWidth: 480,
+                   margin: '0 auto',
+                   lineHeight: 1.4
+                 }}>
+                   Timer will display actual elapsed vs expected total {formatMMSS(demoMetadata.durationInfo.total)} to validate calculated timing.
+                 </div>
+               )}
+             </div>
               
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', alignItems: 'center' }}>
                 <button
@@ -516,72 +646,94 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
       </AnimatePresence>
 
       {/* Progress indicator */}
-      {(isPlaying || isManualMode) && !hideInterface && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          style={{
-            position: 'fixed',
-            top: 80,
-            left: '50%',
-            transform: 'translateX(-50%)',
-            background: 'rgba(0, 0, 0, 0.8)',
-            color: '#f1f5f9',
-            padding: '0.5rem 1rem',
-            borderRadius: 8,
-            fontSize: 12,
-            zIndex: 1000,
-            display: 'flex',
-            gap: '1rem',
-            alignItems: 'center'
-          }}
-        >
-          <span>
-            Slide {currentIndex + 1} of {allSlides.length} (Ch{allSlides[currentIndex].metadata.chapter}:S{allSlides[currentIndex].metadata.slide})
+     {(isPlaying || isManualMode) && !hideInterface && (
+       <motion.div
+         initial={{ opacity: 0 }}
+         animate={{ opacity: 1 }}
+         style={{
+           position: 'fixed',
+           top: 80,
+           left: '50%',
+           transform: 'translateX(-50%)',
+           background: 'rgba(0, 0, 0, 0.8)',
+           color: '#f1f5f9',
+           padding: '0.5rem 1rem',
+           borderRadius: 8,
+           fontSize: 12,
+           zIndex: 1000,
+           display: 'flex',
+           gap: '1rem',
+           alignItems: 'center'
+         }}
+       >
+         <span>
+           Slide {currentIndex + 1} of {allSlides.length} (Ch{allSlides[currentIndex].metadata.chapter}:S{allSlides[currentIndex].metadata.slide})
+         </span>
+
+         {/* Runtime timer (only in narrated mode & enabled) */}
+        {isPlaying && showRuntimeTimerOption && (
+          <span style={{ fontFamily: 'monospace', fontSize: 12, background: 'rgba(255,255,255,0.05)', padding: '0.25rem 0.5rem', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
+            <span>{formatMMSS(elapsedMs / 1000)} elapsed</span>
+            {demoMetadata.durationInfo?.total && (
+              <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                <span style={{ opacity: 0.5 }}>/</span>
+                <span>{formatMMSS(demoMetadata.durationInfo.total)} planned</span>
+                <span style={{ opacity: 0.5 }}>|</span>
+                {(() => {
+                  const delta = (elapsedMs / 1000) - demoMetadata.durationInfo.total;
+                  return (
+                    <span style={{ color: deltaColor(delta) }}>
+                      {delta >= 0 ? '+' : ''}{delta.toFixed(1)}s Δ
+                    </span>
+                  );
+                })()}
+              </span>
+            )}
           </span>
-          
-          {/* Auto-advance toggle (only in manual+audio mode) */}
-          {isManualMode && isManualWithAudio && (
-            <label
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                cursor: 'pointer',
-                fontSize: 11,
-                color: '#94a3b8'
-              }}
-            >
-              <input
-                type="checkbox"
-                checked={autoAdvanceOnAudioEnd}
-                onChange={(e) => setAutoAdvanceOnAudioEnd(e.target.checked)}
-                style={{
-                  width: 14,
-                  height: 14,
-                  cursor: 'pointer'
-                }}
-              />
-              Auto-advance
-            </label>
-          )}
-          
-          <button
-            onClick={handleRestart}
-            style={{
-              background: 'transparent',
-              border: '1px solid #475569',
-              color: '#f1f5f9',
-              borderRadius: 6,
-              padding: '0.25rem 0.75rem',
-              fontSize: 11,
-              cursor: 'pointer'
-            }}
-          >
-            ↻ Restart
-          </button>
-        </motion.div>
-      )}
+        )}
+         
+         {/* Auto-advance toggle (only in manual+audio mode) */}
+         {isManualMode && isManualWithAudio && (
+           <label
+             style={{
+               display: 'flex',
+               alignItems: 'center',
+               gap: '0.5rem',
+               cursor: 'pointer',
+               fontSize: 11,
+               color: '#94a3b8'
+             }}
+           >
+             <input
+               type="checkbox"
+               checked={autoAdvanceOnAudioEnd}
+               onChange={(e) => setAutoAdvanceOnAudioEnd(e.target.checked)}
+               style={{
+                 width: 14,
+                 height: 14,
+                 cursor: 'pointer'
+               }}
+             />
+             Auto-advance
+           </label>
+         )}
+         
+         <button
+           onClick={handleRestart}
+           style={{
+             background: 'transparent',
+             border: '1px solid #475569',
+             color: '#f1f5f9',
+             borderRadius: 6,
+             padding: '0.25rem 0.75rem',
+             fontSize: 11,
+             cursor: 'pointer'
+           }}
+         >
+           ↻ Restart
+         </button>
+       </motion.div>
+     )}
 
       {/* Error toast */}
       <AnimatePresence>

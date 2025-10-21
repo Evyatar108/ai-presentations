@@ -101,77 +101,81 @@ Track implementation progress for the timing system refactoring.
 
 ## Phase 4: Update Calculate Duration Script
 
-**Estimated**: 2-3 hours | **Status**: ⏳ Not Started
+**Estimated**: 2-3 hours | **Status**: ✅ Complete
 
 ### 4.1 Import Timing Utilities
-- [ ] Open `scripts/calculate-durations.ts`
-- [ ] Import `calculatePresentationDuration` from calculator
-- [ ] Import `TimingConfig` type
+- [x] Open `scripts/calculate-durations.ts`
+- [x] Import `calculatePresentationDuration` from calculator
+- [x] Import `TimingConfig` type
 
 ### 4.2 Load Demo Timing Configuration
-- [ ] After loading slides, load demo config
-- [ ] Extract `timing` field from config
-- [ ] Handle demos without timing (use defaults)
+- [x] After loading slides, load demo config
+- [x] Extract `timing` field from config
+- [x] Handle demos without timing (use defaults)
 
 ### 4.3 Calculate Full Duration
-- [ ] Call `calculatePresentationDuration()` with slides and timing
-- [ ] Calculate breakdown:
-  - [ ] Separate segment delays (betweenSegments)
-  - [ ] Separate slide delays (betweenSlides)
-  - [ ] Identify final delay (afterFinalSlide)
-- [ ] Include per-slide breakdown in report
+- [x] Call `calculatePresentationDuration()` with slides and timing
+- [x] Calculate breakdown:
+  - [x] Separate segment delays (betweenSegments)
+  - [x] Separate slide delays (betweenSlides)
+  - [x] Identify final delay (afterFinalSlide)
+- [x] Include per-slide breakdown in report
 
 ### 4.4 Update Report Structure
-- [ ] Add `audioOnlyDuration` field
-- [ ] Add `totalDelays` field
-- [ ] Add `totalDuration` field
-- [ ] Add `breakdown` object with delay categories
-- [ ] Include per-slide details with segments
-- [ ] Update console output to show new fields
+- [x] Add `audioOnlyDuration` field
+- [x] Add `segmentDelays` field
+- [x] Add `slideDelays` field
+- [x] Add `finalDelay` field
+- [x] Add `totalDuration` field
+- [x] Add `formattedDurations` object with formatted strings
+- [x] Include per-slide details with segments
+- [x] Update console output to show new fields
 
 ### 4.5 Update Report Generation
-- [ ] Generate both summary and detailed reports
-- [ ] Save to `duration-report-{demo-id}.json`
-- [ ] Pretty-print JSON for readability
+- [x] Generate both summary and detailed reports
+- [x] Save to `duration-report-{demo-id}.json`
+- [x] Pretty-print JSON for readability
+- [x] Add `--verbose` flag for per-slide console output
 
 **Verification**:
-- [ ] Script runs without errors
-- [ ] Report includes all new fields
-- [ ] Breakdown accurately categorizes delays
-- [ ] Per-slide and per-segment details included
-- [ ] Calculations match manual verification
+- [x] Script runs without errors
+- [x] Report includes all new fields
+- [x] Breakdown accurately categorizes delays
+- [x] Per-slide and per-segment details included
+- [x] Calculations match manual verification
+- [x] TypeScript compiles without errors
 
 ---
 
 ## Phase 5: Update NarratedController
 
-**Estimated**: 1-2 hours | **Status**: ⏳ Not Started
+**Estimated**: 1-2 hours | **Status**: ✅ Complete
 
 ### 5.1 Import Timing Resolver
-- [ ] Open `src/components/NarratedController.tsx`
-- [ ] Import `resolveTimingConfig` from timing types
+- [x] Open `src/components/NarratedController.tsx`
+- [x] Import `resolveTimingConfig` from timing types
 
 ### 5.2 Replace Hardcoded Delays
-- [ ] Find all hardcoded delay values (500, 1000, 2000)
-- [ ] Replace with resolved timing values:
-  - [ ] Between segments: Use `timing.betweenSegments`
-  - [ ] Between slides: Use `timing.betweenSlides`
-  - [ ] After final slide: Use `timing.afterFinalSlide`
-- [ ] Resolve timing per segment considering hierarchy
-- [ ] Pass `demoMetadata.timing` to resolver
+- [x] Find all hardcoded delay values (500, 1000, 2000)
+- [x] Replace with resolved timing values:
+  - [x] Between segments: Use `timing.betweenSegments`
+  - [x] Between slides: Use `timing.betweenSlides`
+  - [x] After final slide: Use `timing.afterFinalSlide`
+- [x] Resolve timing per segment considering hierarchy
+- [x] Pass `demoTiming` prop to component
 
 ### 5.3 Test Integration
-- [ ] Test narrated mode with default timing
-- [ ] Test with custom demo timing
-- [ ] Test with per-slide overrides
-- [ ] Test with per-segment overrides
-- [ ] Verify no regression in audio playback
+- [x] Test narrated mode with default timing
+- [x] Test with custom demo timing
+- [x] Test with per-slide overrides
+- [x] Test with per-segment overrides
+- [x] Verify no regression in audio playback
 
 **Verification**:
-- [ ] Narrated mode works correctly
-- [ ] Timing resolves correctly at all levels
-- [ ] No audio playback issues
-- [ ] Manual+Audio mode still works
+- [x] Narrated mode works correctly
+- [x] Timing resolves correctly at all levels
+- [x] No audio playback issues
+- [x] Manual+Audio mode still works
 
 ---
 
@@ -373,16 +377,16 @@ Track overall completion:
 
 | Phase | Estimated | Actual | Status |
 |-------|-----------|--------|--------|
-| Phase 1: Infrastructure | 2-3h | - | ⏳ Not Started |
-| Phase 2: Calculator | 2-3h | - | ⏳ Not Started |
-| Phase 3: Interfaces | 1h | - | ⏳ Not Started |
-| Phase 4: Duration Script | 2-3h | - | ⏳ Not Started |
-| Phase 5: NarratedController | 1-2h | - | ⏳ Not Started |
+| Phase 1: Infrastructure | 2-3h | - | ✅ Complete |
+| Phase 2: Calculator | 2-3h | - | ✅ Complete |
+| Phase 3: Interfaces | 1h | - | ✅ Complete |
+| Phase 4: Duration Script | 2-3h | 2h | ✅ Complete |
+| Phase 5: NarratedController | 1-2h | 1h | ✅ Complete |
 | Phase 6: Meeting Highlights | 1h | - | ⏳ Not Started |
 | Phase 7: WelcomeScreen | 3-4h | - | ⏳ Not Started |
 | Phase 8: Testing | 2-3h | - | ⏳ Not Started |
 | Phase 9: Documentation | 2-3h | Done | ✅ Complete |
-| **Total** | **15-24h** | - | **5% Complete** |
+| **Total** | **15-24h** | **~9h** | **~60% Complete** |
 
 ---
 
@@ -390,9 +394,40 @@ Track overall completion:
 
 Track implementation notes, blockers, and decisions here:
 
-### [Date] - Note Title
-- Description of issue or decision
-- Resolution or action taken
+### 2025-10-21 - Phase 5 Complete: NarratedController Updated
+- Successfully integrated timing system into NarratedController
+- Replaced all 3 hardcoded delays with `resolveTimingConfig()` calls:
+  - Between segments: 500ms → `timing.betweenSegments`
+  - Between slides: 1000ms → `timing.betweenSlides`
+  - After final slide: 2000ms → `timing.afterFinalSlide`
+- Added `demoTiming` prop to NarratedController interface
+- Updated DemoPlayer to pass `demoConfig.timing` to NarratedController
+- Timing resolution respects hierarchy: Demo → Slide → Segment
+- All three playback modes supported:
+  - Narrated mode: Uses timing system for all delays
+  - Manual+Audio mode: Uses timing system for auto-advance
+  - Manual mode: No timing delays (unaffected)
+- TypeScript compiles without errors
+- No breaking changes to existing functionality
+- Audio synchronization maintained
+
+### 2025-10-21 - Phase 4 Complete: Calculate Duration Script Updated
+- Successfully integrated timing calculator into calculate-durations script
+- Script now uses `calculatePresentationDuration()` for comprehensive duration reports
+- Added `--verbose` flag to show per-slide breakdown in console
+- Report structure includes:
+  - `audioOnlyDuration`: Total audio time
+  - `segmentDelays`: Between-segment delays (500ms default)
+  - `slideDelays`: Between-slide delays (1000ms default)
+  - `finalDelay`: After final slide (2000ms default)
+  - `totalDuration`: Complete presentation runtime
+  - `slideBreakdowns`: Per-slide and per-segment details
+- Meeting Highlights demo results:
+  - Audio Only: 4:07 (247.1s)
+  - Total Duration: 4:39 (279.6s)
+  - Delays: 16.5s (segments) + 14.0s (slides) + 2.0s (final) = 32.5s total
+- TypeScript compiles without errors
+- All tests passed successfully
 
 ---
 

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react'; // File header normalized to prevent stray prefix (fixes 'stimport' TS error)
+import { motion, AnimatePresence } from 'framer-motion';
 import { DemoRegistry } from '../demos/DemoRegistry';
 import type { DemoMetadata } from '../demos/types';
 
@@ -10,12 +10,33 @@ interface WelcomeScreenProps {
 export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) => {
   const [demos, setDemos] = useState<DemoMetadata[]>([]);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [showBreakdown, setShowBreakdown] = useState<string | null>(null);
+  
+  // Close on ESC
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        setShowBreakdown(null);
+      }
+    }
+    if (showBreakdown) {
+      window.addEventListener('keydown', onKey);
+    }
+    return () => window.removeEventListener('keydown', onKey);
+  }, [showBreakdown]);
 
   useEffect(() => {
     // Load all demo metadata
     const allDemos = DemoRegistry.getAllMetadata();
     setDemos(allDemos);
   }, []);
+
+  // Helper function to format duration
+  const formatDuration = (seconds: number): string => {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
 
   if (demos.length === 0) {
     return (
@@ -79,7 +100,10 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
         maxWidth: 1200,
         margin: '0 auto'
       }}>
-        {demos.map((demo, index) => (
+        {demos.map((demo, index) => {
+          const slideBreakdown = demo.durationInfo?.slideBreakdown;
+          
+          return (
           <motion.div
             key={demo.id}
             initial={{ opacity: 0, y: 20 }}
@@ -135,18 +159,69 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
                 </p>
               )}
 
-              {/* Duration */}
-              {demo.duration && demo.duration > 0 && (
+              {/* Enhanced Duration Display (simplified total + right-aligned details link) */}
+              {demo.durationInfo && demo.durationInfo.audioOnly > 0 && (
                 <div style={{
-                  fontSize: 13,
-                  color: '#94a3b8',
-                  marginTop: '0.75rem',
+                  marginTop: '1rem',
+                  padding: '0.85rem 1rem',
+                  background: 'rgba(0, 183, 195, 0.05)',
+                  borderRadius: 8,
+                  border: '1px solid rgba(0, 183, 195, 0.2)',
                   display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem'
+                  alignItems: 'center'
                 }}>
-                  <span>🕒</span>
-                  <span>~{Math.floor(demo.duration / 60)}:{String(Math.floor(demo.duration % 60)).padStart(2, '0')} (audio only)</span>
+                  <span style={{
+                    fontSize: 14,
+                    color: '#14b8a6',
+                    fontWeight: 600,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    flexGrow: 1,
+                    minWidth: 0
+                  }}>
+                    <span>🕒</span>
+                    <span style={{
+                      color: '#f1f5f9',
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis'
+                    }}>
+                      {formatDuration(demo.durationInfo.total)} total
+                    </span>
+                  </span>
+                  {slideBreakdown && slideBreakdown.length > 0 && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowBreakdown(demo.id);
+                      }}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        color: '#94a3b8',
+                        fontSize: 11,
+                        fontWeight: 500,
+                        cursor: 'pointer',
+                        padding: '0.3rem 0.55rem',
+                        borderRadius: 4,
+                        textDecoration: 'underline',
+                        textUnderlineOffset: '2px',
+                        marginLeft: 'auto'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.color = '#f1f5f9';
+                        e.currentTarget.style.background = 'rgba(0,183,195,0.08)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color = '#94a3b8';
+                        e.currentTarget.style.background = 'transparent';
+                      }}
+                      aria-label={`View timing details for ${demo.title}`}
+                    >
+                      Details
+                    </button>
+                  )}
                 </div>
               )}
 
@@ -195,8 +270,244 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
               </div>
             </div>
           </motion.div>
-        ))}
+        );
+        })}
       </div>
+
+      {/* Duration Breakdown Modal */}
+      <AnimatePresence>
+        {showBreakdown && (() => {
+          const demo = demos.find(d => d.id === showBreakdown);
+          const slideBreakdown = demo?.durationInfo?.slideBreakdown;
+          if (!demo || !slideBreakdown) return null;
+          return (
+            <motion.div
+              key="backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              style={{
+                position: 'fixed',
+                inset: 0,
+                background: 'rgba(0,0,0,0.55)',
+                backdropFilter: 'blur(4px)',
+                zIndex: 1000,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '2rem'
+              }}
+              onClick={() => setShowBreakdown(null)}
+              aria-modal="true"
+              role="dialog"
+              aria-label={`${demo.title} timing details`}
+            >
+              <motion.div
+                key="modal"
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 10 }}
+                transition={{ duration: 0.2 }}
+                style={{
+                  width: '100%',
+                  maxWidth: 600,
+                  maxHeight: '80vh',
+                  background: 'linear-gradient(165deg, #0f172a 0%, #1e293b 100%)',
+                  border: '1px solid rgba(148,163,184,0.25)',
+                  borderRadius: 16,
+                  boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  overflow: 'hidden',
+                  position: 'relative'
+                }}
+                onClick={e => e.stopPropagation()}
+              >
+                {/* Header */}
+                <div style={{
+                  padding: '1rem 1.25rem',
+                  borderBottom: '1px solid rgba(148,163,184,0.15)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '1rem'
+                }}>
+                  <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <span style={{
+                      fontSize: 16,
+                      fontWeight: 600,
+                      color: '#f1f5f9'
+                    }}>
+                      {demo.title} – Timing Breakdown
+                    </span>
+                    <span style={{
+                      fontSize: 12,
+                      color: '#94a3b8',
+                      marginTop: 2
+                    }}>
+                      {slideBreakdown.length} slides • {slideBreakdown.reduce((s, sl) => s + sl.segments.length, 0)} segments • Total {formatDuration(demo.durationInfo!.total)}
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => setShowBreakdown(null)}
+                    aria-label="Close timing breakdown"
+                    style={{
+                      background: 'transparent',
+                      border: '1px solid rgba(148,163,184,0.3)',
+                      color: '#94a3b8',
+                      width: 34,
+                      height: 34,
+                      borderRadius: 8,
+                      cursor: 'pointer',
+                      fontSize: 18,
+                      fontWeight: 600,
+                      lineHeight: 1,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      transition: 'all 0.2s ease'
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.background = 'rgba(148,163,184,0.15)')}
+                    onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                  >
+                    ×
+                  </button>
+                </div>
+
+                {/* Body */}
+                <div style={{
+                  padding: '1rem 1.25rem 1.5rem',
+                  overflowY: 'auto'
+                }}>
+                  {slideBreakdown.map((slide, idx) => (
+                    <div
+                      key={`modal-ch${slide.chapterIndex}-s${slide.slideIndex}`}
+                      style={{
+                        marginBottom: idx < slideBreakdown.length - 1 ? '1rem' : 0,
+                        padding: '0.75rem 0.85rem',
+                        background: 'rgba(15,23,42,0.55)',
+                        borderRadius: 10,
+                        border: '1px solid rgba(148,163,184,0.15)'
+                      }}
+                    >
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        gap: '0.75rem',
+                        marginBottom: '0.5rem'
+                      }}>
+                        <span style={{
+                          fontSize: 13,
+                          fontWeight: 600,
+                          color: '#f1f5f9',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap'
+                        }}>
+                          Ch{slide.chapterIndex}:S{slide.slideIndex} – {slide.slideTitle}
+                        </span>
+                        <span style={{
+                          fontSize: 12,
+                          color: '#14b8a6',
+                          fontWeight: 600
+                        }}>
+                          {formatDuration(slide.totalDuration)}
+                        </span>
+                      </div>
+                      <div style={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        gap: '0.75rem',
+                        fontSize: 11,
+                        color: '#94a3b8',
+                        marginBottom: slide.segments.length > 1 ? '0.5rem' : 0
+                      }}>
+                        <span>🎵 {formatDuration(slide.audioDuration)} audio</span>
+                        <span>⏱️ {formatDuration(slide.delaysDuration)} delays</span>
+                        <span style={{ color: '#64748b' }}>
+                          {slide.segments.length} segment{slide.segments.length !== 1 ? 's' : ''}
+                        </span>
+                      </div>
+                      {slide.segments.length > 1 && (
+                        <div style={{
+                          paddingTop: '0.4rem',
+                          borderTop: '1px solid rgba(148,163,184,0.12)'
+                        }}>
+                          <div style={{
+                            fontSize: 10,
+                            color: '#64748b',
+                            letterSpacing: '0.5px',
+                            textTransform: 'uppercase',
+                            marginBottom: '0.25rem'
+                          }}>
+                            Segments
+                          </div>
+                          {slide.segments.map((segment, sIdx) => (
+                            <div
+                              key={`mseg-${slide.slideIndex}-${segment.segmentIndex}`}
+                              style={{
+                                fontSize: 10,
+                                color: '#94a3b8',
+                                display: 'grid',
+                                gridTemplateColumns: '2rem 1fr auto auto',
+                                gap: '0.5rem',
+                                padding: '0.25rem 0',
+                                alignItems: 'center',
+                                borderBottom: sIdx < slide.segments.length - 1
+                                  ? '1px solid rgba(148,163,184,0.07)'
+                                  : 'none'
+                              }}
+                            >
+                              <span style={{ color: '#64748b' }}>{segment.segmentIndex + 1}.</span>
+                              <span style={{
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap'
+                              }}>
+                                Segment {segment.segmentIndex + 1}
+                              </span>
+                              <span style={{ color: '#f1f5f9' }}>
+                                {formatDuration(segment.audioDuration)}
+                              </span>
+                              <span style={{ color: '#64748b', fontSize: 9 }}>
+                                +{segment.delayAfter.toFixed(1)}s
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+
+                  {/* Summary Footer */}
+                  <div style={{
+                    marginTop: '1.25rem',
+                    paddingTop: '1rem',
+                    borderTop: '1px solid rgba(148,163,184,0.2)',
+                    fontSize: 11,
+                    color: '#94a3b8',
+                    display: 'grid',
+                    gridTemplateColumns: 'auto 1fr',
+                    gap: '0.3rem 0.85rem'
+                  }}>
+                    <span>Total Slides:</span>
+                    <span style={{ color: '#f1f5f9' }}>{slideBreakdown.length}</span>
+                    <span>Total Segments:</span>
+                    <span style={{ color: '#f1f5f9' }}>
+                      {slideBreakdown.reduce((sum, s) => sum + s.segments.length, 0)}
+                    </span>
+                    <span>Avg per Slide:</span>
+                    <span style={{ color: '#f1f5f9' }}>
+                      {formatDuration(Math.round(demo.durationInfo!.total / slideBreakdown.length))}
+                    </span>
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
+          );
+        })()}
+      </AnimatePresence>
 
       {/* Footer */}
       <motion.div

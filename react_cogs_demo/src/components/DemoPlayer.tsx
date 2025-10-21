@@ -223,6 +223,7 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack }) => {
         {/* Narrated Controller */}
         <NarratedController
           demoMetadata={demoConfig.metadata}
+          demoTiming={demoConfig.timing}
           slides={loadedSlides}
           onSlideChange={handleSlideChange}
           onPlaybackStart={handlePlaybackStart}

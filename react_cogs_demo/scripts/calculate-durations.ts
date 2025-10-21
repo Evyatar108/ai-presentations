@@ -3,31 +3,51 @@ import * as path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { getAudioDurationInSeconds } from 'get-audio-duration';
-import { SlideComponentWithMetadata } from '../src/slides/SlideMetadata';
+import { SlideComponentWithMetadata, SlideMetadata } from '../src/slides/SlideMetadata';
+import { calculatePresentationDuration, PresentationDurationReport } from '../src/demos/timing/calculator';
+import { TimingConfig } from '../src/demos/timing/types';
+import { DemoConfig } from '../src/demos/types';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+/**
+ * Enhanced duration report that includes timing breakdown.
+ */
 interface DurationReport {
-  [demoId: string]: {
-    totalDuration: number;
-    slides: SlideReport[];
+  [demoId: string]: EnhancedDemoReport;
+}
+
+/**
+ * Complete duration information for a single demo.
+ */
+interface EnhancedDemoReport {
+  /** Demo identifier */
+  demoId: string;
+  
+  /** Audio-only duration in seconds (sum of all audio files) */
+  audioOnlyDuration: number;
+  
+  /** Total segment delays in seconds (between segments within slides) */
+  segmentDelays: number;
+  
+  /** Total slide delays in seconds (between slides) */
+  slideDelays: number;
+  
+  /** Final delay in seconds (after last slide) */
+  finalDelay: number;
+  
+  /** Total presentation duration in seconds (audio + all delays) */
+  totalDuration: number;
+  
+  /** Detailed per-slide breakdowns from timing calculator */
+  slideBreakdowns: PresentationDurationReport['slideBreakdowns'];
+  
+  /** Formatted duration strings for display */
+  formattedDurations: {
+    audioOnly: string;
+    total: string;
   };
-}
-
-interface SlideReport {
-  chapter: number;
-  slide: number;
-  title: string;
-  duration: number;
-  segments: SegmentReport[];
-}
-
-interface SegmentReport {
-  id: string;
-  filepath: string;
-  duration: number;
-  narrationText?: string;
 }
 
 // Get all demo IDs by scanning the demos directory
@@ -45,20 +65,80 @@ async function getAllDemoIds(): Promise<string[]> {
     });
 }
 
-// Load slides for a specific demo
-async function loadDemoSlides(demoId: string): Promise<SlideComponentWithMetadata[]> {
+/**
+ * Load demo configuration including timing settings.
+ */
+async function loadDemoConfig(demoId: string): Promise<{ config: DemoConfig | null, slides: SlideComponentWithMetadata[] }> {
   try {
-    const slidesRegistryPath = `../src/demos/${demoId}/slides/SlidesRegistry.js`;
-    const module = await import(slidesRegistryPath);
-    return module.allSlides || [];
+    // Load demo config (includes timing configuration)
+    const configPath = `../src/demos/${demoId}/index.js`;
+    const configModule = await import(configPath);
+    const config: DemoConfig = configModule.default || configModule.demoConfig;
+    
+    // Load slides through the config's getSlides method
+    const slides = await config.getSlides();
+    
+    return { config, slides };
   } catch (error: any) {
-    console.warn(`⚠️  Could not load slides for demo '${demoId}': ${error.message}`);
-    return [];
+    console.warn(`⚠️  Could not load config for demo '${demoId}': ${error.message}`);
+    
+    // Fallback: try to load slides directly
+    try {
+      const slidesRegistryPath = `../src/demos/${demoId}/slides/SlidesRegistry.js`;
+      const module = await import(slidesRegistryPath);
+      return { config: null, slides: module.allSlides || [] };
+    } catch (fallbackError: any) {
+      console.warn(`⚠️  Could not load slides for demo '${demoId}': ${fallbackError.message}`);
+      return { config: null, slides: [] };
+    }
   }
 }
 
+/**
+ * Populate audio durations in slide metadata from actual audio files.
+ * This updates the slide metadata with actual file durations.
+ */
+async function populateAudioDurations(
+  slides: SlideComponentWithMetadata[],
+  demoId: string,
+  audioDir: string
+): Promise<void> {
+  const demoAudioDir = path.join(audioDir, demoId);
+  
+  for (const slide of slides) {
+    const { chapter, slide: slideNum, audioSegments } = slide.metadata;
+    
+    if (!audioSegments || audioSegments.length === 0) continue;
+    
+    for (let i = 0; i < audioSegments.length; i++) {
+      const segment = audioSegments[i];
+      
+      // Construct expected filepath
+      const filename = `s${slideNum}_segment_${String(i + 1).padStart(2, '0')}_${segment.id}.wav`;
+      const filepath = path.join(demoAudioDir, `c${chapter}`, filename);
+      
+      if (fs.existsSync(filepath)) {
+        try {
+          const duration = await getAudioDurationInSeconds(filepath);
+          // Update the segment's duration in place
+          segment.duration = duration;
+        } catch (error: any) {
+          console.warn(`  ⚠️  Could not read duration for ${filename}: ${error.message}`);
+          segment.duration = 0;
+        }
+      } else {
+        // File doesn't exist - set duration to 0
+        segment.duration = 0;
+      }
+    }
+  }
+}
+
+/**
+ * Calculate comprehensive durations including timing delays for all demos.
+ */
 async function calculateDurations(audioDir: string, demoFilter?: string): Promise<DurationReport> {
-  console.log('⏱️  Calculating audio durations (Multi-Demo)...\n');
+  console.log('⏱️  Calculating presentation durations with timing delays...\n');
   
   const report: DurationReport = {};
   
@@ -82,104 +162,83 @@ async function calculateDurations(audioDir: string, demoFilter?: string): Promis
   
   // Process each demo
   for (const demoId of demosToProcess) {
-    console.log('\n' + '═'.repeat(70));
-    console.log(`📁 Demo: ${demoId}`);
     console.log('═'.repeat(70));
+    console.log(`📁 Calculating durations for: ${demoId}`);
+    console.log('═'.repeat(70) + '\n');
     
-    const allSlides = await loadDemoSlides(demoId);
+    // Load demo config and slides
+    const { config, slides } = await loadDemoConfig(demoId);
     
-    if (allSlides.length === 0) {
+    if (slides.length === 0) {
       console.log(`⚠️  No slides found for demo '${demoId}', skipping...\n`);
       continue;
     }
     
-    const demoAudioDir = path.join(audioDir, demoId);
+    // Populate audio durations from actual files
+    console.log('📂 Loading audio file durations...');
+    await populateAudioDurations(slides, demoId, audioDir);
     
-    report[demoId] = {
-      totalDuration: 0,
-      slides: []
+    // Extract slide metadata for calculator
+    const slideMetadata: SlideMetadata[] = slides.map(s => s.metadata);
+    
+    // Get demo timing config (if available)
+    const demoTiming: TimingConfig | undefined = config?.timing;
+    
+    // Calculate comprehensive duration using timing calculator
+    const durationReport = calculatePresentationDuration(slideMetadata, demoTiming);
+    
+    // Create enhanced report
+    const enhancedReport: EnhancedDemoReport = {
+      demoId,
+      audioOnlyDuration: durationReport.audioOnlyDuration,
+      segmentDelays: durationReport.segmentDelaysDuration,
+      slideDelays: durationReport.slideDelaysDuration,
+      finalDelay: durationReport.finalDelayDuration,
+      totalDuration: durationReport.totalDuration,
+      slideBreakdowns: durationReport.slideBreakdowns,
+      formattedDurations: {
+        audioOnly: formatTime(durationReport.audioOnlyDuration),
+        total: formatTime(durationReport.totalDuration)
+      }
     };
     
-    // Process each slide
-    for (const slide of allSlides) {
-      const { chapter, slide: slideNum, title, audioSegments } = slide.metadata;
-      
-      if (!audioSegments || audioSegments.length === 0) continue;
-      
-      console.log(`\n📄 Chapter ${chapter}, Slide ${slideNum}: ${title}`);
-      
-      const slideReport: SlideReport = {
-        chapter,
-        slide: slideNum,
-        title,
-        duration: 0,
-        segments: []
-      };
-      
-      // Calculate duration for each segment
-      for (let i = 0; i < audioSegments.length; i++) {
-        const segment = audioSegments[i];
-        
-        // Construct expected filepath
-        const filename = `s${slideNum}_segment_${String(i + 1).padStart(2, '0')}_${segment.id}.wav`;
-        const filepath = path.join(demoAudioDir, `c${chapter}`, filename);
-        
-        if (!fs.existsSync(filepath)) {
-          console.log(`  ⚠️  Segment ${i + 1} (${segment.id}): File not found`);
-          continue;
-        }
-        
-        try {
-          const duration = await getAudioDurationInSeconds(filepath);
-          
-          slideReport.segments.push({
-            id: segment.id,
-            filepath: filename,
-            duration,
-            narrationText: segment.narrationText
-          });
-          
-          slideReport.duration += duration;
-          
-          console.log(`  ✅ Segment ${i + 1} (${segment.id}): ${duration.toFixed(2)}s`);
-          
-        } catch (error: any) {
-          console.error(`  ❌ Error reading ${filename}:`, error.message);
-        }
-      }
-      
-      console.log(`  📊 Slide total: ${slideReport.duration.toFixed(2)}s (${formatTime(slideReport.duration)})`);
-      
-      report[demoId].slides.push(slideReport);
-      report[demoId].totalDuration += slideReport.duration;
-    }
+    report[demoId] = enhancedReport;
     
-    // Demo summary
-    console.log('\n' + '-'.repeat(60));
-    console.log(`📊 Demo '${demoId}' Summary`);
-    console.log('-'.repeat(60));
-    console.log(`Total slides: ${report[demoId].slides.length}`);
-    console.log(`Total duration: ${report[demoId].totalDuration.toFixed(2)}s (${formatTime(report[demoId].totalDuration)})`);
-    if (report[demoId].slides.length > 0) {
-      console.log(`Average slide: ${(report[demoId].totalDuration / report[demoId].slides.length).toFixed(2)}s`);
-    }
-    console.log('-'.repeat(60));
+    // Print summary
+    console.log('\n' + '-'.repeat(70));
+    console.log('📊 Duration Summary');
+    console.log('-'.repeat(70));
+    console.log(`Audio Only:      ${enhancedReport.formattedDurations.audioOnly} (${enhancedReport.audioOnlyDuration.toFixed(1)}s)`);
+    console.log(`Total Duration:  ${enhancedReport.formattedDurations.total} (${enhancedReport.totalDuration.toFixed(1)}s)`);
+    console.log(`\nDelay Breakdown:`);
+    console.log(`  Segment delays: ${enhancedReport.segmentDelays.toFixed(1)}s`);
+    console.log(`  Slide delays:   ${enhancedReport.slideDelays.toFixed(1)}s`);
+    console.log(`  Final delay:    ${enhancedReport.finalDelay.toFixed(1)}s`);
+    console.log(`  Total delays:   ${(enhancedReport.segmentDelays + enhancedReport.slideDelays + enhancedReport.finalDelay).toFixed(1)}s`);
+    console.log('-'.repeat(70) + '\n');
   }
   
   return report;
 }
 
+/**
+ * Format seconds as MM:SS string.
+ */
 function formatTime(seconds: number): string {
   const mins = Math.floor(seconds / 60);
   const secs = Math.floor(seconds % 60);
   return `${mins}:${String(secs).padStart(2, '0')}`;
 }
 
-function printReport(report: DurationReport) {
-  console.log('\n' + '═'.repeat(80));
+/**
+ * Print comprehensive duration report with timing breakdown.
+ */
+function printReport(report: DurationReport, verbose: boolean = false) {
+  console.log('═'.repeat(80));
   console.log('📊 MULTI-DEMO DURATION REPORT');
   console.log('═'.repeat(80));
   
+  let grandTotalAudio = 0;
   let grandTotalDuration = 0;
   let grandTotalSlides = 0;
   
@@ -189,60 +248,75 @@ function printReport(report: DurationReport) {
     console.log(`📁 Demo: ${demoId}`);
     console.log('─'.repeat(80));
     
-    if (demoReport.slides.length === 0) {
+    if (demoReport.slideBreakdowns.length === 0) {
       console.log('  No slides processed');
       continue;
     }
     
-    // Slide-by-slide breakdown
-    for (const slide of demoReport.slides) {
-      console.log(`\nChapter ${slide.chapter}, Slide ${slide.slide}: ${slide.title}`);
-      console.log(`  Duration: ${slide.duration.toFixed(2)}s (${formatTime(slide.duration)})`);
-      console.log(`  Segments: ${slide.segments.length}`);
-      
-      for (const segment of slide.segments) {
-        console.log(`    - ${segment.id}: ${segment.duration.toFixed(2)}s`);
+    // Duration summary
+    console.log(`\nAudio Only:      ${demoReport.formattedDurations.audioOnly} (${demoReport.audioOnlyDuration.toFixed(1)}s)`);
+    console.log(`Total Duration:  ${demoReport.formattedDurations.total} (${demoReport.totalDuration.toFixed(1)}s)`);
+    console.log(`\nDelay Breakdown:`);
+    console.log(`  Segment delays: ${demoReport.segmentDelays.toFixed(1)}s`);
+    console.log(`  Slide delays:   ${demoReport.slideDelays.toFixed(1)}s`);
+    console.log(`  Final delay:    ${demoReport.finalDelay.toFixed(1)}s`);
+    
+    // Verbose mode: show per-slide breakdown
+    if (verbose) {
+      console.log(`\nPer-Slide Breakdown:`);
+      for (const slide of demoReport.slideBreakdowns) {
+        console.log(`\n  Ch${slide.chapterIndex}:S${slide.slideIndex} - ${slide.slideTitle}`);
+        console.log(`    Audio: ${slide.audioDuration.toFixed(1)}s | Delays: ${slide.delaysDuration.toFixed(1)}s | Total: ${slide.totalDuration.toFixed(1)}s`);
+        console.log(`    Segments: ${slide.segments.length}`);
       }
     }
     
-    console.log(`\n  Total: ${demoReport.totalDuration.toFixed(2)}s (${formatTime(demoReport.totalDuration)})`);
-    console.log(`  Slides: ${demoReport.slides.length}`);
-    console.log(`  Average: ${(demoReport.totalDuration / demoReport.slides.length).toFixed(2)}s`);
+    console.log(`\nSlides: ${demoReport.slideBreakdowns.length}`);
+    console.log(`Average per Slide: ${(demoReport.totalDuration / demoReport.slideBreakdowns.length).toFixed(1)}s`);
     
+    grandTotalAudio += demoReport.audioOnlyDuration;
     grandTotalDuration += demoReport.totalDuration;
-    grandTotalSlides += demoReport.slides.length;
+    grandTotalSlides += demoReport.slideBreakdowns.length;
   }
   
-  // Grand summary
+  // Grand summary (only if multiple demos)
   if (Object.keys(report).length > 1) {
     console.log('\n' + '═'.repeat(80));
     console.log('📊 GRAND TOTALS (All Demos)');
     console.log('═'.repeat(80));
-    console.log(`Total Demos: ${Object.keys(report).length}`);
-    console.log(`Total Duration: ${grandTotalDuration.toFixed(2)}s (${formatTime(grandTotalDuration)})`);
-    console.log(`Total Slides: ${grandTotalSlides}`);
+    console.log(`Demos:          ${Object.keys(report).length}`);
+    console.log(`Audio Only:     ${formatTime(grandTotalAudio)} (${grandTotalAudio.toFixed(1)}s)`);
+    console.log(`Total Duration: ${formatTime(grandTotalDuration)} (${grandTotalDuration.toFixed(1)}s)`);
+    console.log(`Total Slides:   ${grandTotalSlides}`);
     if (grandTotalSlides > 0) {
-      console.log(`Average per Slide: ${(grandTotalDuration / grandTotalSlides).toFixed(2)}s`);
+      console.log(`Avg per Slide:  ${(grandTotalDuration / grandTotalSlides).toFixed(1)}s`);
     }
   }
   
   console.log('═'.repeat(80) + '\n');
 }
 
+/**
+ * Save comprehensive duration report to JSON file.
+ */
 async function saveReportJSON(report: DurationReport, outputPath: string, demoFilter?: string) {
-  const filename = demoFilter 
+  const filename = demoFilter
     ? `duration-report-${demoFilter}.json`
     : 'duration-report.json';
   const fullPath = path.join(path.dirname(outputPath), filename);
   
+  // Pretty-print JSON for readability
   fs.writeFileSync(fullPath, JSON.stringify(report, null, 2));
-  console.log(`💾 Report saved to: ${fullPath}\n`);
+  console.log(`💾 Duration report saved: ${filename}\n`);
 }
 
 // Parse CLI arguments
-function parseCLIArgs(): { demoFilter?: string } {
+/**
+ * Parse CLI arguments.
+ */
+function parseCLIArgs(): { demoFilter?: string; verbose?: boolean } {
   const args = process.argv.slice(2);
-  const result: { demoFilter?: string } = {};
+  const result: { demoFilter?: string; verbose?: boolean } = {};
   
   // Check for --demo parameter
   const demoIndex = args.indexOf('--demo');
@@ -250,9 +324,11 @@ function parseCLIArgs(): { demoFilter?: string } {
     result.demoFilter = args[demoIndex + 1];
   }
   
+  // Check for --verbose parameter
+  result.verbose = args.includes('--verbose') || args.includes('-v');
+  
   return result;
 }
-
 // CLI execution
 const cliArgs = parseCLIArgs();
 const audioDir = path.join(__dirname, '../public/audio');
@@ -260,7 +336,7 @@ const reportPath = path.join(__dirname, '../duration-report.json');
 
 calculateDurations(audioDir, cliArgs.demoFilter)
   .then(report => {
-    printReport(report);
+    printReport(report, cliArgs.verbose);
     return saveReportJSON(report, reportPath, cliArgs.demoFilter);
   })
   .catch(console.error);
