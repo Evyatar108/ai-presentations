@@ -16,12 +16,12 @@ Visit `http://localhost:5173` to see the demo selection screen.
 
 ## Documentation
 
-- **[Architecture Guide](docs/ARCHITECTURE.md)** - Multi-demo system architecture and design
-- **[Adding Demos](docs/ADDING_DEMOS.md)** - Step-by-step guide to create new demos
-- **[TTS Guide](docs/TTS_GUIDE.md)** - Text-to-speech audio generation workflow
-- **[Component Reference](docs/COMPONENTS.md)** - Core components and utilities
-- **[Troubleshooting](docs/TROUBLESHOOTING.md)** - Common issues and solutions
-- **[Meeting Highlights Demo](docs/MEETING_HIGHLIGHTS_DEMO.md)** - Detailed information about the Meeting Highlights presentation
+- **[Architecture Guide](../docs/ARCHITECTURE.md)** - Multi-demo system architecture and design
+- **[Adding Demos](../docs/ADDING_DEMOS.md)** - Step-by-step guide to create new demos
+- **[TTS Guide](../docs/TTS_GUIDE.md)** - Text-to-speech audio generation workflow
+- **[Component Reference](../docs/COMPONENTS.md)** - Core components and utilities
+- **[Troubleshooting](../docs/TROUBLESHOOTING.md)** - Common issues and solutions
+- **[Meeting Highlights Demo](../docs/demos/highlights/MEETING_HIGHLIGHTS_DEMO.md)** - Detailed information about the Meeting Highlights presentation
 
 ## Project Structure
 

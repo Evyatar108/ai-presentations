@@ -12,6 +12,8 @@ The Meeting Highlights demo is a comprehensive presentation about the Meeting Hi
 
 ### Chapter Breakdown
 
+### Chapter Breakdown
+
 #### Chapter 0: Introduction (1 slide)
 - **Ch0_S1_Intro** - Opening title slide
 
@@ -58,7 +60,93 @@ The Meeting Highlights demo is a comprehensive presentation about the Meeting Hi
   - Feedback email (meetinghlfeedback@microsoft.com)
   - CTA: "Try Meeting Highlights - Available now in BizChat & SharePoint"
 
-## Key Metrics
+## Slide Visual Reference
+
+This section provides detailed visual descriptions of key slides, including animations, color schemes, and layout patterns.
+
+### Chapter 5: COGS Challenge
+
+#### Ch5_S1_ChallengeFraming
+**Visual Design**:
+- Three metric tiles showing initial state (4 LLM Calls, ~600 GPUs, High Input Tokens)
+- Downward arrow animation
+- Target tile with unified prompt metrics (1 Call, ~200 GPUs, Fewer Tokens)
+- Gradient glow effect on target tile
+
+**Animation Flow**: Staggered tile appearance → arrow wipe → target zoom with glow
+
+### Chapter 6: Optimization Solution
+
+#### Ch6_S1_UnifiedConvergence
+**Visual Design**:
+- Central glowing circular node labeled "Unified Prompt"
+- Pulsing glow effect
+- Converging energy lines radiating from center (4 angles)
+- Large "4 → 1 Call" text with strikethrough on "4"
+- Success rate metric tile (92% → 99%)
+
+**Animation Flow**: Central node zoom + pulse → converging lines animation → metrics fade in
+
+#### Ch6_S4_TokenOptimization
+**Visual Design**:
+- Three metric comparison tiles:
+  - Abstractive Input: Verbose JSON → Compact Schema
+  - Extractive Input: Candidate Range Combinations → Direct Selection (emphasized)
+  - Total Tokens: Higher → Lower
+
+**Animation Flow**: Tiles fade in with explanatory text
+
+### Chapter 7: Business Impact
+
+#### Ch7_S2_GPUReduction
+**Visual Design**:
+- Before: 3 server rack silhouettes
+- Transition arrow
+- After: 1 highlighted rack with checkmark badge
+- "~600 → ~200 GPUs" metric
+- "67% capacity reduction" subtitle
+
+**Animation Flow**: Racks fade individually → arrow appears → final rack zooms with checkmark
+
+#### Ch7_S4_QualityComparison
+**Visual Design**:
+- Side-by-side comparison panels
+- V1 vs V2 quality metrics
+- Preference indicators
+- Improvement highlights (cohesion, reduced redundancy, clearer narrative)
+
+**Animation Flow**: Panels appear → comparison metrics animate → preference badge highlights V2
+
+#### Ch7_S5_PathToGA
+**Visual Design**:
+- Horizontal roadmap with two milestones
+- "Private Preview" tile (gradient, labeled "Enabled by COGS reduction")
+- Forward arrow
+- "General Availability" tile (green gradient, labeled "Within capacity limits")
+- Checkmark badge on GA tile
+
+**Animation Flow**: Private Preview appears → arrow extends → GA appears → checkmark pops
+
+## Design System
+
+### Color Palette
+- **Primary**: Microsoft Azure Blue (#0078D4)
+- **Accent**: Teal (#00B7C3)
+- **Dark Background**: Navy (#0f172a, #1e293b)
+- **Success**: Green (#10b981)
+- **Neutral**: Grays (#334155, #475569, #94a3b8)
+
+### Animation Principles
+- **Reduced Motion Support**: All animations gracefully degrade when user prefers reduced motion
+- **Timing**: Most animations 0.3-0.8s duration with easing
+- **Stagger**: Sequential elements use 0.1-0.15s delays
+- **Emphasis**: Glow effects for key metrics and optimized elements
+
+### Typography
+- **Font**: Inter, system-ui, sans-serif
+- **Title Sizes**: 24-48px bold
+- **Body Text**: 14-18px regular
+- **Metrics**: 36-48px bold for impact numbers
 
 ### Product Metrics
 - **80%** of users rate Meeting Highlights as extremely/very useful
@@ -125,6 +213,19 @@ Located in `public/audio/meeting-highlights/c{0-9}/`:
 
 ## Notable Implementation Details
 
+### Technical Stack
+All slides are implemented using:
+- **React** + **TypeScript** for type safety
+- **Framer Motion** for animations
+- **Accessibility features**: reduced motion support, semantic HTML
+- **Responsive design**: flexbox layouts that adapt to viewport
+
+### File Structure
+Slides are organized in chapter-based files:
+- Located in [`src/demos/meeting-highlights/slides/chapters/`](../src/demos/meeting-highlights/slides/chapters/)
+- Registered in [`SlidesRegistry.ts`](../src/demos/meeting-highlights/slides/SlidesRegistry.ts)
+- Each slide has metadata including chapter, slide number, title, and audio paths
+
 ### Multi-Segment Slide (Chapter 2)
 The team collaboration slide uses 9 segments for progressive reveal:
 - Each segment highlights a different team
@@ -134,7 +235,7 @@ The team collaboration slide uses 9 segments for progressive reveal:
 - Most complex slide in the presentation
 
 ### Video Integration
-Both BizChat and SharePoint demos use VideoPlayer component:
+Both BizChat and SharePoint demos use [`VideoPlayer`](../src/components/VideoPlayer.tsx) component:
 - Freeze-on-end playback (pauses on last frame)
 - Synchronized with slide segments
 - Responsive sizing
@@ -167,11 +268,11 @@ All slides carefully synchronized with TTS audio:
 
 ## Related Documentation
 
-- **Product Overview**: `highlights_demo/context/what is meeting highlights.md`
-- **Team Collaboration**: `highlights_demo/context/team collaboration.md`
-- **Architecture**: `highlights_demo/context/architecture comprehensive.md`
-- **V2 Implementation**: `highlights_demo/context/v2/` directory
-- **User Access**: `highlights_demo/context/how can users try meeting highlights.md`
+- **Product Overview**: [`what is meeting highlights.md`](context/what is meeting highlights.md)
+- **Team Collaboration**: [`team collaboration.md`](context/team collaboration.md)
+- **Architecture**: [`architecture comprehensive.md`](context/architecture comprehensive.md)
+- **V2 Implementation**: [`v2/`](context/v2/) directory
+- **User Access**: [`how can users try meeting highlights.md`](context/how can users try meeting highlights.md)
 
 ## Demo-Specific Commands
 

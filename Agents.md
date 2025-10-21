@@ -158,27 +158,30 @@ This project contains materials for an all-hands presentation about Meeting High
 
 ### Documentation Files
 - **README.md** - Main project documentation
-- **highlights_demo/context/team collaboration.md** - Overview of 6+ teams collaborating on Meeting Highlights
-- **highlights_demo/context/architecture comprehensive.md** - Comprehensive component reference with ICM teams and DRIs
-- **highlights_demo/context/v2 goal and efforts.md** - Goals and efforts for v2 implementation
-- **highlights_demo/context/extractive vs abstractive highlights.md** - Technical details on highlight types
-- **highlights_demo/context/what is meeting highlights.md** - Comprehensive product explanation
-- **highlights_demo/context/how can users try meeting highlights.md** - Instructions for accessing Meeting Highlights via BizChat
+- **docs/demos/highlights/team collaboration.md** - Overview of 6+ teams collaborating on Meeting Highlights
+- **docs/demos/highlights/architecture comprehensive.md** - Comprehensive component reference with ICM teams and DRIs
+- **docs/demos/highlights/v2 goal and efforts.md** - Goals and efforts for v2 implementation
+- **docs/demos/highlights/extractive vs abstractive highlights.md** - Technical details on highlight types
+- **docs/demos/highlights/what is meeting highlights.md** - Comprehensive product explanation
+- **docs/demos/highlights/how can users try meeting highlights.md** - Instructions for accessing Meeting Highlights via BizChat
+- **docs/demos/highlights/MEETING_HIGHLIGHTS_DEMO.md** - Detailed demo documentation with slide structure and design system
 
 
 ### Highlights Demo Materials (`highlights_demo/`)
 - **audio/** - Audio files for narrated presentation
 - **chapters/** - Subtitle files (SRT format) for each presentation chapter
 - **images/logos/** - Product logos (BizChat, ClipChamp, Loop, msai-hive, odsp, Teams)
-- **context/** - Technical documentation and implementation files
-  - **team collaboration.md** - Team collaboration overview (ODSP, MSAI-Hive, Clipchamp, Loop, BizChat, Teams)
-  - **architecture comprehensive.md** - Detailed component reference including all services (MeTA, TMR, BizChat, ODSP, VRoom, LLM, ACS, Loki, etc.), ICM teams, DRIs, and complete data flow
-  - **extractive vs abstractive highlights.md** - Comparison of highlight approaches
-  - **v2 goal and efforts.md** - V2 implementation goals
-  - **what is meeting highlights.md** - Product overview
-  - **how can users try meeting highlights.md** - User access instructions via BizChat
-  - **v1/** - Original implementation ([`HighlightsPromptMaper.py`](highlights_demo/context/v1/HighlightsPromptMaper.py))
-  - **v2/** - Current implementation schemas ([`prompt.md`](highlights_demo/context/v2/prompt.md), [`prompt_output_schema.md`](highlights_demo/context/v2/prompt_output_schema.md), [`TRANSCRIPT_TABLE_SCHEMA.md`](highlights_demo/context/v2/TRANSCRIPT_TABLE_SCHEMA.md))
+
+### Meeting Highlights Documentation (`docs/demos/highlights/`)
+- **team collaboration.md** - Team collaboration overview (ODSP, MSAI-Hive, Clipchamp, Loop, BizChat, Teams)
+- **architecture comprehensive.md** - Detailed component reference including all services (MeTA, TMR, BizChat, ODSP, VRoom, LLM, ACS, Loki, etc.), ICM teams, DRIs, and complete data flow
+- **extractive vs abstractive highlights.md** - Comparison of highlight approaches
+- **v2 goal and efforts.md** - V2 implementation goals
+- **what is meeting highlights.md** - Product overview
+- **how can users try meeting highlights.md** - User access instructions via BizChat
+- **MEETING_HIGHLIGHTS_DEMO.md** - Detailed demo documentation with slide structure and design system
+- **v1/** - Original implementation ([`HighlightsPromptMaper.py`](docs/demos/highlights/v1/HighlightsPromptMaper.py))
+- **v2/** - Current implementation schemas ([`prompt.md`](docs/demos/highlights/v2/prompt.md), [`prompt_output_schema.md`](docs/demos/highlights/v2/prompt_output_schema.md), [`TRANSCRIPT_TABLE_SCHEMA.md`](docs/demos/highlights/v2/TRANSCRIPT_TABLE_SCHEMA.md))
 
 ### React Demo Application (`react_cogs_demo/`)
 Interactive presentation slides built with React, Framer Motion, and TypeScript:
@@ -198,8 +201,8 @@ Interactive presentation slides built with React, Framer Motion, and TypeScript:
 - Audio fallback system (1-second silence for missing files)
 
 ### Implementation Files
-- **highlights_demo/context/v1/** - Original implementation ([`HighlightsPromptMaper.py`](highlights_demo/context/v1/HighlightsPromptMaper.py))
-- **highlights_demo/context/v2/** - Current implementation with prompt schema and transcript table schema
+- **docs/demos/highlights/v1/** - Original implementation ([`HighlightsPromptMaper.py`](docs/demos/highlights/v1/HighlightsPromptMaper.py))
+- **docs/demos/highlights/v2/** - Current implementation with prompt schema and transcript table schema
 
 ## Key Metrics
 
