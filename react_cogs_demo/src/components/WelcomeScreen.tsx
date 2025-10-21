@@ -11,6 +11,8 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
   const [demos, setDemos] = useState<DemoMetadata[]>([]);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [showBreakdown, setShowBreakdown] = useState<string | null>(null);
+  // Last actual runtime per demo (persisted from narrated controller)
+  const [actualRuntime, setActualRuntime] = useState<Record<string, { elapsed: number; plannedTotal: number }>>({});
   
   // Close on ESC
   useEffect(() => {
@@ -30,6 +32,35 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
     const allDemos = DemoRegistry.getAllMetadata();
     setDemos(allDemos);
   }, []);
+  
+  // Load persisted actual runtimes and validate against current planned totals
+  useEffect(() => {
+    if (demos.length === 0) return;
+    const next: Record<string, { elapsed: number; plannedTotal: number }> = {};
+    for (const demo of demos) {
+      try {
+        const key = `demoRuntime:${demo.id}`;
+        const raw = localStorage.getItem(key);
+        if (!raw) continue;
+        const parsed = JSON.parse(raw);
+        if (typeof parsed.elapsed !== 'number' || typeof parsed.plannedTotal !== 'number') {
+          localStorage.removeItem(key);
+          continue;
+        }
+        // Purge if planned total changed (estimation updated)
+        const currentPlanned = demo.durationInfo?.total;
+        if (currentPlanned != null && Math.abs(currentPlanned - parsed.plannedTotal) > 0.001) {
+          localStorage.removeItem(key);
+          continue;
+        }
+        next[demo.id] = { elapsed: parsed.elapsed, plannedTotal: parsed.plannedTotal };
+      } catch (e) {
+        // Corrupt entry -> remove
+        localStorage.removeItem(`demoRuntime:${demo.id}`);
+      }
+    }
+    setActualRuntime(next);
+  }, [demos]);
 
   // Helper function to format duration
   const formatDuration = (seconds: number): string => {
@@ -159,7 +190,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
                 </p>
               )}
 
-              {/* Enhanced Duration Display (simplified total + right-aligned details link) */}
+              {/* Duration Display with actual runtime if available */}
               {demo.durationInfo && demo.durationInfo.audioOnly > 0 && (
                 <div style={{
                   marginTop: '1rem',
@@ -168,28 +199,63 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
                   borderRadius: 8,
                   border: '1px solid rgba(0, 183, 195, 0.2)',
                   display: 'flex',
-                  alignItems: 'center'
+                  alignItems: 'center',
+                  gap: '0.75rem'
                 }}>
-                  <span style={{
-                    fontSize: 14,
-                    color: '#14b8a6',
-                    fontWeight: 600,
+                  <div style={{
                     display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.5rem',
+                    flexDirection: 'column',
                     flexGrow: 1,
                     minWidth: 0
                   }}>
-                    <span>🕒</span>
-                    <span style={{
-                      color: '#f1f5f9',
-                      whiteSpace: 'nowrap',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis'
-                    }}>
-                      {formatDuration(demo.durationInfo.total)} total
-                    </span>
-                  </span>
+                    {actualRuntime[demo.id] ? (
+                      <>
+                        <div style={{
+                          fontSize: 14,
+                          fontWeight: 600,
+                          color: '#f1f5f9',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.4rem',
+                          whiteSpace: 'nowrap'
+                        }}>
+                          <span>🟢</span>
+                          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            Actual {formatDuration(actualRuntime[demo.id].elapsed)} runtime
+                          </span>
+                        </div>
+                        <div style={{
+                          fontSize: 11,
+                          color: '#94a3b8',
+                          marginTop: 2,
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.4rem',
+                          whiteSpace: 'nowrap'
+                        }}>
+                          <span style={{ color: '#64748b' }}>Estimated {formatDuration(demo.durationInfo.total)}</span>
+                          <span style={{ color: '#64748b' }}>
+                            ({(actualRuntime[demo.id].elapsed - demo.durationInfo.total).toFixed(1)}s Δ)
+                          </span>
+                        </div>
+                      </>
+                    ) : (
+                      <div style={{
+                        fontSize: 14,
+                        fontWeight: 600,
+                        color: '#14b8a6',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.4rem',
+                        whiteSpace: 'nowrap'
+                      }}>
+                        <span>🕒</span>
+                        <span style={{ color: '#f1f5f9' }}>
+                          Estimated {formatDuration(demo.durationInfo.total)} total
+                        </span>
+                      </div>
+                    )}
+                  </div>
                   {slideBreakdown && slideBreakdown.length > 0 && (
                     <button
                       onClick={(e) => {
@@ -343,9 +409,23 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
                     <span style={{
                       fontSize: 12,
                       color: '#94a3b8',
-                      marginTop: 2
+                      marginTop: 2,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '2px'
                     }}>
-                      {slideBreakdown.length} slides • {slideBreakdown.reduce((s, sl) => s + sl.segments.length, 0)} segments • Total {formatDuration(demo.durationInfo!.total)}
+                      <span>
+                        {slideBreakdown.length} slides • {slideBreakdown.reduce((s, sl) => s + sl.segments.length, 0)} segments
+                      </span>
+                      {actualRuntime[demo.id] ? (
+                        <span>
+                          Actual {formatDuration(actualRuntime[demo.id].elapsed)} vs Estimated {formatDuration(demo.durationInfo!.total)} ({(actualRuntime[demo.id].elapsed - demo.durationInfo!.total).toFixed(1)}s Δ)
+                        </span>
+                      ) : (
+                        <span>
+                          Estimated total {formatDuration(demo.durationInfo!.total)}
+                        </span>
+                      )}
                     </span>
                   </div>
                   <button

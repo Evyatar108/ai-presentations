@@ -83,16 +83,16 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
    currentIndexRef.current = currentIndex;
  }, [currentIndex]);
 
- // Start / reset runtime timer when narrated playback begins (only if enabled)
+ // Start / reset runtime timing baseline when narrated playback begins (always, independent of UI option)
  useEffect(() => {
-   if (isPlaying && showRuntimeTimerOption) {
+   if (isPlaying) {
      setRuntimeStart(performance.now());
      setElapsedMs(0);
    }
    if (!isPlaying) {
      setRuntimeStart(null);
    }
- }, [isPlaying, showRuntimeTimerOption]);
+ }, [isPlaying]);
 
  // Tick elapsed while narrated playback running
  useEffect(() => {
@@ -154,6 +154,20 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
         } else if (showRuntimeTimerOption && finalElapsedSec != null) {
           console.log(`[RuntimeTimer] Completed presentation. Elapsed=${finalElapsedSec.toFixed(2)}s (no planned total provided)`);
         }
+
+        // Persist actual runtime for WelcomeScreen & details modal (purge if planned changes later)
+        if (finalElapsedSec != null) {
+          try {
+            const toStore = {
+              elapsed: finalElapsedSec,
+              plannedTotal: plannedTotal != null ? plannedTotal : finalElapsedSec
+            };
+            localStorage.setItem(`demoRuntime:${demoMetadata.id}`, JSON.stringify(toStore));
+          } catch (e) {
+            console.warn('[RuntimeTimer] Persist failed', e);
+          }
+        }
+
         setShowStartOverlay(true);
         onPlaybackEnd?.();
       }, timing.afterFinalSlide);
@@ -161,7 +175,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     }
     
     setCurrentIndex(nextIndex);
-  }, [onPlaybackEnd, demoMetadata.durationInfo?.total, showRuntimeTimerOption, runtimeStart, demoTiming, allSlides]);
+  }, [onPlaybackEnd, demoMetadata.durationInfo?.total, showRuntimeTimerOption, runtimeStart, demoTiming, allSlides, demoMetadata.id]);
   // Play audio for current slide in narrated mode (all slides use segments now)
   useEffect(() => {
     if (!isPlaying || currentIndex >= allSlides.length || isManualMode) return;
