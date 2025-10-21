@@ -4,6 +4,8 @@ import { hasAudioSegments, SlideComponentWithMetadata } from '../slides/SlideMet
 import { useSegmentContext } from '../contexts/SegmentContext';
 import type { DemoMetadata } from '../demos/types';
 import { resolveTimingConfig, TimingConfig } from '../demos/timing/types';
+import { NarrationEditModal } from './NarrationEditModal';
+import { regenerateSegment, checkTTSServerHealth } from '../utils/ttsClient';
 
 // Fallback audio file for missing segments
 const FALLBACK_AUDIO = '/audio/silence-1s.mp3';
@@ -61,8 +63,27 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
   const [showStartOverlay, setShowStartOverlay] = useState(true);
   const [hideInterface, setHideInterface] = useState(false);
   const [isManualMode, setIsManualMode] = useState(false);
-  const [isManualWithAudio, setIsManualWithAudio] = useState(false);
+  const [audioEnabled, setAudioEnabled] = useState(true); // Audio toggle for manual mode
   const [autoAdvanceOnAudioEnd, setAutoAdvanceOnAudioEnd] = useState(false);
+  // Narration editor state (manual mode only)
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editingSegment, setEditingSegment] = useState<{
+    slideKey: string;
+    segmentId: string;
+    currentText: string;
+  } | null>(null);
+  const [isRegeneratingAudio, setIsRegeneratingAudio] = useState(false);
+  const [regenerationError, setRegenerationError] = useState<string | null>(null);
+
+  // Narration edits storage (in-memory, session-only)
+  interface NarrationEdit {
+    slideKey: string;
+    segmentIndex: number;
+    originalText: string;
+    editedText: string;
+    timestamp: number;
+  }
+  const [narrationEdits, setNarrationEdits] = useState<Map<string, NarrationEdit>>(new Map());
 
   // Runtime timer (for validating timing calculations)
   const [showRuntimeTimerOption, setShowRuntimeTimerOption] = useState(false);
@@ -315,7 +336,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     onPlaybackStart?.();
   };
 
-  // Start manual mode without audio
+  // Start unified manual mode (with audio enabled by default)
   const handleManualMode = () => {
     if (allSlides.length === 0) {
       setError('No slides to play');
@@ -326,30 +347,14 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     setShowStartOverlay(false);
     setIsPlaying(false);
     setIsManualMode(true);
-    setIsManualWithAudio(false);
+    setAudioEnabled(true); // Start with audio enabled by default
     setCurrentIndex(0);
     onSlideChange(allSlides[0].metadata.chapter, allSlides[0].metadata.slide);
   };
 
-  // Start manual mode with audio
-  const handleManualWithAudio = () => {
-    if (allSlides.length === 0) {
-      setError('No slides to play');
-      return;
-    }
-    
-    setFinalElapsedSeconds(null);
-    setShowStartOverlay(false);
-    setIsPlaying(false);
-    setIsManualMode(true);
-    setIsManualWithAudio(true);
-    setCurrentIndex(0);
-    onSlideChange(allSlides[0].metadata.chapter, allSlides[0].metadata.slide);
-  };
-
-  // Initialize segments when slide changes in manual+audio mode
+  // Initialize segments when slide changes in manual mode with audio
   useEffect(() => {
-    if (!isManualMode || !isManualWithAudio || currentIndex >= allSlides.length) return;
+    if (!isManualMode || !audioEnabled || currentIndex >= allSlides.length) return;
     
     const slide = allSlides[currentIndex].metadata;
     const slideKey = `Ch${slide.chapter}:S${slide.slide}`;
@@ -357,13 +362,13 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     if (!hasAudioSegments(slide) || slide.audioSegments.length === 0) return;
     
     // Initialize segment context (resets to segment 0) - only when slide changes
-    console.log(`[Manual+Audio] Initializing segments for ${slideKey}`);
+    console.log(`[Manual] Initializing segments for ${slideKey}`);
     segmentContext.initializeSegments(slideKey, slide.audioSegments);
-  }, [currentIndex, isManualMode, isManualWithAudio]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [currentIndex, isManualMode, audioEnabled]); // eslint-disable-line react-hooks/exhaustive-deps
   
-  // Play audio for current segment in manual+audio mode
+  // Play audio for current segment in manual mode (when audio enabled)
   useEffect(() => {
-    if (!isManualMode || !isManualWithAudio || currentIndex >= allSlides.length) return;
+    if (!isManualMode || !audioEnabled || currentIndex >= allSlides.length) return;
     
     const slide = allSlides[currentIndex].metadata;
     const currentSegmentIdx = segmentContext.currentSegmentIndex;
@@ -409,7 +414,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
           else {
             const nextIndex = currentIndexRef.current + 1;
             if (nextIndex < allSlides.length) {
-              console.log(`[Manual+Audio] Auto-advancing to next slide ${nextIndex}`);
+              console.log(`[Manual] Auto-advancing to next slide ${nextIndex}`);
               setTimeout(() => {
                 lastAutoAdvanceFromIndexRef.current = currentIndexRef.current;
                 setCurrentIndex(nextIndex);
@@ -437,11 +442,11 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
         audioRef.current = null;
       }
     };
-  }, [currentIndex, isManualMode, isManualWithAudio, autoAdvanceOnAudioEnd, onSlideChange, segmentContext.currentSegmentIndex]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [currentIndex, isManualMode, audioEnabled, autoAdvanceOnAudioEnd, onSlideChange, segmentContext.currentSegmentIndex]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Consume external manual slide changes (manual+audio mode)
+  // Consume external manual slide changes (manual mode)
   useEffect(() => {
-    if (!isManualMode || !isManualWithAudio || manualSlideChange == null) return;
+    if (!isManualMode || manualSlideChange == null) return;
     const slideIndex = allSlides.findIndex(s =>
       s.metadata.chapter === manualSlideChange.chapter && s.metadata.slide === manualSlideChange.slide
     );
@@ -449,36 +454,262 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
 
     // Ignore only if this is the specific stale value from just before an auto-advance
     if (lastAutoAdvanceFromIndexRef.current !== null && slideIndex === lastAutoAdvanceFromIndexRef.current) {
-      console.log(`[Manual+Audio] ignoring stale manualSlideChange=${slideIndex} (pre-auto-advance value)`);
+      console.log(`[Manual] ignoring stale manualSlideChange=${slideIndex} (pre-auto-advance value)`);
       lastAutoAdvanceFromIndexRef.current = null; // Clear so user can navigate back later
       return;
     }
 
     if (slideIndex !== currentIndex) {
-      console.log('[Manual+Audio] applying user navigation to index', slideIndex);
+      console.log('[Manual] applying user navigation to index', slideIndex);
       setCurrentIndex(slideIndex);
       lastAutoAdvanceFromIndexRef.current = null; // Clear flag on manual navigation
     }
-  }, [manualSlideChange, isManualMode, isManualWithAudio, currentIndex]);
+  }, [manualSlideChange, isManualMode, currentIndex]);
+// Restart from beginning
+const handleRestart = () => {
+  if (audioRef.current) {
+    audioRef.current.pause();
+    audioRef.current.onended = null;
+    audioRef.current.onerror = null;
+    audioRef.current.onplay = null;
+  }
+  setCurrentIndex(0);
+  setIsPlaying(false);
+  setIsManualMode(false);
+  setAudioEnabled(true);
+  setAutoAdvanceOnAudioEnd(false);
+  setError(null);
+  setFinalElapsedSeconds(null);
+  setShowStartOverlay(true);
+  onPlaybackEnd?.();
+};
 
-  // Restart from beginning
-  const handleRestart = () => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.onended = null;
-      audioRef.current.onerror = null;
-      audioRef.current.onplay = null;
+// Open narration edit modal (manual mode only)
+const handleEditNarration = () => {
+  if (!isManualMode || currentIndex >= allSlides.length) return;
+  
+  const slide = allSlides[currentIndex].metadata;
+  const slideKey = `Ch${slide.chapter}:S${slide.slide}`;
+  
+  if (!hasAudioSegments(slide) || slide.audioSegments.length === 0) {
+    console.warn('[Edit] No audio segments available for this slide');
+    return;
+  }
+  
+  const currentSegmentIdx = segmentContext.currentSegmentIndex;
+  const segment = slide.audioSegments[currentSegmentIdx];
+  
+  if (!segment) {
+    console.warn(`[Edit] Invalid segment index ${currentSegmentIdx}`);
+    return;
+  }
+  
+  // Check if this segment has been edited before
+  const editKey = `${slideKey}:${currentSegmentIdx}`;
+  const existingEdit = narrationEdits.get(editKey);
+  
+  setEditingSegment({
+    slideKey,
+    segmentId: segment.id,
+    currentText: existingEdit?.editedText || segment.narrationText || ''
+  });
+  setShowEditModal(true);
+};
+
+// Export narration edits (Phase 5)
+const handleExportNarration = () => {
+  const exportData = {
+    demoId: demoMetadata.id,
+    exportDate: new Date().toISOString(),
+    slides: allSlides.map(slide => {
+      const slideKey = `Ch${slide.metadata.chapter}:S${slide.metadata.slide}`;
+      
+      return {
+        chapter: slide.metadata.chapter,
+        slide: slide.metadata.slide,
+        title: slide.metadata.title,
+        segments: slide.metadata.audioSegments.map((seg, idx) => {
+          const editKey = `${slideKey}:${idx}`;
+          const edit = narrationEdits.get(editKey);
+          
+          return {
+            id: seg.id,
+            originalNarration: seg.narrationText || '',
+            editedNarration: edit?.editedText || null,
+            modified: !!edit,
+            timestamp: edit?.timestamp ? new Date(edit.timestamp).toISOString() : undefined
+          };
+        })
+      };
+    }),
+    metadata: {
+      totalSlides: allSlides.length,
+      totalSegments: allSlides.reduce((sum, s) => sum + s.metadata.audioSegments.length, 0),
+      modifiedSegments: narrationEdits.size
     }
-    setCurrentIndex(0);
-    setIsPlaying(false);
-    setIsManualMode(false);
-    setIsManualWithAudio(false);
-    setAutoAdvanceOnAudioEnd(false);
-    setError(null);
-    setFinalElapsedSeconds(null);
-    setShowStartOverlay(true);
-    onPlaybackEnd?.();
   };
+  
+  const blob = new Blob([JSON.stringify(exportData, null, 2)], {
+    type: 'application/json'
+  });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `narration-export-${demoMetadata.id}-${Date.now()}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  
+  console.log('[Export] Narration exported:', {
+    demoId: demoMetadata.id,
+    totalSlides: exportData.metadata.totalSlides,
+    totalSegments: exportData.metadata.totalSegments,
+    modifiedSegments: exportData.metadata.modifiedSegments
+  });
+};
+
+// Regenerate audio for a segment using TTS (Phase 4)
+const regenerateSegmentAudio = async (
+  slide: typeof allSlides[0]['metadata'],
+  segmentIndex: number,
+  newText: string
+): Promise<boolean> => {
+  setIsRegeneratingAudio(true);
+  setRegenerationError(null);
+  
+  try {
+    console.log('[TTS] Starting audio regeneration...');
+    console.log(`[TTS] Demo: ${demoMetadata.id}, Chapter: ${slide.chapter}, Slide: ${slide.slide}, Segment: ${segmentIndex}`);
+    
+    // Check TTS server health first
+    const health = await checkTTSServerHealth();
+    if (!health.available) {
+      throw new Error(health.error || 'TTS server is not available');
+    }
+    
+    console.log('[TTS] Server health check passed');
+    
+    const segment = slide.audioSegments[segmentIndex];
+    
+    // Call TTS regeneration
+    const result = await regenerateSegment({
+      chapter: slide.chapter,
+      slide: slide.slide,
+      segmentIndex: segmentIndex,
+      segmentId: segment.id,
+      narrationText: newText,
+      addPauses: true
+    });
+    
+    if (!result.success) {
+      throw new Error(result.error || 'Audio regeneration failed');
+    }
+    
+    console.log('[TTS] Audio regenerated successfully');
+    console.log(`[TTS] File path: ${result.filePath}`);
+    
+    // Update audio file path with cache-busting timestamp
+    const timestamp = result.timestamp || Date.now();
+    const basePath = segment.audioFilePath.split('?')[0]; // Remove existing query params
+    segment.audioFilePath = `${basePath}?t=${timestamp}`;
+    
+    console.log(`[TTS] Updated audio path: ${segment.audioFilePath}`);
+    
+    // If audio is currently playing this segment, reload it
+    if (audioEnabled && segmentContext.currentSegmentIndex === segmentIndex) {
+      console.log('[TTS] Reloading audio for current segment...');
+      // Stop current audio
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+      // Load new audio
+      const audio = await loadAudioWithFallback(segment.audioFilePath, segment.id);
+      audioRef.current = audio;
+      // Auto-play if in manual+audio mode
+      if (audioEnabled) {
+        await audio.play();
+      }
+    }
+    
+    setIsRegeneratingAudio(false);
+    return true;
+    
+  } catch (error: any) {
+    console.error('[TTS] Regeneration error:', error);
+    const errorMessage = error.message || 'Failed to regenerate audio';
+    setRegenerationError(errorMessage);
+    setIsRegeneratingAudio(false);
+    return false;
+  }
+};
+
+// Save edited narration (Phase 3 & 4: save and TTS regeneration)
+const handleSaveNarration = async (newText: string, regenerateAudio: boolean) => {
+  if (!editingSegment) return;
+  
+  const slide = allSlides[currentIndex].metadata;
+  const currentSegmentIdx = segmentContext.currentSegmentIndex;
+  const segment = slide.audioSegments[currentSegmentIdx];
+  
+  if (!segment) {
+    console.error('[Edit] Cannot save: invalid segment');
+    return;
+  }
+  
+  // Create edit key
+  const editKey = `${editingSegment.slideKey}:${currentSegmentIdx}`;
+  
+  // Create edit object
+  const edit: NarrationEdit = {
+    slideKey: editingSegment.slideKey,
+    segmentIndex: currentSegmentIdx,
+    originalText: segment.narrationText || '',
+    editedText: newText,
+    timestamp: Date.now()
+  };
+  
+  // Store edit in narrationEdits Map (immutable update)
+  setNarrationEdits(prev => {
+    const updated = new Map(prev);
+    updated.set(editKey, edit);
+    return updated;
+  });
+  
+  // Update segment's narrationText in-memory (direct mutation is OK here)
+  segment.narrationText = newText;
+  
+  console.log('[Edit] Saved narration:', {
+    key: editKey,
+    originalText: edit.originalText,
+    editedText: newText,
+    timestamp: new Date(edit.timestamp).toISOString()
+  });
+  
+  // Phase 4: Regenerate audio if requested
+  if (regenerateAudio) {
+    console.log('[Edit] TTS regeneration requested');
+    const success = await regenerateSegmentAudio(slide, currentSegmentIdx, newText);
+    
+    if (!success) {
+      // Don't close modal on error - let user retry or cancel
+      console.log('[Edit] Audio regeneration failed, modal remains open');
+      return;
+    }
+    
+    console.log('[Edit] Audio regeneration completed successfully');
+  }
+  
+  // Close modal only on success (or if no regeneration requested)
+  setShowEditModal(false);
+  setEditingSegment(null);
+  setRegenerationError(null);
+};
+
+// Cancel narration edit
+const handleCancelEdit = () => {
+  setShowEditModal(false);
+  setEditingSegment(null);
+};
 
   return (
     <>
@@ -616,43 +847,25 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
                   ▶ Narrated
                 </button>
                 
-                <div style={{ display: 'flex', gap: '0.75rem' }}>
-                  <button
-                    onClick={handleManualMode}
-                    style={{
-                      background: 'transparent',
-                      color: '#94a3b8',
-                      border: '2px solid #475569',
-                      borderRadius: 12,
-                      padding: '1rem 1.5rem',
-                      fontSize: 16,
-                      fontWeight: 600,
-                      cursor: 'pointer'
-                    }}
-                  >
-                    ⌨ Manual (Silent)
-                  </button>
-                  
-                  <button
-                    onClick={handleManualWithAudio}
-                    style={{
-                      background: 'transparent',
-                      color: '#00B7C3',
-                      border: '2px solid #00B7C3',
-                      borderRadius: 12,
-                      padding: '1rem 1.5rem',
-                      fontSize: 16,
-                      fontWeight: 600,
-                      cursor: 'pointer'
-                    }}
-                  >
-                    ⌨ Manual + Audio
-                  </button>
-                </div>
+                <button
+                  onClick={handleManualMode}
+                  style={{
+                    background: 'transparent',
+                    color: '#00B7C3',
+                    border: '2px solid #00B7C3',
+                    borderRadius: 12,
+                    padding: '1rem 1.5rem',
+                    fontSize: 16,
+                    fontWeight: 600,
+                    cursor: 'pointer'
+                  }}
+                >
+                  ⌨ Manual
+                </button>
               </div>
               
               <p style={{ color: '#64748b', marginTop: '1.5rem', fontSize: 12 }}>
-                Narrated: Auto-advance | Manual: Arrow keys | Manual + Audio: Arrow keys + narration
+                Narrated: Auto-advance | Manual: Arrow keys with audio toggle
               </p>
             </motion.div>
           </motion.div>
@@ -706,8 +919,28 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
           </span>
         )}
          
-         {/* Auto-advance toggle (only in manual+audio mode) */}
-         {isManualMode && isManualWithAudio && (
+         {/* Audio toggle button (only in manual mode) */}
+         {isManualMode && (
+           <button
+             onClick={() => setAudioEnabled(!audioEnabled)}
+             style={{
+               background: 'transparent',
+               border: '1px solid #475569',
+               color: audioEnabled ? '#00B7C3' : '#64748b',
+               borderRadius: 6,
+               padding: '0.25rem 0.75rem',
+               fontSize: 11,
+               cursor: 'pointer',
+               fontWeight: 600,
+               transition: 'all 0.2s ease'
+             }}
+           >
+             {audioEnabled ? '🔊 Audio' : '🔇 Muted'}
+           </button>
+         )}
+         
+         {/* Auto-advance toggle (only in manual mode with audio enabled) */}
+         {isManualMode && audioEnabled && (
            <label
              style={{
                display: 'flex',
@@ -730,6 +963,60 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
              />
              Auto-advance
            </label>
+         )}
+         
+         {/* Edit button (only in manual mode with segments) */}
+         {isManualMode && currentIndex < allSlides.length && hasAudioSegments(allSlides[currentIndex].metadata) && (
+           <button
+             onClick={handleEditNarration}
+             style={{
+               background: 'transparent',
+               border: '1px solid #475569',
+               color: '#f1f5f9',
+               borderRadius: 6,
+               padding: '0.25rem 0.75rem',
+               fontSize: 11,
+               cursor: 'pointer',
+               transition: 'all 0.2s ease'
+             }}
+             onMouseEnter={(e) => {
+               e.currentTarget.style.borderColor = '#00B7C3';
+               e.currentTarget.style.color = '#00B7C3';
+             }}
+             onMouseLeave={(e) => {
+               e.currentTarget.style.borderColor = '#475569';
+               e.currentTarget.style.color = '#f1f5f9';
+             }}
+           >
+             ✏️ Edit
+           </button>
+         )}
+         
+         {/* Export button (only in manual mode) */}
+         {isManualMode && (
+           <button
+             onClick={handleExportNarration}
+             style={{
+               background: 'transparent',
+               border: '1px solid #475569',
+               color: '#f1f5f9',
+               borderRadius: 6,
+               padding: '0.25rem 0.75rem',
+               fontSize: 11,
+               cursor: 'pointer',
+               transition: 'all 0.2s ease'
+             }}
+             onMouseEnter={(e) => {
+               e.currentTarget.style.borderColor = '#00B7C3';
+               e.currentTarget.style.color = '#00B7C3';
+             }}
+             onMouseLeave={(e) => {
+               e.currentTarget.style.borderColor = '#475569';
+               e.currentTarget.style.color = '#f1f5f9';
+             }}
+           >
+             💾 Export
+           </button>
          )}
          
          <button
@@ -771,6 +1058,21 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
           >
             {error}
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Narration Edit Modal */}
+      <AnimatePresence>
+        {showEditModal && editingSegment && (
+          <NarrationEditModal
+            slideKey={editingSegment.slideKey}
+            segmentId={editingSegment.segmentId}
+            currentText={editingSegment.currentText}
+            isRegenerating={isRegeneratingAudio}
+            regenerationError={regenerationError}
+            onSave={handleSaveNarration}
+            onCancel={handleCancelEdit}
+          />
         )}
       </AnimatePresence>
     </>
