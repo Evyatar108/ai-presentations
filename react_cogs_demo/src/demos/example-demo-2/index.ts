@@ -1,7 +1,7 @@
 import { DemoConfig } from '../types';
 import { metadata } from './metadata';
 
-export const demo: DemoConfig = {
+const demoConfig: DemoConfig = {
   id: 'example-demo-2',
   metadata,
   defaultMode: 'manual',
@@ -10,3 +10,5 @@ export const demo: DemoConfig = {
     return allSlides;
   }
 };
+
+export default demoConfig;

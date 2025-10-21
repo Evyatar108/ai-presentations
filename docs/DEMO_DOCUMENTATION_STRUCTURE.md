@@ -27,7 +27,7 @@ docs/demos/{demo-id}/
 │       └── ...
 
 src/demos/{demo-id}/
-├── index.ts                     # Demo configuration
+├── index.ts                     # Demo configuration (exports default DemoConfig)
 ├── metadata.ts                  # Demo metadata
 ├── README.md                    # Technical implementation notes
 └── slides/

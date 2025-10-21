@@ -60,7 +60,7 @@ Create `src/demos/your-demo-name/index.ts`:
 import { DemoConfig } from '../types';
 import { metadata } from './metadata';
 
-export const demo: DemoConfig = {
+const demoConfig: DemoConfig = {
   id: 'your-demo-name',
   metadata,
   getSlides: async () => {
@@ -68,7 +68,11 @@ export const demo: DemoConfig = {
     return allSlides;
   }
 };
+
+export default demoConfig;
 ```
+
+**Note**: Always use `export default` for demo configurations to maintain consistency across all demos. The script tools (TTS generation, duration calculation) expect default exports.
 
 ### Step 4: Create Slide Chapters
 
@@ -122,11 +126,12 @@ export const allSlides: SlideMetadata[] = [
 ```
 
 ### Step 6: Register Demo
+### Step 6: Register Demo
 
 Update `src/demos/DemoRegistry.ts`:
 
 ```typescript
-import { demo as yourDemo } from './your-demo-name';
+import yourDemo from './your-demo-name';
 import { metadata as yourMetadata } from './your-demo-name/metadata';
 
 // Add to registerDemo calls
@@ -137,6 +142,7 @@ registerDemo({
 });
 ```
 
+**Note**: Import the demo config using default import (no curly braces) since we're using `export default` in the demo's `index.ts`.
 ### Step 7: Add Assets
 
 Create asset directories:
@@ -173,7 +179,6 @@ npm run tts:generate -- --demo your-demo-name
 ### Step 9: Configure Timing (Optional)
 
 Customize presentation timing delays if defaults aren't suitable:
-
 **Add to demo config** (`src/demos/{demo-id}/index.ts`):
 ```typescript
 import { TimingConfig } from '../timing/types';
@@ -184,10 +189,13 @@ const timing: TimingConfig = {
   afterFinalSlide: 2000   // Hold time after final slide
 };
 
-export const demoConfig: DemoConfig = {
+const demoConfig: DemoConfig = {
   // ... other fields ...
   timing,
 };
+
+export default demoConfig;
+```
 ```
 
 **Generate duration info**:

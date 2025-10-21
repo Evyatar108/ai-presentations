@@ -23,7 +23,7 @@ const timing: TimingConfig = {
  * Meeting Highlights COGS Reduction demo configuration.
  * Slides are lazy-loaded to optimize initial bundle size.
  */
-export const meetingHighlightsDemo: DemoConfig = {
+const demoConfig: DemoConfig = {
   id: 'meeting-highlights',
   metadata: meetingHighlightsMetadata,
   defaultMode: 'narrated',
@@ -33,3 +33,5 @@ export const meetingHighlightsDemo: DemoConfig = {
     return allSlides;
   }
 };
+
+export default demoConfig;

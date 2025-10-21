@@ -99,7 +99,7 @@ export const DemoRegistry = {
 /**
  * Register Meeting Highlights COGS Reduction demo
  */
-import { meetingHighlightsDemo } from './meeting-highlights';
+import meetingHighlightsDemo from './meeting-highlights';
 import { meetingHighlightsMetadata } from './meeting-highlights/metadata';
 
 registerDemo({
@@ -111,7 +111,7 @@ registerDemo({
 /**
  * Register Example Demo 1
  */
-import { demo as exampleDemo1 } from './example-demo-1';
+import exampleDemo1 from './example-demo-1';
 import { metadata as exampleDemo1Metadata } from './example-demo-1/metadata';
 
 registerDemo({
@@ -123,7 +123,7 @@ registerDemo({
 /**
  * Register Example Demo 2
  */
-import { demo as exampleDemo2 } from './example-demo-2';
+import exampleDemo2 from './example-demo-2';
 import { metadata as exampleDemo2Metadata } from './example-demo-2/metadata';
 
 registerDemo({

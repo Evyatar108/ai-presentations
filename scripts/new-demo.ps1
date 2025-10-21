@@ -217,7 +217,7 @@ $indexContent = @"
 import { DemoConfig } from '../types';
 import { metadata } from './metadata';
 
-export const demo: DemoConfig = {
+const demoConfig: DemoConfig = {
   id: '$DemoId',
   metadata,
   getSlides: async () => {
@@ -225,6 +225,8 @@ export const demo: DemoConfig = {
     return allSlides;
   }
 };
+
+export default demoConfig;
 "@
 
 $indexPath = "$srcPath/index.ts"
@@ -366,7 +368,7 @@ Write-Host @"
 
 1. Register the demo in DemoRegistry.ts:
    • Open: react_cogs_demo/src/demos/DemoRegistry.ts
-   • Add import: import { demo as ${DemoId}Demo } from './$DemoId';
+   • Add import: import ${DemoId}Demo from './$DemoId';
    • Add import: import { metadata as ${DemoId}Metadata } from './$DemoId/metadata';
    • Add registration:
      registerDemo({
