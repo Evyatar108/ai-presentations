@@ -170,6 +170,35 @@ Generate audio for your demo (see [TTS Guide](TTS_GUIDE.md)):
 npm run tts:generate -- --demo your-demo-name
 ```
 
+### Step 9: Configure Timing (Optional)
+
+Customize presentation timing delays if defaults aren't suitable:
+
+**Add to demo config** (`src/demos/{demo-id}/index.ts`):
+```typescript
+import { TimingConfig } from '../timing/types';
+
+const timing: TimingConfig = {
+  betweenSegments: 500,   // Delay between segments within slides
+  betweenSlides: 1000,    // Delay between slides
+  afterFinalSlide: 2000   // Hold time after final slide
+};
+
+export const demoConfig: DemoConfig = {
+  // ... other fields ...
+  timing,
+};
+```
+
+**Generate duration info**:
+```bash
+npm run tts:duration -- --demo {demo-id}
+```
+
+Copy the generated `durationInfo` object to your metadata file (`src/demos/{demo-id}/metadata.ts`).
+
+See [`docs/timing-system/EXAMPLES.md`](../react_cogs_demo/docs/timing-system/EXAMPLES.md) for timing patterns.
+
 ### Step 10: Test Your Demo
 
 ```bash

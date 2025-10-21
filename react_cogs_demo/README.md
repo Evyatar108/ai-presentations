@@ -19,6 +19,7 @@ Visit `http://localhost:5173` to see the demo selection screen.
 - **[Architecture Guide](../docs/ARCHITECTURE.md)** - Multi-demo system architecture and design
 - **[Adding Demos](../docs/ADDING_DEMOS.md)** - Step-by-step guide to create new demos
 - **[TTS Guide](../docs/TTS_GUIDE.md)** - Text-to-speech audio generation workflow
+- **[Timing System](../docs/TIMING_SYSTEM.md)** - Duration tracking and timing configuration
 - **[Component Reference](../docs/COMPONENTS.md)** - Core components and utilities
 - **[Troubleshooting](../docs/TROUBLESHOOTING.md)** - Common issues and solutions
 - **[Meeting Highlights Demo](../docs/demos/meeting-highlights/meeting-highlights.md)** - Detailed information about the Meeting Highlights presentation
@@ -47,15 +48,14 @@ react_cogs_demo/
 
 ```bash
 # Development
-npm run dev                         # Start dev server with cache check
-npm run dev:skip-cache              # Start without cache check
+npm run dev                         # Start dev server (checks cache + calculates durations)
 npm run build                       # Build for production
 npm run preview                     # Preview production build
 
 # TTS Audio Generation
 npm run tts:generate                # Generate all demos
 npm run tts:generate -- --demo meeting-highlights  # Specific demo
-npm run tts:duration                # Calculate audio durations
+npm run tts:duration                # Manually calculate durations (auto-runs on dev start)
 
 # Type Checking
 npm run type-check                  # Run TypeScript compiler
