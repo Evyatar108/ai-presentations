@@ -1,5 +1,110 @@
 # Agents - Meeting Highlights COGS Reduction Presentation
 
+## Recent Planning
+
+### 2025-01-20: Manual Mode Enhancements & Externalized Narration System 📋
+**Designed comprehensive improvements to presentation controls and narration management:**
+
+**Documentation Created:**
+- [`react_cogs_demo/docs/MANUAL_MODE_ENHANCEMENTS.md`](react_cogs_demo/docs/MANUAL_MODE_ENHANCEMENTS.md) - Complete design for two major enhancements
+
+**Enhancement 1: Unified Manual Mode**
+- **Goal**: Simplify UX by merging Manual (Silent) and Manual + Audio into single Manual mode
+- **Change**: Two modes instead of three (Narrated, Manual)
+- **Feature**: Audio toggle button (🔊 Audio / 🔇 Muted) within manual mode
+- **Default**: Audio enabled by default (more useful)
+- **Benefit**: Cleaner interface, more flexible control
+
+**Enhancement 2: Externalized Narration System**
+- **Problem**: Narration text currently hardcoded in React components
+- **Solution**: Move to JSON files (one per demo) similar to TTS system
+- **Architecture**:
+  ```
+  public/narration/
+  ├── meeting-highlights/
+  │   ├── narration.json        # All narration text
+  │   └── narration-cache.json  # Hash-based change tracking
+  ├── example-demo-1/
+  │   └── narration.json
+  └── example-demo-2/
+      └── narration.json
+  ```
+- **Benefits**:
+  - ✅ Edit narration without touching React code
+  - ✅ Version control narration separately
+  - ✅ Easy review and collaboration
+  - ✅ Hash-based change detection (like TTS cache)
+  - ✅ Live editing during presentations with save to file
+  - ✅ Script-based extraction and validation
+
+**Narration Editor Features** (Manual Mode Only):
+- **Edit Button** (✏️) - Opens modal to edit current segment narration
+- **Save Options**:
+  - Save - Write changes to narration.json file
+  - Save & Regenerate Audio - Save JSON + regenerate TTS audio
+- **File Operations**: Requires backend API (Express/Node.js) for file writes
+- **Cache Management**: Updates narration-cache.json with new hashes
+
+**Scripts to be Created**:
+1. **extract-narration.ts** - One-time migration from React code to JSON files
+2. **check-narration.ts** - Validate narration changes (like check-tts-cache)
+3. **Backend API** - File write endpoints for save operations
+
+**Implementation Estimate**: 26-32 hours across 9 phases
+- Phase 1: Unified Manual Mode (2-3h)
+- Phase 2: Extract Narration Script (3-4h)
+- Phase 3: Narration Loading System (4-5h)
+- Phase 4: Narration Check Script (2-3h)
+- Phase 5: Backend API (3-4h)
+- Phase 6: Narration Editor UI (4-5h)
+- Phase 7: Save & Regenerate (3-4h)
+- Phase 8: Migration & Cleanup (2-3h)
+- Phase 9: Testing (3-4h)
+
+**Integration with Timing System**:
+- Narration JSON structure includes visual descriptions
+- Can be extended with timing overrides per segment
+- Consistent with existing TTS workflow
+
+### 2025-01-20: Timing System Refactoring Documentation ✅
+**Created comprehensive timing system documentation structure:**
+
+**Overview:**
+Designed and documented a flexible three-level timing configuration system (per-demo, per-slide, per-segment) to accurately calculate presentation durations including all delays.
+
+**Documentation Structure:**
+- **[`docs/timing-system/README.md`](react_cogs_demo/docs/timing-system/README.md)** - Overview and quick start guide
+- **[`docs/timing-system/ARCHITECTURE.md`](react_cogs_demo/docs/timing-system/ARCHITECTURE.md)** - System design, types, and components
+- **[`docs/timing-system/IMPLEMENTATION.md`](react_cogs_demo/docs/timing-system/IMPLEMENTATION.md)** - Step-by-step implementation phases (9 phases)
+- **[`docs/timing-system/WELCOME_SCREEN.md`](react_cogs_demo/docs/timing-system/WELCOME_SCREEN.md)** - Enhanced duration display UI design
+- **[`docs/timing-system/EXAMPLES.md`](react_cogs_demo/docs/timing-system/EXAMPLES.md)** - Common timing configuration patterns
+- **[`docs/timing-system/MIGRATION.md`](react_cogs_demo/docs/timing-system/MIGRATION.md)** - Migration guide for existing demos
+- **[`docs/timing-system/TODO.md`](react_cogs_demo/docs/timing-system/TODO.md)** - Implementation progress tracker
+
+**Key Features:**
+- Three-level timing hierarchy (demo → slide → segment overrides)
+- Accurate duration calculations including all delays
+- Enhanced WelcomeScreen with interactive breakdown modal
+- Per-slide and per-segment duration details
+- Backward compatible (all timing fields optional)
+- Type-safe with full TypeScript support
+
+**Problem Solved:**
+Current duration calculations only account for audio (e.g., ~4:07), but actual runtime is longer due to delays between segments (500ms), between slides (1000ms), and after final slide (2000ms). New system makes timing explicit and calculable.
+
+**Implementation Status:**
+- ✅ Documentation complete (all 7 documents)
+- ⏳ Implementation pending (estimated 15-24 hours)
+- See [`TODO.md`](react_cogs_demo/docs/timing-system/TODO.md) for detailed checklist
+
+**Benefits:**
+- **Accuracy**: Calculations match actual runtime (±1s)
+- **Transparency**: Users see complete duration breakdown in WelcomeScreen
+- **Flexibility**: Custom timing at demo, slide, or segment level
+- **Maintainability**: Single source of truth for all timing configuration
+
+**Note:** Original monolithic plan moved to [`TIMING_REFACTOR_PLAN.md`](react_cogs_demo/TIMING_REFACTOR_PLAN.md) (archived for reference)
+
 ## Recent Changes
 
 ### 2025-01-20: Documentation Structure Standardization ✅
