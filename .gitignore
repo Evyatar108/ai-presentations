@@ -31,7 +31,6 @@ coverage/
 presentation-app/dist/
 
 # Future media exports
-*.mp4
 *.mov
 
 # Remotion (future)
