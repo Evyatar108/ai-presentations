@@ -4,7 +4,7 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import axios from 'axios';
 import * as crypto from 'crypto';
-import { AudioSegment, SlideComponentWithMetadata } from '../src/slides/SlideMetadata';
+import { AudioSegment, SlideComponentWithMetadata } from '../src/framework/slides/SlideMetadata';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

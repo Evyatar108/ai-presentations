@@ -376,7 +376,7 @@ git commit -m "Regenerate audio for updated narration"
 **Override narration path** (advanced use case):
 
 ```typescript
-// In src/utils/narrationLoader.ts
+// In src/framework/utils/narrationLoader.ts
 export async function loadNarration(
   demoId: string,
   customPath?: string

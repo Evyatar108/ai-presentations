@@ -1,10 +1,10 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useReducedMotion } from '../../../../accessibility/ReducedMotion';
-import { useSegmentedAnimation } from '../../../../contexts/SegmentContext';
-import { SlideComponentWithMetadata } from '../../../../slides/SlideMetadata';
-import { SlideContainer, ContentCard, GradientHighlightBox, SlideTitle } from '../../../../slides/SlideLayouts';
-import { typography, highlightBorder, layouts } from '../../../../slides/SlideStyles';
+import { useReducedMotion } from '../../../../framework/accessibility/ReducedMotion';
+import { useSegmentedAnimation } from '../../../../framework/contexts/SegmentContext';
+import { SlideComponentWithMetadata } from '../../../../framework/slides/SlideMetadata';
+import { SlideContainer, ContentCard, GradientHighlightBox, SlideTitle } from '../../../../framework/slides/SlideLayouts';
+import { typography, highlightBorder, layouts } from '../../../../framework/slides/SlideStyles';
 
 /**
  * Chapter 4: Highlight Types

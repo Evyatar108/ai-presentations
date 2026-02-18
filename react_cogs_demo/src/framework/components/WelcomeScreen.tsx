@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react'; // File header normalized to
 import { motion, AnimatePresence } from 'framer-motion';
 import { DemoRegistry } from '../demos/DemoRegistry';
 import type { DemoMetadata } from '../demos/types';
+import { useTheme } from '../theme/ThemeContext';
 
 interface WelcomeScreenProps {
   onSelectDemo: (demoId: string) => void;
 }
 
 export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) => {
+  const theme = useTheme();
   const [demos, setDemos] = useState<DemoMetadata[]>([]);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [showBreakdown, setShowBreakdown] = useState<string | null>(null);
@@ -76,9 +78,9 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
         alignItems: 'center',
         justifyContent: 'center',
         minHeight: '100vh',
-        background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
-        fontFamily: 'Inter, system-ui, sans-serif',
-        color: '#f1f5f9'
+        background: `linear-gradient(135deg, ${theme.colors.bgDeep} 0%, ${theme.colors.bgSurface} 100%)`,
+        fontFamily: theme.fontFamily,
+        color: theme.colors.textPrimary
       }}>
         <p>Loading demos...</p>
       </div>
@@ -88,9 +90,9 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
+      background: `linear-gradient(135deg, ${theme.colors.bgDeep} 0%, ${theme.colors.bgSurface} 100%)`,
       padding: '3rem 2rem',
-      fontFamily: 'Inter, system-ui, sans-serif'
+      fontFamily: theme.fontFamily
     }}>
       {/* Header */}
       <motion.div
@@ -104,9 +106,9 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
         <h1 style={{
           fontSize: 48,
           fontWeight: 700,
-          color: '#f1f5f9',
+          color: theme.colors.textPrimary,
           marginBottom: '1rem',
-          background: 'linear-gradient(135deg, #00B7C3, #0078D4)',
+          background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`,
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
           backgroundClip: 'text'
@@ -115,7 +117,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
         </h1>
         <p style={{
           fontSize: 18,
-          color: '#94a3b8',
+          color: theme.colors.textSecondary,
           maxWidth: 600,
           margin: '0 auto'
         }}>
@@ -173,7 +175,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
               <h2 style={{
                 fontSize: 24,
                 fontWeight: 600,
-                color: '#f1f5f9',
+                color: theme.colors.textPrimary,
                 marginBottom: '0.75rem'
               }}>
                 {demo.title}
@@ -182,7 +184,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
               {demo.description && (
                 <p style={{
                   fontSize: 14,
-                  color: '#94a3b8',
+                  color: theme.colors.textSecondary,
                   lineHeight: 1.6,
                   marginBottom: '1rem'
                 }}>
@@ -213,7 +215,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
                         <div style={{
                           fontSize: 14,
                           fontWeight: 600,
-                          color: '#f1f5f9',
+                          color: theme.colors.textPrimary,
                           display: 'flex',
                           alignItems: 'center',
                           gap: '0.4rem',
@@ -226,15 +228,15 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
                         </div>
                         <div style={{
                           fontSize: 11,
-                          color: '#94a3b8',
+                          color: theme.colors.textSecondary,
                           marginTop: 2,
                           display: 'flex',
                           alignItems: 'center',
                           gap: '0.4rem',
                           whiteSpace: 'nowrap'
                         }}>
-                          <span style={{ color: '#64748b' }}>Estimated {formatDuration(demo.durationInfo.total)}</span>
-                          <span style={{ color: '#64748b' }}>
+                          <span style={{ color: theme.colors.textMuted }}>Estimated {formatDuration(demo.durationInfo.total)}</span>
+                          <span style={{ color: theme.colors.textMuted }}>
                             ({(actualRuntime[demo.id].elapsed - demo.durationInfo.total).toFixed(1)}s Δ)
                           </span>
                         </div>
@@ -250,7 +252,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
                         whiteSpace: 'nowrap'
                       }}>
                         <span>🕒</span>
-                        <span style={{ color: '#f1f5f9' }}>
+                        <span style={{ color: theme.colors.textPrimary }}>
                           Estimated {formatDuration(demo.durationInfo.total)} total
                         </span>
                       </div>
@@ -265,7 +267,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
                       style={{
                         background: 'none',
                         border: 'none',
-                        color: '#94a3b8',
+                        color: theme.colors.textSecondary,
                         fontSize: 11,
                         fontWeight: 500,
                         cursor: 'pointer',
@@ -305,7 +307,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
                       style={{
                         fontSize: 11,
                         fontWeight: 600,
-                        color: '#00B7C3',
+                        color: theme.colors.primary,
                         background: 'rgba(0, 183, 195, 0.1)',
                         padding: '0.25rem 0.75rem',
                         borderRadius: 12,
@@ -326,7 +328,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.5rem',
-                color: hoveredId === demo.id ? '#00B7C3' : '#64748b',
+                color: hoveredId === demo.id ? theme.colors.primary : theme.colors.textMuted,
                 fontSize: 14,
                 fontWeight: 600,
                 transition: 'color 0.3s ease'
@@ -378,7 +380,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
                   width: '100%',
                   maxWidth: 600,
                   maxHeight: '80vh',
-                  background: 'linear-gradient(165deg, #0f172a 0%, #1e293b 100%)',
+                  background: `linear-gradient(165deg, ${theme.colors.bgDeep} 0%, ${theme.colors.bgSurface} 100%)`,
                   border: '1px solid rgba(148,163,184,0.25)',
                   borderRadius: 16,
                   boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
@@ -402,13 +404,13 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
                     <span style={{
                       fontSize: 16,
                       fontWeight: 600,
-                      color: '#f1f5f9'
+                      color: theme.colors.textPrimary
                     }}>
                       {demo.title} – Timing Breakdown
                     </span>
                     <span style={{
                       fontSize: 12,
-                      color: '#94a3b8',
+                      color: theme.colors.textSecondary,
                       marginTop: 2,
                       display: 'flex',
                       flexDirection: 'column',
@@ -434,7 +436,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
                     style={{
                       background: 'transparent',
                       border: '1px solid rgba(148,163,184,0.3)',
-                      color: '#94a3b8',
+                      color: theme.colors.textSecondary,
                       width: 34,
                       height: 34,
                       borderRadius: 8,
@@ -480,7 +482,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
                         <span style={{
                           fontSize: 13,
                           fontWeight: 600,
-                          color: '#f1f5f9',
+                          color: theme.colors.textPrimary,
                           overflow: 'hidden',
                           textOverflow: 'ellipsis',
                           whiteSpace: 'nowrap'
@@ -500,12 +502,12 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
                         flexWrap: 'wrap',
                         gap: '0.75rem',
                         fontSize: 11,
-                        color: '#94a3b8',
+                        color: theme.colors.textSecondary,
                         marginBottom: slide.segments.length > 1 ? '0.5rem' : 0
                       }}>
                         <span>🎵 {formatDuration(slide.audioDuration)} audio</span>
                         <span>⏱️ {formatDuration(slide.delaysDuration)} delays</span>
-                        <span style={{ color: '#64748b' }}>
+                        <span style={{ color: theme.colors.textMuted }}>
                           {slide.segments.length} segment{slide.segments.length !== 1 ? 's' : ''}
                         </span>
                       </div>
@@ -516,7 +518,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
                         }}>
                           <div style={{
                             fontSize: 10,
-                            color: '#64748b',
+                            color: theme.colors.textMuted,
                             letterSpacing: '0.5px',
                             textTransform: 'uppercase',
                             marginBottom: '0.25rem'
@@ -528,7 +530,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
                               key={`mseg-${slide.slideIndex}-${segment.segmentIndex}`}
                               style={{
                                 fontSize: 10,
-                                color: '#94a3b8',
+                                color: theme.colors.textSecondary,
                                 display: 'grid',
                                 gridTemplateColumns: '2rem 1fr auto auto',
                                 gap: '0.5rem',
@@ -539,7 +541,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
                                   : 'none'
                               }}
                             >
-                              <span style={{ color: '#64748b' }}>{segment.segmentIndex + 1}.</span>
+                              <span style={{ color: theme.colors.textMuted }}>{segment.segmentIndex + 1}.</span>
                               <span style={{
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
@@ -547,10 +549,10 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
                               }}>
                                 Segment {segment.segmentIndex + 1}
                               </span>
-                              <span style={{ color: '#f1f5f9' }}>
+                              <span style={{ color: theme.colors.textPrimary }}>
                                 {formatDuration(segment.audioDuration)}
                               </span>
-                              <span style={{ color: '#64748b', fontSize: 9 }}>
+                              <span style={{ color: theme.colors.textMuted, fontSize: 9 }}>
                                 +{segment.delayAfter.toFixed(1)}s
                               </span>
                             </div>
@@ -566,19 +568,19 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
                     paddingTop: '1rem',
                     borderTop: '1px solid rgba(148,163,184,0.2)',
                     fontSize: 11,
-                    color: '#94a3b8',
+                    color: theme.colors.textSecondary,
                     display: 'grid',
                     gridTemplateColumns: 'auto 1fr',
                     gap: '0.3rem 0.85rem'
                   }}>
                     <span>Total Slides:</span>
-                    <span style={{ color: '#f1f5f9' }}>{slideBreakdown.length}</span>
+                    <span style={{ color: theme.colors.textPrimary }}>{slideBreakdown.length}</span>
                     <span>Total Segments:</span>
-                    <span style={{ color: '#f1f5f9' }}>
+                    <span style={{ color: theme.colors.textPrimary }}>
                       {slideBreakdown.reduce((sum, s) => sum + s.segments.length, 0)}
                     </span>
                     <span>Avg per Slide:</span>
-                    <span style={{ color: '#f1f5f9' }}>
+                    <span style={{ color: theme.colors.textPrimary }}>
                       {formatDuration(Math.round(demo.durationInfo!.total / slideBreakdown.length))}
                     </span>
                   </div>
@@ -597,7 +599,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
         style={{
           textAlign: 'center',
           marginTop: '4rem',
-          color: '#64748b',
+          color: theme.colors.textMuted,
           fontSize: 14
         }}
       >

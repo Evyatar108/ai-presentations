@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as crypto from 'crypto';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import { SlideComponentWithMetadata } from '../src/slides/SlideMetadata';
+import { SlideComponentWithMetadata } from '../src/framework/slides/SlideMetadata';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

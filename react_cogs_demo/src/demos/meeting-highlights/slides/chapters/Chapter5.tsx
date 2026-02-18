@@ -1,12 +1,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useReducedMotion } from '../../../../accessibility/ReducedMotion';
-import { MetricTile } from '../../../../components/CoreComponents';
-import { SlideComponentWithMetadata } from '../../../../slides/SlideMetadata';
-import { SlideContainer } from '../../../../slides/SlideLayouts';
-import { typography, gradientBox, layouts } from '../../../../slides/SlideStyles';
-import { staggerContainer, tileVariants, arrowVariants, targetVariants, promptVariants } from '../../../../slides/AnimationVariants';
-import { ArrowDown, ArrowRight } from '../../../../slides/SlideIcons';
+import { useReducedMotion } from '../../../../framework/accessibility/ReducedMotion';
+import { MetricTile } from '../../../../framework/components/MetricTile';
+import { SlideComponentWithMetadata } from '../../../../framework/slides/SlideMetadata';
+import { SlideContainer } from '../../../../framework/slides/SlideLayouts';
+import { typography, gradientBox, layouts } from '../../../../framework/slides/SlideStyles';
+import { staggerContainer, tileVariants, arrowVariants, targetVariants, promptVariants } from '../../../../framework/slides/AnimationVariants';
+import { ArrowDown, ArrowRight } from '../../../../framework/slides/SlideIcons';
 
 /**
  * Chapter 5: COGS Challenge

@@ -7,6 +7,7 @@ import { NarratedController } from './NarratedController';
 import { SlidePlayer, Slide } from './SlidePlayer';
 import { SegmentProvider } from '../contexts/SegmentContext';
 import { loadNarration, getNarrationText, type NarrationData } from '../utils/narrationLoader';
+import { useTheme } from '../theme/ThemeContext';
 
 interface DemoPlayerProps {
   demoId: string;
@@ -14,6 +15,7 @@ interface DemoPlayerProps {
 }
 
 export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack }) => {
+  const theme = useTheme();
   const [demoConfig, setDemoConfig] = useState<DemoConfig | null>(null);
   const [loadedSlides, setLoadedSlides] = useState<SlideComponentWithMetadata[]>([]);
   const [narrationData, setNarrationData] = useState<NarrationData | null>(null);
@@ -162,9 +164,9 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack }) => {
         alignItems: 'center',
         justifyContent: 'center',
         minHeight: '100vh',
-        background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
-        fontFamily: 'Inter, system-ui, sans-serif',
-        color: '#f1f5f9'
+        background: `linear-gradient(135deg, ${theme.colors.bgDeep} 0%, ${theme.colors.bgSurface} 100%)`,
+        fontFamily: theme.fontFamily,
+        color: theme.colors.textPrimary
       }}>
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
@@ -175,12 +177,12 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack }) => {
             width: 48,
             height: 48,
             border: '4px solid rgba(0, 183, 195, 0.2)',
-            borderTop: '4px solid #00B7C3',
+            borderTop: `4px solid ${theme.colors.primary}`,
             borderRadius: '50%',
             margin: '0 auto 1rem',
             animation: 'spin 1s linear infinite'
           }} />
-          <p style={{ fontSize: 18, color: '#94a3b8' }}>Loading demo...</p>
+          <p style={{ fontSize: 18, color: theme.colors.textSecondary }}>Loading demo...</p>
           <style>{`
             @keyframes spin {
               0% { transform: rotate(0deg); }
@@ -200,9 +202,9 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack }) => {
         alignItems: 'center',
         justifyContent: 'center',
         minHeight: '100vh',
-        background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
-        fontFamily: 'Inter, system-ui, sans-serif',
-        color: '#f1f5f9'
+        background: `linear-gradient(135deg, ${theme.colors.bgDeep} 0%, ${theme.colors.bgSurface} 100%)`,
+        fontFamily: theme.fontFamily,
+        color: theme.colors.textPrimary
       }}>
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
@@ -220,14 +222,14 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack }) => {
           <h2 style={{
             fontSize: 24,
             fontWeight: 600,
-            color: '#ef4444',
+            color: theme.colors.error,
             marginBottom: '1rem'
           }}>
             Failed to Load Demo
           </h2>
           <p style={{
             fontSize: 16,
-            color: '#94a3b8',
+            color: theme.colors.textSecondary,
             marginBottom: '2rem'
           }}>
             {error || 'Demo configuration could not be loaded'}
@@ -235,7 +237,7 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack }) => {
           <button
             onClick={onBack}
             style={{
-              background: 'linear-gradient(135deg, #00B7C3, #0078D4)',
+              background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`,
               color: '#fff',
               border: 'none',
               borderRadius: 12,
@@ -266,7 +268,7 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack }) => {
             left: 20,
             background: 'rgba(0, 0, 0, 0.7)',
             backdropFilter: 'blur(10px)',
-            color: '#f1f5f9',
+            color: theme.colors.textPrimary,
             border: '1px solid rgba(148, 163, 184, 0.3)',
             borderRadius: 12,
             padding: '0.75rem 1.25rem',
@@ -277,7 +279,7 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack }) => {
             display: 'flex',
             alignItems: 'center',
             gap: '0.5rem',
-            fontFamily: 'Inter, system-ui, sans-serif',
+            fontFamily: theme.fontFamily,
             transition: 'all 0.2s ease'
           }}
           whileHover={{
@@ -304,6 +306,7 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack }) => {
         {/* Slide Player */}
         <SlidePlayer
           slides={slides}
+          slidesWithMetadata={slidesWithNarration}
           autoAdvance={false}
           externalSlide={currentSlide}
           onSlideChange={handleManualSlideChange}

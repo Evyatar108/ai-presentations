@@ -15,7 +15,7 @@ const PORT = process.env.NARRATION_API_PORT || 3001;
 
 // Middleware
 app.use(cors({
-  origin: 'http://localhost:5173', // Vite dev server
+  origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
   methods: ['GET', 'POST'],
   credentials: true
 }));
@@ -289,7 +289,7 @@ app.listen(PORT, () => {
   console.log('═══════════════════════════════════════════════════════════');
   console.log(`  ✅ Server running on http://localhost:${PORT}`);
   console.log(`  📁 Narration directory: ${NARRATION_DIR}`);
-  console.log(`  🔗 CORS enabled for: http://localhost:5173`);
+  console.log(`  🔗 CORS enabled for: ${process.env.CORS_ORIGIN || 'http://localhost:5173'}`);
   console.log('');
   console.log('  Available endpoints:');
   console.log(`    GET  /api/health                 - Health check`);

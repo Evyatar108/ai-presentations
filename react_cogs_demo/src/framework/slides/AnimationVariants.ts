@@ -166,14 +166,14 @@ export const promptVariants = (reduced: boolean): Variants => ({
  * Pulsing glow animation
  * Used in: Ch6_S1, Ch7_S4
  */
-export const pulseGlow = (reduced: boolean): Record<string, any> => {
+export const pulseGlow = (reduced: boolean, color: string = '0, 183, 195'): Record<string, any> => {
   if (reduced) return {};
-  
+
   return {
     boxShadow: [
-      '0 0 60px rgba(0, 183, 195, 0.6)',
-      '0 0 80px rgba(0, 183, 195, 0.8)',
-      '0 0 60px rgba(0, 183, 195, 0.6)'
+      `0 0 60px rgba(${color}, 0.6)`,
+      `0 0 80px rgba(${color}, 0.8)`,
+      `0 0 60px rgba(${color}, 0.6)`
     ]
   };
 };

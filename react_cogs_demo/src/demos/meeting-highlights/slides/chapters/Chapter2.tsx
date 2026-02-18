@@ -1,8 +1,9 @@
 import React, { useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useReducedMotion } from '../../../../accessibility/ReducedMotion';
-import { useSegmentedAnimation } from '../../../../contexts/SegmentContext';
-import { SlideComponentWithMetadata } from '../../../../slides/SlideMetadata';
+import { useReducedMotion } from '../../../../framework/accessibility/ReducedMotion';
+import { useSegmentedAnimation } from '../../../../framework/contexts/SegmentContext';
+import { SlideComponentWithMetadata } from '../../../../framework/slides/SlideMetadata';
+import 'reactflow/dist/style.css';
 import {
   ReactFlow,
   Background,

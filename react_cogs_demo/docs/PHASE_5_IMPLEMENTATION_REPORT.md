@@ -14,7 +14,7 @@ Phase 5 successfully integrated the backend narration API with the frontend narr
 
 ### 1. API Client Utility ✅
 
-**File**: [`src/utils/narrationApiClient.ts`](../src/utils/narrationApiClient.ts) (200 lines)
+**File**: [`src/framework/utils/narrationApiClient.ts`](../src/framework/utils/narrationApiClient.ts) (200 lines)
 
 **Features**:
 - Type-safe API client with full TypeScript interfaces
@@ -46,7 +46,7 @@ export async function hashText(text: string): Promise<string>
 
 ### 2. NarratedController Integration ✅
 
-**File**: [`src/components/NarratedController.tsx`](../src/components/NarratedController.tsx)
+**File**: [`src/framework/components/NarratedController.tsx`](../src/framework/components/NarratedController.tsx)
 
 **New State Variables**:
 ```typescript
@@ -286,12 +286,12 @@ cat public/narration/meeting-highlights/narration-cache.json
   - `POST /api/narration/update-cache` - Update cache
 
 ### Narration Loader (Phase 3)
-- **File**: [`src/utils/narrationLoader.ts`](../src/utils/narrationLoader.ts)
+- **File**: [`src/framework/utils/narrationLoader.ts`](../src/framework/utils/narrationLoader.ts)
 - **Purpose**: Loads narration from JSON files
 - **Integration**: Works seamlessly with saved narration
 
 ### TTS System (Phase 4)
-- **File**: [`src/utils/ttsClient.ts`](../src/utils/ttsClient.ts)
+- **File**: [`src/framework/utils/ttsClient.ts`](../src/framework/utils/ttsClient.ts)
 - **Purpose**: Regenerates audio using TTS server
 - **Integration**: Cache updated after regeneration
 
@@ -300,15 +300,15 @@ cat public/narration/meeting-highlights/narration-cache.json
 ## File Locations
 
 ### New Files
-- [`src/utils/narrationApiClient.ts`](../src/utils/narrationApiClient.ts) - API client utility (200 lines)
+- [`src/framework/utils/narrationApiClient.ts`](../src/framework/utils/narrationApiClient.ts) - API client utility (200 lines)
 
 ### Modified Files
-- [`src/components/NarratedController.tsx`](../src/components/NarratedController.tsx) - API integration + notifications
+- [`src/framework/components/NarratedController.tsx`](../src/framework/components/NarratedController.tsx) - API integration + notifications
 
 ### No Changes Required
 - Backend API (`server/narration-api.cjs`) - Already complete from Phase 4
-- Narration loader (`src/utils/narrationLoader.ts`) - No changes needed
-- TTS client (`src/utils/ttsClient.ts`) - No changes needed
+- Narration loader (`src/framework/utils/narrationLoader.ts`) - No changes needed
+- TTS client (`src/framework/utils/ttsClient.ts`) - No changes needed
 
 ---
 

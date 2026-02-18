@@ -1,6 +1,6 @@
-import { calculateSlideDuration, calculatePresentationDuration } from '../src/demos/timing/calculator';
-import { resolveTimingConfig, TimingConfig } from '../src/demos/timing/types';
-import type { SlideMetadata, AudioSegment } from '../src/slides/SlideMetadata';
+import { calculateSlideDuration, calculatePresentationDuration } from '../src/framework/demos/timing/calculator';
+import { resolveTimingConfig, TimingConfig } from '../src/framework/demos/timing/types';
+import type { SlideMetadata, AudioSegment } from '../src/framework/slides/SlideMetadata';
 
 interface TestResult {
   name: string;

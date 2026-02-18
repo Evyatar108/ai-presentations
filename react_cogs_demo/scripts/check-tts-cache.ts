@@ -7,7 +7,7 @@ import { dirname } from 'path';
 import * as readline from 'readline';
 import { execSync } from 'child_process';
 import * as crypto from 'crypto';
-import { SlideComponentWithMetadata } from '../src/slides/SlideMetadata';
+import { SlideComponentWithMetadata } from '../src/framework/slides/SlideMetadata';
 
 // Narration JSON structure
 interface NarrationData {

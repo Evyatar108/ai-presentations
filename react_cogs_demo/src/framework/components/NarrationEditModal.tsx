@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useTheme } from '../theme/ThemeContext';
 
 interface NarrationEditModalProps {
   slideKey: string;
@@ -20,6 +21,7 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
   onSave,
   onCancel
 }) => {
+  const theme = useTheme();
   const [text, setText] = useState(currentText);
 
   // Handle ESC key to close modal
@@ -54,7 +56,7 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: 10000,
-        fontFamily: 'Inter, system-ui, sans-serif'
+        fontFamily: theme.fontFamily
       }}
       onClick={!isRegenerating ? onCancel : undefined}
     >
@@ -63,7 +65,7 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
         animate={{ scale: 1 }}
         onClick={(e) => e.stopPropagation()}
         style={{
-          background: '#1e293b',
+          background: theme.colors.bgSurface,
           borderRadius: 12,
           padding: '2rem',
           width: '90%',
@@ -72,7 +74,7 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
         }}
       >
         <h2 style={{ 
-          color: '#f1f5f9', 
+          color: theme.colors.textPrimary,
           marginBottom: '1rem',
           fontSize: 20,
           fontWeight: 600
@@ -89,13 +91,13 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
             width: '100%',
             minHeight: 150,
             padding: '1rem',
-            background: '#0f172a',
-            color: '#f1f5f9',
+            background: theme.colors.bgDeep,
+            color: theme.colors.textPrimary,
             border: '1px solid rgba(148, 163, 184, 0.3)',
             borderRadius: 8,
             fontSize: 14,
             lineHeight: 1.6,
-            fontFamily: 'Inter, system-ui, sans-serif',
+            fontFamily: theme.fontFamily,
             resize: 'vertical',
             outline: 'none',
             boxSizing: 'border-box',
@@ -104,8 +106,8 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
         />
         
         <div style={{ 
-          color: '#94a3b8', 
-          fontSize: 12, 
+          color: theme.colors.textSecondary,
+          fontSize: 12,
           marginTop: '0.5rem' 
         }}>
           Character count: {text.length}
@@ -135,7 +137,7 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
             borderRadius: 6,
             padding: '0.75rem',
             marginTop: '1rem',
-            color: '#ef4444',
+            color: theme.colors.error,
             fontSize: 13,
             display: 'flex',
             alignItems: 'flex-start',
@@ -169,7 +171,7 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
             style={{
               background: 'transparent',
               border: '1px solid #475569',
-              color: '#94a3b8',
+              color: theme.colors.textSecondary,
               padding: '0.75rem 1.5rem',
               borderRadius: 8,
               cursor: isRegenerating ? 'not-allowed' : 'pointer',
@@ -199,8 +201,8 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
             disabled={isRegenerating}
             style={{
               background: 'transparent',
-              border: '1px solid #00B7C3',
-              color: '#00B7C3',
+              border: `1px solid ${theme.colors.primary}`,
+              color: theme.colors.primary,
               padding: '0.75rem 1.5rem',
               borderRadius: 8,
               cursor: isRegenerating ? 'not-allowed' : 'pointer',
@@ -227,7 +229,7 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
             onClick={handleSaveAndRegenerate}
             disabled={isRegenerating}
             style={{
-              background: 'linear-gradient(135deg, #00B7C3, #0078D4)',
+              background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`,
               color: '#fff',
               border: 'none',
               padding: '0.75rem 1.5rem',

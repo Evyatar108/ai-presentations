@@ -13,9 +13,11 @@ import {
   hashText
 } from '../utils/narrationApiClient';
 import { NarrationData, NarrationSlide, NarrationSegment } from '../utils/narrationLoader';
+import { getConfig } from '../config';
+import { useTheme } from '../theme/ThemeContext';
 
 // Fallback audio file for missing segments
-const FALLBACK_AUDIO = '/audio/silence-1s.mp3';
+const getFallbackAudio = () => getConfig().fallbackAudioPath;
 
 // Helper to load audio with fallback
 const loadAudioWithFallback = async (primaryPath: string, segmentId: string): Promise<HTMLAudioElement> => {
@@ -25,7 +27,7 @@ const loadAudioWithFallback = async (primaryPath: string, segmentId: string): Pr
     const handleError = () => {
       console.warn(`[Audio] File not found: ${primaryPath}, using fallback silence for segment: ${segmentId}`);
       // Create fallback audio
-      const fallbackAudio = new Audio(FALLBACK_AUDIO);
+      const fallbackAudio = new Audio(getFallbackAudio());
       resolve(fallbackAudio);
     };
     
@@ -61,6 +63,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
   manualSlideChange,
   onBack
 }) => {
+  const theme = useTheme();
   // Use provided slides or empty array if not loaded yet
   const allSlides = slides || [];
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -880,7 +883,7 @@ const handleCancelEdit = () => {
               alignItems: 'center',
               justifyContent: 'center',
               zIndex: 9999,
-              fontFamily: 'Inter, system-ui, sans-serif'
+              fontFamily: theme.fontFamily
             }}
           >
             <motion.div
@@ -893,10 +896,10 @@ const handleCancelEdit = () => {
                 padding: '2rem'
               }}
             >
-              <h1 style={{ color: '#f1f5f9', marginBottom: '1rem', fontSize: 32 }}>
+              <h1 style={{ color: theme.colors.textPrimary, marginBottom: '1rem', fontSize: 32 }}>
                 {demoMetadata.title}
               </h1>
-              <p style={{ color: '#94a3b8', marginBottom: '2rem', fontSize: 16 }}>
+              <p style={{ color: theme.colors.textSecondary, marginBottom: '2rem', fontSize: 16 }}>
                 This presentation will auto-advance through {allSlides.length} slides with narration.
                 {demoMetadata.description && (
                   <>
@@ -907,7 +910,7 @@ const handleCancelEdit = () => {
               </p>
               
               {error && (
-                <p style={{ color: '#ef4444', marginBottom: '1rem', fontSize: 14 }}>
+                <p style={{ color: theme.colors.error, marginBottom: '1rem', fontSize: 14 }}>
                   {error}
                 </p>
               )}
@@ -917,13 +920,13 @@ const handleCancelEdit = () => {
                 <div style={{
                   marginBottom: '1rem',
                   fontSize: 13,
-                  color: '#94a3b8',
+                  color: theme.colors.textSecondary,
                   background: 'rgba(255,255,255,0.05)',
                   padding: '0.5rem 0.75rem',
                   borderRadius: 8,
-                  fontFamily: 'Inter, system-ui, sans-serif'
+                  fontFamily: theme.fontFamily
                 }}>
-                  <strong style={{ color: '#f1f5f9' }}>Last Run Timing:</strong>{' '}
+                  <strong style={{ color: theme.colors.textPrimary }}>Last Run Timing:</strong>{' '}
                   Elapsed {formatMMSS(finalElapsedSeconds)}
                   {demoMetadata.durationInfo?.total && (
                     <>
@@ -944,7 +947,7 @@ const handleCancelEdit = () => {
                  gap: '1.25rem',
                  flexWrap: 'wrap'
                }}>
-                 <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: 14, color: '#94a3b8' }}>
+                 <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: 14, color: theme.colors.textSecondary }}>
                    <input
                      type="checkbox"
                      checked={hideInterface}
@@ -954,7 +957,7 @@ const handleCancelEdit = () => {
                    <span>Hide interface (recording)</span>
                  </label>
 
-                 <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: 14, color: '#94a3b8' }}>
+                 <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: 14, color: theme.colors.textSecondary }}>
                    <input
                      type="checkbox"
                      checked={showRuntimeTimerOption}
@@ -967,7 +970,7 @@ const handleCancelEdit = () => {
                {showRuntimeTimerOption && demoMetadata.durationInfo?.total && (
                  <div style={{
                    fontSize: 12,
-                   color: '#64748b',
+                   color: theme.colors.textMuted,
                    textAlign: 'center',
                    maxWidth: 480,
                    margin: '0 auto',
@@ -982,7 +985,7 @@ const handleCancelEdit = () => {
                 <button
                   onClick={handleStart}
                   style={{
-                    background: 'linear-gradient(135deg, #00B7C3, #0078D4)',
+                    background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`,
                     color: '#fff',
                     border: 'none',
                     borderRadius: 12,
@@ -1000,8 +1003,8 @@ const handleCancelEdit = () => {
                   onClick={handleManualMode}
                   style={{
                     background: 'transparent',
-                    color: '#00B7C3',
-                    border: '2px solid #00B7C3',
+                    color: theme.colors.primary,
+                    border: `2px solid ${theme.colors.primary}`,
                     borderRadius: 12,
                     padding: '1rem 1.5rem',
                     fontSize: 16,
@@ -1013,7 +1016,7 @@ const handleCancelEdit = () => {
                 </button>
               </div>
               
-              <p style={{ color: '#64748b', marginTop: '1.5rem', fontSize: 12 }}>
+              <p style={{ color: theme.colors.textMuted, marginTop: '1.5rem', fontSize: 12 }}>
                 Narrated: Auto-advance | Manual: Arrow keys with audio toggle
               </p>
             </motion.div>
@@ -1032,7 +1035,7 @@ const handleCancelEdit = () => {
            left: '50%',
            transform: 'translateX(-50%)',
            background: 'rgba(0, 0, 0, 0.8)',
-           color: '#f1f5f9',
+           color: theme.colors.textPrimary,
            padding: '0.5rem 1rem',
            borderRadius: 8,
            fontSize: 12,
@@ -1075,7 +1078,7 @@ const handleCancelEdit = () => {
              style={{
                background: 'transparent',
                border: '1px solid #475569',
-               color: audioEnabled ? '#00B7C3' : '#64748b',
+               color: audioEnabled ? theme.colors.primary : theme.colors.textMuted,
                borderRadius: 6,
                padding: '0.25rem 0.75rem',
                fontSize: 11,
@@ -1097,7 +1100,7 @@ const handleCancelEdit = () => {
                gap: '0.5rem',
                cursor: 'pointer',
                fontSize: 11,
-               color: '#94a3b8'
+               color: theme.colors.textSecondary
              }}
            >
              <input
@@ -1121,7 +1124,7 @@ const handleCancelEdit = () => {
              style={{
                background: 'transparent',
                border: '1px solid #475569',
-               color: '#f1f5f9',
+               color: theme.colors.textPrimary,
                borderRadius: 6,
                padding: '0.25rem 0.75rem',
                fontSize: 11,
@@ -1146,7 +1149,7 @@ const handleCancelEdit = () => {
            style={{
              background: 'transparent',
              border: '1px solid #475569',
-             color: '#f1f5f9',
+             color: theme.colors.textPrimary,
              borderRadius: 6,
              padding: '0.25rem 0.75rem',
              fontSize: 11,
@@ -1230,7 +1233,7 @@ const handleCancelEdit = () => {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.5rem',
-                fontFamily: 'Inter, system-ui, sans-serif'
+                fontFamily: theme.fontFamily
               }}
             >
               <span style={{ fontSize: 16, fontWeight: 'bold' }}>{style.icon}</span>

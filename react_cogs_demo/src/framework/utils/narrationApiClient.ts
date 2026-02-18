@@ -6,8 +6,9 @@
  */
 
 import { NarrationData } from './narrationLoader';
+import { getConfig } from '../config';
 
-const API_BASE_URL = 'http://localhost:3001';
+const getApiBaseUrl = () => getConfig().narrationApiBaseUrl;
 
 /**
  * Request interface for saving narration data
@@ -69,7 +70,7 @@ export async function checkApiHealth(): Promise<boolean> {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 1000); // 1 second timeout
     
-    const response = await fetch(`${API_BASE_URL}/api/health`, {
+    const response = await fetch(`${getApiBaseUrl()}/api/health`, {
       method: 'GET',
       signal: controller.signal
     });
@@ -111,7 +112,7 @@ export async function saveNarrationToFile(
   try {
     console.log('[NarrationAPI] Saving narration for demo:', request.demoId);
     
-    const response = await fetch(`${API_BASE_URL}/api/narration/save`, {
+    const response = await fetch(`${getApiBaseUrl()}/api/narration/save`, {
       method: 'POST',
       headers: { 
         'Content-Type': 'application/json'
@@ -159,7 +160,7 @@ export async function updateNarrationCache(
   try {
     console.log('[NarrationAPI] Updating cache for segment:', request.segment.key);
     
-    const response = await fetch(`${API_BASE_URL}/api/narration/update-cache`, {
+    const response = await fetch(`${getApiBaseUrl()}/api/narration/update-cache`, {
       method: 'POST',
       headers: { 
         'Content-Type': 'application/json'

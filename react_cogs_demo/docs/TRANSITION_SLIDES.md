@@ -604,5 +604,5 @@ animationQueue.add(() => enterSlideB());
 ## See Also
 
 - [Timing System Documentation](timing-system/README.md)
-- [Animation Variants](../src/slides/AnimationVariants.ts)
-- [Slide Player Component](../src/components/SlidePlayer.tsx)
+- [Animation Variants](../src/framework/slides/AnimationVariants.ts)
+- [Slide Player Component](../src/framework/components/SlidePlayer.tsx)

@@ -1,11 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useReducedMotion } from '../../../../accessibility/ReducedMotion';
-import { MetricTile } from '../../../../components/CoreComponents';
-import { SlideComponentWithMetadata } from '../../../../slides/SlideMetadata';
-import { SlideContainer, ContentCard, SlideTitle } from '../../../../slides/SlideLayouts';
-import { typography, gradientBox, layouts } from '../../../../slides/SlideStyles';
-import { fadeUp, scaleIn } from '../../../../slides/AnimationVariants';
+import { useReducedMotion } from '../../../../framework/accessibility/ReducedMotion';
+import { MetricTile } from '../../../../framework/components/MetricTile';
+import { SlideComponentWithMetadata } from '../../../../framework/slides/SlideMetadata';
+import { SlideContainer, ContentCard, SlideTitle } from '../../../../framework/slides/SlideLayouts';
+import { typography, gradientBox, layouts } from '../../../../framework/slides/SlideStyles';
+import { fadeUp, scaleIn } from '../../../../framework/slides/AnimationVariants';
 
 /**
  * Chapter 6: Optimization Solution

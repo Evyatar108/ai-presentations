@@ -1,12 +1,12 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useReducedMotion } from '../../../../accessibility/ReducedMotion';
-import { useSegmentedAnimation } from '../../../../contexts/SegmentContext';
-import { VideoPlayer } from '../../../../components/VideoPlayer';
-import { SlideComponentWithMetadata } from '../../../../slides/SlideMetadata';
-import { SlideContainer, ContentCard, GradientHighlightBox, SlideTitle, BenefitCard } from '../../../../slides/SlideLayouts';
-import { typography, gradientBox } from '../../../../slides/SlideStyles';
-import { fadeUp, fadeLeft, fadeRight, scaleIn } from '../../../../slides/AnimationVariants';
+import { useReducedMotion } from '../../../../framework/accessibility/ReducedMotion';
+import { useSegmentedAnimation } from '../../../../framework/contexts/SegmentContext';
+import { VideoPlayer } from '../../../../framework/components/VideoPlayer';
+import { SlideComponentWithMetadata } from '../../../../framework/slides/SlideMetadata';
+import { SlideContainer, ContentCard, GradientHighlightBox, SlideTitle, BenefitCard } from '../../../../framework/slides/SlideLayouts';
+import { typography, gradientBox } from '../../../../framework/slides/SlideStyles';
+import { fadeUp, fadeLeft, fadeRight, scaleIn } from '../../../../framework/slides/AnimationVariants';
 
 /**
  * Chapter 1: What is Meeting Highlights

@@ -1,11 +1,11 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useReducedMotion } from '../../../../accessibility/ReducedMotion';
-import { useSegmentedAnimation } from '../../../../contexts/SegmentContext';
-import { SlideComponentWithMetadata } from '../../../../slides/SlideMetadata';
-import { SlideContainer, ContentCard, SlideTitle } from '../../../../slides/SlideLayouts';
-import { typography, gradientBox, successGradientBox } from '../../../../slides/SlideStyles';
-import { scaleIn, fadeUp } from '../../../../slides/AnimationVariants';
+import { useReducedMotion } from '../../../../framework/accessibility/ReducedMotion';
+import { useSegmentedAnimation } from '../../../../framework/contexts/SegmentContext';
+import { SlideComponentWithMetadata } from '../../../../framework/slides/SlideMetadata';
+import { SlideContainer, ContentCard, SlideTitle } from '../../../../framework/slides/SlideLayouts';
+import { typography, gradientBox, successGradientBox } from '../../../../framework/slides/SlideStyles';
+import { scaleIn, fadeUp } from '../../../../framework/slides/AnimationVariants';
 
 /**
  * Chapter 8: User Reception

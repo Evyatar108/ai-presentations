@@ -5,8 +5,8 @@
  * presentation, including metadata and lazy-loaded slide definitions.
  */
 
-import type { DemoConfig } from '../types';
-import type { TimingConfig } from '../timing/types';
+import type { DemoConfig } from '../../framework/demos/types';
+import type { TimingConfig } from '../../framework/demos/timing/types';
 import { meetingHighlightsMetadata } from './metadata';
 
 /**

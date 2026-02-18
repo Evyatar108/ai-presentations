@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useReducedMotion } from '../../../../accessibility/ReducedMotion';
-import { MetricTile } from '../../../../components/CoreComponents';
-import { SlideComponentWithMetadata } from '../../../../slides/SlideMetadata';
+import { useReducedMotion } from '../../../../framework/accessibility/ReducedMotion';
+import { MetricTile } from '../../../../framework/components/MetricTile';
+import { SlideComponentWithMetadata } from '../../../../framework/slides/SlideMetadata';
 
 /**
  * Chapter 7: Business Impact

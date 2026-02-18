@@ -644,7 +644,7 @@ npm run extract-narration -- --demo meeting-highlights
 **A**: **Not recommended** - breaking the schema will break the system.
 
 **If needed**:
-1. Update TypeScript interfaces in `src/utils/narrationLoader.ts`
+1. Update TypeScript interfaces in `src/framework/utils/narrationLoader.ts`
 2. Update extraction script `scripts/extract-narration.ts`
 3. Update all consumers of narration data
 4. Update documentation

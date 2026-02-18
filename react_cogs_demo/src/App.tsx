@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { ReducedMotionToggle } from './accessibility/ReducedMotion';
-import { WelcomeScreen } from './components/WelcomeScreen';
-import { DemoPlayer } from './components/DemoPlayer';
-import 'reactflow/dist/style.css';
+import { ReducedMotionToggle } from './framework/accessibility/ReducedMotion';
+import { WelcomeScreen } from './framework/components/WelcomeScreen';
+import { DemoPlayer } from './framework/components/DemoPlayer';
 
 export const App: React.FC = () => {
   const [selectedDemoId, setSelectedDemoId] = useState<string | null>(null);

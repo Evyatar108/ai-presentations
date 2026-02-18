@@ -38,7 +38,7 @@ const ids = DemoRegistry.getDemoIds();
 
 ### Registration
 
-Demos are registered in `src/demos/DemoRegistry.ts`:
+Demos are registered in `src/demos/registry.ts`:
 
 ```typescript
 registerDemo({

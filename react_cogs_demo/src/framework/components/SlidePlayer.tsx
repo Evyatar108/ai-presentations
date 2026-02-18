@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSegmentContext } from '../contexts/SegmentContext';
-import { allSlides } from '../slides/SlidesRegistry';
+import type { SlideComponentWithMetadata } from '../slides/SlideMetadata';
 import * as ttsClient from '../utils/ttsClient';
+import { useTheme } from '../theme/ThemeContext';
 
 export interface Slide {
   chapter: number;
@@ -13,6 +14,7 @@ export interface Slide {
 
 interface SlidePlayerProps {
   slides: Slide[];
+  slidesWithMetadata?: SlideComponentWithMetadata[];
   autoAdvance?: boolean;
   autoAdvanceDelay?: number;
   externalSlide?: { chapter: number; slide: number };
@@ -22,15 +24,17 @@ interface SlidePlayerProps {
 
 export const SlidePlayer: React.FC<SlidePlayerProps> = ({
   slides,
+  slidesWithMetadata,
   autoAdvance = false,
   autoAdvanceDelay = 8000,
   externalSlide,
   onSlideChange,
   disableManualNav = false
 }) => {
+  const theme = useTheme();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
-  
+
   // TTS regeneration states
   const [regeneratingSegment, setRegeneratingSegment] = useState(false);
   const [regenerationStatus, setRegenerationStatus] = useState<{
@@ -50,7 +54,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
         setCurrentIndex(index);
         
         // Initialize segments for the new slide in manual mode
-        const slideMetadata = allSlides[index]?.metadata;
+        const slideMetadata = slidesWithMetadata?.[index]?.metadata;
         if (slideMetadata?.audioSegments) {
           const slideKey = `Ch${slideMetadata.chapter}:S${slideMetadata.slide}`;
           segmentContext.initializeSegments(slideKey, slideMetadata.audioSegments);
@@ -68,7 +72,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
       onSlideChange?.(nextSlide.chapter, nextSlide.slide);
       
       // Initialize segments for the new slide
-      const slideMetadata = allSlides[currentIndex + 1]?.metadata;
+      const slideMetadata = slidesWithMetadata?.[currentIndex + 1]?.metadata;
       if (slideMetadata?.audioSegments) {
         const slideKey = `Ch${slideMetadata.chapter}:S${slideMetadata.slide}`;
         segmentContext.initializeSegments(slideKey, slideMetadata.audioSegments);
@@ -85,7 +89,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
       onSlideChange?.(prevSlide.chapter, prevSlide.slide);
       
       // Initialize segments for the new slide
-      const slideMetadata = allSlides[currentIndex - 1]?.metadata;
+      const slideMetadata = slidesWithMetadata?.[currentIndex - 1]?.metadata;
       if (slideMetadata?.audioSegments) {
         const slideKey = `Ch${slideMetadata.chapter}:S${slideMetadata.slide}`;
         segmentContext.initializeSegments(slideKey, slideMetadata.audioSegments);
@@ -102,7 +106,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
       onSlideChange?.(slide.chapter, slide.slide);
       
       // Initialize segments for the new slide
-      const slideMetadata = allSlides[index]?.metadata;
+      const slideMetadata = slidesWithMetadata?.[index]?.metadata;
       if (slideMetadata?.audioSegments) {
         const slideKey = `Ch${slideMetadata.chapter}:S${slideMetadata.slide}`;
         segmentContext.initializeSegments(slideKey, slideMetadata.audioSegments);
@@ -133,7 +137,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
 
   // Initialize segments for the first slide on mount (for manual mode)
   useEffect(() => {
-    const initialSlideMetadata = allSlides[0]?.metadata;
+    const initialSlideMetadata = slidesWithMetadata?.[0]?.metadata;
     if (initialSlideMetadata?.audioSegments) {
       const slideKey = `Ch${initialSlideMetadata.chapter}:S${initialSlideMetadata.slide}`;
       segmentContext.initializeSegments(slideKey, initialSlideMetadata.audioSegments);
@@ -155,7 +159,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
   const CurrentComponent = currentSlide.Component;
   
   // Get metadata for current slide to check segments
-  const currentSlideMetadata = allSlides[currentIndex]?.metadata;
+  const currentSlideMetadata = slidesWithMetadata?.[currentIndex]?.metadata;
   const segments = currentSlideMetadata?.audioSegments || [];
   const hasSegments = segments.length > 0;
   const hasMultipleSegments = segments.length > 1;
@@ -281,7 +285,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
   };
 
   return (
-    <div style={{ position: 'relative', width: '100%', height: '100vh', overflow: 'hidden', background: '#0f172a' }}>
+    <div style={{ position: 'relative', width: '100%', height: '100vh', overflow: 'hidden', background: theme.colors.bgDeep }}>
       {/* Slide content */}
       <AnimatePresence initial={false} custom={direction}>
         <motion.div
@@ -341,7 +345,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
               style={{
                 background: 'none',
                 border: 'none',
-                color: currentIndex === 0 ? '#475569' : '#f1f5f9',
+                color: currentIndex === 0 ? '#475569' : theme.colors.textPrimary,
                 cursor: currentIndex === 0 ? 'not-allowed' : 'pointer',
                 fontSize: 20,
                 padding: '0.25rem 0.4rem',
@@ -353,9 +357,9 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
             </button>
             <div
               style={{
-                color: '#94a3b8',
+                color: theme.colors.textSecondary,
                 fontSize: 11,
-                fontFamily: 'Inter, system-ui, sans-serif',
+                fontFamily: theme.fontFamily,
                 marginRight: '0.3rem'
               }}
             >
@@ -372,7 +376,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
                     width: idx === currentIndex ? 20 : 8,
                     height: 8,
                     borderRadius: 4,
-                    background: idx === currentIndex ? '#00B7C3' : '#475569',
+                    background: idx === currentIndex ? theme.colors.primary : '#475569',
                     border: 'none',
                     cursor: 'pointer',
                     transition: 'all 0.3s ease',
@@ -388,7 +392,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
               style={{
                 background: 'none',
                 border: 'none',
-                color: currentIndex === slides.length - 1 ? '#475569' : '#f1f5f9',
+                color: currentIndex === slides.length - 1 ? '#475569' : theme.colors.textPrimary,
                 cursor: currentIndex === slides.length - 1 ? 'not-allowed' : 'pointer',
                 fontSize: 20,
                 padding: '0.25rem 0.4rem',
@@ -400,10 +404,10 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
             </button>
             <div
               style={{
-                color: '#94a3b8',
+                color: theme.colors.textSecondary,
                 fontSize: 12,
                 marginLeft: '0.3rem',
-                fontFamily: 'Inter, system-ui, sans-serif'
+                fontFamily: theme.fontFamily
               }}
             >
               {currentIndex} / {slides.length - 1}
@@ -434,7 +438,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
                     style={{
                       background: 'none',
                       border: 'none',
-                      color: segmentContext.currentSegmentIndex === 0 ? '#475569' : '#f1f5f9',
+                      color: segmentContext.currentSegmentIndex === 0 ? '#475569' : theme.colors.textPrimary,
                       cursor: segmentContext.currentSegmentIndex === 0 ? 'not-allowed' : 'pointer',
                       fontSize: 20,
                       padding: '0.25rem 0.4rem',
@@ -446,9 +450,9 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
                   </button>
                   <div
                     style={{
-                      color: '#94a3b8',
+                      color: theme.colors.textSecondary,
                       fontSize: 11,
-                      fontFamily: 'Inter, system-ui, sans-serif',
+                      fontFamily: theme.fontFamily,
                       marginRight: '0.3rem'
                     }}
                   >
@@ -466,7 +470,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
                           width: idx === segmentContext.currentSegmentIndex ? 20 : 8,
                           height: 8,
                           borderRadius: 4,
-                          background: idx === segmentContext.currentSegmentIndex ? '#00B7C3' : '#475569',
+                          background: idx === segmentContext.currentSegmentIndex ? theme.colors.primary : '#475569',
                           border: 'none',
                           cursor: 'pointer',
                           transition: 'all 0.3s ease',
@@ -482,7 +486,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
                     style={{
                       background: 'none',
                       border: 'none',
-                      color: segmentContext.currentSegmentIndex === segments.length - 1 ? '#475569' : '#f1f5f9',
+                      color: segmentContext.currentSegmentIndex === segments.length - 1 ? '#475569' : theme.colors.textPrimary,
                       cursor: segmentContext.currentSegmentIndex === segments.length - 1 ? 'not-allowed' : 'pointer',
                       fontSize: 20,
                       padding: '0.25rem 0.4rem',
@@ -494,10 +498,10 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
                   </button>
                   <div
                     style={{
-                      color: '#94a3b8',
+                      color: theme.colors.textSecondary,
                       fontSize: 12,
                       marginLeft: '0.3rem',
-                      fontFamily: 'Inter, system-ui, sans-serif'
+                      fontFamily: theme.fontFamily
                     }}
                   >
                     {segmentContext.currentSegmentIndex + 1} / {segments.length}
@@ -522,7 +526,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: regeneratingSegment ? '#94a3b8' : '#00B7C3',
+                  color: regeneratingSegment ? theme.colors.textSecondary : theme.colors.primary,
                   cursor: regeneratingSegment ? 'wait' : 'pointer',
                   fontSize: 16,
                   padding: '0.25rem 0.4rem',
@@ -542,7 +546,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: regeneratingSegment ? '#94a3b8' : '#f59e0b',
+                  color: regeneratingSegment ? theme.colors.textSecondary : theme.colors.warning,
                   cursor: regeneratingSegment ? 'wait' : 'pointer',
                   fontSize: 16,
                   padding: '0.25rem 0.4rem',
@@ -566,9 +570,9 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
         position: 'fixed',
         top: 20,
         right: 20,
-        color: '#64748b',
+        color: theme.colors.textMuted,
         fontSize: 12,
-        fontFamily: 'Inter, system-ui, sans-serif',
+        fontFamily: theme.fontFamily,
         background: 'rgba(15, 23, 42, 0.8)',
         padding: '0.5rem 1rem',
         borderRadius: 8,
@@ -602,7 +606,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
               alignItems: 'center',
               gap: '0.5rem',
               boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
-              fontFamily: 'Inter, system-ui, sans-serif',
+              fontFamily: theme.fontFamily,
               maxWidth: '300px'
             }}
           >

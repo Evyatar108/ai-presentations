@@ -6,7 +6,7 @@
 
 Demo selection interface with card-based layout.
 
-**Location**: `src/components/WelcomeScreen.tsx`
+**Location**: `src/framework/components/WelcomeScreen.tsx`
 
 **Features**:
 - Displays all registered demos
@@ -18,7 +18,7 @@ Demo selection interface with card-based layout.
 
 Main container for demo playback with mode selection.
 
-**Location**: `src/components/DemoPlayer.tsx`
+**Location**: `src/framework/components/DemoPlayer.tsx`
 
 **Props**:
 - `demoId: string` - Demo identifier
@@ -34,7 +34,7 @@ Main container for demo playback with mode selection.
 
 Renders individual slides with segment management.
 
-**Location**: `src/components/SlidePlayer.tsx`
+**Location**: `src/framework/components/SlidePlayer.tsx`
 
 **Props**:
 - `slide: SlideMetadata` - Slide configuration
@@ -51,7 +51,7 @@ Renders individual slides with segment management.
 
 Manages audio-synced playback in narrated mode.
 
-**Location**: `src/components/NarratedController.tsx`
+**Location**: `src/framework/components/NarratedController.tsx`
 
 **Features**:
 - Automatic slide progression
@@ -64,7 +64,7 @@ Manages audio-synced playback in narrated mode.
 
 Video embed component with playback controls.
 
-**Location**: `src/components/VideoPlayer.tsx`
+**Location**: `src/framework/components/VideoPlayer.tsx`
 
 **Props**:
 - `videoPath: string` - Path to video file
@@ -83,7 +83,7 @@ Video embed component with playback controls.
 
 Common styling patterns and utilities.
 
-**Location**: `src/slides/SlideStyles.ts`
+**Location**: `src/framework/slides/SlideStyles.ts`
 
 **Exports**:
 ```typescript
@@ -112,7 +112,7 @@ export const commonStyles = {
 
 Framer Motion animation configurations.
 
-**Location**: `src/slides/AnimationVariants.ts`
+**Location**: `src/framework/slides/AnimationVariants.ts`
 
 **Common Variants**:
 ```typescript
@@ -136,7 +136,7 @@ export const scaleIn = {
 
 Reusable layout components.
 
-**Location**: `src/slides/SlideLayouts.tsx`
+**Location**: `src/framework/slides/SlideLayouts.tsx`
 
 **Components**:
 - `TitleSlide` - Full-screen title layout
@@ -148,7 +148,7 @@ Reusable layout components.
 
 Common icon components.
 
-**Location**: `src/slides/SlideIcons.tsx`
+**Location**: `src/framework/slides/SlideIcons.tsx`
 
 **Available Icons**:
 - `CheckIcon`
@@ -161,7 +161,7 @@ Common icon components.
 
 Reusable UI elements.
 
-**Location**: `src/components/CoreComponents.tsx`
+**Location**: `src/framework/components/MetricTile.tsx`
 
 **Components**:
 - `MetricTile` - Display metric with label and value
@@ -175,7 +175,7 @@ Reusable UI elements.
 
 Manages multi-segment slide state.
 
-**Location**: `src/contexts/SegmentContext.tsx`
+**Location**: `src/framework/contexts/SegmentContext.tsx`
 
 **Usage**:
 ```typescript
@@ -191,7 +191,7 @@ const { currentSegment, setCurrentSegment } = useSegmentContext();
 
 Respects user motion preferences.
 
-**Location**: `src/accessibility/ReducedMotion.tsx`
+**Location**: `src/framework/accessibility/ReducedMotion.tsx`
 
 **Usage**:
 ```typescript
@@ -206,7 +206,7 @@ const variants = prefersReducedMotion
 
 ### SlideMetadata
 
-**Location**: `src/slides/SlideMetadata.ts`
+**Location**: `src/framework/slides/SlideMetadata.ts`
 
 ```typescript
 interface SlideMetadata {
@@ -233,7 +233,7 @@ interface SlideComponentProps {
 
 ### DemoMetadata
 
-**Location**: `src/demos/types.ts`
+**Location**: `src/framework/demos/types.ts`
 
 ```typescript
 interface DemoMetadata {
@@ -291,7 +291,7 @@ export const Ch1_S1_Example: SlideMetadata = {
 
 ```typescript
 import { motion } from 'framer-motion';
-import { fadeIn, slideUp } from '../../../../../slides/AnimationVariants';
+import { fadeIn, slideUp } from '../../../../../framework/slides/AnimationVariants';
 
 component: ({ segment }) => (
   <motion.div
@@ -336,7 +336,7 @@ component: ({ segment }) => (
 ### Using Video Player
 
 ```typescript
-import { VideoPlayer } from '../../../../../components/VideoPlayer';
+import { VideoPlayer } from '../../../../../framework/components/VideoPlayer';
 
 component: ({ segment }) => (
   <div style={{ position: 'relative', width: '100%', height: '100vh' }}>

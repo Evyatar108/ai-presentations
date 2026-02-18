@@ -21,7 +21,7 @@ The script creates all required files and directories with templates. See [`DEMO
 - [ ] Add context materials to `docs/demos/{demo-id}/context/`
 - [ ] Implement slides in `src/demos/{demo-id}/slides/chapters/`
 - [ ] Add assets to `public/{audio|images|videos}/{demo-id}/`
-- [ ] Register demo in `DemoRegistry.ts`
+- [ ] Register demo in `src/demos/registry.ts`
 - [ ] Generate TTS audio
 - [ ] Test the demo
 
@@ -40,7 +40,7 @@ mkdir -p src/demos/your-demo-name/slides/chapters
 Create `src/demos/your-demo-name/metadata.ts`:
 
 ```typescript
-import { DemoMetadata } from '../types';
+import { DemoMetadata } from '../../framework/demos/types';
 
 export const metadata: DemoMetadata = {
   id: 'your-demo-name',
@@ -57,7 +57,7 @@ export const metadata: DemoMetadata = {
 Create `src/demos/your-demo-name/index.ts`:
 
 ```typescript
-import { DemoConfig } from '../types';
+import { DemoConfig } from '../../framework/demos/types';
 import { metadata } from './metadata';
 
 const demoConfig: DemoConfig = {
@@ -79,7 +79,7 @@ export default demoConfig;
 Create `src/demos/your-demo-name/slides/chapters/Chapter0.tsx`:
 
 ```typescript
-import { SlideMetadata } from '../../../../../slides/SlideMetadata';
+import { SlideMetadata } from '../../../../../framework/slides/SlideMetadata';
 
 export const Ch0_S1_Welcome: SlideMetadata = {
   chapter: 0,
@@ -116,7 +116,7 @@ export const Ch0_S1_Welcome: SlideMetadata = {
 Create `src/demos/your-demo-name/slides/SlidesRegistry.ts`:
 
 ```typescript
-import { SlideMetadata } from '../../../../slides/SlideMetadata';
+import { SlideMetadata } from '../../../../framework/slides/SlideMetadata';
 import { Ch0_S1_Welcome } from './chapters/Chapter0';
 
 export const allSlides: SlideMetadata[] = [
@@ -128,7 +128,7 @@ export const allSlides: SlideMetadata[] = [
 ### Step 6: Register Demo
 ### Step 6: Register Demo
 
-Update `src/demos/DemoRegistry.ts`:
+Update `src/demos/registry.ts`:
 
 ```typescript
 import yourDemo from './your-demo-name';
@@ -181,7 +181,7 @@ npm run tts:generate -- --demo your-demo-name
 Customize presentation timing delays if defaults aren't suitable:
 **Add to demo config** (`src/demos/{demo-id}/index.ts`):
 ```typescript
-import { TimingConfig } from '../timing/types';
+import { TimingConfig } from '../../framework/demos/timing/types';
 
 const timing: TimingConfig = {
   betweenSegments: 500,   // Delay between segments within slides
@@ -254,7 +254,7 @@ export const Ch1_S1_MultiSegment: SlideMetadata = {
 ### Using Video Player
 
 ```typescript
-import { VideoPlayer } from '../../../../../components/VideoPlayer';
+import { VideoPlayer } from '../../../../../framework/components/VideoPlayer';
 
 component: ({ segment }) => (
   <VideoPlayer
@@ -266,7 +266,7 @@ component: ({ segment }) => (
 
 ### Shared Utilities
 
-Use shared components and utilities from `src/slides/`:
+Use shared components and utilities from `src/framework/slides/`:
 - `SlideStyles.ts` - Common styling patterns
 - `AnimationVariants.ts` - Framer Motion configs
 - `SlideLayouts.tsx` - Layout components

@@ -1,4 +1,4 @@
-import { DemoConfig } from '../types';
+import { DemoConfig } from '../../framework/demos/types';
 import { metadata } from './metadata';
 
 const demoConfig: DemoConfig = {

@@ -1,9 +1,13 @@
 /**
  * Shared Style Objects for Slide Components
  * Extracted from AnimatedSlides.tsx to reduce duplication
+ *
+ * Static exports: backward-compatible, used by existing demo slides.
+ * Theme-aware factory functions (create*): used by framework components via useTheme().
  */
 
 import { CSSProperties } from 'react';
+import type { PresentationTheme } from '../theme/types';
 
 /**
  * Common slide container style - dark background with centered content
@@ -158,3 +162,29 @@ export const layouts = {
     gap
   })
 };
+
+// ============================================================================
+// Theme-aware factory functions (for framework components using useTheme())
+// ============================================================================
+
+export function createSlideContainer(theme: PresentationTheme): CSSProperties {
+  return { ...slideContainer, background: theme.colors.bgDeep, fontFamily: theme.fontFamily };
+}
+
+export function createContentBox(theme: PresentationTheme): CSSProperties {
+  return { ...contentBox, background: theme.colors.bgSurface, border: `1px solid ${theme.colors.bgBorder}` };
+}
+
+export function createGradientBox(theme: PresentationTheme): CSSProperties {
+  return { ...gradientBox, background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})` };
+}
+
+export function createTypography(theme: PresentationTheme) {
+  return {
+    h1: { ...typography.h1, color: theme.colors.textPrimary },
+    h2: { ...typography.h2, color: theme.colors.textPrimary },
+    body: { ...typography.body, color: '#e2e8f0' },
+    caption: { ...typography.caption, color: theme.colors.textSecondary },
+    emphasized: { ...typography.emphasized, color: theme.colors.primary },
+  };
+}

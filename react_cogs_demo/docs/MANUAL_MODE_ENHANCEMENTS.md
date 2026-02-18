@@ -531,7 +531,7 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
 - [x] Test export with various edit states
 
 **Implementation Date**: 2025-01-21
-**Location**: [`NarratedController.tsx`](../src/components/NarratedController.tsx) lines 519-568, 996-1020
+**Location**: [`NarratedController.tsx`](../src/framework/components/NarratedController.tsx) lines 519-568, 996-1020
 
 ### Phase 6: Testing ✅ CODE REVIEW COMPLETE
 - [x] Code review of all implementations

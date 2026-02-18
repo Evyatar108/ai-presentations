@@ -96,7 +96,7 @@ When creating a new demo, timing configuration is optional. To add custom timing
 
 1. Define timing in your demo config (`src/demos/{demo-id}/index.ts`):
 ```typescript
-import { TimingConfig } from '../timing/types';
+import { TimingConfig } from '../../framework/demos/timing/types';
 
 const timing: TimingConfig = {
   betweenSegments: 500,

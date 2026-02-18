@@ -1,10 +1,10 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useReducedMotion } from '../../../../accessibility/ReducedMotion';
-import { useSegmentedAnimation } from '../../../../contexts/SegmentContext';
-import { SlideComponentWithMetadata } from '../../../../slides/SlideMetadata';
-import { SlideContainer, GradientHighlightBox, SlideTitle, ImprovementCard } from '../../../../slides/SlideLayouts';
-import { typography, layouts } from '../../../../slides/SlideStyles';
+import { useReducedMotion } from '../../../../framework/accessibility/ReducedMotion';
+import { useSegmentedAnimation } from '../../../../framework/contexts/SegmentContext';
+import { SlideComponentWithMetadata } from '../../../../framework/slides/SlideMetadata';
+import { SlideContainer, GradientHighlightBox, SlideTitle, ImprovementCard } from '../../../../framework/slides/SlideLayouts';
+import { typography, layouts } from '../../../../framework/slides/SlideStyles';
 
 /**
  * Chapter 9: Future Improvements

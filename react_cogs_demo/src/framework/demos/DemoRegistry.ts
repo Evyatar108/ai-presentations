@@ -11,7 +11,7 @@ const registry: DemoRegistryEntry[] = [];
 /**
  * Register a demo in the registry.
  * Only registers if the ID is not already present.
- * 
+ *
  * @param entry - Demo registry entry to register
  */
 function registerDemo(entry: DemoRegistryEntry): void {
@@ -23,7 +23,7 @@ function registerDemo(entry: DemoRegistryEntry): void {
 
 /**
  * Get metadata for all registered demos.
- * 
+ *
  * @returns Array of demo metadata objects
  */
 function getAllMetadata(): DemoMetadata[] {
@@ -32,7 +32,7 @@ function getAllMetadata(): DemoMetadata[] {
 
 /**
  * Get all registered demo IDs.
- * 
+ *
  * @returns Array of demo IDs
  */
 function getDemoIds(): string[] {
@@ -41,7 +41,7 @@ function getDemoIds(): string[] {
 
 /**
  * Get metadata for a specific demo by ID.
- * 
+ *
  * @param id - Demo identifier
  * @returns Demo metadata or undefined if not found
  */
@@ -52,7 +52,7 @@ function getMetadataById(id: string): DemoMetadata | undefined {
 
 /**
  * Load full configuration for a demo.
- * 
+ *
  * @param id - Demo identifier
  * @returns Promise resolving to demo configuration
  * @throws Error if demo not found
@@ -68,13 +68,13 @@ async function loadDemoConfig(id: string): Promise<DemoConfig> {
 /**
  * Validate that all registered demo IDs are unique.
  * Useful for development-time checks.
- * 
+ *
  * @throws Error if duplicate IDs are found
  */
 function ensureUniqueIds(): void {
   const ids = registry.map(e => e.id);
   const duplicates = ids.filter((id, index) => ids.indexOf(id) !== index);
-  
+
   if (duplicates.length > 0) {
     throw new Error(`Duplicate demo IDs detected: ${duplicates.join(', ')}`);
   }
@@ -91,43 +91,3 @@ export const DemoRegistry = {
   loadDemoConfig,
   ensureUniqueIds,
 };
-
-// ============================================================================
-// Demo Registrations
-// ============================================================================
-
-/**
- * Register Meeting Highlights COGS Reduction demo
- */
-import meetingHighlightsDemo from './meeting-highlights';
-import { meetingHighlightsMetadata } from './meeting-highlights/metadata';
-
-registerDemo({
-  id: meetingHighlightsDemo.id,
-  metadata: meetingHighlightsMetadata,
-  loadConfig: async () => meetingHighlightsDemo
-});
-
-/**
- * Register Example Demo 1
- */
-import exampleDemo1 from './example-demo-1';
-import { metadata as exampleDemo1Metadata } from './example-demo-1/metadata';
-
-registerDemo({
-  id: exampleDemo1.id,
-  metadata: exampleDemo1Metadata,
-  loadConfig: async () => exampleDemo1
-});
-
-/**
- * Register Example Demo 2
- */
-import exampleDemo2 from './example-demo-2';
-import { metadata as exampleDemo2Metadata } from './example-demo-2/metadata';
-
-registerDemo({
-  id: exampleDemo2.id,
-  metadata: exampleDemo2Metadata,
-  loadConfig: async () => exampleDemo2
-});

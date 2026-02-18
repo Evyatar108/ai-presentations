@@ -13,10 +13,10 @@
 All phases successfully completed with production-ready results:
 
 - ✅ **Phase 1**: Extraction script (3h) - [`extract-narration.ts`](../scripts/extract-narration.ts)
-- ✅ **Phase 2**: Loading system (4h) - [`narrationLoader.ts`](../src/utils/narrationLoader.ts)
+- ✅ **Phase 2**: Loading system (4h) - [`narrationLoader.ts`](../src/framework/utils/narrationLoader.ts)
 - ✅ **Phase 3**: Change detection (2h) - [`check-narration.ts`](../scripts/check-narration.ts)
 - ✅ **Phase 4**: Backend API (3h) - [`narration-api.cjs`](../server/narration-api.cjs)
-- ✅ **Phase 5**: Frontend integration (4h) - [`NarratedController.tsx`](../src/components/NarratedController.tsx) + [`NarrationEditModal.tsx`](../src/components/NarrationEditModal.tsx)
+- ✅ **Phase 5**: Frontend integration (4h) - [`NarratedController.tsx`](../src/framework/components/NarratedController.tsx) + [`NarrationEditModal.tsx`](../src/framework/components/NarrationEditModal.tsx)
 - ✅ **Phase 6**: TTS integration (3h) - [`generate-tts.ts`](../scripts/generate-tts.ts) + [`check-tts-cache.ts`](../scripts/check-tts-cache.ts)
 - ✅ **Phase 7**: Migration & cleanup (2h) - All demos migrated
 - ✅ **Phase 8**: Comprehensive testing (4h) - 96% pass rate
@@ -207,7 +207,7 @@ public/narration/
 
 ### 1. Narration Loader Service
 
-**File**: `src/utils/narrationLoader.ts`
+**File**: `src/framework/utils/narrationLoader.ts`
 
 ```typescript
 export interface NarrationData {
@@ -313,7 +313,7 @@ Ch1_S1_WhatIsMeetingHighlights.metadata = {
 
 ### 4. DemoPlayer Integration
 
-**File**: `src/components/DemoPlayer.tsx`
+**File**: `src/framework/components/DemoPlayer.tsx`
 
 ```typescript
 export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demo }) => {
@@ -634,7 +634,7 @@ export const meetingHighlightsMetadata: DemoMetadata = {
 **New**: Write to file via backend API
 
 ```typescript
-// In NarratedController.tsx
+// In src/framework/components/NarratedController.tsx
 const handleSaveNarration = async (newText: string, regenerateAudio: boolean) => {
   // 1. Update in-memory state (same as before)
   const edit: NarrationEdit = {
@@ -823,7 +823,7 @@ async function generateTTS(config: TTSConfig) {
 ### Phase 2: Narration Loading System (4-5 hours)
 
 **Tasks**:
-- [x] Create `src/utils/narrationLoader.ts`
+- [x] Create `src/framework/utils/narrationLoader.ts`
 - [x] Add `useExternalNarration` flag to DemoMetadata
 - [x] Update DemoPlayer to load narration JSON
 - [x] Implement hybrid mode (JSON + inline fallback)
@@ -1043,11 +1043,12 @@ react_cogs_demo/
 │   ├── generate-tts.ts               # UPDATED: Load from JSON
 │   └── check-tts-cache.ts            # Existing
 ├── src/
-│   ├── utils/
-│   │   └── narrationLoader.ts        # NEW: Narration loading
-│   ├── components/
-│   │   ├── DemoPlayer.tsx            # UPDATED: Load narration
-│   │   └── NarratedController.tsx    # UPDATED: Persist edits
+│   ├── framework/
+│   │   ├── utils/
+│   │   │   └── narrationLoader.ts        # NEW: Narration loading
+│   │   └── components/
+│   │       ├── DemoPlayer.tsx            # UPDATED: Load narration
+│   │       └── NarratedController.tsx    # UPDATED: Persist edits
 │   └── demos/
 │       ├── types.ts                  # UPDATED: Add useExternalNarration
 │       └── meeting-highlights/
