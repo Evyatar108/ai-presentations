@@ -30,7 +30,7 @@ const slideBreakdown: SlideDurationBreakdown[] = [
   { slideIndex: 2, slideTitle: "Thank You", chapterIndex: 9, totalDuration: 17.610583, audioDuration: 14.110582999999998, delaysDuration: 3.5, segments: [{ segmentIndex: 0, audioDuration: 2.666667, delayAfter: 0.5 }, { segmentIndex: 1, audioDuration: 3.310583, delayAfter: 0.5 }, { segmentIndex: 2, audioDuration: 4.8, delayAfter: 0.5 }, { segmentIndex: 3, audioDuration: 3.333333, delayAfter: 2 }] }
 ];
 
-export const meetingHighlightsMetadata: DemoMetadata = {
+export const metadata: DemoMetadata = {
   id: 'meeting-highlights',
   title: 'Meeting Highlights COGS Reduction',
   description: 'Presentation showcasing the Meeting Highlights product and the technical optimizations that reduced computational costs by over 70% while maintaining quality. Features product overview, team collaboration, COGS challenge, optimization solution, business impact, user satisfaction, and testimonials.',

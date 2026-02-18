@@ -7,7 +7,7 @@
 
 import type { DemoConfig } from '@framework/demos/types';
 import type { TimingConfig } from '@framework/demos/timing/types';
-import { meetingHighlightsMetadata } from './metadata';
+import { metadata } from './metadata';
 
 /**
  * Timing configuration for Meeting Highlights demo.
@@ -25,7 +25,7 @@ const timing: TimingConfig = {
  */
 const demoConfig: DemoConfig = {
   id: 'meeting-highlights',
-  metadata: meetingHighlightsMetadata,
+  metadata,
   defaultMode: 'narrated',
   timing,
   getSlides: async () => {

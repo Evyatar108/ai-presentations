@@ -15,6 +15,12 @@ if ($DemoId -notmatch '^[a-z0-9]+(-[a-z0-9]+)*$') {
     exit 1
 }
 
+# Check if demo already exists
+if (Test-Path "presentation-app/src/demos/$DemoId") {
+    Write-Host "Error: Demo '$DemoId' already exists at presentation-app/src/demos/$DemoId" -ForegroundColor Red
+    exit 1
+}
+
 # Use demo ID as title if not provided (capitalize words)
 if ([string]::IsNullOrEmpty($DemoTitle)) {
     $DemoTitle = ($DemoId -split '-' | ForEach-Object { $_.Substring(0,1).ToUpper() + $_.Substring(1) }) -join ' '
@@ -364,34 +370,26 @@ foreach ($file in $createdFiles) {
 Write-Host "`n=== Next Steps ===" -ForegroundColor Cyan
 Write-Host @"
 
-1. Register the demo in registry.ts:
-   • Open: presentation-app/src/demos/registry.ts
-   • Add import: import ${DemoId}Demo from './$DemoId';
-   • Add import: import { metadata as ${DemoId}Metadata } from './$DemoId/metadata';
-   • Add registration:
-     DemoRegistry.registerDemo({
-       id: '${DemoId}',
-       metadata: ${DemoId}Metadata,
-       loadConfig: async () => ${DemoId}Demo
-     });
+   Registration is automatic - no need to edit registry.ts!
+   The demo will be discovered via import.meta.glob on next dev server start.
 
-2. Add demo thumbnail:
+1. Add demo thumbnail:
    • Create: $publicImagesPath/${DemoId}-thumbnail.jpeg
    • Recommended size: 16:9 ratio
 
-3. Update documentation:
+2. Update documentation:
    • Edit: $docsPath/$DemoId.md
    • Add context files in: $docsPath/context/
 
-4. Create slides:
+3. Create slides:
    • Add chapters in: $srcPath/slides/chapters/
    • Update: $srcPath/slides/SlidesRegistry.ts
 
-5. Generate TTS audio:
+4. Generate TTS audio:
    cd presentation-app
    npm run tts:generate -- --demo $DemoId
 
-6. Test the demo:
+5. Test the demo:
    npm run dev
 
 "@ -ForegroundColor White

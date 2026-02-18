@@ -86,7 +86,7 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack }) => {
         );
         
         // Hybrid fallback: JSON → inline → error/silent
-        if (externalNarration) {
+        if (externalNarration !== null) {
           // Use external narration from JSON
           return { ...segment, narrationText: externalNarration };
         } else if (segment.narrationText) {

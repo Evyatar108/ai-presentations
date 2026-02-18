@@ -1,38 +1,45 @@
 /**
- * Demo Registrations
+ * Auto-Discovery Demo Registration
  *
- * This file registers all project-specific demos with the framework's DemoRegistry.
+ * Uses Vite's import.meta.glob to automatically discover and register all demos.
+ * Each demo in src/demos/{demo-id}/ must have:
+ *   - metadata.ts with `export const metadata: DemoMetadata`
+ *   - index.ts with `export default demoConfig: DemoConfig`
+ *
  * Import this file as a side-effect in main.tsx to ensure demos are registered at startup.
  */
 
 import { DemoRegistry } from '@framework/demos/DemoRegistry';
+import type { DemoMetadata, DemoConfig } from '@framework/demos/types';
 
-// ---- Meeting Highlights ----
-import meetingHighlightsDemo from './meeting-highlights';
-import { meetingHighlightsMetadata } from './meeting-highlights/metadata';
+// Eagerly load all metadata (for welcome screen listing)
+const metadataModules = import.meta.glob<{ metadata: DemoMetadata }>(
+  './*/metadata.ts',
+  { eager: true }
+);
 
-DemoRegistry.registerDemo({
-  id: meetingHighlightsDemo.id,
-  metadata: meetingHighlightsMetadata,
-  loadConfig: async () => meetingHighlightsDemo
-});
+// Lazily load all configs (on-demand when demo is selected)
+const configLoaders = import.meta.glob<{ default: DemoConfig }>(
+  './*/index.ts'
+);
 
-// ---- Example Demo 1 ----
-import exampleDemo1 from './example-demo-1';
-import { metadata as exampleDemo1Metadata } from './example-demo-1/metadata';
+for (const [metadataPath, metadataModule] of Object.entries(metadataModules)) {
+  const metadata = metadataModule.metadata;
+  if (!metadata?.id) {
+    console.warn(`[DemoRegistry] Skipping ${metadataPath}: no metadata.id`);
+    continue;
+  }
 
-DemoRegistry.registerDemo({
-  id: exampleDemo1.id,
-  metadata: exampleDemo1Metadata,
-  loadConfig: async () => exampleDemo1
-});
+  const configPath = metadataPath.replace('/metadata.ts', '/index.ts');
+  const configLoader = configLoaders[configPath];
+  if (!configLoader) {
+    console.warn(`[DemoRegistry] Skipping ${metadata.id}: no index.ts`);
+    continue;
+  }
 
-// ---- Example Demo 2 ----
-import exampleDemo2 from './example-demo-2';
-import { metadata as exampleDemo2Metadata } from './example-demo-2/metadata';
-
-DemoRegistry.registerDemo({
-  id: exampleDemo2.id,
-  metadata: exampleDemo2Metadata,
-  loadConfig: async () => exampleDemo2
-});
+  DemoRegistry.registerDemo({
+    id: metadata.id,
+    metadata,
+    loadConfig: async () => (await configLoader()).default,
+  });
+}

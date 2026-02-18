@@ -6,13 +6,13 @@
 export interface FrameworkConfig {
   /** Base URL for the narration API server (default: 'http://localhost:3001') */
   narrationApiBaseUrl: string;
-  /** Path to fallback silence audio file (default: '/audio/silence-1s.mp3') */
+  /** Path to fallback silence audio file (default: '/audio/silence-1s.wav') */
   fallbackAudioPath: string;
 }
 
 export const defaultConfig: FrameworkConfig = {
   narrationApiBaseUrl: 'http://localhost:3001',
-  fallbackAudioPath: '/audio/silence-1s.mp3',
+  fallbackAudioPath: '/audio/silence-1s.wav',
 };
 
 let projectOverrides: Partial<FrameworkConfig> = {};
