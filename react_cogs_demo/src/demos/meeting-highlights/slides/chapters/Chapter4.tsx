@@ -166,36 +166,31 @@ Ch4_S1_HighlightTypes.metadata = {
       id: "intro",
       audioFilePath: "/audio/meeting-highlights/c4/s1_segment_01_intro.wav",
       srtSegmentNumber: 1,
-      visualDescription: "Title \"Two Types of Highlights\"",
-      narrationText: "Meeting Highlights combines two distinct types of highlights to create a comprehensive recap."
+      visualDescription: "Title \"Two Types of Highlights\""
     },
     {
       id: "abstractive",
       audioFilePath: "/audio/meeting-highlights/c4/s1_segment_02_abstractive.wav",
       srtSegmentNumber: 2,
-      visualDescription: "Left card appears - Abstractive Highlights with summary icon",
-      narrationText: "First, abstractive highlights. These are AI-generated summaries that capture the key topics discussed in the meeting, using original video from the meeting. The narration is powered by Azure Cognitive Services text-to-speech."
+      visualDescription: "Left card appears - Abstractive Highlights with summary icon"
     },
     {
       id: "key_moments",
       audioFilePath: "/audio/meeting-highlights/c4/s1_segment_03_key_moments.wav",
       srtSegmentNumber: 3,
-      visualDescription: "Right card appears - Key Moments with video clip icon",
-      narrationText: "Second, key moments. These are significant verbatim segments extracted directly from the meeting, using the original audio and video from the recording."
+      visualDescription: "Right card appears - Key Moments with video clip icon"
     },
     {
       id: "timestamps",
       audioFilePath: "/audio/meeting-highlights/c4/s1_segment_04_timestamps.wav",
       srtSegmentNumber: 4,
-      visualDescription: "Detail callout showing 20-30 second segments",
-      narrationText: "Each highlight is a 20 to 40 second segment with precise timestamps and accompanying narration."
+      visualDescription: "Detail callout showing 20-30 second segments"
     },
     {
       id: "narrative",
       audioFilePath: "/audio/meeting-highlights/c4/s1_segment_05_narrative.wav",
       srtSegmentNumber: 5,
-      visualDescription: "Narrative storytelling icon connecting highlights",
-      narrationText: "The AI weaves these highlights together into a cohesive narrative, creating an engaging story that connects the abstractive summaries and key moments."
+      visualDescription: "Narrative storytelling icon connecting highlights"
     }
   ]
 };

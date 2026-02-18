@@ -1,17 +1,37 @@
 // Pre-run TTS cache validation script with multi-demo support
+// Integrates with narration JSON change detection
 import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import * as readline from 'readline';
 import { execSync } from 'child_process';
+import * as crypto from 'crypto';
 import { SlideComponentWithMetadata } from '../src/slides/SlideMetadata';
+
+// Narration JSON structure
+interface NarrationData {
+  demoId: string;
+  version: string;
+  lastModified: string;
+  slides: Array<{
+    chapter: number;
+    slide: number;
+    title: string;
+    segments: Array<{
+      id: string;
+      narrationText: string;
+      visualDescription?: string;
+      notes?: string;
+    }>;
+  }>;
+}
 
 // ES module __dirname equivalent
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-interface NarrationCache {
+interface TTSNarrationCache {
   [demoId: string]: {
     [filepath: string]: {
       narrationText: string;
@@ -45,6 +65,79 @@ interface ChangeDetectionResult {
   };
 }
 
+// Narration JSON cache structure (different from TTS cache)
+interface NarrationCacheSegment {
+  hash: string;
+  lastChecked: string;
+}
+
+interface NarrationJsonCache {
+  version: string;
+  generatedAt: string;
+  segments: Record<string, NarrationCacheSegment>;
+}
+
+// Check narration JSON changes for a demo
+function checkNarrationChanges(demoId: string): {
+  hasChanges: boolean;
+  changedCount: number;
+  missingCount: number;
+  details: string[];
+} {
+  const result = {
+    hasChanges: false,
+    changedCount: 0,
+    missingCount: 0,
+    details: [] as string[]
+  };
+  
+  const narrationFile = path.join(__dirname, `../public/narration/${demoId}/narration.json`);
+  const cacheFile = path.join(__dirname, `../public/narration/${demoId}/narration-cache.json`);
+  
+  // If no narration.json, skip check
+  if (!fs.existsSync(narrationFile)) {
+    return result;
+  }
+  
+  try {
+    const narrationData = JSON.parse(fs.readFileSync(narrationFile, 'utf-8'));
+    
+    // Load cache if exists
+    let cache: NarrationJsonCache | null = null;
+    if (fs.existsSync(cacheFile)) {
+      try {
+        cache = JSON.parse(fs.readFileSync(cacheFile, 'utf-8')) as NarrationJsonCache;
+      } catch (error) {
+        result.details.push('⚠️  Narration cache corrupted or invalid');
+      }
+    }
+    
+    // Check each slide's segments
+    for (const slide of narrationData.slides) {
+      for (const segment of slide.segments) {
+        const key = `ch${slide.chapter}:s${slide.slide}:${segment.id}`;
+        const currentHash = crypto.createHash('sha256')
+          .update(segment.narrationText.trim())
+          .digest('hex');
+        
+        if (!cache || !cache.segments[key]) {
+          result.hasChanges = true;
+          result.missingCount++;
+          result.details.push(`📝 New: ${key}`);
+        } else if (cache.segments[key].hash !== currentHash) {
+          result.hasChanges = true;
+          result.changedCount++;
+          result.details.push(`🔄 Changed: ${key}`);
+        }
+      }
+    }
+  } catch (error: any) {
+    result.details.push(`❌ Error checking narration: ${error.message}`);
+  }
+  
+  return result;
+}
+
 // Get all demo IDs by scanning the demos directory
 async function getAllDemoIds(): Promise<string[]> {
   const demosDir = path.join(__dirname, '../src/demos');
@@ -60,20 +153,92 @@ async function getAllDemoIds(): Promise<string[]> {
     });
 }
 
-// Load slides for a specific demo
+// Load narration JSON for a demo (Node.js version - no fetch API)
+function loadNarrationJson(demoId: string): NarrationData | null {
+  const narrationFile = path.join(__dirname, `../public/narration/${demoId}/narration.json`);
+  
+  if (!fs.existsSync(narrationFile)) {
+    return null;
+  }
+  
+  try {
+    const content = fs.readFileSync(narrationFile, 'utf-8');
+    return JSON.parse(content) as NarrationData;
+  } catch (error: any) {
+    console.warn(`⚠️  Failed to parse narration.json for '${demoId}': ${error.message}`);
+    return null;
+  }
+}
+
+// Merge narration from JSON into slide metadata
+function mergeNarrationIntoSlides(
+  slides: SlideComponentWithMetadata[],
+  narrationData: NarrationData | null
+): SlideComponentWithMetadata[] {
+  if (!narrationData) {
+    return slides;
+  }
+  
+  return slides.map(slide => {
+    const { chapter, slide: slideNum, audioSegments } = slide.metadata;
+    
+    // Find matching slide in narration JSON
+    const narrationSlide = narrationData.slides.find(
+      s => s.chapter === chapter && s.slide === slideNum
+    );
+    
+    if (!narrationSlide || !audioSegments) {
+      return slide;
+    }
+    
+    // Merge narration text into segments
+    const updatedSegments = audioSegments.map(segment => {
+      const narrationSegment = narrationSlide.segments.find(ns => ns.id === segment.id);
+      
+      if (narrationSegment) {
+        return {
+          ...segment,
+          narrationText: narrationSegment.narrationText
+        };
+      }
+      
+      return segment;
+    });
+    
+    return {
+      ...slide,
+      metadata: {
+        ...slide.metadata,
+        audioSegments: updatedSegments
+      }
+    } as SlideComponentWithMetadata;
+  });
+}
+
+// Load slides for a specific demo (with narration JSON merging)
 async function loadDemoSlides(demoId: string): Promise<SlideComponentWithMetadata[]> {
   try {
     const slidesRegistryPath = `../src/demos/${demoId}/slides/SlidesRegistry.js`;
     const module = await import(slidesRegistryPath);
-    return module.allSlides || [];
+    const slides = module.allSlides || [];
+    
+    // Load and merge narration from JSON if available
+    const narrationData = loadNarrationJson(demoId);
+    
+    if (narrationData) {
+      console.log(`   📝 Loaded narration.json with ${narrationData.slides.length} slides`);
+      return mergeNarrationIntoSlides(slides, narrationData);
+    }
+    
+    return slides;
   } catch (error: any) {
     console.warn(`⚠️  Could not load slides for demo '${demoId}': ${error.message}`);
     return [];
   }
 }
 
-// Load cache
-function loadCache(cacheFile: string): NarrationCache {
+// Load TTS cache
+function loadCache(cacheFile: string): TTSNarrationCache {
   if (fs.existsSync(cacheFile)) {
     try {
       const content = fs.readFileSync(cacheFile, 'utf-8');
@@ -256,7 +421,13 @@ async function checkTTSCache(): Promise<void> {
   const outputDir = path.join(__dirname, '../public/audio');
   const cacheFile = path.join(__dirname, '../.tts-narration-cache.json');
   
-  console.log('🔍 Checking TTS cache for changes (Multi-Demo)...\n');
+  console.log('═'.repeat(70));
+  console.log('🔍 TTS Cache & Narration Validation (Multi-Demo)');
+  console.log('═'.repeat(70));
+  console.log();
+  
+  // STEP 1: Check narration JSON changes first
+  console.log('📋 Step 1: Checking narration JSON files...\n');
   
   // Get all demos
   const demoIds = await getAllDemoIds();
@@ -272,6 +443,40 @@ async function checkTTSCache(): Promise<void> {
     hasChanges: false,
     demos: {}
   };
+  
+  // Check narration changes for all demos
+  const narrationChanges: Record<string, ReturnType<typeof checkNarrationChanges>> = {};
+  let totalNarrationChanges = 0;
+  
+  for (const demoId of demoIds) {
+    const changes = checkNarrationChanges(demoId);
+    if (changes.hasChanges) {
+      narrationChanges[demoId] = changes;
+      totalNarrationChanges += changes.changedCount + changes.missingCount;
+    }
+  }
+  
+  if (totalNarrationChanges > 0) {
+    console.log('⚠️  Narration JSON changes detected!\n');
+    for (const [demoId, changes] of Object.entries(narrationChanges)) {
+      console.log(`   📁 ${demoId}:`);
+      console.log(`      - Changed: ${changes.changedCount}`);
+      console.log(`      - New: ${changes.missingCount}`);
+      if (changes.details.length > 0 && changes.details.length <= 5) {
+        changes.details.forEach(detail => console.log(`        ${detail}`));
+      } else if (changes.details.length > 5) {
+        changes.details.slice(0, 3).forEach(detail => console.log(`        ${detail}`));
+        console.log(`        ... and ${changes.details.length - 3} more`);
+      }
+    }
+    console.log('\n   💡 TTS regeneration recommended for these changes.\n');
+  } else {
+    console.log('✅ All narration JSON files match cache\n');
+  }
+  
+  // STEP 2: Check TTS cache (audio files)
+  console.log('─'.repeat(70));
+  console.log('📋 Step 2: Checking TTS audio cache...\n');
   
   // Check each demo
   for (const demoId of demoIds) {
@@ -342,23 +547,44 @@ async function checkTTSCache(): Promise<void> {
       console.log('✅ All audio files are up-to-date for this demo');
     }
   }
+  // Final summary
+  const hasAnyChanges = result.hasChanges || totalNarrationChanges > 0;
   
-  if (!result.hasChanges) {
-    console.log('\n' + '═'.repeat(60));
-    console.log('✅ All demos are up-to-date!');
-    console.log('═'.repeat(60));
-    console.log('\n   Cache matches current narration text.');
-    console.log('   Starting React application...\n');
+  if (!hasAnyChanges) {
+    console.log('\n' + '═'.repeat(70));
+    console.log('✅ All systems up-to-date!');
+    console.log('═'.repeat(70));
+    console.log('\n   ✓ Narration JSON matches cache');
+    console.log('   ✓ TTS audio matches narration text');
+    console.log('   ✓ No missing or orphaned files\n');
+    console.log('Starting React application...\n');
     process.exit(0);
   }
   
-  // Changes detected - prompt user
-  console.log('\n' + '═'.repeat(60));
-  console.log('⚠️  Audio regeneration needed!');
-  console.log('═'.repeat(60));
+  // Changes detected - show summary
+  console.log('\n' + '═'.repeat(70));
+  console.log('⚠️  Changes Detected - TTS Regeneration Recommended');
+  console.log('═'.repeat(70));
   
-  const demosWithChanges = Object.keys(result.demos);
-  console.log(`\nDemos affected: ${demosWithChanges.join(', ')}\n`);
+  const allAffectedDemos = new Set([
+    ...Object.keys(result.demos),
+    ...Object.keys(narrationChanges)
+  ]);
+  
+  console.log(`\nDemos affected: ${Array.from(allAffectedDemos).join(', ')}`);
+  
+  if (totalNarrationChanges > 0) {
+    console.log(`   📝 Narration JSON changes: ${totalNarrationChanges}`);
+  }
+  
+  if (result.hasChanges) {
+    const totalTTSChanges = Object.values(result.demos).reduce(
+      (sum, demo) => sum + demo.changedSegments.length + demo.missingFiles.length,
+      0
+    );
+    console.log(`   🔊 TTS audio changes: ${totalTTSChanges}`);
+  }
+  console.log();
   
   const shouldRegenerate = await promptUser('Do you want to regenerate? (y/n): ');
   

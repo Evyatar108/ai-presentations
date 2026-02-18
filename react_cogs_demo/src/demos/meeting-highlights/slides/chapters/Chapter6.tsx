@@ -115,8 +115,7 @@ Ch6_S1_UnifiedConvergence.metadata = {
   title: "Unified Convergence",
   audioSegments: [{
     id: "main",
-    audioFilePath: "/audio/meeting-highlights/c6/s1_segment_01_main.wav",
-    narrationText: "Our solution was to collapse the four sequential steps into one unified prompt. By designing a single comprehensive prompt that accomplishes the same four steps in one L-L-M call."
+    audioFilePath: "/audio/meeting-highlights/c6/s1_segment_01_main.wav"
   }]
 };
 
@@ -159,7 +158,6 @@ Ch6_S4_TokenOptimization.metadata = {
   title: "Token Optimization",
   audioSegments: [{
     id: "main",
-    audioFilePath: "/audio/meeting-highlights/c6/s4_segment_01_main.wav",
-    narrationText: "Beyond reducing L-L-M calls, we optimized the input tokens themselves, which reduced input tokens by more than 60 percent."
+    audioFilePath: "/audio/meeting-highlights/c6/s4_segment_01_main.wav"
   }]
 };

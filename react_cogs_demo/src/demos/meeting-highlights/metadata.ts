@@ -40,10 +40,10 @@ export const meetingHighlightsMetadata: DemoMetadata = {
   /**
    * External narration configuration.
    * Loads narration text from /public/narration/meeting-highlights/narration.json
-   * Falls back to inline narrationText if JSON is missing or has errors.
+   * Strict mode: Errors if JSON is missing (inline narrationText removed in Phase 7).
    */
   useExternalNarration: true,
-  narrationFallback: 'inline', // Safe fallback during migration
+  narrationFallback: 'error', // Strict mode - inline narrationText removed
   
   /**
    * Duration information calculated by calculate-durations script.

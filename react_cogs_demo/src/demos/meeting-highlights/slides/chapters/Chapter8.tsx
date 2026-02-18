@@ -298,23 +298,19 @@ Ch8_S1_UserSatisfaction.metadata = {
   audioSegments: [
     {
       id: "intro",
-      audioFilePath: "/audio/meeting-highlights/c8/s1_segment_01_intro.wav",
-      narrationText: "Overwhelmingly positive feedback in MS Elite surveys."
+      audioFilePath: "/audio/meeting-highlights/c8/s1_segment_01_intro.wav"
     },
     {
       id: "useful",
-      audioFilePath: "/audio/meeting-highlights/c8/s1_segment_02_useful.wav",
-      narrationText: "80% rated it extremely or very useful."
+      audioFilePath: "/audio/meeting-highlights/c8/s1_segment_02_useful.wav"
     },
     {
       id: "likely",
-      audioFilePath: "/audio/meeting-highlights/c8/s1_segment_03_likely.wav",
-      narrationText: "96% likely to use again."
+      audioFilePath: "/audio/meeting-highlights/c8/s1_segment_03_likely.wav"
     },
     {
       id: "fit",
-      audioFilePath: "/audio/meeting-highlights/c8/s1_segment_04_fit.wav",
-      narrationText: "This points to strong product-market fit and daily habit formation among our users."
+      audioFilePath: "/audio/meeting-highlights/c8/s1_segment_04_fit.wav"
     }
   ]
 };

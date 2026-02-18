@@ -283,28 +283,23 @@ Ch9_S1_Testimonials.metadata = {
   audioSegments: [
     {
       id: "intro",
-      audioFilePath: "/audio/meeting-highlights/c9/s1_segment_01_intro.wav",
-      narrationText: "Enthusiastic user feedback."
+      audioFilePath: "/audio/meeting-highlights/c9/s1_segment_01_intro.wav"
     },
     {
       id: "kevin",
-      audioFilePath: "/audio/meeting-highlights/c9/s1_segment_02_kevin.wav",
-      narrationText: "Kevin C. commented: \"Love this feature. Great way to catch up on a recap without watching the full thing.\""
+      audioFilePath: "/audio/meeting-highlights/c9/s1_segment_02_kevin.wav"
     },
     {
       id: "ryan1",
-      audioFilePath: "/audio/meeting-highlights/c9/s1_segment_03_ryan1.wav",
-      narrationText: "Ryan Roslonsky added: \"Beyond the awesome text recap, there is literally a two-minute narrated video about the meeting.\""
+      audioFilePath: "/audio/meeting-highlights/c9/s1_segment_03_ryan1.wav"
     },
     {
       id: "ryan2",
-      audioFilePath: "/audio/meeting-highlights/c9/s1_segment_04_ryan2.wav",
-      narrationText: "\"It's mind-blowing and an engaging way to recap a meeting for a richer understanding of the conversation.\""
+      audioFilePath: "/audio/meeting-highlights/c9/s1_segment_04_ryan2.wav"
     },
     {
       id: "anonymous",
-      audioFilePath: "/audio/meeting-highlights/c9/s1_segment_05_anonymous.wav",
-      narrationText: "Another user shared: \"Saved me hours of reviewing the transcript. This is magical.\""
+      audioFilePath: "/audio/meeting-highlights/c9/s1_segment_05_anonymous.wav"
     }
   ]
 };
@@ -687,23 +682,19 @@ Ch9_S2_ClosingThanks.metadata = {
   audioSegments: [
     {
       id: "intro",
-      audioFilePath: "/audio/meeting-highlights/c9/s2_segment_01_intro.wav",
-      narrationText: "Thank you for exploring Meeting Highlights."
+      audioFilePath: "/audio/meeting-highlights/c9/s2_segment_01_intro.wav"
     },
     {
       id: "value",
-      audioFilePath: "/audio/meeting-highlights/c9/s2_segment_02_value.wav",
-      narrationText: "Our goal is simple: help you reclaim time and stay aligned."
+      audioFilePath: "/audio/meeting-highlights/c9/s2_segment_02_value.wav"
     },
     {
       id: "feedback",
-      audioFilePath: "/audio/meeting-highlights/c9/s2_segment_03_feedback.wav",
-      narrationText: "Send feedback to meeting H-L feedback at microsoft.com"
+      audioFilePath: "/audio/meeting-highlights/c9/s2_segment_03_feedback.wav"
     },
-      {
-        id: "cta",
-        audioFilePath: "/audio/meeting-highlights/c9/s2_segment_04_cta.wav",
-        narrationText: "Try it now in BizChat and SharePoint."
-      }
-    ]
+    {
+      id: "cta",
+      audioFilePath: "/audio/meeting-highlights/c9/s2_segment_04_cta.wav"
+    }
+  ]
 };

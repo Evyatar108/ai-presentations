@@ -6,6 +6,13 @@ import type { DemoMetadata } from '../demos/types';
 import { resolveTimingConfig, TimingConfig } from '../demos/timing/types';
 import { NarrationEditModal } from './NarrationEditModal';
 import { regenerateSegment, checkTTSServerHealth } from '../utils/ttsClient';
+import {
+  checkApiHealth,
+  saveNarrationToFile,
+  updateNarrationCache,
+  hashText
+} from '../utils/narrationApiClient';
+import { NarrationData, NarrationSlide, NarrationSegment } from '../utils/narrationLoader';
 
 // Fallback audio file for missing segments
 const FALLBACK_AUDIO = '/audio/silence-1s.mp3';
@@ -75,6 +82,19 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
   const [isRegeneratingAudio, setIsRegeneratingAudio] = useState(false);
   const [regenerationError, setRegenerationError] = useState<string | null>(null);
 
+  // Phase 5: API integration state
+  const [apiAvailable, setApiAvailable] = useState<boolean | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+  
+  // Notification system (toast messages)
+  interface Notification {
+    id: number;
+    type: 'success' | 'error' | 'warning' | 'info';
+    message: string;
+  }
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const notificationIdRef = useRef(0);
+
   // Narration edits storage (in-memory, session-only)
   interface NarrationEdit {
     slideKey: string;
@@ -100,9 +120,41 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
   const segmentContext = useSegmentContext();
 
   // Keep ref in sync with state
- useEffect(() => {
-   currentIndexRef.current = currentIndex;
- }, [currentIndex]);
+  useEffect(() => {
+    currentIndexRef.current = currentIndex;
+  }, [currentIndex]);
+
+  // Check API health on mount
+  useEffect(() => {
+    checkApiHealth().then(available => {
+      setApiAvailable(available);
+      if (available) {
+        console.log('[NarratedController] Backend API is available');
+      } else {
+        console.warn('[NarratedController] Backend API is not available - edits will be session-only');
+      }
+    });
+  }, []);
+
+  // Notification helpers
+  const showNotification = useCallback((type: Notification['type'], message: string, duration = 3000) => {
+    const id = ++notificationIdRef.current;
+    const notification: Notification = { id, type, message };
+    
+    setNotifications(prev => [...prev, notification]);
+    
+    // Auto-remove after duration
+    if (duration > 0) {
+      setTimeout(() => {
+        setNotifications(prev => prev.filter(n => n.id !== id));
+      }, duration);
+    }
+  }, []);
+
+  const showSuccessMessage = useCallback((message: string) => showNotification('success', message), [showNotification]);
+  const showErrorMessage = useCallback((message: string) => showNotification('error', message, 5000), [showNotification]);
+  const showWarningMessage = useCallback((message: string) => showNotification('warning', message, 4000), [showNotification]);
+  const showInfoMessage = useCallback((message: string) => showNotification('info', message), [showNotification]);
 
  // Start / reset runtime timing baseline when narrated playback begins (always, independent of UI option)
  useEffect(() => {
@@ -516,55 +568,58 @@ const handleEditNarration = () => {
   setShowEditModal(true);
 };
 
-// Export narration edits (Phase 5)
-const handleExportNarration = () => {
-  const exportData = {
-    demoId: demoMetadata.id,
-    exportDate: new Date().toISOString(),
-    slides: allSlides.map(slide => {
-      const slideKey = `Ch${slide.metadata.chapter}:S${slide.metadata.slide}`;
-      
-      return {
-        chapter: slide.metadata.chapter,
-        slide: slide.metadata.slide,
-        title: slide.metadata.title,
-        segments: slide.metadata.audioSegments.map((seg, idx) => {
-          const editKey = `${slideKey}:${idx}`;
-          const edit = narrationEdits.get(editKey);
-          
-          return {
-            id: seg.id,
-            originalNarration: seg.narrationText || '',
-            editedNarration: edit?.editedText || null,
-            modified: !!edit,
-            timestamp: edit?.timestamp ? new Date(edit.timestamp).toISOString() : undefined
-          };
-        })
-      };
-    }),
-    metadata: {
-      totalSlides: allSlides.length,
-      totalSegments: allSlides.reduce((sum, s) => sum + s.metadata.audioSegments.length, 0),
-      modifiedSegments: narrationEdits.size
+// Export narration edits (Phase 5: enhanced with save-to-file option)
+const handleExportNarration = async () => {
+  const narrationData = buildNarrationDataFromEdits();
+  
+  // Show simple prompt for export action
+  const action = window.confirm(
+    'Export Options:\n\n' +
+    'OK = Save to file system (requires API)\n' +
+    'Cancel = Download JSON file'
+  );
+  
+  if (action) {
+    // Save to file system
+    if (apiAvailable) {
+      setIsSaving(true);
+      try {
+        const result = await saveNarrationToFile({
+          demoId: demoMetadata.id,
+          narrationData
+        });
+        
+        if (result.success) {
+          showSuccessMessage(`Saved to ${result.filePath}`);
+          console.log('[Export] Saved to file system:', result.filePath);
+        }
+      } catch (error) {
+        showErrorMessage('Failed to save to file');
+        console.error('[Export] Save to file failed:', error);
+      } finally {
+        setIsSaving(false);
+      }
+    } else {
+      showErrorMessage('Backend API not available');
     }
-  };
-  
-  const blob = new Blob([JSON.stringify(exportData, null, 2)], {
-    type: 'application/json'
-  });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `narration-export-${demoMetadata.id}-${Date.now()}.json`;
-  a.click();
-  URL.revokeObjectURL(url);
-  
-  console.log('[Export] Narration exported:', {
-    demoId: demoMetadata.id,
-    totalSlides: exportData.metadata.totalSlides,
-    totalSegments: exportData.metadata.totalSegments,
-    modifiedSegments: exportData.metadata.modifiedSegments
-  });
+  } else {
+    // Download JSON
+    const blob = new Blob([JSON.stringify(narrationData, null, 2)], {
+      type: 'application/json'
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `narration-export-${demoMetadata.id}-${Date.now()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    
+    showInfoMessage('Narration exported to download');
+    console.log('[Export] Downloaded narration JSON:', {
+      demoId: demoMetadata.id,
+      totalSlides: narrationData.slides.length
+    });
+  }
 };
 
 // Regenerate audio for a segment using TTS (Phase 4)
@@ -643,7 +698,47 @@ const regenerateSegmentAudio = async (
   }
 };
 
-// Save edited narration (Phase 3 & 4: save and TTS regeneration)
+// Helper function: Build complete NarrationData structure from current in-memory edits
+const buildNarrationDataFromEdits = useCallback((): NarrationData => {
+  const narrationData: NarrationData = {
+    demoId: demoMetadata.id,
+    version: '1.0',
+    lastModified: new Date().toISOString(),
+    slides: []
+  };
+  
+  // Iterate through all slides and build structure
+  for (const slideComponent of allSlides) {
+    const slide = slideComponent.metadata;
+    const slideKey = `Ch${slide.chapter}:S${slide.slide}`;
+    
+    const slideData: NarrationSlide = {
+      chapter: slide.chapter,
+      slide: slide.slide,
+      title: slide.title,
+      segments: []
+    };
+    
+    for (let idx = 0; idx < slide.audioSegments.length; idx++) {
+      const segment = slide.audioSegments[idx];
+      const editKey = `${slideKey}:${idx}`;
+      const edit = narrationEdits.get(editKey);
+      
+      slideData.segments.push({
+        id: segment.id,
+        narrationText: edit?.editedText || segment.narrationText || '',
+        visualDescription: segment.visualDescription || '',
+        notes: ''
+      });
+    }
+    
+    narrationData.slides.push(slideData);
+  }
+  
+  return narrationData;
+}, [demoMetadata.id, allSlides, narrationEdits]);
+
+// Save edited narration (Phase 5: API integration with persistence)
 const handleSaveNarration = async (newText: string, regenerateAudio: boolean) => {
   if (!editingSegment) return;
   
@@ -653,56 +748,110 @@ const handleSaveNarration = async (newText: string, regenerateAudio: boolean) =>
   
   if (!segment) {
     console.error('[Edit] Cannot save: invalid segment');
+    showErrorMessage('Cannot save: invalid segment');
     return;
   }
   
-  // Create edit key
-  const editKey = `${editingSegment.slideKey}:${currentSegmentIdx}`;
+  setIsSaving(true);
   
-  // Create edit object
-  const edit: NarrationEdit = {
-    slideKey: editingSegment.slideKey,
-    segmentIndex: currentSegmentIdx,
-    originalText: segment.narrationText || '',
-    editedText: newText,
-    timestamp: Date.now()
-  };
-  
-  // Store edit in narrationEdits Map (immutable update)
-  setNarrationEdits(prev => {
-    const updated = new Map(prev);
-    updated.set(editKey, edit);
-    return updated;
-  });
-  
-  // Update segment's narrationText in-memory (direct mutation is OK here)
-  segment.narrationText = newText;
-  
-  console.log('[Edit] Saved narration:', {
-    key: editKey,
-    originalText: edit.originalText,
-    editedText: newText,
-    timestamp: new Date(edit.timestamp).toISOString()
-  });
-  
-  // Phase 4: Regenerate audio if requested
-  if (regenerateAudio) {
-    console.log('[Edit] TTS regeneration requested');
-    const success = await regenerateSegmentAudio(slide, currentSegmentIdx, newText);
+  try {
+    // Create edit key
+    const editKey = `${editingSegment.slideKey}:${currentSegmentIdx}`;
     
-    if (!success) {
-      // Don't close modal on error - let user retry or cancel
-      console.log('[Edit] Audio regeneration failed, modal remains open');
-      return;
+    // Create edit object
+    const edit: NarrationEdit = {
+      slideKey: editingSegment.slideKey,
+      segmentIndex: currentSegmentIdx,
+      originalText: segment.narrationText || '',
+      editedText: newText,
+      timestamp: Date.now()
+    };
+    
+    // 1. Store edit in narrationEdits Map (immutable update)
+    setNarrationEdits(prev => {
+      const updated = new Map(prev);
+      updated.set(editKey, edit);
+      return updated;
+    });
+    
+    // 2. Update segment's narrationText in-memory (direct mutation is OK here)
+    segment.narrationText = newText;
+    
+    console.log('[Edit] Saved narration in memory:', {
+      key: editKey,
+      originalText: edit.originalText,
+      editedText: newText,
+      timestamp: new Date(edit.timestamp).toISOString()
+    });
+    
+    // 3. Phase 5: Persist to file via backend API (if available)
+    if (apiAvailable) {
+      try {
+        const narrationData = buildNarrationDataFromEdits();
+        
+        const result = await saveNarrationToFile({
+          demoId: demoMetadata.id,
+          narrationData
+        });
+        
+        if (result.success) {
+          console.log(`[Save] Persisted to ${result.filePath}`);
+          showSuccessMessage('Narration saved to file!');
+        }
+      } catch (apiError) {
+        console.error('[Save] API call failed:', apiError);
+        showErrorMessage('Failed to save to file (in-memory edit still applied)');
+      }
+    } else {
+      console.warn('[Save] Backend API not available - edit is session-only');
+      showWarningMessage('Edit saved in memory only (backend API unavailable)');
     }
     
-    console.log('[Edit] Audio regeneration completed successfully');
+    // 4. Regenerate audio if requested (Phase 4)
+    if (regenerateAudio) {
+      console.log('[Edit] TTS regeneration requested');
+      const success = await regenerateSegmentAudio(slide, currentSegmentIdx, newText);
+      
+      if (!success) {
+        // Don't close modal on error - let user retry or cancel
+        console.log('[Edit] Audio regeneration failed, modal remains open');
+        setIsSaving(false);
+        return;
+      }
+      
+      console.log('[Edit] Audio regeneration completed successfully');
+      
+      // 5. Phase 5: Update narration cache after TTS regeneration
+      if (apiAvailable) {
+        try {
+          const hash = await hashText(newText);
+          await updateNarrationCache({
+            demoId: demoMetadata.id,
+            segment: {
+              key: editKey,
+              hash,
+              timestamp: new Date().toISOString()
+            }
+          });
+          console.log('[Cache] Updated cache for segment:', editKey);
+        } catch (cacheError) {
+          console.error('[Cache] Failed to update cache:', cacheError);
+          // Non-fatal error - don't show to user
+        }
+      }
+    }
+    
+    // Close modal only on success (or if no regeneration requested)
+    setShowEditModal(false);
+    setEditingSegment(null);
+    setRegenerationError(null);
+    
+  } catch (error) {
+    console.error('[Save] Unexpected error:', error);
+    showErrorMessage('Save failed unexpectedly');
+  } finally {
+    setIsSaving(false);
   }
-  
-  // Close modal only on success (or if no regeneration requested)
-  setShowEditModal(false);
-  setEditingSegment(null);
-  setRegenerationError(null);
 };
 
 // Cancel narration edit
@@ -992,33 +1141,6 @@ const handleCancelEdit = () => {
            </button>
          )}
          
-         {/* Export button (only in manual mode) */}
-         {isManualMode && (
-           <button
-             onClick={handleExportNarration}
-             style={{
-               background: 'transparent',
-               border: '1px solid #475569',
-               color: '#f1f5f9',
-               borderRadius: 6,
-               padding: '0.25rem 0.75rem',
-               fontSize: 11,
-               cursor: 'pointer',
-               transition: 'all 0.2s ease'
-             }}
-             onMouseEnter={(e) => {
-               e.currentTarget.style.borderColor = '#00B7C3';
-               e.currentTarget.style.color = '#00B7C3';
-             }}
-             onMouseLeave={(e) => {
-               e.currentTarget.style.borderColor = '#475569';
-               e.currentTarget.style.color = '#f1f5f9';
-             }}
-           >
-             💾 Export
-           </button>
-         )}
-         
          <button
            onClick={handleRestart}
            style={{
@@ -1074,6 +1196,48 @@ const handleCancelEdit = () => {
             onCancel={handleCancelEdit}
           />
         )}
+      </AnimatePresence>
+
+      {/* Notification Toasts */}
+      <AnimatePresence>
+        {notifications.map((notification) => {
+          const colors = {
+            success: { bg: 'rgba(34, 197, 94, 0.9)', icon: '✓' },
+            error: { bg: 'rgba(239, 68, 68, 0.9)', icon: '✕' },
+            warning: { bg: 'rgba(245, 158, 11, 0.9)', icon: '⚠' },
+            info: { bg: 'rgba(59, 130, 246, 0.9)', icon: 'ℹ' }
+          };
+          const style = colors[notification.type];
+          
+          return (
+            <motion.div
+              key={notification.id}
+              initial={{ opacity: 0, x: 50, y: 0 }}
+              animate={{ opacity: 1, x: 0, y: 0 }}
+              exit={{ opacity: 0, x: 50, y: 0 }}
+              style={{
+                position: 'fixed',
+                top: 20 + (notifications.indexOf(notification) * 70),
+                right: 20,
+                background: style.bg,
+                color: '#fff',
+                padding: '0.75rem 1rem',
+                borderRadius: 8,
+                fontSize: 14,
+                maxWidth: 350,
+                zIndex: 10000,
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                fontFamily: 'Inter, system-ui, sans-serif'
+              }}
+            >
+              <span style={{ fontSize: 16, fontWeight: 'bold' }}>{style.icon}</span>
+              <span style={{ flex: 1 }}>{notification.message}</span>
+            </motion.div>
+          );
+        })}
       </AnimatePresence>
     </>
   );

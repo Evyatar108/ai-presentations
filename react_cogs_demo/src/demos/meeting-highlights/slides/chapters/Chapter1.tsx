@@ -148,22 +148,19 @@ Ch1_S1_WhatIsMeetingHighlights.metadata = {
       id: "intro",
       audioFilePath: "/audio/meeting-highlights/c1/s1_segment_01_intro.wav",
       srtSegmentNumber: 1,
-      visualDescription: "Title slide \"Meeting Highlights\"",
-      narrationText: "Meeting Highlights automatically generates 2-3 minute video recaps of your meetings."
+      visualDescription: "Title slide \"Meeting Highlights\""
     },
     {
       id: "combination",
       audioFilePath: "/audio/meeting-highlights/c1/s1_segment_02_combination.wav",
       srtSegmentNumber: 2,
-      visualDescription: "Split screen showing AI summaries + authentic video clips",
-      narrationText: "It combines AI summaries with authentic video clips, preserving tone and discussion flow."
+      visualDescription: "Split screen showing AI summaries + authentic video clips"
     },
     {
       id: "problem",
       audioFilePath: "/audio/meeting-highlights/c1/s1_segment_03_problem.wav",
       srtSegmentNumber: 3,
-      visualDescription: "Value prop highlight box appears",
-      narrationText: "Catch up on meetings without watching hour-long recordings."
+      visualDescription: "Value prop highlight box appears"
     }
   ]
 };
@@ -303,43 +300,37 @@ Ch1_S2_HowToAccess.metadata = {
       id: "intro",
       audioFilePath: "/audio/meeting-highlights/c1/s2_segment_01_intro.wav",
       srtSegmentNumber: 1,
-      visualDescription: "BizChat interface screenshot",
-      narrationText: "Access Meeting Highlights through BizChat."
+      visualDescription: "BizChat interface screenshot"
     },
     {
       id: "bizchat",
       audioFilePath: "/audio/meeting-highlights/c1/s2_segment_02_bizchat.wav",
       srtSegmentNumber: 2,
-      visualDescription: "Embedded MP4 demo video showing BizChat interaction",
-      narrationText: "Open BizChat and ask for a meeting recap."
+      visualDescription: "Embedded MP4 demo video showing BizChat interaction"
     },
     {
       id: "ciq",
       audioFilePath: "/audio/meeting-highlights/c1/s2_segment_03_ciq.wav",
       srtSegmentNumber: 3,
-      visualDescription: "Demo continues - showing \"/\" menu for CIQ",
-      narrationText: "Tip: Type forward slash to easily reference meetings using C-I-Q."
+      visualDescription: "Demo continues - showing \"/\" menu for CIQ"
     },
     {
       id: "select",
       audioFilePath: "/audio/meeting-highlights/c1/s2_segment_04_select.wav",
       srtSegmentNumber: 4,
-      visualDescription: "Demo shows meeting selection from menu",
-      narrationText: "Select and search for meetings from the menu."
+      visualDescription: "Demo shows meeting selection from menu"
     },
     {
       id: "player",
       audioFilePath: "/audio/meeting-highlights/c1/s2_segment_05_player.wav",
       srtSegmentNumber: 5,
-      visualDescription: "Demo shows BizChat response with video player at bottom",
-      narrationText: "The highlights player appears at the bottom."
+      visualDescription: "Demo shows BizChat response with video player at bottom"
     },
     {
       id: "note",
       audioFilePath: "/audio/meeting-highlights/c1/s2_segment_06_note.wav",
       srtSegmentNumber: 6,
-      visualDescription: "Note callout appears with info icon",
-      narrationText: "For series meetings, click the arrow to view instances, then select one."
+      visualDescription: "Note callout appears with info icon"
     }
   ]
 };
@@ -459,36 +450,31 @@ Ch1_S3_HowToAccessSharePoint.metadata = {
       id: "intro",
       audioFilePath: "/audio/meeting-highlights/c1/s3_segment_01_intro.wav",
       srtSegmentNumber: 1,
-      visualDescription: "SharePoint interface screenshot",
-      narrationText: "You can also access Meeting Highlights directly from SharePoint."
+      visualDescription: "SharePoint interface screenshot"
     },
     {
       id: "video",
       audioFilePath: "/audio/meeting-highlights/c1/s3_segment_02_video.wav",
       srtSegmentNumber: 2,
-      visualDescription: "Video player appears showing SharePoint demo",
-      narrationText: "Open the meeting chat in Teams."
+      visualDescription: "Video player appears showing SharePoint demo"
     },
     {
       id: "sharepoint",
       audioFilePath: "/audio/meeting-highlights/c1/s3_segment_03_sharepoint.wav",
       srtSegmentNumber: 3,
-      visualDescription: "First instruction card appears",
-      narrationText: "Navigate to the meeting recording recap page by clicking the recording link or via the Recap tab."
+      visualDescription: "First instruction card appears"
     },
     {
       id: "browser",
       audioFilePath: "/audio/meeting-highlights/c1/s3_segment_04_browser.wav",
       srtSegmentNumber: 4,
-      visualDescription: "Demo shows 'Watch in browser' button",
-      narrationText: "Click the Watch in browser button."
+      visualDescription: "Demo shows 'Watch in browser' button"
     },
     {
       id: "play",
       audioFilePath: "/audio/meeting-highlights/c1/s3_segment_05_play.wav",
       srtSegmentNumber: 5,
-      visualDescription: "Demo shows 'Play highlights' button",
-      narrationText: "Then click Play highlights. A new page should open with the highlights player ready to recap your meeting."
+      visualDescription: "Demo shows 'Play highlights' button"
     }
   ]
 };
@@ -608,43 +594,37 @@ Ch1_S4_UserValue.metadata = {
       id: "intro",
       audioFilePath: "/audio/meeting-highlights/c1/s3_segment_01_intro.wav",
       srtSegmentNumber: 1,
-      visualDescription: "3 value proposition cards appear",
-      narrationText: "Meeting Highlights delivers four key benefits to users."
+      visualDescription: "3 value proposition cards appear"
     },
     {
       id: "triage",
       audioFilePath: "/audio/meeting-highlights/c1/s3_segment_02_triage.wav",
       srtSegmentNumber: 2,
-      visualDescription: "Card 1 highlights - magnifying glass with decision arrows",
-      narrationText: "First, smart triage. The highlights help you decide whether you need to watch the full recording or if the recap is sufficient."
+      visualDescription: "Card 1 highlights - magnifying glass with decision arrows"
     },
     {
       id: "time",
       audioFilePath: "/audio/meeting-highlights/c1/s3_segment_03_time.wav",
       srtSegmentNumber: 3,
-      visualDescription: "Card 2 highlights - clock icon with \"60 min → 3 min\"",
-      narrationText: "Second, massive time savings. If based on the triage you're satisfied with the highlights, you save time by not needing to watch the full recording."
+      visualDescription: "Card 2 highlights - clock icon with \"60 min → 3 min\""
     },
     {
       id: "engagement",
       audioFilePath: "/audio/meeting-highlights/c1/s3_segment_04_engagement.wav",
       srtSegmentNumber: 4,
-      visualDescription: "Card 3 highlights - engagement icons (eyes, ears, text)",
-      narrationText: "Third, better engagement and retention through audiovisual content that caters to all learning styles."
+      visualDescription: "Card 3 highlights - engagement icons (eyes, ears, text)"
     },
     {
       id: "dynamics",
       audioFilePath: "/audio/meeting-highlights/c1/s3_segment_05_dynamics.wav",
       srtSegmentNumber: 5,
-      visualDescription: "Card 4 highlights - mood/vibe icons showing emotions",
-      narrationText: "Fourth, preserved meeting dynamics. You get the tone and vibe of discussions, not just facts."
+      visualDescription: "Card 4 highlights - mood/vibe icons showing emotions"
     },
     {
       id: "testimonial",
       audioFilePath: "/audio/meeting-highlights/c1/s3_segment_06_testimonial.wav",
       srtSegmentNumber: 6,
-      visualDescription: "User testimonial quote appears",
-      narrationText: "Internal users have called it magical, with one manager saying it saved hours of reviewing transcripts."
+      visualDescription: "User testimonial quote appears"
     }
   ]
 };

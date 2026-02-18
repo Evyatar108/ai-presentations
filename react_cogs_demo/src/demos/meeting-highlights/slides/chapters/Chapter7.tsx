@@ -152,8 +152,7 @@ Ch7_S2_GPUReduction.metadata = {
   title: "GPU Optimization",
   audioSegments: [{
     id: "main",
-    audioFilePath: "/audio/meeting-highlights/c7/s2_segment_01_main.wav",
-    narrationText: "Required GPU capacity dropped 70%: from 600 to under 200."
+    audioFilePath: "/audio/meeting-highlights/c7/s2_segment_01_main.wav"
   }]
 };
 
@@ -294,8 +293,7 @@ Ch7_S4_QualityComparison.metadata = {
   title: "Quality Improvement",
   audioSegments: [{
     id: "main",
-    audioFilePath: "/audio/meeting-highlights/c7/s4_segment_01_main.wav",
-    narrationText: "Early internal feedback strongly prefers unified prompt highlight videos over the multi-call pipeline output. The gains center on depth and natural flow."
+    audioFilePath: "/audio/meeting-highlights/c7/s4_segment_01_main.wav"
   }]
 };
 
@@ -455,7 +453,6 @@ Ch7_S5_PathToGA.metadata = {
   title: "Path to GA",
   audioSegments: [{
     id: "main",
-    audioFilePath: "/audio/meeting-highlights/c7/s5_segment_01_main.wav",
-    narrationText: "These improvements are the next step: enabling GA within capacity constraints."
+    audioFilePath: "/audio/meeting-highlights/c7/s5_segment_01_main.wav"
   }]
 };

@@ -3,6 +3,9 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const cors = require('cors');
+const { exec } = require('child_process');
+const util = require('util');
+const execAsync = util.promisify(exec);
 
 const app = express();
 
@@ -170,36 +173,89 @@ app.post('/api/narration/update-cache', (req, res) => {
   }
 });
 
-// Endpoint 3: Regenerate Audio (Placeholder for Phase 6)
-app.post('/api/narration/regenerate-audio', (req, res) => {
+// Endpoint 3: Regenerate Audio (Phase 6 Implementation)
+app.post('/api/narration/regenerate-audio', async (req, res) => {
   try {
     const { demoId, chapter, slide, segmentId, narrationText } = req.body;
     
     // Validation
     if (!demoId || chapter === undefined || slide === undefined || !segmentId || !narrationText) {
-      return res.status(400).json({ 
-        success: false, 
-        error: 'Missing required parameters (demoId, chapter, slide, segmentId, narrationText)' 
+      return res.status(400).json({
+        success: false,
+        error: 'Missing required parameters (demoId, chapter, slide, segmentId, narrationText)'
       });
     }
     
-    // Placeholder response
-    const audioPath = `/audio/${demoId}/c${chapter}/s${slide}_segment_${String(segmentId).padStart(2, '0')}.wav`;
+    console.log(`🔊 [Audio] Regenerating TTS for '${demoId}' ch${chapter}:s${slide}:${segmentId}`);
+    console.log(`   Text preview: "${narrationText.substring(0, 50)}..."`);
     
-    console.log(`⚠️  [Audio] Regenerate request for '${demoId}' ch${chapter}:s${slide}:${segmentId} (not implemented - Phase 6)`);
+    // Construct audio file path
+    const audioPath = `/audio/${demoId}/c${chapter}/s${slide}_segment_${segmentId}.wav`;
+    const fullAudioPath = path.join(__dirname, '../public', audioPath);
     
-    res.json({
-      success: true,
-      audioPath,
-      message: 'TTS regeneration will be implemented in Phase 6',
-      implemented: false
-    });
+    // Execute single-segment TTS generation script
+    const scriptPath = path.join(__dirname, '../scripts/generate-single-tts.ts');
+    const escapedText = narrationText.replace(/"/g, '\\"').replace(/\$/g, '\\$');
+    
+    const command = `npx tsx "${scriptPath}" --demo "${demoId}" --chapter ${chapter} --slide ${slide} --segment "${segmentId}" --text "${escapedText}"`;
+    
+    console.log(`   Executing TTS generation...`);
+    
+    try {
+      const { stdout, stderr } = await execAsync(command, {
+        cwd: path.join(__dirname, '..'),
+        timeout: 120000, // 2 minute timeout
+        maxBuffer: 10 * 1024 * 1024 // 10MB buffer
+      });
+      
+      if (stderr && !stderr.includes('Warning')) {
+        console.warn(`   [TTS] stderr: ${stderr}`);
+      }
+      
+      // Check if file was created
+      if (!fs.existsSync(fullAudioPath)) {
+        throw new Error('Audio file was not created');
+      }
+      
+      const fileStats = fs.statSync(fullAudioPath);
+      console.log(`✅ [Audio] Generated successfully (${(fileStats.size / 1024).toFixed(2)} KB)`);
+      
+      // Get file modification time for cache busting
+      const timestamp = fileStats.mtimeMs;
+      
+      res.json({
+        success: true,
+        audioPath: `${audioPath}?t=${timestamp}`,
+        message: 'TTS audio regenerated successfully',
+        fileSize: fileStats.size,
+        timestamp: new Date(timestamp).toISOString()
+      });
+      
+    } catch (ttsError) {
+      console.error(`❌ [Audio] TTS generation failed:`, ttsError);
+      
+      // Check if it's a TTS server connection error
+      if (ttsError.message.includes('Cannot connect to TTS server')) {
+        return res.status(503).json({
+          success: false,
+          error: 'TTS server not available',
+          details: 'Please ensure the Python TTS server is running (cd tts && python server.py)',
+          serverError: true
+        });
+      }
+      
+      return res.status(500).json({
+        success: false,
+        error: 'TTS generation failed',
+        details: ttsError.message
+      });
+    }
     
   } catch (error) {
-    console.error('[Audio] Error:', error.message);
-    res.status(500).json({ 
-      success: false, 
-      error: error.message 
+    console.error('❌ [Audio] Error:', error.message);
+    res.status(500).json({
+      success: false,
+      error: error.message
     });
   }
 });
@@ -239,7 +295,7 @@ app.listen(PORT, () => {
   console.log(`    GET  /api/health                 - Health check`);
   console.log(`    POST /api/narration/save         - Save narration.json`);
   console.log(`    POST /api/narration/update-cache - Update cache`);
-  console.log(`    POST /api/narration/regenerate-audio - Regenerate TTS (Phase 6)`);
+  console.log(`    POST /api/narration/regenerate-audio - Regenerate TTS audio`);
   console.log('═══════════════════════════════════════════════════════════');
   console.log('');
 });

@@ -672,47 +672,39 @@ Ch2_TeamCollaboration.metadata = {
   audioSegments: [
     {
       id: 'intro',
-      audioFilePath: '/audio/meeting-highlights/c2/s1_segment_01_intro.wav',
-      narrationText: 'Meeting Highlights required the collaboration of six teams within Microsoft for a cross-organizational effort. Let me show you how each team contribute to the project through the architecture.'
+      audioFilePath: '/audio/meeting-highlights/c2/s1_segment_01_intro.wav'
     },
     {
       id: 'odsp',
-      audioFilePath: '/audio/meeting-highlights/c2/s1_segment_02_odsp.wav',
-      narrationText: 'ODSP handles storage and video manifest. When meetings end, it initiates highlight generation.'
+      audioFilePath: '/audio/meeting-highlights/c2/s1_segment_02_odsp.wav'
     },
     {
       id: 'msai',
-      audioFilePath: '/audio/meeting-highlights/c2/s1_segment_03_msai.wav',
-      narrationText: 'MSAI-Hive processes transcripts using LLMs to generate highlight metadata.'
+      audioFilePath: '/audio/meeting-highlights/c2/s1_segment_03_msai.wav'
     },
     {
       id: 'bizchat',
-      audioFilePath: '/audio/meeting-highlights/c2/s1_segment_04_bizchat.wav',
-      narrationText: 'BizChat provides natural language access through conversational queries.'
+      audioFilePath: '/audio/meeting-highlights/c2/s1_segment_04_bizchat.wav'
     },
     {
       id: 'sharepoint',
-      audioFilePath: '/audio/meeting-highlights/c2/s1_segment_05_sharepoint.wav',
-      narrationText: 'SharePoint offers direct access from meeting recap pages. This interface was implemented by the Clipchamp team.'
+      audioFilePath: '/audio/meeting-highlights/c2/s1_segment_05_sharepoint.wav'
     },
     {
       id: 'teams',
-      audioFilePath: '/audio/meeting-highlights/c2/s1_segment_06_teams.wav',
-      narrationText: 'Teams access planned as another interface option.'
+      audioFilePath: '/audio/meeting-highlights/c2/s1_segment_06_teams.wav'
     },
     {
       id: 'loop_storage',
-      audioFilePath: '/audio/meeting-highlights/c2/s1_segment_07_loop_storage.wav',
-      narrationText: 'Loop embeds the Clipchamp player across applications.'
+      audioFilePath: '/audio/meeting-highlights/c2/s1_segment_07_loop_storage.wav'
     },
     {
       id: 'clipchamp',
-      audioFilePath: '/audio/meeting-highlights/c2/s1_segment_08_clipchamp.wav',
-      narrationText: 'Clipchamp delivers the player experience without creating new video files.'
+      audioFilePath: '/audio/meeting-highlights/c2/s1_segment_08_clipchamp.wav'
     },
     {
       id: 'conclusion',
-      audioFilePath: '/audio/meeting-highlights/c2/s1_segment_09_conclusion.wav',
-      narrationText: 'Together, these teams deliver a unified end-to-end experience from recording through AI processing to user access, showcasing true One Microsoft collaboration.'    }
+      audioFilePath: '/audio/meeting-highlights/c2/s1_segment_09_conclusion.wav'
+    }
   ]
 };

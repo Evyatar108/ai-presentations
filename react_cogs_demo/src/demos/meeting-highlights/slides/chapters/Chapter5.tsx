@@ -144,7 +144,6 @@ Ch5_S1_ChallengeFraming.metadata = {
   title: "Challenge Framing",
   audioSegments: [{
     id: "main",
-    audioFilePath: "/audio/meeting-highlights/c5/s1_segment_01_main.wav",
-    narrationText: "Our current Meeting Highlights implementation makes 4 sequential calls to L-L-M, with a large amount of tokens. To enable global scaling, we needed to dramatically reduce these computational costs."
+    audioFilePath: "/audio/meeting-highlights/c5/s1_segment_01_main.wav"
   }]
 };

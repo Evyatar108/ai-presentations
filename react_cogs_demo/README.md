@@ -75,12 +75,81 @@ npm run type-check                  # Run TypeScript compiler
 - **Demo independence** - Each demo has its own assets
 - **Shared infrastructure** - Reusable components and utilities
 
+## Narration System
+
+The narration externalization system allows editing presentation narration through JSON files without touching React code.
+
+### Architecture
+
+- **Narration JSON**: `public/narration/{demo-id}/narration.json` - Single source of truth for all narration text
+- **Narration Cache**: `public/narration/{demo-id}/narration-cache.json` - SHA-256 hashes for change detection
+- **Backend API**: Express server on port 3001 for file persistence
+- **Frontend Integration**: Browser-based editing with save functionality
+- **TTS Integration**: Audio regeneration from JSON narration
+
+### Quick Start
+
+```bash
+# Start development with narration editing
+npm run dev:full
+
+# Edit narration via browser UI
+# 1. Open Meeting Highlights demo
+# 2. Switch to Manual mode
+# 3. Click Edit button (✏️) on any segment
+# 4. Modify text and click "Save"
+# 5. Changes persist to narration.json
+
+# Or edit narration.json directly
+code public/narration/meeting-highlights/narration.json
+
+# Check for changes
+npm run check-narration
+
+# Regenerate TTS audio from JSON
+npm run tts:from-json
+```
+
+### NPM Scripts
+
+```bash
+npm run extract-narration      # Extract narration from React components to JSON
+npm run check-narration        # Detect narration changes via hash comparison
+npm run narration-api          # Start backend API server (port 3001)
+npm run dev:full              # Start both dev server and narration API
+npm run tts:from-json         # Generate TTS audio from narration JSON exclusively
+```
+
+### Features
+
+- ✅ **Browser-Based Editing** - Edit narration directly in presentation UI
+- ✅ **Persistent File Storage** - Changes saved to disk and version controlled
+- ✅ **Automatic Change Detection** - Hash-based detection triggers regeneration
+- ✅ **TTS Audio Regeneration** - Generate audio from updated narration
+- ✅ **Version Control Friendly** - Track narration changes separately from code
+- ✅ **Collaborative Editing** - Multiple people can edit narration files
+
+### Documentation
+
+- **[User Guide](docs/NARRATION_SYSTEM_GUIDE.md)** - Complete usage documentation
+- **[API Reference](docs/NARRATION_API_REFERENCE.md)** - Backend API endpoints
+- **[Troubleshooting](docs/NARRATION_TROUBLESHOOTING.md)** - Common issues and solutions
+- **[Implementation Plan](docs/NARRATION_EXTERNALIZATION_PLAN.md)** - System architecture
+
+### Phase Reports
+
+- [Phase 5: Frontend Integration](docs/PHASE_5_IMPLEMENTATION_REPORT.md)
+- [Phase 6: TTS Integration](docs/PHASE_6_TTS_INTEGRATION.md)
+- [Phase 7: Migration](docs/PHASE_7_MIGRATION_REPORT.md)
+- [Phase 8: Testing](docs/PHASE_8_TEST_RESULTS.md)
+
 ## Tech Stack
 
 - React 18 + TypeScript
 - Vite (dev server & build)
 - Framer Motion (animations)
 - Python Flask TTS server (VibeVoice)
+- Express.js (narration API backend)
 
 ## Contributing
 

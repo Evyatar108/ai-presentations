@@ -3,6 +3,7 @@ import * as path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import axios from 'axios';
+import * as crypto from 'crypto';
 import { AudioSegment, SlideComponentWithMetadata } from '../src/slides/SlideMetadata';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -16,6 +17,7 @@ interface TTSConfig {
   batchSize: number;          // Number of segments per batch request
   cacheFile: string;          // Path to narration cache file
   demoFilter?: string;        // Optional: generate only for specific demo
+  fromJson?: boolean;         // NEW: Use JSON exclusively
 }
 
 interface NarrationCache {
@@ -25,6 +27,28 @@ interface NarrationCache {
       generatedAt: string;
     };
   };
+}
+
+// Narration JSON structure (from narrationLoader.ts)
+interface NarrationSegment {
+  id: string;
+  narrationText: string;
+  visualDescription?: string;
+  notes?: string;
+}
+
+interface NarrationSlide {
+  chapter: number;
+  slide: number;
+  title: string;
+  segments: NarrationSegment[];
+}
+
+interface NarrationData {
+  demoId: string;
+  version: string;
+  lastModified: string;
+  slides: NarrationSlide[];
 }
 
 interface SegmentToGenerate {
@@ -62,6 +86,105 @@ async function loadDemoSlides(demoId: string): Promise<SlideComponentWithMetadat
     console.warn(`⚠️  Could not load slides for demo '${demoId}': ${error.message}`);
     return [];
   }
+}
+
+// Load narration JSON for a demo
+function loadNarrationJson(demoId: string): NarrationData | null {
+  const narrationFile = path.join(__dirname, `../public/narration/${demoId}/narration.json`);
+  
+  if (!fs.existsSync(narrationFile)) {
+    return null;
+  }
+  
+  try {
+    const content = fs.readFileSync(narrationFile, 'utf-8');
+    const data = JSON.parse(content) as NarrationData;
+    
+    // Validate basic structure
+    if (!data.demoId || !data.version || !Array.isArray(data.slides)) {
+      console.warn(`⚠️  Invalid narration.json structure for '${demoId}'`);
+      return null;
+    }
+    
+    return data;
+  } catch (error: any) {
+    console.warn(`⚠️  Failed to parse narration.json for '${demoId}': ${error.message}`);
+    return null;
+  }
+}
+
+// Get narration text from JSON data
+function getNarrationText(
+  narrationData: NarrationData | null,
+  chapter: number,
+  slide: number,
+  segmentId: string
+): string | null {
+  if (!narrationData) {
+    return null;
+  }
+  
+  const slideData = narrationData.slides.find(
+    s => s.chapter === chapter && s.slide === slide
+  );
+  
+  if (!slideData) {
+    return null;
+  }
+  
+  const segment = slideData.segments.find(seg => seg.id === segmentId);
+  return segment?.narrationText ?? null;
+}
+
+// Update narration cache after successful TTS generation
+function updateNarrationCache(
+  demoId: string,
+  slides: SlideComponentWithMetadata[]
+): void {
+  const cacheFile = path.join(__dirname, `../public/narration/${demoId}/narration-cache.json`);
+  const cacheDir = path.dirname(cacheFile);
+  
+  // Ensure directory exists
+  if (!fs.existsSync(cacheDir)) {
+    fs.mkdirSync(cacheDir, { recursive: true });
+  }
+  
+  let cache = {
+    version: '1.0',
+    generatedAt: new Date().toISOString(),
+    segments: {} as Record<string, { hash: string; lastChecked: string }>
+  };
+  
+  // Load existing cache if present
+  if (fs.existsSync(cacheFile)) {
+    try {
+      const content = fs.readFileSync(cacheFile, 'utf-8');
+      cache = JSON.parse(content);
+    } catch (error) {
+      console.warn(`⚠️  Could not parse existing narration cache, creating new one`);
+    }
+  }
+  
+  // Update with new hashes from slides
+  for (const slide of slides) {
+    for (const segment of slide.metadata.audioSegments) {
+      if (!segment.narrationText) continue;
+      
+      const key = `ch${slide.metadata.chapter}:s${slide.metadata.slide}:${segment.id}`;
+      const hash = crypto.createHash('sha256').update(segment.narrationText.trim()).digest('hex');
+      
+      cache.segments[key] = {
+        hash,
+        lastChecked: new Date().toISOString()
+      };
+    }
+  }
+  
+  cache.generatedAt = new Date().toISOString();
+  
+  // Write to file
+  fs.writeFileSync(cacheFile, JSON.stringify(cache, null, 2), 'utf-8');
+  console.log(`✅ Updated narration cache: ${path.relative(path.join(__dirname, '..'), cacheFile)}`);
 }
 
 // Load cache
@@ -203,6 +326,21 @@ async function generateTTS(config: TTSConfig) {
     console.log(`📁 Demo: ${demoId}`);
     console.log('═'.repeat(70) + '\n');
     
+    // NEW: Load narration from JSON
+    console.log(`📥 Loading narration data...`);
+    const narrationData = loadNarrationJson(demoId);
+    
+    if (narrationData) {
+      console.log(`✅ Loaded external narration (version ${narrationData.version}, ${narrationData.slides.length} slides)`);
+    } else if (config.fromJson) {
+      console.error(`❌ --from-json specified but narration.json not found for '${demoId}'`);
+      console.error(`   Expected: public/narration/${demoId}/narration.json\n`);
+      continue;
+    } else {
+      console.log(`📝 No external narration found, using inline narration`);
+    }
+    console.log();
+    
     // Load slides for this demo
     const allSlides = await loadDemoSlides(demoId);
     
@@ -212,6 +350,54 @@ async function generateTTS(config: TTSConfig) {
     }
     
     console.log(`   Found ${allSlides.length} slides\n`);
+    
+    // NEW: Merge narration from JSON into slide metadata
+    if (narrationData) {
+      console.log('🔄 Merging JSON narration into slides...');
+      let mergedCount = 0;
+      let missingCount = 0;
+      
+      for (const slide of allSlides) {
+        for (let i = 0; i < slide.metadata.audioSegments.length; i++) {
+          const segment = slide.metadata.audioSegments[i];
+          
+          const jsonNarration = getNarrationText(
+            narrationData,
+            slide.metadata.chapter,
+            slide.metadata.slide,
+            segment.id
+          );
+          
+          if (jsonNarration) {
+            // Use JSON narration (overrides inline)
+            segment.narrationText = jsonNarration;
+            mergedCount++;
+          } else if (!segment.narrationText && config.fromJson) {
+            // Error if --from-json but missing in JSON
+            console.error(
+              `❌ Missing JSON narration for ch${slide.metadata.chapter}:s${slide.metadata.slide}:${segment.id}`
+            );
+            missingCount++;
+          } else if (!segment.narrationText) {
+            console.warn(
+              `⚠️  No narration for ch${slide.metadata.chapter}:s${slide.metadata.slide}:${segment.id} (not in JSON or inline)`
+            );
+            missingCount++;
+          }
+        }
+      }
+      
+      console.log(`   ✓ Merged ${mergedCount} segments from JSON`);
+      if (missingCount > 0) {
+        console.log(`   ⚠️  ${missingCount} segments missing narration`);
+      }
+      
+      if (config.fromJson && missingCount > 0) {
+        console.error(`\n❌ Cannot proceed with --from-json: ${missingCount} segments missing in JSON\n`);
+        continue;
+      }
+      console.log();
+    }
     
     // Ensure demo cache exists
     if (!cache[demoId]) {
@@ -446,7 +632,16 @@ async function generateTTS(config: TTSConfig) {
   // Save updated cache
   if (totalGenerated > 0) {
     saveCache(config.cacheFile, cache);
-    console.log(`💾 Cache updated with ${totalGenerated} new entries\n`);
+    console.log(`💾 TTS cache updated with ${totalGenerated} new entries`);
+    
+    // NEW: Update narration cache for all processed demos
+    for (const demoId of demosToProcess) {
+      const allSlides = await loadDemoSlides(demoId);
+      if (allSlides.length > 0) {
+        updateNarrationCache(demoId, allSlides);
+      }
+    }
+    console.log();
   }
 }
 
@@ -477,10 +672,11 @@ function loadServerConfig(): string {
 }
 
 // Parse CLI arguments
-function parseCLIArgs(): { demoFilter?: string; skipExisting: boolean } {
+function parseCLIArgs(): { demoFilter?: string; skipExisting: boolean; fromJson: boolean } {
   const args = process.argv.slice(2);
-  const result: { demoFilter?: string; skipExisting: boolean } = {
-    skipExisting: args.includes('--skip-existing')
+  const result: { demoFilter?: string; skipExisting: boolean; fromJson: boolean } = {
+    skipExisting: args.includes('--skip-existing'),
+    fromJson: args.includes('--from-json')
   };
   
   // Check for --demo parameter
@@ -500,7 +696,8 @@ const config: TTSConfig = {
   skipExisting: cliArgs.skipExisting,
   batchSize: parseInt(process.env.BATCH_SIZE || '10', 10),
   cacheFile: path.join(__dirname, '../.tts-narration-cache.json'),
-  demoFilter: cliArgs.demoFilter
+  demoFilter: cliArgs.demoFilter,
+  fromJson: cliArgs.fromJson
 };
 
 generateTTS(config).catch(console.error);
