@@ -94,7 +94,7 @@ Successfully removed all inline `narrationText` from meeting-highlights slide co
 
 ### ✅ TypeScript Compilation
 ```bash
-cd react_cogs_demo && npx tsc --noEmit
+cd presentation-app && npx tsc --noEmit
 ```
 **Result**: Exit code 0 (no errors)
 

@@ -445,7 +445,7 @@ Response:
 
 ### Backend Implementation
 
-**File**: `react_cogs_demo/server/narration-api.js`
+**File**: `presentation-app/server/narration-api.js`
 
 ```javascript
 const express = require('express');
@@ -1023,7 +1023,7 @@ The documentation suite provides complete coverage for:
 ## File Structure After Implementation
 
 ```
-react_cogs_demo/
+presentation-app/
 ├── public/
 │   ├── narration/                    # NEW: Narration JSON files
 │   │   ├── meeting-highlights/

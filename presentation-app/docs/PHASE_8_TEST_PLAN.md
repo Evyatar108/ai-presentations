@@ -37,7 +37,7 @@ This document outlines all tests required to verify the narration externalizatio
 ### Required Setup
 ```bash
 # Install dependencies
-cd react_cogs_demo
+cd presentation-app
 npm install
 
 # Start both servers

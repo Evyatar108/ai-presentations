@@ -141,7 +141,7 @@ If regeneration fails:
 
 ### Prerequisites:
 - [ ] TTS server running (`cd tts && python server.py --voice-sample path/to/voice.wav`)
-- [ ] Dev server running (`cd react_cogs_demo && npm run dev`)
+- [ ] Dev server running (`cd presentation-app && npm run dev`)
 
 ### Test Cases:
 

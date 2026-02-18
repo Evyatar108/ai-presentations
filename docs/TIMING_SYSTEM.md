@@ -85,10 +85,10 @@ Optional timer during narrated playback:
 ## Documentation
 
 For detailed information, see:
-- **[Architecture](../react_cogs_demo/docs/timing-system/ARCHITECTURE.md)** - System design and types
-- **[Implementation](../react_cogs_demo/docs/timing-system/IMPLEMENTATION.md)** - Complete implementation guide
-- **[Examples](../react_cogs_demo/docs/timing-system/EXAMPLES.md)** - Common timing patterns
-- **[Migration](../react_cogs_demo/docs/timing-system/MIGRATION.md)** - Migrating existing demos
+- **[Architecture](../presentation-app/docs/timing-system/ARCHITECTURE.md)** - System design and types
+- **[Implementation](../presentation-app/docs/timing-system/IMPLEMENTATION.md)** - Complete implementation guide
+- **[Examples](../presentation-app/docs/timing-system/EXAMPLES.md)** - Common timing patterns
+- **[Migration](../presentation-app/docs/timing-system/MIGRATION.md)** - Migrating existing demos
 
 ## Usage in New Demos
 

@@ -28,7 +28,7 @@ pnpm-debug.log*
 coverage/
 
 # Build outputs
-react_cogs_demo/dist/
+presentation-app/dist/
 
 # Future media exports
 *.mp4

@@ -28,10 +28,10 @@ $createdDirs = @()
 
 # Base paths
 $docsPath = "docs/demos/$DemoId"
-$srcPath = "react_cogs_demo/src/demos/$DemoId"
-$publicAudioPath = "react_cogs_demo/public/audio/$DemoId"
-$publicImagesPath = "react_cogs_demo/public/images/$DemoId"
-$publicVideosPath = "react_cogs_demo/public/videos/$DemoId"
+$srcPath = "presentation-app/src/demos/$DemoId"
+$publicAudioPath = "presentation-app/public/audio/$DemoId"
+$publicImagesPath = "presentation-app/public/images/$DemoId"
+$publicVideosPath = "presentation-app/public/videos/$DemoId"
 
 # Create directories
 Write-Host "Creating directories..." -ForegroundColor Yellow
@@ -106,13 +106,13 @@ Located in ``public/audio/$DemoId/c{0-9}/``:
 - **Accessibility features**: reduced motion support
 
 ### File Structure
-- Located in [``src/demos/$DemoId/slides/chapters/``](../../react_cogs_demo/src/demos/$DemoId/slides/chapters/)
-- Registered in [``SlidesRegistry.ts``](../../react_cogs_demo/src/demos/$DemoId/slides/SlidesRegistry.ts)
+- Located in [``src/demos/$DemoId/slides/chapters/``](../../presentation-app/src/demos/$DemoId/slides/chapters/)
+- Registered in [``SlidesRegistry.ts``](../../presentation-app/src/demos/$DemoId/slides/SlidesRegistry.ts)
 
 ## Related Documentation
 
 - **Context Materials**: [``context/``](context/) directory
-- **Technical Implementation**: [``src/demos/$DemoId/README.md``](../../react_cogs_demo/src/demos/$DemoId/README.md)
+- **Technical Implementation**: [``src/demos/$DemoId/README.md``](../../presentation-app/src/demos/$DemoId/README.md)
 
 ## Demo-Specific Commands
 
@@ -365,7 +365,7 @@ Write-Host "`n=== Next Steps ===" -ForegroundColor Cyan
 Write-Host @"
 
 1. Register the demo in registry.ts:
-   • Open: react_cogs_demo/src/demos/registry.ts
+   • Open: presentation-app/src/demos/registry.ts
    • Add import: import ${DemoId}Demo from './$DemoId';
    • Add import: import { metadata as ${DemoId}Metadata } from './$DemoId/metadata';
    • Add registration:
@@ -388,7 +388,7 @@ Write-Host @"
    • Update: $srcPath/slides/SlidesRegistry.ts
 
 5. Generate TTS audio:
-   cd react_cogs_demo
+   cd presentation-app
    npm run tts:generate -- --demo $DemoId
 
 6. Test the demo:

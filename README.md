@@ -26,7 +26,7 @@ cogs reduction/
 │   ├── audio/
 │   ├── chapters/          # Subtitle files for narrated presentation
 │   └── images/logos/      # Product logos (Teams, BizChat, Loop, etc.)
-├── react_cogs_demo/      # Interactive React presentation
+├── presentation-app/      # Interactive React presentation
 └── tts/                  # Text-to-speech generation system
 ```
 ## Files Overview
@@ -77,7 +77,7 @@ All semantic transforms executed in one structured pass (segment → narrations 
 ### Demo Run Instructions
 ```bash
 # Navigate to demo directory
-cd react_cogs_demo
+cd presentation-app
 
 # Install dependencies
 npm install
@@ -114,8 +114,8 @@ The presentation includes an automated TTS (Text-to-Speech) generation system fo
 cd tts
 python server.py --voice-sample path/to/voice.wav
 
-# Generate all audio files (in react_cogs_demo/ directory)
-cd react_cogs_demo
+# Generate all audio files (in presentation-app/ directory)
+cd presentation-app
 npm run tts:generate
 ```
 
@@ -151,7 +151,7 @@ While presenting in Manual or Manual+Audio mode, you can regenerate audio for an
 
 **Setup:**
 1. Ensure your remote TTS server is running (see [`tts/README.md`](tts/README.md))
-2. Configure server URL in [`public/tts-config.json`](react_cogs_demo/public/tts-config.json):
+2. Configure server URL in [`public/tts-config.json`](presentation-app/public/tts-config.json):
    ```json
    {
      "remoteTTSServerUrl": "http://192.168.1.100:5000"
@@ -252,32 +252,32 @@ While presenting in Manual or Manual+Audio mode, you can regenerate audio for an
 - Keyboard-first navigation design
 
 ### Demo Source Structure
-- [`index.html`](react_cogs_demo/index.html) - Entry point
-- [`src/main.tsx`](react_cogs_demo/src/main.tsx) - React initialization
-- [`src/App.tsx`](react_cogs_demo/src/App.tsx) - Main app with slide registry
-- [`src/components/SlidePlayer.tsx`](react_cogs_demo/src/components/SlidePlayer.tsx) - Slide navigation & transitions
-- **[`src/slides/chapters/`](react_cogs_demo/src/slides/chapters/)** - **Chapter-based slide organization (9 files, 15 slides total)**
-  - [`Chapter0.tsx`](react_cogs_demo/src/slides/chapters/Chapter0.tsx) - Intro slide (1 slide)
-  - [`Chapter1.tsx`](react_cogs_demo/src/slides/chapters/Chapter1.tsx) - What is Meeting Highlights (3 slides)
-  - [`Chapter2.tsx`](react_cogs_demo/src/slides/chapters/Chapter2.tsx) - Team Collaboration (1 slide with 9 segments)
-  - [`Chapter4.tsx`](react_cogs_demo/src/slides/chapters/Chapter4.tsx) - Highlight Types (1 slide)
-  - [`Chapter5.tsx`](react_cogs_demo/src/slides/chapters/Chapter5.tsx) - COGS Challenge (1 slide)
-  - [`Chapter6.tsx`](react_cogs_demo/src/slides/chapters/Chapter6.tsx) - Optimization Solution (2 slides)
-  - [`Chapter7.tsx`](react_cogs_demo/src/slides/chapters/Chapter7.tsx) - Business Impact (3 slides)
-  - [`Chapter8.tsx`](react_cogs_demo/src/slides/chapters/Chapter8.tsx) - User Reception (1 slide)
-  - [`Chapter9.tsx`](react_cogs_demo/src/slides/chapters/Chapter9.tsx) - Testimonials & Thank You (2 slides)
-- [`src/slides/SlidesRegistry.ts`](react_cogs_demo/src/slides/SlidesRegistry.ts) - Central registry importing all chapter slides
-- [`src/slides/SlideStyles.ts`](react_cogs_demo/src/slides/SlideStyles.ts) - Shared styling utilities
-- [`src/slides/AnimationVariants.ts`](react_cogs_demo/src/slides/AnimationVariants.ts) - Shared animation definitions
-- [`src/slides/SlideLayouts.tsx`](react_cogs_demo/src/slides/SlideLayouts.tsx) - Reusable layout components
-- [`src/slides/SlideIcons.tsx`](react_cogs_demo/src/slides/SlideIcons.tsx) - Shared icon components
-- [`src/components/CoreComponents.tsx`](react_cogs_demo/src/components/CoreComponents.tsx) - Reusable UI components (MetricTile, etc.)
-- [`src/accessibility/ReducedMotion.tsx`](react_cogs_demo/src/accessibility/ReducedMotion.tsx) - Motion preferences context
-- [`src/components/VideoPlayer.tsx`](react_cogs_demo/src/components/VideoPlayer.tsx) - Demo video player component
-- [`src/components/NarratedController.tsx`](react_cogs_demo/src/components/NarratedController.tsx) - Audio-synced presentation controller
-- [`scripts/generate-tts.ts`](react_cogs_demo/scripts/generate-tts.ts) - TTS audio generation with smart caching
-- [`scripts/calculate-durations.ts`](react_cogs_demo/scripts/calculate-durations.ts) - Audio duration calculation
-- [`scripts/check-tts-cache.ts`](react_cogs_demo/scripts/check-tts-cache.ts) - Pre-flight cache validation
+- [`index.html`](presentation-app/index.html) - Entry point
+- [`src/main.tsx`](presentation-app/src/main.tsx) - React initialization
+- [`src/App.tsx`](presentation-app/src/App.tsx) - Main app with slide registry
+- [`src/components/SlidePlayer.tsx`](presentation-app/src/components/SlidePlayer.tsx) - Slide navigation & transitions
+- **[`src/slides/chapters/`](presentation-app/src/slides/chapters/)** - **Chapter-based slide organization (9 files, 15 slides total)**
+  - [`Chapter0.tsx`](presentation-app/src/slides/chapters/Chapter0.tsx) - Intro slide (1 slide)
+  - [`Chapter1.tsx`](presentation-app/src/slides/chapters/Chapter1.tsx) - What is Meeting Highlights (3 slides)
+  - [`Chapter2.tsx`](presentation-app/src/slides/chapters/Chapter2.tsx) - Team Collaboration (1 slide with 9 segments)
+  - [`Chapter4.tsx`](presentation-app/src/slides/chapters/Chapter4.tsx) - Highlight Types (1 slide)
+  - [`Chapter5.tsx`](presentation-app/src/slides/chapters/Chapter5.tsx) - COGS Challenge (1 slide)
+  - [`Chapter6.tsx`](presentation-app/src/slides/chapters/Chapter6.tsx) - Optimization Solution (2 slides)
+  - [`Chapter7.tsx`](presentation-app/src/slides/chapters/Chapter7.tsx) - Business Impact (3 slides)
+  - [`Chapter8.tsx`](presentation-app/src/slides/chapters/Chapter8.tsx) - User Reception (1 slide)
+  - [`Chapter9.tsx`](presentation-app/src/slides/chapters/Chapter9.tsx) - Testimonials & Thank You (2 slides)
+- [`src/slides/SlidesRegistry.ts`](presentation-app/src/slides/SlidesRegistry.ts) - Central registry importing all chapter slides
+- [`src/slides/SlideStyles.ts`](presentation-app/src/slides/SlideStyles.ts) - Shared styling utilities
+- [`src/slides/AnimationVariants.ts`](presentation-app/src/slides/AnimationVariants.ts) - Shared animation definitions
+- [`src/slides/SlideLayouts.tsx`](presentation-app/src/slides/SlideLayouts.tsx) - Reusable layout components
+- [`src/slides/SlideIcons.tsx`](presentation-app/src/slides/SlideIcons.tsx) - Shared icon components
+- [`src/components/CoreComponents.tsx`](presentation-app/src/components/CoreComponents.tsx) - Reusable UI components (MetricTile, etc.)
+- [`src/accessibility/ReducedMotion.tsx`](presentation-app/src/accessibility/ReducedMotion.tsx) - Motion preferences context
+- [`src/components/VideoPlayer.tsx`](presentation-app/src/components/VideoPlayer.tsx) - Demo video player component
+- [`src/components/NarratedController.tsx`](presentation-app/src/components/NarratedController.tsx) - Audio-synced presentation controller
+- [`scripts/generate-tts.ts`](presentation-app/scripts/generate-tts.ts) - TTS audio generation with smart caching
+- [`scripts/calculate-durations.ts`](presentation-app/scripts/calculate-durations.ts) - Audio duration calculation
+- [`scripts/check-tts-cache.ts`](presentation-app/scripts/check-tts-cache.ts) - Pre-flight cache validation
 
 ### Technology Stack
 - **React 18** + **TypeScript** for type-safe UI components
@@ -316,7 +316,7 @@ While presenting in Manual or Manual+Audio mode, you can regenerate audio for an
 The presentation includes an embedded video player component for displaying Meeting Highlights demo videos:
 
 **Video Player Component:**
-- **Location**: [`src/components/VideoPlayer.tsx`](react_cogs_demo/src/components/VideoPlayer.tsx)
+- **Location**: [`src/components/VideoPlayer.tsx`](presentation-app/src/components/VideoPlayer.tsx)
 - **Features**:
   - Freeze-on-end playback (video pauses on last frame)
   - Synchronized with slide narration segments
@@ -352,7 +352,7 @@ export const Ch1_S2_HowToAccess = {
 ```
 
 ### Architecture Documentation
-Detailed technical decisions and component structure: [`ARCHITECTURE.md`](react_cogs_demo/ARCHITECTURE.md)
+Detailed technical decisions and component structure: [`ARCHITECTURE.md`](presentation-app/ARCHITECTURE.md)
 
 ### Summary
 The consolidation from 4 calls to 1, combined with 60% input token reduction, reduced projected GPU needs (~600 → ~200) and is estimated to cut COGS by over 70%. This produced higher-quality highlight videos (detailed vs generic, natural vs robotic), directly enabling scaled rollout within approved capacity constraints. Internal reviewers strongly prefer the unified prompt output.
@@ -397,7 +397,7 @@ Each slide file includes:
 1. **React Component Reference** (comment lines at top)
    ```
    # React Component: Ch5_S1_ChallengeFraming
-   # Location: react_cogs_demo/src/slides/AnimatedSlides.tsx:52
+   # Location: presentation-app/src/slides/AnimatedSlides.tsx:52
    ```
 2. **Segment entries** with visual descriptions and narration:
    ```

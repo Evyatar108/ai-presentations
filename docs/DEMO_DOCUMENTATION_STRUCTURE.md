@@ -199,8 +199,8 @@ public/
 ### From Documentation to Implementation
 Link to source code files using relative paths:
 ```markdown
-- Located in [`src/demos/meeting-highlights/slides/chapters/`](../../../react_cogs_demo/src/demos/meeting-highlights/slides/chapters/)
-- Registered in [`SlidesRegistry.ts`](../../../react_cogs_demo/src/demos/meeting-highlights/slides/SlidesRegistry.ts)
+- Located in [`src/demos/meeting-highlights/slides/chapters/`](../../../presentation-app/src/demos/meeting-highlights/slides/chapters/)
+- Registered in [`SlidesRegistry.ts`](../../../presentation-app/src/demos/meeting-highlights/slides/SlidesRegistry.ts)
 ```
 
 ### From Implementation to Documentation

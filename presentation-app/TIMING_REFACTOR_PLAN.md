@@ -253,7 +253,7 @@ export function calculateSlideDuration(
 Currently, WelcomeScreen only shows audio duration with "(audio only)" note. Users don't see the actual total runtime or breakdown of delays.
 
 ### Solution
-Update [`WelcomeScreen.tsx`](react_cogs_demo/src/components/WelcomeScreen.tsx) to display comprehensive duration information.
+Update [`WelcomeScreen.tsx`](presentation-app/src/components/WelcomeScreen.tsx) to display comprehensive duration information.
 
 **Enhanced `DemoMetadata` Interface**:
 
@@ -1110,7 +1110,7 @@ src/components/
 ## Documentation Updates Needed
 
 1. **`ADDING_DEMOS.md`** - Add timing configuration section
-2. **`react_cogs_demo/README.md`** - Update duration calculation docs
+2. **`presentation-app/README.md`** - Update duration calculation docs
 3. **`docs/demos/meeting-highlights/meeting-highlights.md`** - Add timing details
 4. **New: `docs/TIMING_GUIDE.md`** - Comprehensive timing configuration guide
 

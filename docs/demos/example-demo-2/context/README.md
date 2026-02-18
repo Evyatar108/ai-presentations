@@ -161,7 +161,7 @@ This context supports the [Example Demo 2](../example-demo-2.md) presentation.
 
 ### To Implementation
 ```markdown
-Implementation: [`src/demos/example-demo-2/`](../../../../react_cogs_demo/src/demos/example-demo-2/)
+Implementation: [`src/demos/example-demo-2/`](../../../../presentation-app/src/demos/example-demo-2/)
 ```
 
 ## For Simple Demos

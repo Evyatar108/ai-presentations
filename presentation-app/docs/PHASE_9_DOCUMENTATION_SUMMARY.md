@@ -134,7 +134,7 @@ Phase 9 completes the Narration Externalization Plan by delivering comprehensive
 ## Documentation Structure
 
 ```
-react_cogs_demo/docs/
+presentation-app/docs/
 ├── NARRATION_SYSTEM_GUIDE.md           ⭐ NEW (451 lines)
 ├── NARRATION_API_REFERENCE.md          ⭐ NEW (659 lines)
 ├── NARRATION_TROUBLESHOOTING.md        ⭐ NEW (664 lines)
@@ -145,7 +145,7 @@ react_cogs_demo/docs/
 ├── PHASE_8_TEST_RESULTS.md
 └── PHASE_9_DOCUMENTATION_SUMMARY.md    ⭐ NEW (this file)
 
-react_cogs_demo/README.md               📝 UPDATED (+75 lines)
+presentation-app/README.md               📝 UPDATED (+75 lines)
 ```
 
 ---

@@ -100,7 +100,7 @@ All-hands meeting where:
 
 ### Running the Demo
 ```bash
-cd react_cogs_demo
+cd presentation-app
 npm run dev
 ```
 

@@ -27,7 +27,7 @@ Visit `http://localhost:5173` to see the demo selection screen.
 ## Project Structure
 
 ```
-react_cogs_demo/
+presentation-app/
 ├── src/
 │   ├── demos/                      # Demo presentations
 │   │   ├── DemoRegistry.ts         # Central demo registration

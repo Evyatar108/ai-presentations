@@ -76,9 +76,9 @@ Unlike Example Demo 1 (narrated), this demo defaults to manual mode:
 - Shows flexibility of presentation system
 
 ### File Structure
-- Located in [`src/demos/example-demo-2/slides/chapters/`](../../../react_cogs_demo/src/demos/example-demo-2/slides/chapters/)
-- Registered in [`SlidesRegistry.ts`](../../../react_cogs_demo/src/demos/example-demo-2/slides/SlidesRegistry.ts)
-- Demo config in [`index.ts`](../../../react_cogs_demo/src/demos/example-demo-2/index.ts)
+- Located in [`src/demos/example-demo-2/slides/chapters/`](../../../presentation-app/src/demos/example-demo-2/slides/chapters/)
+- Registered in [`SlidesRegistry.ts`](../../../presentation-app/src/demos/example-demo-2/slides/SlidesRegistry.ts)
+- Demo config in [`index.ts`](../../../presentation-app/src/demos/example-demo-2/index.ts)
 
 ## Development History
 
@@ -97,7 +97,7 @@ Serves as:
 ## Related Documentation
 
 - **Comparison**: See [Example Demo 1](../example-demo-1/example-demo-1.md) for bright gradient approach
-- **Technical Implementation**: [`src/demos/example-demo-2/README.md`](../../../react_cogs_demo/src/demos/example-demo-2/README.md)
+- **Technical Implementation**: [`src/demos/example-demo-2/README.md`](../../../presentation-app/src/demos/example-demo-2/README.md)
 
 ## Context Materials
 

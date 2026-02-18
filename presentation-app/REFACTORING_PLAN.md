@@ -17,7 +17,7 @@ This document outlines the comprehensive plan to refactor the React app from a M
 
 ### Current File Structure
 ```
-react_cogs_demo/src/
+presentation-app/src/
 ├── App.tsx (hardcoded to Meeting Highlights)
 ├── slides/
 │   ├── SlidesRegistry.ts (Meeting Highlights slides)
@@ -49,7 +49,7 @@ public/
 
 ### New File Structure
 ```
-react_cogs_demo/
+presentation-app/
 ├── src/
 │   ├── demos/                          # NEW: Demo-specific content
 │   │   ├── DemoRegistry.ts            # Central demo registry

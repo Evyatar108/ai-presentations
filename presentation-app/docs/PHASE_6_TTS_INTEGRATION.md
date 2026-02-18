@@ -324,7 +324,7 @@ npm run tts:from-json -- --demo meeting-highlights
 ✅ **PASSED** - 0 errors
 
 ```bash
-$ cd react_cogs_demo && npx tsc --noEmit
+$ cd presentation-app && npx tsc --noEmit
 # Exit code: 0
 ```
 

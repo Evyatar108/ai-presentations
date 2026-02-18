@@ -130,7 +130,7 @@ Per user feedback, the export button was removed from the UI. The `handleExportN
 
 ### ✅ TypeScript Compilation
 ```bash
-cd react_cogs_demo
+cd presentation-app
 npx tsc --noEmit
 # Exit code: 0 (no errors)
 ```
@@ -140,14 +140,14 @@ npx tsc --noEmit
 #### Prerequisites
 1. **Start Backend API**:
    ```bash
-   cd react_cogs_demo
+   cd presentation-app
    npm run narration-api
    # Server should start on http://localhost:3001
    ```
 
 2. **Start Dev Server** (in separate terminal):
    ```bash
-   cd react_cogs_demo
+   cd presentation-app
    npm run dev
    # Dev server starts on http://localhost:5173
    ```
@@ -398,11 +398,11 @@ Phase 5 implementation is **complete and production-ready**. All deliverables ha
 ### Start Both Servers
 ```bash
 # Terminal 1: Backend API
-cd react_cogs_demo
+cd presentation-app
 npm run narration-api
 
 # Terminal 2: Dev Server
-cd react_cogs_demo
+cd presentation-app
 npm run dev
 ```
 

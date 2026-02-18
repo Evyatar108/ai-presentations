@@ -8,12 +8,12 @@
 **Status**: ✅ **ALL 9 PHASES COMPLETE** - Production Ready
 
 **Documentation Delivered:**
-- ✅ [`NARRATION_SYSTEM_GUIDE.md`](react_cogs_demo/docs/NARRATION_SYSTEM_GUIDE.md) - 451-line complete user guide
-- ✅ [`NARRATION_API_REFERENCE.md`](react_cogs_demo/docs/NARRATION_API_REFERENCE.md) - 659-line complete API documentation
-- ✅ [`NARRATION_TROUBLESHOOTING.md`](react_cogs_demo/docs/NARRATION_TROUBLESHOOTING.md) - 664-line comprehensive troubleshooting guide
-- ✅ [`PHASE_9_DOCUMENTATION_SUMMARY.md`](react_cogs_demo/docs/PHASE_9_DOCUMENTATION_SUMMARY.md) - 358-line phase completion report
-- ✅ Updated [`README.md`](react_cogs_demo/README.md) - Added 75-line narration system section
-- ✅ Updated [`NARRATION_EXTERNALIZATION_PLAN.md`](react_cogs_demo/docs/NARRATION_EXTERNALIZATION_PLAN.md) - Marked all phases complete
+- ✅ [`NARRATION_SYSTEM_GUIDE.md`](presentation-app/docs/NARRATION_SYSTEM_GUIDE.md) - 451-line complete user guide
+- ✅ [`NARRATION_API_REFERENCE.md`](presentation-app/docs/NARRATION_API_REFERENCE.md) - 659-line complete API documentation
+- ✅ [`NARRATION_TROUBLESHOOTING.md`](presentation-app/docs/NARRATION_TROUBLESHOOTING.md) - 664-line comprehensive troubleshooting guide
+- ✅ [`PHASE_9_DOCUMENTATION_SUMMARY.md`](presentation-app/docs/PHASE_9_DOCUMENTATION_SUMMARY.md) - 358-line phase completion report
+- ✅ Updated [`README.md`](presentation-app/README.md) - Added 75-line narration system section
+- ✅ Updated [`NARRATION_EXTERNALIZATION_PLAN.md`](presentation-app/docs/NARRATION_EXTERNALIZATION_PLAN.md) - Marked all phases complete
 
 **Documentation Metrics:**
 - **Total Lines**: 2,774 lines across 4 new/updated files
@@ -62,10 +62,10 @@ The complete documentation suite provides:
 **Implemented complete TTS integration with narration JSON system:**
 
 **Implementation Completed:**
-- ✅ Updated [`generate-tts.ts`](react_cogs_demo/scripts/generate-tts.ts) - Loads narration from JSON, `--from-json` flag, narration cache updates
-- ✅ Updated [`check-tts-cache.ts`](react_cogs_demo/scripts/check-tts-cache.ts) - Two-step validation (narration JSON + TTS audio), integrated reporting
-- ✅ Implemented [`regenerate-audio` API endpoint](react_cogs_demo/server/narration-api.cjs) - Single-segment regeneration via backend
-- ✅ Created [`generate-single-tts.ts`](react_cogs_demo/scripts/generate-single-tts.ts) - Helper script for on-demand generation
+- ✅ Updated [`generate-tts.ts`](presentation-app/scripts/generate-tts.ts) - Loads narration from JSON, `--from-json` flag, narration cache updates
+- ✅ Updated [`check-tts-cache.ts`](presentation-app/scripts/check-tts-cache.ts) - Two-step validation (narration JSON + TTS audio), integrated reporting
+- ✅ Implemented [`regenerate-audio` API endpoint](presentation-app/server/narration-api.cjs) - Single-segment regeneration via backend
+- ✅ Created [`generate-single-tts.ts`](presentation-app/scripts/generate-single-tts.ts) - Helper script for on-demand generation
 - ✅ Added npm script `tts:from-json` - JSON-only TTS generation mode
 - ✅ TypeScript compilation: 0 errors
 
@@ -79,7 +79,7 @@ The complete documentation suite provides:
 - **End-to-End Workflow**: Edit → Save → Regenerate → Updated Audio
 
 **Documentation Created:**
-- [`react_cogs_demo/docs/PHASE_6_TTS_INTEGRATION.md`](react_cogs_demo/docs/PHASE_6_TTS_INTEGRATION.md) - 650-line comprehensive implementation report
+- [`presentation-app/docs/PHASE_6_TTS_INTEGRATION.md`](presentation-app/docs/PHASE_6_TTS_INTEGRATION.md) - 650-line comprehensive implementation report
 
 **Workflow:**
 1. Load narration from JSON (or fallback to inline)
@@ -102,7 +102,7 @@ The complete documentation suite provides:
 **Designed comprehensive improvements to presentation controls and narration management:**
 
 **Documentation Created:**
-- [`react_cogs_demo/docs/MANUAL_MODE_ENHANCEMENTS.md`](react_cogs_demo/docs/MANUAL_MODE_ENHANCEMENTS.md) - Complete design for two major enhancements
+- [`presentation-app/docs/MANUAL_MODE_ENHANCEMENTS.md`](presentation-app/docs/MANUAL_MODE_ENHANCEMENTS.md) - Complete design for two major enhancements
 
 **Enhancement 1: Unified Manual Mode**
 - **Goal**: Simplify UX by merging Manual (Silent) and Manual + Audio into single Manual mode
@@ -169,13 +169,13 @@ The complete documentation suite provides:
 Designed and documented a flexible three-level timing configuration system (per-demo, per-slide, per-segment) to accurately calculate presentation durations including all delays.
 
 **Documentation Structure:**
-- **[`docs/timing-system/README.md`](react_cogs_demo/docs/timing-system/README.md)** - Overview and quick start guide
-- **[`docs/timing-system/ARCHITECTURE.md`](react_cogs_demo/docs/timing-system/ARCHITECTURE.md)** - System design, types, and components
-- **[`docs/timing-system/IMPLEMENTATION.md`](react_cogs_demo/docs/timing-system/IMPLEMENTATION.md)** - Step-by-step implementation phases (9 phases)
-- **[`docs/timing-system/WELCOME_SCREEN.md`](react_cogs_demo/docs/timing-system/WELCOME_SCREEN.md)** - Enhanced duration display UI design
-- **[`docs/timing-system/EXAMPLES.md`](react_cogs_demo/docs/timing-system/EXAMPLES.md)** - Common timing configuration patterns
-- **[`docs/timing-system/MIGRATION.md`](react_cogs_demo/docs/timing-system/MIGRATION.md)** - Migration guide for existing demos
-- **[`docs/timing-system/TODO.md`](react_cogs_demo/docs/timing-system/TODO.md)** - Implementation progress tracker
+- **[`docs/timing-system/README.md`](presentation-app/docs/timing-system/README.md)** - Overview and quick start guide
+- **[`docs/timing-system/ARCHITECTURE.md`](presentation-app/docs/timing-system/ARCHITECTURE.md)** - System design, types, and components
+- **[`docs/timing-system/IMPLEMENTATION.md`](presentation-app/docs/timing-system/IMPLEMENTATION.md)** - Step-by-step implementation phases (9 phases)
+- **[`docs/timing-system/WELCOME_SCREEN.md`](presentation-app/docs/timing-system/WELCOME_SCREEN.md)** - Enhanced duration display UI design
+- **[`docs/timing-system/EXAMPLES.md`](presentation-app/docs/timing-system/EXAMPLES.md)** - Common timing configuration patterns
+- **[`docs/timing-system/MIGRATION.md`](presentation-app/docs/timing-system/MIGRATION.md)** - Migration guide for existing demos
+- **[`docs/timing-system/TODO.md`](presentation-app/docs/timing-system/TODO.md)** - Implementation progress tracker
 
 **Key Features:**
 - Three-level timing hierarchy (demo → slide → segment overrides)
@@ -191,7 +191,7 @@ Current duration calculations only account for audio (e.g., ~4:07), but actual r
 **Implementation Status:**
 - ✅ Documentation complete (all 7 documents)
 - ⏳ Implementation pending (estimated 15-24 hours)
-- See [`TODO.md`](react_cogs_demo/docs/timing-system/TODO.md) for detailed checklist
+- See [`TODO.md`](presentation-app/docs/timing-system/TODO.md) for detailed checklist
 
 **Benefits:**
 - **Accuracy**: Calculations match actual runtime (±1s)
@@ -199,11 +199,11 @@ Current duration calculations only account for audio (e.g., ~4:07), but actual r
 - **Flexibility**: Custom timing at demo, slide, or segment level
 - **Maintainability**: Single source of truth for all timing configuration
 
-**Note:** Original monolithic plan moved to [`TIMING_REFACTOR_PLAN.md`](react_cogs_demo/TIMING_REFACTOR_PLAN.md) (archived for reference)
+**Note:** Original monolithic plan moved to [`TIMING_REFACTOR_PLAN.md`](presentation-app/TIMING_REFACTOR_PLAN.md) (archived for reference)
 ### 2025-01-21: Phase 6 Testing - Comprehensive Code Review Complete ✅
 **Completed comprehensive code review and test plan for Manual Mode Enhancements:**
 
-**Testing Report Created**: [`react_cogs_demo/docs/PHASE_6_TESTING_REPORT.md`](react_cogs_demo/docs/PHASE_6_TESTING_REPORT.md)
+**Testing Report Created**: [`presentation-app/docs/PHASE_6_TESTING_REPORT.md`](presentation-app/docs/PHASE_6_TESTING_REPORT.md)
 
 **Code Review Results**:
 - ✅ All 5 implementation phases verified complete
@@ -213,7 +213,7 @@ Current duration calculations only account for audio (e.g., ~4:07), but actual r
 
 **Features Verified**:
 1. **Phase 1**: Unified Manual Mode with audio toggle (lines 339-353, 923-940)
-2. **Phase 2**: Narration Editor UI ([`NarrationEditModal.tsx`](react_cogs_demo/src/components/NarrationEditModal.tsx))
+2. **Phase 2**: Narration Editor UI ([`NarrationEditModal.tsx`](presentation-app/src/components/NarrationEditModal.tsx))
 3. **Phase 3**: Edit Functionality (state management with Map, lines 79-86, 647-706)
 4. **Phase 4**: TTS Integration (audio regeneration, lines 571-644)
 5. **Phase 5**: Export Feature (JSON download, lines 519-568, 996-1020)
@@ -243,8 +243,8 @@ Current duration calculations only account for audio (e.g., ~4:07), but actual r
 3. Production build verification
 
 **Updated Files**:
-- [`PHASE_6_TESTING_REPORT.md`](react_cogs_demo/docs/PHASE_6_TESTING_REPORT.md) - 583-line comprehensive test report
-- [`MANUAL_MODE_ENHANCEMENTS.md`](react_cogs_demo/docs/MANUAL_MODE_ENHANCEMENTS.md) - Updated Phase 5 & 6 status
+- [`PHASE_6_TESTING_REPORT.md`](presentation-app/docs/PHASE_6_TESTING_REPORT.md) - 583-line comprehensive test report
+- [`MANUAL_MODE_ENHANCEMENTS.md`](presentation-app/docs/MANUAL_MODE_ENHANCEMENTS.md) - Updated Phase 5 & 6 status
 
 
 ## Recent Changes
@@ -253,13 +253,13 @@ Current duration calculations only account for audio (e.g., ~4:07), but actual r
 **Comprehensive timing configuration system for accurate duration tracking:**
 
 **Implementation Phases Completed:**
-- Phase 1: Timing infrastructure ([`types.ts`](react_cogs_demo/src/demos/timing/types.ts) with TimingConfig, resolveTimingConfig)
-- Phase 2: Duration calculator ([`calculator.ts`](react_cogs_demo/src/demos/timing/calculator.ts) with comprehensive breakdown)
-- Phase 3: TypeScript interfaces updated ([`SlideMetadata.ts`](react_cogs_demo/src/slides/SlideMetadata.ts), [`types.ts`](react_cogs_demo/src/demos/types.ts))
+- Phase 1: Timing infrastructure ([`types.ts`](presentation-app/src/demos/timing/types.ts) with TimingConfig, resolveTimingConfig)
+- Phase 2: Duration calculator ([`calculator.ts`](presentation-app/src/demos/timing/calculator.ts) with comprehensive breakdown)
+- Phase 3: TypeScript interfaces updated ([`SlideMetadata.ts`](presentation-app/src/slides/SlideMetadata.ts), [`types.ts`](presentation-app/src/demos/types.ts))
 - Phase 4: calculate-durations script enhanced (full breakdown reports)
-- Phase 5: NarratedController integrated ([`NarratedController.tsx`](react_cogs_demo/src/components/NarratedController.tsx) - dynamic timing resolution)
-- Phase 6: Meeting Highlights configured ([`metadata.ts`](react_cogs_demo/src/demos/meeting-highlights/metadata.ts) - timing + durationInfo)
-- Phase 7: WelcomeScreen enhanced ([`WelcomeScreen.tsx`](react_cogs_demo/src/components/WelcomeScreen.tsx) - interactive breakdown UI)
+- Phase 5: NarratedController integrated ([`NarratedController.tsx`](presentation-app/src/components/NarratedController.tsx) - dynamic timing resolution)
+- Phase 6: Meeting Highlights configured ([`metadata.ts`](presentation-app/src/demos/meeting-highlights/metadata.ts) - timing + durationInfo)
+- Phase 7: WelcomeScreen enhanced ([`WelcomeScreen.tsx`](presentation-app/src/components/WelcomeScreen.tsx) - interactive breakdown UI)
 - Phase 8: Comprehensive testing (24 unit tests, runtime validation)
 - Phase 9: Documentation updated
 
@@ -275,7 +275,7 @@ Current duration calculations only account for audio (e.g., ~4:07), but actual r
 - Actual vs estimated runtime tracking via localStorage
 - Automatic purge when calculated duration changes
 - Enhanced WelcomeScreen showing actual runtime when available
-- 24-test suite for calculator validation ([`test-duration-calculator.ts`](react_cogs_demo/scripts/test-duration-calculator.ts))
+- 24-test suite for calculator validation ([`test-duration-calculator.ts`](presentation-app/scripts/test-duration-calculator.ts))
 
 **Results:**
 - Meeting Highlights: Estimated 4:40 (280s), Actual 4:54 (294s)
@@ -284,20 +284,20 @@ Current duration calculations only account for audio (e.g., ~4:07), but actual r
 - Production ready with comprehensive testing
 
 **Files Created:**
-- [`src/demos/timing/types.ts`](react_cogs_demo/src/demos/timing/types.ts)
-- [`src/demos/timing/calculator.ts`](react_cogs_demo/src/demos/timing/calculator.ts)
-- [`scripts/test-duration-calculator.ts`](react_cogs_demo/scripts/test-duration-calculator.ts)
-- 7 documentation files in [`docs/timing-system/`](react_cogs_demo/docs/timing-system/)
+- [`src/demos/timing/types.ts`](presentation-app/src/demos/timing/types.ts)
+- [`src/demos/timing/calculator.ts`](presentation-app/src/demos/timing/calculator.ts)
+- [`scripts/test-duration-calculator.ts`](presentation-app/scripts/test-duration-calculator.ts)
+- 7 documentation files in [`docs/timing-system/`](presentation-app/docs/timing-system/)
 
 **Files Modified:**
-- [`src/slides/SlideMetadata.ts`](react_cogs_demo/src/slides/SlideMetadata.ts)
-- [`src/demos/types.ts`](react_cogs_demo/src/demos/types.ts)
-- [`src/components/NarratedController.tsx`](react_cogs_demo/src/components/NarratedController.tsx)
-- [`src/components/DemoPlayer.tsx`](react_cogs_demo/src/components/DemoPlayer.tsx)
-- [`src/components/WelcomeScreen.tsx`](react_cogs_demo/src/components/WelcomeScreen.tsx)
-- [`scripts/calculate-durations.ts`](react_cogs_demo/scripts/calculate-durations.ts)
-- [`src/demos/meeting-highlights/metadata.ts`](react_cogs_demo/src/demos/meeting-highlights/metadata.ts)
-- [`src/demos/meeting-highlights/index.ts`](react_cogs_demo/src/demos/meeting-highlights/index.ts)
+- [`src/slides/SlideMetadata.ts`](presentation-app/src/slides/SlideMetadata.ts)
+- [`src/demos/types.ts`](presentation-app/src/demos/types.ts)
+- [`src/components/NarratedController.tsx`](presentation-app/src/components/NarratedController.tsx)
+- [`src/components/DemoPlayer.tsx`](presentation-app/src/components/DemoPlayer.tsx)
+- [`src/components/WelcomeScreen.tsx`](presentation-app/src/components/WelcomeScreen.tsx)
+- [`scripts/calculate-durations.ts`](presentation-app/scripts/calculate-durations.ts)
+- [`src/demos/meeting-highlights/metadata.ts`](presentation-app/src/demos/meeting-highlights/metadata.ts)
+- [`src/demos/meeting-highlights/index.ts`](presentation-app/src/demos/meeting-highlights/index.ts)
 
 ## Recent Changes
 
@@ -330,7 +330,7 @@ Current duration calculations only account for audio (e.g., ~4:07), but actual r
   - `extractive vs abstractive highlights.md` → `extractive-vs-abstractive-highlights.md`
   - `how can users try meeting highlights.md` → `how-can-users-try-meeting-highlights.md`
   - `v2 goal and efforts.md` → `v2-goals-and-efforts.md`
-- ✅ Updated all cross-references in README.md, Agents.md, react_cogs_demo/README.md
+- ✅ Updated all cross-references in README.md, Agents.md, presentation-app/README.md
 - ✅ Updated internal links in meeting-highlights.md
 
 **Example Demo Documentation Created:**
@@ -371,13 +371,13 @@ Current duration calculations only account for audio (e.g., ~4:07), but actual r
 4. **Video File Paths** - Moved to demo-specific subdirectories
 
 **New Feature Added:**
-- **Duration Display** - Added duration field to [`DemoMetadata`](react_cogs_demo/src/demos/types.ts)
+- **Duration Display** - Added duration field to [`DemoMetadata`](presentation-app/src/demos/types.ts)
 - Meeting Highlights shows "~4:07 (audio only)" on WelcomeScreen
 - Note: Duration reflects audio length only, not including delays between segments/slides (actual runtime is longer)
 - Updated files:
-  - [`types.ts`](react_cogs_demo/src/demos/types.ts) - Added optional `duration?: number` field
-  - [`metadata.ts`](react_cogs_demo/src/demos/meeting-highlights/metadata.ts) - Added duration: 247 seconds with comment
-  - [`WelcomeScreen.tsx`](react_cogs_demo/src/components/WelcomeScreen.tsx) - Display duration with clock icon and "audio only" note
+  - [`types.ts`](presentation-app/src/demos/types.ts) - Added optional `duration?: number` field
+  - [`metadata.ts`](presentation-app/src/demos/meeting-highlights/metadata.ts) - Added duration: 247 seconds with comment
+  - [`WelcomeScreen.tsx`](presentation-app/src/components/WelcomeScreen.tsx) - Display duration with clock icon and "audio only" note
 
 **Final Status:**
 - ✅ Development ready - Dev server starts without prompts or errors
@@ -398,11 +398,11 @@ Current duration calculations only account for audio (e.g., ~4:07), but actual r
   - Dark theme with card layouts
   - Alternative styling approach
   - Default mode: manual
-- Both demos registered in [`DemoRegistry.ts`](react_cogs_demo/src/demos/DemoRegistry.ts)
+- Both demos registered in [`DemoRegistry.ts`](presentation-app/src/demos/DemoRegistry.ts)
 - Structure: metadata.ts, index.ts, slides/SlidesRegistry.ts, chapters/Chapter0.tsx, README.md
 
 **Phase 6: TTS Scripts Updated for Multi-Demo**
-- **[`generate-tts.ts`](react_cogs_demo/scripts/generate-tts.ts)**: Now supports multiple demos
+- **[`generate-tts.ts`](presentation-app/scripts/generate-tts.ts)**: Now supports multiple demos
   - Scans `src/demos/*/` for all demos
   - `--demo` CLI parameter for specific demo generation
   - Multi-demo cache structure: `{ "demo-id": { "filepath": { ... } } }`
@@ -410,20 +410,20 @@ Current duration calculations only account for audio (e.g., ~4:07), but actual r
   - Cleanup per demo with orphaned file detection
   - Commands: `npm run tts:generate` (all), `npm run tts:generate -- --demo meeting-highlights` (specific)
 
-- **[`check-tts-cache.ts`](react_cogs_demo/scripts/check-tts-cache.ts)**: Multi-demo cache validation
+- **[`check-tts-cache.ts`](presentation-app/scripts/check-tts-cache.ts)**: Multi-demo cache validation
   - Checks all demos for changes
   - Reports changes per demo
   - Prompts for regeneration with demo list
   - Handles multi-demo cache structure
 
-- **[`calculate-durations.ts`](react_cogs_demo/scripts/calculate-durations.ts)**: Multi-demo duration reports
+- **[`calculate-durations.ts`](presentation-app/scripts/calculate-durations.ts)**: Multi-demo duration reports
   - Calculates durations per demo
   - Grand totals across all demos
   - `--demo` parameter for specific demo reports
   - Output: `duration-report.json` or `duration-report-{demo-id}.json`
 
 **Phase 7: Documentation Updates**
-- Created comprehensive [`react_cogs_demo/README.md`](react_cogs_demo/README.md)
+- Created comprehensive [`presentation-app/README.md`](presentation-app/README.md)
   - Multi-demo architecture overview
   - Demo organization and structure
   - Step-by-step guide for adding new demos
@@ -476,8 +476,8 @@ public/audio/
 - **Rationale**: Professional closing that thanks audience, invites feedback, and provides clear call-to-action
 - **Visual Design**: Animated particles, gradient text, pulsing CTA with shine effect
 - **Updated files**:
-  - [`Chapter9.tsx`](react_cogs_demo/src/slides/chapters/Chapter9.tsx) - Ch9_S2_ClosingThanks component
-  - [`SlidesRegistry.ts`](react_cogs_demo/src/slides/SlidesRegistry.ts) - Updated reference
+  - [`Chapter9.tsx`](presentation-app/src/slides/chapters/Chapter9.tsx) - Ch9_S2_ClosingThanks component
+  - [`SlidesRegistry.ts`](presentation-app/src/slides/SlidesRegistry.ts) - Updated reference
   - [`Agents.md`](Agents.md) - This entry
 
 
@@ -532,7 +532,7 @@ This project contains materials for an all-hands presentation about Meeting High
   - **v1/** - Original implementation ([`HighlightsPromptMaper.py`](docs/demos/meeting-highlights/context/v1/HighlightsPromptMaper.py))
   - **v2/** - Current implementation schemas ([`prompt.md`](docs/demos/meeting-highlights/context/v2/prompt.md), [`prompt_output_schema.md`](docs/demos/meeting-highlights/context/v2/prompt_output_schema.md), [`TRANSCRIPT_TABLE_SCHEMA.md`](docs/demos/meeting-highlights/context/v2/TRANSCRIPT_TABLE_SCHEMA.md))
 
-### React Demo Application (`react_cogs_demo/`)
+### React Demo Application (`presentation-app/`)
 Interactive presentation slides built with React, Framer Motion, and TypeScript:
 
 #### React Demo Structure
@@ -571,13 +571,13 @@ Interactive presentation slides built with React, Framer Motion, and TypeScript:
 
 ```bash
 # Development
-cd react_cogs_demo
+cd presentation-app
 npm install
 npm run dev
 
 # TTS Generation
 cd tts && python server.py --voice-sample path/to/voice.wav
-cd react_cogs_demo && npm run tts:generate
+cd presentation-app && npm run tts:generate
 npm run tts:duration
 
 # Build

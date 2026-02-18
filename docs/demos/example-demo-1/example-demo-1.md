@@ -66,9 +66,9 @@ This demo shows:
 - Lazy loading of demo modules
 
 ### File Structure
-- Located in [`src/demos/example-demo-1/slides/chapters/`](../../../react_cogs_demo/src/demos/example-demo-1/slides/chapters/)
-- Registered in [`SlidesRegistry.ts`](../../../react_cogs_demo/src/demos/example-demo-1/slides/SlidesRegistry.ts)
-- Demo config in [`index.ts`](../../../react_cogs_demo/src/demos/example-demo-1/index.ts)
+- Located in [`src/demos/example-demo-1/slides/chapters/`](../../../presentation-app/src/demos/example-demo-1/slides/chapters/)
+- Registered in [`SlidesRegistry.ts`](../../../presentation-app/src/demos/example-demo-1/slides/SlidesRegistry.ts)
+- Demo config in [`index.ts`](../../../presentation-app/src/demos/example-demo-1/index.ts)
 
 ## Development History
 
@@ -87,7 +87,7 @@ Serves as:
 ## Related Documentation
 
 - **Architecture**: Multi-demo system allows unlimited presentations
-- **Technical Implementation**: [`src/demos/example-demo-1/README.md`](../../../react_cogs_demo/src/demos/example-demo-1/README.md)
+- **Technical Implementation**: [`src/demos/example-demo-1/README.md`](../../../presentation-app/src/demos/example-demo-1/README.md)
 
 ## Context Materials
 

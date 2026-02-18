@@ -431,7 +431,7 @@ setShowEditModal(false);
 
 1. **Start Development Server**
    ```bash
-   cd react_cogs_demo
+   cd presentation-app
    npm run dev
    ```
    Open browser to http://localhost:5173
@@ -450,7 +450,7 @@ setShowEditModal(false);
 
 4. **TypeScript Compilation Check**
    ```bash
-   cd react_cogs_demo
+   cd presentation-app
    npx tsc --noEmit
    ```
    Should complete with no errors

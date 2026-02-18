@@ -8,7 +8,7 @@ Multi-demo presentation system built with React + TypeScript + Vite. Each demo i
 
 ## Commands
 
-All commands run from `react_cogs_demo/`:
+All commands run from `presentation-app/`:
 
 ```bash
 npm run dev          # Start dev server (auto-checks TTS cache + calculates durations, then starts Vite on :5173)

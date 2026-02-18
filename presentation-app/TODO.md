@@ -203,7 +203,7 @@
 ## Phase 7: Documentation ✅
 
 ### Update Main Documentation
-- [x] Create `react_cogs_demo/README.md`:
+- [x] Create `presentation-app/README.md`:
   - [x] Add multi-demo architecture overview
   - [x] Update file structure documentation
   - [x] Add step-by-step demo creation guide

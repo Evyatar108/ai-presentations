@@ -205,7 +205,7 @@ npm run tts:duration -- --demo {demo-id}
 
 Copy the generated `durationInfo` object to your metadata file (`src/demos/{demo-id}/metadata.ts`).
 
-See [`docs/timing-system/EXAMPLES.md`](../react_cogs_demo/docs/timing-system/EXAMPLES.md) for timing patterns.
+See [`docs/timing-system/EXAMPLES.md`](../presentation-app/docs/timing-system/EXAMPLES.md) for timing patterns.
 
 ### Step 10: Test Your Demo
 
