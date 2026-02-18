@@ -1,12 +1,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useReducedMotion } from '../../../../framework/accessibility/ReducedMotion';
-import { MetricTile } from '../../../../framework/components/MetricTile';
-import { SlideComponentWithMetadata } from '../../../../framework/slides/SlideMetadata';
-import { SlideContainer } from '../../../../framework/slides/SlideLayouts';
-import { typography, gradientBox, layouts } from '../../../../framework/slides/SlideStyles';
-import { staggerContainer, tileVariants, arrowVariants, targetVariants, promptVariants } from '../../../../framework/slides/AnimationVariants';
-import { ArrowDown, ArrowRight } from '../../../../framework/slides/SlideIcons';
+import { useReducedMotion } from '@framework/accessibility/ReducedMotion';
+import { MetricTile } from '@framework/components/MetricTile';
+import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
+import { SlideContainer } from '@framework/slides/SlideLayouts';
+import { typography, layouts } from '@framework/slides/SlideStyles';
+import { staggerContainer, tileVariants, arrowVariants, targetVariants } from '@framework/slides/AnimationVariants';
+import { useTheme } from '@framework/theme/ThemeContext';
 
 /**
  * Chapter 5: COGS Challenge
@@ -19,6 +19,7 @@ import { ArrowDown, ArrowRight } from '../../../../framework/slides/SlideIcons';
  */
 export const Ch5_S1_ChallengeFraming: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
+  const theme = useTheme();
 
   return (
     <SlideContainer maxWidth={900}>
@@ -121,13 +122,13 @@ export const Ch5_S1_ChallengeFraming: SlideComponentWithMetadata = () => {
           >
             <div style={{
               fontSize: 64,
-              color: '#00B7C3',
+              color: theme.colors.primary,
               marginBottom: '0.5rem',
               fontWeight: 'bold'
             }}>
               ?
             </div>
-            <h2 style={{ color: '#f1f5f9', margin: 0, fontSize: 20 }}>
+            <h2 style={{ color: theme.colors.textPrimary, margin: 0, fontSize: 20 }}>
               How can we optimize?
             </h2>
           </motion.div>

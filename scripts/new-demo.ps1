@@ -195,7 +195,7 @@ Write-Host "`nCreating source files..." -ForegroundColor Yellow
 
 # metadata.ts
 $metadataContent = @"
-import { DemoMetadata } from '../types';
+import type { DemoMetadata } from '@framework/demos/types';
 
 export const metadata: DemoMetadata = {
   id: '$DemoId',
@@ -214,7 +214,7 @@ Write-Host "  ✓ Created: $metadataPath" -ForegroundColor Green
 
 # index.ts
 $indexContent = @"
-import { DemoConfig } from '../types';
+import type { DemoConfig } from '@framework/demos/types';
 import { metadata } from './metadata';
 
 const demoConfig: DemoConfig = {
@@ -236,41 +236,39 @@ Write-Host "  ✓ Created: $indexPath" -ForegroundColor Green
 
 # Chapter0.tsx
 $chapter0Content = @"
-import { SlideMetadata } from '../../../../../slides/SlideMetadata';
+import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
 
-export const Ch0_S1_Intro: SlideMetadata = {
+export const Ch0_S1_Intro: SlideComponentWithMetadata = () => (
+  <div style={{
+    width: '100%',
+    height: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    color: 'white',
+    fontFamily: 'Inter, system-ui, sans-serif'
+  }}>
+    <h1 style={{ fontSize: '4rem', fontWeight: 'bold', margin: 0 }}>
+      $DemoTitle
+    </h1>
+    <p style={{ fontSize: '1.5rem', marginTop: '1rem', opacity: 0.9 }}>
+      Your presentation subtitle here
+    </p>
+  </div>
+);
+
+Ch0_S1_Intro.metadata = {
   chapter: 0,
   slide: 1,
   title: '$DemoTitle',
-  segments: [
+  audioSegments: [
     {
-      number: 1,
       id: 'intro',
-      description: 'Introduction',
-      audioPath: '/audio/$DemoId/c0/s1_segment_01_intro.wav',
-      narrationText: 'Welcome to $DemoTitle.'
+      audioFilePath: '/audio/$DemoId/c0/s1_segment_01_intro.wav'
     }
-  ],
-  component: ({ segment }) => (
-    <div style={{
-      width: '100%',
-      height: '100vh',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      color: 'white',
-      fontFamily: 'Inter, system-ui, sans-serif'
-    }}>
-      <h1 style={{ fontSize: '4rem', fontWeight: 'bold', margin: 0 }}>
-        $DemoTitle
-      </h1>
-      <p style={{ fontSize: '1.5rem', marginTop: '1rem', opacity: 0.9 }}>
-        Your presentation subtitle here
-      </p>
-    </div>
-  )
+  ]
 };
 "@
 
@@ -281,10 +279,10 @@ Write-Host "  ✓ Created: $chapter0Path" -ForegroundColor Green
 
 # SlidesRegistry.ts
 $slidesRegistryContent = @"
-import { SlideMetadata } from '../../../../slides/SlideMetadata';
+import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
 import { Ch0_S1_Intro } from './chapters/Chapter0';
 
-export const allSlides: SlideMetadata[] = [
+export const allSlides: SlideComponentWithMetadata[] = [
   Ch0_S1_Intro,
   // Add more slides here
 ];
@@ -366,12 +364,12 @@ foreach ($file in $createdFiles) {
 Write-Host "`n=== Next Steps ===" -ForegroundColor Cyan
 Write-Host @"
 
-1. Register the demo in DemoRegistry.ts:
-   • Open: react_cogs_demo/src/demos/DemoRegistry.ts
+1. Register the demo in registry.ts:
+   • Open: react_cogs_demo/src/demos/registry.ts
    • Add import: import ${DemoId}Demo from './$DemoId';
    • Add import: import { metadata as ${DemoId}Metadata } from './$DemoId/metadata';
    • Add registration:
-     registerDemo({
+     DemoRegistry.registerDemo({
        id: '${DemoId}',
        metadata: ${DemoId}Metadata,
        loadConfig: async () => ${DemoId}Demo

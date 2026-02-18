@@ -1,10 +1,11 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useReducedMotion } from '../../../../framework/accessibility/ReducedMotion';
-import { useSegmentedAnimation } from '../../../../framework/contexts/SegmentContext';
-import { SlideComponentWithMetadata } from '../../../../framework/slides/SlideMetadata';
-import { SlideContainer, ContentCard, GradientHighlightBox, SlideTitle } from '../../../../framework/slides/SlideLayouts';
-import { typography, highlightBorder, layouts } from '../../../../framework/slides/SlideStyles';
+import { useReducedMotion } from '@framework/accessibility/ReducedMotion';
+import { useSegmentedAnimation } from '@framework/contexts/SegmentContext';
+import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
+import { SlideContainer, SlideTitle } from '@framework/slides/SlideLayouts';
+import { typography, layouts } from '@framework/slides/SlideStyles';
+import { useTheme } from '@framework/theme/ThemeContext';
 
 /**
  * Chapter 4: Highlight Types
@@ -17,6 +18,7 @@ import { typography, highlightBorder, layouts } from '../../../../framework/slid
 export const Ch4_S1_HighlightTypes: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
   const { isSegmentVisible, currentSegmentIndex } = useSegmentedAnimation();
+  const theme = useTheme();
 
   const fadeLeftVariant = {
     hidden: { opacity: 0, x: reduced ? 0 : -20 },
@@ -56,8 +58,8 @@ export const Ch4_S1_HighlightTypes: SlideComponentWithMetadata = () => {
                 textAlign: 'center',
                 background: currentSegmentIndex === 1
                   ? 'linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))'
-                  : '#1e293b',
-                border: currentSegmentIndex === 1 ? '2px solid #00B7C3' : '1px solid #334155',
+                  : theme.colors.bgSurface,
+                border: currentSegmentIndex === 1 ? `2px solid ${theme.colors.primary}` : `1px solid ${theme.colors.bgBorder}`,
                 transition: 'all 0.3s ease'
               }}
             >
@@ -68,7 +70,7 @@ export const Ch4_S1_HighlightTypes: SlideComponentWithMetadata = () => {
               <p style={{ ...typography.caption, fontSize: 16 }}>
                 AI-generated summaries of discussion topics
               </p>
-              <p style={{ ...typography.caption, fontSize: 14, marginTop: '0.5rem', color: '#00B7C3' }}>
+              <p style={{ ...typography.caption, fontSize: 14, marginTop: '0.5rem', color: theme.colors.primary }}>
                 Narration by Azure Cognitive Services • Video from meeting
               </p>
             </motion.div>
@@ -87,8 +89,8 @@ export const Ch4_S1_HighlightTypes: SlideComponentWithMetadata = () => {
                 textAlign: 'center',
                 background: currentSegmentIndex === 2
                   ? 'linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))'
-                  : '#1e293b',
-                border: currentSegmentIndex === 2 ? '2px solid #00B7C3' : '1px solid #334155',
+                  : theme.colors.bgSurface,
+                border: currentSegmentIndex === 2 ? `2px solid ${theme.colors.primary}` : `1px solid ${theme.colors.bgBorder}`,
                 transition: 'all 0.3s ease'
               }}
             >
@@ -99,7 +101,7 @@ export const Ch4_S1_HighlightTypes: SlideComponentWithMetadata = () => {
               <p style={{ ...typography.caption, fontSize: 16 }}>
                 Significant verbatim segments from the meeting
               </p>
-              <p style={{ ...typography.caption, fontSize: 14, marginTop: '0.5rem', color: '#00B7C3' }}>
+              <p style={{ ...typography.caption, fontSize: 14, marginTop: '0.5rem', color: theme.colors.primary }}>
                 Uses original audio and video from the recording
               </p>
             </motion.div>
@@ -117,13 +119,13 @@ export const Ch4_S1_HighlightTypes: SlideComponentWithMetadata = () => {
                 marginBottom: '1.5rem',
                 background: currentSegmentIndex === 3
                   ? 'linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))'
-                  : '#1e293b',
-                border: currentSegmentIndex === 3 ? '2px solid #00B7C3' : '1px solid #334155',
+                  : theme.colors.bgSurface,
+                border: currentSegmentIndex === 3 ? `2px solid ${theme.colors.primary}` : `1px solid ${theme.colors.bgBorder}`,
                 transition: 'all 0.3s ease'
               }}
             >
               <p style={{ ...typography.body, margin: 0 }}>
-                ⏱️ Each highlight covers <strong style={{ color: '#00B7C3' }}>20-40 second segments</strong> with timestamps and narration
+                ⏱️ Each highlight covers <strong style={{ color: theme.colors.primary }}>20-40 second segments</strong> with timestamps and narration
               </p>
             </div>
           </motion.div>
@@ -140,13 +142,13 @@ export const Ch4_S1_HighlightTypes: SlideComponentWithMetadata = () => {
                 marginBottom: '1.5rem',
                 background: currentSegmentIndex === 4
                   ? 'linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))'
-                  : '#1e293b',
-                border: currentSegmentIndex === 4 ? '2px solid #00B7C3' : '1px solid #334155',
+                  : theme.colors.bgSurface,
+                border: currentSegmentIndex === 4 ? `2px solid ${theme.colors.primary}` : `1px solid ${theme.colors.bgBorder}`,
                 transition: 'all 0.3s ease'
               }}
             >
               <p style={{ ...typography.body, margin: 0 }}>
-                📖 AI weaves highlights into a <strong style={{ color: '#00B7C3' }}>cohesive narrative</strong>, connecting abstractive summaries and key moments into an engaging story
+                📖 AI weaves highlights into a <strong style={{ color: theme.colors.primary }}>cohesive narrative</strong>, connecting abstractive summaries and key moments into an engaging story
               </p>
             </div>
           </motion.div>

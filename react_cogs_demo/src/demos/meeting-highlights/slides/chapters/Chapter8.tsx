@@ -1,11 +1,11 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useReducedMotion } from '../../../../framework/accessibility/ReducedMotion';
-import { useSegmentedAnimation } from '../../../../framework/contexts/SegmentContext';
-import { SlideComponentWithMetadata } from '../../../../framework/slides/SlideMetadata';
-import { SlideContainer, ContentCard, SlideTitle } from '../../../../framework/slides/SlideLayouts';
-import { typography, gradientBox, successGradientBox } from '../../../../framework/slides/SlideStyles';
-import { scaleIn, fadeUp } from '../../../../framework/slides/AnimationVariants';
+import { useReducedMotion } from '@framework/accessibility/ReducedMotion';
+import { useTheme } from '@framework/theme/ThemeContext';
+import { useSegmentedAnimation } from '@framework/contexts/SegmentContext';
+import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
+import { SlideContainer } from '@framework/slides/SlideLayouts';
+import { typography, gradientBox, successGradientBox } from '@framework/slides/SlideStyles';
 
 /**
  * Chapter 8: User Reception
@@ -14,6 +14,7 @@ import { scaleIn, fadeUp } from '../../../../framework/slides/AnimationVariants'
 
 export const Ch8_S1_UserSatisfaction: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
+  const theme = useTheme();
   const { isSegmentVisible } = useSegmentedAnimation();
 
   return (
@@ -62,14 +63,14 @@ export const Ch8_S1_UserSatisfaction: SlideComponentWithMetadata = () => {
               ...typography.h1,
               fontSize: 48,
               marginBottom: '0.5rem',
-              background: 'linear-gradient(135deg, #00B7C3, #10b981)',
+              background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.success})`,
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text'
             }}>
               User Reception
             </h1>
-            <p style={{ ...typography.body, fontSize: 16, color: '#94a3b8', margin: 0 }}>
+            <p style={{ ...typography.body, fontSize: 16, color: theme.colors.textSecondary, margin: 0 }}>
               MS Elite Survey Results
             </p>
           </motion.div>
@@ -230,10 +231,10 @@ export const Ch8_S1_UserSatisfaction: SlideComponentWithMetadata = () => {
             <motion.div
               whileHover={reduced ? {} : { scale: 1.02 }}
               style={{
-                background: 'linear-gradient(135deg, #1e293b, #0f172a)',
+                background: `linear-gradient(135deg, ${theme.colors.bgSurface}, ${theme.colors.bgDeep})`,
                 borderRadius: 16,
                 padding: '2rem 2.5rem',
-                border: '2px solid #334155',
+                border: `2px solid ${theme.colors.bgBorder}`,
                 boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)',
                 textAlign: 'center',
                 position: 'relative',
@@ -250,7 +251,7 @@ export const Ch8_S1_UserSatisfaction: SlideComponentWithMetadata = () => {
                   style={{
                     position: 'absolute',
                     inset: -2,
-                    background: 'linear-gradient(45deg, #00B7C3, #10b981)',
+                    background: `linear-gradient(45deg, ${theme.colors.primary}, ${theme.colors.success})`,
                     borderRadius: 16,
                     zIndex: 0,
                     filter: 'blur(10px)'
@@ -269,7 +270,7 @@ export const Ch8_S1_UserSatisfaction: SlideComponentWithMetadata = () => {
                 >
                   🎯
                 </motion.span>
-                <p style={{ ...typography.body, fontSize: 22, fontWeight: 600, margin: 0, color: '#f1f5f9' }}>
+                <p style={{ ...typography.body, fontSize: 22, fontWeight: 600, margin: 0, color: theme.colors.textPrimary }}>
                   Strong product-market fit and daily habit formation
                 </p>
                 <motion.span

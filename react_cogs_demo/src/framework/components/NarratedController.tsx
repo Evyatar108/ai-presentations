@@ -12,7 +12,7 @@ import {
   updateNarrationCache,
   hashText
 } from '../utils/narrationApiClient';
-import { NarrationData, NarrationSlide, NarrationSegment } from '../utils/narrationLoader';
+import { NarrationData, NarrationSlide } from '../utils/narrationLoader';
 import { getConfig } from '../config';
 import { useTheme } from '../theme/ThemeContext';
 
@@ -61,14 +61,14 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
   onPlaybackStart,
   onPlaybackEnd,
   manualSlideChange,
-  onBack
+  onBack: _onBack
 }) => {
   const theme = useTheme();
   // Use provided slides or empty array if not loaded yet
   const allSlides = slides || [];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [_isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showStartOverlay, setShowStartOverlay] = useState(true);
   const [hideInterface, setHideInterface] = useState(false);
@@ -87,7 +87,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
 
   // Phase 5: API integration state
   const [apiAvailable, setApiAvailable] = useState<boolean | null>(null);
-  const [isSaving, setIsSaving] = useState(false);
+  const [_isSaving, setIsSaving] = useState(false);
   
   // Notification system (toast messages)
   interface Notification {
@@ -572,7 +572,7 @@ const handleEditNarration = () => {
 };
 
 // Export narration edits (Phase 5: enhanced with save-to-file option)
-const handleExportNarration = async () => {
+const _handleExportNarration = async () => {
   const narrationData = buildNarrationDataFromEdits();
   
   // Show simple prompt for export action

@@ -1,4 +1,4 @@
-import { SlideComponentWithMetadata } from '../../../../framework/slides/SlideMetadata';
+import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
 
 /**
  * Example Demo 1 - Chapter 0: Placeholder Slides

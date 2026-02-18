@@ -5,7 +5,7 @@
  * Import this file as a side-effect in main.tsx to ensure demos are registered at startup.
  */
 
-import { DemoRegistry } from '../framework/demos/DemoRegistry';
+import { DemoRegistry } from '@framework/demos/DemoRegistry';
 
 // ---- Meeting Highlights ----
 import meetingHighlightsDemo from './meeting-highlights';

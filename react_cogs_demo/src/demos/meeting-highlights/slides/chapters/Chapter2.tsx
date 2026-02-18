@@ -1,8 +1,9 @@
 import React, { useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useReducedMotion } from '../../../../framework/accessibility/ReducedMotion';
-import { useSegmentedAnimation } from '../../../../framework/contexts/SegmentContext';
-import { SlideComponentWithMetadata } from '../../../../framework/slides/SlideMetadata';
+import { useReducedMotion } from '@framework/accessibility/ReducedMotion';
+import { useSegmentedAnimation } from '@framework/contexts/SegmentContext';
+import { useTheme } from '@framework/theme/ThemeContext';
+import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
 import 'reactflow/dist/style.css';
 import {
   ReactFlow,
@@ -98,6 +99,7 @@ const teams: TeamInfo[] = [
  * Node renderer component for ReactFlow diagram
  */
 const NodeRenderer: React.FC<{ data: any }> = ({ data }) => {
+  const theme = useTheme();
   const isCurrent = data.isCurrent;
   
   return (
@@ -165,7 +167,7 @@ const NodeRenderer: React.FC<{ data: any }> = ({ data }) => {
           initial={{ opacity: 0, y: -5 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.2 }}
-          style={{ color: '#f1f5f9', fontSize: 14, fontWeight: 600 }}
+          style={{ color: theme.colors.textPrimary, fontSize: 14, fontWeight: 600 }}
         >
           {data.label}
         </motion.div>
@@ -173,7 +175,7 @@ const NodeRenderer: React.FC<{ data: any }> = ({ data }) => {
           initial={{ opacity: 0, y: -5 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.3 }}
-          style={{ color: '#00B7C3', fontSize: 11, marginTop: 2 }}
+          style={{ color: theme.colors.primary, fontSize: 11, marginTop: 2 }}
         >
           {data.role}
         </motion.div>
@@ -193,6 +195,7 @@ const ArchitectureDiagram: React.FC<{
   currentTeamId?: string;
   reduced: boolean;
 }> = ({ currentSegmentIndex, isSegmentVisible, currentTeamId, reduced }) => {
+  const theme = useTheme();
   const nodeVisible = (seg: number) => isSegmentVisible(seg);
 
   const baseNodes: RFNode[] = [
@@ -289,8 +292,8 @@ const ArchitectureDiagram: React.FC<{
               width: 160,
               background: isCurrent
                 ? 'linear-gradient(135deg, rgba(0,183,195,0.25), rgba(0,120,212,0.25))'
-                : '#1e293b',
-              border: isCurrent ? '2px solid #00B7C3' : '1px solid #334155',
+                : theme.colors.bgSurface,
+              border: isCurrent ? `2px solid ${theme.colors.primary}` : `1px solid ${theme.colors.bgBorder}`,
               boxShadow: isCurrent && !reduced ? '0 0 22px rgba(0,183,195,0.4)' : '0 2px 6px rgba(0,0,0,0.4)'
             },
             data: {
@@ -382,7 +385,7 @@ const ArchitectureDiagram: React.FC<{
             (currentSegmentIndex === 6 && isRequestsPlayer) ||
             (currentSegmentIndex === 7 && (isLoopClipchamp || isClipchampOdsp));
           
-          const strokeColor = shouldAnimate ? '#0078D4' : '#00B7C3';
+          const strokeColor = shouldAnimate ? theme.colors.secondary : theme.colors.primary;
           
           return {
             ...e,
@@ -395,7 +398,7 @@ const ArchitectureDiagram: React.FC<{
             },
             label: labelText,
             labelStyle: {
-              fill: '#e2e8f0',
+              fill: theme.colors.textPrimary,
               fontSize: 11,
               fontWeight: 600
             },
@@ -433,16 +436,16 @@ const ArchitectureDiagram: React.FC<{
           defaultEdgeOptions={{
             markerEnd: {
               type: MarkerType.ArrowClosed,
-              color: '#00B7C3'
+              color: theme.colors.primary
             }
           }}
           style={{
-            background: '#0f172a',
-            border: '1px solid #334155',
+            background: theme.colors.bgDeep,
+            border: `1px solid ${theme.colors.bgBorder}`,
             borderRadius: 12
           }}
         >
-          <Background color="#1e293b" gap={32} />
+          <Background color={theme.colors.bgSurface} gap={32} />
         </ReactFlow>
       </ReactFlowProvider>
     </div>
@@ -456,6 +459,7 @@ const ArchitectureDiagram: React.FC<{
 export const Ch2_TeamCollaboration: SlideComponentWithMetadata = () => {
  const { reduced } = useReducedMotion();
  const { currentSegmentIndex, isSegmentVisible } = useSegmentedAnimation();
+ const theme = useTheme();
  const backendFlowRef = React.useRef<HTMLDivElement>(null);
 
  const currentTeam = teams[currentSegmentIndex];
@@ -485,7 +489,7 @@ export const Ch2_TeamCollaboration: SlideComponentWithMetadata = () => {
  return (
    <div
      style={{
-       background: '#0f172a',
+       background: theme.colors.bgDeep,
        minHeight: '100vh',
        display: 'flex',
        flexDirection: 'column',
@@ -499,7 +503,7 @@ export const Ch2_TeamCollaboration: SlideComponentWithMetadata = () => {
        initial={{ opacity: 0, y: -20 }}
        animate={{ opacity: 1, y: 0 }}
        style={{
-         color: '#f1f5f9',
+         color: theme.colors.textPrimary,
          marginBottom: '2rem',
          fontSize: 36,
          textAlign: 'center'
@@ -523,7 +527,7 @@ export const Ch2_TeamCollaboration: SlideComponentWithMetadata = () => {
        >
          <p
            style={{
-             color: '#e2e8f0',
+             color: theme.colors.textPrimary,
              fontSize: 24,
              lineHeight: 1.6
            }}
@@ -564,20 +568,20 @@ export const Ch2_TeamCollaboration: SlideComponentWithMetadata = () => {
            {/* Right: Architecture Flow */}
            <div
              style={{
-               background: '#1e293b',
+               background: theme.colors.bgSurface,
                borderRadius: 16,
-               border: '1px solid #334155',
+               border: `1px solid ${theme.colors.bgBorder}`,
                height: '500px',
                display: 'flex',
                flexDirection: 'column'
              }}
            >
              <h2 style={{
-               color: '#f1f5f9',
+               color: theme.colors.textPrimary,
                fontSize: 20,
                margin: 0,
                padding: '1.5rem 1.5rem 1rem',
-               borderBottom: '1px solid #334155',
+               borderBottom: `1px solid ${theme.colors.bgBorder}`,
                flexShrink: 0
              }}>
                Backend Flow
@@ -613,17 +617,17 @@ export const Ch2_TeamCollaboration: SlideComponentWithMetadata = () => {
                              ? 'linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))'
                              : 'rgba(0, 183, 195, 0.1)',
                            borderRadius: 8,
-                           border: isCurrent ? '2px solid #00B7C3' : 'none',
+                           border: isCurrent ? `2px solid ${theme.colors.primary}` : 'none',
                            boxShadow: isCurrent && !reduced ? '0 0 20px rgba(0, 183, 195, 0.3)' : 'none'
                          }}
                        >
                          <div style={{ fontSize: 28, flexShrink: 0 }}>{step.icon}</div>
                          <div style={{ flex: 1 }}>
-                           <div style={{ color: '#f1f5f9', fontWeight: 600, fontSize: 14 }}>{step.label}</div>
-                           <div style={{ color: '#94a3b8', fontSize: 12, marginTop: 2 }}>{step.desc}</div>
+                           <div style={{ color: theme.colors.textPrimary, fontWeight: 600, fontSize: 14 }}>{step.label}</div>
+                           <div style={{ color: theme.colors.textSecondary, fontSize: 12, marginTop: 2 }}>{step.desc}</div>
                          </div>
                          {index < archFlowSteps.length - 1 && (
-                           <div style={{ color: '#00B7C3', fontSize: 20 }}>↓</div>
+                           <div style={{ color: theme.colors.primary, fontSize: 20 }}>↓</div>
                          )}
                        </motion.div>
                      )}
@@ -654,8 +658,8 @@ export const Ch2_TeamCollaboration: SlideComponentWithMetadata = () => {
              width: 10,
              height: 10,
              borderRadius: '50%',
-             background: isSegmentVisible(index) ? '#00B7C3' : '#334155',
-             border: index === currentSegmentIndex ? '2px solid #f1f5f9' : 'none',
+             background: isSegmentVisible(index) ? theme.colors.primary : theme.colors.bgBorder,
+             border: index === currentSegmentIndex ? `2px solid ${theme.colors.textPrimary}` : 'none',
              transition: 'all 0.3s ease'
            }}
          />

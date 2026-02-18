@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useReducedMotion } from '../../../../framework/accessibility/ReducedMotion';
-import { SlideComponentWithMetadata } from '../../../../framework/slides/SlideMetadata';
-import { SlideContainer } from '../../../../framework/slides/SlideLayouts';
+import { useReducedMotion } from '@framework/accessibility/ReducedMotion';
+import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
+import { SlideContainer } from '@framework/slides/SlideLayouts';
 
 /**
  * Chapter 0: Introduction

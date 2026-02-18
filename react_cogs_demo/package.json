@@ -8,6 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint --ext .ts,.tsx src",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "tts:check": "tsx scripts/check-tts-cache.ts",
     "tts:generate": "tsx scripts/generate-tts.ts",
     "tts:from-json": "tsx scripts/generate-tts.ts --from-json",
@@ -26,6 +28,8 @@
     "reactflow": "^11.11.4"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
     "@types/node": "^24.8.1",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
@@ -38,9 +42,11 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "get-audio-duration": "^4.0.1",
+    "jsdom": "^28.1.0",
     "prettier": "^3.1.0",
     "tsx": "^4.20.6",
     "typescript": "^5.4.0",
-    "vite": "^5.0.0"
+    "vite": "^5.0.0",
+    "vitest": "^4.0.18"
   }
 }

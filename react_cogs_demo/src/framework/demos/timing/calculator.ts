@@ -11,7 +11,7 @@
  * Segment → Slide → Demo → Global Defaults
  */
 
-import type { SlideMetadata, AudioSegment } from '../../slides/SlideMetadata';
+import type { SlideMetadata } from '../../slides/SlideMetadata';
 import { resolveTimingConfig, type TimingConfig } from './types';
 
 /**

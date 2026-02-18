@@ -3,10 +3,10 @@ import * as path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { getAudioDurationInSeconds } from 'get-audio-duration';
-import { SlideComponentWithMetadata, SlideMetadata } from '../src/framework/slides/SlideMetadata';
-import { calculatePresentationDuration, PresentationDurationReport } from '../src/framework/demos/timing/calculator';
-import { TimingConfig } from '../src/framework/demos/timing/types';
-import { DemoConfig } from '../src/framework/demos/types';
+import { SlideComponentWithMetadata, SlideMetadata } from '@framework/slides/SlideMetadata';
+import { calculatePresentationDuration, PresentationDurationReport } from '@framework/demos/timing/calculator';
+import { TimingConfig } from '@framework/demos/timing/types';
+import { DemoConfig } from '@framework/demos/types';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

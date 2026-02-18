@@ -1,10 +1,11 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useReducedMotion } from '../../../../framework/accessibility/ReducedMotion';
-import { useSegmentedAnimation } from '../../../../framework/contexts/SegmentContext';
-import { SlideComponentWithMetadata } from '../../../../framework/slides/SlideMetadata';
-import { SlideContainer, GradientHighlightBox, SlideTitle, ImprovementCard } from '../../../../framework/slides/SlideLayouts';
-import { typography, layouts } from '../../../../framework/slides/SlideStyles';
+import { useReducedMotion } from '@framework/accessibility/ReducedMotion';
+import { useTheme } from '@framework/theme/ThemeContext';
+import { useSegmentedAnimation } from '@framework/contexts/SegmentContext';
+import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
+import { SlideContainer } from '@framework/slides/SlideLayouts';
+import { typography } from '@framework/slides/SlideStyles';
 
 /**
  * Chapter 9: Future Improvements
@@ -16,6 +17,7 @@ import { typography, layouts } from '../../../../framework/slides/SlideStyles';
  */
 export const Ch9_S1_Testimonials: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
+  const theme = useTheme();
   const { isSegmentVisible } = useSegmentedAnimation();
 
   const testimonials = [
@@ -68,7 +70,7 @@ export const Ch9_S1_Testimonials: SlideComponentWithMetadata = () => {
               width: 3,
               height: 3,
               borderRadius: '50%',
-              background: i % 3 === 0 ? '#00B7C3' : i % 3 === 1 ? '#0078D4' : '#8B5CF6',
+              background: i % 3 === 0 ? theme.colors.primary : i % 3 === 1 ? theme.colors.secondary : '#8B5CF6',
             }}
           />
         ))}
@@ -117,7 +119,7 @@ export const Ch9_S1_Testimonials: SlideComponentWithMetadata = () => {
               transition={{ duration: 5, repeat: Infinity, ease: 'linear' }}
               style={{
                 ...typography.h1,
-                background: 'linear-gradient(90deg, #00B7C3, #0078D4, #8B5CF6, #00B7C3)',
+                background: `linear-gradient(90deg, ${theme.colors.primary}, ${theme.colors.secondary}, #8B5CF6, ${theme.colors.primary})`,
                 backgroundSize: '200% auto',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
@@ -136,7 +138,7 @@ export const Ch9_S1_Testimonials: SlideComponentWithMetadata = () => {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.3, duration: 0.5 }}
               style={{
-                color: '#94a3b8',
+                color: theme.colors.textSecondary,
                 fontSize: 16,
                 fontStyle: 'italic',
                 position: 'relative',
@@ -175,10 +177,10 @@ export const Ch9_S1_Testimonials: SlideComponentWithMetadata = () => {
                   boxShadow: '0 20px 40px rgba(0, 183, 195, 0.25)'
                 }}
                 style={{
-                  background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
+                  background: `linear-gradient(135deg, ${theme.colors.bgSurface} 0%, ${theme.colors.bgDeep} 100%)`,
                   borderRadius: 16,
                   padding: '1.5rem',
-                  border: '2px solid #334155',
+                  border: `2px solid ${theme.colors.bgBorder}`,
                   display: 'flex',
                   flexDirection: 'column',
                   position: 'relative',
@@ -196,7 +198,7 @@ export const Ch9_S1_Testimonials: SlideComponentWithMetadata = () => {
                     style={{
                       position: 'absolute',
                       inset: -2,
-                      background: `linear-gradient(135deg, #00B7C3, #0078D4, #8B5CF6)`,
+                      background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary}, #8B5CF6)`,
                       borderRadius: 20,
                       zIndex: 0,
                       filter: 'blur(10px)'
@@ -224,7 +226,7 @@ export const Ch9_S1_Testimonials: SlideComponentWithMetadata = () => {
                   {/* Quote text with shimmer */}
                   <div style={{ position: 'relative', marginBottom: '1rem' }}>
                     <p style={{
-                      color: '#e2e8f0',
+                      color: theme.colors.textPrimary,
                       fontSize: 15,
                       lineHeight: 1.6,
                       fontStyle: 'italic',
@@ -247,18 +249,18 @@ export const Ch9_S1_Testimonials: SlideComponentWithMetadata = () => {
                       alignItems: 'center',
                       gap: '0.5rem',
                       paddingTop: '1rem',
-                      borderTop: '1px solid #334155'
+                      borderTop: `1px solid ${theme.colors.bgBorder}`
                     }}
                   >
                     <div style={{
                       width: 8,
                       height: 8,
                       borderRadius: '50%',
-                      background: 'linear-gradient(135deg, #00B7C3, #0078D4)',
+                      background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`,
                       boxShadow: '0 0 10px rgba(0, 183, 195, 0.5)'
                     }} />
                     <div style={{
-                      color: '#00B7C3',
+                      color: theme.colors.primary,
                       fontSize: 14,
                       fontWeight: 600,
                       letterSpacing: '0.3px'
@@ -309,6 +311,7 @@ Ch9_S1_Testimonials.metadata = {
  */
 export const Ch9_S2_ClosingThanks: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
+  const theme = useTheme();
   const { isSegmentVisible } = useSegmentedAnimation();
 
   return (
@@ -338,7 +341,7 @@ export const Ch9_S2_ClosingThanks: SlideComponentWithMetadata = () => {
               width: 4,
               height: 4,
               borderRadius: '50%',
-              background: i % 2 === 0 ? '#00B7C3' : '#0078D4',
+              background: i % 2 === 0 ? theme.colors.primary : theme.colors.secondary,
             }}
           />
         ))}
@@ -387,7 +390,7 @@ export const Ch9_S2_ClosingThanks: SlideComponentWithMetadata = () => {
               transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
               style={{
                 ...typography.h1,
-                background: 'linear-gradient(90deg, #00B7C3, #0078D4, #00B7C3, #0078D4)',
+                background: `linear-gradient(90deg, ${theme.colors.primary}, ${theme.colors.secondary}, ${theme.colors.primary}, ${theme.colors.secondary})`,
                 backgroundSize: '200% auto',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
@@ -434,7 +437,7 @@ export const Ch9_S2_ClosingThanks: SlideComponentWithMetadata = () => {
               <p style={{
                 ...typography.body,
                 fontSize: 20,
-                color: '#e2e8f0',
+                color: theme.colors.textPrimary,
                 fontWeight: 600,
                 margin: 0,
                 letterSpacing: '0.5px'
@@ -468,8 +471,8 @@ export const Ch9_S2_ClosingThanks: SlideComponentWithMetadata = () => {
               boxShadow: '0 20px 40px rgba(0, 183, 195, 0.3)'
             }}
             style={{
-              background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
-              border: '2px solid #334155',
+              background: `linear-gradient(135deg, ${theme.colors.bgSurface} 0%, ${theme.colors.bgDeep} 100%)`,
+              border: `2px solid ${theme.colors.bgBorder}`,
               borderRadius: 16,
               padding: '2.5rem',
               marginBottom: '1.5rem',
@@ -489,7 +492,7 @@ export const Ch9_S2_ClosingThanks: SlideComponentWithMetadata = () => {
                 style={{
                   position: 'absolute',
                   inset: -2,
-                  background: 'linear-gradient(45deg, #00B7C3, #0078D4, #00B7C3)',
+                  background: `linear-gradient(45deg, ${theme.colors.primary}, ${theme.colors.secondary}, ${theme.colors.primary})`,
                   borderRadius: 16,
                   zIndex: 0,
                   filter: 'blur(8px)'
@@ -512,7 +515,7 @@ export const Ch9_S2_ClosingThanks: SlideComponentWithMetadata = () => {
                 ...typography.h2,
                 fontSize: 22,
                 marginBottom: '1.5rem',
-                color: '#f1f5f9',
+                color: theme.colors.textPrimary,
                 fontWeight: 700
               }}>
                 Share Your Feedback
@@ -522,7 +525,7 @@ export const Ch9_S2_ClosingThanks: SlideComponentWithMetadata = () => {
                 style={{
                   ...typography.body,
                   fontSize: 18,
-                  color: '#00B7C3',
+                  color: theme.colors.primary,
                   fontFamily: 'monospace',
                   letterSpacing: '0.5px',
                   background: 'rgba(0, 183, 195, 0.1)',
@@ -562,7 +565,7 @@ export const Ch9_S2_ClosingThanks: SlideComponentWithMetadata = () => {
               transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
               style={{
                 position: 'relative',
-                background: 'linear-gradient(135deg, #00B7C3, #0078D4)',
+                background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`,
                 borderRadius: 20,
                 padding: '2rem 3.5rem',
                 display: 'inline-block',

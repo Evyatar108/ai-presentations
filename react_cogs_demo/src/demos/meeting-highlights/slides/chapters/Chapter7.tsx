@@ -1,8 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useReducedMotion } from '../../../../framework/accessibility/ReducedMotion';
-import { MetricTile } from '../../../../framework/components/MetricTile';
-import { SlideComponentWithMetadata } from '../../../../framework/slides/SlideMetadata';
+import { useReducedMotion } from '@framework/accessibility/ReducedMotion';
+import { useTheme } from '@framework/theme/ThemeContext';
+import { MetricTile } from '@framework/components/MetricTile';
+import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
 
 /**
  * Chapter 7: Business Impact
@@ -14,10 +15,11 @@ import { SlideComponentWithMetadata } from '../../../../framework/slides/SlideMe
  */
 export const Ch7_S2_GPUReduction: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
+  const theme = useTheme();
 
   return (
     <div style={{
-      background: '#0f172a',
+      background: theme.colors.bgDeep,
       minHeight: '100vh',
       width: '100%',
       display: 'flex',
@@ -27,7 +29,7 @@ export const Ch7_S2_GPUReduction: SlideComponentWithMetadata = () => {
       fontFamily: 'Inter, system-ui, sans-serif'
     }}>
       <div style={{ maxWidth: 800, width: '100%', textAlign: 'center' }}>
-        <h1 style={{ color: '#f1f5f9', marginBottom: '3rem' }}>
+        <h1 style={{ color: theme.colors.textPrimary, marginBottom: '3rem' }}>
           GPU Capacity Optimization
         </h1>
 
@@ -53,7 +55,7 @@ export const Ch7_S2_GPUReduction: SlideComponentWithMetadata = () => {
                   height: 120,
                   background: '#1e3a52',
                   borderRadius: 8,
-                  border: '2px solid #334155',
+                  border: `2px solid ${theme.colors.bgBorder}`,
                   position: 'relative'
                 }}
               >
@@ -80,7 +82,7 @@ export const Ch7_S2_GPUReduction: SlideComponentWithMetadata = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: reduced ? 0.2 : 1.8 }}
           >
-            <path d="M5 20 L50 20 M35 10 L50 20 L35 30" stroke="#00B7C3" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M5 20 L50 20 M35 10 L50 20 L35 30" stroke={theme.colors.primary} strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
           </motion.svg>
 
           {/* After - 1 highlighted rack */}
@@ -91,9 +93,9 @@ export const Ch7_S2_GPUReduction: SlideComponentWithMetadata = () => {
             style={{
               width: 80,
               height: 140,
-              background: 'linear-gradient(135deg, #00B7C3, #0078D4)',
+              background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`,
               borderRadius: 12,
-              border: '3px solid #00B7C3',
+              border: `3px solid ${theme.colors.primary}`,
               boxShadow: reduced ? 'none' : '0 0 30px rgba(0, 183, 195, 0.6)',
               position: 'relative',
               padding: '10px'
@@ -117,7 +119,7 @@ export const Ch7_S2_GPUReduction: SlideComponentWithMetadata = () => {
               width: 30,
               height: 30,
               borderRadius: '50%',
-              background: '#10b981',
+              background: theme.colors.success,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -134,10 +136,10 @@ export const Ch7_S2_GPUReduction: SlideComponentWithMetadata = () => {
           transition={{ delay: reduced ? 0.4 : 2.5, duration: 0.5 }}
           style={{ marginTop: '3rem' }}
         >
-          <div style={{ fontSize: 42, fontWeight: 'bold', color: '#00B7C3' }}>
+          <div style={{ fontSize: 42, fontWeight: 'bold', color: theme.colors.primary }}>
             ~600 → &lt;200 GPUs
           </div>
-          <p style={{ color: '#94a3b8', marginTop: '1rem', fontSize: 16 }}>
+          <p style={{ color: theme.colors.textSecondary, marginTop: '1rem', fontSize: 16 }}>
             70% capacity reduction through architectural consolidation
           </p>
         </motion.div>
@@ -162,7 +164,8 @@ Ch7_S2_GPUReduction.metadata = {
  */
 export const Ch7_S4_QualityComparison: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
-  
+  const theme = useTheme();
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -184,7 +187,7 @@ export const Ch7_S4_QualityComparison: SlideComponentWithMetadata = () => {
   
   return (
     <div style={{
-      background: '#0f172a',
+      background: theme.colors.bgDeep,
       minHeight: '100vh',
       width: '100%',
       display: 'flex',
@@ -198,8 +201,8 @@ export const Ch7_S4_QualityComparison: SlideComponentWithMetadata = () => {
         initial="hidden"
         animate="visible"
         style={{
-          color:'#f1f5f9',
-          border:'1px solid #334155',
+          color: theme.colors.textPrimary,
+          border: `1px solid ${theme.colors.bgBorder}`,
           borderRadius:16,
           padding:'1.5rem',
           maxWidth:900,
@@ -236,7 +239,7 @@ export const Ch7_S4_QualityComparison: SlideComponentWithMetadata = () => {
             initial={{ opacity: 0, scale: reduced ? 1 : 0.9 }}
             animate={reduced ? {} : { opacity: 1, scale: 1 }}
             style={{
-              background: 'linear-gradient(135deg, #00B7C3, #0078D4)',
+              background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`,
               borderRadius: 12,
               padding: '1rem',
               minWidth: 180,
@@ -302,10 +305,11 @@ Ch7_S4_QualityComparison.metadata = {
  */
 export const Ch7_S5_PathToGA: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
+  const theme = useTheme();
 
   return (
     <div style={{
-      background: '#0f172a',
+      background: theme.colors.bgDeep,
       minHeight: '100vh',
       width: '100%',
       display: 'flex',
@@ -319,7 +323,7 @@ export const Ch7_S5_PathToGA: SlideComponentWithMetadata = () => {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: reduced ? 0.2 : 0.5 }}
-          style={{ color: '#f1f5f9', marginBottom: '3rem' }}
+          style={{ color: theme.colors.textPrimary, marginBottom: '3rem' }}
         >
           Path to General Availability
         </motion.h1>
@@ -329,15 +333,15 @@ export const Ch7_S5_PathToGA: SlideComponentWithMetadata = () => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: reduced ? 0.2 : 0.6, delay: reduced ? 0 : 0.2 }}
           style={{
-            background: '#1e293b',
+            background: theme.colors.bgSurface,
             borderRadius: 16,
             padding: '2rem',
-            border: '1px solid #334155',
+            border: `1px solid ${theme.colors.bgBorder}`,
             marginBottom: '2rem'
           }}
         >
-          <p style={{ color: '#e2e8f0', fontSize: 18, lineHeight: 1.6, marginBottom: '2rem' }}>
-            These cost and quality improvements are the <strong style={{ color: '#00B7C3' }}>next step</strong>: enabling private preview release and paving the way for general availability within approved capacity constraints.
+          <p style={{ color: theme.colors.textPrimary, fontSize: 18, lineHeight: 1.6, marginBottom: '2rem' }}>
+            These cost and quality improvements are the <strong style={{ color: theme.colors.primary }}>next step</strong>: enabling private preview release and paving the way for general availability within approved capacity constraints.
           </p>
 
           {/* Roadmap arrow */}
@@ -359,7 +363,7 @@ export const Ch7_S5_PathToGA: SlideComponentWithMetadata = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: reduced ? 0.2 : 0.5, delay: reduced ? 0 : 0.6 }}
               style={{
-                background: 'linear-gradient(135deg, #00B7C3, #0078D4)',
+                background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`,
                 borderRadius: 12,
                 padding: '1.5rem',
                 minWidth: 180,
@@ -383,7 +387,7 @@ export const Ch7_S5_PathToGA: SlideComponentWithMetadata = () => {
               animate={{ opacity: 1 }}
               transition={{ delay: reduced ? 0 : 0.8 }}
             >
-              <path d="M5 20 L70 20 M55 10 L70 20 L55 30" stroke="#00B7C3" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M5 20 L70 20 M55 10 L70 20 L55 30" stroke={theme.colors.primary} strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
             </motion.svg>
 
             {/* General Availability */}
@@ -392,7 +396,7 @@ export const Ch7_S5_PathToGA: SlideComponentWithMetadata = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: reduced ? 0.2 : 0.5, delay: reduced ? 0 : 1 }}
               style={{
-                background: 'linear-gradient(135deg, #10b981, #059669)',
+                background: `linear-gradient(135deg, ${theme.colors.success}, #059669)`,
                 borderRadius: 12,
                 padding: '1.5rem',
                 minWidth: 180,
@@ -419,8 +423,8 @@ export const Ch7_S5_PathToGA: SlideComponentWithMetadata = () => {
                   width: 36,
                   height: 36,
                   borderRadius: '50%',
-                  background: '#10b981',
-                  border: '3px solid #0f172a',
+                  background: theme.colors.success,
+                  border: `3px solid ${theme.colors.bgDeep}`,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -438,7 +442,7 @@ export const Ch7_S5_PathToGA: SlideComponentWithMetadata = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: reduced ? 0.2 : 0.5, delay: reduced ? 0 : 1.4 }}
-          style={{ color: '#94a3b8', fontSize: 14 }}
+          style={{ color: theme.colors.textSecondary, fontSize: 14 }}
         >
           Unified prompt optimization will enable scalable global rollout
         </motion.p>

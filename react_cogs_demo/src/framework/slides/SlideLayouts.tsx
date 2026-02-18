@@ -6,7 +6,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { slideContainer, contentBox, highlightOverlayBox, typography } from './SlideStyles';
-import { fadeDown } from './AnimationVariants';
 import { useTheme } from '../theme/ThemeContext';
 
 interface SlideContainerProps {
@@ -232,7 +231,7 @@ export const BenefitCard: React.FC<BenefitCardProps> = ({
   isHighlighted,
   isVisible,
   reduced,
-  index
+  index: _index
 }) => {
   const theme = useTheme();
   return (
@@ -292,7 +291,7 @@ export const ImprovementCard: React.FC<ImprovementCardProps> = ({
   description,
   isVisible,
   reduced,
-  index
+  index: _index
 }) => {
   const theme = useTheme();
   return (

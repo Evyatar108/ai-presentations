@@ -1,12 +1,13 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useReducedMotion } from '../../../../framework/accessibility/ReducedMotion';
-import { useSegmentedAnimation } from '../../../../framework/contexts/SegmentContext';
-import { VideoPlayer } from '../../../../framework/components/VideoPlayer';
-import { SlideComponentWithMetadata } from '../../../../framework/slides/SlideMetadata';
-import { SlideContainer, ContentCard, GradientHighlightBox, SlideTitle, BenefitCard } from '../../../../framework/slides/SlideLayouts';
-import { typography, gradientBox } from '../../../../framework/slides/SlideStyles';
-import { fadeUp, fadeLeft, fadeRight, scaleIn } from '../../../../framework/slides/AnimationVariants';
+import { useReducedMotion } from '@framework/accessibility/ReducedMotion';
+import { useSegmentedAnimation } from '@framework/contexts/SegmentContext';
+import { VideoPlayer } from '@framework/components/VideoPlayer';
+import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
+import { SlideContainer, ContentCard, GradientHighlightBox, SlideTitle, BenefitCard } from '@framework/slides/SlideLayouts';
+import { typography, gradientBox } from '@framework/slides/SlideStyles';
+import { fadeUp, fadeLeft, fadeRight, scaleIn } from '@framework/slides/AnimationVariants';
+import { useTheme } from '@framework/theme/ThemeContext';
 
 /**
  * Chapter 1: What is Meeting Highlights
@@ -19,6 +20,7 @@ import { fadeUp, fadeLeft, fadeRight, scaleIn } from '../../../../framework/slid
 export const Ch1_S1_WhatIsMeetingHighlights: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
   const { isSegmentVisible, isOnSegment } = useSegmentedAnimation();
+  const theme = useTheme();
 
   return (
     <SlideContainer maxWidth={900}>
@@ -59,7 +61,7 @@ export const Ch1_S1_WhatIsMeetingHighlights: SlideComponentWithMetadata = () => 
               maxWidth: '600px',
               borderRadius: '12px',
               boxShadow: isOnSegment(0) ? '0 8px 24px rgba(0, 0, 0, 0.4)' : 'none',
-              border: '1px solid #334155',
+              border: `1px solid ${theme.colors.bgBorder}`,
               display: 'block'
             }}
           />
@@ -80,7 +82,7 @@ export const Ch1_S1_WhatIsMeetingHighlights: SlideComponentWithMetadata = () => 
                   </div>
                 </div>
                 <div style={{
-                  background: 'linear-gradient(135deg, #0078D4, #00B7C3)',
+                  background: `linear-gradient(135deg, ${theme.colors.secondary}, ${theme.colors.primary})`,
                   borderRadius: 12,
                   padding: '1.5rem',
                   flex: 1,
@@ -125,7 +127,7 @@ export const Ch1_S1_WhatIsMeetingHighlights: SlideComponentWithMetadata = () => 
                     duration: reduced ? 0.2 : 0.5,
                     delay: reduced ? 0 : 0.3
                   }}
-                  style={{ color: '#00B7C3', fontSize: 20, fontWeight: 600, margin: 0 }}
+                  style={{ color: theme.colors.primary, fontSize: 20, fontWeight: 600, margin: 0 }}
                 >
                   Catch up on missed meetings without watching hour-long recordings
                 </motion.p>
@@ -171,6 +173,7 @@ Ch1_S1_WhatIsMeetingHighlights.metadata = {
 export const Ch1_S2_HowToAccess: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
   const { isSegmentVisible } = useSegmentedAnimation();
+  const theme = useTheme();
 
   return (
     <SlideContainer maxWidth={1200}>
@@ -198,10 +201,10 @@ export const Ch1_S2_HowToAccess: SlideComponentWithMetadata = () => {
             {/* Left column: Video */}
             <ContentCard style={{ padding: '0.5rem' }}>
               <p style={{ ...typography.body, fontSize: 18, marginBottom: '1.5rem', marginTop: 0 }}>
-                Open <strong style={{ color: '#00B7C3' }}>BizChat</strong> and ask it to recap a specific meeting
+                Open <strong style={{ color: theme.colors.primary }}>BizChat</strong> and ask it to recap a specific meeting
               </p>
               <div style={{
-                background: '#0f172a',
+                background: theme.colors.bgDeep,
                 borderRadius: 12,
                 padding: '0.5rem'
               }}>
@@ -224,7 +227,7 @@ export const Ch1_S2_HowToAccess: SlideComponentWithMetadata = () => {
                   >
                     <ContentCard style={{ padding: '1.5rem' }}>
                       <p style={{ ...typography.body, fontSize: 15, margin: 0 }}>
-                        💡 <em>Tip:</em> Use <strong style={{ color: '#00B7C3' }}>/</strong> (slash) for CIQ (Contextual Instant Query) - an easy way to reference meetings
+                        💡 <em>Tip:</em> Use <strong style={{ color: theme.colors.primary }}>/</strong> (slash) for CIQ (Contextual Instant Query) - an easy way to reference meetings
                       </p>
                     </ContentCard>
                   </motion.div>
@@ -255,7 +258,7 @@ export const Ch1_S2_HowToAccess: SlideComponentWithMetadata = () => {
                     animate="visible"
                   >
                     <GradientHighlightBox reduced={reduced} style={{ padding: '1.5rem' }}>
-                      <p style={{ color: '#e2e8f0', fontSize: 15, margin: 0 }}>
+                      <p style={{ color: theme.colors.textPrimary, fontSize: 15, margin: 0 }}>
                         🎬 Video player with highlights appears at the bottom
                       </p>
                     </GradientHighlightBox>
@@ -341,6 +344,7 @@ Ch1_S2_HowToAccess.metadata = {
 export const Ch1_S3_HowToAccessSharePoint: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
   const { isSegmentVisible } = useSegmentedAnimation();
+  const theme = useTheme();
 
   return (
     <SlideContainer maxWidth={1200}>
@@ -368,10 +372,10 @@ export const Ch1_S3_HowToAccessSharePoint: SlideComponentWithMetadata = () => {
             {/* Left column: Video */}
             <ContentCard style={{ padding: '0.5rem' }}>
               <p style={{ ...typography.body, fontSize: 18, marginBottom: '1.5rem', marginTop: 0 }}>
-                Access highlights directly from <strong style={{ color: '#00B7C3' }}>SharePoint</strong> meeting recap page
+                Access highlights directly from <strong style={{ color: theme.colors.primary }}>SharePoint</strong> meeting recap page
               </p>
               <div style={{
-                background: '#0f172a',
+                background: theme.colors.bgDeep,
                 borderRadius: 12,
                 padding: '0.5rem'
               }}>
@@ -410,7 +414,7 @@ export const Ch1_S3_HowToAccessSharePoint: SlideComponentWithMetadata = () => {
                   >
                     <ContentCard style={{ padding: '1.5rem' }}>
                       <p style={{ ...typography.body, fontSize: 15, margin: 0 }}>
-                        🌐 Click <strong style={{ color: '#00B7C3' }}>"Watch in browser"</strong> button
+                        🌐 Click <strong style={{ color: theme.colors.primary }}>"Watch in browser"</strong> button
                       </p>
                     </ContentCard>
                   </motion.div>
@@ -425,7 +429,7 @@ export const Ch1_S3_HowToAccessSharePoint: SlideComponentWithMetadata = () => {
                     animate="visible"
                   >
                     <GradientHighlightBox reduced={reduced} style={{ padding: '1.5rem' }}>
-                      <p style={{ color: '#e2e8f0', fontSize: 15, margin: 0 }}>
+                      <p style={{ color: theme.colors.textPrimary, fontSize: 15, margin: 0 }}>
                         🎬 Click <strong>"Play highlights"</strong> button to view
                       </p>
                     </GradientHighlightBox>
@@ -485,6 +489,7 @@ Ch1_S3_HowToAccessSharePoint.metadata = {
 export const Ch1_S4_UserValue: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
   const { isSegmentVisible, isOnSegment } = useSegmentedAnimation();
+  const theme = useTheme();
 
   const benefits = [
     {
@@ -557,16 +562,16 @@ export const Ch1_S4_UserValue: SlideComponentWithMetadata = () => {
             style={{
               background: isOnSegment(5)
                 ? 'linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))'
-                : '#1e293b',
+                : theme.colors.bgSurface,
               borderRadius: 16,
               padding: '2rem',
               textAlign: 'center',
-              border: isOnSegment(5) ? '2px solid #00B7C3' : '1px solid #334155',
+              border: isOnSegment(5) ? `2px solid ${theme.colors.primary}` : `1px solid ${theme.colors.bgBorder}`,
               boxShadow: isOnSegment(5) && !reduced ? '0 0 30px rgba(0, 183, 195, 0.3)' : 'none'
             }}
           >
             <p style={{
-              color: '#e2e8f0',
+              color: theme.colors.textPrimary,
               fontSize: 18,
               fontStyle: 'italic',
               marginBottom: '1rem',
@@ -574,7 +579,7 @@ export const Ch1_S4_UserValue: SlideComponentWithMetadata = () => {
             }}>
               "Saved me hours of reviewing the transcript. This is magical."
             </p>
-            <p style={{ color: '#94a3b8', fontSize: 14, margin: 0 }}>
+            <p style={{ color: theme.colors.textSecondary, fontSize: 14, margin: 0 }}>
               — Internal User Feedback
             </p>
           </motion.div>

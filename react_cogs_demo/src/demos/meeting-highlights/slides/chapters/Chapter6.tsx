@@ -1,11 +1,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useReducedMotion } from '../../../../framework/accessibility/ReducedMotion';
-import { MetricTile } from '../../../../framework/components/MetricTile';
-import { SlideComponentWithMetadata } from '../../../../framework/slides/SlideMetadata';
-import { SlideContainer, ContentCard, SlideTitle } from '../../../../framework/slides/SlideLayouts';
-import { typography, gradientBox, layouts } from '../../../../framework/slides/SlideStyles';
-import { fadeUp, scaleIn } from '../../../../framework/slides/AnimationVariants';
+import { useReducedMotion } from '@framework/accessibility/ReducedMotion';
+import { MetricTile } from '@framework/components/MetricTile';
+import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
+import { SlideContainer, ContentCard, SlideTitle } from '@framework/slides/SlideLayouts';
+import { typography, layouts } from '@framework/slides/SlideStyles';
+import { scaleIn } from '@framework/slides/AnimationVariants';
+import { useTheme } from '@framework/theme/ThemeContext';
 
 /**
  * Chapter 6: Optimization Solution
@@ -17,10 +18,11 @@ import { fadeUp, scaleIn } from '../../../../framework/slides/AnimationVariants'
  */
 export const Ch6_S1_UnifiedConvergence: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
+  const theme = useTheme();
 
   return (
     <div style={{
-      background: '#0f172a',
+      background: theme.colors.bgDeep,
       minHeight: '100vh',
       width: '100%',
       display: 'flex',
@@ -30,7 +32,7 @@ export const Ch6_S1_UnifiedConvergence: SlideComponentWithMetadata = () => {
       fontFamily: 'Inter, system-ui, sans-serif'
     }}>
       <div style={{ maxWidth: 900, width: '100%', textAlign: 'center' }}>
-        <h1 style={{ color: '#f1f5f9', marginBottom: '3rem' }}>
+        <h1 style={{ color: theme.colors.textPrimary, marginBottom: '3rem' }}>
           Unified Single Prompt
         </h1>
 
@@ -45,7 +47,7 @@ export const Ch6_S1_UnifiedConvergence: SlideComponentWithMetadata = () => {
             style={{
               width: 200,
               height: 200,
-              background: 'linear-gradient(135deg, #00B7C3, #0078D4)',
+              background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`,
               borderRadius: '50%',
               display: 'flex',
               alignItems: 'center',
@@ -86,7 +88,7 @@ export const Ch6_S1_UnifiedConvergence: SlideComponentWithMetadata = () => {
                 left: '50%',
                 width: 120,
                 height: 2,
-                background: 'linear-gradient(90deg, #00B7C3, transparent)',
+                background: `linear-gradient(90deg, ${theme.colors.primary}, transparent)`,
                 transformOrigin: 'left center',
                 transform: `translate(-50%, -50%) rotate(${angle}deg)`
               }}
@@ -100,7 +102,7 @@ export const Ch6_S1_UnifiedConvergence: SlideComponentWithMetadata = () => {
           transition={{ delay: reduced ? 0.3 : 1, duration: 0.5 }}
           style={{ marginTop: '3rem' }}
         >
-          <div style={{ fontSize: 48, fontWeight: 'bold', color: '#00B7C3', marginBottom: '1rem' }}>
+          <div style={{ fontSize: 48, fontWeight: 'bold', color: theme.colors.primary, marginBottom: '1rem' }}>
             <span style={{ textDecoration: 'line-through', opacity: 0.6 }}>4</span> → 1 Call
           </div>
         </motion.div>
@@ -124,6 +126,7 @@ Ch6_S1_UnifiedConvergence.metadata = {
  */
 export const Ch6_S4_TokenOptimization: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
+  const theme = useTheme();
 
   return (
     <SlideContainer maxWidth={800}>
