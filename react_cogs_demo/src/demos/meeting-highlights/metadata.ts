@@ -36,6 +36,15 @@ export const meetingHighlightsMetadata: DemoMetadata = {
   description: 'Presentation showcasing the Meeting Highlights product and the technical optimizations that reduced computational costs by over 70% while maintaining quality. Features product overview, team collaboration, COGS challenge, optimization solution, business impact, user satisfaction, and testimonials.',
   thumbnail: '/images/meeting-highlights/meeting_highlights_thumbnail.jpeg',
   tags: ['meeting-highlights', 'llm', 'optimization', 'cogs', 'ai', 'product'],
+  
+  /**
+   * External narration configuration.
+   * Loads narration text from /public/narration/meeting-highlights/narration.json
+   * Falls back to inline narrationText if JSON is missing or has errors.
+   */
+  useExternalNarration: true,
+  narrationFallback: 'inline', // Safe fallback during migration
+  
   /**
    * Duration information calculated by calculate-durations script.
    * 

@@ -1,0 +1,387 @@
+{
+  "demoId": "meeting-highlights",
+  "version": "1.0",
+  "lastModified": "2025-10-21T07:24:35.264Z",
+  "slides": [
+    {
+      "chapter": 1,
+      "slide": 1,
+      "title": "What is Meeting Highlights",
+      "segments": [
+        {
+          "id": "intro",
+          "narrationText": "Meeting Highlights automatically generates 2-3 minute video recaps of your meetings.",
+          "visualDescription": "Title slide \"Meeting Highlights\"",
+          "notes": ""
+        },
+        {
+          "id": "combination",
+          "narrationText": "It combines AI summaries with authentic video clips, preserving tone and discussion flow.",
+          "visualDescription": "Split screen showing AI summaries + authentic video clips",
+          "notes": ""
+        },
+        {
+          "id": "problem",
+          "narrationText": "Catch up on meetings without watching hour-long recordings.",
+          "visualDescription": "Value prop highlight box appears",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 4,
+      "slide": 1,
+      "title": "Highlight Types",
+      "segments": [
+        {
+          "id": "intro",
+          "narrationText": "Meeting Highlights combines two distinct types of highlights to create a comprehensive recap.",
+          "visualDescription": "Title \"Two Types of Highlights\"",
+          "notes": ""
+        },
+        {
+          "id": "abstractive",
+          "narrationText": "First, abstractive highlights. These are AI-generated summaries that capture the key topics discussed in the meeting, using original video from the meeting. The narration is powered by Azure Cognitive Services text-to-speech.",
+          "visualDescription": "Left card appears - Abstractive Highlights with summary icon",
+          "notes": ""
+        },
+        {
+          "id": "key_moments",
+          "narrationText": "Second, key moments. These are significant verbatim segments extracted directly from the meeting, using the original audio and video from the recording.",
+          "visualDescription": "Right card appears - Key Moments with video clip icon",
+          "notes": ""
+        },
+        {
+          "id": "timestamps",
+          "narrationText": "Each highlight is a 20 to 40 second segment with precise timestamps and accompanying narration.",
+          "visualDescription": "Detail callout showing 20-30 second segments",
+          "notes": ""
+        },
+        {
+          "id": "narrative",
+          "narrationText": "The AI weaves these highlights together into a cohesive narrative, creating an engaging story that connects the abstractive summaries and key moments.",
+          "visualDescription": "Narrative storytelling icon connecting highlights",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 1,
+      "slide": 2,
+      "title": "How to Access via BizChat",
+      "segments": [
+        {
+          "id": "intro",
+          "narrationText": "Access Meeting Highlights through BizChat.",
+          "visualDescription": "BizChat interface screenshot",
+          "notes": ""
+        },
+        {
+          "id": "bizchat",
+          "narrationText": "Open BizChat and ask for a meeting recap.",
+          "visualDescription": "Embedded MP4 demo video showing BizChat interaction",
+          "notes": ""
+        },
+        {
+          "id": "ciq",
+          "narrationText": "Tip: Type forward slash to easily reference meetings using C-I-Q.",
+          "visualDescription": "Demo continues - showing \"/\" menu for CIQ",
+          "notes": ""
+        },
+        {
+          "id": "select",
+          "narrationText": "Select and search for meetings from the menu.",
+          "visualDescription": "Demo shows meeting selection from menu",
+          "notes": ""
+        },
+        {
+          "id": "player",
+          "narrationText": "The highlights player appears at the bottom.",
+          "visualDescription": "Demo shows BizChat response with video player at bottom",
+          "notes": ""
+        },
+        {
+          "id": "note",
+          "narrationText": "For series meetings, click the arrow to view instances, then select one.",
+          "visualDescription": "Note callout appears with info icon",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 1,
+      "slide": 3,
+      "title": "How to Access via SharePoint",
+      "segments": [
+        {
+          "id": "intro",
+          "narrationText": "You can also access Meeting Highlights directly from SharePoint.",
+          "visualDescription": "SharePoint interface screenshot",
+          "notes": ""
+        },
+        {
+          "id": "video",
+          "narrationText": "Open the meeting chat in Teams.",
+          "visualDescription": "Video player appears showing SharePoint demo",
+          "notes": ""
+        },
+        {
+          "id": "sharepoint",
+          "narrationText": "Navigate to the meeting recording recap page by clicking the recording link or via the Recap tab.",
+          "visualDescription": "First instruction card appears",
+          "notes": ""
+        },
+        {
+          "id": "browser",
+          "narrationText": "Click the Watch in browser button.",
+          "visualDescription": "Demo shows 'Watch in browser' button",
+          "notes": ""
+        },
+        {
+          "id": "play",
+          "narrationText": "Then click Play highlights. A new page should open with the highlights player ready to recap your meeting.",
+          "visualDescription": "Demo shows 'Play highlights' button",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 2,
+      "slide": 1,
+      "title": "Team Collaboration & Architecture",
+      "segments": [
+        {
+          "id": "intro",
+          "narrationText": "Meeting Highlights required the collaboration of six teams within Microsoft for a cross-organizational effort. Let me show you how each team contribute to the project through the architecture.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": "odsp",
+          "narrationText": "ODSP handles storage and video manifest. When meetings end, it initiates highlight generation.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": "msai",
+          "narrationText": "MSAI-Hive processes transcripts using LLMs to generate highlight metadata.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": "bizchat",
+          "narrationText": "BizChat provides natural language access through conversational queries.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": "sharepoint",
+          "narrationText": "SharePoint offers direct access from meeting recap pages. This interface was implemented by the Clipchamp team.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": "teams",
+          "narrationText": "Teams access planned as another interface option.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": "loop_storage",
+          "narrationText": "Loop embeds the Clipchamp player across applications.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": "clipchamp",
+          "narrationText": "Clipchamp delivers the player experience without creating new video files.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": "conclusion",
+          "narrationText": "Together, these teams deliver a unified end-to-end experience from recording through AI processing to user access, showcasing true One Microsoft collaboration.",
+          "visualDescription": "",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 5,
+      "slide": 1,
+      "title": "Challenge Framing",
+      "segments": [
+        {
+          "id": "main",
+          "narrationText": "Our current Meeting Highlights implementation makes 4 sequential calls to L-L-M, with a large amount of tokens. To enable global scaling, we needed to dramatically reduce these computational costs.",
+          "visualDescription": "",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 6,
+      "slide": 1,
+      "title": "Unified Convergence",
+      "segments": [
+        {
+          "id": "main",
+          "narrationText": "Our solution was to collapse the four sequential steps into one unified prompt. By designing a single comprehensive prompt that accomplishes the same four steps in one L-L-M call.",
+          "visualDescription": "",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 6,
+      "slide": 4,
+      "title": "Token Optimization",
+      "segments": [
+        {
+          "id": "main",
+          "narrationText": "Beyond reducing L-L-M calls, we optimized the input tokens themselves, which reduced input tokens by more than 60 percent.",
+          "visualDescription": "",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 7,
+      "slide": 2,
+      "title": "GPU Optimization",
+      "segments": [
+        {
+          "id": "main",
+          "narrationText": "Required GPU capacity dropped 70%: from 600 to under 200.",
+          "visualDescription": "",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 7,
+      "slide": 4,
+      "title": "Quality Improvement",
+      "segments": [
+        {
+          "id": "main",
+          "narrationText": "Early internal feedback strongly prefers unified prompt highlight videos over the multi-call pipeline output. The gains center on depth and natural flow.",
+          "visualDescription": "",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 7,
+      "slide": 5,
+      "title": "Path to GA",
+      "segments": [
+        {
+          "id": "main",
+          "narrationText": "These improvements are the next step: enabling GA within capacity constraints.",
+          "visualDescription": "",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 8,
+      "slide": 1,
+      "title": "User Satisfaction",
+      "segments": [
+        {
+          "id": "intro",
+          "narrationText": "Overwhelmingly positive feedback in MS Elite surveys.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": "useful",
+          "narrationText": "80% rated it extremely or very useful.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": "likely",
+          "narrationText": "96% likely to use again.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": "fit",
+          "narrationText": "This points to strong product-market fit and daily habit formation among our users.",
+          "visualDescription": "",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 9,
+      "slide": 1,
+      "title": "Testimonials",
+      "segments": [
+        {
+          "id": "intro",
+          "narrationText": "Enthusiastic user feedback.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": "kevin",
+          "narrationText": "Kevin C. commented: \"Love this feature. Great way to catch up on a recap without watching the full thing.\"",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": "ryan1",
+          "narrationText": "Ryan Roslonsky added: \"Beyond the awesome text recap, there is literally a two-minute narrated video about the meeting.\"",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": "ryan2",
+          "narrationText": "\"It's mind-blowing and an engaging way to recap a meeting for a richer understanding of the conversation.\"",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": "anonymous",
+          "narrationText": "Another user shared: \"Saved me hours of reviewing the transcript. This is magical.\"",
+          "visualDescription": "",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 9,
+      "slide": 2,
+      "title": "Thank You",
+      "segments": [
+        {
+          "id": "intro",
+          "narrationText": "Thank you for exploring Meeting Highlights.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": "value",
+          "narrationText": "Our goal is simple: help you reclaim time and stay aligned.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": "feedback",
+          "narrationText": "Send feedback to meeting H-L feedback at microsoft.com",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": "cta",
+          "narrationText": "Try it now in BizChat and SharePoint.",
+          "visualDescription": "",
+          "notes": ""
+        }
+      ]
+    }
+  ]
+}

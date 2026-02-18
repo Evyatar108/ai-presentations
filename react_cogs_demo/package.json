@@ -10,9 +10,15 @@
     "lint": "eslint --ext .ts,.tsx src",
     "tts:check": "tsx scripts/check-tts-cache.ts",
     "tts:generate": "tsx scripts/generate-tts.ts",
-    "tts:duration": "tsx scripts/calculate-durations.ts"
+    "tts:duration": "tsx scripts/calculate-durations.ts",
+    "extract-narration": "tsx scripts/extract-narration.ts",
+    "check-narration": "tsx scripts/check-narration.ts",
+    "narration-api": "node server/narration-api.cjs",
+    "dev:full": "concurrently \"npm run narration-api\" \"npm run dev\" --names \"API,VITE\" --prefix-colors \"cyan,magenta\""
   },
   "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
     "framer-motion": "^11.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -26,6 +32,7 @@
     "@typescript-eslint/parser": "^6.19.0",
     "@vitejs/plugin-react": "^5.0.4",
     "axios": "^1.12.2",
+    "concurrently": "^9.2.1",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-react-hooks": "^4.6.0",

@@ -8,6 +8,11 @@ import { TimingConfig } from './timing/types';
 import { SlideDurationBreakdown } from './timing/calculator';
 
 /**
+ * Fallback behavior when external narration is enabled but narration is missing.
+ */
+export type NarrationFallback = 'inline' | 'error' | 'silent';
+
+/**
  * Metadata describing a demo presentation.
  */
 export interface DemoMetadata {
@@ -21,6 +26,26 @@ export interface DemoMetadata {
   thumbnail?: string;
   /** Categorical labels for filtering/organizing demos */
   tags?: string[];
+  
+  /**
+   * Enable loading narration text from external JSON files.
+   * When true, narration is loaded from `/public/narration/{demoId}/narration.json`
+   * instead of using inline narrationText in slide components.
+   *
+   * @default false
+   */
+  useExternalNarration?: boolean;
+  
+  /**
+   * Fallback behavior when useExternalNarration is true but narration is missing.
+   *
+   * - 'inline' (recommended): Try JSON first, fall back to inline narrationText with warning
+   * - 'error': Try JSON first, fall back to inline but log error
+   * - 'silent': Try JSON first, fall back silently to inline (no console output)
+   *
+   * @default 'inline'
+   */
+  narrationFallback?: NarrationFallback;
   
   /**
    * Optional duration information for this demo.

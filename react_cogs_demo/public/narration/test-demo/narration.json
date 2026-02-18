@@ -1,0 +1,20 @@
+{
+  "demoId": "test-demo",
+  "version": "1.0",
+  "lastModified": "2025-10-21T08:48:30.261Z",
+  "slides": [
+    {
+      "chapter": 1,
+      "slide": 1,
+      "title": "Test Slide",
+      "segments": [
+        {
+          "id": "test",
+          "narrationText": "Hello world, this is a test",
+          "visualDescription": "Test visual",
+          "notes": ""
+        }
+      ]
+    }
+  ]
+}

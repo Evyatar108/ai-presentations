@@ -6,6 +6,7 @@ import type { SlideComponentWithMetadata } from '../slides/SlideMetadata';
 import { NarratedController } from './NarratedController';
 import { SlidePlayer, Slide } from './SlidePlayer';
 import { SegmentProvider } from '../contexts/SegmentContext';
+import { loadNarration, getNarrationText, type NarrationData } from '../utils/narrationLoader';
 
 interface DemoPlayerProps {
   demoId: string;
@@ -15,6 +16,7 @@ interface DemoPlayerProps {
 export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack }) => {
   const [demoConfig, setDemoConfig] = useState<DemoConfig | null>(null);
   const [loadedSlides, setLoadedSlides] = useState<SlideComponentWithMetadata[]>([]);
+  const [narrationData, setNarrationData] = useState<NarrationData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentSlide, setCurrentSlide] = useState<{ chapter: number; slide: number } | undefined>(undefined);
@@ -38,6 +40,14 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack }) => {
         
         if (!mounted) return;
         
+        // Load external narration if enabled
+        let narration: NarrationData | null = null;
+        if (config.metadata.useExternalNarration) {
+          narration = await loadNarration(config.metadata.id);
+          if (!mounted) return;
+          setNarrationData(narration);
+        }
+        
         setDemoConfig(config);
         setLoadedSlides(slides);
         setLoading(false);
@@ -55,17 +65,76 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack }) => {
     };
   }, [demoId]);
 
-  // Build slides from loaded demo config
-  const slides = useMemo((): Slide[] => {
+  // Build slides with narration merged from JSON (if enabled)
+  const slidesWithNarration = useMemo((): SlideComponentWithMetadata[] => {
     if (!loadedSlides || loadedSlides.length === 0) return [];
+    if (!demoConfig?.metadata.useExternalNarration) return loadedSlides;
     
-    return loadedSlides.map(slideComponent => ({
+    // Merge external narration into slide metadata
+    return loadedSlides.map(slideComponent => {
+      const fallbackMode = demoConfig.metadata.narrationFallback || 'inline';
+      
+      // Update each segment's narration text
+      const updatedSegments = slideComponent.metadata.audioSegments.map(segment => {
+        const externalNarration = getNarrationText(
+          narrationData,
+          slideComponent.metadata.chapter,
+          slideComponent.metadata.slide,
+          segment.id
+        );
+        
+        // Hybrid fallback: JSON → inline → error/silent
+        if (externalNarration) {
+          // Use external narration from JSON
+          return { ...segment, narrationText: externalNarration };
+        } else if (segment.narrationText) {
+          // Fall back to inline narration
+          if (fallbackMode === 'inline') {
+            console.warn(
+              `[DemoPlayer] Using inline narration for ch${slideComponent.metadata.chapter}:s${slideComponent.metadata.slide}:${segment.id} ` +
+              `(not found in narration.json)`
+            );
+          } else if (fallbackMode === 'error') {
+            console.error(
+              `[DemoPlayer] Missing narration in JSON for ch${slideComponent.metadata.chapter}:s${slideComponent.metadata.slide}:${segment.id}, ` +
+              `falling back to inline`
+            );
+          }
+          // 'silent' mode: no console output
+          return segment;
+        } else {
+          // No narration available at all
+          if (fallbackMode !== 'silent') {
+            console.error(
+              `[DemoPlayer] No narration available for ch${slideComponent.metadata.chapter}:s${slideComponent.metadata.slide}:${segment.id} ` +
+              `(missing in both JSON and inline)`
+            );
+          }
+          return segment;
+        }
+      });
+      
+      // Update the metadata on the component
+      slideComponent.metadata = {
+        ...slideComponent.metadata,
+        audioSegments: updatedSegments
+      };
+      
+      return slideComponent;
+    });
+  }, [loadedSlides, narrationData, demoConfig]);
+  
+  // Build slides for SlidePlayer from slides with narration
+  const slides = useMemo((): Slide[] => {
+    if (!slidesWithNarration || slidesWithNarration.length === 0) return [];
+    
+    return slidesWithNarration.map(slideComponent => ({
       chapter: slideComponent.metadata.chapter,
       slide: slideComponent.metadata.slide,
       title: slideComponent.metadata.title,
       Component: slideComponent
     }));
-  }, [loadedSlides]);
+  }, [slidesWithNarration]);
 
   const handleSlideChange = (chapter: number, slide: number) => {
     setCurrentSlide({ chapter, slide });
@@ -221,17 +290,17 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack }) => {
         </motion.button>
 
         {/* Narrated Controller */}
+        {/* Narrated Controller */}
         <NarratedController
           demoMetadata={demoConfig.metadata}
           demoTiming={demoConfig.timing}
-          slides={loadedSlides}
+          slides={slidesWithNarration}
           onSlideChange={handleSlideChange}
           onPlaybackStart={handlePlaybackStart}
           onPlaybackEnd={handlePlaybackEnd}
           manualSlideChange={manualSlideChange}
           onBack={onBack}
         />
-
         {/* Slide Player */}
         <SlidePlayer
           slides={slides}
