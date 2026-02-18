@@ -252,29 +252,33 @@ While presenting in Manual or Manual+Audio mode, you can regenerate audio for an
 - Keyboard-first navigation design
 
 ### Demo Source Structure
+
+The codebase is split into a reusable **framework** and project-specific **demo content**:
+
+**Framework** (`src/framework/`):
+- [`src/framework/components/SlidePlayer.tsx`](presentation-app/src/framework/components/SlidePlayer.tsx) - Slide navigation & transitions
+- [`src/framework/components/NarratedController.tsx`](presentation-app/src/framework/components/NarratedController.tsx) - Audio-synced presentation controller
+- [`src/framework/components/VideoPlayer.tsx`](presentation-app/src/framework/components/VideoPlayer.tsx) - Demo video player component
+- [`src/framework/components/MetricTile.tsx`](presentation-app/src/framework/components/MetricTile.tsx) - Reusable metric tile component
+- [`src/framework/slides/SlideStyles.ts`](presentation-app/src/framework/slides/SlideStyles.ts) - Shared styling utilities
+- [`src/framework/slides/AnimationVariants.ts`](presentation-app/src/framework/slides/AnimationVariants.ts) - Shared animation definitions
+- [`src/framework/slides/SlideLayouts.tsx`](presentation-app/src/framework/slides/SlideLayouts.tsx) - Reusable layout components
+- [`src/framework/slides/SlideIcons.tsx`](presentation-app/src/framework/slides/SlideIcons.tsx) - Shared icon components
+- [`src/framework/accessibility/ReducedMotion.tsx`](presentation-app/src/framework/accessibility/ReducedMotion.tsx) - Motion preferences context
+- [`src/framework/demos/DemoRegistry.ts`](presentation-app/src/framework/demos/DemoRegistry.ts) - Demo registration and lazy loading
+
+**Demo Content** (`src/demos/`):
+- [`src/demos/registry.ts`](presentation-app/src/demos/registry.ts) - Demo registrations (side-effect import)
+- [`src/demos/meeting-highlights/`](presentation-app/src/demos/meeting-highlights/) - Meeting Highlights demo
+  - `slides/SlidesRegistry.ts` - Slide component registry
+  - `slides/chapters/Chapter{N}.tsx` - Slide definitions by chapter
+
+**App Entry**:
 - [`index.html`](presentation-app/index.html) - Entry point
 - [`src/main.tsx`](presentation-app/src/main.tsx) - React initialization
-- [`src/App.tsx`](presentation-app/src/App.tsx) - Main app with slide registry
-- [`src/components/SlidePlayer.tsx`](presentation-app/src/components/SlidePlayer.tsx) - Slide navigation & transitions
-- **[`src/slides/chapters/`](presentation-app/src/slides/chapters/)** - **Chapter-based slide organization (9 files, 15 slides total)**
-  - [`Chapter0.tsx`](presentation-app/src/slides/chapters/Chapter0.tsx) - Intro slide (1 slide)
-  - [`Chapter1.tsx`](presentation-app/src/slides/chapters/Chapter1.tsx) - What is Meeting Highlights (3 slides)
-  - [`Chapter2.tsx`](presentation-app/src/slides/chapters/Chapter2.tsx) - Team Collaboration (1 slide with 9 segments)
-  - [`Chapter4.tsx`](presentation-app/src/slides/chapters/Chapter4.tsx) - Highlight Types (1 slide)
-  - [`Chapter5.tsx`](presentation-app/src/slides/chapters/Chapter5.tsx) - COGS Challenge (1 slide)
-  - [`Chapter6.tsx`](presentation-app/src/slides/chapters/Chapter6.tsx) - Optimization Solution (2 slides)
-  - [`Chapter7.tsx`](presentation-app/src/slides/chapters/Chapter7.tsx) - Business Impact (3 slides)
-  - [`Chapter8.tsx`](presentation-app/src/slides/chapters/Chapter8.tsx) - User Reception (1 slide)
-  - [`Chapter9.tsx`](presentation-app/src/slides/chapters/Chapter9.tsx) - Testimonials & Thank You (2 slides)
-- [`src/slides/SlidesRegistry.ts`](presentation-app/src/slides/SlidesRegistry.ts) - Central registry importing all chapter slides
-- [`src/slides/SlideStyles.ts`](presentation-app/src/slides/SlideStyles.ts) - Shared styling utilities
-- [`src/slides/AnimationVariants.ts`](presentation-app/src/slides/AnimationVariants.ts) - Shared animation definitions
-- [`src/slides/SlideLayouts.tsx`](presentation-app/src/slides/SlideLayouts.tsx) - Reusable layout components
-- [`src/slides/SlideIcons.tsx`](presentation-app/src/slides/SlideIcons.tsx) - Shared icon components
-- [`src/components/CoreComponents.tsx`](presentation-app/src/components/CoreComponents.tsx) - Reusable UI components (MetricTile, etc.)
-- [`src/accessibility/ReducedMotion.tsx`](presentation-app/src/accessibility/ReducedMotion.tsx) - Motion preferences context
-- [`src/components/VideoPlayer.tsx`](presentation-app/src/components/VideoPlayer.tsx) - Demo video player component
-- [`src/components/NarratedController.tsx`](presentation-app/src/components/NarratedController.tsx) - Audio-synced presentation controller
+- [`src/App.tsx`](presentation-app/src/App.tsx) - Main app with demo selection
+
+**Scripts**:
 - [`scripts/generate-tts.ts`](presentation-app/scripts/generate-tts.ts) - TTS audio generation with smart caching
 - [`scripts/calculate-durations.ts`](presentation-app/scripts/calculate-durations.ts) - Audio duration calculation
 - [`scripts/check-tts-cache.ts`](presentation-app/scripts/check-tts-cache.ts) - Pre-flight cache validation

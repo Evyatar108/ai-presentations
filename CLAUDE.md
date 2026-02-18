@@ -15,6 +15,10 @@ npm run dev          # Start dev server (auto-checks TTS cache + calculates dura
 npm run dev:full     # Start dev server + Express narration API (port 3001) concurrently
 npm run build        # Production build
 npm run lint         # ESLint on src/
+npm run lint:fix     # ESLint auto-fix
+npm run type-check   # TypeScript type checking (tsc --noEmit)
+npm run test         # Run tests (vitest run)
+npm run test:watch   # Run tests in watch mode
 npm run tts:generate -- --demo {id}  # Generate TTS audio for a specific demo (requires Python TTS server running)
 npm run tts:duration -- --demo {id}  # Calculate audio durations for a demo
 npm run check-narration              # Validate narration structure
@@ -90,4 +94,4 @@ Audio naming: `s{slide}_segment_{number}_{id}.wav`
 
 ## Documentation
 
-Detailed docs in `docs/`: ARCHITECTURE.md, ADDING_DEMOS.md, COMPONENTS.md, TIMING_SYSTEM.md, TTS_GUIDE.md, TROUBLESHOOTING.md, FRAMEWORK.md, THEMING.md. Per-demo docs in `docs/demos/{demo-id}/`.
+Detailed docs in `docs/`: ARCHITECTURE.md, ADDING_DEMOS.md, COMPONENTS.md, TIMING_SYSTEM.md, TTS_GUIDE.md, TROUBLESHOOTING.md, FRAMEWORK.md, THEMING.md, NARRATION_SYSTEM_GUIDE.md, NARRATION_API_REFERENCE.md, NARRATION_TROUBLESHOOTING.md. Per-demo docs in `docs/demos/{demo-id}/`.

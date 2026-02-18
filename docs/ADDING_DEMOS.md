@@ -11,7 +11,7 @@ This guide walks through creating a new presentation demo from scratch.
 ```
 
 The script creates all required files and directories with templates. See [`DEMO_DOCUMENTATION_STRUCTURE.md`](DEMO_DOCUMENTATION_STRUCTURE.md) for documentation structure details.
- 
+
 **Manual approach**: Follow the implementation steps below if you need to understand the details or customize the structure.
 
 ## Quick Start Checklist
@@ -40,7 +40,7 @@ mkdir -p src/demos/your-demo-name/slides/chapters
 Create `src/demos/your-demo-name/metadata.ts`:
 
 ```typescript
-import { DemoMetadata } from '../../framework/demos/types';
+import type { DemoMetadata } from '@framework/demos/types';
 
 export const metadata: DemoMetadata = {
   id: 'your-demo-name',
@@ -48,7 +48,6 @@ export const metadata: DemoMetadata = {
   description: 'Brief description of what this demo presents',
   thumbnail: '/images/your-demo-name/thumbnail.jpeg',
   tags: ['category1', 'category2'],
-  duration: 180  // Optional: duration in seconds
 };
 ```
 
@@ -57,7 +56,7 @@ export const metadata: DemoMetadata = {
 Create `src/demos/your-demo-name/index.ts`:
 
 ```typescript
-import { DemoConfig } from '../../framework/demos/types';
+import type { DemoConfig } from '@framework/demos/types';
 import { metadata } from './metadata';
 
 const demoConfig: DemoConfig = {
@@ -79,53 +78,47 @@ export default demoConfig;
 Create `src/demos/your-demo-name/slides/chapters/Chapter0.tsx`:
 
 ```typescript
-import { SlideMetadata } from '../../../../../framework/slides/SlideMetadata';
+import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
+import { SlideContainer } from '@framework/slides/SlideLayouts';
 
-export const Ch0_S1_Welcome: SlideMetadata = {
+export const Ch0_S1_Welcome: SlideComponentWithMetadata = () => (
+  <SlideContainer>
+    <h1 style={{ color: 'white', fontSize: '4rem' }}>
+      Welcome
+    </h1>
+  </SlideContainer>
+);
+
+Ch0_S1_Welcome.metadata = {
   chapter: 0,
   slide: 1,
   title: 'Welcome',
-  segments: [
+  audioSegments: [
     {
-      number: 1,
       id: 'intro',
-      description: 'Welcome message',
-      audioPath: '/audio/your-demo-name/c0/s1_segment_01_intro.wav',
-      narrationText: 'Welcome to our presentation.'
+      audioFilePath: '/audio/your-demo-name/c0/s1_segment_01_intro.wav',
+      narrationText: 'Welcome to our presentation.',
     }
-  ],
-  component: ({ segment }) => (
-    <div style={{
-      width: '100%',
-      height: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-    }}>
-      <h1 style={{ color: 'white', fontSize: '4rem' }}>
-        Welcome
-      </h1>
-    </div>
-  )
+  ]
 };
 ```
+
+Slides are React function components with a `metadata` property attached. Use `segment >= N` conditionals for progressive reveals (the `segment` prop comes from `SegmentContext`).
 
 ### Step 5: Create Slides Registry
 
 Create `src/demos/your-demo-name/slides/SlidesRegistry.ts`:
 
 ```typescript
-import { SlideMetadata } from '../../../../framework/slides/SlideMetadata';
+import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
 import { Ch0_S1_Welcome } from './chapters/Chapter0';
 
-export const allSlides: SlideMetadata[] = [
+export const allSlides: SlideComponentWithMetadata[] = [
   Ch0_S1_Welcome,
   // Add more slides here
 ];
 ```
 
-### Step 6: Register Demo
 ### Step 6: Register Demo
 
 Update `src/demos/registry.ts`:
@@ -135,7 +128,7 @@ import yourDemo from './your-demo-name';
 import { metadata as yourMetadata } from './your-demo-name/metadata';
 
 // Add to registerDemo calls
-registerDemo({
+DemoRegistry.registerDemo({
   id: yourDemo.id,
   metadata: yourMetadata,
   loadConfig: async () => yourDemo
@@ -143,6 +136,7 @@ registerDemo({
 ```
 
 **Note**: Import the demo config using default import (no curly braces) since we're using `export default` in the demo's `index.ts`.
+
 ### Step 7: Add Assets
 
 Create asset directories:
@@ -176,12 +170,13 @@ Generate audio for your demo (see [TTS Guide](TTS_GUIDE.md)):
 npm run tts:generate -- --demo your-demo-name
 ```
 
-### Step 9: Configure Timing (Optional)
+### Step 10: Configure Timing (Optional)
 
-Customize presentation timing delays if defaults aren't suitable:
+Customize presentation timing delays if defaults aren't suitable.
+
 **Add to demo config** (`src/demos/{demo-id}/index.ts`):
 ```typescript
-import { TimingConfig } from '../../framework/demos/timing/types';
+import type { TimingConfig } from '@framework/demos/timing/types';
 
 const timing: TimingConfig = {
   betweenSegments: 500,   // Delay between segments within slides
@@ -196,7 +191,6 @@ const demoConfig: DemoConfig = {
 
 export default demoConfig;
 ```
-```
 
 **Generate duration info**:
 ```bash
@@ -205,9 +199,9 @@ npm run tts:duration -- --demo {demo-id}
 
 Copy the generated `durationInfo` object to your metadata file (`src/demos/{demo-id}/metadata.ts`).
 
-See [`docs/timing-system/EXAMPLES.md`](../presentation-app/docs/timing-system/EXAMPLES.md) for timing patterns.
+See [TIMING_SYSTEM.md](TIMING_SYSTEM.md) for detailed timing patterns and examples.
 
-### Step 10: Test Your Demo
+### Step 11: Test Your Demo
 
 ```bash
 npm run dev
@@ -222,55 +216,58 @@ Navigate to the demo selection screen and select your new demo.
 For slides with progressive reveals, use multiple segments:
 
 ```typescript
-export const Ch1_S1_MultiSegment: SlideMetadata = {
-  chapter: 1,
-  slide: 1,
-  title: 'Multi-segment Example',
-  segments: [
-    {
-      number: 1,
-      id: 'intro',
-      description: 'First part',
-      audioPath: '/audio/your-demo-name/c1/s1_segment_01_intro.wav',
-      narrationText: 'First narration.'
-    },
-    {
-      number: 2,
-      id: 'detail',
-      description: 'Second part',
-      audioPath: '/audio/your-demo-name/c1/s1_segment_02_detail.wav',
-      narrationText: 'Second narration.'
-    }
-  ],
-  component: ({ segment }) => (
+import { useSegmentContext } from '@framework/contexts/SegmentContext';
+import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
+
+export const Ch1_S1_MultiSegment: SlideComponentWithMetadata = () => {
+  const { segment } = useSegmentContext();
+
+  return (
     <div>
       {segment >= 0 && <h1>First Part</h1>}
       {segment >= 1 && <p>Second Part</p>}
     </div>
-  )
+  );
+};
+
+Ch1_S1_MultiSegment.metadata = {
+  chapter: 1,
+  slide: 1,
+  title: 'Multi-segment Example',
+  audioSegments: [
+    {
+      id: 'intro',
+      audioFilePath: '/audio/your-demo-name/c1/s1_segment_01_intro.wav',
+      narrationText: 'First narration.',
+    },
+    {
+      id: 'detail',
+      audioFilePath: '/audio/your-demo-name/c1/s1_segment_02_detail.wav',
+      narrationText: 'Second narration.',
+    }
+  ]
 };
 ```
 
 ### Using Video Player
 
 ```typescript
-import { VideoPlayer } from '../../../../../framework/components/VideoPlayer';
+import { VideoPlayer } from '@framework/components/VideoPlayer';
 
-component: ({ segment }) => (
-  <VideoPlayer
-    videoPath="/videos/your-demo-name/demo.mp4"
-    playing={segment > 0}
-  />
-)
+// Inside a slide component:
+<VideoPlayer
+  videoPath="/videos/your-demo-name/demo.mp4"
+  playing={segment > 0}
+/>
 ```
 
 ### Shared Utilities
 
-Use shared components and utilities from `src/framework/slides/`:
+Use shared components and utilities from `src/framework/slides/` (also available via `@framework` alias):
 - `SlideStyles.ts` - Common styling patterns
 - `AnimationVariants.ts` - Framer Motion configs
-- `SlideLayouts.tsx` - Layout components
-- `SlideIcons.tsx` - Icon components
+- `SlideLayouts.tsx` - Layout components (SlideContainer, ContentCard, etc.)
+- `SlideIcons.tsx` - Icon components (ArrowDown, ArrowRight, etc.)
 
 ## Related Documentation
 
@@ -278,3 +275,4 @@ Use shared components and utilities from `src/framework/slides/`:
 - **[TTS Guide](TTS_GUIDE.md)** - Audio generation system
 - **[Architecture](ARCHITECTURE.md)** - Overall project architecture
 - **[Components](COMPONENTS.md)** - Shared component documentation
+- **[Timing System](TIMING_SYSTEM.md)** - Timing configuration details

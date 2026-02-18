@@ -126,7 +126,6 @@ Ch6_S1_UnifiedConvergence.metadata = {
  */
 export const Ch6_S4_TokenOptimization: SlideComponentWithMetadata = () => {
   const { reduced } = useReducedMotion();
-  const theme = useTheme();
 
   return (
     <SlideContainer maxWidth={800}>

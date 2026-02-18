@@ -34,6 +34,7 @@ export { hasAudioSegments, getTotalDuration } from './slides/SlideMetadata';
 export { SlideContainer, ContentCard, GradientHighlightBox, SlideTitle, MetricDisplay, TestimonialCard, BenefitCard, ImprovementCard } from './slides/SlideLayouts';
 export * from './slides/SlideStyles';
 export * from './slides/AnimationVariants';
+export { ArrowDown, ArrowRight, ArrowRightLarge, ArrowRightXL, ArrowDownSmall, Checkmark, ConvergingLines, EmojiIcons } from './slides/SlideIcons';
 
 // Demos
 export { DemoRegistry } from './demos/DemoRegistry';
