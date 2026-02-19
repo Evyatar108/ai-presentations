@@ -30,11 +30,11 @@ Scaffold a new demo: `.\scripts\new-demo.ps1 -DemoId "my-demo" [-DemoTitle "My D
 
 ### Framework / Demo Separation
 - `src/framework/` — Reusable presentation engine (components, theme, utilities, registry logic). Copy this to start a new project.
-- `src/demos/` — Project-specific demo content and registration.
+- `src/demos/` — Project-specific demo content (auto-discovered).
 - `src/project.config.ts` — Project-level theme and config overrides.
 
 ### Demo Registry Pattern
-Registry logic lives in `src/framework/demos/DemoRegistry.ts`. Demo registrations are in `src/demos/registry.ts` (imported as a side-effect in `main.tsx`). Each demo lazy-loads its config via `DemoRegistry.loadDemoConfig(id)`. Demo configs use `export default`.
+Registry logic lives in `src/framework/demos/DemoRegistry.ts`. Demos are auto-discovered via `import.meta.glob` in `src/demos/registry.ts` (imported as a side-effect in `main.tsx`). Any folder in `src/demos/` with `metadata.ts` and `index.ts` is automatically registered — no manual editing of `registry.ts` needed. Demo configs use `export default`.
 
 ### Demo Structure
 Each demo lives in `src/demos/{demo-id}/` with:
@@ -56,7 +56,7 @@ Timing (betweenSegments, betweenSlides, afterFinalSlide) can be set at demo, sli
 Two modes: **inline** (narration text in slide components) or **external** (JSON in `public/narration/{demo-id}/narration.json`). External mode enabled via `useExternalNarration: true` in metadata with fallback options: `'inline'`, `'error'`, `'silent'`.
 
 ### Playback
-`NarratedController.tsx` orchestrates audio playback, segment sequencing, and slide advancement. Missing audio falls back to configurable silence path (default: `public/audio/silence-1s.mp3`).
+`NarratedController.tsx` orchestrates audio playback, segment sequencing, and slide advancement. Missing audio falls back to configurable silence path (default: `public/audio/silence-1s.wav`).
 
 ### Assets
 Isolated per demo: `public/audio/{demo-id}/c{chapter}/`, `public/images/{demo-id}/`, `public/videos/{demo-id}/`.
@@ -68,7 +68,7 @@ Audio naming: `s{slide}_segment_{number}_{id}.wav`
 | File | Role |
 |------|------|
 | `src/framework/demos/DemoRegistry.ts` | Registry logic (generic) |
-| `src/demos/registry.ts` | Demo registrations (project-specific) |
+| `src/demos/registry.ts` | Auto-discovery registration via import.meta.glob |
 | `src/framework/demos/types.ts` | DemoMetadata, DemoConfig interfaces |
 | `src/framework/slides/SlideMetadata.ts` | Slide/segment type definitions |
 | `src/framework/components/NarratedController.tsx` | Audio playback orchestration |

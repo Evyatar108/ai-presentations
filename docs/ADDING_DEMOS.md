@@ -21,8 +21,7 @@ The script creates all required files and directories with templates. See [`DEMO
 - [ ] Add context materials to `docs/demos/{demo-id}/context/`
 - [ ] Implement slides in `src/demos/{demo-id}/slides/chapters/`
 - [ ] Add assets to `public/{audio|images|videos}/{demo-id}/`
-- [ ] Register demo in `src/demos/registry.ts`
-- [ ] Generate TTS audio
+- [ ] Generate TTS audio (registration is automatic)
 - [ ] Test the demo
 
 ## Manual Implementation Steps
@@ -119,23 +118,9 @@ export const allSlides: SlideComponentWithMetadata[] = [
 ];
 ```
 
-### Step 6: Register Demo
+### Step 6: Registration (Automatic)
 
-Update `src/demos/registry.ts`:
-
-```typescript
-import yourDemo from './your-demo-name';
-import { metadata as yourMetadata } from './your-demo-name/metadata';
-
-// Add to registerDemo calls
-DemoRegistry.registerDemo({
-  id: yourDemo.id,
-  metadata: yourMetadata,
-  loadConfig: async () => yourDemo
-});
-```
-
-**Note**: Import the demo config using default import (no curly braces) since we're using `export default` in the demo's `index.ts`.
+No manual registration needed. The `src/demos/registry.ts` file uses Vite's `import.meta.glob` to auto-discover all demos. Any folder in `src/demos/` with a `metadata.ts` (exporting `const metadata: DemoMetadata`) and `index.ts` (with `export default demoConfig`) is automatically registered at startup.
 
 ### Step 7: Add Assets
 

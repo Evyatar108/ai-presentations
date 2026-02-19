@@ -44,7 +44,7 @@ src/
 │   └── accessibility/
 │       └── ReducedMotion.tsx      ← Reduced motion preference
 ├── demos/                         ← Project-specific content
-│   ├── registry.ts                ← All demo registrations
+│   ├── registry.ts                ← Auto-discovery registration (import.meta.glob)
 │   ├── meeting-highlights/
 │   ├── example-demo-1/
 │   └── example-demo-2/
@@ -57,7 +57,7 @@ src/
 
 1. Copy `src/framework/` into your new project's `src/` directory
 2. Create `src/project.config.ts` for theme/config overrides
-3. Create `src/demos/registry.ts` and register your demos
+3. Copy `src/demos/registry.ts` (auto-discovers demos via `import.meta.glob`)
 4. In `main.tsx`, import the registry and wrap your app with `ThemeProvider` and `WithReducedMotionProvider`
 
 ## Framework Configuration
@@ -91,19 +91,7 @@ const url = getConfig().narrationApiBaseUrl;
 
 ## How Demos Connect to the Framework
 
-Demos register themselves via `src/demos/registry.ts`:
-
-```typescript
-import { DemoRegistry } from '../framework/demos/DemoRegistry';
-import myDemo from './my-demo';
-import { metadata } from './my-demo/metadata';
-
-DemoRegistry.registerDemo({
-  id: myDemo.id,
-  metadata,
-  loadConfig: async () => myDemo,
-});
-```
+Demos are auto-discovered by `src/demos/registry.ts` using Vite's `import.meta.glob`. Any folder in `src/demos/` with `metadata.ts` (exporting `const metadata: DemoMetadata`) and `index.ts` (with `export default demoConfig`) is automatically registered. No manual editing of `registry.ts` is needed.
 
 This file is imported as a side-effect in `main.tsx` to ensure all demos are registered at startup.
 

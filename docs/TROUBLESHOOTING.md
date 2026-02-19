@@ -69,8 +69,8 @@
 **Symptoms**: Demo doesn't show up in selection screen
 
 **Checklist**:
-1. Verify demo is registered in `src/demos/registry.ts`
-2. Check `metadata.ts` has correct `id` field
+1. Verify demo folder has both `metadata.ts` and `index.ts` (auto-discovered by `registry.ts`)
+2. Check `metadata.ts` exports `const metadata` with a valid `id` field
 3. Ensure `slides/SlidesRegistry.ts` exports `allSlides`
 4. Verify thumbnail image exists at specified path
 5. Check browser console for import errors

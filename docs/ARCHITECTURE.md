@@ -38,15 +38,7 @@ const ids = DemoRegistry.getDemoIds();
 
 ### Registration
 
-Demos are registered in `src/demos/registry.ts`:
-
-```typescript
-registerDemo({
-  id: 'meeting-highlights',
-  metadata: meetingHighlightsMetadata,
-  loadConfig: async () => meetingHighlightsDemo
-});
-```
+Demos are auto-discovered by `src/demos/registry.ts` using Vite's `import.meta.glob`. Any folder in `src/demos/` with `metadata.ts` and `index.ts` is automatically registered — no manual editing needed.
 
 ## Asset Organization
 
