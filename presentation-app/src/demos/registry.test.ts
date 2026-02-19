@@ -41,12 +41,14 @@ describe('Auto-discovery demo registration', () => {
     for (const id of EXPECTED_DEMO_IDS) {
       const config = await DemoRegistry.loadDemoConfig(id);
       expect(config).toBeDefined();
-      expect(config.id).toBe(id);
+      expect(config.metadata.id).toBe(id);
       expect(typeof config.getSlides).toBe('function');
     }
   });
 
   it('has no duplicate IDs', () => {
-    expect(() => DemoRegistry.ensureUniqueIds()).not.toThrow();
+    const ids = DemoRegistry.getDemoIds();
+    const uniqueIds = new Set(ids);
+    expect(ids.length).toBe(uniqueIds.size);
   });
 });

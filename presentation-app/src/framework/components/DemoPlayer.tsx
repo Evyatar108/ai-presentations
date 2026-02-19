@@ -9,7 +9,7 @@ import { SegmentProvider } from '../contexts/SegmentContext';
 import { loadNarration, getNarrationText, type NarrationData } from '../utils/narrationLoader';
 import { useTheme } from '../theme/ThemeContext';
 
-interface DemoPlayerProps {
+export interface DemoPlayerProps {
   demoId: string;
   onBack: () => void;
 }
@@ -116,13 +116,18 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack }) => {
         }
       });
       
-      // Update the metadata on the component
-      slideComponent.metadata = {
-        ...slideComponent.metadata,
-        audioSegments: updatedSegments
-      };
-      
-      return slideComponent;
+      // Create a new component wrapper with updated metadata (avoids mutating the original)
+      const updatedComponent: SlideComponentWithMetadata = Object.assign(
+        (props: Record<string, never>) => slideComponent(props),
+        {
+          metadata: {
+            ...slideComponent.metadata,
+            audioSegments: updatedSegments
+          }
+        }
+      );
+
+      return updatedComponent;
     });
   }, [loadedSlides, narrationData, demoConfig]);
   
@@ -301,7 +306,6 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack }) => {
           onPlaybackStart={handlePlaybackStart}
           onPlaybackEnd={handlePlaybackEnd}
           manualSlideChange={manualSlideChange}
-          onBack={onBack}
         />
         {/* Slide Player */}
         <SlidePlayer

@@ -246,14 +246,24 @@ interface DemoMetadata {
 }
 
 interface DemoConfig {
-  id: string;
   metadata: DemoMetadata;
-  defaultMode: PresentationMode;
-  getSlides: () => Promise<SlideMetadata[]>;
+  defaultMode?: DemoDefaultMode;
+  getSlides: () => Promise<SlideComponentWithMetadata[]>;
+  timing?: TimingConfig;
 }
 
-type PresentationMode = 'narrated' | 'manual' | 'manual-audio';
+type DemoDefaultMode = 'narrated' | 'manual' | 'manual-audio';
 ```
+
+## Exported Props Interfaces
+
+The framework barrel (`@framework`) exports all component props interfaces for external use:
+
+- **`DemoPlayerProps`** — `{ demoId, onBack }`
+- **`SlidePlayerProps`** — `{ slides, slidesWithMetadata?, autoAdvance?, ... }`
+- **`NarratedControllerProps`** — `{ demoMetadata, slides, onSlideChange, ... }`
+- **`SlideContainerProps`**, **`ContentCardProps`**, **`HighlightBoxProps`**, **`SlideTitleProps`**
+- **`MetricDisplayProps`**, **`TestimonialCardProps`**, **`BenefitCardProps`**, **`ImprovementCardProps`**
 
 ## Usage Examples
 

@@ -2,7 +2,6 @@ import { DemoConfig } from '@framework/demos/types';
 import { metadata } from './metadata';
 
 const demoConfig: DemoConfig = {
-  id: 'example-demo-1',
   metadata,
   defaultMode: 'narrated',
   getSlides: async () => {

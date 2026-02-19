@@ -16,10 +16,12 @@ export type { FrameworkConfig } from './config';
 
 // Components
 export { DemoPlayer } from './components/DemoPlayer';
+export type { DemoPlayerProps } from './components/DemoPlayer';
 export { WelcomeScreen } from './components/WelcomeScreen';
 export { NarratedController } from './components/NarratedController';
+export type { NarratedControllerProps } from './components/NarratedController';
 export { SlidePlayer } from './components/SlidePlayer';
-export type { Slide } from './components/SlidePlayer';
+export type { Slide, SlidePlayerProps } from './components/SlidePlayer';
 export { VideoPlayer } from './components/VideoPlayer';
 export { NarrationEditModal } from './components/NarrationEditModal';
 export { MetricTile } from './components/MetricTile';
@@ -32,15 +34,60 @@ export { SegmentProvider, useSegmentContext, useSegmentedAnimation } from './con
 export type { SlideMetadata, SlideComponentWithMetadata, AudioSegment } from './slides/SlideMetadata';
 export { hasAudioSegments, getTotalDuration } from './slides/SlideMetadata';
 export { SlideContainer, ContentCard, GradientHighlightBox, SlideTitle, MetricDisplay, TestimonialCard, BenefitCard, ImprovementCard } from './slides/SlideLayouts';
-export * from './slides/SlideStyles';
-export * from './slides/AnimationVariants';
+export type {
+  SlideContainerProps,
+  ContentCardProps,
+  HighlightBoxProps,
+  SlideTitleProps,
+  MetricDisplayProps,
+  TestimonialCardProps,
+  BenefitCardProps,
+  ImprovementCardProps
+} from './slides/SlideLayouts';
+export {
+  slideContainer,
+  contentBox,
+  gradientBox,
+  successGradientBox,
+  highlightBorder,
+  highlightOverlayBox,
+  warningBox,
+  circularBadge,
+  typography,
+  layouts,
+  createSlideContainer,
+  createContentBox,
+  createGradientBox,
+  createTypography
+} from './slides/SlideStyles';
+export {
+  fadeIn,
+  fadeUp,
+  fadeDown,
+  fadeLeft,
+  fadeRight,
+  scaleIn,
+  scaleInSpring,
+  staggerContainer,
+  tileVariants,
+  arrowVariants,
+  targetVariants,
+  promptVariants,
+  pulseGlow,
+  emphasisPulse,
+  rotateFromTo,
+  expandWidth,
+  expandHeight
+} from './slides/AnimationVariants';
 export { ArrowDown, ArrowRight, ArrowRightLarge, ArrowRightXL, ArrowDownSmall, Checkmark, ConvergingLines, EmojiIcons } from './slides/SlideIcons';
 
 // Demos
 export { DemoRegistry } from './demos/DemoRegistry';
-export type { DemoMetadata, DemoConfig, DemoRegistryEntry } from './demos/types';
+export type { DemoMetadata, DemoConfig, DemoRegistryEntry, DurationInfo, NarrationFallback, DemoDefaultMode } from './demos/types';
 export { resolveTimingConfig, DEFAULT_TIMING } from './demos/timing/types';
 export type { TimingConfig, ResolvedTimingConfig } from './demos/timing/types';
+export { calculateSlideDuration, calculatePresentationDuration } from './demos/timing/calculator';
+export type { SlideDurationBreakdown, PresentationDurationReport, SegmentDurationInfo } from './demos/timing/calculator';
 
 // Utils
 export { loadNarration, getNarrationText } from './utils/narrationLoader';

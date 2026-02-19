@@ -59,7 +59,6 @@ import type { DemoConfig } from '@framework/demos/types';
 import { metadata } from './metadata';
 
 const demoConfig: DemoConfig = {
-  id: 'your-demo-name',
   metadata,
   getSlides: async () => {
     const { allSlides } = await import('./slides/SlidesRegistry');
@@ -70,7 +69,7 @@ const demoConfig: DemoConfig = {
 export default demoConfig;
 ```
 
-**Note**: Always use `export default` for demo configurations to maintain consistency across all demos. The script tools (TTS generation, duration calculation) expect default exports.
+**Note**: Always use `export default` for demo configurations to maintain consistency across all demos. The script tools (TTS generation, duration calculation) expect default exports. The `DemoConfig` interface no longer has an `id` field — the demo ID comes from `metadata.id` only, avoiding duplication and potential mismatch.
 
 ### Step 4: Create Slide Chapters
 
@@ -182,9 +181,35 @@ export default demoConfig;
 npm run tts:duration -- --demo {demo-id}
 ```
 
-Copy the generated `durationInfo` object to your metadata file (`src/demos/{demo-id}/metadata.ts`).
+Copy the generated `durationInfo` object to your metadata file (`src/demos/{demo-id}/metadata.ts`). The `DurationInfo` interface is exported from the framework:
+
+```typescript
+import type { DemoMetadata, DurationInfo } from '@framework/demos/types';
+
+const durationInfo: DurationInfo = {
+  audioOnly: 120.5,
+  segmentDelays: 8.0,
+  slideDelays: 10.0,
+  finalDelay: 2.0,
+  total: 140.5,
+};
+
+export const metadata: DemoMetadata = {
+  id: 'your-demo-name',
+  // ...
+  durationInfo,
+};
+```
 
 See [TIMING_SYSTEM.md](TIMING_SYSTEM.md) for detailed timing patterns and examples.
+
+### Registry Validation
+
+The registry performs development-time validation when demos are registered:
+- **Duplicate IDs**: Warns and skips if a demo with the same ID is already registered
+- **ID consistency**: Warns if `entry.id` and `metadata.id` don't match
+- **Missing title**: Warns if `metadata.title` is empty
+- **Invalid loadConfig**: Rejects entries where `loadConfig` is not a function
 
 ### Step 11: Test Your Demo
 

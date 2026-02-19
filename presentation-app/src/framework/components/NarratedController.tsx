@@ -42,7 +42,7 @@ const loadAudioWithFallback = async (primaryPath: string, segmentId: string): Pr
   });
 };
 
-interface NarratedControllerProps {
+export interface NarratedControllerProps {
   demoMetadata: DemoMetadata;
   demoTiming?: TimingConfig;
   slides: SlideComponentWithMetadata[];
@@ -50,7 +50,6 @@ interface NarratedControllerProps {
   onPlaybackStart?: () => void;
   onPlaybackEnd?: () => void;
   manualSlideChange?: { chapter: number; slide: number } | null;
-  onBack?: () => void;
 }
 
 export const NarratedController: React.FC<NarratedControllerProps> = ({
@@ -60,8 +59,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
   onSlideChange,
   onPlaybackStart,
   onPlaybackEnd,
-  manualSlideChange,
-  onBack: _onBack
+  manualSlideChange
 }) => {
   const theme = useTheme();
   // Use provided slides or empty array if not loaded yet
@@ -692,9 +690,9 @@ const regenerateSegmentAudio = async (
     setIsRegeneratingAudio(false);
     return true;
     
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('[TTS] Regeneration error:', error);
-    const errorMessage = error.message || 'Failed to regenerate audio';
+    const errorMessage = error instanceof Error ? error.message : 'Failed to regenerate audio';
     setRegenerationError(errorMessage);
     setIsRegeneratingAudio(false);
     return false;

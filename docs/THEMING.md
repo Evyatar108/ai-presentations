@@ -72,6 +72,8 @@ const styles = createSlideContainer(theme);
 
 Demo slides can continue using static exports without modification. Framework components use the `create*` functions with `useTheme()` for full theme support.
 
+Note: The `SlideContainer` layout component is now theme-aware — it calls `useTheme()` internally and uses `createSlideContainer(theme)` instead of the static `slideContainer` export. Demo slides using `<SlideContainer>` automatically benefit from custom themes without code changes.
+
 ## Default Theme Values
 
 | Token | Default Value | Usage |

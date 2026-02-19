@@ -1,12 +1,15 @@
 /**
  * Demo Registry - Manages registration and lazy loading of demo presentations.
  * Provides centralized access to demo metadata and configurations.
+ *
+ * Internally uses a Map<string, DemoRegistryEntry> for O(1) lookups
+ * and structural duplicate prevention.
  */
 
 import type { DemoMetadata, DemoConfig, DemoRegistryEntry } from './types';
 
-// Internal registry storage
-const registry: DemoRegistryEntry[] = [];
+// Internal registry storage (Map prevents duplicate keys structurally)
+const registry = new Map<string, DemoRegistryEntry>();
 
 /**
  * Register a demo in the registry.
@@ -15,19 +18,39 @@ const registry: DemoRegistryEntry[] = [];
  * @param entry - Demo registry entry to register
  */
 function registerDemo(entry: DemoRegistryEntry): void {
-  const exists = registry.some(existing => existing.id === entry.id);
-  if (!exists) {
-    registry.push(entry);
+  // Validate loadConfig is a function
+  if (typeof entry.loadConfig !== 'function') {
+    console.error(`[DemoRegistry] Cannot register "${entry.id}": loadConfig is not a function`);
+    return;
   }
+
+  // Warn if metadata.title is missing
+  if (!entry.metadata?.title) {
+    console.warn(`[DemoRegistry] Demo "${entry.id}" is missing metadata.title`);
+  }
+
+  // Warn if entry.id and metadata.id are inconsistent
+  if (entry.metadata?.id && entry.id !== entry.metadata.id) {
+    console.warn(
+      `[DemoRegistry] ID mismatch for "${entry.id}": entry.id="${entry.id}" vs metadata.id="${entry.metadata.id}"`
+    );
+  }
+
+  if (registry.has(entry.id)) {
+    console.warn(`[DemoRegistry] Skipping duplicate registration for "${entry.id}"`);
+    return;
+  }
+  registry.set(entry.id, entry);
 }
 
 /**
  * Get metadata for all registered demos.
+ * Returns shallow copies to prevent consumer mutation.
  *
  * @returns Array of demo metadata objects
  */
 function getAllMetadata(): DemoMetadata[] {
-  return registry.map(entry => entry.metadata);
+  return Array.from(registry.values()).map(entry => ({ ...entry.metadata }));
 }
 
 /**
@@ -36,18 +59,19 @@ function getAllMetadata(): DemoMetadata[] {
  * @returns Array of demo IDs
  */
 function getDemoIds(): string[] {
-  return registry.map(entry => entry.id);
+  return Array.from(registry.keys());
 }
 
 /**
  * Get metadata for a specific demo by ID.
+ * Returns a shallow copy to prevent consumer mutation.
  *
  * @param id - Demo identifier
  * @returns Demo metadata or undefined if not found
  */
 function getMetadataById(id: string): DemoMetadata | undefined {
-  const entry = registry.find(e => e.id === id);
-  return entry?.metadata;
+  const entry = registry.get(id);
+  return entry ? { ...entry.metadata } : undefined;
 }
 
 /**
@@ -58,7 +82,7 @@ function getMetadataById(id: string): DemoMetadata | undefined {
  * @throws Error if demo not found
  */
 async function loadDemoConfig(id: string): Promise<DemoConfig> {
-  const entry = registry.find(e => e.id === id);
+  const entry = registry.get(id);
   if (!entry) {
     throw new Error(`Demo not found: ${id}`);
   }
@@ -66,18 +90,10 @@ async function loadDemoConfig(id: string): Promise<DemoConfig> {
 }
 
 /**
- * Validate that all registered demo IDs are unique.
- * Useful for development-time checks.
- *
- * @throws Error if duplicate IDs are found
+ * Reset registry state. Only intended for test isolation.
  */
-function ensureUniqueIds(): void {
-  const ids = registry.map(e => e.id);
-  const duplicates = ids.filter((id, index) => ids.indexOf(id) !== index);
-
-  if (duplicates.length > 0) {
-    throw new Error(`Duplicate demo IDs detected: ${duplicates.join(', ')}`);
-  }
+function _resetForTesting(): void {
+  registry.clear();
 }
 
 /**
@@ -89,5 +105,5 @@ export const DemoRegistry = {
   getDemoIds,
   getMetadataById,
   loadDemoConfig,
-  ensureUniqueIds,
+  _resetForTesting,
 };

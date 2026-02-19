@@ -37,6 +37,8 @@ src/
 │   │   └── timing/
 │   │       ├── types.ts           ← TimingConfig & resolver
 │   │       └── calculator.ts      ← Duration calculation
+│   ├── hooks/
+│   │   └── useTtsRegeneration.ts ← TTS audio regeneration hook
 │   ├── utils/
 │   │   ├── narrationLoader.ts     ← External narration JSON loader
 │   │   ├── narrationApiClient.ts  ← Backend API client (uses config)
@@ -104,6 +106,25 @@ This file is imported as a side-effect in `main.tsx` to ensure all demos are reg
 | `NarratedController` | Manages audio playback, segment sequencing, timing |
 | `SlidePlayer` | Handles slide navigation, keyboard controls, segment dots |
 | `MetricTile` | Reusable metric display (before/after values) |
+
+## Barrel Exports (`index.ts`)
+
+The framework barrel uses explicit named exports (no wildcard `export *`) for SlideStyles and AnimationVariants. This ensures consumers see exactly what's available and prevents accidental leaking of internal symbols.
+
+Additional exports available from the barrel:
+- **Types**: `DurationInfo`, `NarrationFallback`, `DemoDefaultMode`, `SlideDurationBreakdown`, `PresentationDurationReport`, `SegmentDurationInfo`
+- **Component props**: `DemoPlayerProps`, `SlidePlayerProps`, `NarratedControllerProps`, plus all layout props (`SlideContainerProps`, `ContentCardProps`, etc.)
+- **Calculator functions**: `calculateSlideDuration`, `calculatePresentationDuration`
+
+## Registry Validation
+
+The `DemoRegistry` uses a `Map<string, DemoRegistryEntry>` internally for O(1) lookups and structural duplicate prevention. Development-time validation includes:
+- Duplicate ID detection (warn and skip)
+- `entry.id` vs `metadata.id` consistency check
+- Missing `metadata.title` warning
+- Invalid `loadConfig` rejection
+
+Use `DemoRegistry._resetForTesting()` for test isolation.
 
 ## See Also
 

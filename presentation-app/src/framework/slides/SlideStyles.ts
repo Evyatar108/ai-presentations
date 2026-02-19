@@ -1,9 +1,16 @@
 /**
  * Shared Style Objects for Slide Components
- * Extracted from AnimatedSlides.tsx to reduce duplication
  *
- * Static exports: backward-compatible, used by existing demo slides.
- * Theme-aware factory functions (create*): used by framework components via useTheme().
+ * This module provides two APIs:
+ *
+ * **Static exports** (`slideContainer`, `contentBox`, `typography`, etc.)
+ *   Hardcoded default-theme values. Use these in demo slide components where
+ *   the default theme is always correct and `useTheme()` is not needed.
+ *
+ * **Theme-aware factory functions** (`createSlideContainer(theme)`, `createContentBox(theme)`, etc.)
+ *   Accept a `PresentationTheme` and return styles derived from theme tokens.
+ *   Use these in framework components that call `useTheme()`, so that custom themes
+ *   are respected at runtime.
  */
 
 import { CSSProperties } from 'react';
@@ -183,7 +190,7 @@ export function createTypography(theme: PresentationTheme) {
   return {
     h1: { ...typography.h1, color: theme.colors.textPrimary },
     h2: { ...typography.h2, color: theme.colors.textPrimary },
-    body: { ...typography.body, color: '#e2e8f0' },
+    body: { ...typography.body, color: theme.colors.textPrimary },
     caption: { ...typography.caption, color: theme.colors.textSecondary },
     emphasized: { ...typography.emphasized, color: theme.colors.primary },
   };

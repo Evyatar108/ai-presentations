@@ -4,13 +4,20 @@ import { TimingConfig } from '../demos/timing/types';
  * Represents a single audio segment within a multi-segment slide
  */
 export interface AudioSegment {
-  id: string;                    // Unique identifier (e.g., "intro", "team_odsp")
-  audioFilePath: string;         // Path to audio file for this segment
-  duration?: number;             // Optional pre-computed duration (for scrubbing)
-  animationTrigger?: string;     // Animation key to trigger when this segment starts
-  srtSegmentNumber?: number;     // Reference to segment number in SRT file (e.g., 1 for "1 - Intro")
-  visualDescription?: string;    // Description of what appears visually (from SRT file)
-  narrationText?: string;        // Actual narration text to be spoken (for TTS generation)
+  /** Unique identifier (e.g., "intro", "team_odsp") */
+  id: string;
+  /** Path to audio file for this segment */
+  audioFilePath: string;
+  /** Optional pre-computed duration in seconds (for scrubbing) */
+  duration?: number;
+  /** Animation key to trigger when this segment starts */
+  animationTrigger?: string;
+  /** Reference to segment number in SRT file (e.g., 1 for "1 - Intro") */
+  srtSegmentNumber?: number;
+  /** Description of what appears visually (from SRT file) */
+  visualDescription?: string;
+  /** Actual narration text to be spoken (for TTS generation) */
+  narrationText?: string;
   
   /**
    * Optional timing configuration for this specific segment.
@@ -26,15 +33,18 @@ export interface AudioSegment {
  * Metadata interface that all narrated slide components must implement
  */
 export interface SlideMetadata {
+  /** Chapter number */
   chapter: number;
+  /** Slide number within the chapter */
   slide: number;
+  /** Display title for the slide */
   title: string;
-  
-  // Reference to slide definition SRT file
-  srtFilePath?: string;              // Path to slide's SRT file (e.g., "highlights_demo/chapters/c2/s1_team_collaboration.srt")
-  
-  // Multi-segment audio support (all slides use segments)
-  audioSegments: AudioSegment[];     // Array of audio segments for this slide
+
+  /** Path to slide's SRT file (e.g., "highlights_demo/chapters/c2/s1_team_collaboration.srt") */
+  srtFilePath?: string;
+
+  /** Array of audio segments for this slide */
+  audioSegments: AudioSegment[];
   
   /**
    * Optional timing configuration for this slide.

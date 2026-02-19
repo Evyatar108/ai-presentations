@@ -37,7 +37,8 @@ npm run tts:duration -- -v                    # Verbose mode
 
 **Estimated Durations** (calculated by script):
 - Stored in: `src/demos/*/metadata.ts` files
-- Format: `durationInfo: { audioOnly, segmentDelays, slideDelays, finalDelay, total, slideBreakdown }`
+- Type: `DurationInfo` (exported from `@framework/demos/types`)
+- Format: `durationInfo: { audioOnly, segmentDelays, slideDelays, finalDelay, total, slideBreakdown? }`
 - Updated automatically on `npm run dev`
 
 **Actual Runtime** (measured during playback):

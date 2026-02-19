@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSegmentContext } from '../contexts/SegmentContext';
 import type { SlideComponentWithMetadata } from '../slides/SlideMetadata';
-import * as ttsClient from '../utils/ttsClient';
+import { useTtsRegeneration } from '../hooks/useTtsRegeneration';
 import { useTheme } from '../theme/ThemeContext';
 
 export interface Slide {
@@ -12,7 +12,7 @@ export interface Slide {
   Component: React.FC;
 }
 
-interface SlidePlayerProps {
+export interface SlidePlayerProps {
   slides: Slide[];
   slidesWithMetadata?: SlideComponentWithMetadata[];
   autoAdvance?: boolean;
@@ -35,13 +35,6 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
 
-  // TTS regeneration states
-  const [regeneratingSegment, setRegeneratingSegment] = useState(false);
-  const [regenerationStatus, setRegenerationStatus] = useState<{
-    type: 'success' | 'error';
-    message: string;
-  } | null>(null);
-  
   // Get segment context for segment navigation (needs to be declared early for use in callbacks)
   const segmentContext = useSegmentContext();
 
@@ -180,94 +173,12 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
     segmentContext.previousSegment();
   }, [disableManualNav, hasMultipleSegments, segmentContext]);
   
-  // Regenerate audio for current segment (with pauses by default)
-  const handleRegenerateSegment = useCallback(async (addPauses: boolean = true) => {
-    const segment = currentSlideMetadata?.audioSegments[segmentContext.currentSegmentIndex];
-    
-    if (!segment?.narrationText || !currentSlideMetadata) {
-      setRegenerationStatus({
-        type: 'error',
-        message: 'No narration text available'
-      });
-      setTimeout(() => setRegenerationStatus(null), 5000);
-      return;
-    }
-    
-    setRegeneratingSegment(true);
-    setRegenerationStatus(null);
-    
-    try {
-      console.log('[SlidePlayer] Starting regeneration for:', segment.id);
-      console.log('[SlidePlayer] Add pauses:', addPauses);
-      
-      const result = await ttsClient.regenerateSegment({
-        chapter: currentSlideMetadata.chapter,
-        slide: currentSlideMetadata.slide,
-        segmentIndex: segmentContext.currentSegmentIndex,
-        segmentId: segment.id,
-        narrationText: segment.narrationText,
-        addPauses
-      });
-      
-      if (result.success) {
-        console.log('[SlidePlayer] Regeneration successful:', result.filePath);
-        
-        setRegenerationStatus({
-          type: 'success',
-          message: `✓ Regenerated ${segment.id}`
-        });
-        
-        // Update audio path with cache-busting timestamp
-        const basePath = segment.audioFilePath.split('?')[0]; // Remove any existing query params
-        const newAudioPath = `${basePath}?t=${result.timestamp}`;
-        segment.audioFilePath = newAudioPath;
-        
-        // Play the newly generated audio immediately
-        console.log('[SlidePlayer] Playing regenerated audio:', newAudioPath);
-        const audio = new Audio(newAudioPath);
-        audio.onended = () => {
-          console.log('[SlidePlayer] Regenerated audio playback completed');
-        };
-        audio.onerror = (e) => {
-          console.error('[SlidePlayer] Failed to play regenerated audio:', e);
-          setRegenerationStatus({
-            type: 'error',
-            message: 'Audio playback failed'
-          });
-        };
-        audio.play().catch(err => {
-          console.error('[SlidePlayer] Audio play() rejected:', err);
-        });
-        
-        // Force segment context update (triggers audio in NarratedController if in manual+audio mode)
-        segmentContext.setCurrentSegment(segmentContext.currentSegmentIndex);
-        
-        // Auto-clear success message after 3s
-        setTimeout(() => setRegenerationStatus(null), 3000);
-      } else {
-        console.error('[SlidePlayer] Regeneration failed:', result.error);
-        
-        setRegenerationStatus({
-          type: 'error',
-          message: result.error || 'Generation failed'
-        });
-        
-        // Clear error after 5s
-        setTimeout(() => setRegenerationStatus(null), 5000);
-      }
-    } catch (error: any) {
-      console.error('[SlidePlayer] Regeneration exception:', error);
-      
-      setRegenerationStatus({
-        type: 'error',
-        message: error.message || 'Network error'
-      });
-      
-      setTimeout(() => setRegenerationStatus(null), 5000);
-    } finally {
-      setRegeneratingSegment(false);
-    }
-  }, [currentSlideMetadata, segmentContext]);
+  // TTS audio regeneration (extracted to reusable hook)
+  const { regeneratingSegment, regenerationStatus, handleRegenerateSegment } = useTtsRegeneration({
+    currentSlideMetadata,
+    currentSegmentIndex: segmentContext.currentSegmentIndex,
+    onSegmentRefresh: () => segmentContext.setCurrentSegment(segmentContext.currentSegmentIndex),
+  });
 
   const variants = {
     enter: {
@@ -332,7 +243,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
               display: 'flex',
               gap: '0.6rem',
               alignItems: 'center',
-              background: 'rgba(15, 23, 42, 0.9)',
+              background: `${theme.colors.bgDeep}e6`,
               padding: '0rem 1rem',
               borderRadius: 50,
               backdropFilter: 'blur(10px)'
@@ -345,7 +256,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
               style={{
                 background: 'none',
                 border: 'none',
-                color: currentIndex === 0 ? '#475569' : theme.colors.textPrimary,
+                color: currentIndex === 0 ? theme.colors.textMuted : theme.colors.textPrimary,
                 cursor: currentIndex === 0 ? 'not-allowed' : 'pointer',
                 fontSize: 20,
                 padding: '0.25rem 0.4rem',
@@ -376,7 +287,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
                     width: idx === currentIndex ? 20 : 8,
                     height: 8,
                     borderRadius: 4,
-                    background: idx === currentIndex ? theme.colors.primary : '#475569',
+                    background: idx === currentIndex ? theme.colors.primary : theme.colors.textMuted,
                     border: 'none',
                     cursor: 'pointer',
                     transition: 'all 0.3s ease',
@@ -392,7 +303,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
               style={{
                 background: 'none',
                 border: 'none',
-                color: currentIndex === slides.length - 1 ? '#475569' : theme.colors.textPrimary,
+                color: currentIndex === slides.length - 1 ? theme.colors.textMuted : theme.colors.textPrimary,
                 cursor: currentIndex === slides.length - 1 ? 'not-allowed' : 'pointer',
                 fontSize: 20,
                 padding: '0.25rem 0.4rem',
@@ -421,7 +332,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
                 display: 'flex',
                 gap: '0.6rem',
                 alignItems: 'center',
-                background: 'rgba(15, 23, 42, 0.9)',
+                background: `${theme.colors.bgDeep}e6`,
                 padding: '0rem 1rem',
                 borderRadius: 50,
                 backdropFilter: 'blur(10px)',
@@ -438,7 +349,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
                     style={{
                       background: 'none',
                       border: 'none',
-                      color: segmentContext.currentSegmentIndex === 0 ? '#475569' : theme.colors.textPrimary,
+                      color: segmentContext.currentSegmentIndex === 0 ? theme.colors.textMuted : theme.colors.textPrimary,
                       cursor: segmentContext.currentSegmentIndex === 0 ? 'not-allowed' : 'pointer',
                       fontSize: 20,
                       padding: '0.25rem 0.4rem',
@@ -470,7 +381,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
                           width: idx === segmentContext.currentSegmentIndex ? 20 : 8,
                           height: 8,
                           borderRadius: 4,
-                          background: idx === segmentContext.currentSegmentIndex ? theme.colors.primary : '#475569',
+                          background: idx === segmentContext.currentSegmentIndex ? theme.colors.primary : theme.colors.textMuted,
                           border: 'none',
                           cursor: 'pointer',
                           transition: 'all 0.3s ease',
@@ -486,7 +397,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
                     style={{
                       background: 'none',
                       border: 'none',
-                      color: segmentContext.currentSegmentIndex === segments.length - 1 ? '#475569' : theme.colors.textPrimary,
+                      color: segmentContext.currentSegmentIndex === segments.length - 1 ? theme.colors.textMuted : theme.colors.textPrimary,
                       cursor: segmentContext.currentSegmentIndex === segments.length - 1 ? 'not-allowed' : 'pointer',
                       fontSize: 20,
                       padding: '0.25rem 0.4rem',
@@ -511,7 +422,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
                     style={{
                       width: '1px',
                       height: '16px',
-                      background: '#475569',
+                      background: theme.colors.textMuted,
                       margin: '0 0.3rem'
                     }}
                   />
@@ -573,7 +484,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
         color: theme.colors.textMuted,
         fontSize: 12,
         fontFamily: theme.fontFamily,
-        background: 'rgba(15, 23, 42, 0.8)',
+        background: `${theme.colors.bgDeep}cc`,
         padding: '0.5rem 1rem',
         borderRadius: 8,
         backdropFilter: 'blur(10px)'

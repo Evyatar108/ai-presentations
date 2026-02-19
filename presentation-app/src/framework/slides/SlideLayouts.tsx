@@ -5,34 +5,37 @@
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { slideContainer, contentBox, highlightOverlayBox, typography } from './SlideStyles';
+import { contentBox, highlightOverlayBox, typography, createSlideContainer } from './SlideStyles';
 import { useTheme } from '../theme/ThemeContext';
 
-interface SlideContainerProps {
+export interface SlideContainerProps {
   children: React.ReactNode;
   maxWidth?: number;
   textAlign?: 'center' | 'left' | 'right';
 }
 
 /**
- * Standard slide container with dark background
+ * Standard slide container with dark background.
+ * Theme-aware via useTheme() — uses theme's bgDeep and fontFamily.
  * Used in: ~20 slides
  */
 export const SlideContainer: React.FC<SlideContainerProps> = ({
   children,
   maxWidth = 900,
   textAlign = 'center'
-}) => (
-  <div style={slideContainer}>
-    <div style={{ maxWidth, width: '100%', textAlign }}>
-      {children}
+}) => {
+  const theme = useTheme();
+  return (
+    <div style={createSlideContainer(theme)}>
+      <div style={{ maxWidth, width: '100%', textAlign }}>
+        {children}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
-interface ContentCardProps {
+export interface ContentCardProps {
   children: React.ReactNode;
-  className?: string;
   style?: React.CSSProperties;
 }
 
@@ -49,7 +52,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
   </div>
 );
 
-interface HighlightBoxProps {
+export interface HighlightBoxProps {
   children: React.ReactNode;
   reduced: boolean;
   style?: React.CSSProperties;
@@ -69,7 +72,7 @@ export const GradientHighlightBox: React.FC<HighlightBoxProps> = ({
   </div>
 );
 
-interface SlideTitleProps {
+export interface SlideTitleProps {
   children: React.ReactNode;
   reduced: boolean;
   subtitle?: string;
@@ -108,7 +111,7 @@ export const SlideTitle: React.FC<SlideTitleProps> = ({
   </>
 );
 
-interface MetricDisplayProps {
+export interface MetricDisplayProps {
   value: string | number;
   label: string;
   reduced: boolean;
@@ -158,7 +161,7 @@ export const MetricDisplay: React.FC<MetricDisplayProps> = ({
   );
 };
 
-interface TestimonialCardProps {
+export interface TestimonialCardProps {
   quote: string;
   author: string;
   reduced: boolean;
@@ -192,7 +195,7 @@ export const TestimonialCard: React.FC<TestimonialCardProps> = ({
     >
       <div style={{ fontSize: 32, marginBottom: '1rem' }}>💬</div>
       <p style={{
-        color: '#e2e8f0',
+        color: theme.colors.textPrimary,
         fontSize: 16,
         lineHeight: 1.6,
         fontStyle: 'italic',
@@ -208,7 +211,7 @@ export const TestimonialCard: React.FC<TestimonialCardProps> = ({
   );
 };
 
-interface BenefitCardProps {
+export interface BenefitCardProps {
   icon: string;
   title: string;
   description: string;
@@ -216,7 +219,6 @@ interface BenefitCardProps {
   isHighlighted: boolean;
   isVisible: boolean;
   reduced: boolean;
-  index: number;
 }
 
 /**
@@ -230,8 +232,7 @@ export const BenefitCard: React.FC<BenefitCardProps> = ({
   detail,
   isHighlighted,
   isVisible,
-  reduced,
-  index: _index
+  reduced
 }) => {
   const theme = useTheme();
   return (
@@ -272,13 +273,12 @@ export const BenefitCard: React.FC<BenefitCardProps> = ({
   );
 };
 
-interface ImprovementCardProps {
+export interface ImprovementCardProps {
   icon: string;
   title: string;
   description: string;
   isVisible: boolean;
   reduced: boolean;
-  index: number;
 }
 
 /**
@@ -290,8 +290,7 @@ export const ImprovementCard: React.FC<ImprovementCardProps> = ({
   title,
   description,
   isVisible,
-  reduced,
-  index: _index
+  reduced
 }) => {
   const theme = useTheme();
   return (

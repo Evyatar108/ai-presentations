@@ -23,10 +23,10 @@ src/demos/meeting-highlights/
 
 ## Demo Registry
 
-The `DemoRegistry` provides centralized demo management:
+The `DemoRegistry` provides centralized demo management using an internal `Map<string, DemoRegistryEntry>` for O(1) lookups and structural duplicate prevention:
 
 ```typescript
-// Get all registered demos
+// Get all registered demos (returns shallow copies)
 const allDemos = DemoRegistry.getAllMetadata();
 
 // Load specific demo configuration (lazy)
@@ -34,11 +34,16 @@ const config = await DemoRegistry.loadDemoConfig('meeting-highlights');
 
 // Get demo IDs
 const ids = DemoRegistry.getDemoIds();
+
+// Reset for test isolation
+DemoRegistry._resetForTesting();
 ```
 
 ### Registration
 
 Demos are auto-discovered by `src/demos/registry.ts` using Vite's `import.meta.glob`. Any folder in `src/demos/` with `metadata.ts` and `index.ts` is automatically registered — no manual editing needed.
+
+The registry performs development-time validation (duplicate IDs, ID consistency, missing title, invalid loadConfig) and logs warnings to the console.
 
 ## Asset Organization
 
@@ -68,7 +73,6 @@ Demos load on-demand to optimize initial bundle size:
 
 ```typescript
 export const demo: DemoConfig = {
-  id: 'meeting-highlights',
   metadata,
   defaultMode: 'narrated',
   getSlides: async () => {
@@ -78,6 +82,8 @@ export const demo: DemoConfig = {
   }
 };
 ```
+
+Note: `DemoConfig` no longer has an `id` field — the ID comes exclusively from `metadata.id`.
 
 ## Benefits
 

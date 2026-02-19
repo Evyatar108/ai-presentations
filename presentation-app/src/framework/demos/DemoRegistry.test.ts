@@ -1,10 +1,5 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import type { DemoRegistry as DemoRegistryType } from './DemoRegistry';
-
-/**
- * DemoRegistry uses module-level state (a `registry` array).
- * We use vi.resetModules() + dynamic import to get a fresh module per test.
- */
+import { describe, it, expect, beforeEach } from 'vitest';
+import { DemoRegistry } from './DemoRegistry';
 
 function makeMeta(id: string) {
   return { id, title: `Demo ${id}` };
@@ -15,7 +10,6 @@ function makeEntry(id: string) {
     id,
     metadata: makeMeta(id),
     loadConfig: async () => ({
-      id,
       metadata: makeMeta(id),
       getSlides: async () => [],
     }),
@@ -23,12 +17,8 @@ function makeEntry(id: string) {
 }
 
 describe('DemoRegistry', () => {
-  let DemoRegistry: typeof DemoRegistryType;
-
-  beforeEach(async () => {
-    vi.resetModules();
-    const mod = await import('./DemoRegistry');
-    DemoRegistry = mod.DemoRegistry;
+  beforeEach(() => {
+    DemoRegistry._resetForTesting();
   });
 
   describe('registerDemo', () => {
@@ -63,6 +53,14 @@ describe('DemoRegistry', () => {
       expect(metadata[0].id).toBe('x');
       expect(metadata[1].id).toBe('y');
     });
+
+    it('returns shallow copies (mutation-safe)', () => {
+      DemoRegistry.registerDemo(makeEntry('z'));
+      const meta1 = DemoRegistry.getAllMetadata();
+      meta1[0].title = 'MUTATED';
+      const meta2 = DemoRegistry.getAllMetadata();
+      expect(meta2[0].title).toBe('Demo z');
+    });
   });
 
   describe('getDemoIds', () => {
@@ -89,13 +87,21 @@ describe('DemoRegistry', () => {
     it('returns undefined for unknown ID', () => {
       expect(DemoRegistry.getMetadataById('nonexistent')).toBeUndefined();
     });
+
+    it('returns a shallow copy (mutation-safe)', () => {
+      DemoRegistry.registerDemo(makeEntry('safe'));
+      const meta1 = DemoRegistry.getMetadataById('safe');
+      meta1!.title = 'MUTATED';
+      const meta2 = DemoRegistry.getMetadataById('safe');
+      expect(meta2!.title).toBe('Demo safe');
+    });
   });
 
   describe('loadDemoConfig', () => {
     it('loads config for registered demo', async () => {
       DemoRegistry.registerDemo(makeEntry('loadable'));
       const config = await DemoRegistry.loadDemoConfig('loadable');
-      expect(config.id).toBe('loadable');
+      expect(config.metadata.id).toBe('loadable');
       expect(typeof config.getSlides).toBe('function');
     });
 
@@ -104,15 +110,13 @@ describe('DemoRegistry', () => {
     });
   });
 
-  describe('ensureUniqueIds', () => {
-    it('does not throw when all IDs are unique', () => {
+  describe('_resetForTesting', () => {
+    it('clears all registered demos', () => {
       DemoRegistry.registerDemo(makeEntry('a'));
       DemoRegistry.registerDemo(makeEntry('b'));
-      expect(() => DemoRegistry.ensureUniqueIds()).not.toThrow();
-    });
-
-    it('does not throw on empty registry', () => {
-      expect(() => DemoRegistry.ensureUniqueIds()).not.toThrow();
+      expect(DemoRegistry.getDemoIds()).toHaveLength(2);
+      DemoRegistry._resetForTesting();
+      expect(DemoRegistry.getDemoIds()).toEqual([]);
     });
   });
 });

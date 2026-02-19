@@ -34,7 +34,7 @@ Scaffold a new demo: `.\scripts\new-demo.ps1 -DemoId "my-demo" [-DemoTitle "My D
 - `src/project.config.ts` — Project-level theme and config overrides.
 
 ### Demo Registry Pattern
-Registry logic lives in `src/framework/demos/DemoRegistry.ts`. Demos are auto-discovered via `import.meta.glob` in `src/demos/registry.ts` (imported as a side-effect in `main.tsx`). Any folder in `src/demos/` with `metadata.ts` and `index.ts` is automatically registered — no manual editing of `registry.ts` needed. Demo configs use `export default`.
+Registry logic lives in `src/framework/demos/DemoRegistry.ts` using an internal `Map<string, DemoRegistryEntry>` for O(1) lookups. Demos are auto-discovered via `import.meta.glob` in `src/demos/registry.ts` (imported as a side-effect in `main.tsx`). Any folder in `src/demos/` with `metadata.ts` and `index.ts` is automatically registered — no manual editing of `registry.ts` needed. Demo configs use `export default`. `DemoConfig` no longer has an `id` field — the ID comes exclusively from `metadata.id`. The registry validates entries at registration time (duplicate IDs, ID consistency, missing title, invalid loadConfig).
 
 ### Demo Structure
 Each demo lives in `src/demos/{demo-id}/` with:
@@ -80,7 +80,8 @@ Audio naming: `s{slide}_segment_{number}_{id}.wav`
 | `src/framework/theme/ThemeContext.tsx` | Theme provider & useTheme() hook |
 | `src/framework/config.ts` | Centralized framework config |
 | `src/project.config.ts` | Project-level overrides |
-| `src/framework/index.ts` | Barrel export |
+| `src/framework/index.ts` | Barrel export (explicit named exports, no wildcards) |
+| `src/framework/hooks/useTtsRegeneration.ts` | TTS audio regeneration hook (used by SlidePlayer) |
 | `vite-plugin-audio-writer.ts` | Custom Vite plugin for /api/save-audio |
 
 ## Conventions

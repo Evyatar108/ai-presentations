@@ -24,7 +24,6 @@ const timing: TimingConfig = {
  * Slides are lazy-loaded to optimize initial bundle size.
  */
 const demoConfig: DemoConfig = {
-  id: 'meeting-highlights',
   metadata,
   defaultMode: 'narrated',
   timing,

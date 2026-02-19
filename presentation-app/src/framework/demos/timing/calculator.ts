@@ -132,12 +132,10 @@ export function calculateSlideDuration(
     totalAudioDuration += audioDuration;
     
     // Resolve timing for this specific segment (respects hierarchy)
-    // Note: slide.timing and segment.timing will be added in Phase 3
-    // Using type assertion to handle properties that don't exist yet
     const resolvedTiming = resolveTimingConfig(
       demoTiming,
-      (slide as any).timing as TimingConfig | undefined,
-      (segment as any).timing as TimingConfig | undefined
+      slide.timing,
+      segment.timing
     );
     
     // Determine appropriate delay after this segment

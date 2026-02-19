@@ -544,7 +544,6 @@ export const Ch1_S4_UserValue: SlideComponentWithMetadata = () => {
             isHighlighted={isOnSegment(index + 1)}
             isVisible={isSegmentVisible(index + 1)}
             reduced={reduced}
-            index={index}
           />
         ))}
       </div>
