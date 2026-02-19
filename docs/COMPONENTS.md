@@ -185,11 +185,8 @@ Respects user motion preferences.
 ```typescript
 import { useReducedMotion, fadeIn } from '@framework';
 
-const prefersReducedMotion = useReducedMotion();
-
-const variants = prefersReducedMotion
-  ? { hidden: {}, visible: {} }  // No animation
-  : fadeIn;  // Normal animation
+const { reduced } = useReducedMotion();
+const variants = fadeIn(reduced);
 ```
 
 ## Type Definitions
@@ -287,26 +284,28 @@ export const Ch1_S1_Example = defineSlide({
 ### Using Framer Motion Animations
 
 ```typescript
+import React from 'react';
 import { motion } from 'framer-motion';
 import { defineSlide, fadeIn, fadeUp, useReducedMotion } from '@framework';
 
+const AnimatedComponent: React.FC = () => {
+  const { reduced } = useReducedMotion();
+
+  return (
+    <motion.div initial="hidden" animate="visible" variants={fadeIn(reduced)}
+      style={{ width: '100%', height: '100vh' }}>
+      <motion.h1 variants={fadeUp(reduced)}>Animated Title</motion.h1>
+    </motion.div>
+  );
+};
+
 export const Ch1_S1_Animated = defineSlide({
   metadata: { chapter: 1, slide: 1, title: 'Animated', audioSegments: [/* ... */] },
-  component: () => {
-    const prefersReduced = useReducedMotion();
-    const variants = prefersReduced ? { hidden: {}, visible: {} } : fadeIn;
-
-    return (
-      <motion.div initial="hidden" animate="visible" variants={variants}
-        style={{ width: '100%', height: '100vh' }}>
-        <motion.h1 variants={fadeUp}>Animated Title</motion.h1>
-      </motion.div>
-    );
-  }
+  component: AnimatedComponent,
 });
 ```
 
-> **Note**: Extract the component to a named `const` when using hooks inside `defineSlide()` to satisfy ESLint `rules-of-hooks`.
+> **Note**: Always extract the component to a named `const` when using hooks inside `defineSlide()` to satisfy ESLint `rules-of-hooks`.
 
 ### Multi-Segment Progressive Reveal
 

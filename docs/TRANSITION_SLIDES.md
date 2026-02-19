@@ -95,6 +95,8 @@ function injectTransitionSlides(contentSlides: SlideComponentWithMetadata[]): Sl
   });
 
   return result;
+}
+```
 
 ---
 

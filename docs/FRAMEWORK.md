@@ -25,7 +25,12 @@ src/
 │   │   ├── VideoPlayer.tsx        ← Video playback component
 │   │   ├── NarrationEditModal.tsx ← Edit narration text modal
 │   │   ├── MetricTile.tsx         ← Metric display tile
-│   │   └── HoverButton.tsx        ← Reusable button with hover states
+│   │   ├── HoverButton.tsx        ← Reusable button with hover states
+│   │   └── narrated/
+│   │       ├── StartOverlay.tsx   ← Presentation start mode selection
+│   │       ├── ProgressBar.tsx    ← Playback progress indicator
+│   │       ├── NotificationStack.tsx ← Toast notification display
+│   │       └── ErrorToast.tsx     ← Playback error display
 │   ├── contexts/
 │   │   └── SegmentContext.tsx     ← Segment state management
 │   ├── slides/
@@ -34,7 +39,8 @@ src/
 │   │   ├── SlideLayouts.tsx       ← Shared layout templates
 │   │   ├── SlideStyles.ts         ← Shared styling (static + theme-aware)
 │   │   ├── SlideIcons.tsx         ← SVG icon components
-│   │   └── AnimationVariants.ts   ← Framer Motion presets
+│   │   ├── AnimationVariants.ts   ← Framer Motion presets
+│   │   └── validateSlideMetadata.ts ← Dev-time slide validation
 │   ├── demos/
 │   │   ├── DemoRegistry.ts        ← Registry logic (no demo imports)
 │   │   ├── types.ts               ← DemoMetadata, DemoConfig interfaces
@@ -52,7 +58,8 @@ src/
 │   │   ├── narrationLoader.ts     ← External narration JSON loader
 │   │   ├── narrationApiClient.ts  ← Backend API client (uses config)
 │   │   ├── ttsClient.ts           ← TTS server communication
-│   │   └── debug.ts               ← Debug logging utilities
+│   │   ├── debug.ts               ← Debug logging utilities
+│   │   └── formatTime.ts         ← Time formatting (mm:ss, delta colors)
 │   ├── testing/
 │   │   └── index.ts               ← Test utilities (TestSlideWrapper, helpers)
 │   └── accessibility/

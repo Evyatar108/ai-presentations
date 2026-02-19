@@ -20,6 +20,9 @@ interface PresentationTheme {
     success: string;      // Success state (#10b981)
     warning: string;      // Warning state (#fbbf24)
     error: string;        // Error state (#ef4444)
+    accent: string;       // Accent for duration/highlight text (#14b8a6)
+    bgOverlay: string;    // Modal/overlay backdrop (rgba(0,0,0,0.8))
+    borderSubtle: string; // Subtle interactive border (#475569)
   };
   fontFamily: string;     // 'Inter, system-ui, sans-serif'
 }
@@ -28,7 +31,7 @@ interface PresentationTheme {
 ## Customizing via `project.config.ts`
 
 ```typescript
-import type { PartialTheme } from './framework/theme/types';
+import type { PartialTheme } from '@framework';
 
 export const themeOverrides: PartialTheme = {
   colors: {
@@ -89,4 +92,7 @@ Note: The `SlideContainer` layout component is now theme-aware — it calls `use
 | `success` | `#10b981` | Success states |
 | `warning` | `#fbbf24` | Warning states |
 | `error` | `#ef4444` | Error states |
+| `accent` | `#14b8a6` | Duration/highlight text |
+| `bgOverlay` | `rgba(0,0,0,0.8)` | Modal/overlay backdrops |
+| `borderSubtle` | `#475569` | Subtle interactive borders |
 | `fontFamily` | `Inter, system-ui, sans-serif` | All text |
