@@ -456,7 +456,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
                   transition: 'opacity 0.2s ease'
                 }}
               >
-                {regeneratingSegment ? '⏳' : '🔄'}
+                <span aria-hidden="true">{regeneratingSegment ? '⏳' : '🔄'}</span>
               </button>
               <button
                 onClick={() => handleRegenerateSegment(false)}
@@ -476,7 +476,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
                   transition: 'opacity 0.2s ease'
                 }}
               >
-                {regeneratingSegment ? '⏳' : '🔁'}
+                <span aria-hidden="true">{regeneratingSegment ? '⏳' : '🔁'}</span>
               </button>
             </div>
           )}

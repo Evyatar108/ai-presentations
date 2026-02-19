@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../theme/ThemeContext';
 import { useFocusTrap } from '../hooks/useFocusTrap';
+import { HoverButton } from './HoverButton';
 
 interface NarrationEditModalProps {
   slideKey: string;
@@ -172,7 +173,7 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
           justifyContent: 'flex-end',
           flexWrap: 'wrap'
         }}>
-          <button
+          <HoverButton
             onClick={onCancel}
             disabled={isRegenerating}
             style={{
@@ -187,23 +188,15 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
               fontWeight: 500,
               transition: 'all 0.2s ease'
             }}
-            onMouseEnter={(e) => {
-              if (!isRegenerating) {
-                e.currentTarget.style.borderColor = theme.colors.textMuted;
-                e.currentTarget.style.color = theme.colors.textPrimary;
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!isRegenerating) {
-                e.currentTarget.style.borderColor = theme.colors.borderSubtle;
-                e.currentTarget.style.color = theme.colors.textSecondary;
-              }
+            hoverStyle={{
+              borderColor: theme.colors.textMuted,
+              color: theme.colors.textPrimary,
             }}
           >
             Cancel
-          </button>
+          </HoverButton>
           
-          <button
+          <HoverButton
             onClick={() => onSave(text, false)}
             disabled={isRegenerating}
             style={{
@@ -218,21 +211,14 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
               fontWeight: 500,
               transition: 'all 0.2s ease'
             }}
-            onMouseEnter={(e) => {
-              if (!isRegenerating) {
-                e.currentTarget.style.background = 'rgba(0, 183, 195, 0.1)';
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!isRegenerating) {
-                e.currentTarget.style.background = 'transparent';
-              }
+            hoverStyle={{
+              background: 'rgba(0, 183, 195, 0.1)',
             }}
           >
             Save Only
-          </button>
+          </HoverButton>
           
-          <button
+          <HoverButton
             onClick={handleSaveAndRegenerate}
             disabled={isRegenerating}
             style={{
@@ -247,15 +233,8 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
               fontWeight: 500,
               transition: 'all 0.2s ease'
             }}
-            onMouseEnter={(e) => {
-              if (!isRegenerating) {
-                e.currentTarget.style.opacity = '0.9';
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!isRegenerating) {
-                e.currentTarget.style.opacity = '1';
-              }
+            hoverStyle={{
+              opacity: 0.9,
             }}
           >
             {isRegenerating ? (
@@ -274,7 +253,7 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
             ) : (
               'Save & Regenerate Audio'
             )}
-          </button>
+          </HoverButton>
         </div>
         
         {/* Add keyframe animation for spinner */}

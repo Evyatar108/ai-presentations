@@ -19,6 +19,10 @@ export interface UseTtsRegenerationOptions {
   currentSegmentIndex: number;
   /** Callback invoked after successful regeneration to refresh the segment context */
   onSegmentRefresh: () => void;
+  /** Called before regeneration starts. Throw to abort. */
+  preCheck?: () => Promise<void>;
+  /** Called after successful regeneration with the updated audio path. */
+  postProcess?: (updatedAudioPath: string) => Promise<void>;
 }
 
 export interface UseTtsRegenerationResult {
@@ -34,6 +38,8 @@ export function useTtsRegeneration({
   currentSlideMetadata,
   currentSegmentIndex,
   onSegmentRefresh,
+  preCheck,
+  postProcess,
 }: UseTtsRegenerationOptions): UseTtsRegenerationResult {
   const [regeneratingSegment, setRegeneratingSegment] = useState(false);
   const [regenerationStatus, setRegenerationStatus] = useState<RegenerationStatus | null>(null);
@@ -54,6 +60,11 @@ export function useTtsRegeneration({
     setRegenerationStatus(null);
 
     try {
+      // Run optional pre-check (e.g. TTS health check); throw to abort
+      if (preCheck) {
+        await preCheck();
+      }
+
       console.log('[SlidePlayer] Starting regeneration for:', segment.id);
       console.log('[SlidePlayer] Add pauses:', addPauses);
 
@@ -78,6 +89,11 @@ export function useTtsRegeneration({
         const basePath = segment.audioFilePath.split('?')[0];
         const newAudioPath = `${basePath}?t=${result.timestamp}`;
         segment.audioFilePath = newAudioPath;
+
+        // Run optional post-processing (e.g. reload audio in narration editor)
+        if (postProcess) {
+          await postProcess(newAudioPath);
+        }
 
         // Play the newly generated audio immediately
         console.log('[SlidePlayer] Playing regenerated audio:', newAudioPath);
@@ -124,7 +140,7 @@ export function useTtsRegeneration({
     } finally {
       setRegeneratingSegment(false);
     }
-  }, [currentSlideMetadata, currentSegmentIndex, onSegmentRefresh]);
+  }, [currentSlideMetadata, currentSegmentIndex, onSegmentRefresh, preCheck, postProcess]);
 
   return {
     regeneratingSegment,

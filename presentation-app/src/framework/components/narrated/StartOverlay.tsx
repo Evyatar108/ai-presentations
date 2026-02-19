@@ -158,6 +158,7 @@ export const StartOverlay: React.FC<StartOverlayProps> = ({
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', alignItems: 'center' }}>
               <button
                 onClick={onStartNarrated}
+                aria-label="Start narrated playback"
                 style={{
                   background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`,
                   color: '#fff',
@@ -175,6 +176,7 @@ export const StartOverlay: React.FC<StartOverlayProps> = ({
 
               <button
                 onClick={onStartManual}
+                aria-label="Start manual mode"
                 style={{
                   background: 'transparent',
                   color: theme.colors.primary,

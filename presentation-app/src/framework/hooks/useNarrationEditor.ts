@@ -1,14 +1,15 @@
 import { useState, useCallback } from 'react';
-import type { SlideComponentWithMetadata, SlideMetadata } from '../slides/SlideMetadata';
+import type { SlideComponentWithMetadata } from '../slides/SlideMetadata';
 import { hasAudioSegments } from '../slides/SlideMetadata';
 import type { DemoMetadata } from '../demos/types';
-import { regenerateSegment, checkTTSServerHealth } from '../utils/ttsClient';
+import { checkTTSServerHealth } from '../utils/ttsClient';
 import {
   saveNarrationToFile,
   updateNarrationCache,
   hashText,
 } from '../utils/narrationApiClient';
 import { NarrationData, NarrationSlide } from '../utils/narrationLoader';
+import { useTtsRegeneration } from './useTtsRegeneration';
 
 interface NarrationEdit {
   slideKey: string;
@@ -63,10 +64,46 @@ export function useNarrationEditor({
 }: UseNarrationEditorOptions): UseNarrationEditorResult {
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingSegment, setEditingSegment] = useState<EditingSegment | null>(null);
-  const [isRegeneratingAudio, setIsRegeneratingAudio] = useState(false);
   const [regenerationError, setRegenerationError] = useState<string | null>(null);
   const [_isSaving, setIsSaving] = useState(false);
   const [narrationEdits, setNarrationEdits] = useState<Map<string, NarrationEdit>>(new Map());
+
+  const currentSlideMetadata = currentIndex < allSlides.length
+    ? allSlides[currentIndex].metadata
+    : undefined;
+
+  // Pre-check: verify TTS server health before regeneration
+  const preCheck = useCallback(async () => {
+    const health = await checkTTSServerHealth();
+    if (!health.available) {
+      throw new Error(health.error || 'TTS server is not available');
+    }
+  }, []);
+
+  // Post-process: reload audio into audioRef when the edited segment is current
+  const postProcess = useCallback(async (updatedAudioPath: string) => {
+    if (audioEnabled) {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+      const segment = currentSlideMetadata?.audioSegments[currentSegmentIndex];
+      if (segment) {
+        const audio = await loadAudioWithFallback(updatedAudioPath, segment.id);
+        audioRef.current = audio;
+        await audio.play();
+      }
+    }
+  }, [audioEnabled, audioRef, currentSlideMetadata, currentSegmentIndex, loadAudioWithFallback]);
+
+  // Delegate TTS regeneration to the shared hook
+  const { regeneratingSegment: isRegeneratingAudio, handleRegenerateSegment } = useTtsRegeneration({
+    currentSlideMetadata,
+    currentSegmentIndex,
+    onSegmentRefresh: () => { /* no segment context refresh needed in narrated mode */ },
+    preCheck,
+    postProcess,
+  });
 
   // Build NarrationData from in-memory edits
   const buildNarrationDataFromEdits = useCallback((): NarrationData => {
@@ -100,63 +137,6 @@ export function useNarrationEditor({
     }
     return data;
   }, [demoMetadata.id, allSlides, narrationEdits]);
-
-  // Regenerate TTS audio for a segment
-  const regenerateSegmentAudio = useCallback(async (
-    slide: SlideMetadata,
-    segmentIndex: number,
-    newText: string,
-  ): Promise<boolean> => {
-    setIsRegeneratingAudio(true);
-    setRegenerationError(null);
-
-    try {
-      const health = await checkTTSServerHealth();
-      if (!health.available) {
-        throw new Error(health.error || 'TTS server is not available');
-      }
-
-      const segment = slide.audioSegments[segmentIndex];
-      const result = await regenerateSegment({
-        chapter: slide.chapter,
-        slide: slide.slide,
-        segmentIndex,
-        segmentId: segment.id,
-        narrationText: newText,
-        addPauses: true,
-      });
-
-      if (!result.success) {
-        throw new Error(result.error || 'Audio regeneration failed');
-      }
-
-      // Update audio path with cache-busting timestamp
-      const timestamp = result.timestamp || Date.now();
-      const basePath = segment.audioFilePath.split('?')[0];
-      segment.audioFilePath = `${basePath}?t=${timestamp}`;
-
-      // If audio is playing this segment, reload it
-      if (audioEnabled && currentSegmentIndex === segmentIndex) {
-        if (audioRef.current) {
-          audioRef.current.pause();
-          audioRef.current = null;
-        }
-        const audio = await loadAudioWithFallback(segment.audioFilePath, segment.id);
-        audioRef.current = audio;
-        if (audioEnabled) {
-          await audio.play();
-        }
-      }
-
-      setIsRegeneratingAudio(false);
-      return true;
-    } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to regenerate audio';
-      setRegenerationError(errorMessage);
-      setIsRegeneratingAudio(false);
-      return false;
-    }
-  }, [audioEnabled, audioRef, currentSegmentIndex, loadAudioWithFallback]);
 
   // Open the edit modal
   const handleEditNarration = useCallback(() => {
@@ -226,10 +206,11 @@ export function useNarrationEditor({
         showWarning('Edit saved in memory only (backend API unavailable)');
       }
 
-      // Regenerate audio if requested
+      // Regenerate audio if requested (delegates to useTtsRegeneration)
       if (regenerateAudioFlag) {
-        const success = await regenerateSegmentAudio(slide, currentSegmentIndex, newText);
-        if (!success) {
+        try {
+          await handleRegenerateSegment(true);
+        } catch {
           setIsSaving(false);
           return;
         }
@@ -256,7 +237,7 @@ export function useNarrationEditor({
     } finally {
       setIsSaving(false);
     }
-  }, [editingSegment, allSlides, currentIndex, currentSegmentIndex, apiAvailable, demoMetadata.id, buildNarrationDataFromEdits, showSuccess, showError, showWarning, regenerateSegmentAudio]);
+  }, [editingSegment, allSlides, currentIndex, currentSegmentIndex, apiAvailable, demoMetadata.id, buildNarrationDataFromEdits, showSuccess, showError, showWarning, handleRegenerateSegment]);
 
   const handleCancelEdit = useCallback(() => {
     setShowEditModal(false);

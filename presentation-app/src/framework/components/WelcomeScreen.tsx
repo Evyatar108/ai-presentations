@@ -4,6 +4,7 @@ import { DemoRegistry } from '../demos/DemoRegistry';
 import type { DemoMetadata } from '../demos/types';
 import { useTheme } from '../theme/ThemeContext';
 import { useFocusTrap } from '../hooks/useFocusTrap';
+import { HoverButton } from './HoverButton';
 
 interface WelcomeScreenProps {
   onSelectDemo: (demoId: string) => void;
@@ -262,7 +263,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
                     )}
                   </div>
                   {slideBreakdown && slideBreakdown.length > 0 && (
-                    <button
+                    <HoverButton
                       onClick={(e) => {
                         e.stopPropagation();
                         setShowBreakdown(demo.id);
@@ -280,18 +281,14 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
                         textUnderlineOffset: '2px',
                         marginLeft: 'auto'
                       }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.color = theme.colors.textPrimary;
-                        e.currentTarget.style.background = 'rgba(0,183,195,0.08)';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.color = theme.colors.textSecondary;
-                        e.currentTarget.style.background = 'transparent';
+                      hoverStyle={{
+                        color: theme.colors.textPrimary,
+                        background: 'rgba(0,183,195,0.08)',
                       }}
                       aria-label={`View timing details for ${demo.title}`}
                     >
                       Details
-                    </button>
+                    </HoverButton>
                   )}
                 </div>
               )}
@@ -434,7 +431,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
                       )}
                     </span>
                   </div>
-                  <button
+                  <HoverButton
                     onClick={() => setShowBreakdown(null)}
                     aria-label="Close timing breakdown"
                     style={{
@@ -453,11 +450,12 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
                       justifyContent: 'center',
                       transition: 'all 0.2s ease'
                     }}
-                    onMouseEnter={e => (e.currentTarget.style.background = 'rgba(148,163,184,0.15)')}
-                    onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                    hoverStyle={{
+                      background: 'rgba(148,163,184,0.15)',
+                    }}
                   >
                     ×
-                  </button>
+                  </HoverButton>
                 </div>
 
                 {/* Body */}

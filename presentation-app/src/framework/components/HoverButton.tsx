@@ -19,9 +19,9 @@ export const HoverButton: React.FC<HoverButtonProps> = ({
   return (
     <button
       {...rest}
-      style={{ ...style, ...(isHovered ? hoverStyle : undefined) }}
+      style={{ ...style, ...(isHovered && !rest.disabled ? hoverStyle : undefined) }}
       onMouseEnter={(e) => {
-        setIsHovered(true);
+        if (!rest.disabled) setIsHovered(true);
         rest.onMouseEnter?.(e);
       }}
       onMouseLeave={(e) => {
