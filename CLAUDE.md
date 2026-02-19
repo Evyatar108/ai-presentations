@@ -71,10 +71,17 @@ Audio naming: `s{slide}_segment_{number}_{id}.wav`
 | `src/demos/registry.ts` | Auto-discovery registration via import.meta.glob |
 | `src/framework/demos/types.ts` | DemoMetadata, DemoConfig interfaces |
 | `src/framework/slides/SlideMetadata.ts` | Slide/segment type definitions |
-| `src/framework/components/NarratedController.tsx` | Audio playback orchestration |
+| `src/framework/components/NarratedController.tsx` | Audio playback orchestration (core logic only) |
+| `src/framework/components/narrated/StartOverlay.tsx` | Presentation start mode selection overlay |
+| `src/framework/components/narrated/ProgressBar.tsx` | Playback progress indicator with controls |
+| `src/framework/components/narrated/NotificationStack.tsx` | Toast notification display |
+| `src/framework/components/narrated/ErrorToast.tsx` | Playback error display |
 | `src/framework/components/DemoPlayer.tsx` | Demo container with loading/error states |
+| `src/framework/components/SlideErrorBoundary.tsx` | Error boundary for individual slides |
+| `src/framework/components/DemoPlayerBoundary.tsx` | Top-level error boundary for DemoPlayer |
+| `src/framework/components/HoverButton.tsx` | Reusable button with hover state management |
 | `src/framework/slides/SlideLayouts.tsx` | Shared layout templates |
-| `src/framework/slides/SlideStyles.ts` | Shared styling (static + theme-aware) |
+| `src/framework/slides/SlideStyles.ts` | Shared styling (static + theme-aware factories) |
 | `src/framework/slides/AnimationVariants.ts` | Framer Motion presets |
 | `src/framework/demos/timing/types.ts` | TimingConfig interface & resolver |
 | `src/framework/theme/ThemeContext.tsx` | Theme provider & useTheme() hook |
@@ -82,6 +89,12 @@ Audio naming: `s{slide}_segment_{number}_{id}.wav`
 | `src/project.config.ts` | Project-level overrides |
 | `src/framework/index.ts` | Barrel export (explicit named exports, no wildcards) |
 | `src/framework/hooks/useTtsRegeneration.ts` | TTS audio regeneration hook (used by SlidePlayer) |
+| `src/framework/hooks/useNotifications.ts` | Toast notification state management |
+| `src/framework/hooks/useRuntimeTimer.ts` | Runtime timer with delta calculations |
+| `src/framework/hooks/useApiHealth.ts` | Backend API health check |
+| `src/framework/hooks/useNarrationEditor.ts` | Narration editing workflow |
+| `src/framework/hooks/useFocusTrap.ts` | Keyboard focus trap for modals |
+| `src/framework/utils/formatTime.ts` | Time formatting utilities (mm:ss, delta colors) |
 | `vite-plugin-audio-writer.ts` | Custom Vite plugin for /api/save-audio |
 
 ## Conventions

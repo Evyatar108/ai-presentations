@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../theme/ThemeContext';
+import { useFocusTrap } from '../hooks/useFocusTrap';
 
 interface NarrationEditModalProps {
   slideKey: string;
@@ -23,6 +24,8 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
 }) => {
   const theme = useTheme();
   const [text, setText] = useState(currentText);
+  const modalRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(modalRef, true);
 
   // Handle ESC key to close modal
   useEffect(() => {
@@ -42,6 +45,10 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
 
   return (
     <motion.div
+      ref={modalRef}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="narration-edit-title"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -73,7 +80,7 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
           border: '1px solid rgba(148, 163, 184, 0.2)'
         }}
       >
-        <h2 style={{ 
+        <h2 id="narration-edit-title" style={{
           color: theme.colors.textPrimary,
           marginBottom: '1rem',
           fontSize: 20,
@@ -119,7 +126,7 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
           borderRadius: 6,
           padding: '0.75rem',
           marginTop: '1rem',
-          color: '#fb923c',
+          color: theme.colors.warning,
           fontSize: 13,
           display: 'flex',
           alignItems: 'center',
@@ -170,7 +177,7 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
             disabled={isRegenerating}
             style={{
               background: 'transparent',
-              border: '1px solid #475569',
+              border: `1px solid ${theme.colors.borderSubtle}`,
               color: theme.colors.textSecondary,
               padding: '0.75rem 1.5rem',
               borderRadius: 8,
@@ -182,14 +189,14 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
             }}
             onMouseEnter={(e) => {
               if (!isRegenerating) {
-                e.currentTarget.style.borderColor = '#64748b';
-                e.currentTarget.style.color = '#cbd5e1';
+                e.currentTarget.style.borderColor = theme.colors.textMuted;
+                e.currentTarget.style.color = theme.colors.textPrimary;
               }
             }}
             onMouseLeave={(e) => {
               if (!isRegenerating) {
-                e.currentTarget.style.borderColor = '#475569';
-                e.currentTarget.style.color = '#94a3b8';
+                e.currentTarget.style.borderColor = theme.colors.borderSubtle;
+                e.currentTarget.style.color = theme.colors.textSecondary;
               }
             }}
           >
@@ -274,6 +281,9 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
         <style>{`
           @keyframes spin {
             to { transform: rotate(360deg); }
+          }
+          @media (prefers-reduced-motion: reduce) {
+            * { animation: none !important; }
           }
         `}</style>
       </motion.div>

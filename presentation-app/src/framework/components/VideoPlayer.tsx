@@ -6,13 +6,15 @@ interface VideoPlayerProps {
   isPlaying: boolean;
   onEnded?: () => void;
   freezeOnEnd?: boolean;  // Keep final frame visible
+  ariaLabel?: string;
 }
 
 export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   videoPath,
   isPlaying,
   onEnded,
-  freezeOnEnd = true
+  freezeOnEnd = true,
+  ariaLabel
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [hasEnded, setHasEnded] = useState(false);
@@ -57,6 +59,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
       <video
         ref={videoRef}
         src={videoPath}
+        aria-label={ariaLabel}
         style={{
           width: '100%',
           height: 'auto',
@@ -65,7 +68,9 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         onEnded={handleVideoEnded}
         playsInline
         preload="auto"
-      />
+      >
+        <track kind="captions" src="" label="Captions" default />
+      </video>
     </motion.div>
   );
 };

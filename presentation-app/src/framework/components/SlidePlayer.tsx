@@ -4,6 +4,7 @@ import { useSegmentContext } from '../contexts/SegmentContext';
 import type { SlideComponentWithMetadata } from '../slides/SlideMetadata';
 import { useTtsRegeneration } from '../hooks/useTtsRegeneration';
 import { useTheme } from '../theme/ThemeContext';
+import { SlideErrorBoundary } from './SlideErrorBoundary';
 
 export interface Slide {
   chapter: number;
@@ -218,13 +219,21 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
             left: 0
           }}
         >
-          <CurrentComponent />
+          <SlideErrorBoundary
+            slideKey={String(currentIndex)}
+            slideTitle={currentSlide.title}
+            onSkipForward={currentIndex < slides.length - 1 ? goToNext : undefined}
+            onSkipBackward={currentIndex > 0 ? goToPrev : undefined}
+          >
+            <CurrentComponent />
+          </SlideErrorBoundary>
         </motion.div>
       </AnimatePresence>
 
       {/* Combined Navigation Container (Slide nav on top, Segment nav below) */}
       {!disableManualNav && (
-        <div
+        <nav
+          aria-label="Slide navigation"
           style={{
             position: 'fixed',
             bottom: 12,
@@ -471,7 +480,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
               </button>
             </div>
           )}
-        </div>
+        </nav>
       )}
 
 
@@ -497,6 +506,8 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
       <AnimatePresence>
         {regenerationStatus && (
           <motion.div
+            role="status"
+            aria-live="polite"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}

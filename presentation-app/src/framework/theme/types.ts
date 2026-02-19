@@ -29,6 +29,13 @@ export interface ThemeColors {
   warning: string;
   /** Error color (default: #ef4444) */
   error: string;
+
+  /** Accent color for duration/highlight text (default: #14b8a6 teal) */
+  accent: string;
+  /** Modal/overlay backdrop color (default: rgba(0,0,0,0.8)) */
+  bgOverlay: string;
+  /** Subtle interactive border color (default: #475569) */
+  borderSubtle: string;
 }
 
 export interface PresentationTheme {

@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { defaultTheme } from '../theme/defaultTheme';
 
 interface ReducedMotionContextValue {
   reduced: boolean;
@@ -59,14 +60,14 @@ export const ReducedMotionToggle: React.FC = () => {
       onClick={toggle}
       aria-pressed={reduced}
       style={{
-        background: reduced ? '#334155' : '#1e293b',
-        color: '#f1f5f9',
-        border: '1px solid #475569',
+        background: reduced ? defaultTheme.colors.bgBorder : defaultTheme.colors.bgSurface,
+        color: defaultTheme.colors.textPrimary,
+        border: `1px solid ${defaultTheme.colors.borderSubtle}`,
         borderRadius: 8,
         padding: '0.5rem 0.75rem',
         fontSize: 12,
         cursor: 'pointer',
-        fontFamily: 'Inter, system-ui, sans-serif'
+        fontFamily: defaultTheme.fontFamily,
       }}
     >
       {reduced ? 'Reduced Motion: ON' : 'Reduced Motion: OFF'}

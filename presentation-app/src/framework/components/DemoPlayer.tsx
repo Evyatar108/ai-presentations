@@ -8,6 +8,7 @@ import { SlidePlayer, Slide } from './SlidePlayer';
 import { SegmentProvider } from '../contexts/SegmentContext';
 import { loadNarration, getNarrationText, type NarrationData } from '../utils/narrationLoader';
 import { useTheme } from '../theme/ThemeContext';
+import { DemoPlayerBoundary } from './DemoPlayerBoundary';
 
 export interface DemoPlayerProps {
   demoId: string;
@@ -193,6 +194,9 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack }) => {
               0% { transform: rotate(0deg); }
               100% { transform: rotate(360deg); }
             }
+            @media (prefers-reduced-motion: reduce) {
+              * { animation: none !important; }
+            }
           `}</style>
         </motion.div>
       </div>
@@ -260,6 +264,7 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack }) => {
   }
 
   return (
+    <DemoPlayerBoundary onBack={onBack}>
     <SegmentProvider>
       <div style={{ position: 'relative' }}>
         {/* Floating Back Button */}
@@ -318,5 +323,6 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack }) => {
         />
       </div>
     </SegmentProvider>
+    </DemoPlayerBoundary>
   );
 };

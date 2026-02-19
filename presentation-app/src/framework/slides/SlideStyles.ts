@@ -195,3 +195,46 @@ export function createTypography(theme: PresentationTheme) {
     emphasized: { ...typography.emphasized, color: theme.colors.primary },
   };
 }
+
+export function createOverlayContainer(theme: PresentationTheme): CSSProperties {
+  return {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: theme.colors.bgOverlay,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 10000,
+    fontFamily: theme.fontFamily,
+  };
+}
+
+export function createFixedButton(theme: PresentationTheme): CSSProperties {
+  return {
+    background: 'transparent',
+    border: `1px solid ${theme.colors.borderSubtle}`,
+    color: theme.colors.textPrimary,
+    borderRadius: 8,
+    padding: '0.75rem 1.25rem',
+    fontSize: 14,
+    cursor: 'pointer',
+    fontFamily: theme.fontFamily,
+    transition: 'all 0.2s ease',
+  };
+}
+
+export function createModalBackdrop(theme: PresentationTheme): CSSProperties {
+  return {
+    position: 'fixed',
+    inset: 0,
+    background: theme.colors.bgOverlay,
+    backdropFilter: 'blur(4px)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 1000,
+  };
+}

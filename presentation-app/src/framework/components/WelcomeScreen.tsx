@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react'; // File header normalized to prevent stray prefix (fixes 'stimport' TS error)
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { DemoRegistry } from '../demos/DemoRegistry';
 import type { DemoMetadata } from '../demos/types';
 import { useTheme } from '../theme/ThemeContext';
+import { useFocusTrap } from '../hooks/useFocusTrap';
 
 interface WelcomeScreenProps {
   onSelectDemo: (demoId: string) => void;
@@ -15,6 +16,8 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
   const [showBreakdown, setShowBreakdown] = useState<string | null>(null);
   // Last actual runtime per demo (persisted from narrated controller)
   const [actualRuntime, setActualRuntime] = useState<Record<string, { elapsed: number; plannedTotal: number }>>({});
+  const breakdownModalRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(breakdownModalRef, showBreakdown !== null);
   
   // Close on ESC
   useEffect(() => {
@@ -95,7 +98,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
       fontFamily: theme.fontFamily
     }}>
       {/* Header */}
-      <motion.div
+      <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         style={{
@@ -123,10 +126,10 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
         }}>
           Select a presentation to view
         </p>
-      </motion.div>
+      </motion.header>
 
       {/* Demo Grid */}
-      <div style={{
+      <main style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
         gap: '2rem',
@@ -245,7 +248,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
                       <div style={{
                         fontSize: 14,
                         fontWeight: 600,
-                        color: '#14b8a6',
+                        color: theme.colors.accent,
                         display: 'flex',
                         alignItems: 'center',
                         gap: '0.4rem',
@@ -278,11 +281,11 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
                         marginLeft: 'auto'
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.color = '#f1f5f9';
+                        e.currentTarget.style.color = theme.colors.textPrimary;
                         e.currentTarget.style.background = 'rgba(0,183,195,0.08)';
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.color = '#94a3b8';
+                        e.currentTarget.style.color = theme.colors.textSecondary;
                         e.currentTarget.style.background = 'transparent';
                       }}
                       aria-label={`View timing details for ${demo.title}`}
@@ -340,7 +343,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
           </motion.div>
         );
         })}
-      </div>
+      </main>
 
       {/* Duration Breakdown Modal */}
       <AnimatePresence>
@@ -350,6 +353,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
           if (!demo || !slideBreakdown) return null;
           return (
             <motion.div
+              ref={breakdownModalRef}
               key="backdrop"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -491,7 +495,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
                         </span>
                         <span style={{
                           fontSize: 12,
-                          color: '#14b8a6',
+                          color: theme.colors.accent,
                           fontWeight: 600
                         }}>
                           {formatDuration(slide.totalDuration)}
@@ -592,7 +596,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
       </AnimatePresence>
 
       {/* Footer */}
-      <motion.div
+      <motion.footer
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5 }}
@@ -604,7 +608,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
         }}
       >
         <p>Use keyboard navigation once in presentation mode</p>
-      </motion.div>
+      </motion.footer>
     </div>
   );
 };

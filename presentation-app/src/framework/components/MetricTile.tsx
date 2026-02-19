@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTheme } from '../theme/ThemeContext';
 
 /**
  * MetricTile
@@ -19,15 +20,16 @@ export const MetricTile: React.FC<MetricTileProps> = ({
   emphasis,
   note
 }) => {
+  const theme = useTheme();
   return (
     <div style={{
-      border: '1px solid #1e293b',
+      border: `1px solid ${theme.colors.bgSurface}`,
       borderRadius: 12,
       padding: '1rem',
-      background: emphasis ? 'linear-gradient(135deg,#0f172a,#1e293b)' : '#0f172a',
-      color: '#f1f5f9',
+      background: emphasis ? `linear-gradient(135deg,${theme.colors.bgDeep},${theme.colors.bgSurface})` : theme.colors.bgDeep,
+      color: theme.colors.textPrimary,
       minWidth: 180,
-      fontFamily: 'Inter, system-ui, sans-serif',
+      fontFamily: theme.fontFamily,
       textAlign: 'center'
     }}>
       <div style={{fontSize:12, letterSpacing:1, textTransform:'uppercase', opacity:0.7}}>{label}</div>

@@ -26,6 +26,10 @@ export { VideoPlayer } from './components/VideoPlayer';
 export { NarrationEditModal } from './components/NarrationEditModal';
 export { MetricTile } from './components/MetricTile';
 export type { MetricTileProps } from './components/MetricTile';
+export { SlideErrorBoundary } from './components/SlideErrorBoundary';
+export { DemoPlayerBoundary } from './components/DemoPlayerBoundary';
+export { HoverButton } from './components/HoverButton';
+export type { HoverButtonProps } from './components/HoverButton';
 
 // Contexts
 export { SegmentProvider, useSegmentContext, useSegmentedAnimation } from './contexts/SegmentContext';
@@ -58,7 +62,10 @@ export {
   createSlideContainer,
   createContentBox,
   createGradientBox,
-  createTypography
+  createTypography,
+  createOverlayContainer,
+  createFixedButton,
+  createModalBackdrop
 } from './slides/SlideStyles';
 export {
   fadeIn,
@@ -92,6 +99,14 @@ export type { SlideDurationBreakdown, PresentationDurationReport, SegmentDuratio
 // Utils
 export { loadNarration, getNarrationText } from './utils/narrationLoader';
 export { checkApiHealth, saveNarrationToFile } from './utils/narrationApiClient';
+
+// Hooks
+export { useTtsRegeneration } from './hooks/useTtsRegeneration';
+export { useNotifications } from './hooks/useNotifications';
+export { useRuntimeTimer } from './hooks/useRuntimeTimer';
+export { useApiHealth } from './hooks/useApiHealth';
+export { useNarrationEditor } from './hooks/useNarrationEditor';
+export { useFocusTrap } from './hooks/useFocusTrap';
 
 // Accessibility
 export { ReducedMotionProvider, WithReducedMotionProvider, ReducedMotionToggle, useReducedMotion } from './accessibility/ReducedMotion';

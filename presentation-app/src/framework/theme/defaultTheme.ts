@@ -20,6 +20,10 @@ export const defaultTheme: PresentationTheme = {
     success: '#10b981',
     warning: '#fbbf24',
     error: '#ef4444',
+
+    accent: '#14b8a6',
+    bgOverlay: 'rgba(0,0,0,0.8)',
+    borderSubtle: '#475569',
   },
   fontFamily: 'Inter, system-ui, sans-serif',
 };

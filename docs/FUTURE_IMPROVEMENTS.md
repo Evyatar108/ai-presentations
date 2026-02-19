@@ -2,58 +2,56 @@
 
 Deferred work and improvement opportunities discovered during the framework API & demo contract audit. These are not bugs — the current code works correctly — but addressing them would improve maintainability, testability, and developer experience.
 
-## 1. NarratedController Decomposition
+## 1. NarratedController Decomposition — DONE
 
-**File**: `src/framework/components/NarratedController.tsx` (1,247 lines — 39% of all framework component code)
+**Status**: Completed. NarratedController reduced from 1,247 lines to ~280 lines.
 
-The NarratedController is the largest single file in the framework. It could be decomposed into focused hooks and presentational sub-components:
+**Extracted hooks:**
+- `useNotifications()` — toast notification system (`src/framework/hooks/useNotifications.ts`)
+- `useRuntimeTimer()` — runtime timer with delta calculations (`src/framework/hooks/useRuntimeTimer.ts`)
+- `useApiHealth()` — backend API health check (`src/framework/hooks/useApiHealth.ts`)
+- `useNarrationEditor()` — edit modal state, TTS regeneration, narration save (`src/framework/hooks/useNarrationEditor.ts`)
 
-**Hooks to extract:**
-- `useAudioPlayback()` — audio loading, fallback logic, segment-by-segment orchestration, event handlers
-- `useNarrationEditor()` — edit modal state, TTS regeneration, narration save/cache
-- `usePlaybackState()` — isPlaying/isManualMode/audioEnabled states, notification system
-- `useManualMode()` — manual slide/segment navigation, audio toggle, auto-advance
-- `useRuntimeTimer()` — runtime timer with delta calculations, planned vs. actual display, localStorage persistence
+**Extracted presentational sub-components:**
+- `StartOverlay` — mode selection, options, playback buttons (`src/framework/components/narrated/StartOverlay.tsx`)
+- `ProgressBar` — slide counter, timer, audio toggle, edit/restart (`src/framework/components/narrated/ProgressBar.tsx`)
+- `NotificationStack` — success/error/warning/info toast system (`src/framework/components/narrated/NotificationStack.tsx`)
+- `ErrorToast` — playback error display (`src/framework/components/narrated/ErrorToast.tsx`)
 
-**Presentational sub-components:**
-- `StartOverlay` — mode selection, options checkboxes, playback buttons
-- `ProgressIndicator` — slide counter, timer, audio toggle, edit/restart buttons
-- `NotificationToasts` — success/error/warning/info toast system
+**Shared utility:** `formatMMSS()` and `deltaColor()` in `src/framework/utils/formatTime.ts`.
 
-## 2. Unify SlidePlayer Dual Inputs
+## 2. Unify SlidePlayer Dual Inputs — Deferred (Intentional Design)
 
-**File**: `src/framework/components/SlidePlayer.tsx`
+**Status**: Explored and deferred. The dual-input design (`slides` + `slidesWithMetadata`) is intentional — `slides` is the minimal interface for basic usage, while `slidesWithMetadata` adds audio segments, timing, and TTS. Unifying would break the progressive-complexity API.
 
-SlidePlayer currently accepts both `slides: Slide[]` and `slidesWithMetadata?: SlideComponentWithMetadata[]`:
-- `slides` is the minimal interface (component + identifiers)
-- `slidesWithMetadata` adds audio segments, timing, TTS
+## 3. React Error Boundaries — DONE
 
-Unifying these into a single interface would simplify the component API, but requires updating all callers in DemoPlayer and potentially the Slide/SlideComponentWithMetadata type hierarchy.
+**Status**: Completed.
 
-## 3. React Error Boundaries
+- `SlideErrorBoundary` — wraps `<CurrentComponent />` in SlidePlayer; shows fallback with skip forward/backward buttons; auto-resets on slide change
+- `DemoPlayerBoundary` — wraps DemoPlayer's render output; shows "Back to Demos" escape hatch
+- Fixed unhandled promise rejection in NarratedController API health check
 
-The framework currently has no error boundaries. A single broken slide component crashes the entire presentation.
+Tests in `SlideErrorBoundary.test.tsx` (4 tests).
 
-**Recommended boundaries:**
-- `SlideErrorBoundary` — wrap `<CurrentComponent />` in SlidePlayer so a single broken slide shows a fallback instead of crashing
-- `DemoLoaderErrorBoundary` — wrap `<SlidePlayer>` and `<NarratedController>` in DemoPlayer
-- `WelcomeScreenErrorBoundary` — guard against `DemoRegistry.getAllMetadata()` failures
+## 4. Accessibility Gaps — DONE
 
-Create a shared `ErrorBoundary` component with fallback UI, error details display, and recovery/navigate-back support.
+**Status**: Completed.
 
-## 4. Accessibility Gaps
+- **Focus management**: `useFocusTrap` hook added to NarrationEditModal, StartOverlay, and WelcomeScreen breakdown modal
+- **ARIA live regions**: `aria-live="polite"` on NotificationStack and SlidePlayer regeneration toast; `aria-live="assertive"` on ErrorToast; `role="status"` and `role="alert"` added
+- **Semantic HTML**: `<nav aria-label="Slide navigation">` in SlidePlayer; `<header>`, `<main>`, `<footer>` in WelcomeScreen
+- **Dialog semantics**: `role="dialog"`, `aria-modal="true"`, `aria-labelledby` on NarrationEditModal and StartOverlay
+- **Decorative content**: `aria-hidden="true"` on emoji spans in StartOverlay, ProgressBar, SlideErrorBoundary, DemoPlayerBoundary
+- **Video**: VideoPlayer `ariaLabel` prop + `<track kind="captions">` placeholder
+- **Reduced motion**: `@media (prefers-reduced-motion: reduce)` on spinner animations in DemoPlayer and NarrationEditModal
 
-- **Focus management**: No focus trap in modals (NarrationEditModal, WelcomeScreen); no focus restoration on close; no skip-to-content link
-- **ARIA live regions**: Notification toasts missing `aria-live="polite"`; progress indicator sequence not announced
-- **Semantic HTML**: Start overlay and progress indicator use plain `<div>` instead of `<section>`/`<nav>`/`<status>`
-- **Decorative content**: Emojis (icons) missing `aria-hidden="true"`
-- **Video**: VideoPlayer has no `<track>` for captions, no alt text
+## 5. Systematize Inline Styles — DONE
 
-## 5. Systematize Inline Styles
+**Status**: Completed.
 
-NarratedController, SlidePlayer, and WelcomeScreen use heavy inline styles with scattered hex values (`#475569`, `#00B7C3`, etc.).
-
-**Improvements:**
-- Extract repeated patterns into theme-aware factory functions (`createButtonStyle()`, `createContainerStyle()`, `createProgressIndicator()`)
-- Centralize any remaining hardcoded hex values into theme tokens
-- Consider CSS modules or a styling solution for complex components
+- **New theme tokens**: `accent`, `bgOverlay`, `borderSubtle` added to `ThemeColors`
+- **Theme-ified components**: MetricTile and ReducedMotionToggle now use theme tokens instead of hardcoded colors
+- **Replaced hardcoded colors**: `#475569` → `borderSubtle`, `#14b8a6` → `accent`, `#fb923c` → `warning` across NarrationEditModal, WelcomeScreen, ProgressBar
+- **New factory functions**: `createOverlayContainer()`, `createFixedButton()`, `createModalBackdrop()` in SlideStyles.ts
+- **HoverButton utility**: `src/framework/components/HoverButton.tsx` — thin wrapper managing hover state internally
