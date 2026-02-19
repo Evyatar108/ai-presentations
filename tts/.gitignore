@@ -1,0 +1,18 @@
+# TTS-specific gitignore
+
+# Server configuration (contains IP address)
+server_config.json
+
+# Virtual environments
+venv/
+venv_client/
+__pycache__/
+*.pyc
+*.pyo
+
+# Generated audio output
+output/
+*.wav
+
+# Voice samples (may be large or private)
+voice_samples/
