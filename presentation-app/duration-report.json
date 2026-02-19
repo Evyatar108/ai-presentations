@@ -2,10 +2,10 @@
   "example-demo-1": {
     "demoId": "example-demo-1",
     "audioOnlyDuration": 0,
-    "segmentDelays": 0,
+    "segmentDelays": 1.5,
     "slideDelays": 2,
     "finalDelay": 2,
-    "totalDuration": 4,
+    "totalDuration": 5.5,
     "slideBreakdowns": [
       {
         "slideIndex": 1,
@@ -26,12 +26,27 @@
         "slideIndex": 2,
         "slideTitle": "Key Features",
         "chapterIndex": 0,
-        "totalDuration": 1,
+        "totalDuration": 2.5,
         "audioDuration": 0,
-        "delaysDuration": 1,
+        "delaysDuration": 2.5,
         "segments": [
           {
             "segmentIndex": 0,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 1,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 2,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 3,
             "audioDuration": 0,
             "delayAfter": 1
           }
@@ -55,29 +70,29 @@
     ],
     "formattedDurations": {
       "audioOnly": "0:00",
-      "total": "0:04"
+      "total": "0:05"
     }
   },
   "example-demo-2": {
     "demoId": "example-demo-2",
     "audioOnlyDuration": 0,
-    "segmentDelays": 0,
-    "slideDelays": 2,
+    "segmentDelays": 1.7999999999999998,
+    "slideDelays": 2.4,
     "finalDelay": 2,
-    "totalDuration": 4,
+    "totalDuration": 6.199999999999999,
     "slideBreakdowns": [
       {
         "slideIndex": 1,
         "slideTitle": "Title Slide",
         "chapterIndex": 0,
-        "totalDuration": 1,
+        "totalDuration": 1.2,
         "audioDuration": 0,
-        "delaysDuration": 1,
+        "delaysDuration": 1.2,
         "segments": [
           {
             "segmentIndex": 0,
             "audioDuration": 0,
-            "delayAfter": 1
+            "delayAfter": 1.2
           }
         ]
       },
@@ -85,27 +100,42 @@
         "slideIndex": 2,
         "slideTitle": "System Benefits",
         "chapterIndex": 0,
-        "totalDuration": 1,
+        "totalDuration": 2.4,
         "audioDuration": 0,
-        "delaysDuration": 1,
+        "delaysDuration": 2.4,
         "segments": [
           {
             "segmentIndex": 0,
             "audioDuration": 0,
-            "delayAfter": 1
+            "delayAfter": 0.6
+          },
+          {
+            "segmentIndex": 1,
+            "audioDuration": 0,
+            "delayAfter": 0.6
+          },
+          {
+            "segmentIndex": 2,
+            "audioDuration": 0,
+            "delayAfter": 1.2
           }
         ]
       },
       {
         "slideIndex": 3,
-        "slideTitle": "Thank You",
+        "slideTitle": "Framework Impact",
         "chapterIndex": 0,
-        "totalDuration": 2,
+        "totalDuration": 2.6,
         "audioDuration": 0,
-        "delaysDuration": 2,
+        "delaysDuration": 2.6,
         "segments": [
           {
             "segmentIndex": 0,
+            "audioDuration": 0,
+            "delayAfter": 0.6
+          },
+          {
+            "segmentIndex": 1,
             "audioDuration": 0,
             "delayAfter": 2
           }
@@ -114,7 +144,7 @@
     ],
     "formattedDurations": {
       "audioOnly": "0:00",
-      "total": "0:04"
+      "total": "0:06"
     }
   }
 }

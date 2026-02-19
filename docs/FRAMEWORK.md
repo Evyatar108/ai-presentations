@@ -18,15 +18,19 @@ src/
 │   ├── components/
 │   │   ├── WelcomeScreen.tsx      ← Demo selection screen
 │   │   ├── DemoPlayer.tsx         ← Demo container with loading/error states
+│   │   ├── DemoPlayerBoundary.tsx ← Top-level error boundary for DemoPlayer
 │   │   ├── NarratedController.tsx ← Audio playback orchestration
 │   │   ├── SlidePlayer.tsx        ← Slide navigation & display
+│   │   ├── SlideErrorBoundary.tsx ← Per-slide error boundary
 │   │   ├── VideoPlayer.tsx        ← Video playback component
 │   │   ├── NarrationEditModal.tsx ← Edit narration text modal
-│   │   └── MetricTile.tsx         ← Metric display tile
+│   │   ├── MetricTile.tsx         ← Metric display tile
+│   │   └── HoverButton.tsx        ← Reusable button with hover states
 │   ├── contexts/
 │   │   └── SegmentContext.tsx     ← Segment state management
 │   ├── slides/
 │   │   ├── SlideMetadata.ts       ← Slide/segment type definitions
+│   │   ├── defineSlide.ts         ← defineSlide() factory for creating slides
 │   │   ├── SlideLayouts.tsx       ← Shared layout templates
 │   │   ├── SlideStyles.ts         ← Shared styling (static + theme-aware)
 │   │   ├── SlideIcons.tsx         ← SVG icon components
@@ -38,11 +42,19 @@ src/
 │   │       ├── types.ts           ← TimingConfig & resolver
 │   │       └── calculator.ts      ← Duration calculation
 │   ├── hooks/
-│   │   └── useTtsRegeneration.ts ← TTS audio regeneration hook
+│   │   ├── useTtsRegeneration.ts  ← TTS audio regeneration hook
+│   │   ├── useNotifications.ts    ← Toast notification state management
+│   │   ├── useRuntimeTimer.ts     ← Runtime timer with delta calculations
+│   │   ├── useApiHealth.ts        ← Backend API health check
+│   │   ├── useNarrationEditor.ts  ← Narration editing workflow
+│   │   └── useFocusTrap.ts        ← Keyboard focus trap for modals
 │   ├── utils/
 │   │   ├── narrationLoader.ts     ← External narration JSON loader
 │   │   ├── narrationApiClient.ts  ← Backend API client (uses config)
-│   │   └── ttsClient.ts           ← TTS server communication
+│   │   ├── ttsClient.ts           ← TTS server communication
+│   │   └── debug.ts               ← Debug logging utilities
+│   ├── testing/
+│   │   └── index.ts               ← Test utilities (TestSlideWrapper, helpers)
 │   └── accessibility/
 │       └── ReducedMotion.tsx      ← Reduced motion preference
 ├── demos/                         ← Project-specific content
@@ -69,8 +81,8 @@ The framework provides two configuration mechanisms:
 ### `project.config.ts` — Theme & Config Overrides
 
 ```typescript
-import { setProjectConfig } from './framework/config';
-import type { PartialTheme } from './framework/theme/types';
+import { setProjectConfig } from '@framework';
+import type { PartialTheme } from '@framework';
 
 // Override framework config
 setProjectConfig({
@@ -87,7 +99,7 @@ export const themeOverrides: PartialTheme = {
 
 Access resolved config values anywhere:
 ```typescript
-import { getConfig } from './framework/config';
+import { getConfig } from '@framework';
 const url = getConfig().narrationApiBaseUrl;
 ```
 
@@ -112,6 +124,7 @@ This file is imported as a side-effect in `main.tsx` to ensure all demos are reg
 The framework barrel uses explicit named exports (no wildcard `export *`) for SlideStyles and AnimationVariants. This ensures consumers see exactly what's available and prevents accidental leaking of internal symbols.
 
 Additional exports available from the barrel:
+- **Slide factory**: `defineSlide()` — creates slides with metadata and component in a single call
 - **Types**: `DurationInfo`, `NarrationFallback`, `DemoDefaultMode`, `SlideDurationBreakdown`, `PresentationDurationReport`, `SegmentDurationInfo`
 - **Component props**: `DemoPlayerProps`, `SlidePlayerProps`, `NarratedControllerProps`, plus all layout props (`SlideContainerProps`, `ContentCardProps`, etc.)
 - **Calculator functions**: `calculateSlideDuration`, `calculatePresentationDuration`

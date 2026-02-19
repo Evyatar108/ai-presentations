@@ -44,7 +44,7 @@ Only the properties you specify are overridden; everything else falls back to de
 ## Using `useTheme()` in Custom Slides
 
 ```tsx
-import { useTheme } from '../framework/theme/ThemeContext';
+import { useTheme } from '@framework';
 
 const MySlide = () => {
   const theme = useTheme();
@@ -63,10 +63,10 @@ const MySlide = () => {
 
 ```typescript
 // Static (used by demo slides — backward compatible)
-import { slideContainer, contentBox, typography } from './framework/slides/SlideStyles';
+import { slideContainer, contentBox, typography } from '@framework';
 
 // Theme-aware (used by framework components)
-import { createSlideContainer, createContentBox, createTypography } from './framework/slides/SlideStyles';
+import { createSlideContainer, createContentBox, createTypography } from '@framework';
 const styles = createSlideContainer(theme);
 ```
 

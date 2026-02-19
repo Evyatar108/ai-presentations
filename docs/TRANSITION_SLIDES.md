@@ -78,19 +78,22 @@ export interface SlideMetadata {
 
 ```typescript
 // In DemoPlayer.tsx - Automatic injection when slides load
+import { defineSlide } from '@framework';
+import type { SlideComponentWithMetadata } from '@framework';
+
 function injectTransitionSlides(contentSlides: SlideComponentWithMetadata[]): SlideComponentWithMetadata[] {
   const result: SlideComponentWithMetadata[] = [];
-  
+
   contentSlides.forEach((slide, index) => {
     // Add content slide
     result.push(slide);
-    
+
     // Add transition slide after (except after last slide)
     if (index < contentSlides.length - 1) {
       result.push(createTransitionSlide(slide.metadata.chapter, slide.metadata.slide));
     }
   });
-  
+
   return result;
 
 ---
@@ -139,31 +142,33 @@ export const DEFAULT_TIMING: Required<TimingConfig> = {
 
 ```typescript
 // In DemoPlayer.tsx - Pass demo timing to factory
+import { defineSlide, resolveTimingConfig } from '@framework';
+import type { SlideComponentWithMetadata, TimingConfig } from '@framework';
+
 function createTransitionSlide(
-  afterChapter: number, 
-  afterSlide: number, 
+  afterChapter: number,
+  afterSlide: number,
   demoTiming?: TimingConfig
 ): SlideComponentWithMetadata {
   const resolvedTiming = resolveTimingConfig(demoTiming);
   const transitionDelay = resolvedTiming.transitionDelay; // 200ms default
-  
-  const TransitionSlide: SlideComponentWithMetadata = () => (
-    <div style={{ width: '100%', height: '100vh', background: '#0f172a' }} />
-  );
-  
-  TransitionSlide.metadata = {
-    chapter: afterChapter,
-    slide: afterSlide + 0.5,  // Virtual slide number (e.g., 1.5)
-    title: `Transition (${transitionDelay}ms)`,
-    audioSegments: [],
-    isTransitionSlide: true,
-    timing: {
-      betweenSegments: transitionDelay,  // This IS the transition delay
-      betweenSlides: 0  // No additional delay after transition
-    }
-  };
-  
-  return TransitionSlide;
+
+  return defineSlide({
+    metadata: {
+      chapter: afterChapter,
+      slide: afterSlide + 0.5,  // Virtual slide number (e.g., 1.5)
+      title: `Transition (${transitionDelay}ms)`,
+      audioSegments: [],
+      isTransitionSlide: true,
+      timing: {
+        betweenSegments: transitionDelay,  // This IS the transition delay
+        betweenSlides: 0  // No additional delay after transition
+      }
+    },
+    component: () => (
+      <div style={{ width: '100%', height: '100vh', background: '#0f172a' }} />
+    ),
+  });
 }
 
 // In injection function
@@ -221,8 +226,8 @@ export function calculateSlideDuration(
 
 ```typescript
 // Fast-paced demo with quick transitions
-export const demoConfig: DemoConfig = {
-  id: 'fast-demo',
+const demoConfig: DemoConfig = {
+  metadata,  // id comes from metadata.id
   timing: {
     betweenSegments: 300,
     betweenSlides: 500,
@@ -233,8 +238,8 @@ export const demoConfig: DemoConfig = {
 };
 
 // Slow-paced demo with leisurely transitions
-export const demoConfig: DemoConfig = {
-  id: 'slow-demo',
+const demoConfig: DemoConfig = {
+  metadata,  // id comes from metadata.id
   timing: {
     betweenSegments: 800,
     betweenSlides: 1500,
@@ -293,22 +298,21 @@ export const demoConfig: DemoConfig = {
 }
 
 function createTransitionSlide(afterChapter: number, afterSlide: number): SlideComponentWithMetadata {
-  const TransitionSlide: SlideComponentWithMetadata = () => (
-    <div style={{ width: '100%', height: '100vh', background: '#0f172a' }} />
-  );
-  
-  TransitionSlide.metadata = {
-    chapter: afterChapter,
-    slide: afterSlide + 0.5,  // Virtual slide number (e.g., 1.5 between 1 and 2)
-    title: `Transition after Ch${afterChapter}:S${afterSlide}`,
-    audioSegments: [],
-    isTransitionSlide: true,
-    timing: {
-      betweenSlides: 0  // No delay after transition
-    }
-  };
-  
-  return TransitionSlide;
+  return defineSlide({
+    metadata: {
+      chapter: afterChapter,
+      slide: afterSlide + 0.5,  // Virtual slide number (e.g., 1.5 between 1 and 2)
+      title: `Transition after Ch${afterChapter}:S${afterSlide}`,
+      audioSegments: [],
+      isTransitionSlide: true,
+      timing: {
+        betweenSlides: 0  // No delay after transition
+      }
+    },
+    component: () => (
+      <div style={{ width: '100%', height: '100vh', background: '#0f172a' }} />
+    ),
+  });
 }
 
 // Usage in DemoPlayer
