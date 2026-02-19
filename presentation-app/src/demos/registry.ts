@@ -9,8 +9,8 @@
  * Import this file as a side-effect in main.tsx to ensure demos are registered at startup.
  */
 
-import { DemoRegistry } from '@framework/demos/DemoRegistry';
-import type { DemoMetadata, DemoConfig } from '@framework/demos/types';
+import { DemoRegistry } from '@framework';
+import type { DemoMetadata, DemoConfig } from '@framework';
 
 // Eagerly load all metadata (for welcome screen listing)
 const metadataModules = import.meta.glob<{ metadata: DemoMetadata }>(

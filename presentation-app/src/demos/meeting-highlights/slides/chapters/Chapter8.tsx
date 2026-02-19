@@ -1,18 +1,22 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useReducedMotion } from '@framework/accessibility/ReducedMotion';
-import { useTheme } from '@framework/theme/ThemeContext';
-import { useSegmentedAnimation } from '@framework/contexts/SegmentContext';
-import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
-import { SlideContainer } from '@framework/slides/SlideLayouts';
-import { typography, gradientBox, successGradientBox } from '@framework/slides/SlideStyles';
+import {
+  useReducedMotion,
+  useTheme,
+  useSegmentedAnimation,
+  defineSlide,
+  SlideContainer,
+  typography,
+  gradientBox,
+  successGradientBox,
+} from '@framework';
 
 /**
  * Chapter 8: User Reception
  * Single slide showing user satisfaction metrics
  */
 
-export const Ch8_S1_UserSatisfaction: SlideComponentWithMetadata = () => {
+const Ch8_S1_UserSatisfactionComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
   const theme = useTheme();
   const { isSegmentVisible } = useSegmentedAnimation();
@@ -292,26 +296,29 @@ export const Ch8_S1_UserSatisfaction: SlideComponentWithMetadata = () => {
   );
 };
 
-Ch8_S1_UserSatisfaction.metadata = {
-  chapter: 8,
-  slide: 1,
-  title: "User Satisfaction",
-  audioSegments: [
-    {
-      id: "intro",
-      audioFilePath: "/audio/meeting-highlights/c8/s1_segment_01_intro.wav"
-    },
-    {
-      id: "useful",
-      audioFilePath: "/audio/meeting-highlights/c8/s1_segment_02_useful.wav"
-    },
-    {
-      id: "likely",
-      audioFilePath: "/audio/meeting-highlights/c8/s1_segment_03_likely.wav"
-    },
-    {
-      id: "fit",
-      audioFilePath: "/audio/meeting-highlights/c8/s1_segment_04_fit.wav"
-    }
-  ]
-};
+export const Ch8_S1_UserSatisfaction = defineSlide({
+  metadata: {
+    chapter: 8,
+    slide: 1,
+    title: "User Satisfaction",
+    audioSegments: [
+      {
+        id: "intro",
+        audioFilePath: "/audio/meeting-highlights/c8/s1_segment_01_intro.wav"
+      },
+      {
+        id: "useful",
+        audioFilePath: "/audio/meeting-highlights/c8/s1_segment_02_useful.wav"
+      },
+      {
+        id: "likely",
+        audioFilePath: "/audio/meeting-highlights/c8/s1_segment_03_likely.wav"
+      },
+      {
+        id: "fit",
+        audioFilePath: "/audio/meeting-highlights/c8/s1_segment_04_fit.wav"
+      }
+    ]
+  },
+  component: Ch8_S1_UserSatisfactionComponent
+});

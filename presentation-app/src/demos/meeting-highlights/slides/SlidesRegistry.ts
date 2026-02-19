@@ -1,4 +1,4 @@
-import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
+import type { SlideComponentWithMetadata } from '@framework';
 
 // Import slides from chapter files
 import { BlankIntro } from './chapters/Chapter0';
@@ -34,7 +34,7 @@ import {
  * All slides are now organized in chapter-specific files under ./chapters/
  * This structure improves maintainability and makes it easier to find and edit slides.
  */
- 
+
  export const allSlides: SlideComponentWithMetadata[] = [
    BlankIntro,
    Ch1_S1_WhatIsMeetingHighlights,

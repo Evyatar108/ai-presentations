@@ -1,4 +1,4 @@
-import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
+import { defineSlide } from '@framework';
 
 /**
  * Example Demo 2 - Chapter 0: Placeholder Slides
@@ -6,13 +6,24 @@ import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
  */
 
 // Slide 1: Title Slide (Dark theme)
-export const Ex2_S1_Title: SlideComponentWithMetadata = () => {
-  return (
-    <div style={{ 
-      display: 'flex', 
-      flexDirection: 'column', 
-      alignItems: 'center', 
-      justifyContent: 'center', 
+export const Ex2_S1_Title = defineSlide({
+  metadata: {
+    chapter: 0,
+    slide: 1,
+    title: 'Title Slide',
+    audioSegments: [
+      {
+        id: 'title',
+        audioFilePath: '/audio/example-demo-2/c0/s1_segment_01_title.wav'
+      }
+    ]
+  },
+  component: () => (
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
       height: '100vh',
       background: '#0f172a',
       color: 'white',
@@ -29,83 +40,83 @@ export const Ex2_S1_Title: SlideComponentWithMetadata = () => {
         <p style={{ fontSize: '2rem', opacity: 0.8, textAlign: 'center' }}>Alternative Styling Demo</p>
       </div>
     </div>
-  );
-};
-
-Ex2_S1_Title.metadata = {
-  chapter: 0,
-  slide: 1,
-  title: 'Title Slide',
-  audioSegments: [
-    {
-      id: 'title',
-      audioFilePath: '/audio/example-demo-2/c0/s1_segment_01_title.wav'
-    }
-  ]
-};
+  )
+});
 
 // Slide 2: Benefits (Card layout)
-export const Ex2_S2_Benefits: SlideComponentWithMetadata = () => {
-  const cards = [
-    { title: 'Flexible', icon: '🎨', desc: 'Customize each demo independently' },
-    { title: 'Scalable', icon: '📈', desc: 'Add unlimited demos' },
-    { title: 'Organized', icon: '📁', desc: 'Clear file structure' }
-  ];
+export const Ex2_S2_Benefits = defineSlide({
+  metadata: {
+    chapter: 0,
+    slide: 2,
+    title: 'System Benefits',
+    audioSegments: [
+      {
+        id: 'benefits',
+        audioFilePath: '/audio/example-demo-2/c0/s2_segment_01_benefits.wav'
+      }
+    ]
+  },
+  component: () => {
+    const cards = [
+      { title: 'Flexible', icon: '🎨', desc: 'Customize each demo independently' },
+      { title: 'Scalable', icon: '📈', desc: 'Add unlimited demos' },
+      { title: 'Organized', icon: '📁', desc: 'Clear file structure' }
+    ];
 
-  return (
-    <div style={{ 
-      display: 'flex', 
-      flexDirection: 'column', 
-      height: '100vh',
-      padding: '80px',
-      background: '#0f172a',
-      color: 'white',
-      fontFamily: 'Inter, system-ui, sans-serif'
-    }}>
-      <h2 style={{ fontSize: '3rem', marginBottom: '3rem', textAlign: 'center' }}>System Benefits</h2>
-      <div style={{ 
-        display: 'grid',
-        gridTemplateColumns: 'repeat(3, 1fr)',
-        gap: '2rem',
-        maxWidth: '1200px',
-        margin: '0 auto'
+    return (
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100vh',
+        padding: '80px',
+        background: '#0f172a',
+        color: 'white',
+        fontFamily: 'Inter, system-ui, sans-serif'
       }}>
-        {cards.map((card, i) => (
-          <div key={i} style={{
-            background: '#1e293b',
-            padding: '2rem',
-            borderRadius: '12px',
-            textAlign: 'center',
-            border: '1px solid #334155'
-          }}>
-            <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>{card.icon}</div>
-            <h3 style={{ fontSize: '1.8rem', marginBottom: '0.5rem', color: '#00B7C3' }}>{card.title}</h3>
-            <p style={{ fontSize: '1.2rem', opacity: 0.8 }}>{card.desc}</p>
-          </div>
-        ))}
+        <h2 style={{ fontSize: '3rem', marginBottom: '3rem', textAlign: 'center' }}>System Benefits</h2>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(3, 1fr)',
+          gap: '2rem',
+          maxWidth: '1200px',
+          margin: '0 auto'
+        }}>
+          {cards.map((card, i) => (
+            <div key={i} style={{
+              background: '#1e293b',
+              padding: '2rem',
+              borderRadius: '12px',
+              textAlign: 'center',
+              border: '1px solid #334155'
+            }}>
+              <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>{card.icon}</div>
+              <h3 style={{ fontSize: '1.8rem', marginBottom: '0.5rem', color: '#00B7C3' }}>{card.title}</h3>
+              <p style={{ fontSize: '1.2rem', opacity: 0.8 }}>{card.desc}</p>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
-  );
-};
-
-Ex2_S2_Benefits.metadata = {
-  chapter: 0,
-  slide: 2,
-  title: 'System Benefits',
-  audioSegments: [
-    {
-      id: 'benefits',
-      audioFilePath: '/audio/example-demo-2/c0/s2_segment_01_benefits.wav'
-    }
-  ]
-};
+    );
+  }
+});
 
 // Slide 3: Thank You
-export const Ex2_S3_ThankYou: SlideComponentWithMetadata = () => {
-  return (
-    <div style={{ 
-      display: 'flex', 
-      flexDirection: 'column', 
+export const Ex2_S3_ThankYou = defineSlide({
+  metadata: {
+    chapter: 0,
+    slide: 3,
+    title: 'Thank You',
+    audioSegments: [
+      {
+        id: 'thanks',
+        audioFilePath: '/audio/example-demo-2/c0/s3_segment_01_thanks.wav'
+      }
+    ]
+  },
+  component: () => (
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
       height: '100vh',
@@ -125,17 +136,5 @@ export const Ex2_S3_ThankYou: SlideComponentWithMetadata = () => {
         Ready to create your own demo?
       </div>
     </div>
-  );
-};
-
-Ex2_S3_ThankYou.metadata = {
-  chapter: 0,
-  slide: 3,
-  title: 'Thank You',
-  audioSegments: [
-    {
-      id: 'thanks',
-      audioFilePath: '/audio/example-demo-2/c0/s3_segment_01_thanks.wav'
-    }
-  ]
-};
+  )
+});

@@ -1,11 +1,15 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useReducedMotion } from '@framework/accessibility/ReducedMotion';
-import { useSegmentedAnimation } from '@framework/contexts/SegmentContext';
-import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
-import { SlideContainer, SlideTitle } from '@framework/slides/SlideLayouts';
-import { typography, layouts } from '@framework/slides/SlideStyles';
-import { useTheme } from '@framework/theme/ThemeContext';
+import {
+  useReducedMotion,
+  useSegmentedAnimation,
+  useTheme,
+  defineSlide,
+  SlideContainer,
+  SlideTitle,
+  typography,
+  layouts,
+} from '@framework';
 
 /**
  * Chapter 4: Highlight Types
@@ -15,7 +19,7 @@ import { useTheme } from '@framework/theme/ThemeContext';
 /**
  * Chapter 4, Slide 1 - Highlight Types
  */
-export const Ch4_S1_HighlightTypes: SlideComponentWithMetadata = () => {
+const Ch4_S1_HighlightTypesComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
   const { isSegmentVisible, currentSegmentIndex } = useSegmentedAnimation();
   const theme = useTheme();
@@ -158,41 +162,44 @@ export const Ch4_S1_HighlightTypes: SlideComponentWithMetadata = () => {
   );
 };
 
-Ch4_S1_HighlightTypes.metadata = {
-  chapter: 4,
-  slide: 1,
-  title: "Highlight Types",
-  srtFilePath: "highlights_demo/chapters/c4/s1_highlight_types.srt",
-  audioSegments: [
-    {
-      id: "intro",
-      audioFilePath: "/audio/meeting-highlights/c4/s1_segment_01_intro.wav",
-      srtSegmentNumber: 1,
-      visualDescription: "Title \"Two Types of Highlights\""
-    },
-    {
-      id: "abstractive",
-      audioFilePath: "/audio/meeting-highlights/c4/s1_segment_02_abstractive.wav",
-      srtSegmentNumber: 2,
-      visualDescription: "Left card appears - Abstractive Highlights with summary icon"
-    },
-    {
-      id: "key_moments",
-      audioFilePath: "/audio/meeting-highlights/c4/s1_segment_03_key_moments.wav",
-      srtSegmentNumber: 3,
-      visualDescription: "Right card appears - Key Moments with video clip icon"
-    },
-    {
-      id: "timestamps",
-      audioFilePath: "/audio/meeting-highlights/c4/s1_segment_04_timestamps.wav",
-      srtSegmentNumber: 4,
-      visualDescription: "Detail callout showing 20-30 second segments"
-    },
-    {
-      id: "narrative",
-      audioFilePath: "/audio/meeting-highlights/c4/s1_segment_05_narrative.wav",
-      srtSegmentNumber: 5,
-      visualDescription: "Narrative storytelling icon connecting highlights"
-    }
-  ]
-};
+export const Ch4_S1_HighlightTypes = defineSlide({
+  metadata: {
+    chapter: 4,
+    slide: 1,
+    title: "Highlight Types",
+    srtFilePath: "highlights_demo/chapters/c4/s1_highlight_types.srt",
+    audioSegments: [
+      {
+        id: "intro",
+        audioFilePath: "/audio/meeting-highlights/c4/s1_segment_01_intro.wav",
+        srtSegmentNumber: 1,
+        visualDescription: "Title \"Two Types of Highlights\""
+      },
+      {
+        id: "abstractive",
+        audioFilePath: "/audio/meeting-highlights/c4/s1_segment_02_abstractive.wav",
+        srtSegmentNumber: 2,
+        visualDescription: "Left card appears - Abstractive Highlights with summary icon"
+      },
+      {
+        id: "key_moments",
+        audioFilePath: "/audio/meeting-highlights/c4/s1_segment_03_key_moments.wav",
+        srtSegmentNumber: 3,
+        visualDescription: "Right card appears - Key Moments with video clip icon"
+      },
+      {
+        id: "timestamps",
+        audioFilePath: "/audio/meeting-highlights/c4/s1_segment_04_timestamps.wav",
+        srtSegmentNumber: 4,
+        visualDescription: "Detail callout showing 20-30 second segments"
+      },
+      {
+        id: "narrative",
+        audioFilePath: "/audio/meeting-highlights/c4/s1_segment_05_narrative.wav",
+        srtSegmentNumber: 5,
+        visualDescription: "Narrative storytelling icon connecting highlights"
+      }
+    ]
+  },
+  component: Ch4_S1_HighlightTypesComponent
+});

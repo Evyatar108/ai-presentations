@@ -1,11 +1,13 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useReducedMotion } from '@framework/accessibility/ReducedMotion';
-import { useTheme } from '@framework/theme/ThemeContext';
-import { useSegmentedAnimation } from '@framework/contexts/SegmentContext';
-import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
-import { SlideContainer } from '@framework/slides/SlideLayouts';
-import { typography } from '@framework/slides/SlideStyles';
+import {
+  useReducedMotion,
+  useTheme,
+  useSegmentedAnimation,
+  defineSlide,
+  SlideContainer,
+  typography,
+} from '@framework';
 
 /**
  * Chapter 9: Future Improvements
@@ -15,7 +17,7 @@ import { typography } from '@framework/slides/SlideStyles';
 /**
  * Chapter 9, Slide 1 - Testimonials
  */
-export const Ch9_S1_Testimonials: SlideComponentWithMetadata = () => {
+const Ch9_S1_TestimonialsComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
   const theme = useTheme();
   const { isSegmentVisible } = useSegmentedAnimation();
@@ -278,38 +280,41 @@ export const Ch9_S1_Testimonials: SlideComponentWithMetadata = () => {
   );
 };
 
-Ch9_S1_Testimonials.metadata = {
-  chapter: 9,
-  slide: 1,
-  title: "Testimonials",
-  audioSegments: [
-    {
-      id: "intro",
-      audioFilePath: "/audio/meeting-highlights/c9/s1_segment_01_intro.wav"
-    },
-    {
-      id: "kevin",
-      audioFilePath: "/audio/meeting-highlights/c9/s1_segment_02_kevin.wav"
-    },
-    {
-      id: "ryan1",
-      audioFilePath: "/audio/meeting-highlights/c9/s1_segment_03_ryan1.wav"
-    },
-    {
-      id: "ryan2",
-      audioFilePath: "/audio/meeting-highlights/c9/s1_segment_04_ryan2.wav"
-    },
-    {
-      id: "anonymous",
-      audioFilePath: "/audio/meeting-highlights/c9/s1_segment_05_anonymous.wav"
-    }
-  ]
-};
+export const Ch9_S1_Testimonials = defineSlide({
+  metadata: {
+    chapter: 9,
+    slide: 1,
+    title: "Testimonials",
+    audioSegments: [
+      {
+        id: "intro",
+        audioFilePath: "/audio/meeting-highlights/c9/s1_segment_01_intro.wav"
+      },
+      {
+        id: "kevin",
+        audioFilePath: "/audio/meeting-highlights/c9/s1_segment_02_kevin.wav"
+      },
+      {
+        id: "ryan1",
+        audioFilePath: "/audio/meeting-highlights/c9/s1_segment_03_ryan1.wav"
+      },
+      {
+        id: "ryan2",
+        audioFilePath: "/audio/meeting-highlights/c9/s1_segment_04_ryan2.wav"
+      },
+      {
+        id: "anonymous",
+        audioFilePath: "/audio/meeting-highlights/c9/s1_segment_05_anonymous.wav"
+      }
+    ]
+  },
+  component: Ch9_S1_TestimonialsComponent
+});
 
 /**
  * Chapter 9, Slide 2 - Thank You & Closing
  */
-export const Ch9_S2_ClosingThanks: SlideComponentWithMetadata = () => {
+const Ch9_S2_ClosingThanksComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
   const theme = useTheme();
   const { isSegmentVisible } = useSegmentedAnimation();
@@ -678,26 +683,29 @@ export const Ch9_S2_ClosingThanks: SlideComponentWithMetadata = () => {
   );
 };
 
-Ch9_S2_ClosingThanks.metadata = {
-  chapter: 9,
-  slide: 2,
-  title: "Thank You",
-  audioSegments: [
-    {
-      id: "intro",
-      audioFilePath: "/audio/meeting-highlights/c9/s2_segment_01_intro.wav"
-    },
-    {
-      id: "value",
-      audioFilePath: "/audio/meeting-highlights/c9/s2_segment_02_value.wav"
-    },
-    {
-      id: "feedback",
-      audioFilePath: "/audio/meeting-highlights/c9/s2_segment_03_feedback.wav"
-    },
-    {
-      id: "cta",
-      audioFilePath: "/audio/meeting-highlights/c9/s2_segment_04_cta.wav"
-    }
-  ]
-};
+export const Ch9_S2_ClosingThanks = defineSlide({
+  metadata: {
+    chapter: 9,
+    slide: 2,
+    title: "Thank You",
+    audioSegments: [
+      {
+        id: "intro",
+        audioFilePath: "/audio/meeting-highlights/c9/s2_segment_01_intro.wav"
+      },
+      {
+        id: "value",
+        audioFilePath: "/audio/meeting-highlights/c9/s2_segment_02_value.wav"
+      },
+      {
+        id: "feedback",
+        audioFilePath: "/audio/meeting-highlights/c9/s2_segment_03_feedback.wav"
+      },
+      {
+        id: "cta",
+        audioFilePath: "/audio/meeting-highlights/c9/s2_segment_04_cta.wav"
+      }
+    ]
+  },
+  component: Ch9_S2_ClosingThanksComponent
+});

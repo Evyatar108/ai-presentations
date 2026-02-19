@@ -1,9 +1,6 @@
 import React, { useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useReducedMotion } from '@framework/accessibility/ReducedMotion';
-import { useSegmentedAnimation } from '@framework/contexts/SegmentContext';
-import { useTheme } from '@framework/theme/ThemeContext';
-import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
+import { useReducedMotion, useSegmentedAnimation, useTheme, defineSlide } from '@framework';
 import 'reactflow/dist/style.css';
 import {
   ReactFlow,
@@ -456,7 +453,7 @@ const ArchitectureDiagram: React.FC<{
 * Chapter 2 - Team Collaboration & Architecture
 * Merged slide showing team collaboration diagram (left) and architecture flow (right)
 */
-export const Ch2_TeamCollaboration: SlideComponentWithMetadata = () => {
+const Ch2_TeamCollaborationComponent: React.FC = () => {
  const { reduced } = useReducedMotion();
  const { currentSegmentIndex, isSegmentVisible } = useSegmentedAnimation();
  const theme = useTheme();
@@ -669,47 +666,50 @@ export const Ch2_TeamCollaboration: SlideComponentWithMetadata = () => {
  );
 };
 
-Ch2_TeamCollaboration.metadata = {
-  chapter: 2,
-  slide: 1,
-  title: 'Team Collaboration & Architecture',
-  srtFilePath: 'highlights_demo/chapters/c2/s1_team_collaboration.srt',
-  audioSegments: [
-    {
-      id: 'intro',
-      audioFilePath: '/audio/meeting-highlights/c2/s1_segment_01_intro.wav'
-    },
-    {
-      id: 'odsp',
-      audioFilePath: '/audio/meeting-highlights/c2/s1_segment_02_odsp.wav'
-    },
-    {
-      id: 'msai',
-      audioFilePath: '/audio/meeting-highlights/c2/s1_segment_03_msai.wav'
-    },
-    {
-      id: 'bizchat',
-      audioFilePath: '/audio/meeting-highlights/c2/s1_segment_04_bizchat.wav'
-    },
-    {
-      id: 'sharepoint',
-      audioFilePath: '/audio/meeting-highlights/c2/s1_segment_05_sharepoint.wav'
-    },
-    {
-      id: 'teams',
-      audioFilePath: '/audio/meeting-highlights/c2/s1_segment_06_teams.wav'
-    },
-    {
-      id: 'loop_storage',
-      audioFilePath: '/audio/meeting-highlights/c2/s1_segment_07_loop_storage.wav'
-    },
-    {
-      id: 'clipchamp',
-      audioFilePath: '/audio/meeting-highlights/c2/s1_segment_08_clipchamp.wav'
-    },
-    {
-      id: 'conclusion',
-      audioFilePath: '/audio/meeting-highlights/c2/s1_segment_09_conclusion.wav'
-    }
-  ]
-};
+export const Ch2_TeamCollaboration = defineSlide({
+  metadata: {
+    chapter: 2,
+    slide: 1,
+    title: 'Team Collaboration & Architecture',
+    srtFilePath: 'highlights_demo/chapters/c2/s1_team_collaboration.srt',
+    audioSegments: [
+      {
+        id: 'intro',
+        audioFilePath: '/audio/meeting-highlights/c2/s1_segment_01_intro.wav'
+      },
+      {
+        id: 'odsp',
+        audioFilePath: '/audio/meeting-highlights/c2/s1_segment_02_odsp.wav'
+      },
+      {
+        id: 'msai',
+        audioFilePath: '/audio/meeting-highlights/c2/s1_segment_03_msai.wav'
+      },
+      {
+        id: 'bizchat',
+        audioFilePath: '/audio/meeting-highlights/c2/s1_segment_04_bizchat.wav'
+      },
+      {
+        id: 'sharepoint',
+        audioFilePath: '/audio/meeting-highlights/c2/s1_segment_05_sharepoint.wav'
+      },
+      {
+        id: 'teams',
+        audioFilePath: '/audio/meeting-highlights/c2/s1_segment_06_teams.wav'
+      },
+      {
+        id: 'loop_storage',
+        audioFilePath: '/audio/meeting-highlights/c2/s1_segment_07_loop_storage.wav'
+      },
+      {
+        id: 'clipchamp',
+        audioFilePath: '/audio/meeting-highlights/c2/s1_segment_08_clipchamp.wav'
+      },
+      {
+        id: 'conclusion',
+        audioFilePath: '/audio/meeting-highlights/c2/s1_segment_09_conclusion.wav'
+      }
+    ]
+  },
+  component: Ch2_TeamCollaborationComponent
+});

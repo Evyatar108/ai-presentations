@@ -201,7 +201,7 @@ Write-Host "`nCreating source files..." -ForegroundColor Yellow
 
 # metadata.ts
 $metadataContent = @"
-import type { DemoMetadata } from '@framework/demos/types';
+import type { DemoMetadata } from '@framework';
 
 export const metadata: DemoMetadata = {
   id: '$DemoId',
@@ -220,11 +220,10 @@ Write-Host "  ✓ Created: $metadataPath" -ForegroundColor Green
 
 # index.ts
 $indexContent = @"
-import type { DemoConfig } from '@framework/demos/types';
+import type { DemoConfig } from '@framework';
 import { metadata } from './metadata';
 
 const demoConfig: DemoConfig = {
-  id: '$DemoId',
   metadata,
   getSlides: async () => {
     const { allSlides } = await import('./slides/SlidesRegistry');
@@ -242,40 +241,41 @@ Write-Host "  ✓ Created: $indexPath" -ForegroundColor Green
 
 # Chapter0.tsx
 $chapter0Content = @"
-import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
+import { defineSlide } from '@framework';
 
-export const Ch0_S1_Intro: SlideComponentWithMetadata = () => (
-  <div style={{
-    width: '100%',
-    height: '100vh',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-    color: 'white',
-    fontFamily: 'Inter, system-ui, sans-serif'
-  }}>
-    <h1 style={{ fontSize: '4rem', fontWeight: 'bold', margin: 0 }}>
-      $DemoTitle
-    </h1>
-    <p style={{ fontSize: '1.5rem', marginTop: '1rem', opacity: 0.9 }}>
-      Your presentation subtitle here
-    </p>
-  </div>
-);
-
-Ch0_S1_Intro.metadata = {
-  chapter: 0,
-  slide: 1,
-  title: '$DemoTitle',
-  audioSegments: [
-    {
-      id: 'intro',
-      audioFilePath: '/audio/$DemoId/c0/s1_segment_01_intro.wav'
-    }
-  ]
-};
+export const Ch0_S1_Intro = defineSlide({
+  metadata: {
+    chapter: 0,
+    slide: 1,
+    title: '$DemoTitle',
+    audioSegments: [
+      {
+        id: 'intro',
+        audioFilePath: '/audio/$DemoId/c0/s1_segment_01_intro.wav'
+      }
+    ]
+  },
+  component: () => (
+    <div style={{
+      width: '100%',
+      height: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      color: 'white',
+      fontFamily: 'Inter, system-ui, sans-serif'
+    }}>
+      <h1 style={{ fontSize: '4rem', fontWeight: 'bold', margin: 0 }}>
+        $DemoTitle
+      </h1>
+      <p style={{ fontSize: '1.5rem', marginTop: '1rem', opacity: 0.9 }}>
+        Your presentation subtitle here
+      </p>
+    </div>
+  )
+});
 "@
 
 $chapter0Path = "$srcPath/slides/chapters/Chapter0.tsx"
@@ -285,7 +285,7 @@ Write-Host "  ✓ Created: $chapter0Path" -ForegroundColor Green
 
 # SlidesRegistry.ts
 $slidesRegistryContent = @"
-import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
+import type { SlideComponentWithMetadata } from '@framework';
 import { Ch0_S1_Intro } from './chapters/Chapter0';
 
 export const allSlides: SlideComponentWithMetadata[] = [

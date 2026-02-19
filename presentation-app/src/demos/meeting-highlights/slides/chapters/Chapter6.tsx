@@ -1,12 +1,17 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useReducedMotion } from '@framework/accessibility/ReducedMotion';
-import { MetricTile } from '@framework/components/MetricTile';
-import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
-import { SlideContainer, ContentCard, SlideTitle } from '@framework/slides/SlideLayouts';
-import { typography, layouts } from '@framework/slides/SlideStyles';
-import { scaleIn } from '@framework/slides/AnimationVariants';
-import { useTheme } from '@framework/theme/ThemeContext';
+import {
+  useReducedMotion,
+  useTheme,
+  defineSlide,
+  MetricTile,
+  SlideContainer,
+  ContentCard,
+  SlideTitle,
+  typography,
+  layouts,
+  scaleIn,
+} from '@framework';
 
 /**
  * Chapter 6: Optimization Solution
@@ -16,7 +21,7 @@ import { useTheme } from '@framework/theme/ThemeContext';
 /**
  * Chapter 6, Slide 1 - Unified Convergence
  */
-export const Ch6_S1_UnifiedConvergence: SlideComponentWithMetadata = () => {
+const Ch6_S1_UnifiedConvergenceComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
   const theme = useTheme();
 
@@ -111,20 +116,23 @@ export const Ch6_S1_UnifiedConvergence: SlideComponentWithMetadata = () => {
   );
 };
 
-Ch6_S1_UnifiedConvergence.metadata = {
-  chapter: 6,
-  slide: 1,
-  title: "Unified Convergence",
-  audioSegments: [{
-    id: "main",
-    audioFilePath: "/audio/meeting-highlights/c6/s1_segment_01_main.wav"
-  }]
-};
+export const Ch6_S1_UnifiedConvergence = defineSlide({
+  metadata: {
+    chapter: 6,
+    slide: 1,
+    title: "Unified Convergence",
+    audioSegments: [{
+      id: "main",
+      audioFilePath: "/audio/meeting-highlights/c6/s1_segment_01_main.wav"
+    }]
+  },
+  component: Ch6_S1_UnifiedConvergenceComponent
+});
 
 /**
  * Chapter 6, Slide 4 - Token Optimization
  */
-export const Ch6_S4_TokenOptimization: SlideComponentWithMetadata = () => {
+const Ch6_S4_TokenOptimizationComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
 
   return (
@@ -154,12 +162,15 @@ export const Ch6_S4_TokenOptimization: SlideComponentWithMetadata = () => {
   );
 };
 
-Ch6_S4_TokenOptimization.metadata = {
-  chapter: 6,
-  slide: 4,
-  title: "Token Optimization",
-  audioSegments: [{
-    id: "main",
-    audioFilePath: "/audio/meeting-highlights/c6/s4_segment_01_main.wav"
-  }]
-};
+export const Ch6_S4_TokenOptimization = defineSlide({
+  metadata: {
+    chapter: 6,
+    slide: 4,
+    title: "Token Optimization",
+    audioSegments: [{
+      id: "main",
+      audioFilePath: "/audio/meeting-highlights/c6/s4_segment_01_main.wav"
+    }]
+  },
+  component: Ch6_S4_TokenOptimizationComponent
+});

@@ -1,4 +1,4 @@
-import { DemoMetadata } from '@framework/demos/types';
+import type { DemoMetadata } from '@framework';
 
 export const metadata: DemoMetadata = {
   id: 'example-demo-2',

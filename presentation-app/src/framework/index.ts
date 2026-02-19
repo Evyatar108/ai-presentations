@@ -33,10 +33,15 @@ export type { HoverButtonProps } from './components/HoverButton';
 
 // Contexts
 export { SegmentProvider, useSegmentContext, useSegmentedAnimation } from './contexts/SegmentContext';
+export type { SegmentedAnimationAPI, SegmentState, SegmentControls, SegmentContextValue } from './contexts/SegmentContext';
 
 // Slides
 export type { SlideMetadata, SlideComponentWithMetadata, AudioSegment } from './slides/SlideMetadata';
 export { hasAudioSegments, getTotalDuration } from './slides/SlideMetadata';
+export { defineSlide } from './slides/defineSlide';
+export type { DefineSlideOptions } from './slides/defineSlide';
+export { validateSlideMetadata, validateDemoSlides } from './slides/validateSlideMetadata';
+export type { SlideValidationError } from './slides/validateSlideMetadata';
 export { SlideContainer, ContentCard, GradientHighlightBox, SlideTitle, MetricDisplay, TestimonialCard, BenefitCard, ImprovementCard } from './slides/SlideLayouts';
 export type {
   SlideContainerProps,
@@ -99,6 +104,7 @@ export type { SlideDurationBreakdown, PresentationDurationReport, SegmentDuratio
 // Utils
 export { loadNarration, getNarrationText } from './utils/narrationLoader';
 export { checkApiHealth, saveNarrationToFile } from './utils/narrationApiClient';
+export { debug } from './utils/debug';
 
 // Hooks
 export { useTtsRegeneration } from './hooks/useTtsRegeneration';
@@ -110,3 +116,6 @@ export { useFocusTrap } from './hooks/useFocusTrap';
 
 // Accessibility
 export { ReducedMotionProvider, WithReducedMotionProvider, ReducedMotionToggle, useReducedMotion } from './accessibility/ReducedMotion';
+
+// Testing utilities
+export { TestSlideWrapper, createTestSegment, createTestMetadata, createTestSlide } from './testing/index';

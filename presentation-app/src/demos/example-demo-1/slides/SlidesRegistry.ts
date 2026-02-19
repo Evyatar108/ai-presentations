@@ -1,4 +1,4 @@
-import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
+import type { SlideComponentWithMetadata } from '@framework';
 
 // Import slides from chapter files
 import {

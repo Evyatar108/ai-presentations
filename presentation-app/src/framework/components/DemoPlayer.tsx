@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { DemoRegistry } from '../demos/DemoRegistry';
 import type { DemoConfig } from '../demos/types';
 import type { SlideComponentWithMetadata } from '../slides/SlideMetadata';
+import { validateDemoSlides } from '../slides/validateSlideMetadata';
 import { NarratedController } from './NarratedController';
 import { SlidePlayer, Slide } from './SlidePlayer';
 import { SegmentProvider } from '../contexts/SegmentContext';
@@ -51,6 +52,11 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack }) => {
           setNarrationData(narration);
         }
         
+        // Dev-only validation of slide metadata
+        if (import.meta.env.DEV) {
+          validateDemoSlides(slides);
+        }
+
         setDemoConfig(config);
         setLoadedSlides(slides);
         setLoading(false);

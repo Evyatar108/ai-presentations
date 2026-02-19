@@ -38,6 +38,18 @@
       "rules": {
         "no-console": "off"
       }
+    },
+    {
+      "files": ["src/demos/**/*.ts", "src/demos/**/*.tsx"],
+      "excludedFiles": ["src/demos/**/*.test.ts", "src/demos/**/*.test.tsx"],
+      "rules": {
+        "no-restricted-imports": ["warn", {
+          "patterns": [{
+            "group": ["@framework/*/*"],
+            "message": "Import from '@framework' barrel instead of deep subpaths."
+          }]
+        }]
+      }
     }
   ],
   "ignorePatterns": ["dist/", "node_modules/", "*.config.ts", "*.config.js"]

@@ -1,12 +1,18 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useReducedMotion } from '@framework/accessibility/ReducedMotion';
-import { MetricTile } from '@framework/components/MetricTile';
-import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
-import { SlideContainer } from '@framework/slides/SlideLayouts';
-import { typography, layouts } from '@framework/slides/SlideStyles';
-import { staggerContainer, tileVariants, arrowVariants, targetVariants } from '@framework/slides/AnimationVariants';
-import { useTheme } from '@framework/theme/ThemeContext';
+import {
+  useReducedMotion,
+  useTheme,
+  defineSlide,
+  MetricTile,
+  SlideContainer,
+  typography,
+  layouts,
+  staggerContainer,
+  tileVariants,
+  arrowVariants,
+  targetVariants,
+} from '@framework';
 
 /**
  * Chapter 5: COGS Challenge
@@ -17,7 +23,7 @@ import { useTheme } from '@framework/theme/ThemeContext';
  * Chapter 5, Slide 1 - Challenge Framing
  * BEFORE metrics → TARGET unified approach
  */
-export const Ch5_S1_ChallengeFraming: SlideComponentWithMetadata = () => {
+const Ch5_S1_ChallengeFramingComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
   const theme = useTheme();
 
@@ -139,12 +145,15 @@ export const Ch5_S1_ChallengeFraming: SlideComponentWithMetadata = () => {
   );
 };
 
-Ch5_S1_ChallengeFraming.metadata = {
-  chapter: 5,
-  slide: 1,
-  title: "Challenge Framing",
-  audioSegments: [{
-    id: "main",
-    audioFilePath: "/audio/meeting-highlights/c5/s1_segment_01_main.wav"
-  }]
-};
+export const Ch5_S1_ChallengeFraming = defineSlide({
+  metadata: {
+    chapter: 5,
+    slide: 1,
+    title: "Challenge Framing",
+    audioSegments: [{
+      id: "main",
+      audioFilePath: "/audio/meeting-highlights/c5/s1_segment_01_main.wav"
+    }]
+  },
+  component: Ch5_S1_ChallengeFramingComponent
+});

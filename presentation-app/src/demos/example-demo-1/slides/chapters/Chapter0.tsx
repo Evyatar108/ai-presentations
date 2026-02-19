@@ -1,4 +1,4 @@
-import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
+import { defineSlide } from '@framework';
 
 /**
  * Example Demo 1 - Chapter 0: Placeholder Slides
@@ -6,13 +6,24 @@ import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
  */
 
 // Slide 1: Title Slide
-export const Ex1_S1_Title: SlideComponentWithMetadata = () => {
-  return (
-    <div style={{ 
-      display: 'flex', 
-      flexDirection: 'column', 
-      alignItems: 'center', 
-      justifyContent: 'center', 
+export const Ex1_S1_Title = defineSlide({
+  metadata: {
+    chapter: 0,
+    slide: 1,
+    title: 'Title Slide',
+    audioSegments: [
+      {
+        id: 'title',
+        audioFilePath: '/audio/example-demo-1/c0/s1_segment_01_title.wav'
+      }
+    ]
+  },
+  component: () => (
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
       height: '100vh',
       background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
       color: 'white',
@@ -21,27 +32,26 @@ export const Ex1_S1_Title: SlideComponentWithMetadata = () => {
       <h1 style={{ fontSize: '4rem', marginBottom: '1rem' }}>Example Demo 1</h1>
       <p style={{ fontSize: '2rem', opacity: 0.9 }}>A Placeholder Demonstration</p>
     </div>
-  );
-};
-
-Ex1_S1_Title.metadata = {
-  chapter: 0,
-  slide: 1,
-  title: 'Title Slide',
-  audioSegments: [
-    {
-      id: 'title',
-      audioFilePath: '/audio/example-demo-1/c0/s1_segment_01_title.wav'
-    }
-  ]
-};
+  )
+});
 
 // Slide 2: Content Slide 1
-export const Ex1_S2_Content1: SlideComponentWithMetadata = () => {
-  return (
-    <div style={{ 
-      display: 'flex', 
-      flexDirection: 'column', 
+export const Ex1_S2_Content1 = defineSlide({
+  metadata: {
+    chapter: 0,
+    slide: 2,
+    title: 'Key Features',
+    audioSegments: [
+      {
+        id: 'features',
+        audioFilePath: '/audio/example-demo-1/c0/s2_segment_01_features.wav'
+      }
+    ]
+  },
+  component: () => (
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
       height: '100vh',
       padding: '80px',
       background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
@@ -56,27 +66,26 @@ export const Ex1_S2_Content1: SlideComponentWithMetadata = () => {
         <li>✓ Centralized demo registry</li>
       </ul>
     </div>
-  );
-};
-
-Ex1_S2_Content1.metadata = {
-  chapter: 0,
-  slide: 2,
-  title: 'Key Features',
-  audioSegments: [
-    {
-      id: 'features',
-      audioFilePath: '/audio/example-demo-1/c0/s2_segment_01_features.wav'
-    }
-  ]
-};
+  )
+});
 
 // Slide 3: Conclusion
-export const Ex1_S3_Conclusion: SlideComponentWithMetadata = () => {
-  return (
-    <div style={{ 
-      display: 'flex', 
-      flexDirection: 'column', 
+export const Ex1_S3_Conclusion = defineSlide({
+  metadata: {
+    chapter: 0,
+    slide: 3,
+    title: 'Conclusion',
+    audioSegments: [
+      {
+        id: 'conclusion',
+        audioFilePath: '/audio/example-demo-1/c0/s3_segment_01_conclusion.wav'
+      }
+    ]
+  },
+  component: () => (
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
       height: '100vh',
@@ -91,17 +100,5 @@ export const Ex1_S3_Conclusion: SlideComponentWithMetadata = () => {
         to the system while maintaining a clean, organized structure.
       </p>
     </div>
-  );
-};
-
-Ex1_S3_Conclusion.metadata = {
-  chapter: 0,
-  slide: 3,
-  title: 'Conclusion',
-  audioSegments: [
-    {
-      id: 'conclusion',
-      audioFilePath: '/audio/example-demo-1/c0/s3_segment_01_conclusion.wav'
-    }
-  ]
-};
+  )
+});

@@ -1,9 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useReducedMotion } from '@framework/accessibility/ReducedMotion';
-import { useTheme } from '@framework/theme/ThemeContext';
-import { MetricTile } from '@framework/components/MetricTile';
-import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
+import { useReducedMotion, useTheme, defineSlide, MetricTile } from '@framework';
 
 /**
  * Chapter 7: Business Impact
@@ -13,7 +10,7 @@ import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
 /**
  * Chapter 7, Slide 2 - GPU Reduction
  */
-export const Ch7_S2_GPUReduction: SlideComponentWithMetadata = () => {
+const Ch7_S2_GPUReductionComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
   const theme = useTheme();
 
@@ -148,21 +145,24 @@ export const Ch7_S2_GPUReduction: SlideComponentWithMetadata = () => {
   );
 };
 
-Ch7_S2_GPUReduction.metadata = {
-  chapter: 7,
-  slide: 2,
-  title: "GPU Optimization",
-  audioSegments: [{
-    id: "main",
-    audioFilePath: "/audio/meeting-highlights/c7/s2_segment_01_main.wav"
-  }]
-};
+export const Ch7_S2_GPUReduction = defineSlide({
+  metadata: {
+    chapter: 7,
+    slide: 2,
+    title: "GPU Optimization",
+    audioSegments: [{
+      id: "main",
+      audioFilePath: "/audio/meeting-highlights/c7/s2_segment_01_main.wav"
+    }]
+  },
+  component: Ch7_S2_GPUReductionComponent
+});
 
 /**
  * Chapter 7, Slide 4 - Quality Comparison
  * Animated qualitative preference shift toward unified prompt outputs
  */
-export const Ch7_S4_QualityComparison: SlideComponentWithMetadata = () => {
+const Ch7_S4_QualityComparisonComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
   const theme = useTheme();
 
@@ -290,20 +290,23 @@ export const Ch7_S4_QualityComparison: SlideComponentWithMetadata = () => {
   );
 };
 
-Ch7_S4_QualityComparison.metadata = {
-  chapter: 7,
-  slide: 4,
-  title: "Quality Improvement",
-  audioSegments: [{
-    id: "main",
-    audioFilePath: "/audio/meeting-highlights/c7/s4_segment_01_main.wav"
-  }]
-};
+export const Ch7_S4_QualityComparison = defineSlide({
+  metadata: {
+    chapter: 7,
+    slide: 4,
+    title: "Quality Improvement",
+    audioSegments: [{
+      id: "main",
+      audioFilePath: "/audio/meeting-highlights/c7/s4_segment_01_main.wav"
+    }]
+  },
+  component: Ch7_S4_QualityComparisonComponent
+});
 
 /**
  * Chapter 7, Slide 5 - Path to General Availability
  */
-export const Ch7_S5_PathToGA: SlideComponentWithMetadata = () => {
+const Ch7_S5_PathToGAComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
   const theme = useTheme();
 
@@ -451,12 +454,15 @@ export const Ch7_S5_PathToGA: SlideComponentWithMetadata = () => {
   );
 };
 
-Ch7_S5_PathToGA.metadata = {
-  chapter: 7,
-  slide: 5,
-  title: "Path to GA",
-  audioSegments: [{
-    id: "main",
-    audioFilePath: "/audio/meeting-highlights/c7/s5_segment_01_main.wav"
-  }]
-};
+export const Ch7_S5_PathToGA = defineSlide({
+  metadata: {
+    chapter: 7,
+    slide: 5,
+    title: "Path to GA",
+    audioSegments: [{
+      id: "main",
+      audioFilePath: "/audio/meeting-highlights/c7/s5_segment_01_main.wav"
+    }]
+  },
+  component: Ch7_S5_PathToGAComponent
+});
