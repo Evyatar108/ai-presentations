@@ -39,7 +39,7 @@ mkdir -p src/demos/your-demo-name/slides/chapters
 Create `src/demos/your-demo-name/metadata.ts`:
 
 ```typescript
-import type { DemoMetadata } from '@framework/demos/types';
+import type { DemoMetadata } from '@framework';
 
 export const metadata: DemoMetadata = {
   id: 'your-demo-name',
@@ -55,7 +55,7 @@ export const metadata: DemoMetadata = {
 Create `src/demos/your-demo-name/index.ts`:
 
 ```typescript
-import type { DemoConfig } from '@framework/demos/types';
+import type { DemoConfig } from '@framework';
 import { metadata } from './metadata';
 
 const demoConfig: DemoConfig = {
@@ -76,39 +76,46 @@ export default demoConfig;
 Create `src/demos/your-demo-name/slides/chapters/Chapter0.tsx`:
 
 ```typescript
-import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
-import { SlideContainer } from '@framework/slides/SlideLayouts';
+import { defineSlide } from '@framework';
 
-export const Ch0_S1_Welcome: SlideComponentWithMetadata = () => (
-  <SlideContainer>
-    <h1 style={{ color: 'white', fontSize: '4rem' }}>
-      Welcome
-    </h1>
-  </SlideContainer>
-);
-
-Ch0_S1_Welcome.metadata = {
-  chapter: 0,
-  slide: 1,
-  title: 'Welcome',
-  audioSegments: [
-    {
-      id: 'intro',
-      audioFilePath: '/audio/your-demo-name/c0/s1_segment_01_intro.wav',
-      narrationText: 'Welcome to our presentation.',
-    }
-  ]
-};
+export const Ch0_S1_Welcome = defineSlide({
+  metadata: {
+    chapter: 0,
+    slide: 1,
+    title: 'Welcome',
+    audioSegments: [
+      {
+        id: 'intro',
+        audioFilePath: '/audio/your-demo-name/c0/s1_segment_01_intro.wav',
+        narrationText: 'Welcome to our presentation.',
+      }
+    ]
+  },
+  component: () => (
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: '100vh',
+      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      color: 'white',
+    }}>
+      <h1 style={{ fontSize: '4rem' }}>Welcome</h1>
+    </div>
+  )
+});
 ```
 
-Slides are React function components with a `metadata` property attached. Use `segment >= N` conditionals for progressive reveals (the `segment` prop comes from `SegmentContext`).
+Slides are created using the `defineSlide()` factory, which combines `metadata` and a `component` into a single object. Use `segment >= N` conditionals for progressive reveals (the `segment` prop comes from `useSegmentContext()`).
+
+> **Important**: All demo code must import from the `@framework` barrel (`import { ... } from '@framework'`). Deep imports like `@framework/slides/SlideMetadata` or `@framework/contexts/SegmentContext` are blocked by the `no-restricted-imports` ESLint rule.
 
 ### Step 5: Create Slides Registry
 
 Create `src/demos/your-demo-name/slides/SlidesRegistry.ts`:
 
 ```typescript
-import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
+import type { SlideComponentWithMetadata } from '@framework';
 import { Ch0_S1_Welcome } from './chapters/Chapter0';
 
 export const allSlides: SlideComponentWithMetadata[] = [
@@ -160,7 +167,7 @@ Customize presentation timing delays if defaults aren't suitable.
 
 **Add to demo config** (`src/demos/{demo-id}/index.ts`):
 ```typescript
-import type { TimingConfig } from '@framework/demos/timing/types';
+import type { DemoConfig, TimingConfig } from '@framework';
 
 const timing: TimingConfig = {
   betweenSegments: 500,   // Delay between segments within slides
@@ -184,7 +191,7 @@ npm run tts:duration -- --demo {demo-id}
 Copy the generated `durationInfo` object to your metadata file (`src/demos/{demo-id}/metadata.ts`). The `DurationInfo` interface is exported from the framework:
 
 ```typescript
-import type { DemoMetadata, DurationInfo } from '@framework/demos/types';
+import type { DemoMetadata, DurationInfo } from '@framework';
 
 const durationInfo: DurationInfo = {
   audioOnly: 120.5,
@@ -223,13 +230,13 @@ Navigate to the demo selection screen and select your new demo.
 
 ### Multi-Segment Slides
 
-For slides with progressive reveals, use multiple segments:
+For slides with progressive reveals, use multiple segments with `defineSlide()` and `useSegmentContext()`:
 
 ```typescript
-import { useSegmentContext } from '@framework/contexts/SegmentContext';
-import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
+import React from 'react';
+import { defineSlide, useSegmentContext } from '@framework';
 
-export const Ch1_S1_MultiSegment: SlideComponentWithMetadata = () => {
+const MultiSegmentComponent: React.FC = () => {
   const { segment } = useSegmentContext();
 
   return (
@@ -240,44 +247,75 @@ export const Ch1_S1_MultiSegment: SlideComponentWithMetadata = () => {
   );
 };
 
-Ch1_S1_MultiSegment.metadata = {
-  chapter: 1,
-  slide: 1,
-  title: 'Multi-segment Example',
-  audioSegments: [
-    {
-      id: 'intro',
-      audioFilePath: '/audio/your-demo-name/c1/s1_segment_01_intro.wav',
-      narrationText: 'First narration.',
-    },
-    {
-      id: 'detail',
-      audioFilePath: '/audio/your-demo-name/c1/s1_segment_02_detail.wav',
-      narrationText: 'Second narration.',
-    }
-  ]
-};
+export const Ch1_S1_MultiSegment = defineSlide({
+  metadata: {
+    chapter: 1,
+    slide: 1,
+    title: 'Multi-segment Example',
+    audioSegments: [
+      {
+        id: 'intro',
+        audioFilePath: '/audio/your-demo-name/c1/s1_segment_01_intro.wav',
+        narrationText: 'First narration.',
+      },
+      {
+        id: 'detail',
+        audioFilePath: '/audio/your-demo-name/c1/s1_segment_02_detail.wav',
+        narrationText: 'Second narration.',
+      }
+    ]
+  },
+  component: MultiSegmentComponent
+});
 ```
+
+> **Note**: When using hooks inside `defineSlide()`, extract the component to a named `const` (like `MultiSegmentComponent` above). This satisfies the ESLint `rules-of-hooks` requirement that hooks are called from named functions.
 
 ### Using Video Player
 
 ```typescript
-import { VideoPlayer } from '@framework/components/VideoPlayer';
+import { VideoPlayer } from '@framework';
 
 // Inside a slide component:
 <VideoPlayer
   videoPath="/videos/your-demo-name/demo.mp4"
-  playing={segment > 0}
+  isPlaying={segment > 0}
 />
 ```
 
 ### Shared Utilities
 
-Use shared components and utilities from `src/framework/slides/` (also available via `@framework` alias):
-- `SlideStyles.ts` - Common styling patterns
-- `AnimationVariants.ts` - Framer Motion configs
-- `SlideLayouts.tsx` - Layout components (SlideContainer, ContentCard, etc.)
-- `SlideIcons.tsx` - Icon components (ArrowDown, ArrowRight, etc.)
+Import shared components and utilities from the `@framework` barrel:
+- **Layout components**: `SlideContainer`, `ContentCard`, `GradientHighlightBox`, `SlideTitle`
+- **Animation presets**: `fadeIn`, `fadeUp`, `scaleIn`, `staggerContainer`, etc.
+- **Style factories**: `createSlideContainer()`, `createContentBox()`, `createGradientBox()`
+- **Icons**: `ArrowDown`, `ArrowRight`, `Checkmark`, etc.
+- **Accessibility**: `useReducedMotion()` — respects `prefers-reduced-motion`
+- **Theme**: `useTheme()` — access current theme colors and typography
+
+### Testing Your Demo
+
+The framework provides test utilities for unit-testing slides:
+
+```typescript
+import { TestSlideWrapper, createTestSlide, createTestMetadata } from '@framework';
+import { render, screen } from '@testing-library/react';
+
+// Create test metadata
+const metadata = createTestMetadata({ title: 'Test Slide' });
+
+// Create a complete test slide
+const slide = createTestSlide({ metadata });
+
+// Render a slide with required providers (SegmentProvider, ThemeProvider, etc.)
+render(
+  <TestSlideWrapper segment={0}>
+    <MySlideComponent />
+  </TestSlideWrapper>
+);
+```
+
+See the existing test files in `src/framework/testing/` for more examples.
 
 ## Related Documentation
 

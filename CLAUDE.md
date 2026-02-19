@@ -102,9 +102,11 @@ Audio naming: `s{slide}_segment_{number}_{id}.wav`
 - Demo IDs: kebab-case (e.g., `meeting-highlights`)
 - Chapter files: `Chapter0.tsx`, `Chapter1.tsx`, etc.
 - Slide exports: `Ch{chapter}_S{slide}_{Name}` (e.g., `Ch1_S2_Details`)
-- Shared utilities imported from `src/framework/slides/` (SlideStyles, AnimationVariants, SlideLayouts, SlideIcons)
-- Accessibility: animations respect `prefers-reduced-motion` via `useReducedMotion()` hook from `src/framework/accessibility/ReducedMotion.tsx`
-- Framework components use `useTheme()` for colors; demo slides may use static style exports
+- **Slides must use `defineSlide({ metadata, component })`** factory from `@framework` (not two-step `.metadata =` pattern)
+- **Demo code must import from `@framework` barrel only** — deep imports like `@framework/slides/SlideMetadata` are blocked by the `no-restricted-imports` ESLint rule
+- When using hooks inside `defineSlide()`, extract the component to a named `const` (ESLint `rules-of-hooks` requires hooks in named functions)
+- Accessibility: animations respect `prefers-reduced-motion` via `useReducedMotion()` hook
+- Framework components use `useTheme()` for colors; demo slides may use static style exports or theme-aware `create*()` factories
 
 ## Documentation
 

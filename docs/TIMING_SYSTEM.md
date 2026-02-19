@@ -97,7 +97,7 @@ When creating a new demo, timing configuration is optional. To add custom timing
 
 1. Define timing in your demo config (`src/demos/{demo-id}/index.ts`):
 ```typescript
-import { TimingConfig } from '../../framework/demos/timing/types';
+import type { DemoConfig, TimingConfig } from '@framework';
 
 const timing: TimingConfig = {
   betweenSegments: 500,
@@ -105,10 +105,12 @@ const timing: TimingConfig = {
   afterFinalSlide: 2000
 };
 
-export const demoConfig: DemoConfig = {
+const demoConfig: DemoConfig = {
   // ... other fields ...
   timing,
 };
+
+export default demoConfig;
 ```
 
 2. Run duration calculation (automatic on `npm run dev`, or manual):

@@ -68,44 +68,36 @@ Video embed component with playback controls.
 
 **Props**:
 - `videoPath: string` - Path to video file
-- `playing: boolean` - Whether video should play
+- `isPlaying: boolean` - Whether video should play
 - `onEnded?: () => void` - Callback when video ends
+- `captionsSrc?: string` - Optional path to WebVTT captions file
 
 **Features**:
 - Freeze-on-end playback (pauses on last frame)
 - Framer Motion animations
 - Responsive sizing
 - Synchronized with slide segments
+- Optional captions track (only rendered when `captionsSrc` is provided)
 
 ## Shared Utilities
 
 ### SlideStyles
 
-Common styling patterns and utilities.
+Common styling patterns and utilities, available via the `@framework` barrel.
 
 **Location**: `src/framework/slides/SlideStyles.ts`
 
-**Exports**:
+**Static exports** (hardcoded colors — suitable for quick prototyping):
 ```typescript
-export const colors = {
-  primary: '#667eea',
-  secondary: '#764ba2',
-  // ...
-};
+import { slideContainer, contentBox, gradientBox, typography, layouts } from '@framework';
+```
 
-export const gradients = {
-  purple: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-  // ...
-};
+**Theme-aware factories** (use current theme colors — recommended for production):
+```typescript
+import { createSlideContainer, createContentBox, createGradientBox, createTypography, useTheme } from '@framework';
 
-export const commonStyles = {
-  centerContent: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  // ...
-};
+const theme = useTheme();
+const container = createSlideContainer(theme);
 ```
 
 ### AnimationVariants
@@ -116,21 +108,10 @@ Framer Motion animation configurations.
 
 **Common Variants**:
 ```typescript
-export const fadeIn = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1 }
-};
-
-export const slideUp = {
-  hidden: { opacity: 0, y: 50 },
-  visible: { opacity: 1, y: 0 }
-};
-
-export const scaleIn = {
-  hidden: { opacity: 0, scale: 0.8 },
-  visible: { opacity: 1, scale: 1 }
-};
+import { fadeIn, fadeUp, scaleIn, staggerContainer } from '@framework';
 ```
+
+Available presets: `fadeIn`, `fadeUp`, `fadeDown`, `fadeLeft`, `fadeRight`, `scaleIn`, `scaleInSpring`, `staggerContainer`, `tileVariants`, `pulseGlow`, `emphasisPulse`, `expandWidth`, `expandHeight`.
 
 ### SlideLayouts
 
@@ -138,11 +119,14 @@ Reusable layout components.
 
 **Location**: `src/framework/slides/SlideLayouts.tsx`
 
-**Components**:
-- `TitleSlide` - Full-screen title layout
-- `ContentSlide` - Header + content layout
-- `TwoColumnSlide` - Split-screen layout
-- `FullScreenSlide` - Custom full-screen content
+**Components** (all importable from `@framework`):
+- `SlideContainer` - Theme-aware full-screen slide wrapper
+- `ContentCard` - Styled content card with shadow
+- `GradientHighlightBox` - Gradient-bordered highlight box
+- `SlideTitle` - Consistent slide title styling
+- `MetricDisplay` - Metric with label and value
+- `TestimonialCard` - Quote card layout
+- `BenefitCard` / `ImprovementCard` - Feature showcase cards
 
 ### SlideIcons
 
@@ -150,12 +134,9 @@ Common icon components.
 
 **Location**: `src/framework/slides/SlideIcons.tsx`
 
-**Available Icons**:
-- `CheckIcon`
-- `XIcon`
-- `ArrowRightIcon`
-- `StarIcon`
-- `InfoIcon`
+**Available Icons** (all importable from `@framework`):
+- `ArrowDown`, `ArrowRight`, `ArrowRightLarge`, `ArrowRightXL`, `ArrowDownSmall`
+- `Checkmark`, `ConvergingLines`, `EmojiIcons`
 
 ### CoreComponents
 
@@ -179,11 +160,18 @@ Manages multi-segment slide state.
 
 **Usage**:
 ```typescript
-const { currentSegment, setCurrentSegment } = useSegmentContext();
+import { useSegmentContext, useSegmentedAnimation } from '@framework';
+
+// Basic segment access
+const { segment } = useSegmentContext();
+
+// Advanced: segmented animation API with named segment lookups
+const { isSegmentVisible, getSegmentAnimation } = useSegmentedAnimation();
 ```
 
 **Features**:
 - Track current segment index
+- Named segment lookups via `isSegmentVisibleById()`
 - Segment progression
 - Slide-level state management
 
@@ -195,6 +183,8 @@ Respects user motion preferences.
 
 **Usage**:
 ```typescript
+import { useReducedMotion, fadeIn } from '@framework';
+
 const prefersReducedMotion = useReducedMotion();
 
 const variants = prefersReducedMotion
@@ -206,34 +196,28 @@ const variants = prefersReducedMotion
 
 ### SlideMetadata
 
-**Location**: `src/framework/slides/SlideMetadata.ts`
+**Import**: `import type { SlideMetadata, SlideComponentWithMetadata, AudioSegment } from '@framework';`
 
 ```typescript
 interface SlideMetadata {
   chapter: number;
   slide: number;
   title: string;
-  segments: SegmentMetadata[];
-  videoPath?: string;
-  component: React.ComponentType<SlideComponentProps>;
+  audioSegments?: AudioSegment[];
+  timing?: TimingConfig;
 }
 
-interface SegmentMetadata {
-  number: number;
+interface AudioSegment {
   id: string;
-  description: string;
-  audioPath?: string;
+  audioFilePath: string;
   narrationText?: string;
-}
-
-interface SlideComponentProps {
-  segment: number;
+  timing?: TimingConfig;
 }
 ```
 
 ### DemoMetadata
 
-**Location**: `src/framework/demos/types.ts`
+**Import**: `import type { DemoMetadata, DemoConfig, TimingConfig } from '@framework';`
 
 ```typescript
 interface DemoMetadata {
@@ -242,7 +226,7 @@ interface DemoMetadata {
   description: string;
   thumbnail: string;
   tags: string[];
-  duration?: number;  // seconds
+  durationInfo?: DurationInfo;
 }
 
 interface DemoConfig {
@@ -264,96 +248,120 @@ The framework barrel (`@framework`) exports all component props interfaces for e
 - **`NarratedControllerProps`** — `{ demoMetadata, slides, onSlideChange, ... }`
 - **`SlideContainerProps`**, **`ContentCardProps`**, **`HighlightBoxProps`**, **`SlideTitleProps`**
 - **`MetricDisplayProps`**, **`TestimonialCardProps`**, **`BenefitCardProps`**, **`ImprovementCardProps`**
+- **`HoverButtonProps`** — `{ hoverStyle?, ...ButtonHTMLAttributes }`
 
 ## Usage Examples
 
-### Creating a Simple Slide
+### Creating a Slide with `defineSlide()`
 
 ```typescript
-export const Ch1_S1_Example: SlideMetadata = {
-  chapter: 1,
-  slide: 1,
-  title: 'Example Slide',
-  segments: [
-    {
-      number: 1,
-      id: 'main',
-      description: 'Main content',
-      audioPath: '/audio/demo/c1/s1_segment_01_main.wav',
-      narrationText: 'This is an example slide.'
-    }
-  ],
-  component: ({ segment }) => (
+import { defineSlide } from '@framework';
+
+export const Ch1_S1_Example = defineSlide({
+  metadata: {
+    chapter: 1,
+    slide: 1,
+    title: 'Example Slide',
+    audioSegments: [
+      {
+        id: 'main',
+        audioFilePath: '/audio/demo/c1/s1_segment_01_main.wav',
+        narrationText: 'This is an example slide.',
+      }
+    ]
+  },
+  component: () => (
     <div style={{
       width: '100%',
       height: '100vh',
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'center'
+      justifyContent: 'center',
     }}>
       <h1>Example Slide</h1>
     </div>
   )
-};
+});
 ```
 
 ### Using Framer Motion Animations
 
 ```typescript
 import { motion } from 'framer-motion';
-import { fadeIn, slideUp } from '../../../../../framework/slides/AnimationVariants';
+import { defineSlide, fadeIn, fadeUp, useReducedMotion } from '@framework';
 
-component: ({ segment }) => (
-  <motion.div
-    initial="hidden"
-    animate="visible"
-    variants={fadeIn}
-    style={{ width: '100%', height: '100vh' }}
-  >
-    <motion.h1 variants={slideUp}>
-      Animated Title
-    </motion.h1>
-  </motion.div>
-)
+export const Ch1_S1_Animated = defineSlide({
+  metadata: { chapter: 1, slide: 1, title: 'Animated', audioSegments: [/* ... */] },
+  component: () => {
+    const prefersReduced = useReducedMotion();
+    const variants = prefersReduced ? { hidden: {}, visible: {} } : fadeIn;
+
+    return (
+      <motion.div initial="hidden" animate="visible" variants={variants}
+        style={{ width: '100%', height: '100vh' }}>
+        <motion.h1 variants={fadeUp}>Animated Title</motion.h1>
+      </motion.div>
+    );
+  }
+});
 ```
+
+> **Note**: Extract the component to a named `const` when using hooks inside `defineSlide()` to satisfy ESLint `rules-of-hooks`.
 
 ### Multi-Segment Progressive Reveal
 
 ```typescript
-component: ({ segment }) => (
-  <div>
-    {segment >= 0 && (
-      <motion.h1 initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-        First Part
-      </motion.h1>
-    )}
-    
-    {segment >= 1 && (
-      <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-        Second Part
-      </motion.p>
-    )}
-    
-    {segment >= 2 && (
-      <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}>
-        Third Part
-      </motion.div>
-    )}
-  </div>
-)
+import React from 'react';
+import { motion } from 'framer-motion';
+import { defineSlide, useSegmentContext } from '@framework';
+
+const RevealComponent: React.FC = () => {
+  const { segment } = useSegmentContext();
+
+  return (
+    <div>
+      {segment >= 0 && (
+        <motion.h1 initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+          First Part
+        </motion.h1>
+      )}
+      {segment >= 1 && (
+        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+          Second Part
+        </motion.p>
+      )}
+      {segment >= 2 && (
+        <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}>
+          Third Part
+        </motion.div>
+      )}
+    </div>
+  );
+};
+
+export const Ch1_S1_Reveal = defineSlide({
+  metadata: {
+    chapter: 1, slide: 1, title: 'Reveal',
+    audioSegments: [
+      { id: 'part1', audioFilePath: '...', narrationText: 'First.' },
+      { id: 'part2', audioFilePath: '...', narrationText: 'Second.' },
+      { id: 'part3', audioFilePath: '...', narrationText: 'Third.' },
+    ]
+  },
+  component: RevealComponent
+});
 ```
 
 ### Using Video Player
 
 ```typescript
-import { VideoPlayer } from '../../../../../framework/components/VideoPlayer';
+import { VideoPlayer } from '@framework';
 
-component: ({ segment }) => (
-  <div style={{ position: 'relative', width: '100%', height: '100vh' }}>
-    <VideoPlayer
-      videoPath="/videos/demo/example.mp4"
-      playing={segment > 0}
-      onEnded={() => console.log('Video ended')}
-    />
-  </div>
-)
+// Inside a slide component:
+<VideoPlayer
+  videoPath="/videos/demo/example.mp4"
+  isPlaying={segment > 0}
+  onEnded={() => console.log('Video ended')}
+  captionsSrc="/videos/demo/example.vtt"
+/>
+```

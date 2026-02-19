@@ -7,6 +7,7 @@ interface VideoPlayerProps {
   onEnded?: () => void;
   freezeOnEnd?: boolean;  // Keep final frame visible
   ariaLabel?: string;
+  captionsSrc?: string;   // Optional path to WebVTT captions file
 }
 
 export const VideoPlayer: React.FC<VideoPlayerProps> = ({
@@ -14,7 +15,8 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   isPlaying,
   onEnded,
   freezeOnEnd = true,
-  ariaLabel
+  ariaLabel,
+  captionsSrc,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [hasEnded, setHasEnded] = useState(false);
@@ -69,7 +71,9 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         playsInline
         preload="auto"
       >
-        <track kind="captions" src="" label="Captions" default />
+        {captionsSrc && (
+          <track kind="captions" src={captionsSrc} label="Captions" default />
+        )}
       </video>
     </motion.div>
   );

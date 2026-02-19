@@ -1,11 +1,64 @@
-import { defineSlide } from '@framework';
+import React from 'react';
+import { motion } from 'framer-motion';
+import {
+  defineSlide,
+  useReducedMotion,
+  useTheme,
+  useSegmentedAnimation,
+  fadeIn,
+  fadeUp,
+  scaleIn,
+  staggerContainer,
+  SlideContainer,
+  ContentCard,
+  GradientHighlightBox,
+} from '@framework';
 
 /**
- * Example Demo 1 - Chapter 0: Placeholder Slides
- * Simple slides demonstrating the multi-demo architecture
+ * Example Demo 1 - Chapter 0
+ * Showcases key framework features: themes, animations, reduced motion,
+ * progressive segment reveals, and theme-aware layout components.
  */
 
-// Slide 1: Title Slide
+// ─── Slide 1: Title ─────────────────────────────────────────────────────────
+// Demonstrates: useReducedMotion(), useTheme(), Framer Motion fadeIn
+
+const TitleComponent: React.FC = () => {
+  const theme = useTheme();
+  const { reduced } = useReducedMotion();
+
+  return (
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      variants={fadeIn(reduced)}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100vh',
+        background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`,
+        color: theme.colors.textPrimary,
+        fontFamily: theme.fontFamily,
+      }}
+    >
+      <motion.h1
+        variants={fadeUp(reduced)}
+        style={{ fontSize: '4rem', marginBottom: '1rem' }}
+      >
+        Example Demo 1
+      </motion.h1>
+      <motion.p
+        variants={fadeUp(reduced, 0.2)}
+        style={{ fontSize: '2rem', opacity: 0.9 }}
+      >
+        Framework Feature Showcase
+      </motion.p>
+    </motion.div>
+  );
+};
+
 export const Ex1_S1_Title = defineSlide({
   metadata: {
     chapter: 0,
@@ -14,28 +67,82 @@ export const Ex1_S1_Title = defineSlide({
     audioSegments: [
       {
         id: 'title',
-        audioFilePath: '/audio/example-demo-1/c0/s1_segment_01_title.wav'
+        audioFilePath: '/audio/example-demo-1/c0/s1_segment_01_title.wav',
       }
     ]
   },
-  component: () => (
+  component: TitleComponent,
+});
+
+// ─── Slide 2: Features (Multi-Segment Progressive Reveal) ───────────────────
+// Demonstrates: useSegmentedAnimation(), isSegmentVisible(), staggerContainer
+
+const features = [
+  { icon: '🎨', label: 'Theme-aware components via useTheme()' },
+  { icon: '♿', label: 'Reduced-motion support via useReducedMotion()' },
+  { icon: '📊', label: 'Progressive reveals with segment contexts' },
+  { icon: '🧱', label: 'Layout primitives: SlideContainer, ContentCard' },
+];
+
+const FeaturesComponent: React.FC = () => {
+  const theme = useTheme();
+  const { reduced } = useReducedMotion();
+  const { isSegmentVisible } = useSegmentedAnimation();
+
+  return (
     <div style={{
       display: 'flex',
       flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
       height: '100vh',
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      color: 'white',
-      fontFamily: 'Inter, system-ui, sans-serif'
+      padding: '80px',
+      background: `linear-gradient(135deg, ${theme.colors.primary}22, ${theme.colors.secondary}22)`,
+      fontFamily: theme.fontFamily,
     }}>
-      <h1 style={{ fontSize: '4rem', marginBottom: '1rem' }}>Example Demo 1</h1>
-      <p style={{ fontSize: '2rem', opacity: 0.9 }}>A Placeholder Demonstration</p>
-    </div>
-  )
-});
+      <motion.h2
+        initial="hidden"
+        animate="visible"
+        variants={fadeUp(reduced)}
+        style={{
+          fontSize: '3rem',
+          marginBottom: '2.5rem',
+          color: theme.colors.textPrimary,
+        }}
+      >
+        Key Features
+      </motion.h2>
 
-// Slide 2: Content Slide 1
+      <motion.div
+        variants={staggerContainer(reduced)}
+        initial="hidden"
+        animate="visible"
+        style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}
+      >
+        {features.map((feat, i) => (
+          isSegmentVisible(i) && (
+            <motion.div
+              key={feat.label}
+              variants={scaleIn(reduced)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '1rem',
+                fontSize: '1.8rem',
+                padding: '1rem 1.5rem',
+                borderRadius: 12,
+                background: 'rgba(255,255,255,0.08)',
+                color: theme.colors.textPrimary,
+              }}
+            >
+              <span style={{ fontSize: '2.2rem' }}>{feat.icon}</span>
+              {feat.label}
+            </motion.div>
+          )
+        ))}
+      </motion.div>
+    </div>
+  );
+};
+
 export const Ex1_S2_Content1 = defineSlide({
   metadata: {
     chapter: 0,
@@ -43,33 +150,83 @@ export const Ex1_S2_Content1 = defineSlide({
     title: 'Key Features',
     audioSegments: [
       {
-        id: 'features',
-        audioFilePath: '/audio/example-demo-1/c0/s2_segment_01_features.wav'
-      }
+        id: 'theme',
+        audioFilePath: '/audio/example-demo-1/c0/s2_segment_01_theme.wav',
+      },
+      {
+        id: 'a11y',
+        audioFilePath: '/audio/example-demo-1/c0/s2_segment_02_a11y.wav',
+      },
+      {
+        id: 'segments',
+        audioFilePath: '/audio/example-demo-1/c0/s2_segment_03_segments.wav',
+      },
+      {
+        id: 'layouts',
+        audioFilePath: '/audio/example-demo-1/c0/s2_segment_04_layouts.wav',
+      },
     ]
   },
-  component: () => (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      height: '100vh',
-      padding: '80px',
-      background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-      color: 'white',
-      fontFamily: 'Inter, system-ui, sans-serif'
-    }}>
-      <h2 style={{ fontSize: '3rem', marginBottom: '2rem' }}>Key Features</h2>
-      <ul style={{ fontSize: '2rem', lineHeight: '2.5', listStyle: 'none', paddingLeft: 0 }}>
-        <li>✓ Multi-demo architecture support</li>
-        <li>✓ Lazy loading for optimal performance</li>
-        <li>✓ Demo-specific asset organization</li>
-        <li>✓ Centralized demo registry</li>
-      </ul>
-    </div>
-  )
+  component: FeaturesComponent,
 });
 
-// Slide 3: Conclusion
+// ─── Slide 3: Conclusion (Theme-Aware Layout Components) ─────────────────────
+// Demonstrates: SlideContainer, ContentCard, GradientHighlightBox
+
+const ConclusionComponent: React.FC = () => {
+  const theme = useTheme();
+  const { reduced } = useReducedMotion();
+
+  return (
+    <SlideContainer>
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={fadeIn(reduced)}
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '2rem',
+          maxWidth: 800,
+        }}
+      >
+        <h2 style={{
+          fontSize: '3rem',
+          marginBottom: '0.5rem',
+          color: theme.colors.textPrimary,
+          fontFamily: theme.fontFamily,
+        }}>
+          Conclusion
+        </h2>
+
+        <ContentCard>
+          <p style={{
+            fontSize: '1.4rem',
+            lineHeight: 1.6,
+            color: theme.colors.textSecondary,
+            margin: 0,
+          }}>
+            This demo showcases the most important framework APIs so you can
+            see how themes, animations, segments, and layout components work
+            together in practice.
+          </p>
+        </ContentCard>
+
+        <GradientHighlightBox reduced={reduced}>
+          <p style={{
+            fontSize: '1.2rem',
+            margin: 0,
+            color: theme.colors.textPrimary,
+          }}>
+            Get started: run <code style={{ background: 'rgba(255,255,255,0.1)', padding: '2px 6px', borderRadius: 4 }}>.\scripts\new-demo.ps1 -DemoId "my-demo"</code> to scaffold your own demo.
+          </p>
+        </GradientHighlightBox>
+      </motion.div>
+    </SlideContainer>
+  );
+};
+
 export const Ex1_S3_Conclusion = defineSlide({
   metadata: {
     chapter: 0,
@@ -78,27 +235,9 @@ export const Ex1_S3_Conclusion = defineSlide({
     audioSegments: [
       {
         id: 'conclusion',
-        audioFilePath: '/audio/example-demo-1/c0/s3_segment_01_conclusion.wav'
+        audioFilePath: '/audio/example-demo-1/c0/s3_segment_01_conclusion.wav',
       }
     ]
   },
-  component: () => (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      height: '100vh',
-      padding: '80px',
-      background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-      color: 'white',
-      fontFamily: 'Inter, system-ui, sans-serif'
-    }}>
-      <h2 style={{ fontSize: '3rem', marginBottom: '2rem' }}>Conclusion</h2>
-      <p style={{ fontSize: '1.8rem', maxWidth: '800px', textAlign: 'center', lineHeight: '1.6' }}>
-        This placeholder demo demonstrates how easy it is to add new presentations
-        to the system while maintaining a clean, organized structure.
-      </p>
-    </div>
-  )
+  component: ConclusionComponent,
 });

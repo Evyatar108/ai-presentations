@@ -42,6 +42,7 @@ export const StartOverlay: React.FC<StartOverlayProps> = ({
         <motion.div
           ref={overlayRef}
           role="dialog"
+          aria-modal="true"
           aria-label="Presentation start options"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

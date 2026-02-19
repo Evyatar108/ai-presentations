@@ -5,8 +5,9 @@ export interface HoverButtonProps extends React.ButtonHTMLAttributes<HTMLButtonE
 }
 
 /**
- * Thin button wrapper that manages hover state internally.
- * Merges `hoverStyle` into `style` on mouse-enter and reverts on mouse-leave.
+ * Thin button wrapper that manages hover and focus state internally.
+ * Merges `hoverStyle` into `style` on mouse-enter or keyboard focus,
+ * and reverts on mouse-leave or blur.
  */
 export const HoverButton: React.FC<HoverButtonProps> = ({
   style,
@@ -15,11 +16,14 @@ export const HoverButton: React.FC<HoverButtonProps> = ({
   ...rest
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+
+  const isActive = (isHovered || isFocused) && !rest.disabled;
 
   return (
     <button
       {...rest}
-      style={{ ...style, ...(isHovered && !rest.disabled ? hoverStyle : undefined) }}
+      style={{ ...style, ...(isActive ? hoverStyle : undefined) }}
       onMouseEnter={(e) => {
         if (!rest.disabled) setIsHovered(true);
         rest.onMouseEnter?.(e);
@@ -27,6 +31,14 @@ export const HoverButton: React.FC<HoverButtonProps> = ({
       onMouseLeave={(e) => {
         setIsHovered(false);
         rest.onMouseLeave?.(e);
+      }}
+      onFocus={(e) => {
+        if (!rest.disabled) setIsFocused(true);
+        rest.onFocus?.(e);
+      }}
+      onBlur={(e) => {
+        setIsFocused(false);
+        rest.onBlur?.(e);
       }}
     >
       {children}
