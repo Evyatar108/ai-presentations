@@ -2,11 +2,13 @@
   "demoId": "highlights-deep-dive",
   "version": "1.0",
   "lastModified": "2026-02-19T15:00:00.000Z",
+  "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
   "slides": [
     {
       "chapter": 0,
       "slide": 1,
       "title": "Title",
+      "instruct": "Speak with calm authority and a hint of intrigue, like opening a keynote.",
       "segments": [
         {
           "id": "main",
@@ -45,6 +47,7 @@
       "chapter": 1,
       "slide": 2,
       "title": "COGS Problem",
+      "instruct": "Speak with urgency and concern, emphasizing the severity of the cost problem.",
       "segments": [
         {
           "id": "metrics",
@@ -60,6 +63,7 @@
         },
         {
           "id": "emphasis",
+          "instruct": "Speak with firm conviction, slower pace, emphasizing every word.",
           "narrationText": "The cost was inherent in the prompt architecture itself. The fix had to come from prompt engineering.",
           "visualDescription": "Red emphasis box: 'The fix had to come from prompt engineering'",
           "notes": ""
@@ -159,6 +163,7 @@
         },
         {
           "id": "driver5",
+          "instruct": "Speak with dramatic emphasis, pausing before revealing the biggest driver.",
           "narrationText": "And driver five — the biggest one. A combinatorial candidate explosion that generates O of n-squared candidate ranges. This was the single largest cost driver, and the one that required the most creative solution.",
           "visualDescription": "Card 5 highlighted in red: Combinatorial candidate explosion O(n²)",
           "notes": ""
@@ -213,6 +218,7 @@
       "chapter": 4,
       "slide": 2,
       "title": "O(n^2) Visualized",
+      "instruct": "Speak with building intensity, like revealing the scale of a problem.",
       "segments": [
         {
           "id": "grid",
@@ -376,6 +382,7 @@
       "chapter": 8,
       "slide": 1,
       "title": "Results Metrics",
+      "instruct": "Speak with energy and pride, celebrating the achievement.",
       "segments": [
         {
           "id": "title",
@@ -397,6 +404,7 @@
         },
         {
           "id": "gpus",
+          "instruct": "Speak with triumph, this is the headline number.",
           "narrationText": "And roughly seventy percent GPU reduction — from six hundred projected A100 GPUs down to about one hundred eighty. This removed the capacity blocker for GA.",
           "visualDescription": "Metric card: ~70% GPU Reduction (~600 → ~180 A100s)",
           "notes": ""
@@ -422,6 +430,7 @@
         },
         {
           "id": "quote",
+          "instruct": "Speak as if quoting someone admiringly, slightly slower and more measured.",
           "narrationText": "In the words of our Principal PM: V2 is a compact prompt with only one LLM request that combines abstractive and extractive highlights generation into a single unified pipeline.",
           "visualDescription": "Eli Lekhtser quote card",
           "notes": ""
@@ -432,6 +441,7 @@
       "chapter": 9,
       "slide": 1,
       "title": "Five Lessons",
+      "instruct": "Speak in a thoughtful, advisory tone, like sharing hard-won wisdom.",
       "segments": [
         {
           "id": "title",
@@ -475,6 +485,7 @@
       "chapter": 9,
       "slide": 2,
       "title": "Closing",
+      "instruct": "Speak warmly and inspirationally.",
       "segments": [
         {
           "id": "thankyou",

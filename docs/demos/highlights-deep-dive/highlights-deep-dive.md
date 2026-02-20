@@ -98,6 +98,46 @@ Engineering peers familiar with:
 - **Audio**: `public/audio/highlights-deep-dive/c{0-9}/` (TTS generated later)
 - **Images**: `public/images/highlights-deep-dive/thumbnail.jpeg`
 
+## Narration Style (Instruct)
+
+This demo uses the three-level `instruct` hierarchy for TTS style control (Qwen3-TTS). The `instruct` field can be set at the demo, slide, or segment level — most-specific wins.
+
+### Demo-Level Default
+
+All slides and segments inherit this unless overridden:
+
+> *"Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers."*
+
+### Slide-Level Overrides (6 of 19 slides)
+
+| Chapter.Slide | Title | Instruct |
+|---|---|---|
+| 0.1 | Title | Speak with calm authority and a hint of intrigue, like opening a keynote. |
+| 1.2 | COGS Problem | Speak with urgency and concern, emphasizing the severity of the cost problem. |
+| 4.2 | O(n^2) Visualized | Speak with building intensity, like revealing the scale of a problem. |
+| 8.1 | Results Metrics | Speak with energy and pride, celebrating the achievement. |
+| 9.1 | Five Lessons | Speak in a thoughtful, advisory tone, like sharing hard-won wisdom. |
+| 9.2 | Closing | Speak warmly and inspirationally. |
+
+### Segment-Level Overrides (4 segments)
+
+| Slide | Segment ID | Instruct |
+|---|---|---|
+| Ch1_S2 (COGS Problem) | `emphasis` | Speak with firm conviction, slower pace, emphasizing every word. |
+| Ch3_S1 (Cost Drivers) | `driver5` | Speak with dramatic emphasis, pausing before revealing the biggest driver. |
+| Ch8_S1 (Results Metrics) | `gpus` | Speak with triumph, this is the headline number. |
+| Ch8_S2 (Quality and Impact) | `quote` | Speak as if quoting someone admiringly, slightly slower and more measured. |
+
+### Emotional Arc
+
+The instruct values guide the TTS voice through a deliberate emotional arc:
+
+1. **Calm exposition** (Ch0-Ch2) — Professional default with keynote opening
+2. **Building tension** (Ch3-Ch4) — Urgency around cost drivers, intensity at O(n^2) reveal
+3. **Resolution** (Ch5-Ch7) — Returns to professional default as solutions are presented
+4. **Celebration** (Ch8) — Energy and pride for results, triumph on headline GPU number
+5. **Reflection** (Ch9) — Thoughtful wisdom for lessons, warm inspiration for closing
+
 ## Related Documentation
 
 - [Context README](context/README.md) — Source file provenance

@@ -45,6 +45,14 @@ npm run type-check   # TypeScript type checking
 npm run lint         # ESLint
 ```
 
+### TTS Generation
+
+```bash
+npm run tts:generate -- --demo highlights-deep-dive  # Uses instruct from narration.json
+```
+
+TTS style/tone instructions (`instruct`) are defined in the narration JSON at three levels — demo, slide, and segment — with most-specific winning. See the [Narration Style](../../../../docs/demos/highlights-deep-dive/highlights-deep-dive.md#narration-style-instruct) section in the demo docs for the full instruct hierarchy.
+
 ## File References
 
 - **Demo config**: [`index.ts`](./index.ts)
