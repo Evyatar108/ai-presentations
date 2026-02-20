@@ -44,13 +44,16 @@ Each demo lives in `src/demos/{demo-id}/` with:
 - `slides/chapters/Chapter{N}.tsx` — slide definitions
 
 ### Slide Model
-Slides are objects with `metadata` (chapter, slide number, title, audio segments) and a `component` React function receiving `{ segment }`. Progressive reveals use `segment >= N` conditionals. Audio segments define `audioPath`, `narrationText`, and optional `timing` overrides.
+Slides are objects with `metadata` (chapter, slide number, title, audio segments) and a `component` React function receiving `{ segment }`. Progressive reveals use `segment >= N` conditionals. Audio segments define `audioPath`, `narrationText`, and optional `timing` and `instruct` overrides.
 
 ### Theme System
 Colors and typography are centralized in `src/framework/theme/`. Framework components use `useTheme()` hook. Demo slides can use static exports from `SlideStyles.ts` or opt into theme-aware `create*()` factory functions. Override colors via `src/project.config.ts`.
 
 ### Three-Level Timing Hierarchy
 Timing (betweenSegments, betweenSlides, afterFinalSlide) can be set at demo, slide, or segment level. Later levels override earlier. Defaults: 500ms / 1000ms / 2000ms. Resolution via `resolveTimingConfig()` in `src/framework/demos/timing/types.ts`.
+
+### Three-Level Instruct Hierarchy
+TTS style instructions (`instruct?: string`) follow the same three-level pattern: `DemoConfig.instruct` → `SlideMetadata.instruct` → `AudioSegment.instruct`. Most-specific wins (first non-undefined). Passed to Qwen3-TTS server as the `instruct` parameter. CLI scripts also accept `--instruct "..."` as lowest-priority fallback. Instruct changes are tracked in the TTS cache and trigger regeneration.
 
 ### Narration System
 Two modes: **inline** (narration text in slide components) or **external** (JSON in `public/narration/{demo-id}/narration.json`). External mode enabled via `useExternalNarration: true` in metadata with fallback options: `'inline'`, `'error'`, `'silent'`.

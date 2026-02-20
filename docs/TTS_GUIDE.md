@@ -33,6 +33,14 @@ Scans all demos in `src/demos/` and generates audio for segments with narration 
 npm run tts:generate -- --demo meeting-highlights
 ```
 
+### With TTS Style Instruction
+
+```bash
+npm run tts:generate -- --demo meeting-highlights --instruct "speak slowly and clearly"
+```
+
+The `--instruct` flag sets a demo-wide TTS style instruction (lowest priority). See [Instruct Hierarchy](#instruct-hierarchy) below.
+
 ### Skip Existing Files
 
 ```bash
@@ -53,13 +61,14 @@ Regenerates all audio files, ignoring the cache.
 
 ### How It Works
 
-The cache (`.tts-narration-cache.json`) tracks narration text per audio file:
+The cache (`.tts-narration-cache.json`) tracks narration text and instruct per audio file:
 
 ```json
 {
   "meeting-highlights": {
     "c0/s1_segment_01_intro.wav": {
       "narrationText": "Welcome to Meeting Highlights...",
+      "instruct": "speak slowly and clearly",
       "generatedAt": "2025-01-20T10:30:00.000Z"
     }
   }
@@ -67,10 +76,10 @@ The cache (`.tts-narration-cache.json`) tracks narration text per audio file:
 ```
 
 When you run generation:
-1. Script reads all slide narration text
+1. Script reads all slide narration text and resolved instruct
 2. Compares against cache
-3. Only regenerates files where narration text changed
-4. Updates cache with new narration text
+3. Only regenerates files where narration text or instruct changed
+4. Updates cache with new narration text and instruct
 
 ### Pre-flight Cache Check
 
@@ -181,6 +190,76 @@ Found 2 orphaned audio files:
 
 Do you want to remove these unused files? (y/n)
 ```
+
+## Instruct Hierarchy
+
+The `instruct` parameter controls TTS voice style/tone (supported by Qwen3-TTS). It follows a three-level hierarchy mirroring the timing system:
+
+**Resolution order** (most specific wins):
+```
+AudioSegment.instruct → SlideMetadata.instruct → NarrationJSON.instruct → DemoConfig.instruct → CLI --instruct
+```
+
+### Setting instruct at each level
+
+**Demo-level** (in `index.ts`):
+```typescript
+const demoConfig: DemoConfig = {
+  metadata,
+  instruct: 'speak with a professional, clear tone',
+  getSlides: async () => { ... }
+};
+```
+
+**Slide-level** (in chapter file):
+```typescript
+export const Ch1_S1_Intro = defineSlide({
+  metadata: {
+    chapter: 1, slide: 1, title: 'Intro',
+    instruct: 'speak with excitement and energy',
+    audioSegments: [...]
+  },
+  component: () => <div>...</div>
+});
+```
+
+**Segment-level** (in audio segment):
+```typescript
+audioSegments: [
+  {
+    id: 'whisper',
+    audioFilePath: '/audio/demo/c1/s1_segment_01_whisper.wav',
+    narrationText: 'This is a secret...',
+    instruct: 'speak in a soft whisper',
+  }
+]
+```
+
+**Narration JSON** (all three levels):
+```json
+{
+  "demoId": "my-demo",
+  "instruct": "speak clearly with a warm tone",
+  "slides": [
+    {
+      "chapter": 1, "slide": 1,
+      "instruct": "speak with excitement",
+      "segments": [
+        { "id": "intro", "narrationText": "...", "instruct": "speak softly" }
+      ]
+    }
+  ]
+}
+```
+
+**CLI fallback** (lowest priority):
+```bash
+npm run tts:generate -- --demo my-demo --instruct "speak slowly and clearly"
+```
+
+### Cache behavior
+
+Changing the instruct for a segment triggers TTS regeneration (the instruct value is included in the cache hash). The narration cache (`narration-cache.json`) also factors instruct into its hashes.
 
 ## Troubleshooting
 

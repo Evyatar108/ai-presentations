@@ -71,10 +71,30 @@ Check that WAV files were created in `public/audio/example-demo-1/` and play the
 
 ## Speaker Options
 
-The `--speaker` flag accepts any of the 9 premium preset timbres from the CustomVoice model. To try a different voice:
+**Recommended speakers (tested, best English quality):**
+
+| Speaker | Description |
+|---------|-------------|
+| **Aiden** | Sunny American male, clear midrange — best for narration |
+| **Ryan** | Dynamic male with strong rhythmic drive — good alternative |
 
 ```bash
-python server_qwen.py --speaker Chelsie --language English --host 0.0.0.0 --port 5000
+# Recommended
+python server_qwen.py --speaker Aiden --language English --host 0.0.0.0 --port 5000
+
+# Alternative
+python server_qwen.py --speaker Ryan --language English --host 0.0.0.0 --port 5000
 ```
 
-See the [Qwen3-TTS model card](https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice) for the full list.
+Other available speakers (not recommended for English presentations): Vivian, Serena, Dylan, Eric, Ono_Anna, Sohee, Uncle_Fu. See the [Qwen3-TTS model card](https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice) for the full list.
+
+## Instruct Parameter
+
+Qwen3-TTS supports an `instruct` parameter to control voice style and tone. Pass it via CLI or define it in your demo/slide/segment configuration:
+
+```bash
+# CLI fallback (lowest priority)
+npm run tts:generate -- --demo example-demo-1 --instruct "speak slowly and clearly"
+```
+
+The `instruct` string is passed to the `/generate` and `/generate_batch` endpoints. Set it at demo, slide, or segment level in TypeScript or narration JSON for fine-grained control. See `docs/TTS_GUIDE.md` for the full hierarchy.

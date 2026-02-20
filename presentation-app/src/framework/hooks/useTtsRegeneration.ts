@@ -23,6 +23,8 @@ export interface UseTtsRegenerationOptions {
   preCheck?: () => Promise<void>;
   /** Called after successful regeneration with the updated audio path. */
   postProcess?: (updatedAudioPath: string) => Promise<void>;
+  /** Demo-level instruct (lowest priority fallback) */
+  demoInstruct?: string;
 }
 
 export interface UseTtsRegenerationResult {
@@ -40,6 +42,7 @@ export function useTtsRegeneration({
   onSegmentRefresh,
   preCheck,
   postProcess,
+  demoInstruct,
 }: UseTtsRegenerationOptions): UseTtsRegenerationResult {
   const [regeneratingSegment, setRegeneratingSegment] = useState(false);
   const [regenerationStatus, setRegenerationStatus] = useState<RegenerationStatus | null>(null);
@@ -65,8 +68,17 @@ export function useTtsRegeneration({
         await preCheck();
       }
 
+      // Resolve instruct: segment → slide → demo
+      const resolvedInstruct =
+        segment.instruct ??
+        currentSlideMetadata.instruct ??
+        demoInstruct;
+
       console.log('[SlidePlayer] Starting regeneration for:', segment.id);
       console.log('[SlidePlayer] Add pauses:', addPauses);
+      if (resolvedInstruct) {
+        console.log('[SlidePlayer] Instruct:', resolvedInstruct);
+      }
 
       const result = await regenerateSegment({
         chapter: currentSlideMetadata.chapter,
@@ -75,6 +87,7 @@ export function useTtsRegeneration({
         segmentId: segment.id,
         narrationText: segment.narrationText,
         addPauses,
+        instruct: resolvedInstruct,
       });
 
       if (result.success) {
@@ -140,7 +153,7 @@ export function useTtsRegeneration({
     } finally {
       setRegeneratingSegment(false);
     }
-  }, [currentSlideMetadata, currentSegmentIndex, onSegmentRefresh, preCheck, postProcess]);
+  }, [currentSlideMetadata, currentSegmentIndex, onSegmentRefresh, preCheck, postProcess, demoInstruct]);
 
   return {
     regeneratingSegment,

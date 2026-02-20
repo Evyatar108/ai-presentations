@@ -58,15 +58,19 @@ def clean_text(text: str) -> str:
 
 # ── Audio helpers ───────────────────────────────────────────────────
 
-def generate_one(text: str) -> str:
+def generate_one(text: str, instruct: str | None = None) -> str:
     """Generate audio for a single text and return base64-encoded WAV."""
     cleaned = clean_text(text)
 
-    wavs, sr = model.generate_custom_voice(
+    kwargs = dict(
         text=cleaned,
         language=default_language,
         speaker=default_speaker,
     )
+    if instruct:
+        kwargs["instruct"] = instruct
+
+    wavs, sr = model.generate_custom_voice(**kwargs)
 
     audio_np = wavs[0] if isinstance(wavs, list) else wavs
     if isinstance(audio_np, torch.Tensor):
@@ -105,12 +109,13 @@ def health():
 def generate_audio():
     """
     Generate audio from text.
-    Expects JSON: {"text": "Hello!"}
+    Expects JSON: {"text": "Hello!", "instruct": "speak slowly"}  (instruct is optional)
     Returns JSON: {"audio": base64_wav, "sample_rate": 24000, "success": true}
     """
     try:
         data = request.get_json()
         text = data.get("text", "")
+        instruct = data.get("instruct") or None
 
         if not text:
             return jsonify({"error": "No text provided"}), 400
@@ -118,7 +123,9 @@ def generate_audio():
             return jsonify({"error": "Model not initialized"}), 500
 
         print(f"Generating audio for: {clean_text(text)[:80]}...")
-        audio_b64 = generate_one(text)
+        if instruct:
+            print(f"Instruct: {instruct}")
+        audio_b64 = generate_one(text, instruct)
         print("Audio generated successfully")
 
         return jsonify({
@@ -136,12 +143,13 @@ def generate_audio():
 def generate_audio_batch():
     """
     Generate audio for multiple texts.
-    Expects JSON: {"texts": ["Speaker 0: Hello!", "Speaker 0: Hi!"]}
+    Expects JSON: {"texts": ["Speaker 0: Hello!", "Speaker 0: Hi!"], "instruct": "speak clearly"}  (instruct is optional, applied to all)
     Returns JSON: {"audios": [b64_1, b64_2, ...], "sample_rate": 24000, "count": N, "success": true}
     """
     try:
         data = request.get_json()
         texts = data.get("texts", [])
+        instruct = data.get("instruct") or None
 
         if not texts:
             return jsonify({"error": "No texts provided"}), 400
@@ -149,10 +157,12 @@ def generate_audio_batch():
             return jsonify({"error": "Model not initialized"}), 500
 
         print(f"Generating audio for {len(texts)} utterances sequentially...")
+        if instruct:
+            print(f"Instruct: {instruct}")
 
         audios_b64 = []
         for idx, text in enumerate(texts):
-            audio_b64 = generate_one(text)
+            audio_b64 = generate_one(text, instruct)
             audios_b64.append(audio_b64)
             print(f"  Generated audio {idx + 1}/{len(texts)}")
 

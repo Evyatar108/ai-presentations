@@ -23,6 +23,7 @@ interface SingleSegmentConfig {
   segmentId: string;
   narrationText: string;
   serverUrl: string;
+  instruct?: string;
 }
 
 // Load server config from JSON file
@@ -49,6 +50,9 @@ async function generateSingleSegment(config: SingleSegmentConfig): Promise<void>
   console.log(`Demo:         ${config.demoId}`);
   console.log(`Location:     Ch${config.chapter}/S${config.slide}/${config.segmentId}`);
   console.log(`Text:         "${config.narrationText.substring(0, 50)}..."`);
+  if (config.instruct) {
+    console.log(`Instruct:     "${config.instruct}"`);
+  }
   console.log(`Server:       ${config.serverUrl}`);
   console.log('═'.repeat(50));
   console.log();
@@ -80,7 +84,8 @@ async function generateSingleSegment(config: SingleSegmentConfig): Promise<void>
     const response = await axios.post(
       `${config.serverUrl}/generate`,
       {
-        text: `Speaker 0: ${config.narrationText}`
+        text: `Speaker 0: ${config.narrationText}`,
+        ...(config.instruct ? { instruct: config.instruct } : {})
       },
       {
         timeout: 60000 // 1 minute timeout
@@ -201,6 +206,10 @@ function parseCLIArgs(): Partial<SingleSegmentConfig> {
         config.narrationText = value;
         i++;
         break;
+      case '--instruct':
+        config.instruct = value;
+        i++;
+        break;
     }
   }
 
@@ -225,14 +234,16 @@ if (
   console.log('    --chapter <number> \\');
   console.log('    --slide <number> \\');
   console.log('    --segment <segment-id> \\');
-  console.log('    --text "<narration text>"\n');
+  console.log('    --text "<narration text>" \\');
+  console.log('    [--instruct "<style instruction>"]\n');
   console.log('Example:');
   console.log('  tsx scripts/generate-single-tts.ts \\');
   console.log('    --demo meeting-highlights \\');
   console.log('    --chapter 1 \\');
   console.log('    --slide 2 \\');
   console.log('    --segment intro \\');
-  console.log('    --text "Welcome to the presentation"\n');
+  console.log('    --text "Welcome to the presentation" \\');
+  console.log('    --instruct "speak slowly and clearly"\n');
   process.exit(1);
 }
 
@@ -242,7 +253,8 @@ const config: SingleSegmentConfig = {
   slide: cliArgs.slide!,
   segmentId: cliArgs.segmentId!,
   narrationText: cliArgs.narrationText!,
-  serverUrl: process.env.TTS_SERVER_URL || loadServerConfig()
+  serverUrl: process.env.TTS_SERVER_URL || loadServerConfig(),
+  instruct: cliArgs.instruct
 };
 
 generateSingleSegment(config).catch((error) => {

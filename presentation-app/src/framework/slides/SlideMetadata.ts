@@ -18,7 +18,17 @@ export interface AudioSegment {
   visualDescription?: string;
   /** Actual narration text to be spoken (for TTS generation) */
   narrationText?: string;
-  
+
+  /**
+   * Optional TTS style/tone instruction for this specific segment.
+   * Overrides slide and demo instruct for this segment only.
+   * Passed to the TTS server as the `instruct` parameter (e.g. Qwen3-TTS).
+   *
+   * @example
+   * instruct: "speak slowly and clearly with a warm tone"
+   */
+  instruct?: string;
+
   /**
    * Optional timing configuration for this specific segment.
    * Overrides slide and demo timing for this segment only.
@@ -55,6 +65,15 @@ export interface SlideMetadata {
    * timing: { betweenSegments: 750, betweenSlides: 1500 }
    */
   timing?: TimingConfig;
+
+  /**
+   * Optional TTS style/tone instruction for all segments in this slide.
+   * Overrides demo-level instruct. Individual segments can further override.
+   *
+   * @example
+   * instruct: "speak with excitement and energy"
+   */
+  instruct?: string;
 }
  
  /**

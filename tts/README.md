@@ -35,10 +35,10 @@ python server.py --voice-sample path/to/voice.wav
 pip install -r requirements_qwen.txt
 
 # Start server (no voice sample needed)
-python server_qwen.py --speaker Vivian --language English
+python server_qwen.py --speaker Aiden --language English
 ```
 
-Available `--speaker` options include: Vivian, Chelsie, Ethan, and other premium presets from the CustomVoice model. See the [Qwen3-TTS model card](https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice) for the full list.
+**Recommended speakers for English narration: `Aiden` (sunny American male) or `Ryan` (dynamic male).** Other presets exist but were tested and not preferred. See the [Qwen3-TTS model card](https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice) for the full list.
 
 ### Generating audio (same for both engines)
 
@@ -46,10 +46,15 @@ Once either server is running, use the standard commands from `presentation-app/
 
 ```bash
 npm run tts:generate -- --demo my-demo
+npm run tts:generate -- --demo my-demo --instruct "speak slowly and clearly"
 npm run tts:duration -- --demo my-demo
 ```
 
 Or trigger regeneration from the browser via `npm run dev:full`.
+
+### Instruct parameter (Qwen3-TTS only)
+
+The `instruct` parameter controls voice style and tone. It can be set at demo, slide, or segment level in the TypeScript types and narration JSON files (most-specific wins). The CLI `--instruct` flag serves as a fallback default. VibeVoice ignores instruct silently. See `docs/TTS_GUIDE.md` for the full hierarchy.
 
 ## Quick Start
 
@@ -88,7 +93,7 @@ pip install -r requirements.txt
 python server.py --voice-sample path/to/voice.wav --host 0.0.0.0 --port 5000
 
 # Or run Qwen3-TTS instead
-python server_qwen.py --speaker Vivian --host 0.0.0.0 --port 5000
+python server_qwen.py --speaker Aiden --host 0.0.0.0 --port 5000
 ```
 
 **On Local PC (Client):**

@@ -210,6 +210,50 @@ export const metadata: DemoMetadata = {
 
 See [TIMING_SYSTEM.md](TIMING_SYSTEM.md) for detailed timing patterns and examples.
 
+### Step 11: Configure TTS Instruct (Optional)
+
+Set a TTS voice style instruction for Qwen3-TTS. Like timing, `instruct` supports a three-level hierarchy: demo → slide → segment (most specific wins).
+
+**Add to demo config** (`src/demos/{demo-id}/index.ts`):
+```typescript
+const demoConfig: DemoConfig = {
+  metadata,
+  instruct: 'speak slowly and clearly with a professional tone',
+  getSlides: async () => {
+    const { allSlides } = await import('./slides/SlidesRegistry');
+    return allSlides;
+  }
+};
+
+export default demoConfig;
+```
+
+**Override per-slide** (in chapter file):
+```typescript
+export const Ch1_S5_Exciting = defineSlide({
+  metadata: {
+    chapter: 1, slide: 5, title: 'Key Results',
+    instruct: 'speak with excitement and energy',
+    audioSegments: [...]
+  },
+  component: ExcitingSlide
+});
+```
+
+**Override per-segment** (in audio segment):
+```typescript
+audioSegments: [
+  {
+    id: 'dramatic',
+    audioFilePath: '/audio/your-demo-name/c1/s5_segment_01_dramatic.wav',
+    narrationText: 'And the results are in...',
+    instruct: 'speak with dramatic anticipation',
+  }
+]
+```
+
+See [TTS_GUIDE.md](TTS_GUIDE.md#instruct-hierarchy) for details on instruct in narration JSON and CLI usage.
+
 ### Registry Validation
 
 The registry performs development-time validation when demos are registered:
@@ -218,7 +262,7 @@ The registry performs development-time validation when demos are registered:
 - **Missing title**: Warns if `metadata.title` is empty
 - **Invalid loadConfig**: Rejects entries where `loadConfig` is not a function
 
-### Step 11: Test Your Demo
+### Step 12: Test Your Demo
 
 ```bash
 npm run dev

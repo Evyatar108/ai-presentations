@@ -13,6 +13,8 @@ export interface NarrationSegment {
   narrationText: string;
   visualDescription?: string;
   notes?: string;
+  /** Optional TTS style/tone instruction for this segment */
+  instruct?: string;
 }
 
 /**
@@ -23,6 +25,8 @@ export interface NarrationSlide {
   slide: number;
   title: string;
   segments: NarrationSegment[];
+  /** Optional TTS style/tone instruction for all segments in this slide */
+  instruct?: string;
 }
 
 /**
@@ -33,6 +37,8 @@ export interface NarrationData {
   version: string;
   lastModified: string;
   slides: NarrationSlide[];
+  /** Optional TTS style/tone instruction for the entire demo */
+  instruct?: string;
 }
 
 /**
@@ -163,6 +169,43 @@ export function getNarrationSegment(
   const segment = slideData.segments.find(seg => seg.id === segmentId);
   
   return segment ?? null;
+}
+
+/**
+ * Resolve the TTS instruct for a specific segment using the three-level hierarchy:
+ * segment.instruct → slide.instruct → narrationData.instruct → undefined
+ *
+ * @param narrationData - The loaded narration data (or null)
+ * @param chapter - Chapter number
+ * @param slide - Slide number within chapter
+ * @param segmentId - Unique segment identifier
+ * @returns The resolved instruct string or undefined if none set at any level
+ */
+export function getNarrationInstruct(
+  narrationData: NarrationData | null,
+  chapter: number,
+  slide: number,
+  segmentId: string
+): string | undefined {
+  if (!narrationData) {
+    return undefined;
+  }
+
+  const slideData = narrationData.slides.find(
+    s => s.chapter === chapter && s.slide === slide
+  );
+
+  if (slideData) {
+    const segment = slideData.segments.find(seg => seg.id === segmentId);
+    if (segment?.instruct) {
+      return segment.instruct;
+    }
+    if (slideData.instruct) {
+      return slideData.instruct;
+    }
+  }
+
+  return narrationData.instruct;
 }
 
 /**

@@ -136,11 +136,13 @@ npm run tts:from-json
   "demoId": "meeting-highlights",
   "version": "1.0",
   "lastModified": "2025-01-21T10:30:00Z",
+  "instruct": "speak clearly with a professional tone",
   "slides": [
     {
       "chapter": 1,
       "slide": 1,
       "title": "What is Meeting Highlights",
+      "instruct": "speak with excitement",
       "segments": [
         {
           "id": "intro",
@@ -172,17 +174,22 @@ npm run tts:from-json -- --demo meeting-highlights
 - `lastModified` - ISO 8601 timestamp
 - `slides` - Array of slide objects
 
+**Optional Fields**:
+- `instruct` - TTS style/tone instruction for the entire demo (string, optional). Lowest-priority default for all slides/segments.
+
 **Slide Object**:
 - `chapter` - Chapter number (integer)
 - `slide` - Slide number within chapter (integer)
 - `title` - Slide title (string)
 - `segments` - Array of segment objects
+- `instruct` - TTS style/tone instruction for this slide (optional, overrides demo-level)
 
 **Segment Object**:
 - `id` - Unique segment identifier (string)
 - `narrationText` - The actual narration text (string)
 - `visualDescription` - Description of visual content (optional)
 - `notes` - Internal notes/comments (optional)
+- `instruct` - TTS style/tone instruction for this segment (optional, overrides slide and demo-level)
 
 ---
 
@@ -259,10 +266,10 @@ The system uses SHA-256 hashing to detect narration changes without comparing fu
 
 **How it works**:
 
-1. Each segment's narration text is hashed
+1. Each segment's narration text and resolved instruct are hashed together
 2. Hash stored in `narration-cache.json`
-3. On next check, current text is hashed
-4. If hashes differ → change detected
+3. On next check, current text + instruct is hashed
+4. If hashes differ → change detected (text or instruct changed)
 5. Prompt to regenerate TTS audio
 
 ### Checking for Changes

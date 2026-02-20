@@ -122,6 +122,10 @@ npm run tts:duration -- --demo your-demo-id
 
 See [Adding Demos Guide](./ADDING_DEMOS.md) for complete demo creation workflow.
 
+## Related: Instruct Hierarchy
+
+The TTS `instruct` parameter (voice style/tone for Qwen3-TTS) follows the same three-level hierarchy pattern: Demo → Slide → Segment (most specific wins). See [TTS_GUIDE.md](./TTS_GUIDE.md#instruct-hierarchy) for details.
+
 ## Backward Compatibility
 
 All timing fields are optional. Demos without timing configuration will use default values (500ms/1000ms/2000ms). The system is fully backward compatible with existing demos.

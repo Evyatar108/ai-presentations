@@ -90,6 +90,7 @@ Content-Type: application/json
     "demoId": "meeting-highlights",
     "version": "1.0",
     "lastModified": "2025-01-21T10:30:00Z",
+    "instruct": "speak clearly with a professional tone",
     "slides": [
       {
         "chapter": 1,
@@ -284,7 +285,8 @@ Content-Type: application/json
   "chapter": 1,
   "slide": 2,
   "segmentId": "intro",
-  "narrationText": "New narration text here..."
+  "narrationText": "New narration text here...",
+  "instruct": "speak slowly and clearly"
 }
 ```
 
@@ -294,6 +296,7 @@ Content-Type: application/json
 - `slide` (number, required) - Slide number
 - `segmentId` (string, required) - Segment identifier
 - `narrationText` (string, required) - Updated narration text
+- `instruct` (string, optional) - TTS style/tone instruction (e.g., "speak slowly and clearly"). Passed to the TTS server for engines that support it (Qwen3-TTS).
 
 **Response** (200 OK):
 ```json

@@ -15,6 +15,7 @@ interface RegenerateSegmentParams {
   segmentId: string;
   narrationText: string;
   addPauses?: boolean; // Optional flag to add " Amazing." or ". Amazing." at the end
+  instruct?: string;   // Optional tone/style instruction (e.g. "speak slowly and clearly")
 }
 
 interface RegenerateResult {
@@ -148,7 +149,8 @@ export async function regenerateSegment(
         body: JSON.stringify({
           texts: [
             `Speaker 0: ${params.narrationText}${params.addPauses !== false ? (params.narrationText.trim().endsWith('.') ? ' Amazing.' : '. Amazing.') : ''}`,  // Add " Amazing." or ". Amazing." by default
-          ]
+          ],
+          ...(params.instruct ? { instruct: params.instruct } : {}),
         }),
         // Add timeout and better error handling
         signal: AbortSignal.timeout(60000) // 60 second timeout

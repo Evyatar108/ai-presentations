@@ -100,6 +100,16 @@ export interface DemoConfig {
    * timing: { betweenSegments: 500, betweenSlides: 1000, afterFinalSlide: 2000 }
    */
   timing?: TimingConfig;
+
+  /**
+   * Optional TTS style/tone instruction for the entire demo.
+   * Sets default instruct for all slides and segments.
+   * Can be overridden at slide or segment level.
+   *
+   * @example
+   * instruct: "speak slowly and clearly with a professional tone"
+   */
+  instruct?: string;
 }
 
 /**

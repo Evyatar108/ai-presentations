@@ -18,12 +18,14 @@ interface TTSConfig {
   cacheFile: string;          // Path to narration cache file
   demoFilter?: string;        // Optional: generate only for specific demo
   fromJson?: boolean;         // NEW: Use JSON exclusively
+  instruct?: string;          // CLI-level default instruct (lowest priority)
 }
 
 interface NarrationCache {
   [demoId: string]: {
     [filepath: string]: {
       narrationText: string;
+      instruct?: string;
       generatedAt: string;
     };
   };
@@ -35,6 +37,7 @@ interface NarrationSegment {
   narrationText: string;
   visualDescription?: string;
   notes?: string;
+  instruct?: string;
 }
 
 interface NarrationSlide {
@@ -42,6 +45,7 @@ interface NarrationSlide {
   slide: number;
   title: string;
   segments: NarrationSegment[];
+  instruct?: string;
 }
 
 interface NarrationData {
@@ -49,6 +53,7 @@ interface NarrationData {
   version: string;
   lastModified: string;
   slides: NarrationSlide[];
+  instruct?: string;
 }
 
 interface SegmentToGenerate {
@@ -59,6 +64,8 @@ interface SegmentToGenerate {
   segment: AudioSegment;
   filename: string;
   filepath: string;
+  /** Resolved instruct for this segment (segment → slide → narrationJSON → CLI) */
+  instruct?: string;
 }
 
 // Get all demo IDs by scanning the demos directory
@@ -136,6 +143,34 @@ function getNarrationText(
   return segment?.narrationText ?? null;
 }
 
+// Get resolved instruct from narration JSON (segment → slide → data-level)
+function getNarrationInstruct(
+  narrationData: NarrationData | null,
+  chapter: number,
+  slide: number,
+  segmentId: string
+): string | undefined {
+  if (!narrationData) {
+    return undefined;
+  }
+
+  const slideData = narrationData.slides.find(
+    s => s.chapter === chapter && s.slide === slide
+  );
+
+  if (slideData) {
+    const segment = slideData.segments.find(seg => seg.id === segmentId);
+    if (segment?.instruct) {
+      return segment.instruct;
+    }
+    if (slideData.instruct) {
+      return slideData.instruct;
+    }
+  }
+
+  return narrationData.instruct;
+}
+
 // Update narration cache after successful TTS generation
 function updateNarrationCache(
   demoId: string,
@@ -165,14 +200,17 @@ function updateNarrationCache(
     }
   }
   
-  // Update with new hashes from slides
+  // Update with new hashes from slides (include instruct in hash)
   for (const slide of slides) {
     for (const segment of slide.metadata.audioSegments) {
       if (!segment.narrationText) continue;
-      
+
       const key = `ch${slide.metadata.chapter}:s${slide.metadata.slide}:${segment.id}`;
-      const hash = crypto.createHash('sha256').update(segment.narrationText.trim()).digest('hex');
-      
+      const resolvedInstruct = segment.instruct ?? slide.metadata.instruct ?? '';
+      const hash = crypto.createHash('sha256')
+        .update(segment.narrationText.trim() + '\0' + resolvedInstruct)
+        .digest('hex');
+
       cache.segments[key] = {
         hash,
         lastChecked: new Date().toISOString()
@@ -372,7 +410,20 @@ async function generateTTS(config: TTSConfig) {
             // Use JSON narration (overrides inline)
             segment.narrationText = jsonNarration;
             mergedCount++;
-          } else if (!segment.narrationText && config.fromJson) {
+          }
+
+          // Merge instruct from JSON (segment → slide → data-level)
+          const jsonInstruct = getNarrationInstruct(
+            narrationData,
+            slide.metadata.chapter,
+            slide.metadata.slide,
+            segment.id
+          );
+          if (jsonInstruct) {
+            segment.instruct = jsonInstruct;
+          }
+
+          if (!segment.narrationText && config.fromJson) {
             // Error if --from-json but missing in JSON
             console.error(
               `❌ Missing JSON narration for ch${slide.metadata.chapter}:s${slide.metadata.slide}:${segment.id}`
@@ -487,18 +538,28 @@ async function generateTTS(config: TTSConfig) {
         const filepath = path.join(chapterDir, filename);
         const relativeFilepath = path.relative(demoOutputDir, filepath);
         
+        // Resolve instruct: segment → slide → narrationJSON → CLI
+        const resolvedInstruct =
+          segment.instruct ??
+          slide.metadata.instruct ??
+          config.instruct;
+
         // Check if we should skip this segment
         let shouldSkip = false;
-        
+
         if (config.skipExisting && fs.existsSync(filepath)) {
-          // File exists - check if narration has changed
+          // File exists - check if narration or instruct has changed
           const cachedEntry = cache[demoId][relativeFilepath];
-          if (cachedEntry && cachedEntry.narrationText === segment.narrationText) {
-            // Narration hasn't changed - skip
+          if (
+            cachedEntry &&
+            cachedEntry.narrationText === segment.narrationText &&
+            (cachedEntry.instruct ?? undefined) === resolvedInstruct
+          ) {
+            // Narration and instruct haven't changed - skip
             shouldSkip = true;
             skippedCount++;
           }
-          // If narration changed or not in cache, regenerate
+          // If narration or instruct changed or not in cache, regenerate
         }
         
         if (shouldSkip) {
@@ -513,7 +574,8 @@ async function generateTTS(config: TTSConfig) {
           segmentIndex: i,
           segment,
           filename,
-          filepath
+          filepath,
+          instruct: resolvedInstruct
         });
       }
     }
@@ -526,36 +588,54 @@ async function generateTTS(config: TTSConfig) {
       continue;
     }
     
-    // Process in batches
+    // Group segments by resolved instruct, then process in batches
+    // (each batch call sends a single instruct to the server)
     let generatedCount = 0;
     let errorCount = 0;
-    const batches = chunkArray(segmentsToGenerate, config.batchSize);
-    
-    console.log(`Processing ${batches.length} batches (${config.batchSize} segments per batch)...\n`);
-    
-    for (let batchIdx = 0; batchIdx < batches.length; batchIdx++) {
-      const batch = batches[batchIdx];
+
+    const byInstruct = new Map<string | undefined, SegmentToGenerate[]>();
+    for (const seg of segmentsToGenerate) {
+      const key = seg.instruct;
+      if (!byInstruct.has(key)) {
+        byInstruct.set(key, []);
+      }
+      byInstruct.get(key)!.push(seg);
+    }
+
+    const allBatches: { batch: SegmentToGenerate[]; instruct?: string }[] = [];
+    for (const [instruct, segments] of byInstruct) {
+      const chunks = chunkArray(segments, config.batchSize);
+      for (const chunk of chunks) {
+        allBatches.push({ batch: chunk, instruct });
+      }
+    }
+
+    console.log(`Processing ${allBatches.length} batches (${config.batchSize} segments per batch)...\n`);
+
+    for (let batchIdx = 0; batchIdx < allBatches.length; batchIdx++) {
+      const { batch, instruct } = allBatches[batchIdx];
       const batchNum = batchIdx + 1;
-      
+
       console.log(`\n${'='.repeat(60)}`);
-      console.log(`📦 Batch ${batchNum}/${batches.length} (${batch.length} segments)`);
+      console.log(`📦 Batch ${batchNum}/${allBatches.length} (${batch.length} segments${instruct ? `, instruct: "${instruct.substring(0, 40)}..."` : ''})`);
       console.log('='.repeat(60));
-      
+
       // Show what's in this batch
       batch.forEach((item, idx) => {
         const preview = item.segment.narrationText!.substring(0, 50);
         console.log(`  ${idx + 1}. Ch${item.chapter}/S${item.slide} (${item.segment.id}): "${preview}..."`);
       });
-      
+
       try {
         console.log(`\n🔊 Sending batch request to server...`);
-        
+
         // Prepare texts for batch request
         const texts = batch.map(item => `Speaker 0: ${item.segment.narrationText}`);
-        
+
         // Call batch endpoint
         const response = await axios.post(`${config.serverUrl}/generate_batch`, {
-          texts
+          texts,
+          ...(instruct ? { instruct } : {})
         }, {
           timeout: 900000 // 15 minute timeout for batch
         });
@@ -581,6 +661,7 @@ async function generateTTS(config: TTSConfig) {
             const relativeFilepath = path.relative(path.join(config.outputDir, item.demoId), item.filepath);
             cache[item.demoId][relativeFilepath] = {
               narrationText: item.segment.narrationText!,
+              ...(item.instruct ? { instruct: item.instruct } : {}),
               generatedAt: new Date().toISOString()
             };
           }
@@ -600,7 +681,7 @@ async function generateTTS(config: TTSConfig) {
       }
       
       // Show progress
-      const progressPct = ((batchNum / batches.length) * 100).toFixed(1);
+      const progressPct = ((batchNum / allBatches.length) * 100).toFixed(1);
       console.log(`\n📊 Progress: ${generatedCount}/${segmentsToGenerate.length} segments (${progressPct}%)`);
     }
     
@@ -672,19 +753,25 @@ function loadServerConfig(): string {
 }
 
 // Parse CLI arguments
-function parseCLIArgs(): { demoFilter?: string; skipExisting: boolean; fromJson: boolean } {
+function parseCLIArgs(): { demoFilter?: string; skipExisting: boolean; fromJson: boolean; instruct?: string } {
   const args = process.argv.slice(2);
-  const result: { demoFilter?: string; skipExisting: boolean; fromJson: boolean } = {
+  const result: { demoFilter?: string; skipExisting: boolean; fromJson: boolean; instruct?: string } = {
     skipExisting: args.includes('--skip-existing'),
     fromJson: args.includes('--from-json')
   };
-  
+
   // Check for --demo parameter
   const demoIndex = args.indexOf('--demo');
   if (demoIndex !== -1 && args[demoIndex + 1]) {
     result.demoFilter = args[demoIndex + 1];
   }
-  
+
+  // Check for --instruct parameter
+  const instructIndex = args.indexOf('--instruct');
+  if (instructIndex !== -1 && args[instructIndex + 1]) {
+    result.instruct = args[instructIndex + 1];
+  }
+
   return result;
 }
 
@@ -697,7 +784,8 @@ const config: TTSConfig = {
   batchSize: parseInt(process.env.BATCH_SIZE || '10', 10),
   cacheFile: path.join(__dirname, '../.tts-narration-cache.json'),
   demoFilter: cliArgs.demoFilter,
-  fromJson: cliArgs.fromJson
+  fromJson: cliArgs.fromJson,
+  instruct: cliArgs.instruct
 };
 
 generateTTS(config).catch(console.error);

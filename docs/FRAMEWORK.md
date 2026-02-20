@@ -133,6 +133,7 @@ The framework barrel uses explicit named exports (no wildcard `export *`) for Sl
 Additional exports available from the barrel:
 - **Slide factory**: `defineSlide()` — creates slides with metadata and component in a single call
 - **Types**: `DurationInfo`, `NarrationFallback`, `DemoDefaultMode`, `SlideDurationBreakdown`, `PresentationDurationReport`, `SegmentDurationInfo`
+- **Narration helpers**: `getNarrationInstruct()` — resolves instruct from narration JSON (segment → slide → data-level)
 - **Component props**: `DemoPlayerProps`, `SlidePlayerProps`, `NarratedControllerProps`, plus all layout props (`SlideContainerProps`, `ContentCardProps`, etc.)
 - **Calculator functions**: `calculateSlideDuration`, `calculatePresentationDuration`
 
@@ -151,4 +152,5 @@ Use `DemoRegistry._resetForTesting()` for test isolation.
 - [THEMING.md](./THEMING.md) — Theme system reference
 - [ADDING_DEMOS.md](./ADDING_DEMOS.md) — How to add new demos
 - [TIMING_SYSTEM.md](./TIMING_SYSTEM.md) — Three-level timing hierarchy
+- [TTS_GUIDE.md](./TTS_GUIDE.md) — TTS generation, instruct hierarchy, caching
 - [COMPONENTS.md](./COMPONENTS.md) — Component reference

@@ -14,15 +14,18 @@ interface NarrationData {
   demoId: string;
   version: string;
   lastModified: string;
+  instruct?: string;
   slides: Array<{
     chapter: number;
     slide: number;
     title: string;
+    instruct?: string;
     segments: Array<{
       id: string;
       narrationText: string;
       visualDescription?: string;
       notes?: string;
+      instruct?: string;
     }>;
   }>;
 }
@@ -116,8 +119,10 @@ function checkNarrationChanges(demoId: string): {
     for (const slide of narrationData.slides) {
       for (const segment of slide.segments) {
         const key = `ch${slide.chapter}:s${slide.slide}:${segment.id}`;
+        // Include resolved instruct in hash so instruct changes trigger regeneration
+        const resolvedInstruct = segment.instruct ?? slide.instruct ?? narrationData.instruct ?? '';
         const currentHash = crypto.createHash('sha256')
-          .update(segment.narrationText.trim())
+          .update(segment.narrationText.trim() + '\0' + resolvedInstruct)
           .digest('hex');
         
         if (!cache || !cache.segments[key]) {
@@ -191,17 +196,24 @@ function mergeNarrationIntoSlides(
       return slide;
     }
     
-    // Merge narration text into segments
+    // Merge narration text and instruct into segments
     const updatedSegments = audioSegments.map(segment => {
       const narrationSegment = narrationSlide.segments.find(ns => ns.id === segment.id);
-      
+
       if (narrationSegment) {
+        // Resolve instruct: segment → slide → data-level
+        const resolvedInstruct =
+          narrationSegment.instruct ??
+          narrationSlide.instruct ??
+          narrationData.instruct;
+
         return {
           ...segment,
-          narrationText: narrationSegment.narrationText
+          narrationText: narrationSegment.narrationText,
+          ...(resolvedInstruct ? { instruct: resolvedInstruct } : {})
         };
       }
-      
+
       return segment;
     });
     
