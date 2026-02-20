@@ -18,11 +18,10 @@ import BeforeAfterSplit from '../components/BeforeAfterSplit';
  */
 
 const COST_DRIVERS = [
-  { num: 1, title: '4 sequential calls = 4x latency', desc: 'Each call waits for the previous one to finish' },
+  { num: 1, title: '4 sequential calls = 4x compute cost', desc: 'Each call consumes its own GPU allocation' },
   { num: 2, title: 'Verbose JSON input', desc: 'Keys repeated per utterance (500+ times)' },
-  { num: 3, title: 'Duplicated RAI rules', desc: '~60 lines x 3 prompts = 180 wasted lines' },
-  { num: 4, title: 'Fragile markdown table parsing', desc: 'Output of each call parsed as input to the next' },
-  { num: 5, title: 'Combinatorial candidate explosion O(n\u00B2)', desc: 'Nested loop generates thousands of candidate ranges' }
+  { num: 3, title: 'Fragile markdown table parsing', desc: 'Output of each call parsed as input to the next' },
+  { num: 4, title: 'Combinatorial candidate explosion O(n\u00B2)', desc: 'Nested loop generates thousands of candidate ranges' }
 ];
 
 // ---------- Slide 1: Cost Drivers ----------
@@ -37,7 +36,7 @@ const Ch3_S1_CostDriversComponent: React.FC = () => {
       <AnimatePresence>
         {isSegmentVisible(0) && (
           <SlideTitle reduced={reduced}>
-            Five Structural Cost Drivers
+            Four Structural Cost Drivers
           </SlideTitle>
         )}
       </AnimatePresence>
@@ -116,14 +115,13 @@ export const Ch3_S1_CostDrivers = defineSlide({
   metadata: {
     chapter: 3,
     slide: 1,
-    title: 'Five Cost Drivers',
+    title: 'Four Cost Drivers',
     audioSegments: [
       { id: 'title', audioFilePath: '/audio/highlights-deep-dive/c3/s1_segment_01_title.wav' },
       { id: 'driver1', audioFilePath: '/audio/highlights-deep-dive/c3/s1_segment_02_driver1.wav' },
       { id: 'driver2', audioFilePath: '/audio/highlights-deep-dive/c3/s1_segment_03_driver2.wav' },
       { id: 'driver3', audioFilePath: '/audio/highlights-deep-dive/c3/s1_segment_04_driver3.wav' },
-      { id: 'driver4', audioFilePath: '/audio/highlights-deep-dive/c3/s1_segment_05_driver4.wav' },
-      { id: 'driver5', audioFilePath: '/audio/highlights-deep-dive/c3/s1_segment_06_driver5.wav' }
+      { id: 'driver4', audioFilePath: '/audio/highlights-deep-dive/c3/s1_segment_05_driver4.wav' }
     ]
   },
   component: Ch3_S1_CostDriversComponent

@@ -133,7 +133,7 @@ const Ch8_S2_QualityAndImpactComponent: React.FC = () => {
               marginBottom: '2rem'
             }}
           >
-            {['Cost Reduction', 'Private Preview (Oct 2025)', 'GA Rollout'].map((step, i) => (
+            {['Cost Reduction', 'Private Preview', 'GA Rollout'].map((step, i) => (
               <React.Fragment key={step}>
                 {i > 0 && <span style={{ color: theme.colors.primary }}><ArrowRight /></span>}
                 <div style={{
@@ -161,7 +161,7 @@ const Ch8_S2_QualityAndImpactComponent: React.FC = () => {
         {isSegmentVisible(2) && (
           <TestimonialCard
             quote="V2 is a compact prompt with only one LLM request that combines abstractive and extractive highlights generation into a single unified pipeline."
-            author="Eli Lekhtser, Principal PM"
+            author="Eli Lekhtser, Engineering Manager"
             reduced={reduced}
           />
         )}

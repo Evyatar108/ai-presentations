@@ -1,171 +1,23 @@
 {
-  "example-demo-1": {
-    "demoId": "example-demo-1",
-    "audioOnlyDuration": 0,
-    "segmentDelays": 1.5,
-    "slideDelays": 2,
-    "finalDelay": 2,
-    "totalDuration": 5.5,
-    "slideBreakdowns": [
-      {
-        "slideIndex": 1,
-        "slideTitle": "Title Slide",
-        "chapterIndex": 0,
-        "totalDuration": 1,
-        "audioDuration": 0,
-        "delaysDuration": 1,
-        "segments": [
-          {
-            "segmentIndex": 0,
-            "audioDuration": 0,
-            "delayAfter": 1
-          }
-        ]
-      },
-      {
-        "slideIndex": 2,
-        "slideTitle": "Key Features",
-        "chapterIndex": 0,
-        "totalDuration": 2.5,
-        "audioDuration": 0,
-        "delaysDuration": 2.5,
-        "segments": [
-          {
-            "segmentIndex": 0,
-            "audioDuration": 0,
-            "delayAfter": 0.5
-          },
-          {
-            "segmentIndex": 1,
-            "audioDuration": 0,
-            "delayAfter": 0.5
-          },
-          {
-            "segmentIndex": 2,
-            "audioDuration": 0,
-            "delayAfter": 0.5
-          },
-          {
-            "segmentIndex": 3,
-            "audioDuration": 0,
-            "delayAfter": 1
-          }
-        ]
-      },
-      {
-        "slideIndex": 3,
-        "slideTitle": "Conclusion",
-        "chapterIndex": 0,
-        "totalDuration": 2,
-        "audioDuration": 0,
-        "delaysDuration": 2,
-        "segments": [
-          {
-            "segmentIndex": 0,
-            "audioDuration": 0,
-            "delayAfter": 2
-          }
-        ]
-      }
-    ],
-    "formattedDurations": {
-      "audioOnly": "0:00",
-      "total": "0:05"
-    }
-  },
-  "example-demo-2": {
-    "demoId": "example-demo-2",
-    "audioOnlyDuration": 0,
-    "segmentDelays": 1.7999999999999998,
-    "slideDelays": 2.4,
-    "finalDelay": 2,
-    "totalDuration": 6.199999999999999,
-    "slideBreakdowns": [
-      {
-        "slideIndex": 1,
-        "slideTitle": "Title Slide",
-        "chapterIndex": 0,
-        "totalDuration": 1.2,
-        "audioDuration": 0,
-        "delaysDuration": 1.2,
-        "segments": [
-          {
-            "segmentIndex": 0,
-            "audioDuration": 0,
-            "delayAfter": 1.2
-          }
-        ]
-      },
-      {
-        "slideIndex": 2,
-        "slideTitle": "System Benefits",
-        "chapterIndex": 0,
-        "totalDuration": 2.4,
-        "audioDuration": 0,
-        "delaysDuration": 2.4,
-        "segments": [
-          {
-            "segmentIndex": 0,
-            "audioDuration": 0,
-            "delayAfter": 0.6
-          },
-          {
-            "segmentIndex": 1,
-            "audioDuration": 0,
-            "delayAfter": 0.6
-          },
-          {
-            "segmentIndex": 2,
-            "audioDuration": 0,
-            "delayAfter": 1.2
-          }
-        ]
-      },
-      {
-        "slideIndex": 3,
-        "slideTitle": "Framework Impact",
-        "chapterIndex": 0,
-        "totalDuration": 2.6,
-        "audioDuration": 0,
-        "delaysDuration": 2.6,
-        "segments": [
-          {
-            "segmentIndex": 0,
-            "audioDuration": 0,
-            "delayAfter": 0.6
-          },
-          {
-            "segmentIndex": 1,
-            "audioDuration": 0,
-            "delayAfter": 2
-          }
-        ]
-      }
-    ],
-    "formattedDurations": {
-      "audioOnly": "0:00",
-      "total": "0:06"
-    }
-  },
   "highlights-deep-dive": {
     "demoId": "highlights-deep-dive",
-    "audioOnlyDuration": 822.08,
-    "segmentDelays": 20,
+    "audioOnlyDuration": 577.76,
+    "segmentDelays": 19.5,
     "slideDelays": 18,
     "finalDelay": 2,
-    "totalDuration": 862.08,
+    "totalDuration": 617.26,
     "slideBreakdowns": [
       {
         "slideIndex": 1,
         "slideTitle": "Title",
         "chapterIndex": 0,
-        "totalDuration": 15.32,
-        "audioDuration": 14.32,
+        "totalDuration": 17,
+        "audioDuration": 16,
         "delaysDuration": 1,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 14.32,
+            "audioDuration": 16,
             "delayAfter": 1
           }
         ]
@@ -174,23 +26,23 @@
         "slideIndex": 1,
         "slideTitle": "Product Context",
         "chapterIndex": 1,
-        "totalDuration": 38.959999999999994,
-        "audioDuration": 36.959999999999994,
+        "totalDuration": 38.4,
+        "audioDuration": 36.4,
         "delaysDuration": 2,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 2.88,
+            "audioDuration": 3.04,
             "delayAfter": 0.5
           },
           {
             "segmentIndex": 1,
-            "audioDuration": 17.84,
+            "audioDuration": 17.28,
             "delayAfter": 0.5
           },
           {
             "segmentIndex": 2,
-            "audioDuration": 16.24,
+            "audioDuration": 16.08,
             "delayAfter": 1
           }
         ]
@@ -199,23 +51,23 @@
         "slideIndex": 2,
         "slideTitle": "COGS Problem",
         "chapterIndex": 1,
-        "totalDuration": 42.879999999999995,
-        "audioDuration": 40.879999999999995,
+        "totalDuration": 36.32000000000001,
+        "audioDuration": 34.32000000000001,
         "delaysDuration": 2,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 19.68,
+            "audioDuration": 19.28,
             "delayAfter": 0.5
           },
           {
             "segmentIndex": 1,
-            "audioDuration": 14.72,
+            "audioDuration": 8.88,
             "delayAfter": 0.5
           },
           {
             "segmentIndex": 2,
-            "audioDuration": 6.48,
+            "audioDuration": 6.16,
             "delayAfter": 1
           }
         ]
@@ -224,33 +76,33 @@
         "slideIndex": 1,
         "slideTitle": "Four-Call Pipeline",
         "chapterIndex": 2,
-        "totalDuration": 51.24,
-        "audioDuration": 48.24,
+        "totalDuration": 47.32000000000001,
+        "audioDuration": 44.32000000000001,
         "delaysDuration": 3,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 5.84,
+            "audioDuration": 4,
             "delayAfter": 0.5
           },
           {
             "segmentIndex": 1,
-            "audioDuration": 7.28,
+            "audioDuration": 8.08,
             "delayAfter": 0.5
           },
           {
             "segmentIndex": 2,
-            "audioDuration": 12.96,
+            "audioDuration": 12.8,
             "delayAfter": 0.5
           },
           {
             "segmentIndex": 3,
-            "audioDuration": 8.48,
+            "audioDuration": 8.88,
             "delayAfter": 0.5
           },
           {
             "segmentIndex": 4,
-            "audioDuration": 13.68,
+            "audioDuration": 10.56,
             "delayAfter": 1
           }
         ]
@@ -259,58 +111,53 @@
         "slideIndex": 2,
         "slideTitle": "Call Detail",
         "chapterIndex": 2,
-        "totalDuration": 46.38,
-        "audioDuration": 44.88,
+        "totalDuration": 33.980000000000004,
+        "audioDuration": 32.480000000000004,
         "delaysDuration": 1.5,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 20.96,
+            "audioDuration": 17.12,
             "delayAfter": 0.5
           },
           {
             "segmentIndex": 1,
-            "audioDuration": 23.92,
+            "audioDuration": 15.36,
             "delayAfter": 1
           }
         ]
       },
       {
         "slideIndex": 1,
-        "slideTitle": "Five Cost Drivers",
+        "slideTitle": "Four Cost Drivers",
         "chapterIndex": 3,
-        "totalDuration": 67.74000000000001,
-        "audioDuration": 64.24000000000001,
-        "delaysDuration": 3.5,
+        "totalDuration": 50.36,
+        "audioDuration": 47.36,
+        "delaysDuration": 3,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 5.6,
+            "audioDuration": 4.88,
             "delayAfter": 0.5
           },
           {
             "segmentIndex": 1,
-            "audioDuration": 8,
+            "audioDuration": 7.52,
             "delayAfter": 0.5
           },
           {
             "segmentIndex": 2,
-            "audioDuration": 12.96,
+            "audioDuration": 13.28,
             "delayAfter": 0.5
           },
           {
             "segmentIndex": 3,
-            "audioDuration": 10,
+            "audioDuration": 6.88,
             "delayAfter": 0.5
           },
           {
             "segmentIndex": 4,
-            "audioDuration": 12.96,
-            "delayAfter": 0.5
-          },
-          {
-            "segmentIndex": 5,
-            "audioDuration": 14.72,
+            "audioDuration": 14.8,
             "delayAfter": 1
           }
         ]
@@ -319,18 +166,18 @@
         "slideIndex": 2,
         "slideTitle": "Verbose JSON",
         "chapterIndex": 3,
-        "totalDuration": 32.22,
-        "audioDuration": 30.72,
+        "totalDuration": 14.46,
+        "audioDuration": 12.96,
         "delaysDuration": 1.5,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 20.32,
+            "audioDuration": 10.32,
             "delayAfter": 0.5
           },
           {
             "segmentIndex": 1,
-            "audioDuration": 10.4,
+            "audioDuration": 2.64,
             "delayAfter": 1
           }
         ]
@@ -339,23 +186,23 @@
         "slideIndex": 1,
         "slideTitle": "Nested Loop",
         "chapterIndex": 4,
-        "totalDuration": 46.56,
-        "audioDuration": 44.56,
+        "totalDuration": 24.08,
+        "audioDuration": 22.08,
         "delaysDuration": 2,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 11.68,
+            "audioDuration": 4.16,
             "delayAfter": 0.5
           },
           {
             "segmentIndex": 1,
-            "audioDuration": 17.6,
+            "audioDuration": 10.24,
             "delayAfter": 0.5
           },
           {
             "segmentIndex": 2,
-            "audioDuration": 15.28,
+            "audioDuration": 7.68,
             "delayAfter": 1
           }
         ]
@@ -364,23 +211,23 @@
         "slideIndex": 2,
         "slideTitle": "O(n^2) Visualized",
         "chapterIndex": 4,
-        "totalDuration": 43.6,
-        "audioDuration": 41.6,
+        "totalDuration": 30.64,
+        "audioDuration": 28.64,
         "delaysDuration": 2,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 11.84,
+            "audioDuration": 4.4,
             "delayAfter": 0.5
           },
           {
             "segmentIndex": 1,
-            "audioDuration": 15.04,
+            "audioDuration": 9.2,
             "delayAfter": 0.5
           },
           {
             "segmentIndex": 2,
-            "audioDuration": 14.72,
+            "audioDuration": 15.04,
             "delayAfter": 1
           }
         ]
@@ -389,23 +236,23 @@
         "slideIndex": 1,
         "slideTitle": "Format Comparison",
         "chapterIndex": 5,
-        "totalDuration": 52.96,
-        "audioDuration": 50.96,
+        "totalDuration": 34.8,
+        "audioDuration": 32.8,
         "delaysDuration": 2,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 6.96,
+            "audioDuration": 6.56,
             "delayAfter": 0.5
           },
           {
             "segmentIndex": 1,
-            "audioDuration": 20.72,
+            "audioDuration": 12.88,
             "delayAfter": 0.5
           },
           {
             "segmentIndex": 2,
-            "audioDuration": 23.28,
+            "audioDuration": 13.36,
             "delayAfter": 1
           }
         ]
@@ -414,23 +261,23 @@
         "slideIndex": 2,
         "slideTitle": "max_end_utterance_id",
         "chapterIndex": 5,
-        "totalDuration": 60.48,
-        "audioDuration": 58.48,
+        "totalDuration": 39.2,
+        "audioDuration": 37.2,
         "delaysDuration": 2,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 23.68,
+            "audioDuration": 20.48,
             "delayAfter": 0.5
           },
           {
             "segmentIndex": 1,
-            "audioDuration": 17.2,
+            "audioDuration": 8.48,
             "delayAfter": 0.5
           },
           {
             "segmentIndex": 2,
-            "audioDuration": 17.6,
+            "audioDuration": 8.24,
             "delayAfter": 1
           }
         ]
@@ -439,8 +286,8 @@
         "slideIndex": 1,
         "slideTitle": "Pseudocode Algorithm",
         "chapterIndex": 6,
-        "totalDuration": 62,
-        "audioDuration": 60,
+        "totalDuration": 38.88,
+        "audioDuration": 36.88,
         "delaysDuration": 2,
         "segments": [
           {
@@ -450,12 +297,12 @@
           },
           {
             "segmentIndex": 1,
-            "audioDuration": 27.52,
+            "audioDuration": 16.16,
             "delayAfter": 0.5
           },
           {
             "segmentIndex": 2,
-            "audioDuration": 18.96,
+            "audioDuration": 7.2,
             "delayAfter": 1
           }
         ]
@@ -464,18 +311,18 @@
         "slideIndex": 2,
         "slideTitle": "Prose vs Pseudocode",
         "chapterIndex": 6,
-        "totalDuration": 44.620000000000005,
-        "audioDuration": 43.120000000000005,
+        "totalDuration": 25.5,
+        "audioDuration": 24,
         "delaysDuration": 1.5,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 22.48,
+            "audioDuration": 11.6,
             "delayAfter": 0.5
           },
           {
             "segmentIndex": 1,
-            "audioDuration": 20.64,
+            "audioDuration": 12.4,
             "delayAfter": 1
           }
         ]
@@ -484,23 +331,23 @@
         "slideIndex": 1,
         "slideTitle": "Copy-then-Parse",
         "chapterIndex": 7,
-        "totalDuration": 55.84,
-        "audioDuration": 53.84,
+        "totalDuration": 37.28,
+        "audioDuration": 35.28,
         "delaysDuration": 2,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 8.8,
+            "audioDuration": 9.28,
             "delayAfter": 0.5
           },
           {
             "segmentIndex": 1,
-            "audioDuration": 16.72,
+            "audioDuration": 9.12,
             "delayAfter": 0.5
           },
           {
             "segmentIndex": 2,
-            "audioDuration": 28.32,
+            "audioDuration": 16.88,
             "delayAfter": 1
           }
         ]
@@ -509,18 +356,18 @@
         "slideIndex": 2,
         "slideTitle": "Self-Checks",
         "chapterIndex": 7,
-        "totalDuration": 38.38,
-        "audioDuration": 36.88,
+        "totalDuration": 27.82,
+        "audioDuration": 26.32,
         "delaysDuration": 1.5,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 7.76,
+            "audioDuration": 13.76,
             "delayAfter": 0.5
           },
           {
             "segmentIndex": 1,
-            "audioDuration": 29.12,
+            "audioDuration": 12.56,
             "delayAfter": 1
           }
         ]
@@ -529,28 +376,28 @@
         "slideIndex": 1,
         "slideTitle": "Results Metrics",
         "chapterIndex": 8,
-        "totalDuration": 34.1,
-        "audioDuration": 31.6,
+        "totalDuration": 20.98,
+        "audioDuration": 18.48,
         "delaysDuration": 2.5,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 1.6,
+            "audioDuration": 1.68,
             "delayAfter": 0.5
           },
           {
             "segmentIndex": 1,
-            "audioDuration": 10.16,
+            "audioDuration": 3.76,
             "delayAfter": 0.5
           },
           {
             "segmentIndex": 2,
-            "audioDuration": 8.56,
+            "audioDuration": 4.16,
             "delayAfter": 0.5
           },
           {
             "segmentIndex": 3,
-            "audioDuration": 11.28,
+            "audioDuration": 8.88,
             "delayAfter": 1
           }
         ]
@@ -559,23 +406,23 @@
         "slideIndex": 2,
         "slideTitle": "Quality and Impact",
         "chapterIndex": 8,
-        "totalDuration": 40.4,
-        "audioDuration": 38.4,
+        "totalDuration": 35.92,
+        "audioDuration": 33.92,
         "delaysDuration": 2,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 16.16,
+            "audioDuration": 12.16,
             "delayAfter": 0.5
           },
           {
             "segmentIndex": 1,
-            "audioDuration": 9.68,
+            "audioDuration": 8.08,
             "delayAfter": 0.5
           },
           {
             "segmentIndex": 2,
-            "audioDuration": 12.56,
+            "audioDuration": 13.68,
             "delayAfter": 1
           }
         ]
@@ -584,38 +431,38 @@
         "slideIndex": 1,
         "slideTitle": "Five Lessons",
         "chapterIndex": 9,
-        "totalDuration": 77.26,
-        "audioDuration": 73.76,
+        "totalDuration": 53.260000000000005,
+        "audioDuration": 49.760000000000005,
         "delaysDuration": 3.5,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 5.36,
+            "audioDuration": 4.64,
             "delayAfter": 0.5
           },
           {
             "segmentIndex": 1,
-            "audioDuration": 12.4,
+            "audioDuration": 7.84,
             "delayAfter": 0.5
           },
           {
             "segmentIndex": 2,
-            "audioDuration": 13.12,
+            "audioDuration": 7.04,
             "delayAfter": 0.5
           },
           {
             "segmentIndex": 3,
-            "audioDuration": 13.36,
+            "audioDuration": 10.8,
             "delayAfter": 0.5
           },
           {
             "segmentIndex": 4,
-            "audioDuration": 14.56,
+            "audioDuration": 7.6,
             "delayAfter": 0.5
           },
           {
             "segmentIndex": 5,
-            "audioDuration": 14.96,
+            "audioDuration": 11.84,
             "delayAfter": 1
           }
         ]
@@ -624,13 +471,13 @@
         "slideIndex": 2,
         "slideTitle": "Closing",
         "chapterIndex": 9,
-        "totalDuration": 11.14,
-        "audioDuration": 8.64,
+        "totalDuration": 11.06,
+        "audioDuration": 8.56,
         "delaysDuration": 2.5,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 1.28,
+            "audioDuration": 1.2,
             "delayAfter": 0.5
           },
           {
@@ -642,8 +489,8 @@
       }
     ],
     "formattedDurations": {
-      "audioOnly": "13:42",
-      "total": "14:22"
+      "audioOnly": "9:37",
+      "total": "10:17"
     }
   }
 }

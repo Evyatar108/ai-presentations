@@ -35,7 +35,7 @@ const SELF_CHECKS = [
   'max_two_extractives_per_topic',
   'all_extractives_ranked',
   'final_narrative_alignment',
-  'rai_policy_pass',
+  'narrative_completeness',
   'turn_boundary_compliance',
   'topic_order_compliance'
 ];

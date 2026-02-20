@@ -74,10 +74,6 @@ const ABSTRACTIVES_CODE = `class HighlightsPromptMaper(PromptMaper):
 - Create two types of sections:
     abstractive and extractive...
 
-# RAI Rules:            (~20 lines)
-- You will never provide profiling...
-- You will never speculate...
-
 # Detailed instructions  (~40 lines)
 ...
 """)`;
@@ -95,7 +91,7 @@ const Ch2_S2_CallDetailComponent: React.FC = () => {
             code={ABSTRACTIVES_CODE}
             language="python"
             title="HighlightsPromptMaper.py  --  highlights_abstractives query"
-            highlightLines={[3, 10, 11, 14, 15]}
+            highlightLines={[3, 10, 11]}
             fontSize={12}
           />
         )}
@@ -115,7 +111,6 @@ const Ch2_S2_CallDetailComponent: React.FC = () => {
             }}
           >
             {[
-              { label: 'RAI rules', detail: '~20 lines repeated per prompt', color: theme.colors.warning },
               { label: 'Prose instructions', detail: 'Paragraph-style directions', color: theme.colors.textSecondary },
               { label: 'Markdown table output', detail: 'Passed between calls', color: theme.colors.primary }
             ].map((item) => (

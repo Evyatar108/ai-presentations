@@ -164,7 +164,7 @@ const Ch1_S2_COGSProblemComponent: React.FC = () => {
           >
             <TestimonialCard
               quote="The current approach was consuming too many GPUs. We needed a fundamentally different strategy to make GA viable."
-              author="Eli Lekhtser, Principal PM"
+              author="Eli Lekhtser, Engineering Manager"
               reduced={reduced}
             />
           </motion.div>

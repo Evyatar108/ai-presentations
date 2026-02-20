@@ -102,7 +102,7 @@ const Ch6_S1_PseudocodeComponent: React.FC = () => {
             language="python"
             title="prompt.md  --  generate_highlights()"
             fontSize={11}
-            highlightLines={[1, 7, 15, 20, 22, 24]}
+            highlightLines={[1, 7, 16, 21, 22, 24]}
           />
         )}
       </AnimatePresence>
@@ -182,7 +182,7 @@ for topic in topics:
 const BENEFITS = [
   'Unambiguous execution order',
   'Named variables = shared state',
-  'Code-execution mode in LLM',
+  'More precise than prose',
   'Single source of truth'
 ];
 

@@ -216,12 +216,12 @@ const Ch4_S2_VisualizedComponent: React.FC = () => {
                   overflow: 'hidden'
                 }}>
                   <motion.div
-                    {...expandWidth(reduced, typeof window !== 'undefined' ? 400 : 400, 0.3)}
+                    {...expandWidth(reduced, 2000, 0.3)}
                     style={{
                       height: '100%',
                       background: `linear-gradient(90deg, ${theme.colors.warning}, ${theme.colors.error})`,
                       borderRadius: 6,
-                      maxWidth: '100%'
+                      maxWidth: '93%'
                     }}
                   />
                 </div>
