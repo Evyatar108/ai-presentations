@@ -1,7 +1,7 @@
 # Highlights Deep-Dive Demo
 
 **Demo ID**: `highlights-deep-dive`
-**Slides**: 19 across 10 chapters
+**Slides**: 24 across 11 chapters
 **Mode**: Manual (default), Narrated (when TTS audio is generated)
 
 ## Content Structure
@@ -12,18 +12,19 @@
 | 1 | 2 | Problem Context |
 | 2 | 2 | V1 Pipeline Architecture |
 | 3 | 2 | Five Cost Drivers |
-| 4 | 2 | The O(n^2) Problem |
-| 5 | 2 | Compact Transcript Table |
-| 6 | 2 | Pseudocode Algorithm |
+| 4 | 3 | The O(n^2) Problem |
+| 5 | 3 | Compact Transcript Table |
+| 6 | 3 | Prompt Overview + Pseudocode Algorithm |
 | 7 | 2 | Copy-then-Parse + Self-Checks |
-| 8 | 2 | Results |
-| 9 | 2 | Lessons + Closing |
+| 8 | 2 | Evaluation & Iteration |
+| 9 | 2 | Results |
+| 10 | 2 | Lessons + Closing |
 
 ## Technical Implementation
 
 ### Slide Organization
-- `slides/SlidesRegistry.ts` — Ordered array of all 19 slide components
-- `slides/chapters/Chapter{0-9}.tsx` — Slide definitions grouped by chapter
+- `slides/SlidesRegistry.ts` — Ordered array of all 24 slide components
+- `slides/chapters/Chapter{0-10}.tsx` — Slide definitions grouped by chapter
 
 ### Custom Components
 Located in `slides/components/`:

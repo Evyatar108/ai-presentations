@@ -310,6 +310,31 @@
       ]
     },
     {
+      "chapter": 5,
+      "slide": 3,
+      "title": "Turn/Utterance Concept",
+      "segments": [
+        {
+          "id": "title",
+          "narrationText": "Before we move on to the prompt itself, let's look at the turn and utterance model that the compact format is built on.",
+          "visualDescription": "Title: 'Turns and Utterances'",
+          "notes": ""
+        },
+        {
+          "id": "concept",
+          "narrationText": "In V1, every utterance repeats the speaker name — Alice, Alice, Alice, Bob, Bob. In V2, we group consecutive utterances by the same speaker into a turn. The speaker name appears once on the turn tag — t5 Alice — and all utterances inside restart their IDs from u0. This eliminates redundant speaker tokens and makes the structure self-describing: one turn equals one speaker's consecutive utterances.",
+          "visualDescription": "Before/after split — V1 flat list with repeated speakers vs V2 turn-grouped format",
+          "notes": ""
+        },
+        {
+          "id": "constraint",
+          "narrationText": "This grouping also enforces a critical rule: extractive clips must be contained within a single turn — meaning a single speaker. You can select u0 through u2 within turn t5, but you cannot cross from t5 into t6. The local utterance IDs make this constraint easy for the model to verify — if start and end share the same turn tag, the clip is valid.",
+          "visualDescription": "Valid vs invalid extractive range cards — same turn vs cross-turn",
+          "notes": ""
+        }
+      ]
+    },
+    {
       "chapter": 6,
       "slide": 1,
       "title": "Prompt Overview",
@@ -425,6 +450,56 @@
     {
       "chapter": 8,
       "slide": 1,
+      "title": "Validation Challenges",
+      "segments": [
+        {
+          "id": "title",
+          "narrationText": "With the prompt built, we needed a way to validate that changes actually improved output quality. The biggest challenge was getting the model to output correct turn and utterance combinations.",
+          "visualDescription": "Title: 'Validating Turn-Utterance Output'",
+          "notes": ""
+        },
+        {
+          "id": "checks",
+          "narrationText": "We added two automated verifications. First, output range validation — every turn and utterance combination in the output must actually exist in the input transcript. Second, a max utterance threshold check — the beginning utterance of an extractive clip must not exceed the max_end_utterance_id from the transcript table. These checks caught errors that would otherwise produce invalid video edits.",
+          "visualDescription": "Two verification cards: range validation + threshold check",
+          "notes": ""
+        },
+        {
+          "id": "challenge",
+          "narrationText": "Getting the model to output correct turn-utterance combinations was by far the hardest challenge. We tracked error statistics — the rate of invalid combinations — as our primary stability metric across prompt iterations. This is where copy-then-parse, which we covered earlier, proved essential. By forcing the model to first copy the raw turn tag and pipe-delimited row, then parse the IDs from those copies, the error rate dropped dramatically.",
+          "visualDescription": "Emphasis callout linking back to copy-then-parse technique",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 8,
+      "slide": 2,
+      "title": "Eval Tool",
+      "segments": [
+        {
+          "id": "title",
+          "narrationText": "To iterate quickly, we built a local evaluation tool that ran the full flow on downloaded transcripts and recordings — no cloud deployment needed.",
+          "visualDescription": "Title: 'Local Evaluation Tool'",
+          "notes": ""
+        },
+        {
+          "id": "pipeline",
+          "narrationText": "The tool takes a transcript and recording as input, runs the prompt locally, and produces two outputs. A highlights JSON file for automated validation — checking structural correctness and turn-utterance accuracy. And a highlights video for subjective quality review — letting us see and hear exactly what the model selected.",
+          "visualDescription": "Pipeline diagram: Transcript + Recording → Local Runner → JSON + Video, with two output cards",
+          "notes": ""
+        },
+        {
+          "id": "metrics",
+          "narrationText": "We used error statistics about incorrect turn-utterance combinations as our primary metric. Each prompt revision was run across a set of test transcripts, and we tracked how the invalid combination rate changed. This gave us a quantitative signal to complement the qualitative video review — and let us measure whether techniques like copy-then-parse were actually working.",
+          "visualDescription": "Error rate tracking callout",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 9,
+      "slide": 1,
       "title": "Results Metrics",
       "instruct": "Speak with energy and pride, celebrating the achievement.",
       "segments": [
@@ -456,7 +531,7 @@
       ]
     },
     {
-      "chapter": 8,
+      "chapter": 9,
       "slide": 2,
       "title": "Quality and Impact",
       "segments": [
@@ -482,15 +557,15 @@
       ]
     },
     {
-      "chapter": 9,
+      "chapter": 10,
       "slide": 1,
-      "title": "Five Lessons",
+      "title": "Six Lessons",
       "instruct": "Speak in a thoughtful, advisory tone, like sharing hard-won wisdom.",
       "segments": [
         {
           "id": "title",
-          "narrationText": "Let me close with five lessons you can apply to your next LLM pipeline.",
-          "visualDescription": "Title: 'Five Lessons for Your Next LLM Pipeline'",
+          "narrationText": "Let me close with six lessons you can apply to your next LLM pipeline.",
+          "visualDescription": "Title: 'Six Lessons for Your Next LLM Pipeline'",
           "notes": ""
         },
         {
@@ -522,11 +597,17 @@
           "narrationText": "And lesson five: self-checks are both a safety net and a diagnostic signal. They catch failures at generation time and show you which constraints break most in production.",
           "visualDescription": "Card 5: Self-checks enable automation",
           "notes": ""
+        },
+        {
+          "id": "lesson6",
+          "narrationText": "And lesson six: build a local evaluation loop. Run your prompt on real data, measure error rates quantitatively, and review output quality visually. This dual signal — automated validation plus human review — tells you whether each prompt change is actually working.",
+          "visualDescription": "Card 6: Build a local evaluation loop",
+          "notes": ""
         }
       ]
     },
     {
-      "chapter": 9,
+      "chapter": 10,
       "slide": 2,
       "title": "Closing",
       "instruct": "Speak warmly and inspirationally.",

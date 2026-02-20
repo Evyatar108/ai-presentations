@@ -14,7 +14,7 @@ import CodeBlock from '../components/CodeBlock';
 import BeforeAfterSplit from '../components/BeforeAfterSplit';
 
 /**
- * Chapter 5: Compact Transcript Table (2 slides)
+ * Chapter 5: Compact Transcript Table (3 slides)
  */
 
 const V1_JSON_SAMPLE = `{"Index":0,"Speaker":"Alice","Start":0.0,"End":3.2,
@@ -294,4 +294,195 @@ export const Ch5_S2_MaxEndId = defineSlide({
     ]
   },
   component: Ch5_S2_MaxEndIdComponent
+});
+
+// ---------- Slide 3: Turn/Utterance Concept ----------
+
+const V1_FLAT = [
+  { speaker: 'Alice', text: 'Welcome everyone' },
+  { speaker: 'Alice', text: 'Let\'s look at metrics' },
+  { speaker: 'Alice', text: 'Starting with engagement' },
+  { speaker: 'Bob', text: 'Across all key metrics' },
+  { speaker: 'Bob', text: 'We saw growth' },
+];
+
+const V2_GROUPED = [
+  { turn: 't5', speaker: 'Alice', utterances: ['u0 Welcome everyone', 'u1 Let\'s look at metrics', 'u2 Starting with engagement'] },
+  { turn: 't6', speaker: 'Bob', utterances: ['u0 Across all key metrics', 'u1 We saw growth'] },
+];
+
+const Ch5_S3_TurnUtteranceConceptComponent: React.FC = () => {
+  const { reduced } = useReducedMotion();
+  const { isSegmentVisible } = useSegmentedAnimation();
+  const theme = useTheme();
+
+  return (
+    <SlideContainer maxWidth={1050}>
+      <AnimatePresence>
+        {isSegmentVisible(0) && (
+          <SlideTitle reduced={reduced}>
+            Turns and Utterances
+          </SlideTitle>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {isSegmentVisible(1) && (
+          <motion.div
+            variants={fadeUp(reduced)}
+            initial="hidden"
+            animate="visible"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: '1.5rem',
+              marginBottom: '2rem'
+            }}
+          >
+            {/* V1 flat list */}
+            <div style={{
+              background: 'rgba(251, 191, 36, 0.06)',
+              border: '1px solid rgba(251, 191, 36, 0.3)',
+              borderRadius: 12,
+              padding: '1rem 1.25rem'
+            }}>
+              <div style={{ ...typography.caption, fontSize: 11, color: theme.colors.warning, letterSpacing: 1, textTransform: 'uppercase', marginBottom: '0.6rem' }}>
+                V1: Flat List
+              </div>
+              {V1_FLAT.map((row, i) => (
+                <div key={i} style={{
+                  display: 'flex',
+                  gap: '0.5rem',
+                  padding: '0.3rem 0.5rem',
+                  fontSize: 13,
+                  fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+                  borderBottom: i < V1_FLAT.length - 1 ? `1px solid rgba(251, 191, 36, 0.15)` : 'none'
+                }}>
+                  <span style={{ color: theme.colors.warning, fontWeight: 600, minWidth: 40 }}>{row.speaker}</span>
+                  <span style={{ color: theme.colors.textSecondary }}>{row.text}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* V2 turn-grouped */}
+            <div style={{
+              background: 'rgba(0, 183, 195, 0.06)',
+              border: '1px solid rgba(0, 183, 195, 0.3)',
+              borderRadius: 12,
+              padding: '1rem 1.25rem'
+            }}>
+              <div style={{ ...typography.caption, fontSize: 11, color: theme.colors.primary, letterSpacing: 1, textTransform: 'uppercase', marginBottom: '0.6rem' }}>
+                V2: Turn-Grouped
+              </div>
+              {V2_GROUPED.map((turn) => (
+                <div key={turn.turn} style={{ marginBottom: '0.5rem' }}>
+                  <div style={{
+                    fontSize: 13,
+                    fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+                    color: theme.colors.primary,
+                    fontWeight: 600,
+                    padding: '0.2rem 0.5rem'
+                  }}>
+                    &lt;{turn.turn} {turn.speaker}&gt;
+                  </div>
+                  {turn.utterances.map((utt, j) => (
+                    <div key={j} style={{
+                      fontSize: 13,
+                      fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+                      color: theme.colors.textSecondary,
+                      padding: '0.15rem 0.5rem 0.15rem 1.5rem'
+                    }}>
+                      {utt}
+                    </div>
+                  ))}
+                  <div style={{
+                    fontSize: 13,
+                    fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+                    color: theme.colors.primary,
+                    fontWeight: 600,
+                    padding: '0.2rem 0.5rem'
+                  }}>
+                    &lt;/{turn.turn}&gt;
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {isSegmentVisible(2) && (
+          <motion.div
+            variants={fadeUp(reduced)}
+            initial="hidden"
+            animate="visible"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: '1rem'
+            }}
+          >
+            <div style={{
+              background: 'rgba(16, 185, 129, 0.06)',
+              border: `1px solid ${theme.colors.success}`,
+              borderRadius: 10,
+              padding: '0.85rem 1.25rem',
+              textAlign: 'center'
+            }}>
+              <div style={{ ...typography.caption, fontSize: 11, color: theme.colors.success, letterSpacing: 1, textTransform: 'uppercase', marginBottom: '0.3rem' }}>
+                Valid
+              </div>
+              <div style={{
+                fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+                fontSize: 13,
+                color: theme.colors.textPrimary
+              }}>
+                t5: u0 &ndash; u2
+              </div>
+              <div style={{ ...typography.caption, fontSize: 12, marginTop: '0.25rem' }}>
+                Same turn, same speaker
+              </div>
+            </div>
+            <div style={{
+              background: 'rgba(239, 68, 68, 0.06)',
+              border: `1px solid ${theme.colors.error}`,
+              borderRadius: 10,
+              padding: '0.85rem 1.25rem',
+              textAlign: 'center'
+            }}>
+              <div style={{ ...typography.caption, fontSize: 11, color: theme.colors.error, letterSpacing: 1, textTransform: 'uppercase', marginBottom: '0.3rem' }}>
+                Invalid
+              </div>
+              <div style={{
+                fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+                fontSize: 13,
+                color: theme.colors.textPrimary,
+                textDecoration: 'line-through'
+              }}>
+                t5: u2 &ndash; t6: u0
+              </div>
+              <div style={{ ...typography.caption, fontSize: 12, marginTop: '0.25rem' }}>
+                Crosses turn boundary
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </SlideContainer>
+  );
+};
+
+export const Ch5_S3_TurnUtteranceConcept = defineSlide({
+  metadata: {
+    chapter: 5,
+    slide: 3,
+    title: 'Turn/Utterance Concept',
+    audioSegments: [
+      { id: 'title', audioFilePath: '/audio/highlights-deep-dive/c5/s3_segment_01_title.wav' },
+      { id: 'concept', audioFilePath: '/audio/highlights-deep-dive/c5/s3_segment_02_concept.wav' },
+      { id: 'constraint', audioFilePath: '/audio/highlights-deep-dive/c5/s3_segment_03_constraint.wav' }
+    ]
+  },
+  component: Ch5_S3_TurnUtteranceConceptComponent
 });

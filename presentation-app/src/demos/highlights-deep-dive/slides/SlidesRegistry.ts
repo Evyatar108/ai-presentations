@@ -16,7 +16,7 @@ import { Ch3_S1_CostDrivers, Ch3_S2_VerboseJSON } from './chapters/Chapter3';
 import { Ch4_S1_NestedLoop, Ch4_S2_CandidateRows, Ch4_S3_Visualized } from './chapters/Chapter4';
 
 // Chapter 5: Compact Transcript Table
-import { Ch5_S1_FormatComparison, Ch5_S2_MaxEndId } from './chapters/Chapter5';
+import { Ch5_S1_FormatComparison, Ch5_S2_MaxEndId, Ch5_S3_TurnUtteranceConcept } from './chapters/Chapter5';
 
 // Chapter 6: Prompt Overview + Pseudocode Algorithm
 import { Ch6_S1_PromptOverview, Ch6_S2_Pseudocode, Ch6_S3_ProseVsPseudocode } from './chapters/Chapter6';
@@ -24,15 +24,18 @@ import { Ch6_S1_PromptOverview, Ch6_S2_Pseudocode, Ch6_S3_ProseVsPseudocode } fr
 // Chapter 7: Copy-then-Parse + Self-Checks
 import { Ch7_S1_CopyThenParse, Ch7_S2_SelfChecks } from './chapters/Chapter7';
 
-// Chapter 8: Results
-import { Ch8_S1_Metrics, Ch8_S2_QualityAndImpact } from './chapters/Chapter8';
+// Chapter 8: Evaluation & Iteration
+import { Ch8_S1_ValidationChallenges, Ch8_S2_EvalTool } from './chapters/Chapter8';
 
-// Chapter 9: Lessons + Closing
-import { Ch9_S1_Lessons, Ch9_S2_Closing } from './chapters/Chapter9';
+// Chapter 9: Results
+import { Ch9_S1_Metrics, Ch9_S2_QualityAndImpact } from './chapters/Chapter9';
+
+// Chapter 10: Lessons + Closing
+import { Ch10_S1_Lessons, Ch10_S2_Closing } from './chapters/Chapter10';
 
 /**
  * Central registry of all slide components for the Highlights Deep-Dive demo.
- * 21 slides across 10 chapters.
+ * 24 slides across 11 chapters.
  */
 export const allSlides: SlideComponentWithMetadata[] = [
   Ch0_S1_Title,
@@ -47,13 +50,16 @@ export const allSlides: SlideComponentWithMetadata[] = [
   Ch4_S3_Visualized,
   Ch5_S1_FormatComparison,
   Ch5_S2_MaxEndId,
+  Ch5_S3_TurnUtteranceConcept,
   Ch6_S1_PromptOverview,
   Ch6_S2_Pseudocode,
   Ch6_S3_ProseVsPseudocode,
   Ch7_S1_CopyThenParse,
   Ch7_S2_SelfChecks,
-  Ch8_S1_Metrics,
-  Ch8_S2_QualityAndImpact,
-  Ch9_S1_Lessons,
-  Ch9_S2_Closing,
+  Ch8_S1_ValidationChallenges,
+  Ch8_S2_EvalTool,
+  Ch9_S1_Metrics,
+  Ch9_S2_QualityAndImpact,
+  Ch10_S1_Lessons,
+  Ch10_S2_Closing,
 ];

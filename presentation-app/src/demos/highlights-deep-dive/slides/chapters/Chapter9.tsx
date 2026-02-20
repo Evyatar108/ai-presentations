@@ -7,155 +7,114 @@ import {
   defineSlide,
   SlideContainer,
   SlideTitle,
+  MetricDisplay,
+  TestimonialCard,
   typography,
+  layouts,
   fadeUp,
+  ArrowRight,
 } from '@framework';
 
 /**
- * Chapter 9: Lessons + Closing (2 slides)
+ * Chapter 9: Results (2 slides)
  */
 
-const LESSONS = [
-  { num: 1, title: 'Challenge the multi-call assumption', desc: 'A single well-structured prompt can replace an entire pipeline' },
-  { num: 2, title: 'Input format is a cost lever', desc: 'Compact representation (turn tags, pipe-delimited) slashes tokens' },
-  { num: 3, title: 'Pseudocode beats prose', desc: 'Executable instructions reduce ambiguity and improve consistency' },
-  { num: 4, title: 'Force the model to ground itself', desc: 'Copy-then-parse prevents hallucination of IDs and references' },
-  { num: 5, title: 'Self-checks enable automation', desc: 'Boolean validators let you detect and retry failures automatically' }
+// ---------- Slide 1: Metrics ----------
+
+const METRICS = [
+  { value: '75%', label: 'LLM Call Reduction', detail: '4 calls \u2192 1 call', emphasis: true },
+  { value: '60%', label: 'Token Reduction', detail: 'Compact table + unified prompt' },
+  { value: '~70%', label: 'GPU Reduction', detail: '~600 \u2192 ~180 A100s' }
 ];
 
-// ---------- Slide 1: Lessons ----------
-
-const Ch9_S1_LessonsComponent: React.FC = () => {
+const Ch9_S1_MetricsComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
-  const { isSegmentVisible, currentSegmentIndex } = useSegmentedAnimation();
-  const theme = useTheme();
+  const { isSegmentVisible } = useSegmentedAnimation();
 
   return (
-    <SlideContainer maxWidth={800}>
+    <SlideContainer maxWidth={1000}>
       <AnimatePresence>
         {isSegmentVisible(0) && (
           <SlideTitle reduced={reduced}>
-            Five Lessons for Your Next LLM Pipeline
+            Results
           </SlideTitle>
         )}
       </AnimatePresence>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
-        {LESSONS.map((lesson, i) => {
-          const segIdx = i + 1;
-          const isActive = currentSegmentIndex === segIdx;
-
-          return (
-            <AnimatePresence key={lesson.num}>
-              {isSegmentVisible(segIdx) && (
-                <motion.div
-                  variants={fadeUp(reduced)}
-                  initial="hidden"
-                  animate="visible"
-                  style={{
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    gap: '1rem',
-                    padding: '0.85rem 1.25rem',
-                    borderRadius: 12,
-                    background: isActive
-                      ? `linear-gradient(135deg, rgba(0, 183, 195, 0.1), rgba(0, 120, 212, 0.1))`
-                      : theme.colors.bgSurface,
-                    border: isActive
-                      ? `2px solid ${theme.colors.primary}`
-                      : `1px solid ${theme.colors.bgBorder}`,
-                    boxShadow: isActive && !reduced
-                      ? `0 0 15px rgba(0, 183, 195, 0.15)`
-                      : 'none',
-                    transition: 'all 0.3s ease',
-                    opacity: isSegmentVisible(segIdx) ? 1 : 0
-                  }}
-                >
-                  <div style={{
-                    width: 30,
-                    height: 30,
-                    borderRadius: '50%',
-                    background: isActive
-                      ? `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`
-                      : theme.colors.bgBorder,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: 14,
-                    fontWeight: 700,
-                    color: '#fff',
-                    flexShrink: 0,
-                    marginTop: 2
-                  }}>
-                    {lesson.num}
-                  </div>
-                  <div style={{ textAlign: 'left' }}>
-                    <div style={{
-                      ...typography.body,
-                      fontSize: 16,
-                      fontWeight: 600,
-                      color: isActive ? theme.colors.primary : theme.colors.textPrimary
-                    }}>
-                      {lesson.title}
-                    </div>
-                    <div style={{ ...typography.caption, fontSize: 13, marginTop: 2 }}>
-                      {lesson.desc}
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          );
-        })}
+      <div style={{ ...layouts.grid3Col('2rem') }}>
+        {METRICS.map((metric, i) => (
+          <AnimatePresence key={metric.label}>
+            {isSegmentVisible(i + 1) && (
+              <MetricDisplay
+                value={metric.value}
+                label={metric.label}
+                reduced={reduced}
+                emphasis={metric.emphasis}
+                delay={reduced ? 0 : 0.1}
+              />
+            )}
+          </AnimatePresence>
+        ))}
       </div>
     </SlideContainer>
   );
 };
 
-export const Ch9_S1_Lessons = defineSlide({
+export const Ch9_S1_Metrics = defineSlide({
   metadata: {
     chapter: 9,
     slide: 1,
-    title: 'Five Lessons',
+    title: 'Results Metrics',
     audioSegments: [
       { id: 'title', audioFilePath: '/audio/highlights-deep-dive/c9/s1_segment_01_title.wav' },
-      { id: 'lesson1', audioFilePath: '/audio/highlights-deep-dive/c9/s1_segment_02_lesson1.wav' },
-      { id: 'lesson2', audioFilePath: '/audio/highlights-deep-dive/c9/s1_segment_03_lesson2.wav' },
-      { id: 'lesson3', audioFilePath: '/audio/highlights-deep-dive/c9/s1_segment_04_lesson3.wav' },
-      { id: 'lesson4', audioFilePath: '/audio/highlights-deep-dive/c9/s1_segment_05_lesson4.wav' },
-      { id: 'lesson5', audioFilePath: '/audio/highlights-deep-dive/c9/s1_segment_06_lesson5.wav' }
+      { id: 'calls', audioFilePath: '/audio/highlights-deep-dive/c9/s1_segment_02_calls.wav' },
+      { id: 'tokens', audioFilePath: '/audio/highlights-deep-dive/c9/s1_segment_03_tokens.wav' },
+      { id: 'gpus', audioFilePath: '/audio/highlights-deep-dive/c9/s1_segment_04_gpus.wav' }
     ]
   },
-  component: Ch9_S1_LessonsComponent
+  component: Ch9_S1_MetricsComponent
 });
 
-// ---------- Slide 2: Closing ----------
+// ---------- Slide 2: Quality & Impact ----------
 
-const Ch9_S2_ClosingComponent: React.FC = () => {
+const Ch9_S2_QualityAndImpactComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
   const { isSegmentVisible } = useSegmentedAnimation();
   const theme = useTheme();
 
   return (
-    <SlideContainer>
+    <SlideContainer maxWidth={950}>
       <AnimatePresence>
         {isSegmentVisible(0) && (
           <motion.div
-            initial={{ opacity: 0, scale: reduced ? 1 : 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: reduced ? 0.3 : 0.8, type: 'spring' }}
-            style={{ textAlign: 'center', marginBottom: '2rem' }}
+            variants={fadeUp(reduced)}
+            initial="hidden"
+            animate="visible"
+            style={{
+              ...layouts.grid3Col('1.5rem'),
+              marginBottom: '2rem'
+            }}
           >
-            <h1 style={{
-              fontSize: 56,
-              fontWeight: 700,
-              background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`,
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              marginBottom: '1rem'
-            }}>
-              Thank You
-            </h1>
+            {[
+              { label: 'Grounding', value: 'No regression', color: theme.colors.success },
+              { label: 'Coverage', value: '~75-80%', color: theme.colors.primary },
+              { label: 'Reviewers', value: 'Prefer V2', color: theme.colors.success }
+            ].map((tile) => (
+              <div key={tile.label} style={{
+                background: theme.colors.bgSurface,
+                border: `1px solid ${theme.colors.bgBorder}`,
+                borderRadius: 12,
+                padding: '1rem',
+                textAlign: 'center'
+              }}>
+                <div style={{ ...typography.caption, fontSize: 12, letterSpacing: 1, textTransform: 'uppercase', marginBottom: '0.3rem' }}>
+                  {tile.label}
+                </div>
+                <div style={{ fontSize: 20, fontWeight: 700, color: tile.color }}>
+                  {tile.value}
+                </div>
+              </div>
+            ))}
           </motion.div>
         )}
       </AnimatePresence>
@@ -166,36 +125,61 @@ const Ch9_S2_ClosingComponent: React.FC = () => {
             variants={fadeUp(reduced)}
             initial="hidden"
             animate="visible"
-            style={{ textAlign: 'center' }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '1rem',
+              marginBottom: '2rem'
+            }}
           >
-            <div style={{
-              display: 'inline-block',
-              background: `linear-gradient(135deg, rgba(0, 183, 195, 0.15), rgba(0, 120, 212, 0.15))`,
-              border: `1px solid ${theme.colors.primary}`,
-              borderRadius: 10,
-              padding: '0.75rem 2rem',
-              fontSize: 16,
-              color: theme.colors.primary,
-              fontWeight: 600
-            }}>
-              Try the techniques — prompt engineering scales
-            </div>
+            {['Cost Reduction', 'Private Preview', 'GA Rollout'].map((step, i) => (
+              <React.Fragment key={step}>
+                {i > 0 && <span style={{ color: theme.colors.primary }}><ArrowRight /></span>}
+                <div style={{
+                  padding: '0.6rem 1.25rem',
+                  borderRadius: 8,
+                  background: i === 2
+                    ? `linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))`
+                    : theme.colors.bgSurface,
+                  border: i === 2
+                    ? `2px solid ${theme.colors.primary}`
+                    : `1px solid ${theme.colors.bgBorder}`,
+                  fontSize: 14,
+                  fontWeight: 600,
+                  color: theme.colors.textPrimary
+                }}>
+                  {step}
+                </div>
+              </React.Fragment>
+            ))}
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {isSegmentVisible(2) && (
+          <TestimonialCard
+            quote="V2 is a compact prompt with only one LLM request that combines abstractive and extractive highlights generation into a single unified pipeline."
+            author="Eli Lekhtser, Engineering Manager"
+            reduced={reduced}
+          />
         )}
       </AnimatePresence>
     </SlideContainer>
   );
 };
 
-export const Ch9_S2_Closing = defineSlide({
+export const Ch9_S2_QualityAndImpact = defineSlide({
   metadata: {
     chapter: 9,
     slide: 2,
-    title: 'Closing',
+    title: 'Quality and Impact',
     audioSegments: [
-      { id: 'thankyou', audioFilePath: '/audio/highlights-deep-dive/c9/s2_segment_01_thankyou.wav' },
-      { id: 'cta', audioFilePath: '/audio/highlights-deep-dive/c9/s2_segment_02_cta.wav' }
+      { id: 'quality', audioFilePath: '/audio/highlights-deep-dive/c9/s2_segment_01_quality.wav' },
+      { id: 'roadmap', audioFilePath: '/audio/highlights-deep-dive/c9/s2_segment_02_roadmap.wav' },
+      { id: 'quote', audioFilePath: '/audio/highlights-deep-dive/c9/s2_segment_03_quote.wav' }
     ]
   },
-  component: Ch9_S2_ClosingComponent
+  component: Ch9_S2_QualityAndImpactComponent
 });

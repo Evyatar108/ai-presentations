@@ -8,8 +8,8 @@ This demo targets **engineering peers** familiar with LLMs and prompt engineerin
 
 ## Demo Structure
 
-**Total Slides**: 19 slides across 10 chapters
-**Estimated Duration**: ~12-15 minutes (narrated)
+**Total Slides**: 24 slides across 11 chapters
+**Estimated Duration**: ~15-18 minutes (narrated)
 **Demo ID**: `highlights-deep-dive`
 
 ### Chapter Breakdown
@@ -29,29 +29,36 @@ This demo targets **engineering peers** familiar with LLMs and prompt engineerin
 - **Ch3_S1_CostDrivers** — Progressive reveal of 5 structural cost drivers, with O(n^2) highlighted in red
 - **Ch3_S2_VerboseJSON** — Before/after: V1 verbose JSON vs token waste analysis
 
-#### Chapter 4: The O(n^2) Problem (2 slides)
+#### Chapter 4: The O(n^2) Problem (3 slides)
 - **Ch4_S1_NestedLoop** — The nested loop code from highlights_utils.py with highlighted for-loops
-- **Ch4_S2_Visualized** — Animated upper-triangle grid, scale-up math, 128K context bar
+- **Ch4_S2_CandidateRows** — Concrete example showing overlapping candidate ranges with duplication callout
+- **Ch4_S3_Visualized** — Animated upper-triangle grid, scale-up math, 128K context bar
 
-#### Chapter 5: Compact Transcript Table (2 slides)
+#### Chapter 5: Compact Transcript Table (3 slides)
 - **Ch5_S1_FormatComparison** — Side-by-side V1 JSON vs V2 compact table with comparison table
 - **Ch5_S2_MaxEndId** — Annotated row showing max_end_utterance_id, V1 vs V2 complexity comparison
+- **Ch5_S3_TurnUtteranceConcept** — Turn/utterance grouping model: V1 flat list vs V2 turn-grouped, valid/invalid extractive range cards
 
-#### Chapter 6: Pseudocode Algorithm (2 slides)
-- **Ch6_S1_Pseudocode** — Full generate_highlights() pseudocode with 6 output field checkmarks
-- **Ch6_S2_ProseVsPseudocode** — Side-by-side V1 prose vs V2 pseudocode with 4 benefit cards
+#### Chapter 6: Prompt Overview + Pseudocode Algorithm (3 slides)
+- **Ch6_S1_PromptOverview** — Full V2 prompt overview with six section cards
+- **Ch6_S2_Pseudocode** — Full generate_highlights() pseudocode with 6 output field checkmarks
+- **Ch6_S3_ProseVsPseudocode** — Side-by-side V1 prose vs V2 pseudocode with 4 benefit cards
 
 #### Chapter 7: Copy-then-Parse + Self-Checks (2 slides)
 - **Ch7_S1_CopyThenParse** — Two-step code: copy raw strings, then parse structured values
 - **Ch7_S2_SelfChecks** — Grid of 10 boolean self-check cards with cascade animation
 
-#### Chapter 8: Results (2 slides)
-- **Ch8_S1_Metrics** — Three large metric cards: 75% call reduction, 60% token reduction, ~70% GPU reduction
-- **Ch8_S2_QualityAndImpact** — Quality tiles, roadmap arrow, testimonial quote
+#### Chapter 8: Evaluation & Iteration (2 slides)
+- **Ch8_S1_ValidationChallenges** — Output range validation + max utterance threshold checks, copy-then-parse callout
+- **Ch8_S2_EvalTool** — Local evaluation tool pipeline diagram, error statistics as primary metric
 
-#### Chapter 9: Lessons + Closing (2 slides)
-- **Ch9_S1_Lessons** — Five takeaway cards with progressive highlight
-- **Ch9_S2_Closing** — Thank you with gradient text + CTA badge
+#### Chapter 9: Results (2 slides)
+- **Ch9_S1_Metrics** — Three large metric cards: 75% call reduction, 60% token reduction, ~70% GPU reduction
+- **Ch9_S2_QualityAndImpact** — Quality tiles, roadmap arrow, testimonial quote
+
+#### Chapter 10: Lessons + Closing (2 slides)
+- **Ch10_S1_Lessons** — Six takeaway cards with progressive highlight
+- **Ch10_S2_Closing** — Thank you with gradient text + CTA badge
 
 ## Target Audience
 
@@ -95,7 +102,7 @@ Engineering peers familiar with:
 
 ## Assets
 
-- **Audio**: `public/audio/highlights-deep-dive/c{0-9}/` (TTS generated later)
+- **Audio**: `public/audio/highlights-deep-dive/c{0-10}/` (TTS generated later)
 - **Images**: `public/images/highlights-deep-dive/thumbnail.jpeg`
 
 ## Narration Style (Instruct)
@@ -108,25 +115,25 @@ All slides and segments inherit this unless overridden:
 
 > *"Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers."*
 
-### Slide-Level Overrides (6 of 19 slides)
+### Slide-Level Overrides (6 of 24 slides)
 
 | Chapter.Slide | Title | Instruct |
 |---|---|---|
 | 0.1 | Title | Speak with calm authority and a hint of intrigue, like opening a keynote. |
 | 1.2 | COGS Problem | Speak with urgency and concern, emphasizing the severity of the cost problem. |
-| 4.2 | O(n^2) Visualized | Speak with building intensity, like revealing the scale of a problem. |
-| 8.1 | Results Metrics | Speak with energy and pride, celebrating the achievement. |
-| 9.1 | Five Lessons | Speak in a thoughtful, advisory tone, like sharing hard-won wisdom. |
-| 9.2 | Closing | Speak warmly and inspirationally. |
+| 4.3 | O(n^2) Visualized | Speak with building intensity, like revealing the scale of a problem. |
+| 9.1 | Results Metrics | Speak with energy and pride, celebrating the achievement. |
+| 10.1 | Six Lessons | Speak in a thoughtful, advisory tone, like sharing hard-won wisdom. |
+| 10.2 | Closing | Speak warmly and inspirationally. |
 
 ### Segment-Level Overrides (4 segments)
 
 | Slide | Segment ID | Instruct |
 |---|---|---|
 | Ch1_S2 (COGS Problem) | `emphasis` | Speak with firm conviction, slower pace, emphasizing every word. |
-| Ch3_S1 (Cost Drivers) | `driver5` | Speak with dramatic emphasis, pausing before revealing the biggest driver. |
-| Ch8_S1 (Results Metrics) | `gpus` | Speak with triumph, this is the headline number. |
-| Ch8_S2 (Quality and Impact) | `quote` | Speak as if quoting someone admiringly, slightly slower and more measured. |
+| Ch3_S1 (Cost Drivers) | `driver4` | Speak with dramatic emphasis, pausing before revealing the biggest driver. |
+| Ch9_S1 (Results Metrics) | `gpus` | Speak with triumph, this is the headline number. |
+| Ch9_S2 (Quality and Impact) | `quote` | Speak as if quoting someone admiringly, slightly slower and more measured. |
 
 ### Emotional Arc
 
@@ -135,8 +142,9 @@ The instruct values guide the TTS voice through a deliberate emotional arc:
 1. **Calm exposition** (Ch0-Ch2) — Professional default with keynote opening
 2. **Building tension** (Ch3-Ch4) — Urgency around cost drivers, intensity at O(n^2) reveal
 3. **Resolution** (Ch5-Ch7) — Returns to professional default as solutions are presented
-4. **Celebration** (Ch8) — Energy and pride for results, triumph on headline GPU number
-5. **Reflection** (Ch9) — Thoughtful wisdom for lessons, warm inspiration for closing
+4. **Validation** (Ch8) — Professional default for evaluation methodology
+5. **Celebration** (Ch9) — Energy and pride for results, triumph on headline GPU number
+6. **Reflection** (Ch10) — Thoughtful wisdom for lessons, warm inspiration for closing
 
 ## Related Documentation
 
