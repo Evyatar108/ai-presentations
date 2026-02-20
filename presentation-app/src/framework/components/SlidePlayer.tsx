@@ -437,16 +437,16 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
                   />
                 </>
               )}
-              {/* Regenerate buttons - always shown for any slide with segments */}
+              {/* Regenerate button - always shown for any slide with segments */}
               <button
                 onClick={() => {
-                  if (window.confirm('Regenerate audio for this segment WITH pauses?')) {
-                    handleRegenerateSegment(true);
+                  if (window.confirm('Regenerate audio for this segment?')) {
+                    handleRegenerateSegment(false);
                   }
                 }}
                 disabled={regeneratingSegment}
-                title="Regenerate audio WITH pauses (adds ' . .' at end)"
-                aria-label="Regenerate audio with pauses"
+                title="Regenerate audio for this segment"
+                aria-label="Regenerate audio"
                 style={{
                   background: 'none',
                   border: 'none',
@@ -461,30 +461,6 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
                 }}
               >
                 <span aria-hidden="true">{regeneratingSegment ? '⏳' : '🔄'}</span>
-              </button>
-              <button
-                onClick={() => {
-                  if (window.confirm('Regenerate audio for this segment WITHOUT pauses?')) {
-                    handleRegenerateSegment(false);
-                  }
-                }}
-                disabled={regeneratingSegment}
-                title="Regenerate audio WITHOUT pauses (exact narration text)"
-                aria-label="Regenerate audio without pauses"
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: regeneratingSegment ? theme.colors.textSecondary : theme.colors.warning,
-                  cursor: regeneratingSegment ? 'wait' : 'pointer',
-                  fontSize: 16,
-                  padding: '0.25rem 0.4rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  opacity: regeneratingSegment ? 0.6 : 1,
-                  transition: 'opacity 0.2s ease'
-                }}
-              >
-                <span aria-hidden="true">{regeneratingSegment ? '⏳' : '🔁'}</span>
               </button>
             </div>
           )}
