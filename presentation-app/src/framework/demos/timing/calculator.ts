@@ -74,7 +74,10 @@ export interface PresentationDurationReport {
   
   /** Delay after final slide in seconds */
   finalDelayDuration: number;
-  
+
+  /** Start silence duration in seconds (before first slide) */
+  startSilenceDuration: number;
+
   /** Per-slide breakdown with detailed segment info */
   slideBreakdowns: SlideDurationBreakdown[];
 }
@@ -211,6 +214,7 @@ export function calculatePresentationDuration(
       segmentDelaysDuration: 0,
       slideDelaysDuration: 0,
       finalDelayDuration: 0,
+      startSilenceDuration: 0,
       slideBreakdowns: []
     };
   }
@@ -247,14 +251,17 @@ export function calculatePresentationDuration(
     slideBreakdowns.push(breakdown);
   });
   
-  const totalDuration = totalAudioOnlyDuration + totalSegmentDelays + totalSlideDelays + finalSlideDelay;
-  
+  const resolvedTiming = resolveTimingConfig(demoTiming);
+  const startSilence = resolvedTiming.beforeFirstSlide / 1000;
+  const totalDuration = startSilence + totalAudioOnlyDuration + totalSegmentDelays + totalSlideDelays + finalSlideDelay;
+
   return {
     totalDuration,
     audioOnlyDuration: totalAudioOnlyDuration,
     segmentDelaysDuration: totalSegmentDelays,
     slideDelaysDuration: totalSlideDelays,
     finalDelayDuration: finalSlideDelay,
+    startSilenceDuration: startSilence,
     slideBreakdowns
   };
 }

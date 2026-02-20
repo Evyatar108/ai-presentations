@@ -58,4 +58,16 @@ describe('resolveTimingConfig', () => {
     expect(result.betweenSlides).toBe(1000);
     expect(result.afterFinalSlide).toBe(2000);
   });
+
+  it('overrides beforeFirstSlide from config', () => {
+    const config: TimingConfig = { beforeFirstSlide: 2000 };
+    const result = resolveTimingConfig(config);
+    expect(result.beforeFirstSlide).toBe(2000);
+  });
+
+  it('allows opting out of start silence with beforeFirstSlide: 0', () => {
+    const config: TimingConfig = { beforeFirstSlide: 0 };
+    const result = resolveTimingConfig(config);
+    expect(result.beforeFirstSlide).toBe(0);
+  });
 });

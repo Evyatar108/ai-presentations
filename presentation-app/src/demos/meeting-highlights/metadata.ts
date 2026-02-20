@@ -12,7 +12,6 @@ import type { DemoMetadata, SlideDurationBreakdown } from '@framework';
  * Provides per-slide timing information for duration analysis.
  */
 const slideBreakdown: SlideDurationBreakdown[] = [
-  { slideIndex: 0, slideTitle: "Intro", chapterIndex: 0, totalDuration: 1, audioDuration: 0, delaysDuration: 1, segments: [{ segmentIndex: 0, audioDuration: 0, delayAfter: 1 }] },
   { slideIndex: 1, slideTitle: "What is Meeting Highlights", chapterIndex: 1, totalDuration: 13.845334000000001, audioDuration: 11.845334000000001, delaysDuration: 2, segments: [{ segmentIndex: 0, audioDuration: 4.4, delayAfter: 0.5 }, { segmentIndex: 1, audioDuration: 4.778667, delayAfter: 0.5 }, { segmentIndex: 2, audioDuration: 2.666667, delayAfter: 1 }] },
   { slideIndex: 2, slideTitle: "How to Access via BizChat", chapterIndex: 1, totalDuration: 23.195999999999998, audioDuration: 19.695999999999998, delaysDuration: 3.5, segments: [{ segmentIndex: 0, audioDuration: 1.962667, delayAfter: 0.5 }, { segmentIndex: 1, audioDuration: 3.2, delayAfter: 0.5 }, { segmentIndex: 2, audioDuration: 5.866667, delayAfter: 0.5 }, { segmentIndex: 3, audioDuration: 2.133333, delayAfter: 0.5 }, { segmentIndex: 4, audioDuration: 2, delayAfter: 0.5 }, { segmentIndex: 5, audioDuration: 4.533333, delayAfter: 1 }] },
   { slideIndex: 3, slideTitle: "How to Access via SharePoint", chapterIndex: 1, totalDuration: 22.557333, audioDuration: 19.557333, delaysDuration: 3, segments: [{ segmentIndex: 0, audioDuration: 3.157333, delayAfter: 0.5 }, { segmentIndex: 1, audioDuration: 2.666667, delayAfter: 0.5 }, { segmentIndex: 2, audioDuration: 5.733333, delayAfter: 0.5 }, { segmentIndex: 3, audioDuration: 1.466667, delayAfter: 0.5 }, { segmentIndex: 4, audioDuration: 6.533333, delayAfter: 1 }] },
@@ -49,19 +48,21 @@ export const metadata: DemoMetadata = {
    *
    * Breakdown:
    * - Audio Only: 4:07 (247s) - Total narration audio across all slides
+   * - Start Silence: 1s - Blank screen before first slide (beforeFirstSlide)
    * - Segment Delays: 16.5s - Pauses between segments within slides (500ms each)
-   * - Slide Delays: 14s - Transitions between slides (1000ms each)
+   * - Slide Delays: 13s - Transitions between slides (1000ms each)
    * - Final Delay: 2s - Hold time after final slide
    * - Total Duration: 4:39 (280s) - Complete presentation runtime
    *
    * Note: All timing values use defaults from demo timing config:
-   * betweenSegments=500ms, betweenSlides=1000ms, afterFinalSlide=2000ms
+   * betweenSegments=500ms, betweenSlides=1000ms, afterFinalSlide=2000ms, beforeFirstSlide=1000ms
    */
   durationInfo: {
     audioOnly: 247,       // Audio duration in seconds (rounded from 247.145s)
     segmentDelays: 17,    // Between-segment delays total (rounded from 16.5s)
-    slideDelays: 14,      // Between-slide delays total
+    slideDelays: 13,      // Between-slide delays total
     finalDelay: 2,        // After final slide delay
+    startSilence: 1,      // Before first slide silence
     total: 280,           // Complete presentation duration (rounded from 279.645s)
     slideBreakdown
   }

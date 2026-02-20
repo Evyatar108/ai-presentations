@@ -86,6 +86,7 @@ describe('calculatePresentationDuration', () => {
     const result = calculatePresentationDuration([]);
     expect(result.totalDuration).toBe(0);
     expect(result.audioOnlyDuration).toBe(0);
+    expect(result.startSilenceDuration).toBe(0);
     expect(result.slideBreakdowns).toHaveLength(0);
   });
 
@@ -95,11 +96,12 @@ describe('calculatePresentationDuration', () => {
         audioSegments: [{ id: 'seg1', audioFilePath: '/test.wav', duration: 10 }]
       })
     ];
-    const result = calculatePresentationDuration(slides);
+    const result = calculatePresentationDuration(slides, { beforeFirstSlide: 0 });
     expect(result.audioOnlyDuration).toBe(10);
     expect(result.finalDelayDuration).toBe(2); // afterFinalSlide default
     expect(result.segmentDelaysDuration).toBe(0);
     expect(result.slideDelaysDuration).toBe(0);
+    expect(result.startSilenceDuration).toBe(0);
     expect(result.totalDuration).toBe(12);
   });
 
@@ -117,7 +119,7 @@ describe('calculatePresentationDuration', () => {
         audioSegments: [{ id: 'c', audioFilePath: '/c.wav', duration: 5 }]
       })
     ];
-    const result = calculatePresentationDuration(slides);
+    const result = calculatePresentationDuration(slides, { beforeFirstSlide: 0 });
     // Slide 1: audio 3+4=7, delays: 0.5 (between segs) + 1.0 (between slides) = 1.5
     // Slide 2: audio 5, delays: 2.0 (final slide)
     expect(result.audioOnlyDuration).toBe(12);
@@ -134,10 +136,33 @@ describe('calculatePresentationDuration', () => {
         audioSegments: [{ id: 'seg1', audioFilePath: '/test.wav', duration: 5 }]
       })
     ];
-    const timing = { betweenSegments: 200, betweenSlides: 500, afterFinalSlide: 3000 };
+    const timing = { betweenSegments: 200, betweenSlides: 500, afterFinalSlide: 3000, beforeFirstSlide: 0 };
     const result = calculatePresentationDuration(slides, timing);
     expect(result.audioOnlyDuration).toBe(5);
     expect(result.finalDelayDuration).toBe(3); // 3000ms
     expect(result.totalDuration).toBe(8);
+  });
+
+  it('includes default start silence in total duration', () => {
+    const slides = [
+      makeSlide({
+        audioSegments: [{ id: 'seg1', audioFilePath: '/test.wav', duration: 10 }]
+      })
+    ];
+    const result = calculatePresentationDuration(slides);
+    // Default beforeFirstSlide is 1000ms = 1s
+    expect(result.startSilenceDuration).toBe(1);
+    expect(result.totalDuration).toBe(13); // 10 audio + 2 final + 1 start silence
+  });
+
+  it('excludes start silence when beforeFirstSlide is 0', () => {
+    const slides = [
+      makeSlide({
+        audioSegments: [{ id: 'seg1', audioFilePath: '/test.wav', duration: 10 }]
+      })
+    ];
+    const result = calculatePresentationDuration(slides, { beforeFirstSlide: 0 });
+    expect(result.startSilenceDuration).toBe(0);
+    expect(result.totalDuration).toBe(12); // 10 audio + 2 final, no start silence
   });
 });

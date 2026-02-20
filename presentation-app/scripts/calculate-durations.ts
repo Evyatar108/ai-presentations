@@ -36,7 +36,10 @@ interface EnhancedDemoReport {
   
   /** Final delay in seconds (after last slide) */
   finalDelay: number;
-  
+
+  /** Start silence in seconds (before first slide) */
+  startSilence: number;
+
   /** Total presentation duration in seconds (audio + all delays) */
   totalDuration: number;
   
@@ -194,6 +197,7 @@ async function calculateDurations(audioDir: string, demoFilter?: string): Promis
       segmentDelays: durationReport.segmentDelaysDuration,
       slideDelays: durationReport.slideDelaysDuration,
       finalDelay: durationReport.finalDelayDuration,
+      startSilence: durationReport.startSilenceDuration,
       totalDuration: durationReport.totalDuration,
       slideBreakdowns: durationReport.slideBreakdowns,
       formattedDurations: {
@@ -211,10 +215,11 @@ async function calculateDurations(audioDir: string, demoFilter?: string): Promis
     console.log(`Audio Only:      ${enhancedReport.formattedDurations.audioOnly} (${enhancedReport.audioOnlyDuration.toFixed(1)}s)`);
     console.log(`Total Duration:  ${enhancedReport.formattedDurations.total} (${enhancedReport.totalDuration.toFixed(1)}s)`);
     console.log(`\nDelay Breakdown:`);
+    console.log(`  Start silence:  ${enhancedReport.startSilence.toFixed(1)}s`);
     console.log(`  Segment delays: ${enhancedReport.segmentDelays.toFixed(1)}s`);
     console.log(`  Slide delays:   ${enhancedReport.slideDelays.toFixed(1)}s`);
     console.log(`  Final delay:    ${enhancedReport.finalDelay.toFixed(1)}s`);
-    console.log(`  Total delays:   ${(enhancedReport.segmentDelays + enhancedReport.slideDelays + enhancedReport.finalDelay).toFixed(1)}s`);
+    console.log(`  Total delays:   ${(enhancedReport.startSilence + enhancedReport.segmentDelays + enhancedReport.slideDelays + enhancedReport.finalDelay).toFixed(1)}s`);
     console.log('-'.repeat(70) + '\n');
   }
   
@@ -257,6 +262,7 @@ function printReport(report: DurationReport, verbose: boolean = false) {
     console.log(`\nAudio Only:      ${demoReport.formattedDurations.audioOnly} (${demoReport.audioOnlyDuration.toFixed(1)}s)`);
     console.log(`Total Duration:  ${demoReport.formattedDurations.total} (${demoReport.totalDuration.toFixed(1)}s)`);
     console.log(`\nDelay Breakdown:`);
+    console.log(`  Start silence:  ${demoReport.startSilence.toFixed(1)}s`);
     console.log(`  Segment delays: ${demoReport.segmentDelays.toFixed(1)}s`);
     console.log(`  Slide delays:   ${demoReport.slideDelays.toFixed(1)}s`);
     console.log(`  Final delay:    ${demoReport.finalDelay.toFixed(1)}s`);

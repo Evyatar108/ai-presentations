@@ -4,19 +4,6 @@
   "lastModified": "2025-10-21T07:24:35.264Z",
   "slides": [
     {
-      "chapter": 0,
-      "slide": 0,
-      "title": "Intro",
-      "segments": [
-        {
-          "id": "main",
-          "narrationText": "",
-          "visualDescription": "Blank intro slide",
-          "notes": ""
-        }
-      ]
-    },
-    {
       "chapter": 1,
       "slide": 1,
       "title": "What is Meeting Highlights",
