@@ -146,5 +146,504 @@
       "audioOnly": "0:00",
       "total": "0:06"
     }
+  },
+  "highlights-deep-dive": {
+    "demoId": "highlights-deep-dive",
+    "audioOnlyDuration": 0,
+    "segmentDelays": 20,
+    "slideDelays": 18,
+    "finalDelay": 2,
+    "totalDuration": 40,
+    "slideBreakdowns": [
+      {
+        "slideIndex": 1,
+        "slideTitle": "Title",
+        "chapterIndex": 0,
+        "totalDuration": 1,
+        "audioDuration": 0,
+        "delaysDuration": 1,
+        "segments": [
+          {
+            "segmentIndex": 0,
+            "audioDuration": 0,
+            "delayAfter": 1
+          }
+        ]
+      },
+      {
+        "slideIndex": 1,
+        "slideTitle": "Product Context",
+        "chapterIndex": 1,
+        "totalDuration": 2,
+        "audioDuration": 0,
+        "delaysDuration": 2,
+        "segments": [
+          {
+            "segmentIndex": 0,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 1,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 2,
+            "audioDuration": 0,
+            "delayAfter": 1
+          }
+        ]
+      },
+      {
+        "slideIndex": 2,
+        "slideTitle": "COGS Problem",
+        "chapterIndex": 1,
+        "totalDuration": 2,
+        "audioDuration": 0,
+        "delaysDuration": 2,
+        "segments": [
+          {
+            "segmentIndex": 0,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 1,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 2,
+            "audioDuration": 0,
+            "delayAfter": 1
+          }
+        ]
+      },
+      {
+        "slideIndex": 1,
+        "slideTitle": "Four-Call Pipeline",
+        "chapterIndex": 2,
+        "totalDuration": 3,
+        "audioDuration": 0,
+        "delaysDuration": 3,
+        "segments": [
+          {
+            "segmentIndex": 0,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 1,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 2,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 3,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 4,
+            "audioDuration": 0,
+            "delayAfter": 1
+          }
+        ]
+      },
+      {
+        "slideIndex": 2,
+        "slideTitle": "Call Detail",
+        "chapterIndex": 2,
+        "totalDuration": 1.5,
+        "audioDuration": 0,
+        "delaysDuration": 1.5,
+        "segments": [
+          {
+            "segmentIndex": 0,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 1,
+            "audioDuration": 0,
+            "delayAfter": 1
+          }
+        ]
+      },
+      {
+        "slideIndex": 1,
+        "slideTitle": "Five Cost Drivers",
+        "chapterIndex": 3,
+        "totalDuration": 3.5,
+        "audioDuration": 0,
+        "delaysDuration": 3.5,
+        "segments": [
+          {
+            "segmentIndex": 0,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 1,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 2,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 3,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 4,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 5,
+            "audioDuration": 0,
+            "delayAfter": 1
+          }
+        ]
+      },
+      {
+        "slideIndex": 2,
+        "slideTitle": "Verbose JSON",
+        "chapterIndex": 3,
+        "totalDuration": 1.5,
+        "audioDuration": 0,
+        "delaysDuration": 1.5,
+        "segments": [
+          {
+            "segmentIndex": 0,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 1,
+            "audioDuration": 0,
+            "delayAfter": 1
+          }
+        ]
+      },
+      {
+        "slideIndex": 1,
+        "slideTitle": "Nested Loop",
+        "chapterIndex": 4,
+        "totalDuration": 2,
+        "audioDuration": 0,
+        "delaysDuration": 2,
+        "segments": [
+          {
+            "segmentIndex": 0,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 1,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 2,
+            "audioDuration": 0,
+            "delayAfter": 1
+          }
+        ]
+      },
+      {
+        "slideIndex": 2,
+        "slideTitle": "O(n^2) Visualized",
+        "chapterIndex": 4,
+        "totalDuration": 2,
+        "audioDuration": 0,
+        "delaysDuration": 2,
+        "segments": [
+          {
+            "segmentIndex": 0,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 1,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 2,
+            "audioDuration": 0,
+            "delayAfter": 1
+          }
+        ]
+      },
+      {
+        "slideIndex": 1,
+        "slideTitle": "Format Comparison",
+        "chapterIndex": 5,
+        "totalDuration": 2,
+        "audioDuration": 0,
+        "delaysDuration": 2,
+        "segments": [
+          {
+            "segmentIndex": 0,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 1,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 2,
+            "audioDuration": 0,
+            "delayAfter": 1
+          }
+        ]
+      },
+      {
+        "slideIndex": 2,
+        "slideTitle": "max_end_utterance_id",
+        "chapterIndex": 5,
+        "totalDuration": 2,
+        "audioDuration": 0,
+        "delaysDuration": 2,
+        "segments": [
+          {
+            "segmentIndex": 0,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 1,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 2,
+            "audioDuration": 0,
+            "delayAfter": 1
+          }
+        ]
+      },
+      {
+        "slideIndex": 1,
+        "slideTitle": "Pseudocode Algorithm",
+        "chapterIndex": 6,
+        "totalDuration": 2,
+        "audioDuration": 0,
+        "delaysDuration": 2,
+        "segments": [
+          {
+            "segmentIndex": 0,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 1,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 2,
+            "audioDuration": 0,
+            "delayAfter": 1
+          }
+        ]
+      },
+      {
+        "slideIndex": 2,
+        "slideTitle": "Prose vs Pseudocode",
+        "chapterIndex": 6,
+        "totalDuration": 1.5,
+        "audioDuration": 0,
+        "delaysDuration": 1.5,
+        "segments": [
+          {
+            "segmentIndex": 0,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 1,
+            "audioDuration": 0,
+            "delayAfter": 1
+          }
+        ]
+      },
+      {
+        "slideIndex": 1,
+        "slideTitle": "Copy-then-Parse",
+        "chapterIndex": 7,
+        "totalDuration": 2,
+        "audioDuration": 0,
+        "delaysDuration": 2,
+        "segments": [
+          {
+            "segmentIndex": 0,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 1,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 2,
+            "audioDuration": 0,
+            "delayAfter": 1
+          }
+        ]
+      },
+      {
+        "slideIndex": 2,
+        "slideTitle": "Self-Checks",
+        "chapterIndex": 7,
+        "totalDuration": 1.5,
+        "audioDuration": 0,
+        "delaysDuration": 1.5,
+        "segments": [
+          {
+            "segmentIndex": 0,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 1,
+            "audioDuration": 0,
+            "delayAfter": 1
+          }
+        ]
+      },
+      {
+        "slideIndex": 1,
+        "slideTitle": "Results Metrics",
+        "chapterIndex": 8,
+        "totalDuration": 2.5,
+        "audioDuration": 0,
+        "delaysDuration": 2.5,
+        "segments": [
+          {
+            "segmentIndex": 0,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 1,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 2,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 3,
+            "audioDuration": 0,
+            "delayAfter": 1
+          }
+        ]
+      },
+      {
+        "slideIndex": 2,
+        "slideTitle": "Quality and Impact",
+        "chapterIndex": 8,
+        "totalDuration": 2,
+        "audioDuration": 0,
+        "delaysDuration": 2,
+        "segments": [
+          {
+            "segmentIndex": 0,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 1,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 2,
+            "audioDuration": 0,
+            "delayAfter": 1
+          }
+        ]
+      },
+      {
+        "slideIndex": 1,
+        "slideTitle": "Five Lessons",
+        "chapterIndex": 9,
+        "totalDuration": 3.5,
+        "audioDuration": 0,
+        "delaysDuration": 3.5,
+        "segments": [
+          {
+            "segmentIndex": 0,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 1,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 2,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 3,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 4,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 5,
+            "audioDuration": 0,
+            "delayAfter": 1
+          }
+        ]
+      },
+      {
+        "slideIndex": 2,
+        "slideTitle": "Closing",
+        "chapterIndex": 9,
+        "totalDuration": 2.5,
+        "audioDuration": 0,
+        "delaysDuration": 2.5,
+        "segments": [
+          {
+            "segmentIndex": 0,
+            "audioDuration": 0,
+            "delayAfter": 0.5
+          },
+          {
+            "segmentIndex": 1,
+            "audioDuration": 0,
+            "delayAfter": 2
+          }
+        ]
+      }
+    ],
+    "formattedDurations": {
+      "audioOnly": "0:00",
+      "total": "0:40"
+    }
   }
 }
