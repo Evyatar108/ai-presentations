@@ -31,8 +31,8 @@
         },
         {
           "id": "pipeline",
-          "narrationText": "It's a three-stage pipeline. A meeting transcript goes into an LLM, which produces structured editing metadata. That metadata is then consumed by a video assembly service that builds the final recap video. The model doesn't produce the video — it produces the editing instructions.",
-          "visualDescription": "Three-box pipeline diagram: Transcript → LLM → Video Assembly",
+          "narrationText": "It's a four-stage pipeline. A meeting transcript goes into an LLM, which produces structured metadata — timestamps, topic boundaries, and narration text. That metadata is used to generate TTS audio for the narration. Then the highlights video is streamed on demand by seeking into the original recording at those timestamps. There's no video rendering step — the model produces editing instructions, and playback happens live.",
+          "visualDescription": "Four-box pipeline diagram: Transcript → LLM → Metadata + TTS → On-Demand Streaming",
           "notes": ""
         },
         {

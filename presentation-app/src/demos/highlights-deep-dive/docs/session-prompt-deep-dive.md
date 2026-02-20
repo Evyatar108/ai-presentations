@@ -18,10 +18,10 @@ Meeting Highlights generates AI video recaps of Teams meetings. Each recap inter
 The LLM's job is the middle step of a three-stage pipeline:
 
 ```
-Meeting Transcript  →  [LLM: Structured Metadata]  →  Video Assembly
+Meeting Transcript  →  [LLM: Structured Metadata]  →  Metadata + TTS  →  On-Demand Streaming
 ```
 
-The model reads the full transcript, identifies the key topics, writes narration summaries, selects the best verbatim audio clips, ranks them by quality, and outputs a single structured JSON that the video assembly pipeline consumes directly.
+The model reads the full transcript, identifies the key topics, writes narration summaries, selects the best verbatim audio clips, ranks them by quality, and outputs a single structured JSON. That metadata drives TTS audio generation for the narration segments, and the highlights video is then streamed on demand by seeking into the original recording at the specified timestamps — there is no pre-rendered video assembly step.
 
 The model does NOT produce the video — it produces the **editing instructions** that tell the video pipeline what to show, when, and in what order.
 

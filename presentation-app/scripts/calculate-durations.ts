@@ -310,10 +310,84 @@ async function saveReportJSON(report: DurationReport, outputPath: string, demoFi
     ? `duration-report-${demoFilter}.json`
     : 'duration-report.json';
   const fullPath = path.join(path.dirname(outputPath), filename);
-  
+
   // Pretty-print JSON for readability
   fs.writeFileSync(fullPath, JSON.stringify(report, null, 2));
-  console.log(`💾 Duration report saved: ${filename}\n`);
+  console.log(`💾 Duration report saved: ${filename}`);
+}
+
+/**
+ * Generate the durationInfo object literal string for embedding in metadata.ts.
+ */
+function generateDurationInfoLiteral(demoReport: EnhancedDemoReport): string {
+  const indent = '    ';
+  const lines: string[] = [];
+
+  lines.push('  durationInfo: {');
+  lines.push(`${indent}audioOnly: ${round2(demoReport.audioOnlyDuration)},`);
+  lines.push(`${indent}segmentDelays: ${round2(demoReport.segmentDelays)},`);
+  lines.push(`${indent}slideDelays: ${round2(demoReport.slideDelays)},`);
+  lines.push(`${indent}finalDelay: ${round2(demoReport.finalDelay)},`);
+  lines.push(`${indent}startSilence: ${round2(demoReport.startSilence)},`);
+  lines.push(`${indent}total: ${round2(demoReport.totalDuration)},`);
+  lines.push(`${indent}slideBreakdown: [`);
+
+  for (const slide of demoReport.slideBreakdowns) {
+    const segs = slide.segments
+      .map(s => `{ segmentIndex: ${s.segmentIndex}, audioDuration: ${round2(s.audioDuration)}, delayAfter: ${round2(s.delayAfter)} }`)
+      .join(', ');
+    lines.push(`${indent}  { slideIndex: ${slide.slideIndex}, slideTitle: '${slide.slideTitle.replace(/'/g, "\\'")}', chapterIndex: ${slide.chapterIndex}, totalDuration: ${round2(slide.totalDuration)}, audioDuration: ${round2(slide.audioDuration)}, delaysDuration: ${round2(slide.delaysDuration)}, segments: [${segs}] },`);
+  }
+
+  lines.push(`${indent}]`);
+  lines.push('  }');
+
+  return lines.join('\n');
+}
+
+/**
+ * Round a number to 2 decimal places, removing trailing zeros.
+ */
+function round2(n: number): number {
+  return Math.round(n * 100) / 100;
+}
+
+/**
+ * Update the durationInfo field in a demo's metadata.ts file.
+ * Replaces the existing durationInfo block (or inserts one if missing).
+ */
+function updateMetadataFile(demoId: string, demoReport: EnhancedDemoReport): boolean {
+  const metadataPath = path.join(__dirname, `../src/demos/${demoId}/metadata.ts`);
+
+  if (!fs.existsSync(metadataPath)) {
+    console.warn(`  ⚠️  metadata.ts not found for '${demoId}', skipping metadata update`);
+    return false;
+  }
+
+  const content = fs.readFileSync(metadataPath, 'utf-8');
+  const newDurationInfo = generateDurationInfoLiteral(demoReport);
+
+  // Match existing durationInfo block (handles nested braces via greedy match up to closing })
+  const durationInfoRegex = /  durationInfo:\s*\{[\s\S]*?\n  \}/;
+
+  if (durationInfoRegex.test(content)) {
+    const updated = content.replace(durationInfoRegex, newDurationInfo);
+    fs.writeFileSync(metadataPath, updated, 'utf-8');
+    console.log(`✅ Updated durationInfo in src/demos/${demoId}/metadata.ts`);
+    return true;
+  }
+
+  // No existing durationInfo — try to insert before the closing of the metadata object
+  const closingBraceRegex = /\n\};\s*$/;
+  if (closingBraceRegex.test(content)) {
+    const updated = content.replace(closingBraceRegex, `,\n\n${newDurationInfo}\n};\n`);
+    fs.writeFileSync(metadataPath, updated, 'utf-8');
+    console.log(`✅ Inserted durationInfo in src/demos/${demoId}/metadata.ts`);
+    return true;
+  }
+
+  console.warn(`  ⚠️  Could not locate insertion point in metadata.ts for '${demoId}'`);
+  return false;
 }
 
 // Parse CLI arguments
@@ -343,6 +417,17 @@ const reportPath = path.join(__dirname, '../duration-report.json');
 calculateDurations(audioDir, cliArgs.demoFilter)
   .then(report => {
     printReport(report, cliArgs.verbose);
-    return saveReportJSON(report, reportPath, cliArgs.demoFilter);
+    saveReportJSON(report, reportPath, cliArgs.demoFilter);
+
+    // Auto-update metadata.ts for each demo
+    let updatedCount = 0;
+    for (const [demoId, demoReport] of Object.entries(report)) {
+      if (updateMetadataFile(demoId, demoReport)) {
+        updatedCount++;
+      }
+    }
+    if (updatedCount > 0) {
+      console.log(`\n📝 Updated ${updatedCount} metadata.ts file(s) with durationInfo\n`);
+    }
   })
   .catch(console.error);

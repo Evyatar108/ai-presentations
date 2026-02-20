@@ -190,26 +190,7 @@ export default demoConfig;
 npm run tts:duration -- --demo {demo-id}
 ```
 
-Copy the generated `durationInfo` object to your metadata file (`src/demos/{demo-id}/metadata.ts`). The `DurationInfo` interface is exported from the framework:
-
-```typescript
-import type { DemoMetadata, DurationInfo } from '@framework';
-
-const durationInfo: DurationInfo = {
-  audioOnly: 120.5,
-  segmentDelays: 8.0,
-  slideDelays: 10.0,
-  finalDelay: 2.0,
-  startSilence: 1.0,
-  total: 141.5,
-};
-
-export const metadata: DemoMetadata = {
-  id: 'your-demo-name',
-  // ...
-  durationInfo,
-};
-```
+This automatically updates the `durationInfo` field in your `metadata.ts` file (`src/demos/{demo-id}/metadata.ts`). If no `durationInfo` exists yet, it will be inserted. No manual copying is needed.
 
 See [TIMING_SYSTEM.md](TIMING_SYSTEM.md) for detailed timing patterns and examples.
 

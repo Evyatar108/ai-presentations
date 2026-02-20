@@ -49,13 +49,13 @@ const Ch1_S1_ProductContextComponent: React.FC = () => {
               marginBottom: '2rem'
             }}
           >
-            {['Transcript', 'LLM', 'Video Assembly'].map((label, i) => (
+            {['Transcript', 'LLM', 'Metadata + TTS', 'On-Demand Streaming'].map((label, i) => (
               <React.Fragment key={label}>
                 {i > 0 && (
-                  <span style={{ fontSize: 24, color: theme.colors.primary }}>&#8594;</span>
+                  <span style={{ fontSize: 20, color: theme.colors.primary }}>&#8594;</span>
                 )}
                 <div style={{
-                  padding: '1rem 2rem',
+                  padding: '0.75rem 1.25rem',
                   borderRadius: 12,
                   background: i === 1
                     ? `linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))`
@@ -65,7 +65,7 @@ const Ch1_S1_ProductContextComponent: React.FC = () => {
                     : `1px solid ${theme.colors.bgBorder}`,
                   color: theme.colors.textPrimary,
                   fontWeight: 600,
-                  fontSize: 16
+                  fontSize: 14
                 }}>
                   {label}
                 </div>

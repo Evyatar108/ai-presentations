@@ -111,7 +111,7 @@ npm run tts:duration
 npm run tts:duration -- --demo meeting-highlights
 ```
 
-Generates `duration-report.json`:
+Generates `duration-report.json` and automatically updates `durationInfo` in each demo's `metadata.ts`:
 
 ```json
 {

@@ -201,9 +201,9 @@
       "generatedAt": "2026-02-20T19:12:27.292Z"
     },
     "c1\\s1_segment_02_pipeline.wav": {
-      "narrationText": "It's a three-stage pipeline. A meeting transcript goes into an LLM, which produces structured editing metadata. That metadata is then consumed by a video assembly service that builds the final recap video. The model doesn't produce the video — it produces the editing instructions.",
+      "narrationText": "It's a four-stage pipeline. A meeting transcript goes into an LLM, which produces structured metadata — timestamps, topic boundaries, and narration text. That metadata is used to generate TTS audio for the narration. Then the highlights video is streamed on demand by seeking into the original recording at those timestamps. There's no video rendering step — the model produces editing instructions, and playback happens live.",
       "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-20T19:12:27.297Z"
+      "generatedAt": "2026-02-20T23:37:56.939Z"
     },
     "c1\\s1_segment_03_types.wav": {
       "narrationText": "The LLM produces two types of content. Abstractive narration — AI-written topic summaries spoken over muted meeting video. And extractive clips — the actual best moments from the meeting, with original audio and video preserved.",

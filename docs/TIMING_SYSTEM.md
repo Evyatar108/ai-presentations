@@ -161,7 +161,7 @@ export default demoConfig;
 npm run tts:duration -- --demo your-demo-id
 ```
 
-3. Copy the generated `durationInfo` from the console or JSON report to your `metadata.ts` file.
+The script automatically updates `durationInfo` in your demo's `metadata.ts` file — no manual copying needed.
 
 See [Adding Demos Guide](./ADDING_DEMOS.md) for complete demo creation workflow.
 
