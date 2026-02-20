@@ -41,13 +41,9 @@ npm run tts:generate -- --demo meeting-highlights --instruct "speak slowly and c
 
 The `--instruct` flag sets a demo-wide TTS style instruction (lowest priority). See [Instruct Hierarchy](#instruct-hierarchy) below.
 
-### Skip Existing Files
+### Smart Caching (Default)
 
-```bash
-npm run tts:generate -- --skip-existing
-```
-
-Only generates audio for files that don't exist yet. Useful for initial generation.
+By default, the generator skips segments whose audio file already exists and whose narration text and instruct haven't changed (based on the TTS cache). Only new or modified segments are generated.
 
 ### Force Regeneration
 

@@ -637,7 +637,7 @@ async function generateTTS(config: TTSConfig) {
           texts,
           ...(instruct ? { instruct } : {})
         }, {
-          timeout: 900000 // 15 minute timeout for batch
+          timeout: 10800000 // 3 hour timeout for batch
         });
         
         if (response.data.success) {
@@ -756,7 +756,7 @@ function loadServerConfig(): string {
 function parseCLIArgs(): { demoFilter?: string; skipExisting: boolean; fromJson: boolean; instruct?: string } {
   const args = process.argv.slice(2);
   const result: { demoFilter?: string; skipExisting: boolean; fromJson: boolean; instruct?: string } = {
-    skipExisting: args.includes('--skip-existing'),
+    skipExisting: !args.includes('--force'),
     fromJson: args.includes('--from-json')
   };
 

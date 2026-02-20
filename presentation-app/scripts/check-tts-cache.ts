@@ -603,8 +603,8 @@ async function checkTTSCache(): Promise<void> {
   if (shouldRegenerate) {
     console.log('\n🔊 Starting TTS generation (smart cache - only changed segments)...\n');
     try {
-      // Run TTS generation script with --skip-existing flag for smart caching
-      execSync('npm run tts:generate -- --skip-existing', {
+      // Run TTS generation script (skip-existing is now the default)
+      execSync('npm run tts:generate', {
         stdio: 'inherit',
         cwd: path.join(__dirname, '..')
       });
