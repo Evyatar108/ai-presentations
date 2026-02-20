@@ -98,6 +98,7 @@ def health():
     return jsonify({
         'status': 'ok',
         'model_loaded': model is not None,
+        'engine': 'vibevoice',
         'device': 'cuda',
         'gpu_name': torch.cuda.get_device_name(0) if torch.cuda.is_available() else None
     })

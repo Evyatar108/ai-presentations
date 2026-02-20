@@ -1,12 +1,55 @@
-# Text-to-Speech Generator using VibeVoice
+# Text-to-Speech Generator
 
-This project provides multiple ways to generate audio files from transcript text using the VibeVoice model.
+This project provides multiple ways to generate audio files from transcript text. Two TTS engines are supported:
+
+- **VibeVoice** (`server.py`) — requires a voice sample WAV file for cloning
+- **Qwen3-TTS** (`server_qwen.py`) — uses premium preset speaker timbres (no voice sample needed)
+
+Both servers expose the same HTTP API, so the TypeScript scripts and browser client work unchanged regardless of which engine is running.
 
 ## Available Scripts
 
-1. **[`generate_audio.py`](generate_audio.py:1)** - Standalone local script
-2. **[`server.py`](server.py:1)** - TTS server for remote processing
-3. **[`client.py`](client.py:1)** - Client to connect to remote server
+1. **[`generate_audio.py`](generate_audio.py:1)** - Standalone local script (VibeVoice)
+2. **[`server.py`](server.py:1)** - VibeVoice TTS server
+3. **[`server_qwen.py`](server_qwen.py:1)** - Qwen3-TTS server
+4. **[`client.py`](client.py:1)** - Client to connect to remote server
+
+## Engine Selection
+
+Both engines run on the same port (default 5000) and use the same `server_config.json` — just start the one you want.
+
+### VibeVoice (voice cloning)
+
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Start server (requires a voice sample file)
+python server.py --voice-sample path/to/voice.wav
+```
+
+### Qwen3-TTS (preset speakers)
+
+```bash
+# Install dependencies (separate venv recommended)
+pip install -r requirements_qwen.txt
+
+# Start server (no voice sample needed)
+python server_qwen.py --speaker Vivian --language English
+```
+
+Available `--speaker` options include: Vivian, Chelsie, Ethan, and other premium presets from the CustomVoice model. See the [Qwen3-TTS model card](https://huggingface.co/Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice) for the full list.
+
+### Generating audio (same for both engines)
+
+Once either server is running, use the standard commands from `presentation-app/`:
+
+```bash
+npm run tts:generate -- --demo my-demo
+npm run tts:duration -- --demo my-demo
+```
+
+Or trigger regeneration from the browser via `npm run dev:full`.
 
 ## Quick Start
 
@@ -41,8 +84,11 @@ venv\Scripts\activate
 pip install -r requirements.txt
 
 # Open firewall port 5000 (see NETWORK_SETUP.md)
-# Run server
+# Run server (VibeVoice)
 python server.py --voice-sample path/to/voice.wav --host 0.0.0.0 --port 5000
+
+# Or run Qwen3-TTS instead
+python server_qwen.py --speaker Vivian --host 0.0.0.0 --port 5000
 ```
 
 **On Local PC (Client):**
@@ -66,18 +112,20 @@ python client.py
 
 ## File Descriptions
 
-- **[`generate_audio.py`](generate_audio.py:1)** - Self-contained script for local TTS generation
-- **[`server.py`](server.py:1)** - Flask-based HTTP server that runs the VibeVoice model
+- **[`generate_audio.py`](generate_audio.py:1)** - Self-contained script for local TTS generation (VibeVoice)
+- **[`server.py`](server.py:1)** - Flask-based HTTP server running the VibeVoice model
+- **[`server_qwen.py`](server_qwen.py:1)** - Flask-based HTTP server running Qwen3-TTS (same API)
 - **[`client.py`](client.py:1)** - Client script that sends requests to the server
-- **[`requirements.txt`](requirements.txt:1)** - Python dependencies
+- **[`requirements.txt`](requirements.txt:1)** - Python dependencies for VibeVoice
+- **[`requirements_qwen.txt`](requirements_qwen.txt:1)** - Python dependencies for Qwen3-TTS
 - **[`NETWORK_SETUP.md`](NETWORK_SETUP.md:1)** - Detailed network configuration guide
 
 ## Requirements
 
 - Python 3.8 or higher
-- CUDA-capable GPU (recommended for faster processing)
-- ~10GB disk space for the model
-- Voice sample file in WAV format (24kHz mono preferred)
+- CUDA-capable GPU (required)
+- ~10GB disk space for models
+- Voice sample file in WAV format (VibeVoice only; not needed for Qwen3-TTS)
 
 ## Network Setup
 
