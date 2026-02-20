@@ -50,7 +50,7 @@ Slides are objects with `metadata` (chapter, slide number, title, audio segments
 Colors and typography are centralized in `src/framework/theme/`. Framework components use `useTheme()` hook. Demo slides can use static exports from `SlideStyles.ts` or opt into theme-aware `create*()` factory functions. Override colors via `src/project.config.ts`.
 
 ### Three-Level Timing Hierarchy
-Timing (betweenSegments, betweenSlides, afterFinalSlide) can be set at demo, slide, or segment level. Later levels override earlier. Defaults: 500ms / 1000ms / 2000ms. Resolution via `resolveTimingConfig()` in `src/framework/demos/timing/types.ts`.
+Timing (beforeFirstSlide, betweenSegments, betweenSlides, afterFinalSlide) can be set at demo, slide, or segment level. Later levels override earlier. Defaults: 1000ms / 500ms / 1000ms / 2000ms. Resolution via `resolveTimingConfig()` in `src/framework/demos/timing/types.ts`. The `startTransition` option on `DemoConfig` controls the Framer Motion exit animation for the start silence overlay (default: 0.8s fade-out). It lives on `DemoConfig` rather than `TimingConfig` because it's a visual animation config, not a numeric delay.
 
 ### Three-Level Instruct Hierarchy
 TTS style instructions (`instruct?: string`) follow the same three-level pattern: `DemoConfig.instruct` → `SlideMetadata.instruct` → `AudioSegment.instruct`. Most-specific wins (first non-undefined). Passed to Qwen3-TTS server as the `instruct` parameter. CLI scripts also accept `--instruct "..."` as lowest-priority fallback. Instruct changes are tracked in the TTS cache and trigger regeneration.
@@ -86,7 +86,7 @@ Audio naming: `s{slide}_segment_{number}_{id}.wav`
 | `src/framework/slides/SlideLayouts.tsx` | Shared layout templates |
 | `src/framework/slides/SlideStyles.ts` | Shared styling (static + theme-aware factories) |
 | `src/framework/slides/AnimationVariants.ts` | Framer Motion presets |
-| `src/framework/demos/timing/types.ts` | TimingConfig interface & resolver |
+| `src/framework/demos/timing/types.ts` | TimingConfig, StartTransition interfaces & resolver |
 | `src/framework/theme/ThemeContext.tsx` | Theme provider & useTheme() hook |
 | `src/framework/config.ts` | Centralized framework config |
 | `src/project.config.ts` | Project-level overrides |
