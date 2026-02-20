@@ -168,7 +168,8 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
             {demo.thumbnail && (
               <div style={{
                 width: '100%',
-                height: 200,
+                aspectRatio: '3 / 2',
+                maxHeight: 200,
                 background: `url(${demo.thumbnail}) center/cover`,
                 borderBottom: '1px solid rgba(148, 163, 184, 0.2)'
               }} />
