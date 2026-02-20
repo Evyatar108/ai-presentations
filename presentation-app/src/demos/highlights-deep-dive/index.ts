@@ -8,8 +8,8 @@ import type { DemoConfig, TimingConfig } from '@framework';
 import { metadata } from './metadata';
 
 const timing: TimingConfig = {
-  betweenSegments: 500,
-  betweenSlides: 1000,
+  betweenSegments: 1500,
+  betweenSlides: 3000,
   afterFinalSlide: 2000
 };
 

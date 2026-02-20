@@ -439,7 +439,11 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
               )}
               {/* Regenerate buttons - always shown for any slide with segments */}
               <button
-                onClick={() => handleRegenerateSegment(true)}
+                onClick={() => {
+                  if (window.confirm('Regenerate audio for this segment WITH pauses?')) {
+                    handleRegenerateSegment(true);
+                  }
+                }}
                 disabled={regeneratingSegment}
                 title="Regenerate audio WITH pauses (adds ' . .' at end)"
                 aria-label="Regenerate audio with pauses"
@@ -459,7 +463,11 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
                 <span aria-hidden="true">{regeneratingSegment ? '⏳' : '🔄'}</span>
               </button>
               <button
-                onClick={() => handleRegenerateSegment(false)}
+                onClick={() => {
+                  if (window.confirm('Regenerate audio for this segment WITHOUT pauses?')) {
+                    handleRegenerateSegment(false);
+                  }
+                }}
                 disabled={regeneratingSegment}
                 title="Regenerate audio WITHOUT pauses (exact narration text)"
                 aria-label="Regenerate audio without pauses"

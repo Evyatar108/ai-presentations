@@ -12,7 +12,7 @@
       "segments": [
         {
           "id": "main",
-          "narrationText": "From four calls to one. This is the story of how we redesigned the Meeting Highlights prompt — collapsing a four-call GPT-4 pipeline into a single unified prompt, and cutting GPU costs by roughly seventy percent.",
+          "narrationText": "Hello, I'm Qwen TTS, and I'll be narrating this presentation for Evyatar. From four calls to one. This is the story of how I redesigned the Meeting Highlights prompt — collapsing a four-call GPT-4 pipeline into a single unified prompt, and cutting GPU costs by roughly seventy percent.",
           "visualDescription": "Title slide: 'From 4 Calls to 1: Redesigning the Meeting Highlights Prompt'",
           "notes": ""
         }
@@ -51,13 +51,13 @@
       "segments": [
         {
           "id": "metrics",
-          "narrationText": "Here's the problem we faced. The V1 implementation used four sequential LLM calls per meeting. At projected GA scale, that would require roughly six hundred A100 GPUs — far exceeding approved quotas. This made Meeting Highlights a capacity blocker, preventing the GA rollout.",
+          "narrationText": "Here's the problem I faced. The V1 implementation used four sequential LLM calls per meeting. At projected GA scale, that would require roughly six hundred A100 GPUs — far exceeding approved quotas. This made Meeting Highlights a capacity blocker, preventing the GA rollout.",
           "visualDescription": "Three metric tiles: 4 LLM Calls, ~600 GPUs, Capacity Blocker",
           "notes": ""
         },
         {
           "id": "quote",
-          "narrationText": "As our engineering manager put it — we needed a fundamentally different strategy. This wasn't a problem we could solve by adding more hardware.",
+          "narrationText": "As my engineering manager put it — I needed a fundamentally different strategy. This wasn't a problem we could solve by adding more hardware.",
           "visualDescription": "Blockquote card with Eli Lekhtser quote",
           "notes": ""
         },
@@ -89,7 +89,7 @@
         },
         {
           "id": "call2",
-          "narrationText": "Call two: extractive selection. This selects the best verbatim clips from a pre-enumerated set of candidate ranges. We'll come back to how those candidates are generated — it's the critical cost driver.",
+          "narrationText": "Call two: extractive selection. This selects the best verbatim clips from a pre-enumerated set of candidate ranges. I'll come back to how those candidates are generated — it's the critical cost driver.",
           "visualDescription": "Second pipeline box appears: highlights_extractives",
           "notes": ""
         },
@@ -133,7 +133,7 @@
       "segments": [
         {
           "id": "title",
-          "narrationText": "When we analyzed the V1 pipeline, we identified four structural cost drivers.",
+          "narrationText": "When I analyzed the V1 pipeline, I identified four structural cost drivers.",
           "visualDescription": "Title: 'Four Structural Cost Drivers'",
           "notes": ""
         },
