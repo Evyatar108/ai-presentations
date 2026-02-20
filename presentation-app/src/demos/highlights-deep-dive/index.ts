@@ -9,7 +9,7 @@ import { metadata } from './metadata';
 
 const timing: TimingConfig = {
   betweenSegments: 1500,
-  betweenSlides: 3000,
+  betweenSlides: 2000,
   afterFinalSlide: 2000
 };
 
