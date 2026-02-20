@@ -5,5 +5,6 @@ export const metadata: DemoMetadata = {
   title: 'Example Demo 1',
   description: 'A placeholder demo showcasing the multi-demo architecture',
   thumbnail: '/images/example-demo-1/thumbnail.jpeg',
-  tags: ['example', 'placeholder', 'demo']
+  tags: ['example', 'placeholder', 'demo'],
+  hidden: true
 };

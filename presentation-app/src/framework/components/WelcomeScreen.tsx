@@ -35,7 +35,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
 
   useEffect(() => {
     // Load all demo metadata
-    const allDemos = DemoRegistry.getAllMetadata();
+    const allDemos = DemoRegistry.getAllMetadata().filter(d => !d.hidden);
     setDemos(allDemos);
   }, []);
   

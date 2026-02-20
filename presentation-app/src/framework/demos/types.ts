@@ -47,6 +47,9 @@ export interface DemoMetadata {
    */
   narrationFallback?: NarrationFallback;
   
+  /** Hide this demo from the welcome screen listing */
+  hidden?: boolean;
+
   /**
    * Optional duration information for this demo.
    * Provides detailed breakdown of audio and timing delays.

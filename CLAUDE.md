@@ -38,7 +38,7 @@ Registry logic lives in `src/framework/demos/DemoRegistry.ts` using an internal 
 
 ### Demo Structure
 Each demo lives in `src/demos/{demo-id}/` with:
-- `metadata.ts` — title, description, thumbnail, tags, durationInfo
+- `metadata.ts` — title, description, thumbnail, tags, durationInfo, hidden
 - `index.ts` — DemoConfig with lazy `getSlides()` that imports `SlidesRegistry`
 - `slides/SlidesRegistry.ts` — ordered array of all slide components
 - `slides/chapters/Chapter{N}.tsx` — slide definitions

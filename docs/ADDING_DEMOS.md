@@ -47,6 +47,7 @@ export const metadata: DemoMetadata = {
   description: 'Brief description of what this demo presents',
   thumbnail: '/images/your-demo-name/thumbnail.jpeg',
   tags: ['category1', 'category2'],
+  // hidden: true,  // Set to hide from the welcome screen listing
 };
 ```
 

@@ -223,6 +223,7 @@ interface DemoMetadata {
   description: string;
   thumbnail: string;
   tags: string[];
+  hidden?: boolean;
   durationInfo?: DurationInfo;
 }
 

@@ -10,7 +10,7 @@ Each demo is self-contained in `src/demos/{demo-id}/`:
 
 ```
 src/demos/meeting-highlights/
-├── metadata.ts              # Demo metadata (title, description, thumbnail)
+├── metadata.ts              # Demo metadata (title, description, thumbnail, hidden)
 ├── index.ts                 # Demo configuration with lazy-loaded slides
 ├── README.md                # Demo-specific documentation
 └── slides/
