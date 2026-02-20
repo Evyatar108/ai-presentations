@@ -1,449 +1,138 @@
-# Highlights COGS Reduction
+# Presentation Framework
 
-This repository contains work related to meeting highlights and COGS (Cost of Goods Sold) reduction efforts.
+Multi-demo presentation system built with React + TypeScript + Vite. Each demo is a narrated, animated slideshow with TTS-generated audio, progressive segment reveals, and multiple playback modes.
 
-## Directory Structure
+## Quick Start
 
-```
-cogs reduction/
-├── README.md
-├── docs/demos/meeting-highlights/  # Meeting Highlights documentation
-│   ├── meeting-highlights.md
-│   └── context/
-│       ├── architecture-comprehensive.md
-│       ├── extractive-vs-abstractive-highlights.md
-│       ├── how-can-users-try-meeting-highlights.md
-│       ├── team-collaboration.md
-│       ├── v2-goals-and-efforts.md
-│       ├── what-is-meeting-highlights.md
-│   ├── v1/
-│   │   └── HighlightsPromptMaper.py
-│   └── v2/
-│       ├── prompt.md
-│       ├── prompt_output_schema.md
-│       └── TRANSCRIPT_TABLE_SCHEMA.md
-├── highlights_demo/
-│   ├── audio/
-│   ├── chapters/          # Subtitle files for narrated presentation
-│   └── images/logos/      # Product logos (Teams, BizChat, Loop, etc.)
-├── presentation-app/      # Interactive React presentation
-└── tts/                  # Text-to-speech generation system
-```
-## Files Overview
-
-### Highlights Demo Directory (`highlights_demo/`)
-Contains presentation materials and supporting documentation:
-- **audio/** - Audio files for narrated presentation
-- **chapters/** - Subtitle files (SRT format) for each presentation chapter
-- **images/logos/** - Product logos (Teams, BizChat, Loop, Clipchamp, ODSP, MSAI Hive)
-- **context/** - Technical documentation and implementation files
-
-### Documentation (`docs/demos/meeting-highlights/`)
-- **meeting-highlights.md** - Detailed demo documentation with slide structure and design system
-- **context/** - Background materials for demo creation:
-  - **team-collaboration.md** - Overview of the 6+ teams collaborating on Meeting Highlights (ODSP, MSAI-Hive, Clipchamp, Loop, BizChat, Teams)
-  - **architecture-comprehensive.md** - Comprehensive component reference with all services, ICM teams, DRIs, and detailed data flow
-  - **extractive-vs-abstractive-highlights.md** - Documentation comparing extractive and abstractive highlight approaches
-  - **v2-goals-and-efforts.md** - Goals and efforts for version 2
-  - **what-is-meeting-highlights.md** - Overview of meeting highlights functionality
-  - **how-can-users-try-meeting-highlights.md** - Instructions for accessing Meeting Highlights via BizChat (includes CIQ usage)
-- **v1/** - Original implementation
-  - `HighlightsPromptMaper.py` - Python script for highlights prompt mapping (version 1)
-- **v2/** - Current implementation documentation
-  - `prompt.md` - Prompt documentation
-  - `prompt_output_schema.md` - Output schema specification
-  - `TRANSCRIPT_TABLE_SCHEMA.md` - Transcript table schema definition
-## COGS Reduction Demo Expansion
-
-This project now includes an interactive React + Vite demo illustrating how meeting highlights costs were reduced while improving output quality.
-
-### Key Improvements
-- LLM calls: 4 → 1 (75% reduction - single unified prompt preserves full algorithmic flow segment→narrate→extract→rank→compose)
-- Input tokens: ~60% reduction (switched from verbose JSON to compact schema, eliminated pre-computed candidate ranges)
-- Estimated GPU capacity: ~600 → ~200 (67% reduction - simplified concurrency, fewer orchestration turnarounds, lower token volume)
-- COGS: Estimated 70%+ reduction enabling private preview + GA path
-- Quality: Internal reviewers strongly prefer unified prompt highlights vs multi-prompt V1 output (higher cohesion, less redundancy)
-
-### V1 Four-Prompt Pipeline
-1. Abstractive Topics [`highlights_abstractives()`](docs/demos/meeting-highlights/context/v1/HighlightsPromptMaper.py:13)
-2. Extractive Selection [`highlights_extractives()`](docs/demos/meeting-highlights/context/v1/HighlightsPromptMaper.py:140)
-3. Quality Ranking [`highlights_extractive_ranking()`](docs/demos/meeting-highlights/context/v1/HighlightsPromptMaper.py:230)
-4. Final Narrative Synthesis [`highlights_final()`](docs/demos/meeting-highlights/context/v1/HighlightsPromptMaper.py:318)
-Each step invoked the LLM separately, adding latency padding, retry surface, token overhead, and GPU reservation pressure.
-
-### Unified V2 Prompt
-All semantic transforms executed in one structured pass (segment → narrations → verbatim extraction → quality ranking → narrative composition). Removes intermediate JSON stitching and orchestration overhead while improving narrative flow.
-
-### Demo Run Instructions
 ```bash
-# Navigate to demo directory
 cd presentation-app
-
-# Install dependencies
 npm install
-
-# Start dev server (http://localhost:5173)
-npm run dev
-
-# Build for production
-npm run build
-
-# Preview production build
-npm run preview
-
-# Generate TTS audio files (requires Python TTS server running)
-npm run tts:generate
-
-# Calculate audio durations
-npm run tts:duration
+npm run dev        # http://localhost:5173
 ```
 
-Open http://localhost:5173 to view the demo.
+## Demos
 
-### TTS Audio Generation System
+| Demo | Description |
+|------|-------------|
+| **meeting-highlights** | Meeting Highlights COGS Reduction — product overview, team collaboration, optimization (4→1 LLM calls), 70%+ cost savings, business impact |
+| **highlights-deep-dive** | Technical deep-dive into collapsing a 4-call GPT-4 pipeline into a single unified prompt |
+| **example-demo-1** | Placeholder demo showcasing the multi-demo architecture |
+| **example-demo-2** | Showcases layout components, named segments, and timing overrides |
 
-The presentation includes an automated TTS (Text-to-Speech) generation system for creating narration audio:
+New demos are auto-discovered — any folder in `src/demos/` with `metadata.ts` and `index.ts` is automatically registered.
 
-**Prerequisites:**
-1. Python TTS server must be running (see [`tts/README.md`](tts/README.md))
-2. Server configuration in `tts/server_config.json`
+Scaffold a new demo: `.\scripts\new-demo.ps1 -DemoId "my-demo" [-DemoTitle "My Demo"]`
 
-**Generate Audio Files:**
+## Playback Modes
+
+- **Narrated** — auto-advances with synchronized TTS audio
+- **Manual Silent** — arrow key navigation, no audio
+- **Manual + Audio** — arrow key navigation with audio playback per slide
+
+## Project Structure
+
+```
+├── presentation-app/       # React + Vite application
+│   ├── src/
+│   │   ├── framework/      # Reusable presentation engine
+│   │   ├── demos/          # Demo content (auto-discovered)
+│   │   └── project.config.ts
+│   ├── public/
+│   │   ├── audio/{demo-id}/   # TTS audio per demo
+│   │   ├── images/{demo-id}/  # Images per demo
+│   │   ├── videos/{demo-id}/  # Videos per demo
+│   │   └── narration/{demo-id}/  # External narration JSON
+│   └── scripts/            # TTS generation, duration calc, cache check
+├── tts/                    # Python TTS server (VibeVoice + Qwen3-TTS)
+├── scripts/                # new-demo.ps1 scaffolding
+└── docs/                   # Detailed documentation
+```
+
+### Framework (`src/framework/`)
+
+Reusable presentation engine — copy this to start a new project.
+
+- **components/** — DemoPlayer, NarratedController, SlidePlayer, VideoPlayer, MetricTile, error boundaries
+- **slides/** — `defineSlide()` factory, layouts, styles, animation variants, icons
+- **demos/** — DemoRegistry (auto-discovery via `import.meta.glob`), timing system
+- **theme/** — ThemeProvider, `useTheme()` hook, customizable tokens
+- **hooks/** — TTS regeneration, notifications, runtime timer, API health, focus trap
+- **accessibility/** — `useReducedMotion()`, reduced-motion toggle respecting `prefers-reduced-motion`
+- **index.ts** — barrel export with ~120 explicit named exports
+
+### Demo Structure
+
+Each demo lives in `src/demos/{demo-id}/`:
+
+```
+{demo-id}/
+├── metadata.ts             # Title, description, tags, durationInfo
+├── index.ts                # DemoConfig with lazy getSlides()
+└── slides/
+    ├── SlidesRegistry.ts   # Ordered array of slides
+    └── chapters/
+        └── Chapter{N}.tsx  # Slide definitions using defineSlide()
+```
+
+## Commands
+
+All commands run from `presentation-app/`:
+
 ```bash
-# Start Python TTS server (in tts/ directory)
-cd tts
-python server.py --voice-sample path/to/voice.wav
+# Development
+npm run dev              # Dev server (auto-checks TTS cache + durations)
+npm run dev:full         # Dev server + Express narration API (port 3001)
+npm run build            # Production build
+npm run preview          # Preview production build
 
-# Generate all audio files (in presentation-app/ directory)
-cd presentation-app
-npm run tts:generate
+# Quality
+npm run lint             # ESLint
+npm run lint:fix         # ESLint auto-fix
+npm run type-check       # TypeScript type checking
+npm run test             # Run tests (vitest)
+npm run test:watch       # Tests in watch mode
+
+# TTS
+npm run tts:generate -- --demo {id}   # Generate TTS audio
+npm run tts:duration -- --demo {id}   # Calculate audio durations
+npm run check-narration               # Validate narration structure
 ```
 
-**Smart Caching System:**
-- Tracks narration text changes in `.tts-narration-cache.json`
-- Only regenerates audio when narration text changes
-- Skips unchanged segments automatically
-- Pre-flight check before `npm run dev` detects changes and prompts for regeneration
-- **Automatic cleanup of unused audio files:**
-  - Detects audio files no longer referenced in slides
-  - Removes orphaned cache entries
-  - Prompts before deletion during both generation and pre-flight check
-  - Keeps audio directory clean and synchronized with slide content
+## TTS Audio Generation
 
-**Features:**
-- **Batch processing**: Generates 10 segments per batch for efficiency
-- **Fallback audio**: Uses 1-second silence for missing files
-- **Progress tracking**: Shows real-time generation progress
-- **Duration calculation**: `npm run tts:duration` analyzes all audio files
-- **Automatic cache updates**: Saves narration text + timestamps after generation
+Two TTS engines are supported (same HTTP API, interchangeable):
 
-**File Organization:**
-```
-public/audio/
-├── c0/ - c9/              # Chapter-based folders
-│   └── sX_segment_YY_id.wav  # Slide X, segment YY, segment ID
-└── silence-1s.mp3         # Fallback for missing files
-```
+| Engine | Command | Notes |
+|--------|---------|-------|
+| **VibeVoice** | `python tts/server.py --voice-sample voice.wav` | Voice cloning from sample |
+| **Qwen3-TTS** | `python tts/server_qwen.py --speaker Vivian` | Preset premium speakers, no sample needed |
 
-### Audio Regeneration in Manual Mode (Dev Feature)
+Both run on port 5000 by default. See [`tts/README.md`](tts/README.md) for setup details.
 
-While presenting in Manual or Manual+Audio mode, you can regenerate audio for any segment on the fly:
+The generation system features smart caching (`.tts-narration-cache.json`), batch processing, automatic cleanup of orphaned files, and a pre-flight check that runs before `npm run dev`.
 
-**Setup:**
-1. Ensure your remote TTS server is running (see [`tts/README.md`](tts/README.md))
-2. Configure server URL in [`public/tts-config.json`](presentation-app/public/tts-config.json):
-   ```json
-   {
-     "remoteTTSServerUrl": "http://192.168.1.100:5000"
-   }
-   ```
-3. Start the dev server: `npm run dev`
+## Tech Stack
 
-**Usage:**
-1. Navigate to any multi-segment slide in Manual or Manual+Audio mode
-2. Click the 🔄 button in the segment navigation bar (bottom of screen)
-3. Wait for generation (button shows ⏳ spinner)
-4. Audio file is automatically:
-   - Generated on remote TTS server
-   - Saved to local `public/audio/` directory
-   - Updated in `.tts-narration-cache.json`
-   - Loaded in browser with cache-busting
-5. In Manual+Audio mode, the new audio plays immediately
+- **React 18** + **TypeScript** — type-safe UI components
+- **Vite 5** — dev server and builds
+- **Framer Motion** — animations and transitions
+- **Vitest** — testing (126 tests across 14 files)
+- **ReactFlow** — flow diagram visualizations
 
-**How It Works:**
-- **Remote TTS Server**: Generates audio from narration text
-- **Local Vite Plugin**: Writes audio file to disk via `/api/save-audio` endpoint
-- **Browser Client**: Coordinates between remote generation and local storage
-- **Cache-Busting**: Adds timestamp query param to force browser reload
+## Documentation
 
-**Visual Feedback:**
-- ⏳ Loading spinner during generation
-- ✓ Green success toast with segment name
-- ✗ Red error toast if generation fails
-- All toasts auto-dismiss after 3-5 seconds
+Detailed docs in [`docs/`](docs/):
 
-**Use Cases:**
-- Quick iteration on narration without full rebuild
-- Fix audio issues during presentation rehearsal
-- Experiment with different narration styles
-- Test TTS quality for specific segments
+| Doc | Topic |
+|-----|-------|
+| [ARCHITECTURE.md](docs/ARCHITECTURE.md) | System architecture and design decisions |
+| [ADDING_DEMOS.md](docs/ADDING_DEMOS.md) | How to create new demos |
+| [FRAMEWORK.md](docs/FRAMEWORK.md) | Framework API reference |
+| [COMPONENTS.md](docs/COMPONENTS.md) | Component documentation |
+| [THEMING.md](docs/THEMING.md) | Theme system and customization |
+| [TIMING_SYSTEM.md](docs/TIMING_SYSTEM.md) | Three-level timing hierarchy |
+| [NARRATION_SYSTEM_GUIDE.md](docs/NARRATION_SYSTEM_GUIDE.md) | Inline and external narration |
+| [TTS_GUIDE.md](docs/TTS_GUIDE.md) | TTS generation workflow |
+| [TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) | Common issues and solutions |
 
-**Technical Details:**
-- Only works in development mode (Vite dev server required)
-- Requires remote TTS server accessibility
-- Files persist across browser refreshes
-- Cache stays synchronized automatically
-
-**Troubleshooting:**
-- If button shows error: Check TTS server is running and accessible
-- If audio doesn't reload: Try navigating away and back to the segment
-- If files don't save: Check file permissions on `public/audio/` directory
-- For network issues: Verify TTS server URL in `public/tts-config.json`
-
-### Demo Features
-
-**Presentation Modes:**
-1. **Narrated Mode** (▶ Narrated)
-   - Auto-advances through slides with synchronized audio
-   - Plays all audio segments sequentially
-   - Ideal for hands-free viewing or recording
-
-2. **Manual Mode** (⌨ Manual Silent)
-   - Navigate slides with arrow keys
-   - No audio playback
-   - Best for quick review or exploration
-
-3. **Manual + Audio** (⌨ Manual + Audio)
-   - Navigate slides manually with arrow keys
-   - Plays audio for each slide you visit
-   - Optional auto-advance when audio ends
-   - Prevents audio overlap with smart cleanup
-   - **Audio regeneration**: Regenerate audio for current segment on-the-fly (see below)
-
-**Navigation:**
-- Arrow keys: Previous/Next slide
-- Space: Next slide
-- Number keys: Jump to slide
-- Visual progress indicators with clickable dots
-- Slide counter showing current position (Ch:S format)
-
-**Animated Visualizations:**
-- **Ch0**: Blank intro slide
-- **Ch1** (3 slides): Comprehensive product introduction
-  - What is Meeting Highlights
-  - How to access via BizChat
-  - How to access via SharePoint
-- **Ch2**: Team collaboration (9-segment progressive reveal with team logos and architecture flow)
-- **Ch4**: Highlight types (extractive vs abstractive)
-- **Ch5** (1 slide): COGS Challenge - challenge framing with initial metrics
-- **Ch6** (2 slides): Optimization Solution
-  - Unified convergence animation (4→1 call)
-  - 60% token optimization
-- **Ch7** (3 slides): Business Impact
-  - GPU reduction animation (600→200)
-  - Quality comparison metrics
-  - Path to GA rollout
-- **Ch8**: User satisfaction (80% useful, 96% likely to reuse)
-- **Ch9** (2 slides): Testimonials and thank you/call-to-action
-**Accessibility**
-- Reduced-motion toggle (top-left corner) respects `prefers-reduced-motion`
-- All animations gracefully degrade to instant transitions when reduced motion is enabled
-- ARIA labels on all interactive controls
-- Keyboard-first navigation design
-
-### Demo Source Structure
-
-The codebase is split into a reusable **framework** and project-specific **demo content**:
-
-**Framework** (`src/framework/`):
-- [`src/framework/components/SlidePlayer.tsx`](presentation-app/src/framework/components/SlidePlayer.tsx) - Slide navigation & transitions
-- [`src/framework/components/NarratedController.tsx`](presentation-app/src/framework/components/NarratedController.tsx) - Audio-synced presentation controller
-- [`src/framework/components/VideoPlayer.tsx`](presentation-app/src/framework/components/VideoPlayer.tsx) - Demo video player component
-- [`src/framework/components/MetricTile.tsx`](presentation-app/src/framework/components/MetricTile.tsx) - Reusable metric tile component
-- [`src/framework/slides/SlideStyles.ts`](presentation-app/src/framework/slides/SlideStyles.ts) - Shared styling utilities
-- [`src/framework/slides/AnimationVariants.ts`](presentation-app/src/framework/slides/AnimationVariants.ts) - Shared animation definitions
-- [`src/framework/slides/SlideLayouts.tsx`](presentation-app/src/framework/slides/SlideLayouts.tsx) - Reusable layout components
-- [`src/framework/slides/SlideIcons.tsx`](presentation-app/src/framework/slides/SlideIcons.tsx) - Shared icon components
-- [`src/framework/accessibility/ReducedMotion.tsx`](presentation-app/src/framework/accessibility/ReducedMotion.tsx) - Motion preferences context
-- [`src/framework/demos/DemoRegistry.ts`](presentation-app/src/framework/demos/DemoRegistry.ts) - Demo registration and lazy loading
-
-**Demo Content** (`src/demos/`):
-- [`src/demos/registry.ts`](presentation-app/src/demos/registry.ts) - Demo registrations (side-effect import)
-- [`src/demos/meeting-highlights/`](presentation-app/src/demos/meeting-highlights/) - Meeting Highlights demo
-  - `slides/SlidesRegistry.ts` - Slide component registry
-  - `slides/chapters/Chapter{N}.tsx` - Slide definitions by chapter
-
-**App Entry**:
-- [`index.html`](presentation-app/index.html) - Entry point
-- [`src/main.tsx`](presentation-app/src/main.tsx) - React initialization
-- [`src/App.tsx`](presentation-app/src/App.tsx) - Main app with demo selection
-
-**Scripts**:
-- [`scripts/generate-tts.ts`](presentation-app/scripts/generate-tts.ts) - TTS audio generation with smart caching
-- [`scripts/calculate-durations.ts`](presentation-app/scripts/calculate-durations.ts) - Audio duration calculation
-- [`scripts/check-tts-cache.ts`](presentation-app/scripts/check-tts-cache.ts) - Pre-flight cache validation
-
-### Technology Stack
-- **React 18** + **TypeScript** for type-safe UI components
-- **Vite** for fast development and optimized builds
-- **Framer Motion** for sophisticated animations and transitions
-- **CSS-in-JS** inline styles for component-scoped styling
-
-### npm Scripts
-
-**Development:**
-- `npm run dev` - Start development server (checks TTS cache first)
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-
-**TTS Generation:**
-- `npm run tts:generate` - Generate all TTS audio files (cleans up unused files first)
-- `npm run tts:generate -- --skip-existing` - Only generate changed/new files (smart cache)
-- `npm run tts:duration` - Calculate and report audio durations
-
-**TTS Cleanup Workflow:**
-1. Scans `public/audio/` directories for WAV files
-2. Compares against slides in `SlidesRegistry.ts`
-3. Identifies orphaned files (not referenced by any slide)
-4. Identifies orphaned cache entries (no corresponding slide)
-5. Prompts: "Do you want to remove these unused files? (y/n)"
-6. Deletes files and updates cache on confirmation
-
-**Output:**
-- `public/audio/` - Generated audio files organized by chapter
-- `public/videos/` - Demo video files (MP4 format)
-- `.tts-narration-cache.json` - Narration text cache for change detection
-- `duration-report.json` - Audio duration analysis
-
-### Demo Video Integration
-
-The presentation includes an embedded video player component for displaying Meeting Highlights demo videos:
-
-**Video Player Component:**
-- **Location**: [`src/components/VideoPlayer.tsx`](presentation-app/src/components/VideoPlayer.tsx)
-- **Features**:
-  - Freeze-on-end playback (video pauses on last frame)
-  - Synchronized with slide narration segments
-  - Framer Motion animations for smooth entry/exit
-  - Responsive sizing and positioning
-  - Multiple video support across different slides
-
-**Video Storage:**
-- Videos stored in `public/videos/` directory
-- Format: MP4
-- Referenced in slide metadata via `videoPath` property
-
-**Available Demo Videos:**
-- **`meeting_highlights_usage_in_bizchat.mp4`** - Demonstrates how users access Meeting Highlights through BizChat, showing the CIQ interface and Meeting Highlights player in action
-
-**Usage in Slides:**
-```typescript
-export const Ch1_S2_HowToAccess = {
-  metadata: {
-    chapter: 1,
-    slide: 2,
-    title: "How to Access",
-    videoPath: '/videos/meeting_highlights_usage_in_bizchat.mp4',
-    audioSegments: [
-      {
-        id: 'intro',
-        narrationText: 'Let me show you how Meeting Highlights works...',
-        audioFilePath: '/audio/c1/s2_segment_01_intro.wav'
-      }
-    ]
-  }
-}
-```
-
-### Architecture Documentation
-Detailed technical decisions and component structure: [`ARCHITECTURE.md`](presentation-app/ARCHITECTURE.md)
-
-### Summary
-The consolidation from 4 calls to 1, combined with 60% input token reduction, reduced projected GPU needs (~600 → ~200) and is estimated to cut COGS by over 70%. This produced higher-quality highlight videos (detailed vs generic, natural vs robotic), directly enabling scaled rollout within approved capacity constraints. Internal reviewers strongly prefer the unified prompt output.
-
-### Chapter Files & Slide Structure
-
-The presentation includes narrated subtitle files organized in chapter-specific folders under [`highlights_demo/chapters/`](highlights_demo/chapters/).
-
-#### Directory Structure
-```
-highlights_demo/chapters/
-├── c2/                    # Chapter 2: Team Collaboration
-│   └── s1_team_collaboration.srt
-├── c5/                    # Chapter 5: COGS Challenge
-│   ├── s1_challenge_framing.srt
-│   ├── s2_four_prompts.srt
-│   ├── s3_gpu_requirements.srt
-│   ├── s4_latency_complexity.srt
-│   └── s5_need_reduction.srt
-├── c6/                    # Chapter 6: Optimization Solution
-│   ├── s1_unified_convergence.srt
-│   ├── s2_unified_flow.srt
-│   ├── s3_single_invocation.srt
-│   ├── s4_token_optimization.srt
-│   └── s5_model_tuning.srt
-└── c7/                    # Chapter 7: Business Impact
-    ├── s1_call_reduction.srt
-    ├── s2_gpu_reduction.srt
-    ├── s3_cost_curve.srt
-    ├── s4_quality_comparison.srt
-    └── s5_path_to_ga.srt
-```
-
-#### File Naming Convention
-- **Folder**: `cX/` where X is the chapter number
-- **File**: `sY_description.srt` where Y is the slide number within that chapter
-- Each file represents one slide in the presentation
-- Each slide may contain multiple segments (utterances) with timing information
-
-#### Slide File Format
-Each slide file includes:
-1. **React Component Reference** (comment lines at top)
-   ```
-   # React Component: Ch5_S1_ChallengeFraming
-   # Location: presentation-app/src/slides/AnimatedSlides.tsx:52
-   ```
-2. **Segment entries** with visual descriptions and narration:
-   ```
-   1 - Visual description
-   00:00:00,000 --> 00:00:04,000
-   Narration text for this segment
-   ```
-
-Each segment includes:
-- **Segment number and visual description** - What appears on screen during this utterance
-- **Timing information** - Start and end timestamps in SRT format
-- **Narration text** - The spoken content for this segment
-
-#### Current Chapters
-
-**Chapter 2: Team Collaboration**
-- [`s1_team_collaboration.srt`](highlights_demo/chapters/c2/s1_team_collaboration.srt) - 8 segments showing team logos (ODSP, MSAI-Hive, Clipchamp, Loop, BizChat, Teams)
-
-**Chapter 5: COGS Challenge** (5 slides)
-- [`s1_challenge_framing.srt`](highlights_demo/chapters/c5/s1_challenge_framing.srt) - Cost efficiency critical for scale
-- [`s2_four_prompts.srt`](highlights_demo/chapters/c5/s2_four_prompts.srt) - Four LLM calls visualization
-- [`s3_gpu_requirements.srt`](highlights_demo/chapters/c5/s3_gpu_requirements.srt) - GPU requirements (~600)
-- [`s4_latency_complexity.srt`](highlights_demo/chapters/c5/s4_latency_complexity.srt) - Latency and complexity impact
-- [`s5_need_reduction.srt`](highlights_demo/chapters/c5/s5_need_reduction.srt) - Need for dramatic cost reduction
-
-**Chapter 6: Optimization Solution** (5 slides)
-- [`s1_unified_convergence.srt`](highlights_demo/chapters/c6/s1_unified_convergence.srt) - Four prompts collapse into one
-- [`s2_unified_flow.srt`](highlights_demo/chapters/c6/s2_unified_flow.srt) - Algorithm preserved as reasoning chain
-- [`s3_single_invocation.srt`](highlights_demo/chapters/c6/s3_single_invocation.srt) - Single invocation replaces four calls
-- [`s4_token_optimization.srt`](highlights_demo/chapters/c6/s4_token_optimization.srt) - 60% input token reduction
-- [`s5_model_tuning.srt`](highlights_demo/chapters/c6/s5_model_tuning.srt) - Model tuning for slimmer schema
-
-**Chapter 7: Business Impact** (5 slides)
-- [`s1_call_reduction.srt`](highlights_demo/chapters/c7/s1_call_reduction.srt) - 75% call reduction + 60% token reduction
-- [`s2_gpu_reduction.srt`](highlights_demo/chapters/c7/s2_gpu_reduction.srt) - GPU reduction (600→200)
-- [`s3_cost_curve.srt`](highlights_demo/chapters/c7/s3_cost_curve.srt) - 70% COGS reduction curve
-- [`s4_quality_comparison.srt`](highlights_demo/chapters/c7/s4_quality_comparison.srt) - Quality metrics comparison
-- [`s5_path_to_ga.srt`](highlights_demo/chapters/c7/s5_path_to_ga.srt) - Enables preview and GA rollout
-
-**Other Chapters** (Legacy SRT format - to be migrated):
-- **Chapter 1**: Product introduction (8 captions)
-- **Chapter 3**: Generation workflow (6 captions)
-- **Chapter 4**: Highlight types and storage (5 captions)
-- **Chapter 8**: User reception (4 captions)
-- **Chapter 9**: Testimonials and future (7 captions)
+Per-demo documentation lives in `docs/demos/{demo-id}/`.
