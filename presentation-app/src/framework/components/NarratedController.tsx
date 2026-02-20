@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { hasAudioSegments, SlideComponentWithMetadata } from '../slides/SlideMetadata';
 import { useSegmentContext } from '../contexts/SegmentContext';
 import type { DemoMetadata } from '../demos/types';
-import { resolveTimingConfig, TimingConfig } from '../demos/timing/types';
+import { resolveTimingConfig, TimingConfig, DEFAULT_START_TRANSITION } from '../demos/timing/types';
+import type { StartTransition } from '../demos/timing/types';
 import { NarrationEditModal } from './NarrationEditModal';
 import { getConfig } from '../config';
 import { StartOverlay } from './narrated/StartOverlay';
@@ -14,6 +15,7 @@ import { useNotifications } from '../hooks/useNotifications';
 import { useRuntimeTimer } from '../hooks/useRuntimeTimer';
 import { useApiHealth } from '../hooks/useApiHealth';
 import { useNarrationEditor } from '../hooks/useNarrationEditor';
+import { useTheme } from '../theme/ThemeContext';
 
 // Fallback audio file for missing segments
 const getFallbackAudio = () => getConfig().fallbackAudioPath;
@@ -43,6 +45,7 @@ const loadAudioWithFallback = async (primaryPath: string, segmentId: string): Pr
 export interface NarratedControllerProps {
   demoMetadata: DemoMetadata;
   demoTiming?: TimingConfig;
+  startTransition?: StartTransition;
   slides: SlideComponentWithMetadata[];
   onSlideChange: (chapter: number, slide: number) => void;
   onPlaybackStart?: () => void;
@@ -53,6 +56,7 @@ export interface NarratedControllerProps {
 export const NarratedController: React.FC<NarratedControllerProps> = ({
   demoMetadata,
   demoTiming,
+  startTransition,
   slides,
   onSlideChange,
   onPlaybackStart,
@@ -70,6 +74,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
   const [isManualMode, setIsManualMode] = useState(false);
   const [audioEnabled, setAudioEnabled] = useState(true);
   const [autoAdvanceOnAudioEnd, setAutoAdvanceOnAudioEnd] = useState(false);
+  const [startSilenceActive, setStartSilenceActive] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const currentIndexRef = useRef(currentIndex);
@@ -77,6 +82,9 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
 
   // Segment context for multi-segment slides
   const segmentContext = useSegmentContext();
+
+  // Theme for overlay
+  const theme = useTheme();
 
   // Extracted hooks
   const { notifications, showSuccess, showError, showWarning } = useNotifications();
@@ -151,6 +159,18 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
   useEffect(() => {
     if (!isPlaying || currentIndex >= allSlides.length || isManualMode) return;
 
+    // Start silence: delay before the first slide appears
+    if (currentIndex === 0 && startSilenceActive) {
+      const timing = resolveTimingConfig(demoTiming);
+      if (timing.beforeFirstSlide > 0) {
+        const timer = setTimeout(() => setStartSilenceActive(false), timing.beforeFirstSlide);
+        return () => clearTimeout(timer);
+      }
+      // beforeFirstSlide is 0, proceed immediately
+      setStartSilenceActive(false);
+      return;
+    }
+
     const currentSlide = allSlides[currentIndex].metadata;
     const slideKey = `Ch${currentSlide.chapter}:U${currentSlide.slide}`;
 
@@ -169,7 +189,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isPlaying, currentIndex, isManualMode]);
+  }, [isPlaying, currentIndex, isManualMode, startSilenceActive]);
 
   // Play slide segments
   const playSlideSegments = useCallback((slideMetadata: typeof allSlides[0]['metadata'], slideKey: string) => {
@@ -247,6 +267,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     if (allSlides.length === 0) { setError('No slides to play'); return; }
     setFinalElapsedSeconds(null);
     setShowStartOverlay(false);
+    setStartSilenceActive(true);
     setIsPlaying(true);
     setIsManualMode(false);
     setCurrentIndex(0);
@@ -375,6 +396,23 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
         onStartNarrated={handleStart}
         onStartManual={handleManualMode}
       />
+
+      <AnimatePresence>
+        {startSilenceActive && !showStartOverlay && (
+          <motion.div
+            key="start-silence"
+            initial={{ opacity: 1 }}
+            exit={{ ...DEFAULT_START_TRANSITION.exit, ...startTransition?.exit }}
+            transition={{ ...DEFAULT_START_TRANSITION.transition, ...startTransition?.transition }}
+            style={{
+              position: 'fixed',
+              inset: 0,
+              backgroundColor: theme.colors.bgDeep,
+              zIndex: 50,
+            }}
+          />
+        )}
+      </AnimatePresence>
 
       {(isPlaying || isManualMode) && !hideInterface && currentIndex < allSlides.length && (
         <ProgressBar

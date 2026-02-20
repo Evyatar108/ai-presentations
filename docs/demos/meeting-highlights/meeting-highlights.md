@@ -6,16 +6,13 @@ The Meeting Highlights demo is a comprehensive presentation about the Meeting Hi
 
 ## Demo Structure
 
-**Total Slides**: 15 slides across 9 chapters  
+**Total Slides**: 14 slides across 8 chapters
 **Duration**: ~4:07 minutes (audio only, actual runtime longer with delays)  
 **Default Mode**: Narrated
 
 ### Chapter Breakdown
 
 ### Chapter Breakdown
-
-#### Chapter 0: Introduction (1 slide)
-- **Ch0_S1_Intro** - Opening title slide
 
 #### Chapter 1: What is Meeting Highlights (3 slides)
 - **Ch1_S1_ProductIntro** - Introduction to the feature
@@ -175,7 +172,7 @@ The presentation was intentionally simplified from a more technical version:
 - Removed redundant architecture overview (Chapter 3 deleted)
 - Removed intermediate algorithm flow details (Chapter 6: 5 slides → 2 slides)
 - Removed redundant metrics slides (Chapter 7: 5 slides → 3 slides)
-- **Result**: 15 total slides (down from 23), clearer narrative flow
+- **Result**: 14 total slides (down from 23), clearer narrative flow
 
 ### Business Impact Focus
 - Starts with "what" (product introduction with videos)
@@ -205,11 +202,13 @@ Located in `public/images/meeting-highlights/`:
   - Teams.png
 
 ### Audio
-Located in `public/audio/meeting-highlights/c{0-9}/`:
+Located in `public/audio/meeting-highlights/c{1-9}/`:
 - Generated via TTS from narration text
 - WAV format, 24kHz mono
 - ~65 audio segments total
 - Smart caching tracks changes
+- Start silence before the first slide is handled by the framework `beforeFirstSlide` timing (default 1s)
+- Start transition uses the default 0.8s fade-out (`DEFAULT_START_TRANSITION`)
 
 ## Notable Implementation Details
 

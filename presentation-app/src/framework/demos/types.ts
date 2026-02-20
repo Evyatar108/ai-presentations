@@ -4,7 +4,7 @@
  */
 
 import { SlideComponentWithMetadata } from '../slides/SlideMetadata';
-import { TimingConfig } from './timing/types';
+import { TimingConfig, StartTransition } from './timing/types';
 import { SlideDurationBreakdown } from './timing/calculator';
 
 /**
@@ -69,6 +69,8 @@ export interface DurationInfo {
   slideDelays: number;
   /** Final delay in seconds (after last slide) */
   finalDelay: number;
+  /** Start silence in seconds (before first slide) */
+  startSilence: number;
   /** Total presentation duration in seconds (audio + all delays) */
   total: number;
   /** Optional detailed breakdown per slide */
@@ -100,6 +102,19 @@ export interface DemoConfig {
    * timing: { betweenSegments: 500, betweenSlides: 1000, afterFinalSlide: 2000 }
    */
   timing?: TimingConfig;
+
+  /**
+   * Transition animation for the blank screen overlay that plays
+   * during the beforeFirstSlide silence period.
+   * Controls how the overlay animates away when the first slide appears.
+   *
+   * @example
+   * // Slower fade
+   * startTransition: { transition: { duration: 1.5 } }
+   * // Scale out
+   * startTransition: { exit: { opacity: 0, scale: 1.1 }, transition: { duration: 0.6 } }
+   */
+  startTransition?: StartTransition;
 
   /**
    * Optional TTS style/tone instruction for the entire demo.

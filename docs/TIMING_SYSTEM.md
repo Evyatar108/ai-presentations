@@ -29,6 +29,7 @@ npm run tts:duration -- -v                    # Verbose mode
 
 ## Default Timing Values
 
+- **Before first slide**: 1000ms (blank screen before first slide appears)
 - **Between segments**: 500ms (pause within slides)
 - **Between slides**: 1000ms (transition between slides)
 - **After final slide**: 2000ms (hold before completion)
@@ -38,7 +39,7 @@ npm run tts:duration -- -v                    # Verbose mode
 **Estimated Durations** (calculated by script):
 - Stored in: `src/demos/*/metadata.ts` files
 - Type: `DurationInfo` (exported from `@framework/demos/types`)
-- Format: `durationInfo: { audioOnly, segmentDelays, slideDelays, finalDelay, total, slideBreakdown? }`
+- Format: `durationInfo: { audioOnly, segmentDelays, slideDelays, finalDelay, startSilence, total, slideBreakdown? }`
 - Updated automatically on `npm run dev`
 
 **Actual Runtime** (measured during playback):
@@ -51,11 +52,53 @@ npm run tts:duration -- -v                    # Verbose mode
 
 ## Features
 
+### Start Silence (beforeFirstSlide)
+
+When narrated playback begins, a blank dark screen is shown for `beforeFirstSlide` milliseconds before the first slide appears. This provides a clean visual transition from the start overlay to the first slide's content and audio.
+
+- Default: 1000ms (1 second)
+- Set to `0` to disable: `beforeFirstSlide: 0`
+- Only applies to narrated mode (manual mode is unaffected)
+
+### Start Transition (startTransition)
+
+The `startTransition` option on `DemoConfig` controls how the blank overlay animates away when the first slide appears after the start silence period. It accepts Framer Motion `exit` targets and `transition` timing.
+
+- Default: `{ exit: { opacity: 0 }, transition: { duration: 0.8, ease: 'easeInOut' } }` (fade out)
+- Set on `DemoConfig` (not `TimingConfig`) since it's a visual animation concern, not a numeric delay
+
+**Examples:**
+```typescript
+// Slower fade (1.5s)
+startTransition: { transition: { duration: 1.5 } }
+
+// Scale out with fade
+startTransition: {
+  exit: { opacity: 0, scale: 1.1 },
+  transition: { duration: 0.6 }
+}
+
+// Slide up with fade
+startTransition: {
+  exit: { opacity: 0, y: '-100%' },
+  transition: { duration: 0.5, ease: 'easeIn' }
+}
+
+// Spring physics
+startTransition: {
+  exit: { opacity: 0, scale: 0.8 },
+  transition: { type: 'spring', stiffness: 200, damping: 20 }
+}
+```
+
+**Note**: `startTransition` is separate from `TimingConfig` because it defines a Framer Motion animation object, not a numeric millisecond value, and only applies at the demo level (not slide or segment).
+
 ### Hierarchical Configuration
 Override timing at any level:
 ```typescript
 // Demo-level (in index.ts)
 const timing: TimingConfig = {
+  beforeFirstSlide: 1000,
   betweenSegments: 500,
   betweenSlides: 1000,
   afterFinalSlide: 2000
@@ -128,7 +171,7 @@ The TTS `instruct` parameter (voice style/tone for Qwen3-TTS) follows the same t
 
 ## Backward Compatibility
 
-All timing fields are optional. Demos without timing configuration will use default values (500ms/1000ms/2000ms). The system is fully backward compatible with existing demos.
+All timing fields are optional. Demos without timing configuration will use default values (1000ms/500ms/1000ms/2000ms for beforeFirstSlide/betweenSegments/betweenSlides/afterFinalSlide). The system is fully backward compatible with existing demos.
 
 ## Known Variance
 

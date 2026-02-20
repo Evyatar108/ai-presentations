@@ -104,6 +104,8 @@ Engineering peers familiar with:
 
 - **Audio**: `public/audio/highlights-deep-dive/c{0-10}/` (TTS generated later)
 - **Images**: `public/images/highlights-deep-dive/thumbnail.jpeg`
+- Start silence: Uses the default 1s `beforeFirstSlide` blank screen before the first slide
+- Start transition: Uses the default 0.8s fade-out (`DEFAULT_START_TRANSITION`)
 
 ## Narration Style (Instruct)
 

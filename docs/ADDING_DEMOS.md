@@ -170,6 +170,7 @@ Customize presentation timing delays if defaults aren't suitable.
 import type { DemoConfig, TimingConfig } from '@framework';
 
 const timing: TimingConfig = {
+  beforeFirstSlide: 1000, // Blank screen before first slide (0 to disable)
   betweenSegments: 500,   // Delay between segments within slides
   betweenSlides: 1000,    // Delay between slides
   afterFinalSlide: 2000   // Hold time after final slide
@@ -198,7 +199,8 @@ const durationInfo: DurationInfo = {
   segmentDelays: 8.0,
   slideDelays: 10.0,
   finalDelay: 2.0,
-  total: 140.5,
+  startSilence: 1.0,
+  total: 141.5,
 };
 
 export const metadata: DemoMetadata = {
@@ -209,6 +211,23 @@ export const metadata: DemoMetadata = {
 ```
 
 See [TIMING_SYSTEM.md](TIMING_SYSTEM.md) for detailed timing patterns and examples.
+
+**Customize start transition** (optional):
+
+The blank overlay during start silence fades out by default (0.8s). Override via `startTransition` on `DemoConfig`:
+```typescript
+const demoConfig: DemoConfig = {
+  metadata,
+  timing,
+  startTransition: {
+    exit: { opacity: 0, scale: 1.1 },
+    transition: { duration: 0.6 }
+  },
+  getSlides: async () => { /* ... */ }
+};
+```
+
+See [TIMING_SYSTEM.md](TIMING_SYSTEM.md#start-transition-starttransition) for more examples.
 
 ### Step 11: Configure TTS Instruct (Optional)
 

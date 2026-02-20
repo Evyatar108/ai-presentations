@@ -231,6 +231,19 @@ interface DemoConfig {
   defaultMode?: DemoDefaultMode;
   getSlides: () => Promise<SlideComponentWithMetadata[]>;
   timing?: TimingConfig;
+  startTransition?: StartTransition;
+}
+
+interface StartTransition {
+  exit?: { opacity?: number; scale?: number; x?: number | string; y?: number | string };
+  transition?: { duration?: number; ease?: string | number[]; type?: 'tween' | 'spring'; stiffness?: number; damping?: number };
+}
+
+interface TimingConfig {
+  beforeFirstSlide?: number; // Default: 1000ms
+  betweenSegments?: number;  // Default: 500ms
+  betweenSlides?: number;    // Default: 1000ms
+  afterFinalSlide?: number;  // Default: 2000ms
 }
 
 type DemoDefaultMode = 'narrated' | 'manual' | 'manual-audio';

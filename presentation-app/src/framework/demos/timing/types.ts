@@ -29,11 +29,17 @@ export interface TimingConfig {
    */
   betweenSlides?: number;
   
-  /** 
+  /**
    * Delay after the final slide before showing end overlay.
    * Default: 2000ms
    */
   afterFinalSlide?: number;
+
+  /**
+   * Silence duration before the first slide appears (blank screen).
+   * Default: 1000ms. Set to 0 to disable.
+   */
+  beforeFirstSlide?: number;
   
   /** 
    * Additional custom delays for specific scenarios.
@@ -57,6 +63,7 @@ export const DEFAULT_TIMING: Required<TimingConfig> = {
   betweenSegments: 500,
   betweenSlides: 1000,
   afterFinalSlide: 2000,
+  beforeFirstSlide: 1000,
   custom: {}
 };
 
@@ -88,6 +95,33 @@ export interface ResolvedTimingConfig extends Required<TimingConfig> {}
  * @param configs - Variable number of timing configs to merge (undefined values are skipped)
  * @returns Fully resolved timing configuration with all fields populated
  */
+/**
+ * Transition animation for the start silence overlay.
+ * Controls how the blank screen animates away when the first slide appears.
+ */
+export interface StartTransition {
+  /** Exit animation target. Default: { opacity: 0 } (fade out) */
+  exit?: {
+    opacity?: number;
+    scale?: number;
+    x?: number | string;
+    y?: number | string;
+  };
+  /** Transition timing. Default: { duration: 0.8, ease: 'easeInOut' } */
+  transition?: {
+    duration?: number;
+    ease?: string | number[];
+    type?: 'tween' | 'spring';
+    stiffness?: number;
+    damping?: number;
+  };
+}
+
+export const DEFAULT_START_TRANSITION: Required<Pick<StartTransition, 'exit' | 'transition'>> = {
+  exit: { opacity: 0 },
+  transition: { duration: 0.8, ease: 'easeInOut' },
+};
+
 export function resolveTimingConfig(
   ...configs: (TimingConfig | undefined)[]
 ): ResolvedTimingConfig {
@@ -111,6 +145,11 @@ export function resolveTimingConfig(
     // Override final slide delay if specified
     if (config.afterFinalSlide !== undefined) {
       merged.afterFinalSlide = config.afterFinalSlide;
+    }
+
+    // Override start silence if specified
+    if (config.beforeFirstSlide !== undefined) {
+      merged.beforeFirstSlide = config.beforeFirstSlide;
     }
     
     // Merge custom delays (later custom values override earlier ones)
