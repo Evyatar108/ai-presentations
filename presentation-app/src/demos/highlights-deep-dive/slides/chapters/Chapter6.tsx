@@ -16,8 +16,152 @@ import CodeBlock from '../components/CodeBlock';
 import BeforeAfterSplit from '../components/BeforeAfterSplit';
 
 /**
- * Chapter 6: Pseudocode Algorithm (2 slides)
+ * Chapter 6: Prompt Overview + Pseudocode Algorithm (3 slides)
  */
+
+// ---------- Slide 1: Prompt Overview ----------
+
+const PROMPT_SECTIONS = [
+  { num: 1, name: 'Critical Rules', desc: 'Copy-then-parse pattern + core constraints' },
+  { num: 2, name: 'Algorithm', desc: 'Pseudocode generate_highlights() function' },
+  { num: 3, name: 'Content Priorities', desc: 'Topic guidance, speaker references, style rules' },
+  { num: 4, name: 'Transition Sentences', desc: 'Bridging narration to extractive audio' },
+  { num: 5, name: 'Safety (RAI)', desc: 'Gender/role/emotion guardrails (compressed)' },
+  { num: 6, name: 'Self-Checks', desc: '10 boolean validators on model output' },
+];
+
+const Ch6_S1_PromptOverviewComponent: React.FC = () => {
+  const { reduced } = useReducedMotion();
+  const { isSegmentVisible } = useSegmentedAnimation();
+  const theme = useTheme();
+
+  return (
+    <SlideContainer maxWidth={950}>
+      <AnimatePresence>
+        {isSegmentVisible(0) && (
+          <SlideTitle reduced={reduced} subtitle="Six Sections at a Glance">
+            V2 Prompt Overview
+          </SlideTitle>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {isSegmentVisible(1) && (
+          <motion.div
+            variants={fadeUp(reduced)}
+            initial="hidden"
+            animate="visible"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(3, 1fr)',
+              gap: '0.75rem',
+              marginTop: '0.5rem'
+            }}
+          >
+            {PROMPT_SECTIONS.map((section, i) => (
+              <motion.div
+                key={section.num}
+                initial={{ opacity: 0, y: reduced ? 0 : 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: reduced ? 0.1 : 0.3,
+                  delay: reduced ? 0 : i * 0.08
+                }}
+                style={{
+                  background: theme.colors.bgSurface,
+                  border: `1px solid ${theme.colors.bgBorder}`,
+                  borderRadius: 12,
+                  padding: '1rem 1.1rem',
+                  textAlign: 'left'
+                }}
+              >
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  marginBottom: '0.4rem'
+                }}>
+                  <div style={{
+                    width: 24,
+                    height: 24,
+                    borderRadius: '50%',
+                    background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: 12,
+                    color: '#fff',
+                    fontWeight: 700,
+                    flexShrink: 0
+                  }}>
+                    {section.num}
+                  </div>
+                  <span style={{
+                    ...typography.body,
+                    fontSize: 14,
+                    fontWeight: 700,
+                    color: theme.colors.textPrimary
+                  }}>
+                    {section.name}
+                  </span>
+                </div>
+                <div style={{
+                  ...typography.body,
+                  fontSize: 12,
+                  color: theme.colors.textSecondary,
+                  lineHeight: 1.4
+                }}>
+                  {section.desc}
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {isSegmentVisible(2) && (
+          <motion.div
+            variants={fadeUp(reduced)}
+            initial="hidden"
+            animate="visible"
+            style={{
+              marginTop: '1.25rem',
+              padding: '0.85rem 1.25rem',
+              borderRadius: 10,
+              background: `linear-gradient(135deg, ${theme.colors.primary}15, ${theme.colors.secondary}15)`,
+              borderLeft: `3px solid ${theme.colors.primary}`,
+            }}
+          >
+            <p style={{
+              ...typography.body,
+              fontSize: 14,
+              color: theme.colors.textPrimary,
+              margin: 0,
+              fontStyle: 'italic'
+            }}>
+              Rules & constraints up front, then a precise algorithm, then quality & safety guidelines, and finally self-validation — all processed in a single pass.
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </SlideContainer>
+  );
+};
+
+export const Ch6_S1_PromptOverview = defineSlide({
+  metadata: {
+    chapter: 6,
+    slide: 1,
+    title: 'Prompt Overview',
+    audioSegments: [
+      { id: 'title', audioFilePath: '/audio/highlights-deep-dive/c6/s1_segment_01_title.wav' },
+      { id: 'sections', audioFilePath: '/audio/highlights-deep-dive/c6/s1_segment_02_sections.wav' },
+      { id: 'insight', audioFilePath: '/audio/highlights-deep-dive/c6/s1_segment_03_insight.wav' }
+    ]
+  },
+  component: Ch6_S1_PromptOverviewComponent
+});
 
 const PSEUDOCODE = `def generate_highlights(transcript_markdown):
     """Main pipeline: segment -> narrate -> extract -> rank -> build narrative."""
@@ -62,9 +206,9 @@ const OUTPUT_FIELDS = [
   'self_checks'
 ];
 
-// ---------- Slide 1: Pseudocode ----------
+// ---------- Slide 2: Pseudocode ----------
 
-const Ch6_S1_PseudocodeComponent: React.FC = () => {
+const Ch6_S2_PseudocodeComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
   const { isSegmentVisible } = useSegmentedAnimation();
   const theme = useTheme();
@@ -144,21 +288,21 @@ const Ch6_S1_PseudocodeComponent: React.FC = () => {
   );
 };
 
-export const Ch6_S1_Pseudocode = defineSlide({
+export const Ch6_S2_Pseudocode = defineSlide({
   metadata: {
     chapter: 6,
-    slide: 1,
+    slide: 2,
     title: 'Pseudocode Algorithm',
     audioSegments: [
-      { id: 'title', audioFilePath: '/audio/highlights-deep-dive/c6/s1_segment_01_title.wav' },
-      { id: 'code', audioFilePath: '/audio/highlights-deep-dive/c6/s1_segment_02_code.wav' },
-      { id: 'outputs', audioFilePath: '/audio/highlights-deep-dive/c6/s1_segment_03_outputs.wav' }
+      { id: 'title', audioFilePath: '/audio/highlights-deep-dive/c6/s2_segment_01_title.wav' },
+      { id: 'code', audioFilePath: '/audio/highlights-deep-dive/c6/s2_segment_02_code.wav' },
+      { id: 'outputs', audioFilePath: '/audio/highlights-deep-dive/c6/s2_segment_03_outputs.wav' }
     ]
   },
-  component: Ch6_S1_PseudocodeComponent
+  component: Ch6_S2_PseudocodeComponent
 });
 
-// ---------- Slide 2: Prose vs Pseudocode ----------
+// ---------- Slide 3: Prose vs Pseudocode ----------
 
 const V1_PROSE = `Please identify those key topics and write a short
 summary of each topic. These topics will be the
@@ -186,7 +330,7 @@ const BENEFITS = [
   'Single source of truth'
 ];
 
-const Ch6_S2_ProseVsPseudocodeComponent: React.FC = () => {
+const Ch6_S3_ProseVsPseudocodeComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
   const { isSegmentVisible } = useSegmentedAnimation();
   const theme = useTheme();
@@ -239,15 +383,15 @@ const Ch6_S2_ProseVsPseudocodeComponent: React.FC = () => {
   );
 };
 
-export const Ch6_S2_ProseVsPseudocode = defineSlide({
+export const Ch6_S3_ProseVsPseudocode = defineSlide({
   metadata: {
     chapter: 6,
-    slide: 2,
+    slide: 3,
     title: 'Prose vs Pseudocode',
     audioSegments: [
-      { id: 'comparison', audioFilePath: '/audio/highlights-deep-dive/c6/s2_segment_01_comparison.wav' },
-      { id: 'benefits', audioFilePath: '/audio/highlights-deep-dive/c6/s2_segment_02_benefits.wav' }
+      { id: 'comparison', audioFilePath: '/audio/highlights-deep-dive/c6/s3_segment_01_comparison.wav' },
+      { id: 'benefits', audioFilePath: '/audio/highlights-deep-dive/c6/s3_segment_02_benefits.wav' }
     ]
   },
-  component: Ch6_S2_ProseVsPseudocodeComponent
+  component: Ch6_S3_ProseVsPseudocodeComponent
 });

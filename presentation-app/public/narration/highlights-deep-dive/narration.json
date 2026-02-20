@@ -211,6 +211,31 @@
     {
       "chapter": 4,
       "slide": 2,
+      "title": "Candidate Rows",
+      "segments": [
+        {
+          "id": "title",
+          "narrationText": "What does that nested loop actually produce? Let's look at a concrete example with five utterances.",
+          "visualDescription": "Title: 'Candidate Rows'",
+          "notes": ""
+        },
+        {
+          "id": "rows",
+          "narrationText": "Each candidate is a contiguous range of utterances — start to end — with the full text of every utterance in that range. Notice how the ranges overlap. Utterances one and two appear in almost every candidate, their text duplicated each time.",
+          "visualDescription": "Six candidate rows animate in showing overlapping utterance ranges as colored bars",
+          "notes": ""
+        },
+        {
+          "id": "waste",
+          "narrationText": "Utterance two alone appears in five of the six candidates. That's the same text sent to the model five times. Now multiply that across thirty utterances per topic and five topics per meeting.",
+          "visualDescription": "Duplication callout: u2 appears in 5 of 6 candidates",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 4,
+      "slide": 3,
       "title": "O(n^2) Visualized",
       "instruct": "Speak with building intensity, like revealing the scale of a problem.",
       "segments": [
@@ -287,6 +312,31 @@
     {
       "chapter": 6,
       "slide": 1,
+      "title": "Prompt Overview",
+      "segments": [
+        {
+          "id": "title",
+          "narrationText": "Before we zoom into specific techniques, here's the full V2 prompt at a glance. Everything that took four separate prompts in V1 lives in a single document with six sections.",
+          "visualDescription": "Title: 'V2 Prompt: Six Sections at a Glance'",
+          "notes": ""
+        },
+        {
+          "id": "sections",
+          "narrationText": "Section one: critical rules — the copy-then-parse pattern and core constraints like topic non-overlap. Section two: the algorithm — pseudocode defining the entire pipeline. Section three: content priorities — what makes a good topic, speaker references, style rules. Section four: transition sentences — how to bridge from narration to raw audio. Section five: compressed safety rules. And section six: self-checks — boolean validators the model runs on its own output.",
+          "visualDescription": "Six section cards in a 3x2 grid, each with number, name, and one-line description",
+          "notes": ""
+        },
+        {
+          "id": "insight",
+          "narrationText": "Notice the structure. Rules and constraints up front, then a precise algorithm, then guidelines for quality and safety, and finally self-validation. Each section has a clear job — and the model processes them all in a single pass.",
+          "visualDescription": "Callout box highlighting the logical progression of sections",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 6,
+      "slide": 2,
       "title": "Pseudocode Algorithm",
       "segments": [
         {
@@ -311,7 +361,7 @@
     },
     {
       "chapter": 6,
-      "slide": 2,
+      "slide": 3,
       "title": "Prose vs Pseudocode",
       "segments": [
         {
@@ -335,19 +385,19 @@
       "segments": [
         {
           "id": "title",
-          "narrationText": "The third innovation: copy-then-parse — a chain-of-thought grounding technique that prevents the model from hallucinating IDs and references.",
+          "narrationText": "The third innovation: copy-then-parse. The idea is to break the model's work into two subtasks — a simple one that almost always succeeds, followed by a harder one that benefits from having the first result in context.",
           "visualDescription": "Title: 'Copy-then-Parse: Chain-of-Thought Grounding'",
           "notes": ""
         },
         {
           "id": "copy",
-          "narrationText": "Step one: copy raw strings verbatim from the input — the turn opening tag, the pipe-delimited row. Literal copies, not interpretations.",
+          "narrationText": "Step one: copy raw strings verbatim from the input — the turn opening tag, the pipe-delimited row. This is deliberately easy. The model just echoes what it sees. And now those exact strings sit at the bottom of the output, right where the model looks when generating its next tokens.",
           "visualDescription": "CodeBlock Step 1: model copies raw strings from input",
           "notes": ""
         },
         {
           "id": "parse",
-          "narrationText": "Step two: parse structured values from those copies. Speaker name from the turn tag, turn ID by stripping the prefix, utterance ID the same way. If any parsed value doesn't match its source string, we know something went wrong.",
+          "narrationText": "Step two: parse structured values from those copies. Speaker name from the turn tag, turn ID by stripping the t prefix, utterance ID by stripping the u. Because the raw strings are right there in context — just tokens back — the model is far more likely to parse correctly than if it had to retrieve values from the original input thousands of tokens above.",
           "visualDescription": "CodeBlock Step 2: model parses from copies with arrows showing derivation",
           "notes": ""
         }

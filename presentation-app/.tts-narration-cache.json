@@ -310,21 +310,6 @@
       "instruct": "Speak with firm conviction, slower pace, emphasizing every word.",
       "generatedAt": "2026-02-20T14:23:55.468Z"
     },
-    "c4\\s2_segment_01_grid.wav": {
-      "narrationText": "Each lit cell is one candidate range. Watch how quickly they multiply.",
-      "instruct": "Speak with building intensity, like revealing the scale of a problem.",
-      "generatedAt": "2026-02-20T14:28:17.229Z"
-    },
-    "c4\\s2_segment_02_math.wav": {
-      "narrationText": "At real scale: thirty utterances per topic gives four hundred thirty-five candidates. Multiply across five topics — over two thousand rows.",
-      "instruct": "Speak with building intensity, like revealing the scale of a problem.",
-      "generatedAt": "2026-02-20T14:28:17.230Z"
-    },
-    "c4\\s2_segment_03_context_window.wav": {
-      "narrationText": "The V1 code then greedily packs these candidates into the prompt until it fills the entire 128K context window. This is why a single extractives call could consume more tokens than all other calls combined.",
-      "instruct": "Speak with building intensity, like revealing the scale of a problem.",
-      "generatedAt": "2026-02-20T14:28:17.233Z"
-    },
     "c8\\s1_segment_01_title.wav": {
       "narrationText": "So what were the results?",
       "instruct": "Speak with energy and pride, celebrating the achievement.",
@@ -425,26 +410,6 @@
       "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
       "generatedAt": "2026-02-20T14:12:03.919Z"
     },
-    "c6\\s1_segment_02_code.wav": {
-      "narrationText": "Here's the main function from the V2 prompt. It reads like executable code — parse turn markers, skip intro and closing, segment into topics, write narration, enumerate extractive candidates, filter, rank, and build the final narrative.",
-      "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-20T14:12:03.921Z"
-    },
-    "c6\\s1_segment_03_outputs.wav": {
-      "narrationText": "All six output fields in a single response: topics, order, ranges, ranking, narrative, and self-checks.",
-      "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-20T14:12:03.923Z"
-    },
-    "c6\\s2_segment_01_comparison.wav": {
-      "narrationText": "On the left, V1's prose — vague guidance about coverage and distinctness. On the right, V2's pseudocode — explicit function calls with constraints and named variables.",
-      "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-20T14:12:03.925Z"
-    },
-    "c6\\s2_segment_02_benefits.wav": {
-      "narrationText": "Four benefits. Unambiguous execution order. Named variables as shared state. More precision than prose. And a single source of truth — one prompt, not four.",
-      "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-20T14:12:03.928Z"
-    },
     "c7\\s1_segment_01_title.wav": {
       "narrationText": "The third innovation: copy-then-parse — a chain-of-thought grounding technique that prevents the model from hallucinating IDs and references.",
       "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
@@ -480,5 +445,7 @@
       "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
       "generatedAt": "2026-02-20T14:20:27.335Z"
     }
-  }
+  },
+  "example-demo-1": {},
+  "example-demo-2": {}
 }
