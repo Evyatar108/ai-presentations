@@ -7,6 +7,8 @@ import {
   defineSlide,
   SlideContainer,
   SlideTitle,
+  Reveal,
+  RevealSequence,
   typography,
   fadeUp,
   expandWidth,
@@ -450,43 +452,36 @@ const Ch4_S4_OutputSafetyComponent: React.FC = () => {
 
   return (
     <SlideContainer maxWidth={950}>
-      {/* Segment 0: Extractive Input Example */}
-      <AnimatePresence>
-        {isSegmentVisible(0) && (
-          <motion.div
-            variants={fadeUp(reduced)}
-            initial="hidden"
-            animate="visible"
+      <RevealSequence>
+        {/* Segment 0: Extractive Input Example — disappears at segment 2 */}
+        <Reveal from={0} until={1} animation={fadeUp}>
+          <motion.h1
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: reduced ? 0.2 : 0.5 }}
+            style={{ ...typography.h1, marginBottom: '0.5rem' }}
           >
-            <motion.h1
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: reduced ? 0.2 : 0.5 }}
-              style={{ ...typography.h1, marginBottom: '0.5rem' }}
-            >
-              What the Model Receives
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: reduced ? 0.2 : 0.5, delay: reduced ? 0 : 0.2 }}
-              style={{ ...typography.caption, marginBottom: '1rem' }}
-            >
-              V1 Call 2 (Extractives): Input
-            </motion.p>
+            What the Model Receives
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: reduced ? 0.2 : 0.5, delay: reduced ? 0 : 0.2 }}
+            style={{ ...typography.caption, marginBottom: '1rem' }}
+          >
+            V1 Call 2 (Extractives): Input
+          </motion.p>
 
-            <CodeBlock
-              code={EXTRACTIVE_INPUT_TABLE}
-              language="markdown"
-              fontSize={12}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
+          <CodeBlock
+            code={EXTRACTIVE_INPUT_TABLE}
+            language="markdown"
+            fontSize={12}
+          />
+        </Reveal>
 
-      {/* Segment 1: Call 2's Full Picture */}
-      <AnimatePresence>
-        {isSegmentVisible(1) && (
+        {/* Segment 1: Call 2's Full Picture */}
+        <AnimatePresence>
+          {isSegmentVisible(1) && (
           <motion.div
             variants={fadeUp(reduced)}
             initial="hidden"
@@ -602,20 +597,13 @@ const Ch4_S4_OutputSafetyComponent: React.FC = () => {
         )}
       </AnimatePresence>
 
-      {/* Segment 2: Why Precompute? */}
-      <AnimatePresence>
-        {isSegmentVisible(2) && (
-          <motion.div
-            variants={staggerContainer(reduced, 0.15)}
-            initial="hidden"
-            animate="visible"
-            style={{
+      {/* Segment 2: Why Precompute? — enters after segment 0 exits */}
+      <Reveal from={2} animation={(r) => staggerContainer(r, 0.15)} style={{
               display: 'flex',
               flexDirection: 'column',
               gap: '1rem',
               marginTop: '2rem',
-            }}
-          >
+            }}>
             {/* WITH precomputation */}
             <motion.div
               variants={tileVariants(reduced)}
@@ -693,9 +681,8 @@ const Ch4_S4_OutputSafetyComponent: React.FC = () => {
                 <span style={{ color: theme.colors.error, fontWeight: 700 }}>broken video</span>
               </div>
             </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      </Reveal>
+      </RevealSequence>
 
       {/* Segment 3: The Trade-Off and V2 Preview */}
       <AnimatePresence>

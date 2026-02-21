@@ -32,7 +32,7 @@ export { HoverButton } from './components/HoverButton';
 export type { HoverButtonProps } from './components/HoverButton';
 
 // Reveal components
-export { Reveal, RevealGroup, RevealContext } from './components/reveal';
+export { Reveal, RevealGroup, RevealContext, RevealSequence } from './components/reveal';
 export type { RevealProps, RevealGroupProps, RevealContextProps, RevealAnimation, RevealVisibilityProps } from './components/reveal';
 
 // Contexts

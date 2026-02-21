@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { Variants } from 'framer-motion';
+import type { TargetAndTransition, Variants } from 'framer-motion';
 import { useSegmentedAnimation } from '../../contexts/SegmentContext';
 import { useReducedMotion } from '../../accessibility/ReducedMotion';
 import { fadeIn } from '../../slides/AnimationVariants';
@@ -12,6 +12,8 @@ interface RevealVisibilityResult {
   visible: boolean;
   /** Resolved Framer Motion variants (hidden/visible). */
   variants: Variants;
+  /** Resolved exit animation. */
+  exit: TargetAndTransition;
   /** Whether reduced motion is active. */
   reduced: boolean;
 }
@@ -23,6 +25,7 @@ interface RevealVisibilityResult {
 export function useRevealVisibility(
   visibilityProps: RevealVisibilityProps,
   animationProp?: RevealAnimation,
+  exitAnimationProp?: RevealAnimation,
 ): RevealVisibilityResult {
   const { currentSegmentIndex, isSegmentVisible, isSegmentVisibleById } = useSegmentedAnimation();
   const { reduced } = useReducedMotion();
@@ -63,5 +66,15 @@ export function useRevealVisibility(
     return typeof raw === 'function' ? raw(reduced) : raw;
   }, [animationProp, contextAnimation, reduced]);
 
-  return { visible, variants, reduced };
+  // Exit resolution: explicit exitAnimation > variants.exit > variants.hidden > opacity:0
+  const exit = useMemo<TargetAndTransition>(() => {
+    if (exitAnimationProp) {
+      const resolved = typeof exitAnimationProp === 'function' ? exitAnimationProp(reduced) : exitAnimationProp;
+      // Use the hidden state from the exit variants as the exit target
+      return (resolved.hidden ?? resolved.exit ?? { opacity: 0 }) as TargetAndTransition;
+    }
+    return (variants.exit ?? variants.hidden ?? { opacity: 0 }) as TargetAndTransition;
+  }, [exitAnimationProp, variants, reduced]);
+
+  return { visible, variants, exit, reduced };
 }

@@ -1,9 +1,10 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { AnimatePresence, motion, type TargetAndTransition, type Variants } from 'framer-motion';
 import { useReducedMotion } from '../../accessibility/ReducedMotion';
 import { fadeUp } from '../../slides/AnimationVariants';
 import type { RevealGroupProps, RevealAnimation } from './types';
 import { useRevealVisibility } from './useRevealVisibility';
+import { useRevealSequence } from './RevealSequence';
 
 // Map of element types to their motion counterparts
 const motionElements = {
@@ -45,6 +46,7 @@ function resolveAnimation(anim: RevealAnimation, reduced: boolean): Variants {
  */
 export const RevealGroup: React.FC<RevealGroupProps> = ({
   animation,
+  exitAnimation,
   as = 'div',
   className,
   style,
@@ -55,9 +57,25 @@ export const RevealGroup: React.FC<RevealGroupProps> = ({
   childAnimation = fadeUp,
   ...visibilityProps
 }) => {
-  const { visible, variants } = useRevealVisibility(visibilityProps, animation);
+  const { visible, variants, exit: resolvedExit } = useRevealVisibility(visibilityProps, animation, exitAnimation);
   const { reduced } = useReducedMotion();
   const MotionElement = motionElements[as];
+  const sequence = useRevealSequence();
+
+  // Track whether this group was actually rendered (mounted in AnimatePresence).
+  const wasRenderedRef = useRef(false);
+
+  // Suppress entrance when inside a RevealSequence that is processing exits.
+  const isNewEntrance = visible && !wasRenderedRef.current;
+  const effectiveVisible = (sequence?.holdEntrance && isNewEntrance) ? false : visible;
+
+  // Register exits with the RevealSequence.
+  useEffect(() => {
+    if (wasRenderedRef.current && !effectiveVisible && sequence) {
+      sequence.onExitStart();
+    }
+    wasRenderedRef.current = effectiveVisible;
+  }, [effectiveVisible, sequence]);
 
   // Build stagger container variants when stagger is enabled
   const containerVariants = useMemo<Variants>(() => {
@@ -82,11 +100,15 @@ export const RevealGroup: React.FC<RevealGroupProps> = ({
     [childAnimation, reduced],
   );
 
-  const exitVariant = (containerVariants.exit ?? containerVariants.hidden ?? { opacity: 0 }) as TargetAndTransition;
+  // If exitAnimation prop was provided, use the resolved exit from the hook.
+  // Otherwise derive from the container variants (which may differ from entrance variants when stagger is on).
+  const exitVariant = exitAnimation
+    ? resolvedExit
+    : (containerVariants.exit ?? containerVariants.hidden ?? { opacity: 0 }) as TargetAndTransition;
 
   return (
-    <AnimatePresence>
-      {visible && (
+    <AnimatePresence onExitComplete={sequence ? sequence.onExitComplete : undefined}>
+      {effectiveVisible && (
         <MotionElement
           variants={containerVariants}
           initial="hidden"

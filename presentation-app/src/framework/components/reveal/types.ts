@@ -24,8 +24,10 @@ export type RevealVisibilityProps =
  * Common props shared by Reveal and RevealGroup.
  */
 interface RevealBaseProps {
-  /** Override animation (beats RevealContext default). */
+  /** Override entrance animation (beats RevealContext default). */
   animation?: RevealAnimation;
+  /** Override exit animation. Default: reverses the entrance (uses `variants.hidden`). */
+  exitAnimation?: RevealAnimation;
   /** Wrapper element type. Default: `'div'`. */
   as?: 'div' | 'span' | 'li' | 'section' | 'article' | 'p';
   /** CSS class on wrapper element. */

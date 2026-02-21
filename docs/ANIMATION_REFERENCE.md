@@ -68,6 +68,16 @@ import { Reveal, fadeUp, scaleIn } from '@framework';
 
 // By segment ID
 <Reveal id="summary">Summary</Reveal>
+
+// Custom exit animation (useful with `on` or `from+until` where content disappears)
+<Reveal on={2} animation={scaleIn} exitAnimation={fadeDown}>
+  Scales in, fades down on exit
+</Reveal>
+
+// Exit uses the hidden state of the provided animation factory
+<Reveal from={1} until={3} exitAnimation={fadeRight}>
+  Slides right on exit
+</Reveal>
 ```
 
 ### Staggered groups
@@ -94,6 +104,35 @@ import { Reveal, RevealContext, scaleIn } from '@framework';
 </RevealContext>
 ```
 
+### Sequenced exit-before-enter
+
+By default, when one element exits and another enters on the same segment boundary, both animations play simultaneously. Wrap in `<RevealSequence>` to play exits first, then entrances — no per-element configuration needed.
+
+```tsx
+import { Reveal, RevealSequence } from '@framework';
+
+// Default 150ms pause between exit completing and entrance starting
+<RevealSequence>
+  <Reveal from={0} until={1} exitAnimation={fadeDown}>
+    This exits first when moving to segment 2
+  </Reveal>
+  <Reveal from={2}>
+    This enters after the exit above completes + 150ms
+  </Reveal>
+</RevealSequence>
+
+// Custom delay (in ms)
+<RevealSequence delay={300}>
+  ...
+</RevealSequence>
+```
+
+How it works:
+- When the segment changes, `RevealSequence` holds back newly-entering Reveals
+- Exiting Reveals play their exit animations via AnimatePresence
+- Once all exits complete, a `delay` pause is applied (default 150ms), then entrances animate in
+- If no exits occur on a segment change, entrances play after the delay
+
 ---
 
 ## When to Use `<Reveal>` vs the Hook
@@ -102,6 +141,7 @@ import { Reveal, RevealContext, scaleIn } from '@framework';
 |----------|------|
 | Element show/hide with animation (~70% of slides) | `<Reveal>` |
 | Staggered lists/grids | `<RevealGroup stagger>` |
+| Exit-before-enter sequencing | `<RevealSequence>` wrapper |
 | Non-visual logic (data, conditional styling, highlighting) | `useSegmentedAnimation()` hook |
 | Components with built-in `isVisible` prop (`BenefitCard`, etc.) | `useSegmentedAnimation()` hook |
 | Continuous/looping animations | `motion` elements directly |
