@@ -19,12 +19,12 @@ export const metadata: DemoMetadata = {
   narrationFallback: 'silent',
 
   durationInfo: {
-    audioOnly: 1076.48,
-    segmentDelays: 79.5,
+    audioOnly: 1116.16,
+    segmentDelays: 81,
     slideDelays: 48,
     finalDelay: 2,
     startSilence: 1,
-    total: 1206.98,
+    total: 1248.16,
     slideBreakdown: [
       { slideIndex: 1, slideTitle: 'Title', chapterIndex: 0, totalDuration: 18.08, audioDuration: 16.08, delaysDuration: 2, segments: [{ segmentIndex: 0, audioDuration: 16.08, delayAfter: 2 }] },
       { slideIndex: 1, slideTitle: 'Product Context', chapterIndex: 1, totalDuration: 50.2, audioDuration: 45.2, delaysDuration: 5, segments: [{ segmentIndex: 0, audioDuration: 3.44, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 26.4, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 15.36, delayAfter: 2 }] },
@@ -35,7 +35,7 @@ export const metadata: DemoMetadata = {
       { slideIndex: 1, slideTitle: 'Nested Loop', chapterIndex: 4, totalDuration: 34.12, audioDuration: 29.12, delaysDuration: 5, segments: [{ segmentIndex: 0, audioDuration: 12.96, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 9.04, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 7.12, delayAfter: 2 }] },
       { slideIndex: 2, slideTitle: 'Candidate Rows', chapterIndex: 4, totalDuration: 48.36, audioDuration: 43.36, delaysDuration: 5, segments: [{ segmentIndex: 0, audioDuration: 12.96, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 17.12, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 13.28, delayAfter: 2 }] },
       { slideIndex: 3, slideTitle: 'O(n^2) Visualized', chapterIndex: 4, totalDuration: 34.76, audioDuration: 29.76, delaysDuration: 5, segments: [{ segmentIndex: 0, audioDuration: 5.12, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 9.12, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 15.52, delayAfter: 2 }] },
-      { slideIndex: 4, slideTitle: 'Output Safety', chapterIndex: 4, totalDuration: 86.04, audioDuration: 81.04, delaysDuration: 5, segments: [{ segmentIndex: 0, audioDuration: 21.6, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 33.2, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 26.24, delayAfter: 2 }] },
+      { slideIndex: 4, slideTitle: 'Output Safety', chapterIndex: 4, totalDuration: 127.22, audioDuration: 120.72, delaysDuration: 6.5, segments: [{ segmentIndex: 0, audioDuration: 34.96, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 25.04, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 31.76, delayAfter: 1.5 }, { segmentIndex: 3, audioDuration: 28.96, delayAfter: 2 }] },
       { slideIndex: 1, slideTitle: 'Format Comparison', chapterIndex: 5, totalDuration: 37.88, audioDuration: 32.88, delaysDuration: 5, segments: [{ segmentIndex: 0, audioDuration: 6.96, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 14.24, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 11.68, delayAfter: 2 }] },
       { slideIndex: 2, slideTitle: 'max_end_utterance_id', chapterIndex: 5, totalDuration: 63.56, audioDuration: 58.56, delaysDuration: 5, segments: [{ segmentIndex: 0, audioDuration: 39.04, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 9.84, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 9.68, delayAfter: 2 }] },
       { slideIndex: 3, slideTitle: 'Turn/Utterance Concept', chapterIndex: 5, totalDuration: 71.32, audioDuration: 66.32, delaysDuration: 5, segments: [{ segmentIndex: 0, audioDuration: 6.32, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 33.6, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 26.4, delayAfter: 2 }] },

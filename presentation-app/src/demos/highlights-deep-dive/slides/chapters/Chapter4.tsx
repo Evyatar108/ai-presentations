@@ -338,7 +338,7 @@ const Ch4_S3_VisualizedComponent: React.FC = () => {
             animate="visible"
             style={{ marginBottom: '2rem' }}
           >
-            <CandidateGrid n={6} animate />
+            <CandidateGrid n={16} animate topicRanges={[[0, 5], [5, 10], [10, 15]]} hideLastLabel />
           </motion.div>
         )}
       </AnimatePresence>
@@ -432,6 +432,17 @@ export const Ch4_S3_Visualized = defineSlide({
 
 // ---------- Slide 4: Output Safety ----------
 
+const EXTRACTIVE_INPUT_TABLE = `# Meeting's utterance blocks:
+|utterance_range|uttrances_texts|
+|---|---|
+|[0, 1]|['Welcome everyone', 'Sprint metrics look good']|
+|[0, 2]|['Welcome everyone', 'Sprint metrics look good', 'Velocity is up 12%']|
+|[1, 2]|['Sprint metrics look good', 'Velocity is up 12%']|
+|[1, 3]|['Sprint metrics look good', 'Velocity is up 12%', 'Bug count dropped']|
+|[2, 3]|['Velocity is up 12%', 'Bug count dropped']|
+|[2, 4]|['Velocity is up 12%', 'Bug count dropped', 'Overall a strong sprint']|
+// ... greedily packed to fill 128K context window`;
+
 const Ch4_S4_OutputSafetyComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
   const { isSegmentVisible } = useSegmentedAnimation();
@@ -439,9 +450,30 @@ const Ch4_S4_OutputSafetyComponent: React.FC = () => {
 
   return (
     <SlideContainer maxWidth={950}>
-      {/* Segment 0: Call 2's Full Picture */}
+      {/* Segment 0: Extractive Input Example */}
       <AnimatePresence>
         {isSegmentVisible(0) && (
+          <motion.div
+            variants={fadeUp(reduced)}
+            initial="hidden"
+            animate="visible"
+          >
+            <SlideTitle reduced={reduced} subtitle="V1 Call 2 (Extractives): Input">
+              What the Model Receives
+            </SlideTitle>
+
+            <CodeBlock
+              code={EXTRACTIVE_INPUT_TABLE}
+              language="markdown"
+              fontSize={12}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Segment 1: Call 2's Full Picture */}
+      <AnimatePresence>
+        {isSegmentVisible(1) && (
           <motion.div
             variants={fadeUp(reduced)}
             initial="hidden"
@@ -541,9 +573,9 @@ const Ch4_S4_OutputSafetyComponent: React.FC = () => {
         )}
       </AnimatePresence>
 
-      {/* Segment 1: Why Precompute? */}
+      {/* Segment 2: Why Precompute? */}
       <AnimatePresence>
-        {isSegmentVisible(1) && (
+        {isSegmentVisible(2) && (
           <motion.div
             variants={staggerContainer(reduced, 0.15)}
             initial="hidden"
@@ -636,9 +668,9 @@ const Ch4_S4_OutputSafetyComponent: React.FC = () => {
         )}
       </AnimatePresence>
 
-      {/* Segment 2: The Trade-Off and V2 Preview */}
+      {/* Segment 3: The Trade-Off and V2 Preview */}
       <AnimatePresence>
-        {isSegmentVisible(2) && (
+        {isSegmentVisible(3) && (
           <motion.div
             variants={fadeUp(reduced)}
             initial="hidden"
@@ -745,6 +777,7 @@ export const Ch4_S4_OutputSafety = defineSlide({
     slide: 4,
     title: 'Output Safety',
     audioSegments: [
+      { id: 'input_example' },
       { id: 'input_output' },
       { id: 'rationale' },
       { id: 'tradeoff' }

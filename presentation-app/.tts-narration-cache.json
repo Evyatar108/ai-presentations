@@ -550,21 +550,6 @@
       "instruct": "Speak with energy and pride, celebrating the achievement.",
       "generatedAt": "2026-02-20T20:35:11.147Z"
     },
-    "c4\\s4_segment_01_input_output.wav": {
-      "narrationText": "So we've seen that Call 2 receives over two thousand candidate rows as input. But what does it actually output? Not freeform text — just index numbers. The model receives a numbered list of precomputed candidates and returns which indices it wants to keep. That's the entire output: a list of candidate identifiers.",
-      "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-21T01:51:30.979Z"
-    },
-    "c4\\s4_segment_02_rationale.wav": {
-      "narrationText": "This is deliberate. By precomputing every valid candidate range programmatically, V1 constrains the model's output space. The model can only pick from ranges that are guaranteed to be valid — correct utterance boundaries, within duration thresholds, within a single topic. If the model output arbitrary start and end utterances, it could reference non-existent IDs or cross topic boundaries — producing invalid video editing instructions and a broken highlights video.",
-      "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-21T01:51:30.984Z"
-    },
-    "c4\\s4_segment_03_tradeoff.wav": {
-      "narrationText": "So V1 made a deliberate trade-off: accept the O of n-squared input cost in exchange for guaranteed output safety. Every candidate the model could select was pre-validated. But as we've seen, this fills the entire 128K context window. Next, we'll see how V2 achieves the same output safety at linear cost — using a single column called max_end_utterance_id.",
-      "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-21T01:51:30.988Z"
-    },
     "c6\\s4_segment_01_skeleton.wav": {
       "narrationText": "This is what a single V2 response looks like: six top-level fields in one JSON object. Abstractive topics from Call 1. Extractive ranges from Call 2. Ranking from Call 3. And the final narrative from Call 4. Everything V1 spread across four separate LLM calls, produced in a single pass.",
       "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
@@ -579,6 +564,26 @@
       "narrationText": "This is a key takeaway: the output schema isn't just a data format — it's a prompt engineering tool. The field names tell the model what to do. The nested structure constrains what it can output. And self-checks close the loop with built-in validation. When you design an LLM's output schema, you're writing part of the prompt.",
       "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
       "generatedAt": "2026-02-21T01:51:31.006Z"
+    },
+    "c4\\s4_segment_01_input_example.wav": {
+      "narrationText": "Before we look at the output, let's see what Call 2 actually receives as input. It's a markdown table — each row is one candidate range with the full text of every utterance in that range. Notice how the same phrases repeat across rows — 'Velocity is up twelve percent' appears in four of the six candidates. Now scale this to thirty utterances per topic and five topics — that's over two thousand rows of heavily duplicated text, greedily packed until the 128K context window is full.",
+      "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
+      "generatedAt": "2026-02-21T03:00:11.859Z"
+    },
+    "c4\\s4_segment_02_input_output.wav": {
+      "narrationText": "So we've seen that Call 2 receives over two thousand candidate rows as input. But what does it actually output? Not freeform text — just index numbers. The model receives a numbered list of precomputed candidates and returns which indices it wants to keep. That's the entire output: a list of candidate identifiers.",
+      "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
+      "generatedAt": "2026-02-21T03:00:11.864Z"
+    },
+    "c4\\s4_segment_03_rationale.wav": {
+      "narrationText": "This is deliberate. By precomputing every valid candidate range programmatically, V1 constrains the model's output space. The model can only pick from ranges that are guaranteed to be valid — correct utterance boundaries, within duration thresholds, within a single topic. If the model output arbitrary start and end utterances, it could reference non-existent IDs or cross topic boundaries — producing invalid video editing instructions and a broken highlights video.",
+      "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
+      "generatedAt": "2026-02-21T03:00:11.867Z"
+    },
+    "c4\\s4_segment_04_tradeoff.wav": {
+      "narrationText": "So V1 made a deliberate trade-off: accept the O of n-squared input cost in exchange for guaranteed output safety. Every candidate the model could select was pre-validated. But as we've seen, this fills the entire 128K context window. Next, we'll see how V2 achieves the same output safety at linear cost — using a single column called max_end_utterance_id.",
+      "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
+      "generatedAt": "2026-02-21T03:00:11.870Z"
     }
   },
   "example-demo-1": {},

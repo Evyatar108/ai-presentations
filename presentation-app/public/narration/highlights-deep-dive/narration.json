@@ -246,6 +246,12 @@
       "title": "Output Safety",
       "segments": [
         {
+          "id": "input_example",
+          "narrationText": "Before we look at the output, let's see what Call 2 actually receives as input. It's a markdown table — each row is one candidate range with the full text of every utterance in that range. Notice how the same phrases repeat across rows — 'Velocity is up twelve percent' appears in four of the six candidates. Now scale this to thirty utterances per topic and five topics — that's over two thousand rows of heavily duplicated text, greedily packed until the 128K context window is full.",
+          "visualDescription": "CodeBlock showing a markdown table with utterance_range and uttrances_texts columns, 6 candidate rows with visible text duplication, followed by a comment about 128K packing",
+          "notes": ""
+        },
+        {
           "id": "input_output",
           "narrationText": "So we've seen that Call 2 receives over two thousand candidate rows as input. But what does it actually output? Not freeform text — just index numbers. The model receives a numbered list of precomputed candidates and returns which indices it wants to keep. That's the entire output: a list of candidate identifiers.",
           "visualDescription": "Horizontal flow: [2000+ Candidate Rows] → Call 2 → [selected: [3, 17, 42]]. Left amber, right green.",
