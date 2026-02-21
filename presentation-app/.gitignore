@@ -6,6 +6,7 @@ node_modules
 # testing
 /coverage
 /screenshots
+/recordings
 
 # playwright
 /test-results

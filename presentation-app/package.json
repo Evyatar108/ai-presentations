@@ -22,7 +22,8 @@
     "dev:full": "concurrently \"npm run narration-api\" \"npm run dev\" --names \"API,VITE\" --prefix-colors \"cyan,magenta\"",
     "tts:verify": "tsx scripts/verify-tts.ts",
     "test:overflow": "tsx scripts/run-overflow-test.ts",
-    "test:screenshot": "tsx scripts/run-screenshot-test.ts"
+    "test:screenshot": "tsx scripts/run-screenshot-test.ts",
+    "test:record": "tsx scripts/run-record-test.ts"
   },
   "dependencies": {
     "cors": "^2.8.5",

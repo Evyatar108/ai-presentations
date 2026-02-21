@@ -28,6 +28,7 @@ npm run test:overflow -- --demo {id}  # Playwright test: detect viewport overflo
 npm run test:overflow -- --demo {id} --viewport 1920x1019  # Same, at a custom viewport size
 npm run test:screenshot -- --demo {id}  # Playwright: screenshot every slide/segment (requires dev server running)
 npm run test:screenshot -- --demo {id} --slides 3-5  # Screenshot only slides 3 through 5
+npm run test:record -- --demo {id}  # Playwright: record narrated playback as .webm video (requires dev server running)
 ```
 
 Scaffold a new demo: `.\scripts\new-demo.ps1 -DemoId "my-demo" [-DemoTitle "My Demo"]`
