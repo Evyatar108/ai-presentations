@@ -191,9 +191,9 @@
   },
   "highlights-deep-dive": {
     "c0\\s1_segment_01_main.wav": {
-      "narrationText": "Hello, I'm Kwen tee-tee-ess, and I'll be narrating this presentation for Evyahtar... We'll cover how the Meeting Highlights prompt was redesigned — from a four-call GPT-4 pipeline down to a single unified prompt — cutting GPU costs by roughly seventy percent.",
+      "narrationText": "Hello, I'm Kwen tee-tee-ess, and I'll be narrating this presentation for Evyah-tar... We'll cover how the Meeting Highlights prompt was redesigned — from a four-call GPT-4 pipeline down to a single unified prompt — cutting GPU costs by roughly seventy percent.",
       "instruct": "Speak with calm authority and a hint of intrigue, like opening a keynote.",
-      "generatedAt": "2026-02-21T02:06:28.134Z"
+      "generatedAt": "2026-02-21T11:20:09.580Z"
     },
     "c1\\s1_segment_01_title.wav": {
       "narrationText": "Let's start with what Meeting Highlights actually produces.",
@@ -288,7 +288,7 @@
     "c1\\s2_segment_01_metrics.wav": {
       "narrationText": "Here's the problem I faced. The V1 implementation used four sequential LLM calls per meeting. At projected GA scale, that would require roughly six hundred A100 GPUs — far exceeding approved quotas. This made Meeting Highlights a capacity blocker, preventing the GA rollout.",
       "instruct": "Speak with urgency and concern, emphasizing the severity of the cost problem.",
-      "generatedAt": "2026-02-20T20:57:24.774Z"
+      "generatedAt": "2026-02-21T11:33:23.862Z"
     },
     "c1\\s2_segment_02_quote.wav": {
       "narrationText": "As my engineering manager put it — I needed a fundamentally different strategy. This wasn't a problem we could solve by adding more hardware.",

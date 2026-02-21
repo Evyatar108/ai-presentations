@@ -19,16 +19,16 @@ export const metadata: DemoMetadata = {
   narrationFallback: 'silent',
 
   durationInfo: {
-    audioOnly: 1195.12,
+    audioOnly: 1197.76,
     segmentDelays: 82.5,
     slideDelays: 48,
     finalDelay: 2,
     startSilence: 1,
-    total: 1328.62,
+    total: 1331.26,
     slideBreakdown: [
-      { slideIndex: 1, slideTitle: 'Title', chapterIndex: 0, totalDuration: 18.08, audioDuration: 16.08, delaysDuration: 2, segments: [{ segmentIndex: 0, audioDuration: 16.08, delayAfter: 2 }] },
+      { slideIndex: 1, slideTitle: 'Title', chapterIndex: 0, totalDuration: 19.92, audioDuration: 17.92, delaysDuration: 2, segments: [{ segmentIndex: 0, audioDuration: 17.92, delayAfter: 2 }] },
       { slideIndex: 1, slideTitle: 'Product Context', chapterIndex: 1, totalDuration: 50.2, audioDuration: 45.2, delaysDuration: 5, segments: [{ segmentIndex: 0, audioDuration: 3.44, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 26.4, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 15.36, delayAfter: 2 }] },
-      { slideIndex: 2, slideTitle: 'COGS Problem', chapterIndex: 1, totalDuration: 38.2, audioDuration: 33.2, delaysDuration: 5, segments: [{ segmentIndex: 0, audioDuration: 18.8, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 8, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 6.4, delayAfter: 2 }] },
+      { slideIndex: 2, slideTitle: 'COGS Problem', chapterIndex: 1, totalDuration: 39, audioDuration: 34, delaysDuration: 5, segments: [{ segmentIndex: 0, audioDuration: 19.6, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 8, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 6.4, delayAfter: 2 }] },
       { slideIndex: 1, slideTitle: 'Four-Call Pipeline', chapterIndex: 2, totalDuration: 50.24, audioDuration: 42.24, delaysDuration: 8, segments: [{ segmentIndex: 0, audioDuration: 4, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 8, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 12.24, delayAfter: 1.5 }, { segmentIndex: 3, audioDuration: 8.48, delayAfter: 1.5 }, { segmentIndex: 4, audioDuration: 9.52, delayAfter: 2 }] },
       { slideIndex: 1, slideTitle: 'Four Cost Drivers', chapterIndex: 3, totalDuration: 53.28, audioDuration: 45.28, delaysDuration: 8, segments: [{ segmentIndex: 0, audioDuration: 4.8, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 6.88, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 13.68, delayAfter: 1.5 }, { segmentIndex: 3, audioDuration: 5.68, delayAfter: 1.5 }, { segmentIndex: 4, audioDuration: 14.24, delayAfter: 2 }] },
       { slideIndex: 2, slideTitle: 'Verbose JSON', chapterIndex: 3, totalDuration: 21.34, audioDuration: 17.84, delaysDuration: 3.5, segments: [{ segmentIndex: 0, audioDuration: 15.36, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 2.48, delayAfter: 2 }] },

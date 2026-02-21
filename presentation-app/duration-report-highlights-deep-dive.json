@@ -1,24 +1,24 @@
 {
   "highlights-deep-dive": {
     "demoId": "highlights-deep-dive",
-    "audioOnlyDuration": 1195.12,
+    "audioOnlyDuration": 1197.7599999999998,
     "segmentDelays": 82.5,
     "slideDelays": 48,
     "finalDelay": 2,
     "startSilence": 1,
-    "totalDuration": 1328.62,
+    "totalDuration": 1331.2599999999998,
     "slideBreakdowns": [
       {
         "slideIndex": 1,
         "slideTitle": "Title",
         "chapterIndex": 0,
-        "totalDuration": 18.08,
-        "audioDuration": 16.08,
+        "totalDuration": 19.92,
+        "audioDuration": 17.92,
         "delaysDuration": 2,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 16.08,
+            "audioDuration": 17.92,
             "delayAfter": 2
           }
         ]
@@ -52,13 +52,13 @@
         "slideIndex": 2,
         "slideTitle": "COGS Problem",
         "chapterIndex": 1,
-        "totalDuration": 38.2,
-        "audioDuration": 33.2,
+        "totalDuration": 39,
+        "audioDuration": 34,
         "delaysDuration": 5,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 18.8,
+            "audioDuration": 19.6,
             "delayAfter": 1.5
           },
           {
@@ -660,8 +660,8 @@
       }
     ],
     "formattedDurations": {
-      "audioOnly": "19:55",
-      "total": "22:08"
+      "audioOnly": "19:57",
+      "total": "22:11"
     }
   }
 }
