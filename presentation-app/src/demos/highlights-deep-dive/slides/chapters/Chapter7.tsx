@@ -108,8 +108,8 @@ const Ch7_S2_SelfChecksComponent: React.FC = () => {
   return (
     <SlideContainer maxWidth={900}>
       <Reveal from={0}>
-        <SlideTitle reduced={reduced}>
-          Self-Checks: Model Validates Its Own Output
+        <SlideTitle reduced={reduced} subtitle="Specification + Validation">
+          Self-Checks
         </SlideTitle>
       </Reveal>
 

@@ -253,8 +253,8 @@
         },
         {
           "id": "input_output",
-          "narrationText": "So we've seen that Call 2 receives over two thousand candidate rows as input. But what does it actually output? Not freeform text — just index numbers. The model receives a numbered list of precomputed candidates and returns which indices it wants to keep. That's the entire output: a list of candidate identifiers.",
-          "visualDescription": "Horizontal flow: [2000+ Candidate Rows] → Call 2 → [selected: [3, 17, 42]]. Left amber, right green.",
+          "narrationText": "So we've seen that Call 2 receives over two thousand candidate rows as input. But what does it actually output? A filtered subset of those same rows. The model echoes back the utterance ranges it wants to keep, along with a selection reason and self-assessment flags. The key insight is that every range in the output was already pre-computed and validated in the input — the model can only select from what it was given.",
+          "visualDescription": "Horizontal flow: [2000+ Candidate Rows] → Call 2 → [table excerpt with utterance_range and selection_reason columns]. Left amber, right green.",
           "notes": ""
         },
         {
@@ -478,13 +478,13 @@
       "segments": [
         {
           "id": "title",
-          "narrationText": "The V2 prompt includes a self-checks section — ten boolean validators the model runs against its own output. They catch errors at generation time, and in production they show you which constraints fail most often.",
+          "narrationText": "The V2 prompt includes a self-checks section — ten boolean validators the model runs against its own output. But they're not just for catching errors. By spelling out what 'correct' looks like inside the prompt itself, the checks reinforce the target format — the model is more likely to produce conforming output in the first place. In production, they double as telemetry, showing you which constraints fail most often.",
           "visualDescription": "Title: 'Self-Checks: Model Validates Its Own Output'",
           "notes": ""
         },
         {
           "id": "grid",
-          "narrationText": "Ten checks covering structural correctness — topic boundaries, ID uniqueness, extractive constraints, narrative alignment, and more. Any failure triggers an automatic retry.",
+          "narrationText": "Ten checks covering structural correctness — topic boundaries, ID uniqueness, extractive constraints, narrative alignment, and more. Each one is both an instruction to the model and a runtime gate. Any failure triggers an automatic retry.",
           "visualDescription": "Grid of 10 boolean check cards with cascade animation",
           "notes": ""
         }
