@@ -338,7 +338,7 @@ const Ch4_S3_VisualizedComponent: React.FC = () => {
             animate="visible"
             style={{ marginBottom: '2rem' }}
           >
-            <CandidateGrid n={16} animate topicRanges={[[0, 5], [5, 10], [10, 15]]} hideLastLabel />
+            <CandidateGrid n={31} animate topicRanges={[[0, 10], [10, 20], [20, 30]]} hideLastLabel />
           </motion.div>
         )}
       </AnimatePresence>
