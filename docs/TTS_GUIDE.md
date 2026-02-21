@@ -318,6 +318,62 @@ npm run tts:generate -- --demo {demo-id}
 4. Answer `y` to regenerate
 5. Server starts with updated audio
 
+## Verification (Whisper Transcription)
+
+### Overview
+
+After generating TTS audio, you can verify what the TTS actually said by transcribing it back to text using a Whisper server. This catches mispronunciations, garbled audio, and missing/extra words.
+
+### Setup
+
+Start the Whisper server on the remote GPU machine (see `tts/WHISPER_SETUP.md`):
+
+```bash
+python server_whisper.py --model large-v3 --port 5001
+```
+
+### Verify Audio
+
+```bash
+# Verify all segments for a demo
+npm run tts:verify -- --demo highlights-deep-dive
+
+# Force re-verification (ignore cache)
+npm run tts:verify -- --demo highlights-deep-dive --force
+
+# Verify specific segments only
+npm run tts:verify -- --demo highlights-deep-dive --segments ch1:s2:intro,ch3:s1:summary
+```
+
+### Output
+
+The script produces:
+1. **Console table** — side-by-side comparison of original vs. transcribed text
+2. **Report file** — `verification-report-{demoId}.json` with full details
+3. **Verification cache** — `.tts-verification-cache.json` (keyed on audio file hash; re-runs automatically when audio changes)
+
+### `/fix-tts` Skill
+
+The `/fix-tts` Claude Code command automates the full verify-evaluate-regenerate cycle:
+
+```
+/fix-tts highlights-deep-dive
+```
+
+This will:
+1. Transcribe all audio via Whisper
+2. Compare original vs. transcribed using LLM judgment
+3. Regenerate problematic segments
+4. Re-verify up to 3 times
+
+Differences in acronyms (GPT, AI), product names, and punctuation are treated as acceptable. Only meaning-altering differences trigger regeneration.
+
+### Custom Whisper URL
+
+```bash
+WHISPER_URL=http://other-server:5001 npm run tts:verify -- --demo my-demo
+```
+
 ## Advanced Configuration
 
 ### Custom TTS Server URL
