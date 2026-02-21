@@ -28,7 +28,8 @@ npm run test:overflow -- --demo {id}  # Playwright (static): detect viewport ove
 npm run test:overflow -- --demo {id} --viewport 1920x1019  # Same, at a custom viewport size
 npm run test:screenshot -- --demo {id}  # Playwright (static): screenshot every slide/segment
 npm run test:screenshot -- --demo {id} --slides 3-5  # Screenshot only slides 3 through 5
-npm run test:record -- --demo {id}  # Playwright (record): record narrated playback as .webm video
+npm run test:record -- --demo {id}  # Playwright (record): record narrated playback as .mp4 video (requires ffmpeg)
+npm run test:record -- --demo {id} --fps 60  # Same, at 60fps
 ```
 
 Playwright tests require the dev server running on localhost:5173. Two Playwright projects in `playwright.config.ts`:
@@ -116,6 +117,7 @@ Audio naming: `s{slide}_segment_{number}_{id}.wav`
 | `vite-plugin-audio-writer.ts` | Custom Vite plugin for /api/save-audio |
 | `tests/overflow.spec.ts` | Playwright test: viewport overflow detection for all slides/segments |
 | `tests/screenshot.spec.ts` | Playwright test: screenshot every slide/segment for visual review |
+| `tests/record.spec.ts` | Playwright test: CDP screencast → ffmpeg recording of narrated playback |
 | `playwright.config.ts` | Playwright config: `static` project (overflow/screenshot, reducedMotion) + `record` project (full animations) |
 
 ## Conventions
@@ -133,4 +135,4 @@ Audio naming: `s{slide}_segment_{number}_{id}.wav`
 
 ## Documentation
 
-Detailed docs in `docs/`: ANIMATION_REFERENCE.md, ARCHITECTURE.md, ADDING_DEMOS.md, COMPONENT_CATALOG.md, COMPONENTS.md, TIMING_SYSTEM.md, TTS_GUIDE.md, TROUBLESHOOTING.md, FRAMEWORK.md, THEMING.md, NARRATION_SYSTEM_GUIDE.md, NARRATION_API_REFERENCE.md, NARRATION_TROUBLESHOOTING.md. Per-demo docs in `docs/demos/{demo-id}/`.
+Detailed docs in `docs/`: ANIMATION_REFERENCE.md, ARCHITECTURE.md, ADDING_DEMOS.md, COMPONENT_CATALOG.md, COMPONENTS.md, TIMING_SYSTEM.md, TTS_GUIDE.md, TROUBLESHOOTING.md, FRAMEWORK.md, THEMING.md, NARRATION_SYSTEM_GUIDE.md, NARRATION_API_REFERENCE.md, NARRATION_TROUBLESHOOTING.md, RECORDING_GUIDE.md. Per-demo docs in `docs/demos/{demo-id}/`.
