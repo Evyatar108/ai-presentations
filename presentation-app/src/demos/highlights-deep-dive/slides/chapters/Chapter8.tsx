@@ -245,12 +245,11 @@ const Ch8_S2_EvalToolComponent: React.FC = () => {
           color: theme.colors.primary,
           marginBottom: '0.3rem'
         }}>
-          Error Statistics as Primary Metric
+          Rapid Iteration Through Dual Feedback
         </div>
         <div style={{ ...typography.caption, fontSize: 13, lineHeight: 1.5 }}>
-          Each prompt revision was run across test transcripts. Invalid turn-utterance
-          combination rate tracked per iteration — quantitative signal complementing
-          qualitative video review.
+          Change a prompt, run locally, check both signals in minutes — not hours.
+          This tight feedback loop made it practical to test dozens of prompt revisions per day.
         </div>
       </Reveal>
     </SlideContainer>
