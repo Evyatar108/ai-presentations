@@ -24,6 +24,18 @@ Read the file `presentation-app/verification-report-$ARGUMENTS.json` (use the de
 
 Read `presentation-app/.tts-verification-decisions.json` if it exists. This file contains past user decisions for segments. Use these to inform your evaluation — if the user previously marked a segment as "ok" and the diff pattern is the same, you can note that.
 
+## Step 3b: Scan narration text for known TTS-breaking patterns
+
+Before evaluating Whisper output, proactively scan the narration text for patterns known to cause TTS pronunciation failures:
+
+- **Underscored identifiers**: `highlights_extractives`, `max_end_utterance_id`, `final_narrative` — the underscore causes TTS to garble the word. Replace with spaces (e.g., "highlights extractives", "max end utterance ID").
+- **Hyphenated compound terms**: `copy-then-parse`, `pre-computed` — hyphens can cause TTS to insert extra syllables. Replace with spaces (e.g., "copy then parse"). Note: em-dashes (—) used as sentence punctuation are fine.
+- **Snake_case or camelCase code identifiers** used verbatim in narration text — rephrase for speech.
+- **Special characters in spoken text**: `$`, `%`, `#`, `@`, `&`, `<`, `>`, backticks — can confuse TTS. Spell out or remove (e.g., "percent" instead of "%").
+- **URLs, file paths, or code expressions** embedded in narration — rephrase for speech.
+
+If you find any of these patterns, flag them to the user and offer to fix the narration text before regenerating. Fixing the root cause in the text is always better than regenerating the same broken input.
+
 ## Step 4: Evaluate and present each segment interactively
 
 For each segment in the report, compare `original` (intended narration) vs `transcribed` (what Whisper heard).
@@ -31,6 +43,7 @@ For each segment in the report, compare `original` (intended narration) vs `tran
 First, do your own triage. Classify each segment:
 - **OK (auto)**: The transcription is essentially identical — only whitespace, punctuation, or trivial differences.
 - **Flagged**: There's a meaningful difference that the user should review.
+- **Text fix needed**: The narration text itself contains a TTS-breaking pattern (from Step 3b). Flag these separately — they need a text fix, not just regeneration.
 
 For segments you classified as OK (auto), briefly list them as "auto-approved" so the user knows they were checked.
 
@@ -111,7 +124,8 @@ cd presentation-app && npm run tts:verify -- --demo {demo-id} --segments {comma-
 Read the updated report. For each re-verified segment, show the user the new result. If a segment still has issues, repeat Steps 4-6 up to 3 total attempts.
 
 After 3 attempts, report persistent issues and suggest the user consider:
-- Adjusting the narration text in the slide component
+- Checking for TTS-breaking patterns in the narration text (underscores, hyphens, special characters, code identifiers)
+- Rephrasing the narration text to be more speech-friendly
 - Adding an `instruct` override on the segment for TTS style guidance
 
 ## Step 7: Summary
