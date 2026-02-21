@@ -236,6 +236,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
       {/* Combined Navigation Container (Slide nav on top, Segment nav below) */}
       {!disableManualNav && (
         <nav
+          data-testid="slide-nav"
           aria-label="Slide navigation"
           style={{
             position: 'fixed',
@@ -473,7 +474,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
 
       {/* Keyboard hint (hidden when manual nav disabled) */}
       {!disableManualNav && (
-        <div style={{
+        <div data-testid="keyboard-hint" style={{
         position: 'fixed',
         top: 20,
         right: 20,

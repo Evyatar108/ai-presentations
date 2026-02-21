@@ -309,6 +309,7 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack }) => {
       <div style={{ position: 'relative' }}>
         {/* Floating Back Button */}
         <motion.button
+          data-testid="back-button"
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           onClick={onBack}

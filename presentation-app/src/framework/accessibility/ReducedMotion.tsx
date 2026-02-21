@@ -57,6 +57,7 @@ export const ReducedMotionToggle: React.FC = () => {
   const { reduced, toggle, autoPref } = useReducedMotion();
   return (
     <button
+      data-testid="reduced-motion-toggle"
       onClick={toggle}
       aria-pressed={reduced}
       style={{

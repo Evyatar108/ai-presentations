@@ -2,7 +2,7 @@
  * Screenshot Capture Test
  *
  * Steps through every slide and segment of a demo in manual mode
- * and captures a screenshot of each state.
+ * and captures a clean screenshot (UI chrome hidden) of each state.
  *
  * Usage:
  *   npm run test:screenshot -- --demo highlights-deep-dive
@@ -42,7 +42,22 @@ const DEMO_ID = getDemoId();
 const SLIDE_RANGE = getSlideRange();
 
 // ---------------------------------------------------------------------------
-// Helpers (reused from overflow.spec.ts)
+// CSS to hide UI chrome for clean screenshots.
+// Uses visibility:hidden to keep layout stable (elements remain in DOM
+// and are clickable by Playwright via aria-labels).
+// ---------------------------------------------------------------------------
+const HIDE_CHROME_CSS = `
+  [data-testid="progress-bar"],
+  [data-testid="slide-nav"],
+  [data-testid="keyboard-hint"],
+  [data-testid="back-button"],
+  [data-testid="reduced-motion-toggle"] {
+    display: none !important;
+  }
+`;
+
+// ---------------------------------------------------------------------------
+// Helpers
 // ---------------------------------------------------------------------------
 
 /** Wait for Framer Motion animations to settle + ResizeObserver + React re-render. */
@@ -89,6 +104,22 @@ async function getSegmentId(page: Page, idx: number): Promise<string> {
   return match ? match[1] : `segment_${idx}`;
 }
 
+/** Hide UI chrome, take screenshot, restore. */
+async function takeCleanScreenshot(page: Page, path: string) {
+  const tag = await page.addStyleTag({ content: HIDE_CHROME_CSS });
+  await page.screenshot({ path });
+  await tag.evaluate(el => el.remove());
+}
+
+/** Navigate to a specific slide by clicking its dot (1-indexed). */
+async function goToSlide(page: Page, slideNumber: number) {
+  const dot = page.locator(`button[aria-label^="Go to slide ${slideNumber}:"]`);
+  if (await dot.count() > 0) {
+    await dot.click();
+    await waitForAnimations(page, 1000);
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Test
 // ---------------------------------------------------------------------------
@@ -116,13 +147,9 @@ test(`screenshot: ${DEMO_ID}`, async ({ page }) => {
 
   await waitForAnimations(page, 2000);
 
-  // 3. If we need to skip to a specific starting slide, press ArrowRight
+  // 3. If we need to skip to a specific starting slide, click its dot directly
   if (SLIDE_RANGE) {
-    const info = await getSlideInfo(page);
-    for (let i = info.current; i < SLIDE_RANGE.start; i++) {
-      await page.keyboard.press('ArrowRight');
-      await waitForAnimations(page, 800);
-    }
+    await goToSlide(page, SLIDE_RANGE.start);
   }
 
   // 4. Step through slides and segments, taking screenshots
@@ -152,13 +179,13 @@ test(`screenshot: ${DEMO_ID}`, async ({ page }) => {
         await waitForAnimations(page);
 
         const filename = `${slideLabel}_seg${pad(s)}_${segId}.png`;
-        await page.screenshot({ path: join(outDir, filename) });
+        await takeCleanScreenshot(page, join(outDir, filename));
         screenshotCount++;
         console.log(`  [${info.current}/${info.total}] ${filename}  "${title}"`);
       }
     } else {
       const filename = `${slideLabel}_seg00_default.png`;
-      await page.screenshot({ path: join(outDir, filename) });
+      await takeCleanScreenshot(page, join(outDir, filename));
       screenshotCount++;
       console.log(`  [${info.current}/${info.total}] ${filename}  "${title}"`);
     }

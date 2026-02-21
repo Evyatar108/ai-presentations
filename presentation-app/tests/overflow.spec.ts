@@ -135,10 +135,8 @@ test(`overflow check: ${DEMO_ID}`, async ({ page }) => {
   await page.goto('/');
   await page.waitForLoadState('networkidle');
 
-  // 2. Click the demo tile (match by title text — tiles don't have aria-labels)
-  // First find a clickable element containing text that links to our demo
-  const demoTile = page.locator(`text=/Highlights Prompt Deep-Dive/`).first();
-  // Wait for demo tiles to appear
+  // 2. Click the demo tile by data-demo-id attribute
+  const demoTile = page.locator(`[data-demo-id="${DEMO_ID}"]`);
   await expect(demoTile).toBeVisible({ timeout: 15_000 });
   await demoTile.click();
 

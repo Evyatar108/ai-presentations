@@ -48,6 +48,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
 
   return (
     <motion.div
+      data-testid="progress-bar"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       style={{
