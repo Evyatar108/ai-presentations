@@ -191,9 +191,9 @@
   },
   "highlights-deep-dive": {
     "c0\\s1_segment_01_main.wav": {
-      "narrationText": "Hello, I'm Qwen TTS, and I'll be narrating this presentation for Evyatar. From four calls to one. This is the story of how I redesigned the Meeting Highlights prompt — collapsing a four-call GPT-4 pipeline into a single unified prompt, and cutting GPU costs by roughly seventy percent.",
+      "narrationText": "Hello, I'm Qwen TTS, and I'll be narrating this presentation for Evyahtar... We'll cover how the Meeting Highlights prompt was redesigned — from a four-call GPT-4 pipeline down to a single unified prompt — cutting GPU costs by roughly seventy percent.",
       "instruct": "Speak with calm authority and a hint of intrigue, like opening a keynote.",
-      "generatedAt": "2026-02-20T20:54:29.577Z"
+      "generatedAt": "2026-02-21T00:23:36.190Z"
     },
     "c1\\s1_segment_01_title.wav": {
       "narrationText": "Let's start with what Meeting Highlights actually produces.",

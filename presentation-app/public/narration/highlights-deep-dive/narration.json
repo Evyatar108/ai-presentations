@@ -12,7 +12,7 @@
       "segments": [
         {
           "id": "main",
-          "narrationText": "Hello, I'm Qwen TTS, and I'll be narrating this presentation for Evyatar. From four calls to one. This is the story of how I redesigned the Meeting Highlights prompt — collapsing a four-call GPT-4 pipeline into a single unified prompt, and cutting GPU costs by roughly seventy percent.",
+          "narrationText": "Hello, I'm Qwen TTS, and I'll be narrating this presentation for Evyahtar... We'll cover how the Meeting Highlights prompt was redesigned — from a four-call GPT-4 pipeline down to a single unified prompt — cutting GPU costs by roughly seventy percent.",
           "visualDescription": "Title slide: 'From 4 Calls to 1: Redesigning the Meeting Highlights Prompt'",
           "notes": ""
         }
