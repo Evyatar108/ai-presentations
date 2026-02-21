@@ -28,5 +28,7 @@ yarn-error.log*
 
 # TTS cache and config
 .tts-narration-cache.json
+.tts-verification-cache.json
+.tts-verification-decisions.json
 duration-report.json
 public/server_config.json
