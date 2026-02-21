@@ -1,12 +1,12 @@
 {
   "highlights-deep-dive": {
     "demoId": "highlights-deep-dive",
-    "audioOnlyDuration": 1122.4799999999998,
-    "segmentDelays": 81,
+    "audioOnlyDuration": 1161.6,
+    "segmentDelays": 82.5,
     "slideDelays": 48,
     "finalDelay": 2,
     "startSilence": 1,
-    "totalDuration": 1254.4799999999998,
+    "totalDuration": 1295.1,
     "slideBreakdowns": [
       {
         "slideIndex": 1,
@@ -417,23 +417,28 @@
         "slideIndex": 4,
         "slideTitle": "Output Schema",
         "chapterIndex": 6,
-        "totalDuration": 84.52,
-        "audioDuration": 79.52,
-        "delaysDuration": 5,
+        "totalDuration": 125.14,
+        "audioDuration": 118.64,
+        "delaysDuration": 6.5,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 22.8,
+            "audioDuration": 31.44,
             "delayAfter": 1.5
           },
           {
             "segmentIndex": 1,
-            "audioDuration": 34.16,
+            "audioDuration": 28.72,
             "delayAfter": 1.5
           },
           {
             "segmentIndex": 2,
-            "audioDuration": 22.56,
+            "audioDuration": 31.92,
+            "delayAfter": 1.5
+          },
+          {
+            "segmentIndex": 3,
+            "audioDuration": 26.56,
             "delayAfter": 2
           }
         ]
@@ -655,8 +660,8 @@
       }
     ],
     "formattedDurations": {
-      "audioOnly": "18:42",
-      "total": "20:54"
+      "audioOnly": "19:21",
+      "total": "21:35"
     }
   }
 }

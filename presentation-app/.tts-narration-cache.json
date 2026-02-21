@@ -551,19 +551,9 @@
       "generatedAt": "2026-02-20T20:35:11.147Z"
     },
     "c6\\s4_segment_01_skeleton.wav": {
-      "narrationText": "This is what a single V2 response looks like: six top-level fields in one JSON object. Abstractive topics from Call 1. Extractive ranges from Call 2. Ranking from Call 3. And the final narrative from Call 4. Everything V1 spread across four separate LLM calls, produced in a single pass.",
+      "narrationText": "This is a single V2 response — six top-level fields in one JSON object. But they serve two very different purposes. The first four fields — abstractive topics, topic order, extractive ranges, and ranking — are structured chain-of-thought. They guide the model through segmentation, selection, and ranking. Only the fifth field, final_narrative, is the actual deliverable — the video editing instructions consumed by the product. And self_checks adds runtime validation.",
       "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-21T01:51:30.996Z"
-    },
-    "c6\\s4_segment_02_extractive_zoom.wav": {
-      "narrationText": "The most interesting part is extractive_ranges. Look at the field names — they're instructions. 'Selected turn opening tag raw copy from input' forces the model to copy the exact turn tag from the transcript. Then 'speaker name' and 'turn id' are parsed from that copy. Same pattern below: first copy the raw pipe-delimited row, then parse the utterance IDs from it. The schema itself guides the model through copy-then-parse — which we'll see in detail next.",
-      "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-21T01:51:31.001Z"
-    },
-    "c6\\s4_segment_03_insight.wav": {
-      "narrationText": "This is a key takeaway: the output schema isn't just a data format — it's a prompt engineering tool. The field names tell the model what to do. The nested structure constrains what it can output. And self-checks close the loop with built-in validation. When you design an LLM's output schema, you're writing part of the prompt.",
-      "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-21T01:51:31.006Z"
+      "generatedAt": "2026-02-21T03:59:59.009Z"
     },
     "c4\\s4_segment_01_input_example.wav": {
       "narrationText": "Before we look at the output, let's see what Call 2 actually receives as input. It's a markdown table — each row is one candidate range with the full text of every utterance in that range. Notice how the same phrases repeat across rows — 'Velocity is up twelve percent' appears in four of the six candidates. Now scale this to thirty utterances per topic and five topics — that's over two thousand rows of heavily duplicated text, greedily packed until the 128K context window is full.",
@@ -584,6 +574,21 @@
       "narrationText": "So V1 made a deliberate trade-off: accept the O of n-squared input cost in exchange for guaranteed output safety. Every candidate the model could select was pre-validated. But as we've seen, this fills the entire 128K context window. Next, we'll see how V2 achieves the same output safety at linear cost — using a single column called max_end_utterance_id.",
       "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
       "generatedAt": "2026-02-21T03:00:11.870Z"
+    },
+    "c6\\s4_segment_02_deliverable_zoom.wav": {
+      "narrationText": "Let's zoom into what final_narrative actually contains. Each row has a topic with narration text for TTS voiceover, and playback_start — the turn and utterance coordinates that tell the video player where to seek. Plus an optional extractive object defining clip boundaries. These coordinates are what the product uses to assemble the highlights video. Everything else in the schema — all five other fields — is reasoning scaffolding that helped the model produce this.",
+      "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
+      "generatedAt": "2026-02-21T03:59:59.013Z"
+    },
+    "c6\\s4_segment_03_extractive_zoom.wav": {
+      "narrationText": "Now contrast that with extractive_ranges — pure chain-of-thought. Look at the field names — they're instructions. 'Selected turn opening tag raw copy from input' forces the model to copy the exact turn tag. Then 'speaker name' and 'turn id' are parsed from that copy. Same pattern below: first copy the raw pipe-delimited row, then parse the utterance IDs. The schema guides the model through copy-then-parse — which we'll see in detail next.",
+      "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
+      "generatedAt": "2026-02-21T03:59:59.017Z"
+    },
+    "c6\\s4_segment_04_insight.wav": {
+      "narrationText": "So here's the key takeaway. The output schema isn't just a data format — it's a chain-of-thought scaffold and a prompt engineering tool. Five fields guide the model's reasoning, one field captures the deliverable. Field names become execution steps, nested structure enforces constraints, and self-checks close the validation loop. When you design an LLM's output schema, you're designing the reasoning path.",
+      "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
+      "generatedAt": "2026-02-21T03:59:59.020Z"
     }
   },
   "example-demo-1": {},

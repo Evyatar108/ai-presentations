@@ -44,7 +44,7 @@ This demo targets **engineering peers** familiar with LLMs and prompt engineerin
 - **Ch6_S1_PromptOverview** — Full V2 prompt overview with six section cards
 - **Ch6_S2_Pseudocode** — Full generate_highlights() pseudocode with 6 output field checkmarks
 - **Ch6_S3_ProseVsPseudocode** — Side-by-side V1 prose vs V2 pseudocode with 4 benefit cards
-- **Ch6_S4_OutputSchema** — V2's single JSON response: 6 fields replacing 4 calls, extractive_ranges schema with copy-then-parse field names
+- **Ch6_S4_OutputSchema** — V2's single JSON response: 6 fields as chain-of-thought scaffolding → deliverable architecture, with final_narrative as the only product-consumed output; extractive_ranges copy-then-parse field names
 
 #### Chapter 7: Copy-then-Parse + Self-Checks (2 slides)
 - **Ch7_S1_CopyThenParse** — Two-step code: copy raw strings, then parse structured values

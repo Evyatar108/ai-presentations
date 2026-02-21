@@ -19,12 +19,12 @@ export const metadata: DemoMetadata = {
   narrationFallback: 'silent',
 
   durationInfo: {
-    audioOnly: 1122.48,
-    segmentDelays: 81,
+    audioOnly: 1161.6,
+    segmentDelays: 82.5,
     slideDelays: 48,
     finalDelay: 2,
     startSilence: 1,
-    total: 1254.48,
+    total: 1295.1,
     slideBreakdown: [
       { slideIndex: 1, slideTitle: 'Title', chapterIndex: 0, totalDuration: 18.08, audioDuration: 16.08, delaysDuration: 2, segments: [{ segmentIndex: 0, audioDuration: 16.08, delayAfter: 2 }] },
       { slideIndex: 1, slideTitle: 'Product Context', chapterIndex: 1, totalDuration: 50.2, audioDuration: 45.2, delaysDuration: 5, segments: [{ segmentIndex: 0, audioDuration: 3.44, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 26.4, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 15.36, delayAfter: 2 }] },
@@ -42,7 +42,7 @@ export const metadata: DemoMetadata = {
       { slideIndex: 1, slideTitle: 'Prompt Overview', chapterIndex: 6, totalDuration: 67.08, audioDuration: 62.08, delaysDuration: 5, segments: [{ segmentIndex: 0, audioDuration: 12.88, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 31.2, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 18, delayAfter: 2 }] },
       { slideIndex: 2, slideTitle: 'Pseudocode Algorithm', chapterIndex: 6, totalDuration: 43.16, audioDuration: 38.16, delaysDuration: 5, segments: [{ segmentIndex: 0, audioDuration: 13.12, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 16.24, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 8.8, delayAfter: 2 }] },
       { slideIndex: 3, slideTitle: 'Prose vs Pseudocode', chapterIndex: 6, totalDuration: 28.22, audioDuration: 24.72, delaysDuration: 3.5, segments: [{ segmentIndex: 0, audioDuration: 12, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 12.72, delayAfter: 2 }] },
-      { slideIndex: 4, slideTitle: 'Output Schema', chapterIndex: 6, totalDuration: 84.52, audioDuration: 79.52, delaysDuration: 5, segments: [{ segmentIndex: 0, audioDuration: 22.8, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 34.16, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 22.56, delayAfter: 2 }] },
+      { slideIndex: 4, slideTitle: 'Output Schema', chapterIndex: 6, totalDuration: 125.14, audioDuration: 118.64, delaysDuration: 6.5, segments: [{ segmentIndex: 0, audioDuration: 31.44, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 28.72, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 31.92, delayAfter: 1.5 }, { segmentIndex: 3, audioDuration: 26.56, delayAfter: 2 }] },
       { slideIndex: 1, slideTitle: 'Copy-then-Parse', chapterIndex: 7, totalDuration: 65, audioDuration: 60, delaysDuration: 5, segments: [{ segmentIndex: 0, audioDuration: 15.6, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 19.28, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 25.12, delayAfter: 2 }] },
       { slideIndex: 2, slideTitle: 'Self-Checks', chapterIndex: 7, totalDuration: 27.58, audioDuration: 24.08, delaysDuration: 3.5, segments: [{ segmentIndex: 0, audioDuration: 13.52, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 10.56, delayAfter: 2 }] },
       { slideIndex: 1, slideTitle: 'Validation Challenges', chapterIndex: 8, totalDuration: 74.52, audioDuration: 69.52, delaysDuration: 5, segments: [{ segmentIndex: 0, audioDuration: 11.68, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 28.08, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 29.76, delayAfter: 2 }] },

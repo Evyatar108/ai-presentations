@@ -399,13 +399,29 @@ export const Ch6_S3_ProseVsPseudocode = defineSlide({
 // ---------- Slide 4: Output Schema ----------
 
 const SCHEMA_FIELDS = [
-  { name: 'abstractive_topics', desc: '1–7 topics with narration', call: 'Call 1' },
-  { name: 'topic_order', desc: 'Chronological sequence', call: 'Call 4' },
-  { name: 'extractive_ranges', desc: 'Selected verbatim clips', call: 'Call 2' },
-  { name: 'ranking', desc: 'Quality scores & ordering', call: 'Call 3' },
-  { name: 'final_narrative', desc: 'Unified topic + clip rows', call: 'Call 4' },
-  { name: 'self_checks', desc: '10 boolean validators', call: null },
+  { name: 'abstractive_topics', desc: '1–7 topics with narration',  call: 'Call 1', category: 'cot' as const },
+  { name: 'topic_order',        desc: 'Chronological sequence',     call: 'Call 4', category: 'cot' as const },
+  { name: 'extractive_ranges',  desc: 'Selected verbatim clips',    call: 'Call 2', category: 'cot' as const },
+  { name: 'ranking',            desc: 'Quality scores & ordering',  call: 'Call 3', category: 'cot' as const },
+  { name: 'final_narrative',    desc: 'Playback coordinates + narration text', call: 'Call 4', category: 'deliverable' as const },
+  { name: 'self_checks',        desc: '10 boolean validators',      call: null,     category: 'validation' as const },
 ];
+
+const FINAL_NARRATIVE_SAMPLE = `[{
+  "topic_id": "SPR",
+  "topic_title": "Sprint Metrics",
+  "narration_for_final_output": "The team reviewed sprint velocity...",
+  "playback_start": {
+    "turn_id": 5,
+    "utterance_id": 2
+  },
+  "extractive": {
+    "turn_id": 5,
+    "start_utterance_id": 2,
+    "end_utterance_id": 4,
+    "transition_sentence": "Here's what Sarah said..."
+  }
+}]`;
 
 const EXTRACTIVE_SAMPLE = `{
   "selected_turn_opening_tag_raw_copy_from_input": "<t5 Sarah>",
@@ -424,99 +440,240 @@ const EXTRACTIVE_SAMPLE = `{
 const SCHEMA_INSIGHT_PILLS = [
   'Field names = instructions',
   'Structure = constraints',
-  'self_checks = validation',
+  'Chain-of-thought → deliverable',
 ];
+
+const COT_FIELDS = SCHEMA_FIELDS.filter(f => f.category === 'cot');
+const DELIVERABLE_FIELD = SCHEMA_FIELDS.find(f => f.category === 'deliverable')!;
+const VALIDATION_FIELD = SCHEMA_FIELDS.find(f => f.category === 'validation')!;
+
+const CATEGORY_STYLES = {
+  cot:         { accent: '#fbbf24', label: 'Chain-of-Thought Scaffolding', bg: 'rgba(251, 191, 36, 0.08)' },
+  deliverable: { accent: '#00B7C3', label: 'Deliverable',                 bg: 'rgba(0, 183, 195, 0.08)' },
+  validation:  { accent: '#10b981', label: 'Validation',                  bg: 'rgba(16, 185, 129, 0.08)' },
+} as const;
 
 const Ch6_S4_OutputSchemaComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
   const { isSegmentVisible } = useSegmentedAnimation();
   const theme = useTheme();
 
+  const renderFieldCard = (
+    field: typeof SCHEMA_FIELDS[number],
+    index: number,
+    accent: string,
+    bg: string,
+    compact = false,
+  ) => (
+    <motion.div
+      key={field.name}
+      initial={{ opacity: 0, y: reduced ? 0 : 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: reduced ? 0.1 : 0.3,
+        delay: reduced ? 0 : index * 0.06,
+      }}
+      style={{
+        background: bg,
+        border: `1px solid ${theme.colors.bgBorder}`,
+        borderLeft: `3px solid ${accent}`,
+        borderRadius: 10,
+        padding: compact ? '0.45rem 0.65rem' : '0.55rem 0.75rem',
+        textAlign: 'left',
+      }}
+    >
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: '0.2rem',
+      }}>
+        <span style={{
+          fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+          fontSize: compact ? 10.5 : 11,
+          fontWeight: 600,
+          color: accent,
+        }}>
+          {field.name}
+        </span>
+        <span style={{
+          fontSize: 9,
+          fontWeight: 700,
+          color: field.call ? '#fbbf24' : theme.colors.success,
+          background: field.call
+            ? 'rgba(251, 191, 36, 0.15)'
+            : `${theme.colors.success}20`,
+          borderRadius: 5,
+          padding: '0.15rem 0.4rem',
+          whiteSpace: 'nowrap',
+        }}>
+          {field.call ? `V1: ${field.call}` : 'New'}
+        </span>
+      </div>
+      <div style={{
+        ...typography.body,
+        fontSize: compact ? 10.5 : 11,
+        color: theme.colors.textSecondary,
+        lineHeight: 1.3,
+      }}>
+        {field.desc}
+      </div>
+    </motion.div>
+  );
+
   return (
     <SlideContainer maxWidth={1000}>
-      {/* Segment 0: Six-field overview */}
+      {/* Segment 0: Grouped six-field overview — CoT vs Deliverable vs Validation */}
       <AnimatePresence>
         {isSegmentVisible(0) && (
           <div>
             <div style={{ textAlign: 'center' }}>
-              <SlideTitle reduced={reduced} subtitle="Six Fields, One JSON Response">
+              <SlideTitle reduced={reduced} subtitle="Six Fields, Two Purposes">
                 Output Schema
               </SlideTitle>
             </div>
+
+            {/* Row 1: CoT scaffolding label + 4 compact cards */}
             <motion.div
               variants={fadeUp(reduced)}
               initial="hidden"
               animate="visible"
+            >
+              <div style={{
+                ...typography.body,
+                fontSize: 10,
+                fontWeight: 700,
+                textTransform: 'uppercase' as const,
+                letterSpacing: '0.08em',
+                color: CATEGORY_STYLES.cot.accent,
+                marginBottom: '0.35rem',
+                marginTop: '0.15rem',
+              }}>
+                {CATEGORY_STYLES.cot.label}
+              </div>
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(4, 1fr)',
+                gap: '0.5rem',
+              }}>
+                {COT_FIELDS.map((field, i) =>
+                  renderFieldCard(field, i, CATEGORY_STYLES.cot.accent, CATEGORY_STYLES.cot.bg, true)
+                )}
+              </div>
+            </motion.div>
+
+            {/* Row 2: Deliverable + Validation */}
+            <motion.div
+              initial={{ opacity: 0, y: reduced ? 0 : 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: reduced ? 0.1 : 0.3, delay: reduced ? 0 : 0.3 }}
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(3, 1fr)',
-                gap: '0.6rem',
-                marginTop: '0.25rem',
+                gridTemplateColumns: '2fr 1fr',
+                gap: '0.5rem',
+                marginTop: '0.6rem',
               }}
             >
-              {SCHEMA_FIELDS.map((field, i) => (
-                <motion.div
-                  key={field.name}
-                  initial={{ opacity: 0, y: reduced ? 0 : 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    duration: reduced ? 0.1 : 0.3,
-                    delay: reduced ? 0 : i * 0.06,
-                  }}
-                  style={{
-                    background: theme.colors.bgSurface,
-                    border: `1px solid ${theme.colors.bgBorder}`,
-                    borderRadius: 10,
-                    padding: '0.55rem 0.75rem',
-                    textAlign: 'left',
-                  }}
-                >
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    marginBottom: '0.25rem',
-                  }}>
-                    <span style={{
-                      fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
-                      fontSize: 11,
-                      fontWeight: 600,
-                      color: theme.colors.primary,
-                    }}>
-                      {field.name}
-                    </span>
-                    <span style={{
-                      fontSize: 9,
-                      fontWeight: 700,
-                      color: field.call ? '#fbbf24' : theme.colors.success,
-                      background: field.call
-                        ? 'rgba(251, 191, 36, 0.15)'
-                        : `${theme.colors.success}20`,
-                      borderRadius: 5,
-                      padding: '0.15rem 0.4rem',
-                      whiteSpace: 'nowrap',
-                    }}>
-                      {field.call ? `V1: ${field.call}` : 'New'}
-                    </span>
-                  </div>
-                  <div style={{
-                    ...typography.body,
-                    fontSize: 11,
-                    color: theme.colors.textSecondary,
-                    lineHeight: 1.3,
-                  }}>
-                    {field.desc}
-                  </div>
-                </motion.div>
-              ))}
+              <div>
+                <div style={{
+                  ...typography.body,
+                  fontSize: 10,
+                  fontWeight: 700,
+                  textTransform: 'uppercase' as const,
+                  letterSpacing: '0.08em',
+                  color: CATEGORY_STYLES.deliverable.accent,
+                  marginBottom: '0.35rem',
+                }}>
+                  {CATEGORY_STYLES.deliverable.label}
+                </div>
+                {renderFieldCard(DELIVERABLE_FIELD, 4, CATEGORY_STYLES.deliverable.accent, CATEGORY_STYLES.deliverable.bg)}
+              </div>
+              <div>
+                <div style={{
+                  ...typography.body,
+                  fontSize: 10,
+                  fontWeight: 700,
+                  textTransform: 'uppercase' as const,
+                  letterSpacing: '0.08em',
+                  color: CATEGORY_STYLES.validation.accent,
+                  marginBottom: '0.35rem',
+                }}>
+                  {CATEGORY_STYLES.validation.label}
+                </div>
+                {renderFieldCard(VALIDATION_FIELD, 5, CATEGORY_STYLES.validation.accent, CATEGORY_STYLES.validation.bg)}
+              </div>
             </motion.div>
           </div>
         )}
       </AnimatePresence>
 
-      {/* Segment 1: extractive_ranges zoom */}
+      {/* Segment 1: final_narrative zoom — the actual deliverable */}
       <AnimatePresence>
         {isSegmentVisible(1) && (
+          <motion.div
+            variants={fadeUp(reduced)}
+            initial="hidden"
+            animate="visible"
+            style={{ marginTop: '1rem' }}
+          >
+            <CodeBlock
+              code={FINAL_NARRATIVE_SAMPLE}
+              language="json"
+              title="final_narrative[0]  —  the product deliverable"
+              fontSize={11}
+              highlightLines={[6, 7, 8, 10, 11, 12]}
+            />
+            <div style={{
+              display: 'flex',
+              gap: '1.5rem',
+              marginTop: '0.4rem',
+              justifyContent: 'center',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                <div style={{
+                  width: 10, height: 10, borderRadius: 2,
+                  background: 'rgba(0, 183, 195, 0.35)',
+                  border: '2px solid #00B7C3',
+                }} />
+                <span style={{ ...typography.body, fontSize: 10, color: theme.colors.textSecondary }}>
+                  Playback coordinates (video seeking)
+                </span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                <div style={{
+                  width: 10, height: 10, borderRadius: 2,
+                  background: 'rgba(0, 183, 195, 0.35)',
+                  border: '2px solid #00B7C3',
+                }} />
+                <span style={{ ...typography.body, fontSize: 10, color: theme.colors.textSecondary }}>
+                  Extractive clip boundaries
+                </span>
+              </div>
+            </div>
+            <div style={{
+              marginTop: '0.5rem',
+              padding: '0.5rem 0.85rem',
+              borderRadius: 8,
+              background: `${CATEGORY_STYLES.deliverable.accent}10`,
+              borderLeft: `3px solid ${CATEGORY_STYLES.deliverable.accent}`,
+              textAlign: 'center',
+            }}>
+              <span style={{
+                ...typography.body,
+                fontSize: 11.5,
+                color: theme.colors.textPrimary,
+                fontStyle: 'italic',
+              }}>
+                This is what the video player actually uses. Everything else in the schema is reasoning scaffolding.
+              </span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Segment 2: extractive_ranges zoom */}
+      <AnimatePresence>
+        {isSegmentVisible(2) && (
           <motion.div
             variants={fadeUp(reduced)}
             initial="hidden"
@@ -561,9 +718,9 @@ const Ch6_S4_OutputSchemaComponent: React.FC = () => {
         )}
       </AnimatePresence>
 
-      {/* Segment 2: Insight callout + pills */}
+      {/* Segment 3: Insight callout + pills */}
       <AnimatePresence>
-        {isSegmentVisible(2) && (
+        {isSegmentVisible(3) && (
           <motion.div
             variants={fadeUp(reduced)}
             initial="hidden"
@@ -583,9 +740,9 @@ const Ch6_S4_OutputSchemaComponent: React.FC = () => {
                 margin: 0,
                 fontStyle: 'italic',
               }}>
-                The output schema isn't just a data format — it's a prompt engineering tool.
-                Field names guide execution order, nested structure enforces constraints,
-                and self_checks close the validation loop.
+                The output schema isn't just a data format — it's a chain-of-thought scaffold.
+                Five fields guide the model's reasoning, one field captures the deliverable.
+                Field names become execution steps, and self_checks closes the validation loop.
               </p>
             </div>
             <div style={{
@@ -623,6 +780,7 @@ export const Ch6_S4_OutputSchema = defineSlide({
     title: 'Output Schema',
     audioSegments: [
       { id: 'skeleton' },
+      { id: 'deliverable_zoom' },
       { id: 'extractive_zoom' },
       { id: 'insight' }
     ]

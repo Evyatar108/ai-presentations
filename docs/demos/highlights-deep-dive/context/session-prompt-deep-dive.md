@@ -718,14 +718,16 @@ From `prompt_output_schema.md` — a strict JSON schema with:
 
 **6 top-level sections** in one output — replacing 4 separate markdown tables from 4 separate calls:
 
-| Section | What it replaces |
-|---------|-----------------|
-| `abstractive_topics` | Call 1 output |
-| `topic_order` | Implicit ordering across calls |
-| `extractive_ranges` | Call 2 output |
-| `ranking` | Call 3 output |
-| `final_narrative` | Call 4 output |
-| `self_checks` | Nothing — new in V2 |
+| Section | Role | What it replaces |
+|---------|------|-----------------|
+| `abstractive_topics` | Chain-of-thought | Call 1 output |
+| `topic_order` | Chain-of-thought | Implicit ordering across calls |
+| `extractive_ranges` | Chain-of-thought | Call 2 output |
+| `ranking` | Chain-of-thought | Call 3 output |
+| `final_narrative` | **Deliverable** | Call 4 output |
+| `self_checks` | Validation | Nothing — new in V2 |
+
+Only `final_narrative` is consumed by the product — it contains the playback coordinates and narration text that drive video assembly. The other four output fields are structured chain-of-thought: intermediate reasoning steps that guide the model through segmentation, selection, and ranking before it commits to the final output.
 
 Benefits: `additionalProperties: false` prevents hallucinated fields, `enum` constraints lock down categorical values, `pattern` constraints validate ID formats.
 

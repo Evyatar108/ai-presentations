@@ -422,20 +422,26 @@
       "segments": [
         {
           "id": "skeleton",
-          "narrationText": "This is what a single V2 response looks like: six top-level fields in one JSON object. Abstractive topics from Call 1. Extractive ranges from Call 2. Ranking from Call 3. And the final narrative from Call 4. Everything V1 spread across four separate LLM calls, produced in a single pass.",
-          "visualDescription": "3x2 grid: six fields with monospace names, descriptions, and V1 call badges",
+          "narrationText": "This is a single V2 response — six top-level fields in one JSON object. But they serve two very different purposes. The first four fields — abstractive topics, topic order, extractive ranges, and ranking — are structured chain-of-thought. They guide the model through segmentation, selection, and ranking. Only the fifth field, final_narrative, is the actual deliverable — the video editing instructions consumed by the product. And self_checks adds runtime validation.",
+          "visualDescription": "Grouped grid: Row 1 = 4 CoT cards (amber accent), Row 2 = final_narrative (teal, prominent) + self_checks (green)",
+          "notes": ""
+        },
+        {
+          "id": "deliverable_zoom",
+          "narrationText": "Let's zoom into what final_narrative actually contains. Each row has a topic with narration text for TTS voiceover, and playback_start — the turn and utterance coordinates that tell the video player where to seek. Plus an optional extractive object defining clip boundaries. These coordinates are what the product uses to assemble the highlights video. Everything else in the schema — all five other fields — is reasoning scaffolding that helped the model produce this.",
+          "visualDescription": "JSON code block showing final_narrative[0] with highlighted playback_start and extractive fields, plus legend and callout",
           "notes": ""
         },
         {
           "id": "extractive_zoom",
-          "narrationText": "The most interesting part is extractive_ranges. Look at the field names — they're instructions. 'Selected turn opening tag raw copy from input' forces the model to copy the exact turn tag from the transcript. Then 'speaker name' and 'turn id' are parsed from that copy. Same pattern below: first copy the raw pipe-delimited row, then parse the utterance IDs from it. The schema itself guides the model through copy-then-parse — which we'll see in detail next.",
+          "narrationText": "Now contrast that with extractive_ranges — pure chain-of-thought. Look at the field names — they're instructions. 'Selected turn opening tag raw copy from input' forces the model to copy the exact turn tag. Then 'speaker name' and 'turn id' are parsed from that copy. Same pattern below: first copy the raw pipe-delimited row, then parse the utterance IDs. The schema guides the model through copy-then-parse — which we'll see in detail next.",
           "visualDescription": "JSON code block showing extractive_ranges[0] with amber-highlighted copy fields and legend",
           "notes": ""
         },
         {
           "id": "insight",
-          "narrationText": "This is a key takeaway: the output schema isn't just a data format — it's a prompt engineering tool. The field names tell the model what to do. The nested structure constrains what it can output. And self-checks close the loop with built-in validation. When you design an LLM's output schema, you're writing part of the prompt.",
-          "visualDescription": "Callout card with teal accent + three pills: 'Field names = instructions', 'Structure = constraints', 'self_checks = validation'",
+          "narrationText": "So here's the key takeaway. The output schema isn't just a data format — it's a chain-of-thought scaffold and a prompt engineering tool. Five fields guide the model's reasoning, one field captures the deliverable. Field names become execution steps, nested structure enforces constraints, and self-checks close the validation loop. When you design an LLM's output schema, you're designing the reasoning path.",
+          "visualDescription": "Callout card with teal accent + three pills: 'Field names = instructions', 'Structure = constraints', 'Chain-of-thought → deliverable'",
           "notes": ""
         }
       ]
