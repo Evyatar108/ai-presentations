@@ -355,6 +355,7 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack }) => {
         />
         {/* Slide Player */}
         <SlidePlayer
+          demoId={demoId}
           slides={slides}
           slidesWithMetadata={slidesWithResolvedPaths}
           autoAdvance={false}

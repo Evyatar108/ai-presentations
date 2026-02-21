@@ -13,6 +13,8 @@ export interface RegenerationStatus {
 }
 
 export interface UseTtsRegenerationOptions {
+  /** Demo ID used to build the correct audio output path */
+  demoId: string;
   /** Current slide metadata (may be undefined if no metadata is loaded) */
   currentSlideMetadata: SlideMetadata | undefined;
   /** Current segment index within the slide */
@@ -37,6 +39,7 @@ export interface UseTtsRegenerationResult {
 }
 
 export function useTtsRegeneration({
+  demoId,
   currentSlideMetadata,
   currentSegmentIndex,
   onSegmentRefresh,
@@ -81,6 +84,7 @@ export function useTtsRegeneration({
       }
 
       const result = await regenerateSegment({
+        demoId,
         chapter: currentSlideMetadata.chapter,
         slide: currentSlideMetadata.slide,
         segmentIndex: currentSegmentIndex,
@@ -153,7 +157,7 @@ export function useTtsRegeneration({
     } finally {
       setRegeneratingSegment(false);
     }
-  }, [currentSlideMetadata, currentSegmentIndex, onSegmentRefresh, preCheck, postProcess, demoInstruct]);
+  }, [demoId, currentSlideMetadata, currentSegmentIndex, onSegmentRefresh, preCheck, postProcess, demoInstruct]);
 
   return {
     regeneratingSegment,

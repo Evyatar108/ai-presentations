@@ -98,6 +98,7 @@ export function useNarrationEditor({
 
   // Delegate TTS regeneration to the shared hook
   const { regeneratingSegment: isRegeneratingAudio, handleRegenerateSegment } = useTtsRegeneration({
+    demoId: demoMetadata.id,
     currentSlideMetadata,
     currentSegmentIndex,
     onSegmentRefresh: () => { /* no segment context refresh needed in narrated mode */ },

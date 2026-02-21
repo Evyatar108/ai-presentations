@@ -9,6 +9,7 @@ interface TTSConfig {
 }
 
 interface RegenerateSegmentParams {
+  demoId: string;
   chapter: number;
   slide: number;
   segmentIndex: number;
@@ -179,7 +180,7 @@ export async function regenerateSegment(
     console.log(`[TTS] Saving audio locally via: ${config.localSaveEndpoint}`);
     
     const { buildAudioOutputPath } = await import('./audioPath');
-    const outputPath = buildAudioOutputPath(params.chapter, params.slide, params.segmentIndex, params.segmentId);
+    const outputPath = `${params.demoId}/${buildAudioOutputPath(params.chapter, params.slide, params.segmentIndex, params.segmentId)}`;
     
     const saveResponse = await fetch(config.localSaveEndpoint, {
       method: 'POST',

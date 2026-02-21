@@ -14,6 +14,7 @@ export interface Slide {
 }
 
 export interface SlidePlayerProps {
+  demoId: string;
   slides: Slide[];
   slidesWithMetadata?: SlideComponentWithMetadata[];
   autoAdvance?: boolean;
@@ -24,6 +25,7 @@ export interface SlidePlayerProps {
 }
 
 export const SlidePlayer: React.FC<SlidePlayerProps> = ({
+  demoId,
   slides,
   slidesWithMetadata,
   autoAdvance = false,
@@ -176,6 +178,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
   
   // TTS audio regeneration (extracted to reusable hook)
   const { regeneratingSegment, regenerationStatus, handleRegenerateSegment } = useTtsRegeneration({
+    demoId,
     currentSlideMetadata,
     currentSegmentIndex: segmentContext.currentSegmentIndex,
     onSegmentRefresh: () => segmentContext.setCurrentSegment(segmentContext.currentSegmentIndex),
