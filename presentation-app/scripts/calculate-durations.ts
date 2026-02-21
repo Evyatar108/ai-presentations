@@ -390,6 +390,30 @@ function updateMetadataFile(demoId: string, demoReport: EnhancedDemoReport): boo
   return false;
 }
 
+/**
+ * Run the full duration calculation pipeline: calculate → print → save JSON → update metadata.ts.
+ * Exported so other scripts (e.g. generate-tts) can call it in-process.
+ */
+export async function runDurationCalculation(options: {
+  audioDir: string;
+  demoFilter?: string;
+  reportPath: string;
+  verbose?: boolean;
+}): Promise<void> {
+  const report = await calculateDurations(options.audioDir, options.demoFilter);
+  printReport(report, options.verbose);
+  await saveReportJSON(report, options.reportPath, options.demoFilter);
+  let updatedCount = 0;
+  for (const [demoId, demoReport] of Object.entries(report)) {
+    if (updateMetadataFile(demoId, demoReport)) {
+      updatedCount++;
+    }
+  }
+  if (updatedCount > 0) {
+    console.log(`\n📝 Updated ${updatedCount} metadata.ts file(s) with durationInfo\n`);
+  }
+}
+
 // Parse CLI arguments
 /**
  * Parse CLI arguments.
@@ -397,37 +421,26 @@ function updateMetadataFile(demoId: string, demoReport: EnhancedDemoReport): boo
 function parseCLIArgs(): { demoFilter?: string; verbose?: boolean } {
   const args = process.argv.slice(2);
   const result: { demoFilter?: string; verbose?: boolean } = {};
-  
+
   // Check for --demo parameter
   const demoIndex = args.indexOf('--demo');
   if (demoIndex !== -1 && args[demoIndex + 1]) {
     result.demoFilter = args[demoIndex + 1];
   }
-  
+
   // Check for --verbose parameter
   result.verbose = args.includes('--verbose') || args.includes('-v');
-  
+
   return result;
 }
-// CLI execution
-const cliArgs = parseCLIArgs();
-const audioDir = path.join(__dirname, '../public/audio');
-const reportPath = path.join(__dirname, '../duration-report.json');
 
-calculateDurations(audioDir, cliArgs.demoFilter)
-  .then(report => {
-    printReport(report, cliArgs.verbose);
-    saveReportJSON(report, reportPath, cliArgs.demoFilter);
-
-    // Auto-update metadata.ts for each demo
-    let updatedCount = 0;
-    for (const [demoId, demoReport] of Object.entries(report)) {
-      if (updateMetadataFile(demoId, demoReport)) {
-        updatedCount++;
-      }
-    }
-    if (updatedCount > 0) {
-      console.log(`\n📝 Updated ${updatedCount} metadata.ts file(s) with durationInfo\n`);
-    }
-  })
-  .catch(console.error);
+// CLI execution — only when run directly
+if (path.resolve(process.argv[1]) === path.resolve(__filename)) {
+  const cliArgs = parseCLIArgs();
+  runDurationCalculation({
+    audioDir: path.join(__dirname, '../public/audio'),
+    demoFilter: cliArgs.demoFilter,
+    reportPath: path.join(__dirname, '../duration-report.json'),
+    verbose: cliArgs.verbose,
+  }).catch(console.error);
+}

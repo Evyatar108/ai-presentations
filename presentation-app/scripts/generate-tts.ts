@@ -5,6 +5,7 @@ import { dirname } from 'path';
 import axios from 'axios';
 import * as crypto from 'crypto';
 import { AudioSegment, SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
+import { runDurationCalculation } from './calculate-durations';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -358,6 +359,8 @@ async function generateTTS(config: TTSConfig) {
   let totalGenerated = 0;
   let totalSkipped = 0;
   let totalErrors = 0;
+  let totalDeleted = 0;
+  let totalRenamed = 0;
   
   for (const demoId of demosToProcess) {
     console.log('\n' + '═'.repeat(70));
@@ -670,6 +673,9 @@ async function generateTTS(config: TTSConfig) {
     // Step 5: Generate remaining unmatched segments
     console.log(`Found ${segmentsToGenerate.length} segments to generate (${skippedCount} skipped, ${renamedCount} renamed)\n`);
 
+    totalRenamed += renamedCount;
+    totalDeleted += cleanup.orphanedFiles.length;
+
     if (segmentsToGenerate.length === 0) {
       console.log('✅ No segments need generation for this demo.\n');
       totalSkipped += skippedCount;
@@ -811,6 +817,17 @@ async function generateTTS(config: TTSConfig) {
       }
     }
     console.log();
+  }
+
+  // Auto-run duration calculation if any audio files changed
+  const audioChanged = totalGenerated > 0 || totalDeleted > 0 || totalRenamed > 0;
+  if (audioChanged) {
+    console.log('⏱️  Audio files changed — recalculating durations...\n');
+    await runDurationCalculation({
+      audioDir: config.outputDir,
+      demoFilter: config.demoFilter,
+      reportPath: path.join(__dirname, '../duration-report.json'),
+    });
   }
 }
 
