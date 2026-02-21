@@ -153,7 +153,7 @@ export async function regenerateSegment(
           ...(params.instruct ? { instruct: params.instruct } : {}),
         }),
         // Add timeout and better error handling
-        signal: AbortSignal.timeout(60000) // 60 second timeout
+        signal: AbortSignal.timeout(1800000) // 30 minute timeout
       }
     );
     
