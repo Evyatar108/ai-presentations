@@ -383,7 +383,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
                       <button
                         key={segment.id}
                         onClick={() => goToSegment(idx)}
-                        aria-label={`Go to segment ${idx + 1}: ${segment.id}`}
+                        aria-label={`Go to segment ${idx}: ${segment.id}`}
                         aria-current={idx === segmentContext.currentSegmentIndex ? 'true' : 'false'}
                         title={segment.id}
                         style={{
@@ -424,7 +424,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
                       fontFamily: theme.fontFamily
                     }}
                   >
-                    {segmentContext.currentSegmentIndex + 1} / {segments.length}
+                    {segmentContext.currentSegmentIndex} / {segments.length}
                   </div>
                   {/* Divider before regenerate button */}
                   <div

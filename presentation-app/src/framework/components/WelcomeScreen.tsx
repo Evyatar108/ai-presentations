@@ -543,13 +543,13 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
                                   : 'none'
                               }}
                             >
-                              <span style={{ color: theme.colors.textMuted }}>{segment.segmentIndex + 1}.</span>
+                              <span style={{ color: theme.colors.textMuted }}>{segment.segmentIndex}.</span>
                               <span style={{
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
                                 whiteSpace: 'nowrap'
                               }}>
-                                Segment {segment.segmentIndex + 1}
+                                Segment {segment.segmentIndex}
                               </span>
                               <span style={{ color: theme.colors.textPrimary }}>
                                 {formatDuration(segment.audioDuration)}
