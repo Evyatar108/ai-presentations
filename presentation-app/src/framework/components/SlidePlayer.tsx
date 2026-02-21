@@ -424,7 +424,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
                       fontFamily: theme.fontFamily
                     }}
                   >
-                    {segmentContext.currentSegmentIndex} / {segments.length}
+                    {segmentContext.currentSegmentIndex} / {segments.length - 1}
                   </div>
                   {/* Divider before regenerate button */}
                   <div
