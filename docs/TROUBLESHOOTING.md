@@ -208,6 +208,24 @@
 2. Verify segment audio paths are correct
 3. Check for missing audio files (uses silence fallback)
 
+## Animation / Layout Issues
+
+### Content jumps twice during RevealSequence transitions
+
+**Symptoms**: When a `<Reveal>` exits inside a `<RevealSequence>`, sibling elements below it snap upward in two steps instead of moving smoothly once.
+
+**Cause**: `SlideContainer` uses `display: flex; align-items: center` (vertical centering). If exit removal and entrance addition happen at different times, the flex container re-centers twice — once when the exiting element is removed and again when the entering element is added.
+
+**How the framework handles this**:
+- Exiting elements inside a `RevealSequence` **stay mounted** in the DOM and smoothly collapse their height to zero (fade out + height/margin/padding collapse over ~0.4s)
+- At release (after the delay), exit-unmount and entrance-mount happen in the **same React render**, so the flex container re-centers only once
+- All elements use `layout="position"` so any remaining position changes are smoothly animated by Framer Motion
+
+**If you still see jumps**:
+1. Ensure all animated children inside the `RevealSequence` use `<Reveal>` or `<RevealGroup>` — raw `<AnimatePresence>` blocks don't participate in the sequencing and will enter/exit independently
+2. Avoid mixing `<AnimatePresence>` with `<Reveal>` inside the same `RevealSequence`
+3. Check that sibling elements outside the `RevealSequence` don't have their own `AnimatePresence` wrappers that could cause separate layout shifts
+
 ## Performance Issues
 
 ### Slow Initial Load

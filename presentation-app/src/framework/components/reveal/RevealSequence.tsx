@@ -6,7 +6,7 @@ export interface RevealSequenceContextValue {
   holdEntrance: boolean;
   /** Called by a Reveal when it detects an exit (visible → invisible). */
   onExitStart: () => void;
-  /** Called by a Reveal's AnimatePresence when its exit animation completes. */
+  /** Called by a Reveal's onAnimationComplete when its exit (hidden) animation finishes. */
   onExitComplete: () => void;
 }
 
@@ -20,7 +20,7 @@ export function useRevealSequence(): RevealSequenceContextValue | null {
 }
 
 interface RevealSequenceProps {
-  /** Delay in milliseconds between all exits completing and entrances starting. Default: `300`. */
+  /** Delay in milliseconds between all exits completing and entrances starting. Default: `500`. */
   delay?: number;
   children: React.ReactNode;
 }
@@ -28,9 +28,14 @@ interface RevealSequenceProps {
 /**
  * Coordinates exit-before-enter sequencing for child `<Reveal>` and `<RevealGroup>` components.
  *
- * When the segment changes, exiting elements animate out first.
- * Only after all exits complete (plus an optional `delay`) do newly-entering elements animate in.
- * No per-element configuration needed — just wrap the group.
+ * When the segment changes, exiting elements animate to their `hidden` variant but **stay
+ * mounted** (preserving layout space). Only after all exit animations complete (plus an
+ * optional `delay`) are exiting elements unmounted and entering elements mounted in a
+ * **single React render** — preventing double layout shifts in flex-centered containers.
+ *
+ * Inside a RevealSequence, child Reveals do NOT use AnimatePresence. They control
+ * enter/exit via the `animate` prop ('visible' / 'hidden') and report animation
+ * completion via `onAnimationComplete`.
  *
  * @example
  * ```tsx
@@ -40,7 +45,7 @@ interface RevealSequenceProps {
  * </RevealSequence>
  * ```
  */
-export const RevealSequence: React.FC<RevealSequenceProps> = ({ delay = 300, children }) => {
+export const RevealSequence: React.FC<RevealSequenceProps> = ({ delay = 500, children }) => {
   const { currentSegmentIndex } = useSegmentedAnimation();
   const prevIndexRef = useRef(currentSegmentIndex);
   const pendingExitsRef = useRef(0);

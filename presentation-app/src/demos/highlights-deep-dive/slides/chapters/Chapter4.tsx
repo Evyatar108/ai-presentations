@@ -480,14 +480,7 @@ const Ch4_S4_OutputSafetyComponent: React.FC = () => {
         </Reveal>
 
         {/* Segment 1: Call 2's Full Picture */}
-        <AnimatePresence>
-          {isSegmentVisible(1) && (
-          <motion.div
-            variants={fadeUp(reduced)}
-            initial="hidden"
-            animate="visible"
-            style={{ marginTop: '2rem' }}
-          >
+        <Reveal from={1} animation={fadeUp} style={{ marginTop: '2rem' }}>
             <motion.h1
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -593,9 +586,7 @@ const Ch4_S4_OutputSafetyComponent: React.FC = () => {
             }}>
               Model selects rows from the input table — every range is pre-validated
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+        </Reveal>
 
       {/* Segment 2: Why Precompute? — enters after segment 0 exits */}
       <Reveal from={2} animation={(r) => staggerContainer(r, 0.15)} style={{

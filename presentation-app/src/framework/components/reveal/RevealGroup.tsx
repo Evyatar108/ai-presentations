@@ -6,6 +6,8 @@ import type { RevealGroupProps, RevealAnimation } from './types';
 import { useRevealVisibility } from './useRevealVisibility';
 import { useRevealSequence } from './RevealSequence';
 
+const COLLAPSE_EASE = [0.4, 0, 0.2, 1] as const;
+
 // Map of element types to their motion counterparts
 const motionElements = {
   div: motion.div,
@@ -69,13 +71,26 @@ export const RevealGroup: React.FC<RevealGroupProps> = ({
   const isNewEntrance = visible && !wasRenderedRef.current;
   const effectiveVisible = (sequence?.holdEntrance && isNewEntrance) ? false : visible;
 
+  const isExiting = !effectiveVisible && wasRenderedRef.current;
+  const holdingExitRef = useRef(false);
+  const effectiveVisibleRef = useRef(effectiveVisible);
+  effectiveVisibleRef.current = effectiveVisible;
+
   // Register exits with the RevealSequence.
   useEffect(() => {
     if (wasRenderedRef.current && !effectiveVisible && sequence) {
+      holdingExitRef.current = true;
       sequence.onExitStart();
+    }
+    if (effectiveVisible) {
+      holdingExitRef.current = false;
     }
     wasRenderedRef.current = effectiveVisible;
   }, [effectiveVisible, sequence]);
+
+  if (sequence && !sequence.holdEntrance && holdingExitRef.current) {
+    holdingExitRef.current = false;
+  }
 
   // Build stagger container variants when stagger is enabled
   const containerVariants = useMemo<Variants>(() => {
@@ -106,8 +121,75 @@ export const RevealGroup: React.FC<RevealGroupProps> = ({
     ? resolvedExit
     : (containerVariants.exit ?? containerVariants.hidden ?? { opacity: 0 }) as TargetAndTransition;
 
+  // Smooth height-collapsing exit for RevealSequence.
+  const sequenceExitTarget = useMemo<TargetAndTransition | undefined>(() => {
+    if (!sequence) return undefined;
+    const hidden = (typeof containerVariants.hidden === 'object' ? containerVariants.hidden : { opacity: 0 }) as Record<string, unknown>;
+    return {
+      ...hidden,
+      height: 0,
+      overflow: 'hidden',
+      marginTop: 0,
+      marginBottom: 0,
+      paddingTop: 0,
+      paddingBottom: 0,
+      transition: {
+        opacity: { duration: 0.3 },
+        y: { duration: 0.3 },
+        x: { duration: 0.3 },
+        scale: { duration: 0.3 },
+        height: { duration: 0.4, ease: COLLAPSE_EASE },
+        overflow: { duration: 0 },
+        marginTop: { duration: 0.4, ease: COLLAPSE_EASE },
+        marginBottom: { duration: 0.4, ease: COLLAPSE_EASE },
+        paddingTop: { duration: 0.4, ease: COLLAPSE_EASE },
+        paddingBottom: { duration: 0.4, ease: COLLAPSE_EASE },
+      },
+    };
+  }, [sequence, containerVariants]);
+
+  const childContent = stagger
+    ? React.Children.map(children, (child) =>
+        child != null ? (
+          <motion.div variants={childVariants}>{child}</motion.div>
+        ) : null,
+      )
+    : children;
+
+  // ---------------------------------------------------------------------------
+  // Inside a RevealSequence: keep exiting elements mounted until release.
+  // layout="position" ensures visible elements smoothly reposition when
+  // siblings collapse or enter.
+  // ---------------------------------------------------------------------------
+  if (sequence) {
+    const shouldRender = effectiveVisible || isExiting || holdingExitRef.current;
+
+    if (!shouldRender) return null;
+
+    return (
+      <MotionElement
+        layout="position"
+        variants={containerVariants}
+        initial="hidden"
+        animate={effectiveVisible ? 'visible' : sequenceExitTarget}
+        onAnimationComplete={() => {
+          if (!effectiveVisibleRef.current && sequence) {
+            sequence.onExitComplete();
+          }
+        }}
+        className={className}
+        style={style}
+      >
+        {childContent}
+      </MotionElement>
+    );
+  }
+
+  // ---------------------------------------------------------------------------
+  // Outside a RevealSequence: standard AnimatePresence enter/exit.
+  // ---------------------------------------------------------------------------
   return (
-    <AnimatePresence onExitComplete={sequence ? sequence.onExitComplete : undefined}>
+    <AnimatePresence>
       {effectiveVisible && (
         <MotionElement
           variants={containerVariants}
@@ -117,13 +199,7 @@ export const RevealGroup: React.FC<RevealGroupProps> = ({
           className={className}
           style={style}
         >
-          {stagger
-            ? React.Children.map(children, (child) =>
-                child != null ? (
-                  <motion.div variants={childVariants}>{child}</motion.div>
-                ) : null,
-              )
-            : children}
+          {childContent}
         </MotionElement>
       )}
     </AnimatePresence>

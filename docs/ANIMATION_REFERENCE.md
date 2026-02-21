@@ -111,13 +111,13 @@ By default, when one element exits and another enters on the same segment bounda
 ```tsx
 import { Reveal, RevealSequence } from '@framework';
 
-// Default 150ms pause between exit completing and entrance starting
+// Default 500ms pause between exit completing and entrance starting
 <RevealSequence>
   <Reveal from={0} until={1} exitAnimation={fadeDown}>
     This exits first when moving to segment 2
   </Reveal>
   <Reveal from={2}>
-    This enters after the exit above completes + 150ms
+    This enters after the exit above completes + 500ms
   </Reveal>
 </RevealSequence>
 
@@ -129,9 +129,12 @@ import { Reveal, RevealSequence } from '@framework';
 
 How it works:
 - When the segment changes, `RevealSequence` holds back newly-entering Reveals
-- Exiting Reveals play their exit animations via AnimatePresence
-- Once all exits complete, a `delay` pause is applied (default 150ms), then entrances animate in
-- If no exits occur on a segment change, entrances play after the delay
+- Exiting Reveals fade out and smoothly collapse their height — content below slides up gradually
+- After all exits complete + `delay`, entering Reveals animate in
+- Elements use `layout="position"` for smooth repositioning during transitions
+- Inside a `RevealSequence`, `Reveal`/`RevealGroup` do **not** use `AnimatePresence` — the `exitAnimation` prop only applies outside a `RevealSequence`
+
+> See [TROUBLESHOOTING.md — Content jumps twice during RevealSequence transitions](TROUBLESHOOTING.md#content-jumps-twice-during-revealsequence-transitions) for the design rationale and debugging tips.
 
 ---
 
