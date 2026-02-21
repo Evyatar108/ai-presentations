@@ -7,7 +7,7 @@ import { Ch0_S1_Title } from './chapters/Chapter0';
 import { Ch1_S1_ProductContext, Ch1_S2_COGSProblem } from './chapters/Chapter1';
 
 // Chapter 2: V1 Pipeline Architecture
-import { Ch2_S1_FourCalls, Ch2_S2_CallDetail } from './chapters/Chapter2';
+import { Ch2_S1_FourCalls } from './chapters/Chapter2';
 
 // Chapter 3: Five Cost Drivers
 import { Ch3_S1_CostDrivers, Ch3_S2_VerboseJSON } from './chapters/Chapter3';
@@ -35,14 +35,13 @@ import { Ch10_S1_Lessons, Ch10_S2_Closing } from './chapters/Chapter10';
 
 /**
  * Central registry of all slide components for the Highlights Deep-Dive demo.
- * 24 slides across 11 chapters.
+ * 23 slides across 11 chapters.
  */
 export const allSlides: SlideComponentWithMetadata[] = [
   Ch0_S1_Title,
   Ch1_S1_ProductContext,
   Ch1_S2_COGSProblem,
   Ch2_S1_FourCalls,
-  Ch2_S2_CallDetail,
   Ch3_S1_CostDrivers,
   Ch3_S2_VerboseJSON,
   Ch4_S1_NestedLoop,

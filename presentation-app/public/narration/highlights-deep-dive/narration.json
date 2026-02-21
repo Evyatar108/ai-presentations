@@ -108,25 +108,6 @@
       ]
     },
     {
-      "chapter": 2,
-      "slide": 2,
-      "title": "Call Detail",
-      "segments": [
-        {
-          "id": "code",
-          "narrationText": "Here's what a single call looks like in the V1 code. This is the abstractives query — a prompt template embedded in a Python string. Notice the structure: system instructions telling the model to envision itself as a video editor, then detailed prose instructions for the task.",
-          "visualDescription": "CodeBlock showing Python snippet from HighlightsPromptMaper.py",
-          "notes": ""
-        },
-        {
-          "id": "annotations",
-          "narrationText": "Two things to notice. The instructions are prose paragraphs — vague natural language the model interprets freely. And each call chains to the next via parsed markdown tables, creating fragile dependencies.",
-          "visualDescription": "Three annotation callouts: RAI rules, Prose instructions, Markdown table output",
-          "notes": ""
-        }
-      ]
-    },
-    {
       "chapter": 3,
       "slide": 1,
       "title": "Four Cost Drivers",

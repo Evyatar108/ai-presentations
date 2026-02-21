@@ -1,20 +1,16 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import {
   useReducedMotion,
   useSegmentedAnimation,
-  useTheme,
   defineSlide,
   SlideContainer,
   SlideTitle,
-  typography,
-  fadeUp,
 } from '@framework';
 import PipelineDiagram from '../components/PipelineDiagram';
-import CodeBlock from '../components/CodeBlock';
 
 /**
- * Chapter 2: V1 Pipeline Architecture (2 slides)
+ * Chapter 2: V1 Pipeline Architecture (1 slide)
  */
 
 // ---------- Slide 1: Four Calls ----------
@@ -59,89 +55,3 @@ export const Ch2_S1_FourCalls = defineSlide({
   component: Ch2_S1_FourCallsComponent
 });
 
-// ---------- Slide 2: Call Detail ----------
-
-const ABSTRACTIVES_CODE = `class HighlightsPromptMaper(PromptMaper):
-    def add_prompts_values(self):
-        self.query_to_prompt["highlights_abstractives"] = Query(
-            first_model_query="",
-            run_only_on_last=True,
-            limit_max_token=4096,
-            first_prompt_template="""
-<|im_start|>system
-# General instructions
-- Envision yourself as a video editor...
-- Create two types of sections:
-    abstractive and extractive...
-
-# Detailed instructions  (~40 lines)
-...
-""")`;
-
-const Ch2_S2_CallDetailComponent: React.FC = () => {
-  const { reduced } = useReducedMotion();
-  const { isSegmentVisible } = useSegmentedAnimation();
-  const theme = useTheme();
-
-  return (
-    <SlideContainer maxWidth={1000} textAlign="left">
-      <AnimatePresence>
-        {isSegmentVisible(0) && (
-          <CodeBlock
-            code={ABSTRACTIVES_CODE}
-            language="python"
-            title="HighlightsPromptMaper.py  --  highlights_abstractives query"
-            highlightLines={[3, 10, 11]}
-            fontSize={12}
-          />
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {isSegmentVisible(1) && (
-          <motion.div
-            variants={fadeUp(reduced)}
-            initial="hidden"
-            animate="visible"
-            style={{
-              display: 'flex',
-              gap: '1rem',
-              marginTop: '1.5rem',
-              justifyContent: 'center'
-            }}
-          >
-            {[
-              { label: 'Prose instructions', detail: 'Paragraph-style directions', color: theme.colors.textSecondary },
-              { label: 'Markdown table output', detail: 'Passed between calls', color: theme.colors.primary }
-            ].map((item) => (
-              <div key={item.label} style={{
-                background: theme.colors.bgSurface,
-                border: `1px solid ${theme.colors.bgBorder}`,
-                borderRadius: 10,
-                padding: '0.75rem 1rem',
-                borderLeft: `3px solid ${item.color}`,
-                flex: 1
-              }}>
-                <div style={{ ...typography.body, fontSize: 14, fontWeight: 600 }}>{item.label}</div>
-                <div style={{ ...typography.caption, fontSize: 12 }}>{item.detail}</div>
-              </div>
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </SlideContainer>
-  );
-};
-
-export const Ch2_S2_CallDetail = defineSlide({
-  metadata: {
-    chapter: 2,
-    slide: 2,
-    title: 'Call Detail',
-    audioSegments: [
-      { id: 'code', audioFilePath: '/audio/highlights-deep-dive/c2/s2_segment_01_code.wav' },
-      { id: 'annotations', audioFilePath: '/audio/highlights-deep-dive/c2/s2_segment_02_annotations.wav' }
-    ]
-  },
-  component: Ch2_S2_CallDetailComponent
-});
