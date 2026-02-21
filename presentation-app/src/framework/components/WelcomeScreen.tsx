@@ -132,7 +132,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
       {/* Demo Grid */}
       <main style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
         gap: '2rem',
         maxWidth: 1200,
         margin: '0 auto'
@@ -168,9 +168,8 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
             {demo.thumbnail && (
               <div style={{
                 width: '100%',
-                aspectRatio: '3 / 2',
-                maxHeight: 200,
-                background: `url(${demo.thumbnail}) center/cover`,
+                aspectRatio: '16 / 9',
+                background: `rgba(15, 23, 42, 0.8) url(${demo.thumbnail}) center/contain no-repeat`,
                 borderBottom: '1px solid rgba(148, 163, 184, 0.2)'
               }} />
             )}
