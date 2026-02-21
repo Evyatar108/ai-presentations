@@ -152,7 +152,6 @@ export const Ch7_S2_GPUReduction = defineSlide({
     title: "GPU Optimization",
     audioSegments: [{
       id: "main",
-      audioFilePath: "/audio/meeting-highlights/c7/s2_segment_01_main.wav"
     }]
   },
   component: Ch7_S2_GPUReductionComponent
@@ -297,7 +296,6 @@ export const Ch7_S4_QualityComparison = defineSlide({
     title: "Quality Improvement",
     audioSegments: [{
       id: "main",
-      audioFilePath: "/audio/meeting-highlights/c7/s4_segment_01_main.wav"
     }]
   },
   component: Ch7_S4_QualityComparisonComponent
@@ -461,7 +459,6 @@ export const Ch7_S5_PathToGA = defineSlide({
     title: "Path to GA",
     audioSegments: [{
       id: "main",
-      audioFilePath: "/audio/meeting-highlights/c7/s5_segment_01_main.wav"
     }]
   },
   component: Ch7_S5_PathToGAComponent

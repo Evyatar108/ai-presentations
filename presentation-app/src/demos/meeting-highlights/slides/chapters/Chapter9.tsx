@@ -288,23 +288,18 @@ export const Ch9_S1_Testimonials = defineSlide({
     audioSegments: [
       {
         id: "intro",
-        audioFilePath: "/audio/meeting-highlights/c9/s1_segment_01_intro.wav"
       },
       {
         id: "kevin",
-        audioFilePath: "/audio/meeting-highlights/c9/s1_segment_02_kevin.wav"
       },
       {
         id: "ryan1",
-        audioFilePath: "/audio/meeting-highlights/c9/s1_segment_03_ryan1.wav"
       },
       {
         id: "ryan2",
-        audioFilePath: "/audio/meeting-highlights/c9/s1_segment_04_ryan2.wav"
       },
       {
         id: "anonymous",
-        audioFilePath: "/audio/meeting-highlights/c9/s1_segment_05_anonymous.wav"
       }
     ]
   },
@@ -691,19 +686,15 @@ export const Ch9_S2_ClosingThanks = defineSlide({
     audioSegments: [
       {
         id: "intro",
-        audioFilePath: "/audio/meeting-highlights/c9/s2_segment_01_intro.wav"
       },
       {
         id: "value",
-        audioFilePath: "/audio/meeting-highlights/c9/s2_segment_02_value.wav"
       },
       {
         id: "feedback",
-        audioFilePath: "/audio/meeting-highlights/c9/s2_segment_03_feedback.wav"
       },
       {
         id: "cta",
-        audioFilePath: "/audio/meeting-highlights/c9/s2_segment_04_cta.wav"
       }
     ]
   },

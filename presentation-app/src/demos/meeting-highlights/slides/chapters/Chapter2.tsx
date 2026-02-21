@@ -675,39 +675,30 @@ export const Ch2_TeamCollaboration = defineSlide({
     audioSegments: [
       {
         id: 'intro',
-        audioFilePath: '/audio/meeting-highlights/c2/s1_segment_01_intro.wav'
       },
       {
         id: 'odsp',
-        audioFilePath: '/audio/meeting-highlights/c2/s1_segment_02_odsp.wav'
       },
       {
         id: 'msai',
-        audioFilePath: '/audio/meeting-highlights/c2/s1_segment_03_msai.wav'
       },
       {
         id: 'bizchat',
-        audioFilePath: '/audio/meeting-highlights/c2/s1_segment_04_bizchat.wav'
       },
       {
         id: 'sharepoint',
-        audioFilePath: '/audio/meeting-highlights/c2/s1_segment_05_sharepoint.wav'
       },
       {
         id: 'teams',
-        audioFilePath: '/audio/meeting-highlights/c2/s1_segment_06_teams.wav'
       },
       {
         id: 'loop_storage',
-        audioFilePath: '/audio/meeting-highlights/c2/s1_segment_07_loop_storage.wav'
       },
       {
         id: 'clipchamp',
-        audioFilePath: '/audio/meeting-highlights/c2/s1_segment_08_clipchamp.wav'
       },
       {
         id: 'conclusion',
-        audioFilePath: '/audio/meeting-highlights/c2/s1_segment_09_conclusion.wav'
       }
     ]
   },

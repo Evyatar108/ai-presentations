@@ -72,12 +72,20 @@ describe('validateSlideMetadata', () => {
     expect(errors.some(e => e.message.includes('duplicate segment id'))).toBe(true);
   });
 
-  it('reports empty audioFilePath', () => {
+  it('reports empty-string audioFilePath', () => {
     const errors = validateSlideMetadata(
       { ...validMeta, audioSegments: [{ id: 'x', audioFilePath: '' }] },
       0
     );
     expect(errors.some(e => e.field.includes('.audioFilePath'))).toBe(true);
+  });
+
+  it('accepts undefined audioFilePath (auto-derived at runtime)', () => {
+    const errors = validateSlideMetadata(
+      { ...validMeta, audioSegments: [{ id: 'x' }] },
+      0
+    );
+    expect(errors.some(e => e.field.includes('.audioFilePath'))).toBe(false);
   });
 
   it('reports negative segment duration', () => {

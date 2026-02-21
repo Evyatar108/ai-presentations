@@ -249,10 +249,7 @@ export const Ch0_S1_Intro = defineSlide({
     slide: 1,
     title: '$DemoTitle',
     audioSegments: [
-      {
-        id: 'intro',
-        audioFilePath: '/audio/$DemoId/c0/s1_segment_01_intro.wav'
-      }
+      { id: 'intro' }
     ]
   },
   component: () => (

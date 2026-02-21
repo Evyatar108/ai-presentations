@@ -122,9 +122,9 @@ export const Ch1_S1_ProductContext = defineSlide({
     slide: 1,
     title: 'Product Context',
     audioSegments: [
-      { id: 'title', audioFilePath: '/audio/highlights-deep-dive/c1/s1_segment_01_title.wav' },
-      { id: 'pipeline', audioFilePath: '/audio/highlights-deep-dive/c1/s1_segment_02_pipeline.wav' },
-      { id: 'types', audioFilePath: '/audio/highlights-deep-dive/c1/s1_segment_03_types.wav' }
+      { id: 'title' },
+      { id: 'pipeline' },
+      { id: 'types' }
     ]
   },
   component: Ch1_S1_ProductContextComponent
@@ -202,9 +202,9 @@ export const Ch1_S2_COGSProblem = defineSlide({
     slide: 2,
     title: 'COGS Problem',
     audioSegments: [
-      { id: 'metrics', audioFilePath: '/audio/highlights-deep-dive/c1/s2_segment_01_metrics.wav' },
-      { id: 'quote', audioFilePath: '/audio/highlights-deep-dive/c1/s2_segment_02_quote.wav' },
-      { id: 'emphasis', audioFilePath: '/audio/highlights-deep-dive/c1/s2_segment_03_emphasis.wav' }
+      { id: 'metrics' },
+      { id: 'quote' },
+      { id: 'emphasis' }
     ]
   },
   component: Ch1_S2_COGSProblemComponent

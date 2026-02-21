@@ -145,9 +145,9 @@ export const Ch8_S1_ValidationChallenges = defineSlide({
     slide: 1,
     title: 'Validation Challenges',
     audioSegments: [
-      { id: 'title', audioFilePath: '/audio/highlights-deep-dive/c8/s1_segment_01_title.wav' },
-      { id: 'checks', audioFilePath: '/audio/highlights-deep-dive/c8/s1_segment_02_checks.wav' },
-      { id: 'challenge', audioFilePath: '/audio/highlights-deep-dive/c8/s1_segment_03_challenge.wav' }
+      { id: 'title' },
+      { id: 'checks' },
+      { id: 'challenge' }
     ]
   },
   component: Ch8_S1_ValidationChallengesComponent
@@ -315,9 +315,9 @@ export const Ch8_S2_EvalTool = defineSlide({
     slide: 2,
     title: 'Eval Tool',
     audioSegments: [
-      { id: 'title', audioFilePath: '/audio/highlights-deep-dive/c8/s2_segment_01_title.wav' },
-      { id: 'pipeline', audioFilePath: '/audio/highlights-deep-dive/c8/s2_segment_02_pipeline.wav' },
-      { id: 'metrics', audioFilePath: '/audio/highlights-deep-dive/c8/s2_segment_03_metrics.wav' }
+      { id: 'title' },
+      { id: 'pipeline' },
+      { id: 'metrics' }
     ]
   },
   component: Ch8_S2_EvalToolComponent

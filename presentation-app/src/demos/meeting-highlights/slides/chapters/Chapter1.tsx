@@ -158,19 +158,16 @@ export const Ch1_S1_WhatIsMeetingHighlights = defineSlide({
     audioSegments: [
       {
         id: "intro",
-        audioFilePath: "/audio/meeting-highlights/c1/s1_segment_01_intro.wav",
         srtSegmentNumber: 1,
         visualDescription: "Title slide \"Meeting Highlights\""
       },
       {
         id: "combination",
-        audioFilePath: "/audio/meeting-highlights/c1/s1_segment_02_combination.wav",
         srtSegmentNumber: 2,
         visualDescription: "Split screen showing AI summaries + authentic video clips"
       },
       {
         id: "problem",
-        audioFilePath: "/audio/meeting-highlights/c1/s1_segment_03_problem.wav",
         srtSegmentNumber: 3,
         visualDescription: "Value prop highlight box appears"
       }
@@ -314,37 +311,31 @@ export const Ch1_S2_HowToAccess = defineSlide({
     audioSegments: [
       {
         id: "intro",
-        audioFilePath: "/audio/meeting-highlights/c1/s2_segment_01_intro.wav",
         srtSegmentNumber: 1,
         visualDescription: "BizChat interface screenshot"
       },
       {
         id: "bizchat",
-        audioFilePath: "/audio/meeting-highlights/c1/s2_segment_02_bizchat.wav",
         srtSegmentNumber: 2,
         visualDescription: "Embedded MP4 demo video showing BizChat interaction"
       },
       {
         id: "ciq",
-        audioFilePath: "/audio/meeting-highlights/c1/s2_segment_03_ciq.wav",
         srtSegmentNumber: 3,
         visualDescription: "Demo continues - showing \"/\" menu for CIQ"
       },
       {
         id: "select",
-        audioFilePath: "/audio/meeting-highlights/c1/s2_segment_04_select.wav",
         srtSegmentNumber: 4,
         visualDescription: "Demo shows meeting selection from menu"
       },
       {
         id: "player",
-        audioFilePath: "/audio/meeting-highlights/c1/s2_segment_05_player.wav",
         srtSegmentNumber: 5,
         visualDescription: "Demo shows BizChat response with video player at bottom"
       },
       {
         id: "note",
-        audioFilePath: "/audio/meeting-highlights/c1/s2_segment_06_note.wav",
         srtSegmentNumber: 6,
         visualDescription: "Note callout appears with info icon"
       }
@@ -468,31 +459,26 @@ export const Ch1_S3_HowToAccessSharePoint = defineSlide({
     audioSegments: [
       {
         id: "intro",
-        audioFilePath: "/audio/meeting-highlights/c1/s3_segment_01_intro.wav",
         srtSegmentNumber: 1,
         visualDescription: "SharePoint interface screenshot"
       },
       {
         id: "video",
-        audioFilePath: "/audio/meeting-highlights/c1/s3_segment_02_video.wav",
         srtSegmentNumber: 2,
         visualDescription: "Video player appears showing SharePoint demo"
       },
       {
         id: "sharepoint",
-        audioFilePath: "/audio/meeting-highlights/c1/s3_segment_03_sharepoint.wav",
         srtSegmentNumber: 3,
         visualDescription: "First instruction card appears"
       },
       {
         id: "browser",
-        audioFilePath: "/audio/meeting-highlights/c1/s3_segment_04_browser.wav",
         srtSegmentNumber: 4,
         visualDescription: "Demo shows 'Watch in browser' button"
       },
       {
         id: "play",
-        audioFilePath: "/audio/meeting-highlights/c1/s3_segment_05_play.wav",
         srtSegmentNumber: 5,
         visualDescription: "Demo shows 'Play highlights' button"
       }

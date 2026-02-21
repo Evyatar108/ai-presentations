@@ -66,10 +66,10 @@ export const Ch9_S1_Metrics = defineSlide({
     slide: 1,
     title: 'Results Metrics',
     audioSegments: [
-      { id: 'title', audioFilePath: '/audio/highlights-deep-dive/c9/s1_segment_01_title.wav' },
-      { id: 'calls', audioFilePath: '/audio/highlights-deep-dive/c9/s1_segment_02_calls.wav' },
-      { id: 'tokens', audioFilePath: '/audio/highlights-deep-dive/c9/s1_segment_03_tokens.wav' },
-      { id: 'gpus', audioFilePath: '/audio/highlights-deep-dive/c9/s1_segment_04_gpus.wav' }
+      { id: 'title' },
+      { id: 'calls' },
+      { id: 'tokens' },
+      { id: 'gpus' }
     ]
   },
   component: Ch9_S1_MetricsComponent
@@ -176,9 +176,9 @@ export const Ch9_S2_QualityAndImpact = defineSlide({
     slide: 2,
     title: 'Quality and Impact',
     audioSegments: [
-      { id: 'quality', audioFilePath: '/audio/highlights-deep-dive/c9/s2_segment_01_quality.wav' },
-      { id: 'roadmap', audioFilePath: '/audio/highlights-deep-dive/c9/s2_segment_02_roadmap.wav' },
-      { id: 'quote', audioFilePath: '/audio/highlights-deep-dive/c9/s2_segment_03_quote.wav' }
+      { id: 'quality' },
+      { id: 'roadmap' },
+      { id: 'quote' }
     ]
   },
   component: Ch9_S2_QualityAndImpactComponent

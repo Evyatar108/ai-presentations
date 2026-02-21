@@ -455,89 +455,65 @@ async function generateTTS(config: TTSConfig) {
       cache[demoId] = {};
     }
     
-    // Check for unused audio files
+    // Step 1: Detect orphaned audio files (don't delete yet — we may rename them)
     console.log('🔍 Scanning for unused audio files...\n');
     const cleanup = cleanupUnusedAudio(demoId, config.outputDir, cache, allSlides);
-    
-    if (cleanup.orphanedFiles.length > 0 || cleanup.orphanedCacheKeys.length > 0) {
-      console.log('⚠️  Found unused audio files and/or cache entries:\n');
-      
-      if (cleanup.orphanedFiles.length > 0) {
-        console.log(`📁 Orphaned audio files: ${cleanup.orphanedFiles.length}`);
-        cleanup.orphanedFiles.forEach(file => {
-          console.log(`   - ${file}`);
-        });
-        console.log();
-      }
-      
-      if (cleanup.orphanedCacheKeys.length > 0) {
-        console.log(`🗑️  Orphaned cache entries: ${cleanup.orphanedCacheKeys.length}`);
-        cleanup.orphanedCacheKeys.forEach(key => {
-          console.log(`   - ${key}`);
-        });
-        console.log();
-      }
-      
-      // Delete orphaned files
-      const demoOutputDir = path.join(config.outputDir, demoId);
-      for (const relativeFile of cleanup.orphanedFiles) {
-        const fullPath = path.join(demoOutputDir, relativeFile);
-        try {
-          fs.unlinkSync(fullPath);
-          console.log(`✅ Deleted: ${relativeFile}`);
-        } catch (error: any) {
-          console.error(`❌ Failed to delete ${relativeFile}: ${error.message}`);
-        }
-      }
-      
-      // Remove orphaned cache entries
-      for (const key of cleanup.orphanedCacheKeys) {
-        delete cache[demoId][key];
-      }
-      
-      if (cleanup.orphanedFiles.length > 0 || cleanup.orphanedCacheKeys.length > 0) {
-        console.log(`\n💾 Cleaned up ${cleanup.orphanedFiles.length} files and ${cleanup.orphanedCacheKeys.length} cache entries\n`);
-        saveCache(config.cacheFile, cache);
-      }
-    } else {
+
+    if (cleanup.orphanedFiles.length > 0) {
+      console.log(`📁 Orphaned audio files: ${cleanup.orphanedFiles.length}`);
+      cleanup.orphanedFiles.forEach(file => {
+        console.log(`   - ${file}`);
+      });
+      console.log();
+    }
+
+    if (cleanup.orphanedCacheKeys.length > 0) {
+      console.log(`🗑️  Orphaned cache entries: ${cleanup.orphanedCacheKeys.length}`);
+      cleanup.orphanedCacheKeys.forEach(key => {
+        console.log(`   - ${key}`);
+      });
+      console.log();
+    }
+
+    if (cleanup.orphanedFiles.length === 0 && cleanup.orphanedCacheKeys.length === 0) {
       console.log('✅ No unused audio files found\n');
     }
-    
-    // Collect all segments that need generation
+
+    // Step 2: Collect all segments that need generation
     const segmentsToGenerate: SegmentToGenerate[] = [];
     let totalSegments = 0;
     let skippedCount = 0;
-    
+
     console.log('Scanning slides for segments to generate...\n');
-    
+
     const demoOutputDir = path.join(config.outputDir, demoId);
-    
+
     for (const slide of allSlides) {
       const { chapter, slide: slideNum, title, audioSegments } = slide.metadata;
-      
+
       if (!audioSegments || audioSegments.length === 0) continue;
-      
+
       // Create chapter directory
       const chapterDir = path.join(demoOutputDir, `c${chapter}`);
       fs.mkdirSync(chapterDir, { recursive: true });
-      
+
       // Check each segment
       for (let i = 0; i < audioSegments.length; i++) {
         const segment = audioSegments[i];
         totalSegments++;
-        
+
         // Skip if no narration text
         if (!segment.narrationText) {
           console.log(`⚠️  ${demoId} Ch${chapter}/S${slideNum} Segment ${i + 1}: No narration text`);
           skippedCount++;
           continue;
         }
-        
+
         // Generate filename
         const filename = `s${slideNum}_segment_${String(i + 1).padStart(2, '0')}_${segment.id}.wav`;
         const filepath = path.join(chapterDir, filename);
         const relativeFilepath = path.relative(demoOutputDir, filepath);
-        
+
         // Resolve instruct: segment → slide → narrationJSON → CLI
         const resolvedInstruct =
           segment.instruct ??
@@ -561,11 +537,11 @@ async function generateTTS(config: TTSConfig) {
           }
           // If narration or instruct changed or not in cache, regenerate
         }
-        
+
         if (shouldSkip) {
           continue;
         }
-        
+
         // Add to generation queue
         segmentsToGenerate.push({
           demoId,
@@ -579,9 +555,121 @@ async function generateTTS(config: TTSConfig) {
         });
       }
     }
-    
-    console.log(`Found ${segmentsToGenerate.length} segments to generate (${skippedCount} skipped)\n`);
-    
+
+    // Step 3: Smart rename — match orphans to missing segments by content hash
+    let renamedCount = 0;
+    if (cleanup.orphanedFiles.length > 0 && segmentsToGenerate.length > 0) {
+      console.log('🔄 Checking for renameable orphans (same content, different slide number)...\n');
+
+      // Build lookup: hash(narrationText + instruct) → orphan relative path
+      const orphansByHash = new Map<string, { relativePath: string; cacheKey: string | undefined }>();
+      for (const orphanRelPath of cleanup.orphanedFiles) {
+        // Find matching cache entry for this orphan
+        const normalizedPath = orphanRelPath.replace(/\\/g, '/');
+        const cacheEntry = cache[demoId][normalizedPath] || cache[demoId][orphanRelPath];
+        if (cacheEntry?.narrationText) {
+          const hash = crypto.createHash('sha256')
+            .update(cacheEntry.narrationText.trim() + '\0' + (cacheEntry.instruct ?? ''))
+            .digest('hex');
+          // Only keep first match per hash (prefer the first orphan found)
+          if (!orphansByHash.has(hash)) {
+            orphansByHash.set(hash, {
+              relativePath: normalizedPath,
+              cacheKey: normalizedPath
+            });
+          }
+        }
+      }
+
+      // Try to match each segment-to-generate against orphans
+      const remainingSegments: SegmentToGenerate[] = [];
+      const matchedOrphans = new Set<string>();
+
+      for (const seg of segmentsToGenerate) {
+        if (!seg.segment.narrationText) {
+          remainingSegments.push(seg);
+          continue;
+        }
+
+        const hash = crypto.createHash('sha256')
+          .update(seg.segment.narrationText.trim() + '\0' + (seg.instruct ?? ''))
+          .digest('hex');
+
+        const orphan = orphansByHash.get(hash);
+        if (orphan && !matchedOrphans.has(orphan.relativePath) && !fs.existsSync(seg.filepath)) {
+          // Match found — rename the file
+          const oldFullPath = path.join(demoOutputDir, orphan.relativePath);
+          try {
+            // Ensure target directory exists
+            fs.mkdirSync(path.dirname(seg.filepath), { recursive: true });
+            fs.renameSync(oldFullPath, seg.filepath);
+
+            const newRelativePath = path.relative(demoOutputDir, seg.filepath).replace(/\\/g, '/');
+
+            // Update cache: copy entry under new key, remove old key
+            if (orphan.cacheKey && cache[demoId][orphan.cacheKey]) {
+              cache[demoId][newRelativePath] = {
+                ...cache[demoId][orphan.cacheKey],
+                generatedAt: new Date().toISOString()
+              };
+              delete cache[demoId][orphan.cacheKey];
+            }
+
+            console.log(`  🔄 Renamed: ${orphan.relativePath} → ${newRelativePath}`);
+            matchedOrphans.add(orphan.relativePath);
+            renamedCount++;
+
+            // Remove from orphan lists so it won't be deleted later
+            const orphanIdx = cleanup.orphanedFiles.indexOf(orphan.relativePath);
+            if (orphanIdx !== -1) cleanup.orphanedFiles.splice(orphanIdx, 1);
+            const cacheIdx = cleanup.orphanedCacheKeys.indexOf(orphan.cacheKey!);
+            if (cacheIdx !== -1) cleanup.orphanedCacheKeys.splice(cacheIdx, 1);
+          } catch (error: any) {
+            console.error(`  ❌ Failed to rename ${orphan.relativePath}: ${error.message}`);
+            remainingSegments.push(seg);
+          }
+        } else {
+          remainingSegments.push(seg);
+        }
+      }
+
+      // Replace generation queue with only unmatched segments
+      segmentsToGenerate.length = 0;
+      segmentsToGenerate.push(...remainingSegments);
+
+      if (renamedCount > 0) {
+        console.log(`\n  ✅ Renamed ${renamedCount} files (avoided regeneration)\n`);
+        saveCache(config.cacheFile, cache);
+      } else {
+        console.log('  No renameable matches found\n');
+      }
+    }
+
+    // Step 4: Delete remaining unmatched orphaned files and cache entries
+    if (cleanup.orphanedFiles.length > 0 || cleanup.orphanedCacheKeys.length > 0) {
+      for (const relativeFile of cleanup.orphanedFiles) {
+        const fullPath = path.join(demoOutputDir, relativeFile);
+        try {
+          fs.unlinkSync(fullPath);
+          console.log(`✅ Deleted: ${relativeFile}`);
+        } catch (error: any) {
+          console.error(`❌ Failed to delete ${relativeFile}: ${error.message}`);
+        }
+      }
+
+      for (const key of cleanup.orphanedCacheKeys) {
+        delete cache[demoId][key];
+      }
+
+      if (cleanup.orphanedFiles.length > 0 || cleanup.orphanedCacheKeys.length > 0) {
+        console.log(`\n💾 Cleaned up ${cleanup.orphanedFiles.length} files and ${cleanup.orphanedCacheKeys.length} cache entries\n`);
+        saveCache(config.cacheFile, cache);
+      }
+    }
+
+    // Step 5: Generate remaining unmatched segments
+    console.log(`Found ${segmentsToGenerate.length} segments to generate (${skippedCount} skipped, ${renamedCount} renamed)\n`);
+
     if (segmentsToGenerate.length === 0) {
       console.log('✅ No segments need generation for this demo.\n');
       totalSkipped += skippedCount;

@@ -57,7 +57,6 @@ export const Ex2_S1_Title = defineSlide({
     audioSegments: [
       {
         id: 'title',
-        audioFilePath: '/audio/example-demo-2/c0/s1_segment_01_title.wav',
       }
     ]
   },
@@ -134,15 +133,12 @@ export const Ex2_S2_Benefits = defineSlide({
     audioSegments: [
       {
         id: 'flexible',
-        audioFilePath: '/audio/example-demo-2/c0/s2_segment_01_flexible.wav',
       },
       {
         id: 'scalable',
-        audioFilePath: '/audio/example-demo-2/c0/s2_segment_02_scalable.wav',
       },
       {
         id: 'organized',
-        audioFilePath: '/audio/example-demo-2/c0/s2_segment_03_organized.wav',
       },
     ]
   },
@@ -208,11 +204,9 @@ export const Ex2_S3_Impact = defineSlide({
     audioSegments: [
       {
         id: 'speed',
-        audioFilePath: '/audio/example-demo-2/c0/s3_segment_01_speed.wav',
       },
       {
         id: 'typed',
-        audioFilePath: '/audio/example-demo-2/c0/s3_segment_02_typed.wav',
       },
     ]
   },

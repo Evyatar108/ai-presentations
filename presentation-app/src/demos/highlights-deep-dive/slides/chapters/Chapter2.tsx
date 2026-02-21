@@ -45,11 +45,11 @@ export const Ch2_S1_FourCalls = defineSlide({
     slide: 1,
     title: 'Four-Call Pipeline',
     audioSegments: [
-      { id: 'title', audioFilePath: '/audio/highlights-deep-dive/c2/s1_segment_01_title.wav' },
-      { id: 'call1', audioFilePath: '/audio/highlights-deep-dive/c2/s1_segment_02_call1.wav' },
-      { id: 'call2', audioFilePath: '/audio/highlights-deep-dive/c2/s1_segment_03_call2.wav' },
-      { id: 'call3', audioFilePath: '/audio/highlights-deep-dive/c2/s1_segment_04_call3.wav' },
-      { id: 'call4', audioFilePath: '/audio/highlights-deep-dive/c2/s1_segment_05_call4.wav' }
+      { id: 'title' },
+      { id: 'call1' },
+      { id: 'call2' },
+      { id: 'call3' },
+      { id: 'call4' }
     ]
   },
   component: Ch2_S1_FourCallsComponent

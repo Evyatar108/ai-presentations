@@ -137,9 +137,9 @@ export const Ch4_S1_NestedLoop = defineSlide({
     slide: 1,
     title: 'Nested Loop',
     audioSegments: [
-      { id: 'title', audioFilePath: '/audio/highlights-deep-dive/c4/s1_segment_01_title.wav' },
-      { id: 'code', audioFilePath: '/audio/highlights-deep-dive/c4/s1_segment_02_code.wav' },
-      { id: 'annotation', audioFilePath: '/audio/highlights-deep-dive/c4/s1_segment_03_annotation.wav' }
+      { id: 'title' },
+      { id: 'code' },
+      { id: 'annotation' }
     ]
   },
   component: Ch4_S1_NestedLoopComponent
@@ -326,9 +326,9 @@ export const Ch4_S2_CandidateRows = defineSlide({
     slide: 2,
     title: 'Candidate Rows',
     audioSegments: [
-      { id: 'title', audioFilePath: '/audio/highlights-deep-dive/c4/s2_segment_01_title.wav' },
-      { id: 'rows', audioFilePath: '/audio/highlights-deep-dive/c4/s2_segment_02_rows.wav' },
-      { id: 'waste', audioFilePath: '/audio/highlights-deep-dive/c4/s2_segment_03_waste.wav' },
+      { id: 'title' },
+      { id: 'rows' },
+      { id: 'waste' },
     ]
   },
   component: Ch4_S2_CandidateRowsComponent
@@ -435,9 +435,9 @@ export const Ch4_S3_Visualized = defineSlide({
     slide: 3,
     title: 'O(n^2) Visualized',
     audioSegments: [
-      { id: 'grid', audioFilePath: '/audio/highlights-deep-dive/c4/s3_segment_01_grid.wav' },
-      { id: 'math', audioFilePath: '/audio/highlights-deep-dive/c4/s3_segment_02_math.wav' },
-      { id: 'context_window', audioFilePath: '/audio/highlights-deep-dive/c4/s3_segment_03_context_window.wav' }
+      { id: 'grid' },
+      { id: 'math' },
+      { id: 'context_window' }
     ]
   },
   component: Ch4_S3_VisualizedComponent

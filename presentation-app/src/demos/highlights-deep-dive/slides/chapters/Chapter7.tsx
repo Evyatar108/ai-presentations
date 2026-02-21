@@ -120,9 +120,9 @@ export const Ch7_S1_CopyThenParse = defineSlide({
     slide: 1,
     title: 'Copy-then-Parse',
     audioSegments: [
-      { id: 'title', audioFilePath: '/audio/highlights-deep-dive/c7/s1_segment_01_title.wav' },
-      { id: 'copy', audioFilePath: '/audio/highlights-deep-dive/c7/s1_segment_02_copy.wav' },
-      { id: 'parse', audioFilePath: '/audio/highlights-deep-dive/c7/s1_segment_03_parse.wav' }
+      { id: 'title' },
+      { id: 'copy' },
+      { id: 'parse' }
     ]
   },
   component: Ch7_S1_CopyThenParseComponent
@@ -213,8 +213,8 @@ export const Ch7_S2_SelfChecks = defineSlide({
     slide: 2,
     title: 'Self-Checks',
     audioSegments: [
-      { id: 'title', audioFilePath: '/audio/highlights-deep-dive/c7/s2_segment_01_title.wav' },
-      { id: 'grid', audioFilePath: '/audio/highlights-deep-dive/c7/s2_segment_02_grid.wav' }
+      { id: 'title' },
+      { id: 'grid' }
     ]
   },
   component: Ch7_S2_SelfChecksComponent

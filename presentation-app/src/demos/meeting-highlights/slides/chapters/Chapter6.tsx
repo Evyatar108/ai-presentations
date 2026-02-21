@@ -123,7 +123,6 @@ export const Ch6_S1_UnifiedConvergence = defineSlide({
     title: "Unified Convergence",
     audioSegments: [{
       id: "main",
-      audioFilePath: "/audio/meeting-highlights/c6/s1_segment_01_main.wav"
     }]
   },
   component: Ch6_S1_UnifiedConvergenceComponent
@@ -169,7 +168,6 @@ export const Ch6_S4_TokenOptimization = defineSlide({
     title: "Token Optimization",
     audioSegments: [{
       id: "main",
-      audioFilePath: "/audio/meeting-highlights/c6/s4_segment_01_main.wav"
     }]
   },
   component: Ch6_S4_TokenOptimizationComponent

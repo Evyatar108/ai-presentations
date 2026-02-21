@@ -119,13 +119,13 @@ export const Ch10_S1_Lessons = defineSlide({
     slide: 1,
     title: 'Six Lessons',
     audioSegments: [
-      { id: 'title', audioFilePath: '/audio/highlights-deep-dive/c10/s1_segment_01_title.wav' },
-      { id: 'lesson1', audioFilePath: '/audio/highlights-deep-dive/c10/s1_segment_02_lesson1.wav' },
-      { id: 'lesson2', audioFilePath: '/audio/highlights-deep-dive/c10/s1_segment_03_lesson2.wav' },
-      { id: 'lesson3', audioFilePath: '/audio/highlights-deep-dive/c10/s1_segment_04_lesson3.wav' },
-      { id: 'lesson4', audioFilePath: '/audio/highlights-deep-dive/c10/s1_segment_05_lesson4.wav' },
-      { id: 'lesson5', audioFilePath: '/audio/highlights-deep-dive/c10/s1_segment_06_lesson5.wav' },
-      { id: 'lesson6', audioFilePath: '/audio/highlights-deep-dive/c10/s1_segment_07_lesson6.wav' }
+      { id: 'title' },
+      { id: 'lesson1' },
+      { id: 'lesson2' },
+      { id: 'lesson3' },
+      { id: 'lesson4' },
+      { id: 'lesson5' },
+      { id: 'lesson6' }
     ]
   },
   component: Ch10_S1_LessonsComponent
@@ -195,8 +195,8 @@ export const Ch10_S2_Closing = defineSlide({
     slide: 2,
     title: 'Closing',
     audioSegments: [
-      { id: 'thankyou', audioFilePath: '/audio/highlights-deep-dive/c10/s2_segment_01_thankyou.wav' },
-      { id: 'cta', audioFilePath: '/audio/highlights-deep-dive/c10/s2_segment_02_cta.wav' }
+      { id: 'thankyou' },
+      { id: 'cta' }
     ]
   },
   component: Ch10_S2_ClosingComponent

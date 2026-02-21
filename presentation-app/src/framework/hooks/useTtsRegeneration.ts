@@ -99,7 +99,7 @@ export function useTtsRegeneration({
         });
 
         // Update audio path with cache-busting timestamp
-        const basePath = segment.audioFilePath.split('?')[0];
+        const basePath = (segment.audioFilePath ?? '').split('?')[0];
         const newAudioPath = `${basePath}?t=${result.timestamp}`;
         segment.audioFilePath = newAudioPath;
 

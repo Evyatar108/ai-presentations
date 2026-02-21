@@ -223,7 +223,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
       }
 
       setIsLoading(true);
-      loadAudioWithFallback(segment.audioFilePath, segment.id).then(audio => {
+      loadAudioWithFallback(segment.audioFilePath ?? '', segment.id).then(audio => {
         audioRef.current = audio;
 
         audio.onended = () => {
@@ -307,7 +307,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
 
     let isActive = true;
 
-    loadAudioWithFallback(segment.audioFilePath, segment.id).then(audio => {
+    loadAudioWithFallback(segment.audioFilePath ?? '', segment.id).then(audio => {
       if (!isActive) return;
       audioRef.current = audio;
       audio.onended = () => {

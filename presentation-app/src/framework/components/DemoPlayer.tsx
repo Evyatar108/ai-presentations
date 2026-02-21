@@ -8,6 +8,7 @@ import { NarratedController } from './NarratedController';
 import { SlidePlayer, Slide } from './SlidePlayer';
 import { SegmentProvider } from '../contexts/SegmentContext';
 import { loadNarration, getNarrationText, type NarrationData } from '../utils/narrationLoader';
+import { resolveAudioFilePath } from '../utils/audioPath';
 import { useTheme } from '../theme/ThemeContext';
 import { DemoPlayerBoundary } from './DemoPlayerBoundary';
 
@@ -138,17 +139,50 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack }) => {
     });
   }, [loadedSlides, narrationData, demoConfig]);
   
-  // Build slides for SlidePlayer from slides with narration
-  const slides = useMemo((): Slide[] => {
+  // Resolve auto-derived audioFilePaths for segments that omit it
+  const slidesWithResolvedPaths = useMemo((): SlideComponentWithMetadata[] => {
     if (!slidesWithNarration || slidesWithNarration.length === 0) return [];
-    
-    return slidesWithNarration.map(slideComponent => ({
+
+    // Fast path: if every segment already has audioFilePath, skip mapping
+    const allResolved = slidesWithNarration.every(sc =>
+      sc.metadata.audioSegments.every(seg => !!seg.audioFilePath)
+    );
+    if (allResolved) return slidesWithNarration;
+
+    return slidesWithNarration.map(slideComponent => {
+      const { chapter, slide, audioSegments } = slideComponent.metadata;
+      const hasUnresolved = audioSegments.some(seg => !seg.audioFilePath);
+      if (!hasUnresolved) return slideComponent;
+
+      const resolvedSegments = audioSegments.map((segment, i) =>
+        segment.audioFilePath
+          ? segment
+          : { ...segment, audioFilePath: resolveAudioFilePath(segment, demoId, chapter, slide, i) }
+      );
+
+      return Object.assign(
+        (props: Record<string, never>) => slideComponent(props),
+        {
+          metadata: {
+            ...slideComponent.metadata,
+            audioSegments: resolvedSegments,
+          }
+        }
+      ) as SlideComponentWithMetadata;
+    });
+  }, [slidesWithNarration, demoId]);
+
+  // Build slides for SlidePlayer from slides with resolved paths
+  const slides = useMemo((): Slide[] => {
+    if (!slidesWithResolvedPaths || slidesWithResolvedPaths.length === 0) return [];
+
+    return slidesWithResolvedPaths.map(slideComponent => ({
       chapter: slideComponent.metadata.chapter,
       slide: slideComponent.metadata.slide,
       title: slideComponent.metadata.title,
       Component: slideComponent
     }));
-  }, [slidesWithNarration]);
+  }, [slidesWithResolvedPaths]);
 
   const handleSlideChange = (chapter: number, slide: number) => {
     setCurrentSlide({ chapter, slide });
@@ -313,7 +347,7 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack }) => {
           demoMetadata={demoConfig.metadata}
           demoTiming={demoConfig.timing}
           startTransition={demoConfig.startTransition}
-          slides={slidesWithNarration}
+          slides={slidesWithResolvedPaths}
           onSlideChange={handleSlideChange}
           onPlaybackStart={handlePlaybackStart}
           onPlaybackEnd={handlePlaybackEnd}
@@ -322,7 +356,7 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack }) => {
         {/* Slide Player */}
         <SlidePlayer
           slides={slides}
-          slidesWithMetadata={slidesWithNarration}
+          slidesWithMetadata={slidesWithResolvedPaths}
           autoAdvance={false}
           externalSlide={currentSlide}
           onSlideChange={handleManualSlideChange}

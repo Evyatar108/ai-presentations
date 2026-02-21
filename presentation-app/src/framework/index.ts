@@ -105,6 +105,7 @@ export type { SlideDurationBreakdown, PresentationDurationReport, SegmentDuratio
 export { loadNarration, getNarrationText } from './utils/narrationLoader';
 export { checkApiHealth, saveNarrationToFile } from './utils/narrationApiClient';
 export { debug } from './utils/debug';
+export { buildAudioFileName, buildAudioOutputPath, buildAudioFilePath, resolveAudioFilePath } from './utils/audioPath';
 
 // Hooks
 export { useTtsRegeneration } from './hooks/useTtsRegeneration';

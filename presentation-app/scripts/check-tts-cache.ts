@@ -64,6 +64,10 @@ interface ChangeDetectionResult {
         filepath: string;
       }>;
       orphanedCacheKeys: string[];
+      renameableFiles: Array<{
+        from: string;
+        to: string;
+      }>;
     };
   };
 }
@@ -412,6 +416,66 @@ function detectChanges(
   return result;
 }
 
+// Detect renameable orphans: orphaned files whose cached content matches a missing segment
+function detectRenameableFiles(
+  demoId: string,
+  outputDir: string,
+  cacheFile: string,
+  orphanedFiles: Array<{ filepath: string }>,
+  missingFiles: Array<{ chapter: number; slide: number; segmentId: string; filepath: string }>,
+  allSlides: SlideComponentWithMetadata[]
+): Array<{ from: string; to: string }> {
+  if (orphanedFiles.length === 0 || missingFiles.length === 0) return [];
+
+  const cache = loadCache(cacheFile);
+  const demoCache = cache[demoId] || {};
+  const demoOutputDir = path.join(outputDir, demoId);
+
+  // Build lookup: hash(narrationText + instruct) → orphan filepath
+  const orphansByHash = new Map<string, string>();
+  for (const orphan of orphanedFiles) {
+    const normalizedPath = orphan.filepath.replace(/\\/g, '/');
+    const cacheEntry = demoCache[normalizedPath] || demoCache[orphan.filepath];
+    if (cacheEntry?.narrationText) {
+      const instruct = (cacheEntry as any).instruct ?? '';
+      const hash = crypto.createHash('sha256')
+        .update(cacheEntry.narrationText.trim() + '\0' + instruct)
+        .digest('hex');
+      if (!orphansByHash.has(hash)) {
+        orphansByHash.set(hash, normalizedPath);
+      }
+    }
+  }
+
+  // For each missing file, compute expected content hash and check for a match
+  const renameables: Array<{ from: string; to: string }> = [];
+  const matchedOrphans = new Set<string>();
+
+  for (const missing of missingFiles) {
+    // Find the slide to get narration text
+    const slide = allSlides.find(
+      s => s.metadata.chapter === missing.chapter && s.metadata.slide === missing.slide
+    );
+    if (!slide) continue;
+
+    const segment = slide.metadata.audioSegments.find(seg => seg.id === missing.segmentId);
+    if (!segment?.narrationText) continue;
+
+    const resolvedInstruct = segment.instruct ?? slide.metadata.instruct ?? '';
+    const hash = crypto.createHash('sha256')
+      .update(segment.narrationText.trim() + '\0' + resolvedInstruct)
+      .digest('hex');
+
+    const orphanPath = orphansByHash.get(hash);
+    if (orphanPath && !matchedOrphans.has(orphanPath)) {
+      renameables.push({ from: orphanPath, to: missing.filepath.replace(/\\/g, '/') });
+      matchedOrphans.add(orphanPath);
+    }
+  }
+
+  return renameables;
+}
+
 // Prompt user for confirmation
 function promptUser(question: string): Promise<boolean> {
   const rl = readline.createInterface({
@@ -515,6 +579,12 @@ async function checkTTSCache(): Promise<void> {
       changes.changedSegments.length > 0 ||
       changes.missingFiles.length > 0;
     
+    // Detect renameable files (orphans that match missing segments by content hash)
+    const renameables = detectRenameableFiles(
+      demoId, outputDir, cacheFile,
+      orphaned.orphanedFiles, changes.missingFiles, allSlides
+    );
+
     if (demoHasChanges) {
       result.hasChanges = true;
       result.demos[demoId] = {
@@ -522,30 +592,47 @@ async function checkTTSCache(): Promise<void> {
         missingFiles: changes.missingFiles,
         newSegments: changes.newSegments,
         orphanedFiles: orphaned.orphanedFiles,
-        orphanedCacheKeys: orphaned.orphanedCacheKeys
+        orphanedCacheKeys: orphaned.orphanedCacheKeys,
+        renameableFiles: renameables
       };
-      
-      // Report issues
-      if (orphaned.orphanedFiles.length > 0) {
-        console.log(`\n⚠️  Orphaned audio files: ${orphaned.orphanedFiles.length}`);
-        orphaned.orphanedFiles.slice(0, 3).forEach(item => {
+
+      // Report renameable files first (most actionable)
+      if (renameables.length > 0) {
+        console.log(`\n🔄 Renameable files: ${renameables.length} (same content, slide renumbered — fixed by tts:generate without TTS server)`);
+        renameables.slice(0, 3).forEach(item => {
+          console.log(`   - ${item.from} → ${item.to}`);
+        });
+        if (renameables.length > 3) {
+          console.log(`   ... and ${renameables.length - 3} more`);
+        }
+      }
+
+      // Report remaining orphans (excluding those that are renameable)
+      const renameableFromPaths = new Set(renameables.map(r => r.from));
+      const trueOrphans = orphaned.orphanedFiles.filter(f => !renameableFromPaths.has(f.filepath.replace(/\\/g, '/')));
+      if (trueOrphans.length > 0) {
+        console.log(`\n⚠️  Orphaned audio files: ${trueOrphans.length}`);
+        trueOrphans.slice(0, 3).forEach(item => {
           console.log(`   - ${item.filepath}`);
         });
-        if (orphaned.orphanedFiles.length > 3) {
-          console.log(`   ... and ${orphaned.orphanedFiles.length - 3} more`);
+        if (trueOrphans.length > 3) {
+          console.log(`   ... and ${trueOrphans.length - 3} more`);
         }
       }
-      
-      if (changes.missingFiles.length > 0) {
-        console.log(`\n📁 Missing audio files: ${changes.missingFiles.length}`);
-        changes.missingFiles.slice(0, 3).forEach(item => {
+
+      // Report missing files (excluding those that are renameable)
+      const renameableToPaths = new Set(renameables.map(r => r.to));
+      const trueMissing = changes.missingFiles.filter(f => !renameableToPaths.has(f.filepath.replace(/\\/g, '/')));
+      if (trueMissing.length > 0) {
+        console.log(`\n📁 Missing audio files: ${trueMissing.length}`);
+        trueMissing.slice(0, 3).forEach(item => {
           console.log(`   - Ch${item.chapter}/S${item.slide} (${item.segmentId})`);
         });
-        if (changes.missingFiles.length > 3) {
-          console.log(`   ... and ${changes.missingFiles.length - 3} more`);
+        if (trueMissing.length > 3) {
+          console.log(`   ... and ${trueMissing.length - 3} more`);
         }
       }
-      
+
       if (changes.changedSegments.length > 0) {
         console.log(`\n🔄 Changed narrations: ${changes.changedSegments.length}`);
         changes.changedSegments.slice(0, 3).forEach(item => {

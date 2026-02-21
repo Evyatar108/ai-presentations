@@ -71,11 +71,11 @@ export function validateSlideMetadata(
         seenIds.add(seg.id);
       }
 
-      if (!seg.audioFilePath || seg.audioFilePath.trim().length === 0) {
+      if (seg.audioFilePath !== undefined && seg.audioFilePath.trim().length === 0) {
         errors.push({
           slideIndex,
           field: `audioSegments[${i}].audioFilePath`,
-          message: 'segment audioFilePath must be a non-empty string',
+          message: 'segment audioFilePath must not be an empty string (omit it to auto-derive)',
         });
       }
 

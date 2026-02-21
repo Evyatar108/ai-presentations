@@ -304,19 +304,15 @@ export const Ch8_S1_UserSatisfaction = defineSlide({
     audioSegments: [
       {
         id: "intro",
-        audioFilePath: "/audio/meeting-highlights/c8/s1_segment_01_intro.wav"
       },
       {
         id: "useful",
-        audioFilePath: "/audio/meeting-highlights/c8/s1_segment_02_useful.wav"
       },
       {
         id: "likely",
-        audioFilePath: "/audio/meeting-highlights/c8/s1_segment_03_likely.wav"
       },
       {
         id: "fit",
-        audioFilePath: "/audio/meeting-highlights/c8/s1_segment_04_fit.wav"
       }
     ]
   },

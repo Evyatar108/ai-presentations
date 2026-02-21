@@ -6,8 +6,8 @@ import { TimingConfig } from '../demos/timing/types';
 export interface AudioSegment {
   /** Unique identifier (e.g., "intro", "team_odsp") */
   id: string;
-  /** Path to audio file for this segment */
-  audioFilePath: string;
+  /** Path to audio file for this segment (auto-derived from slide coordinates if omitted) */
+  audioFilePath?: string;
   /** Optional pre-computed duration in seconds (for scrubbing) */
   duration?: number;
   /** Animation key to trigger when this segment starts */

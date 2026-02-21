@@ -44,7 +44,7 @@ Each demo lives in `src/demos/{demo-id}/` with:
 - `slides/chapters/Chapter{N}.tsx` — slide definitions
 
 ### Slide Model
-Slides are objects with `metadata` (chapter, slide number, title, audio segments) and a `component` React function receiving `{ segment }`. Progressive reveals use `segment >= N` conditionals. Audio segments define `audioPath`, `narrationText`, and optional `timing` and `instruct` overrides.
+Slides are objects with `metadata` (chapter, slide number, title, audio segments) and a `component` React function receiving `{ segment }`. Progressive reveals use `segment >= N` conditionals. Audio segments define `narrationText`, and optional `timing` and `instruct` overrides. `audioFilePath` is **auto-derived** at runtime from slide coordinates (via `resolveAudioFilePath` in `DemoPlayer`) — do not hardcode it. The pattern is `/audio/{demoId}/c{chapter}/s{slide}_segment_{paddedIndex}_{segmentId}.wav`. To override, set `audioFilePath` explicitly on the segment.
 
 ### Theme System
 Colors and typography are centralized in `src/framework/theme/`. Framework components use `useTheme()` hook. Demo slides can use static exports from `SlideStyles.ts` or opt into theme-aware `create*()` factory functions. Override colors via `src/project.config.ts`.
@@ -97,6 +97,7 @@ Audio naming: `s{slide}_segment_{number}_{id}.wav`
 | `src/framework/hooks/useApiHealth.ts` | Backend API health check |
 | `src/framework/hooks/useNarrationEditor.ts` | Narration editing workflow |
 | `src/framework/hooks/useFocusTrap.ts` | Keyboard focus trap for modals |
+| `src/framework/utils/audioPath.ts` | Audio file path derivation (buildAudioFilePath, resolveAudioFilePath) |
 | `src/framework/utils/formatTime.ts` | Time formatting utilities (mm:ss, delta colors) |
 | `vite-plugin-audio-writer.ts` | Custom Vite plugin for /api/save-audio |
 

@@ -67,7 +67,6 @@ export const Ex1_S1_Title = defineSlide({
     audioSegments: [
       {
         id: 'title',
-        audioFilePath: '/audio/example-demo-1/c0/s1_segment_01_title.wav',
       }
     ]
   },
@@ -151,19 +150,15 @@ export const Ex1_S2_Content1 = defineSlide({
     audioSegments: [
       {
         id: 'theme',
-        audioFilePath: '/audio/example-demo-1/c0/s2_segment_01_theme.wav',
       },
       {
         id: 'a11y',
-        audioFilePath: '/audio/example-demo-1/c0/s2_segment_02_a11y.wav',
       },
       {
         id: 'segments',
-        audioFilePath: '/audio/example-demo-1/c0/s2_segment_03_segments.wav',
       },
       {
         id: 'layouts',
-        audioFilePath: '/audio/example-demo-1/c0/s2_segment_04_layouts.wav',
       },
     ]
   },
@@ -235,7 +230,6 @@ export const Ex1_S3_Conclusion = defineSlide({
     audioSegments: [
       {
         id: 'conclusion',
-        audioFilePath: '/audio/example-demo-1/c0/s3_segment_01_conclusion.wav',
       }
     ]
   },

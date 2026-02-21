@@ -20,7 +20,7 @@ export interface DefineSlideOptions {
  *     chapter: 1,
  *     slide: 1,
  *     title: 'My Slide',
- *     audioSegments: [{ id: 'intro', audioFilePath: '/audio/demo/c1/s1.wav' }]
+ *     audioSegments: [{ id: 'intro' }]
  *   },
  *   component: () => <div>Hello</div>
  * });

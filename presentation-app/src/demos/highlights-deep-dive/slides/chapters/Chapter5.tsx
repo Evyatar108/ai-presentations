@@ -118,9 +118,9 @@ export const Ch5_S1_FormatComparison = defineSlide({
     slide: 1,
     title: 'Format Comparison',
     audioSegments: [
-      { id: 'title', audioFilePath: '/audio/highlights-deep-dive/c5/s1_segment_01_title.wav' },
-      { id: 'split', audioFilePath: '/audio/highlights-deep-dive/c5/s1_segment_02_split.wav' },
-      { id: 'table', audioFilePath: '/audio/highlights-deep-dive/c5/s1_segment_03_table.wav' }
+      { id: 'title' },
+      { id: 'split' },
+      { id: 'table' }
     ]
   },
   component: Ch5_S1_FormatComparisonComponent
@@ -288,9 +288,9 @@ export const Ch5_S2_MaxEndId = defineSlide({
     slide: 2,
     title: 'max_end_utterance_id',
     audioSegments: [
-      { id: 'row', audioFilePath: '/audio/highlights-deep-dive/c5/s2_segment_01_row.wav' },
-      { id: 'visual', audioFilePath: '/audio/highlights-deep-dive/c5/s2_segment_02_visual.wav' },
-      { id: 'comparison', audioFilePath: '/audio/highlights-deep-dive/c5/s2_segment_03_comparison.wav' }
+      { id: 'row' },
+      { id: 'visual' },
+      { id: 'comparison' }
     ]
   },
   component: Ch5_S2_MaxEndIdComponent
@@ -479,9 +479,9 @@ export const Ch5_S3_TurnUtteranceConcept = defineSlide({
     slide: 3,
     title: 'Turn/Utterance Concept',
     audioSegments: [
-      { id: 'title', audioFilePath: '/audio/highlights-deep-dive/c5/s3_segment_01_title.wav' },
-      { id: 'concept', audioFilePath: '/audio/highlights-deep-dive/c5/s3_segment_02_concept.wav' },
-      { id: 'constraint', audioFilePath: '/audio/highlights-deep-dive/c5/s3_segment_03_constraint.wav' }
+      { id: 'title' },
+      { id: 'concept' },
+      { id: 'constraint' }
     ]
   },
   component: Ch5_S3_TurnUtteranceConceptComponent

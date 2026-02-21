@@ -152,7 +152,6 @@ export const Ch5_S1_ChallengeFraming = defineSlide({
     title: "Challenge Framing",
     audioSegments: [{
       id: "main",
-      audioFilePath: "/audio/meeting-highlights/c5/s1_segment_01_main.wav"
     }]
   },
   component: Ch5_S1_ChallengeFramingComponent

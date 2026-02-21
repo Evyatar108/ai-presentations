@@ -178,8 +178,8 @@ export async function regenerateSegment(
     // Step 2: Save to local filesystem via Vite plugin
     console.log(`[TTS] Saving audio locally via: ${config.localSaveEndpoint}`);
     
-    const filename = `s${params.slide}_segment_${String(params.segmentIndex + 1).padStart(2, '0')}_${params.segmentId}.wav`;
-    const outputPath = `c${params.chapter}/${filename}`;
+    const { buildAudioOutputPath } = await import('./audioPath');
+    const outputPath = buildAudioOutputPath(params.chapter, params.slide, params.segmentIndex, params.segmentId);
     
     const saveResponse = await fetch(config.localSaveEndpoint, {
       method: 'POST',

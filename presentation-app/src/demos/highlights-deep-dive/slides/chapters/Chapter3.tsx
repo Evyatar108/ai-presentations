@@ -117,11 +117,11 @@ export const Ch3_S1_CostDrivers = defineSlide({
     slide: 1,
     title: 'Four Cost Drivers',
     audioSegments: [
-      { id: 'title', audioFilePath: '/audio/highlights-deep-dive/c3/s1_segment_01_title.wav' },
-      { id: 'driver1', audioFilePath: '/audio/highlights-deep-dive/c3/s1_segment_02_driver1.wav' },
-      { id: 'driver2', audioFilePath: '/audio/highlights-deep-dive/c3/s1_segment_03_driver2.wav' },
-      { id: 'driver3', audioFilePath: '/audio/highlights-deep-dive/c3/s1_segment_04_driver3.wav' },
-      { id: 'driver4', audioFilePath: '/audio/highlights-deep-dive/c3/s1_segment_05_driver4.wav' }
+      { id: 'title' },
+      { id: 'driver1' },
+      { id: 'driver2' },
+      { id: 'driver3' },
+      { id: 'driver4' }
     ]
   },
   component: Ch3_S1_CostDriversComponent
@@ -203,8 +203,8 @@ export const Ch3_S2_VerboseJSON = defineSlide({
     slide: 2,
     title: 'Verbose JSON',
     audioSegments: [
-      { id: 'comparison', audioFilePath: '/audio/highlights-deep-dive/c3/s2_segment_01_comparison.wav' },
-      { id: 'caption', audioFilePath: '/audio/highlights-deep-dive/c3/s2_segment_02_caption.wav' }
+      { id: 'comparison' },
+      { id: 'caption' }
     ]
   },
   component: Ch3_S2_VerboseJSONComponent
