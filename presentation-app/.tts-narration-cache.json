@@ -235,16 +235,6 @@
       "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
       "generatedAt": "2026-02-20T19:12:27.324Z"
     },
-    "c2\\s2_segment_01_code.wav": {
-      "narrationText": "Here's what a single call looks like in the V1 code. This is the abstractives query — a prompt template embedded in a Python string. Notice the structure: system instructions telling the model to envision itself as a video editor, then detailed prose instructions for the task.",
-      "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-20T19:12:27.328Z"
-    },
-    "c2\\s2_segment_02_annotations.wav": {
-      "narrationText": "Two things to notice. The instructions are prose paragraphs — vague natural language the model interprets freely. And each call chains to the next via parsed markdown tables, creating fragile dependencies.",
-      "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-20T19:12:27.332Z"
-    },
     "c3\\s1_segment_01_title.wav": {
       "narrationText": "When I analyzed the V1 pipeline, I identified four structural cost drivers.",
       "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
@@ -271,9 +261,9 @@
       "generatedAt": "2026-02-20T20:31:10.681Z"
     },
     "c3\\s2_segment_01_comparison.wav": {
-      "narrationText": "V1 wraps each utterance in a five-key JSON object. Five hundred utterances means twenty-five hundred wasted key tokens — before any actual content.",
+      "narrationText": "This is how Call 1 — highlights_abstractives — sees the meeting transcript. Each utterance wrapped in a five-key JSON object. Five hundred utterances means twenty-five hundred wasted key tokens before any actual content.",
       "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-20T19:20:04.778Z"
+      "generatedAt": "2026-02-21T00:47:30.982Z"
     },
     "c3\\s2_segment_02_caption.wav": {
       "narrationText": "A cost lever we'll address in V2.",
@@ -281,9 +271,9 @@
       "generatedAt": "2026-02-20T19:20:04.779Z"
     },
     "c4\\s1_segment_01_title.wav": {
-      "narrationText": "Now for the biggest cost driver: the combinatorial candidate explosion.",
+      "narrationText": "Now for the biggest cost driver: the combinatorial candidate explosion. This code runs between Call 1 and Call 2, generating the candidate rows that become input to Call 2 — highlights_extractives.",
       "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-20T19:20:04.781Z"
+      "generatedAt": "2026-02-21T00:47:30.986Z"
     },
     "c4\\s1_segment_02_code.wav": {
       "narrationText": "Look at the two highlighted for-loops. For each topic, the outer loop iterates over every start utterance, the inner loop over every end after that start.",
@@ -326,9 +316,9 @@
       "generatedAt": "2026-02-20T19:36:37.394Z"
     },
     "c5\\s1_segment_02_split.wav": {
-      "narrationText": "V1's verbose format on the left. On the right, V2: turn markers group utterances by speaker, pipe-delimited columns replace JSON keys, and local IDs restart within each turn.",
+      "narrationText": "Call 1's verbose JSON input on the left. On the right, V2's replacement: turn markers group utterances by speaker, pipe-delimited columns replace JSON keys, and local IDs restart within each turn.",
       "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-20T19:36:37.396Z"
+      "generatedAt": "2026-02-21T00:47:30.990Z"
     },
     "c5\\s1_segment_03_table.wav": {
       "narrationText": "Speaker info moves to a turn tag header. Timestamps are omitted — pre-computed downstream. And the third column, max_end_utterance_id, encodes topic boundaries directly in the data.",
@@ -381,9 +371,9 @@
       "generatedAt": "2026-02-20T20:23:41.040Z"
     },
     "c4\\s2_segment_01_title.wav": {
-      "narrationText": "What does that nested loop actually produce? Let's look at a concrete example with five utterances.",
+      "narrationText": "What does that nested loop actually produce? These candidate rows become the input to Call 2 — highlights_extractives. Let's look at a concrete example with five utterances.",
       "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-20T19:20:04.787Z"
+      "generatedAt": "2026-02-21T00:47:30.988Z"
     },
     "c4\\s3_segment_01_grid.wav": {
       "narrationText": "Each lit cell is one candidate range. Watch how quickly they multiply.",
@@ -396,9 +386,9 @@
       "generatedAt": "2026-02-20T20:34:15.844Z"
     },
     "c4\\s3_segment_03_context_window.wav": {
-      "narrationText": "The V1 code then greedily packs these candidates into the prompt until it fills the entire 128K context window. This is why a single extractives call could consume more tokens than all other calls combined.",
+      "narrationText": "The V1 code then greedily packs these candidates into Call 2's prompt until it fills the entire 128K context window. This is why highlights_extractives alone could consume more tokens than all other calls combined.",
       "instruct": "Speak with building intensity, like revealing the scale of a problem.",
-      "generatedAt": "2026-02-20T20:34:15.846Z"
+      "generatedAt": "2026-02-21T00:49:07.846Z"
     },
     "c9\\s2_segment_01_quality.wav": {
       "narrationText": "Quality held strong. No grounding regression. Seventy-five to eighty percent coverage. And in blind A-B tests, reviewers preferred V2.",

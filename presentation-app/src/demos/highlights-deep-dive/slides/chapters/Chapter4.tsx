@@ -177,7 +177,7 @@ const Ch4_S2_CandidateRowsComponent: React.FC = () => {
     <SlideContainer maxWidth={950}>
       <AnimatePresence>
         {isSegmentVisible(0) && (
-          <SlideTitle reduced={reduced}>
+          <SlideTitle reduced={reduced} subtitle="V1 Call 2 (Extractives): Input">
             Candidate Rows
           </SlideTitle>
         )}
@@ -435,9 +435,9 @@ export const Ch4_S3_Visualized = defineSlide({
     slide: 3,
     title: 'O(n^2) Visualized',
     audioSegments: [
-      { id: 'grid', audioFilePath: '/audio/highlights-deep-dive/c4/s2_segment_01_grid.wav' },
-      { id: 'math', audioFilePath: '/audio/highlights-deep-dive/c4/s2_segment_02_math.wav' },
-      { id: 'context_window', audioFilePath: '/audio/highlights-deep-dive/c4/s2_segment_03_context_window.wav' }
+      { id: 'grid', audioFilePath: '/audio/highlights-deep-dive/c4/s3_segment_01_grid.wav' },
+      { id: 'math', audioFilePath: '/audio/highlights-deep-dive/c4/s3_segment_02_math.wav' },
+      { id: 'context_window', audioFilePath: '/audio/highlights-deep-dive/c4/s3_segment_03_context_window.wav' }
     ]
   },
   component: Ch4_S3_VisualizedComponent

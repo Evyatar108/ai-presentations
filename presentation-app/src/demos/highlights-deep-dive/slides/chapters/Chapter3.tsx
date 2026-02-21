@@ -157,7 +157,7 @@ const Ch3_S2_VerboseJSONComponent: React.FC = () => {
       <AnimatePresence>
         {isSegmentVisible(0) && (
           <BeforeAfterSplit
-            beforeTitle="V1: Verbose JSON Input"
+            beforeTitle="V1 Call 1 (Abstractives): Input Format"
             afterTitle="Token Waste"
             beforeContent={
               <CodeBlock code={VERBOSE_JSON} language="json" fontSize={12} />

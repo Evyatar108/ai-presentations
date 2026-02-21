@@ -54,7 +54,7 @@ const Ch5_S1_FormatComparisonComponent: React.FC = () => {
       <AnimatePresence>
         {isSegmentVisible(1) && (
           <BeforeAfterSplit
-            beforeTitle="V1: Verbose JSON"
+            beforeTitle="V1 Call 1 (Abstractives): JSON"
             afterTitle="V2: Compact Table"
             beforeContent={<CodeBlock code={V1_JSON_SAMPLE} language="json" fontSize={11} />}
             afterContent={<CodeBlock code={V2_TABLE_SAMPLE} language="markdown" fontSize={11} />}

@@ -152,7 +152,7 @@
       "segments": [
         {
           "id": "comparison",
-          "narrationText": "V1 wraps each utterance in a five-key JSON object. Five hundred utterances means twenty-five hundred wasted key tokens — before any actual content.",
+          "narrationText": "This is how Call 1 — highlights_abstractives — sees the meeting transcript. Each utterance wrapped in a five-key JSON object. Five hundred utterances means twenty-five hundred wasted key tokens before any actual content.",
           "visualDescription": "BeforeAfterSplit — Left: V1 verbose JSON. Right: token counter",
           "notes": ""
         },
@@ -171,7 +171,7 @@
       "segments": [
         {
           "id": "title",
-          "narrationText": "Now for the biggest cost driver: the combinatorial candidate explosion.",
+          "narrationText": "Now for the biggest cost driver: the combinatorial candidate explosion. This code runs between Call 1 and Call 2, generating the candidate rows that become input to Call 2 — highlights_extractives.",
           "visualDescription": "Title: 'Combinatorial Candidate Explosion'",
           "notes": ""
         },
@@ -196,7 +196,7 @@
       "segments": [
         {
           "id": "title",
-          "narrationText": "What does that nested loop actually produce? Let's look at a concrete example with five utterances.",
+          "narrationText": "What does that nested loop actually produce? These candidate rows become the input to Call 2 — highlights_extractives. Let's look at a concrete example with five utterances.",
           "visualDescription": "Title: 'Candidate Rows'",
           "notes": ""
         },
@@ -234,7 +234,7 @@
         },
         {
           "id": "context_window",
-          "narrationText": "The V1 code then greedily packs these candidates into the prompt until it fills the entire 128K context window. This is why a single extractives call could consume more tokens than all other calls combined.",
+          "narrationText": "The V1 code then greedily packs these candidates into Call 2's prompt until it fills the entire 128K context window. This is why highlights_extractives alone could consume more tokens than all other calls combined.",
           "visualDescription": "Animated bar filling to 128K tokens",
           "notes": ""
         }
@@ -253,7 +253,7 @@
         },
         {
           "id": "split",
-          "narrationText": "V1's verbose format on the left. On the right, V2: turn markers group utterances by speaker, pipe-delimited columns replace JSON keys, and local IDs restart within each turn.",
+          "narrationText": "Call 1's verbose JSON input on the left. On the right, V2's replacement: turn markers group utterances by speaker, pipe-delimited columns replace JSON keys, and local IDs restart within each turn.",
           "visualDescription": "BeforeAfterSplit — V1 JSON vs V2 compact table",
           "notes": ""
         },
