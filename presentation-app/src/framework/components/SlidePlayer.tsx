@@ -110,27 +110,6 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
     }
   }, [currentIndex, slides, disableManualNav, onSlideChange, segmentContext]);
 
-  // Keyboard navigation
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowRight' || e.key === ' ') {
-        e.preventDefault();
-        goToNext();
-      } else if (e.key === 'ArrowLeft') {
-        e.preventDefault();
-        goToPrev();
-      } else if (e.key >= '1' && e.key <= '9') {
-        const idx = parseInt(e.key) - 1;
-        if (idx < slides.length) {
-          goToSlide(idx);
-        }
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [goToNext, goToPrev, goToSlide, slides.length]);
-
   // Initialize segments for the first slide on mount (for manual mode)
   useEffect(() => {
     const initialSlideMetadata = slidesWithMetadata?.[0]?.metadata;
@@ -175,7 +154,36 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
     if (disableManualNav || !hasMultipleSegments) return;
     segmentContext.previousSegment();
   }, [disableManualNav, hasMultipleSegments, segmentContext]);
-  
+
+  // Keyboard navigation — ArrowRight/Space advances segment first, then slide
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        e.preventDefault();
+        if (hasMultipleSegments && segmentContext.currentSegmentIndex < segments.length - 1) {
+          goToNextSegment();
+        } else {
+          goToNext();
+        }
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        if (hasMultipleSegments && segmentContext.currentSegmentIndex > 0) {
+          goToPrevSegment();
+        } else {
+          goToPrev();
+        }
+      } else if (e.key >= '1' && e.key <= '9') {
+        const idx = parseInt(e.key) - 1;
+        if (idx < slides.length) {
+          goToSlide(idx);
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [goToNext, goToPrev, goToNextSegment, goToPrevSegment, goToSlide, slides.length, hasMultipleSegments, segments.length, segmentContext.currentSegmentIndex]);
+
   // TTS audio regeneration (extracted to reusable hook)
   const { regeneratingSegment, regenerationStatus, handleRegenerateSegment } = useTtsRegeneration({
     demoId,

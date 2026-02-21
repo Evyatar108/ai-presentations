@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { DemoRegistry } from '../demos/DemoRegistry';
 import type { DemoConfig } from '../demos/types';
@@ -7,6 +7,7 @@ import { validateDemoSlides } from '../slides/validateSlideMetadata';
 import { NarratedController } from './NarratedController';
 import { SlidePlayer, Slide } from './SlidePlayer';
 import { SegmentProvider } from '../contexts/SegmentContext';
+import { HideInterfaceProvider } from '../contexts/HideInterfaceContext';
 import { loadNarration, getNarrationText, type NarrationData } from '../utils/narrationLoader';
 import { resolveAudioFilePath } from '../utils/audioPath';
 import { useTheme } from '../theme/ThemeContext';
@@ -15,9 +16,10 @@ import { DemoPlayerBoundary } from './DemoPlayerBoundary';
 export interface DemoPlayerProps {
   demoId: string;
   onBack: () => void;
+  onHideInterfaceChange?: (hidden: boolean) => void;
 }
 
-export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack }) => {
+export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideInterfaceChange }) => {
   const theme = useTheme();
   const [demoConfig, setDemoConfig] = useState<DemoConfig | null>(null);
   const [loadedSlides, setLoadedSlides] = useState<SlideComponentWithMetadata[]>([]);
@@ -27,6 +29,23 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack }) => {
   const [currentSlide, setCurrentSlide] = useState<{ chapter: number; slide: number } | undefined>(undefined);
   const [isNarratedMode, setIsNarratedMode] = useState(false);
   const [manualSlideChange, setManualSlideChange] = useState<{ chapter: number; slide: number } | null>(null);
+  const [hideInterface, setHideInterface] = useState(false);
+
+  const handleHideInterfaceChange = useCallback((hidden: boolean) => {
+    setHideInterface(hidden);
+    onHideInterfaceChange?.(hidden);
+  }, [onHideInterfaceChange]);
+
+  // ESC key navigates back to demos list
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onBack();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onBack]);
 
   // Load demo configuration and slides
   useEffect(() => {
@@ -305,44 +324,46 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack }) => {
 
   return (
     <DemoPlayerBoundary onBack={onBack}>
+    <HideInterfaceProvider value={hideInterface}>
     <SegmentProvider>
       <div style={{ position: 'relative' }}>
         {/* Floating Back Button */}
-        <motion.button
-          data-testid="back-button"
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          onClick={onBack}
-          style={{
-            position: 'fixed',
-            top: 20,
-            left: 20,
-            background: 'rgba(0, 0, 0, 0.7)',
-            backdropFilter: 'blur(10px)',
-            color: theme.colors.textPrimary,
-            border: '1px solid rgba(148, 163, 184, 0.3)',
-            borderRadius: 12,
-            padding: '0.75rem 1.25rem',
-            fontSize: 14,
-            fontWeight: 600,
-            cursor: 'pointer',
-            zIndex: 10000,
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            fontFamily: theme.fontFamily,
-            transition: 'all 0.2s ease'
-          }}
-          whileHover={{
-            background: 'rgba(0, 183, 195, 0.2)',
-            borderColor: '#00B7C3'
-          }}
-        >
-          <span>←</span>
-          <span>Back to Demos</span>
-        </motion.button>
+        {!hideInterface && (
+          <motion.button
+            data-testid="back-button"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            onClick={onBack}
+            style={{
+              position: 'fixed',
+              top: 20,
+              left: 20,
+              background: 'rgba(0, 0, 0, 0.7)',
+              backdropFilter: 'blur(10px)',
+              color: theme.colors.textPrimary,
+              border: '1px solid rgba(148, 163, 184, 0.3)',
+              borderRadius: 12,
+              padding: '0.75rem 1.25rem',
+              fontSize: 14,
+              fontWeight: 600,
+              cursor: 'pointer',
+              zIndex: 10000,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              fontFamily: theme.fontFamily,
+              transition: 'all 0.2s ease'
+            }}
+            whileHover={{
+              background: 'rgba(0, 183, 195, 0.2)',
+              borderColor: '#00B7C3'
+            }}
+          >
+            <span>←</span>
+            <span>Back to Demos</span>
+          </motion.button>
+        )}
 
-        {/* Narrated Controller */}
         {/* Narrated Controller */}
         <NarratedController
           demoMetadata={demoConfig.metadata}
@@ -353,6 +374,8 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack }) => {
           onPlaybackStart={handlePlaybackStart}
           onPlaybackEnd={handlePlaybackEnd}
           manualSlideChange={manualSlideChange}
+          hideInterface={hideInterface}
+          onHideInterfaceChange={handleHideInterfaceChange}
         />
         {/* Slide Player */}
         <SlidePlayer
@@ -366,6 +389,7 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack }) => {
         />
       </div>
     </SegmentProvider>
+    </HideInterfaceProvider>
     </DemoPlayerBoundary>
   );
 };

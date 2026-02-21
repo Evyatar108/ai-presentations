@@ -46,6 +46,7 @@ export type { RevealProps, RevealGroupProps, RevealContextProps, RevealAnimation
 // Contexts
 export { SegmentProvider, useSegmentContext, useSegmentedAnimation } from './contexts/SegmentContext';
 export type { SegmentedAnimationAPI, SegmentState, SegmentControls, SegmentContextValue } from './contexts/SegmentContext';
+export { HideInterfaceProvider, useHideInterface } from './contexts/HideInterfaceContext';
 
 // Slides
 export type { SlideMetadata, SlideComponentWithMetadata, AudioSegment } from './slides/SlideMetadata';

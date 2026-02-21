@@ -7,6 +7,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { contentBox, highlightOverlayBox, typography, createSlideContainer } from './SlideStyles';
 import { useTheme } from '../theme/ThemeContext';
+import { useHideInterface } from '../contexts/HideInterfaceContext';
 
 export interface SlideContainerProps {
   children: React.ReactNode;
@@ -30,6 +31,7 @@ export const SlideContainer: React.FC<SlideContainerProps> = ({
   viewportFraction = 0.75
 }) => {
   const theme = useTheme();
+  const hideInterface = useHideInterface();
   const contentRef = useRef<HTMLDivElement>(null);
   const [overflowPx, setOverflowPx] = useState(0);
 
@@ -63,7 +65,7 @@ export const SlideContainer: React.FC<SlideContainerProps> = ({
     };
   }, [viewportFraction]);
 
-  const isOverflowing = import.meta.env.DEV && overflowPx > 0;
+  const isOverflowing = import.meta.env.DEV && overflowPx > 0 && !hideInterface;
 
   return (
     <div style={createSlideContainer(theme)}>

@@ -51,6 +51,8 @@ export interface NarratedControllerProps {
   onPlaybackStart?: () => void;
   onPlaybackEnd?: () => void;
   manualSlideChange?: { chapter: number; slide: number } | null;
+  hideInterface: boolean;
+  onHideInterfaceChange: (hidden: boolean) => void;
 }
 
 export const NarratedController: React.FC<NarratedControllerProps> = ({
@@ -61,7 +63,9 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
   onSlideChange,
   onPlaybackStart,
   onPlaybackEnd,
-  manualSlideChange
+  manualSlideChange,
+  hideInterface,
+  onHideInterfaceChange
 }) => {
   // Use provided slides or empty array if not loaded yet
   const allSlides = slides || [];
@@ -70,7 +74,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
   const [_isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showStartOverlay, setShowStartOverlay] = useState(true);
-  const [hideInterface, setHideInterface] = useState(false);
+  const setHideInterface = onHideInterfaceChange;
   const [isManualMode, setIsManualMode] = useState(false);
   const [audioEnabled, setAudioEnabled] = useState(true);
   const [autoAdvanceOnAudioEnd, setAutoAdvanceOnAudioEnd] = useState(false);
