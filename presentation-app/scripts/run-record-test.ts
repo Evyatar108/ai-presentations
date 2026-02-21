@@ -4,6 +4,7 @@
  * Usage:
  *   npm run test:record -- --demo highlights-deep-dive
  *   npm run test:record -- --demo highlights-deep-dive --viewport 1920x800
+ *   npm run test:record -- --demo highlights-deep-dive --fps 60
  */
 import { execSync } from 'child_process';
 
@@ -17,7 +18,7 @@ function getArg(name: string): string | undefined {
 
 const demoId = getArg('--demo');
 if (!demoId) {
-  console.error('Usage: npm run test:record -- --demo <demo-id> [--viewport WxH]');
+  console.error('Usage: npm run test:record -- --demo <demo-id> [--viewport WxH] [--fps N]');
   process.exit(1);
 }
 
@@ -34,9 +35,15 @@ if (viewport) {
   env.VIEWPORT_HEIGHT = String(h);
 }
 
+const fps = getArg('--fps');
+if (fps) {
+  env.FPS = fps;
+}
+
 const parts = [
   `demo: ${demoId}`,
   viewport ? `viewport: ${viewport}` : null,
+  fps ? `fps: ${fps}` : null,
 ].filter(Boolean).join(', ');
 console.log(`Recording video (${parts})\n`);
 

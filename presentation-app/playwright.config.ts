@@ -11,11 +11,18 @@ export default defineConfig({
     baseURL: 'http://localhost:5173',
     headless: true,
     viewport: { width, height },
+    browserName: 'chromium',
   },
   projects: [
     {
-      name: 'chromium',
-      use: { browserName: 'chromium' },
+      name: 'static',
+      testMatch: ['overflow.spec.ts', 'screenshot.spec.ts'],
+      use: { reducedMotion: 'reduce' },
+    },
+    {
+      name: 'record',
+      testMatch: ['record.spec.ts'],
+      // Full animations for video recording
     },
   ],
 });

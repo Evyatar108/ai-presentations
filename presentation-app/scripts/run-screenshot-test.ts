@@ -48,7 +48,7 @@ const parts = [
 console.log(`Taking screenshots (${parts})\n`);
 
 try {
-  execSync(`npx playwright test tests/screenshot.spec.ts`, {
+  execSync(`npx playwright test tests/screenshot.spec.ts --project=static`, {
     stdio: 'inherit',
     env,
     cwd: process.cwd(),

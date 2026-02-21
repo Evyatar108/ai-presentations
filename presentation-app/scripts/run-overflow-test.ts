@@ -39,7 +39,7 @@ if (viewport) {
 }
 
 try {
-  execSync(`npx playwright test tests/overflow.spec.ts`, {
+  execSync(`npx playwright test tests/overflow.spec.ts --project=static`, {
     stdio: 'inherit',
     env,
     cwd: process.cwd(),

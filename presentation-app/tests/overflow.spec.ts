@@ -53,21 +53,17 @@ interface SlideResult {
   segments: SegmentResult[];
 }
 
-/** Wait for Framer Motion animations to settle + ResizeObserver + React re-render. */
-async function waitForAnimations(page: Page, ms = 1500) {
-  await page.waitForTimeout(ms);
-}
-
 /**
- * Read the data-overflow attribute set by SlideContainer's ResizeObserver.
- * Must be called AFTER waitForAnimations() so the ResizeObserver has fired
- * and React has re-rendered with the measured value.
+ * Read the data-overflow attribute after waiting for content to settle.
+ * Relies on reducedMotion: 'reduce' (set in the "static" Playwright project)
+ * so Framer Motion animations are near-instant. We only need the
+ * ResizeObserver + React re-render cycle (~1-2 frames).
  *
  * Uses querySelectorAll + last element because during slide transitions,
  * AnimatePresence briefly mounts both the exiting and entering slides.
- * The LAST [data-overflow] element is the current (entering) slide.
  */
 async function readOverflow(page: Page): Promise<{ overflow: number; scrollHeight: number; threshold: number }> {
+  await page.waitForTimeout(300);
   return page.evaluate(() => {
     const all = document.querySelectorAll('[data-overflow]');
     const el = all[all.length - 1] as HTMLElement | undefined;
@@ -146,7 +142,7 @@ test(`overflow check: ${DEMO_ID}`, async ({ page }) => {
   await manualBtn.click();
 
   // Wait for the first slide to render
-  await waitForAnimations(page, 1500);
+  await page.waitForTimeout(500);
 
   // 4. Step through all slides and segments
   const results: SlideResult[] = [];
@@ -174,7 +170,6 @@ test(`overflow check: ${DEMO_ID}`, async ({ page }) => {
         if (await segDot.count() > 0) {
           await segDot.click();
         }
-        await waitForAnimations(page);
         const { overflow, scrollHeight, threshold } = await readOverflow(page);
         slideResult.segments.push({
           segmentIdx: s,
@@ -186,7 +181,6 @@ test(`overflow check: ${DEMO_ID}`, async ({ page }) => {
       }
     } else {
       // Single segment (no dots), just measure
-      await waitForAnimations(page);
       const { overflow, scrollHeight, threshold } = await readOverflow(page);
       slideResult.segments.push({
         segmentIdx: 0,
@@ -204,7 +198,7 @@ test(`overflow check: ${DEMO_ID}`, async ({ page }) => {
       done = true;
     } else {
       await page.keyboard.press('ArrowRight');
-      await waitForAnimations(page, 1000);
+      await page.waitForTimeout(400);
     }
   }
 
