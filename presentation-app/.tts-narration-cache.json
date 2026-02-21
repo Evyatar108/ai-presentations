@@ -381,9 +381,9 @@
       "generatedAt": "2026-02-20T20:34:15.842Z"
     },
     "c4\\s3_segment_02_math.wav": {
-      "narrationText": "At real scale: thirty utterances per topic gives four hundred thirty-five candidates. Multiply across five topics — over two thousand rows.",
+      "narrationText": "In this example, ten utterances across three topics produce one hundred thirty-five candidates. But each candidate is several utterances long — so the actual number of duplicated utterance copies is over six hundred. And this is a small example.",
       "instruct": "Speak with building intensity, like revealing the scale of a problem.",
-      "generatedAt": "2026-02-20T20:34:15.844Z"
+      "generatedAt": "2026-02-21T03:32:31.378Z"
     },
     "c4\\s3_segment_03_context_window.wav": {
       "narrationText": "The V1 code then greedily packs these candidates into Call 2's prompt until it fills the entire 128K context window. This is why highlights_extractives alone could consume more tokens than all other calls combined.",

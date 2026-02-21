@@ -228,8 +228,8 @@
         },
         {
           "id": "math",
-          "narrationText": "At real scale: thirty utterances per topic gives four hundred thirty-five candidates. Multiply across five topics — over two thousand rows.",
-          "visualDescription": "Scale-up math: 30 utterances → 435 candidates, 5 topics → 2000+ rows",
+          "narrationText": "In this example, ten utterances across three topics produce one hundred thirty-five candidates. But each candidate is several utterances long — so the actual number of duplicated utterance copies is over six hundred. And this is a small example.",
+          "visualDescription": "Example math: 10 utterances × 3 topics → 135 candidates, ~5 utterances each → ~630 duplicated copies",
           "notes": ""
         },
         {

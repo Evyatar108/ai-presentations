@@ -338,7 +338,7 @@ const Ch4_S3_VisualizedComponent: React.FC = () => {
             animate="visible"
             style={{ marginBottom: '2rem' }}
           >
-            <CandidateGrid n={31} animate topicRanges={[[0, 10], [10, 20], [20, 30]]} hideLastLabel />
+            <CandidateGrid n={30} animate topicRanges={[[0, 9], [10, 19], [20, 29]]} />
           </motion.div>
         )}
       </AnimatePresence>
@@ -352,12 +352,12 @@ const Ch4_S3_VisualizedComponent: React.FC = () => {
             style={{ textAlign: 'center', marginBottom: '1.5rem' }}
           >
             <p style={{ ...typography.body, fontSize: 18, margin: 0 }}>
-              30 utterances/topic {'  '}<span style={{ color: theme.colors.warning }}>&#8594;</span>{'  '}
-              <span style={{ color: theme.colors.warning, fontWeight: 700 }}>435 candidates</span>
+              In this example: 10 utterances &#215; 3 topics {'  '}<span style={{ color: theme.colors.warning }}>&#8594;</span>{'  '}
+              <span style={{ color: theme.colors.warning, fontWeight: 700 }}>135 candidates</span>
             </p>
             <p style={{ ...typography.body, fontSize: 18, margin: '0.25rem 0 0' }}>
-              5 topics {'  '}<span style={{ color: theme.colors.error }}>&#8594;</span>{'  '}
-              <span style={{ color: theme.colors.error, fontWeight: 700 }}>~2,000+ rows</span>
+              Each candidate &#8776; 5 utterances long {'  '}<span style={{ color: theme.colors.error }}>&#8594;</span>{'  '}
+              <span style={{ color: theme.colors.error, fontWeight: 700 }}>~630 duplicated utterance copies</span>
             </p>
           </motion.div>
         )}

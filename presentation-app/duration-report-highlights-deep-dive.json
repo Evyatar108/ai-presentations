@@ -1,12 +1,12 @@
 {
   "highlights-deep-dive": {
     "demoId": "highlights-deep-dive",
-    "audioOnlyDuration": 1116.1599999999999,
+    "audioOnlyDuration": 1122.4799999999998,
     "segmentDelays": 81,
     "slideDelays": 48,
     "finalDelay": 2,
     "startSilence": 1,
-    "totalDuration": 1248.1599999999999,
+    "totalDuration": 1254.4799999999998,
     "slideBreakdowns": [
       {
         "slideIndex": 1,
@@ -217,8 +217,8 @@
         "slideIndex": 3,
         "slideTitle": "O(n^2) Visualized",
         "chapterIndex": 4,
-        "totalDuration": 34.76,
-        "audioDuration": 29.759999999999998,
+        "totalDuration": 41.08,
+        "audioDuration": 36.08,
         "delaysDuration": 5,
         "segments": [
           {
@@ -228,7 +228,7 @@
           },
           {
             "segmentIndex": 1,
-            "audioDuration": 9.12,
+            "audioDuration": 15.44,
             "delayAfter": 1.5
           },
           {
@@ -655,8 +655,8 @@
       }
     ],
     "formattedDurations": {
-      "audioOnly": "18:36",
-      "total": "20:48"
+      "audioOnly": "18:42",
+      "total": "20:54"
     }
   }
 }
