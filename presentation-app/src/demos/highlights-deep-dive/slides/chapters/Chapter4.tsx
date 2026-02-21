@@ -17,23 +17,14 @@ import CodeBlock from '../components/CodeBlock';
 import CandidateGrid from '../components/CandidateGrid';
 
 /**
- * Chapter 4: The O(n^2) Problem (3 slides)
+ * Chapter 4: The O(n^2) Problem (4 slides)
  */
 
 const NESTED_LOOP_CODE = `def extract_highlights_candidates_from_transcript(
     contexts_blocks, topic_ranges,
     duration_thresh_low, duration_thresh_high
 ):
-    data = contexts_blocks[0]
-    result = []
-    ranges = [[int(x) for x in s.split("-")] for s in topic_ranges]
-    utterances = list(zip(
-        data["uttrances_start_times"],
-        data["uttrances_end_times"],
-        data["uttrances_texts"],
-        data["uttrances_ids"],
-        speaker_list
-    ))
+    # ... setup: zip utterances, parse topic ranges ...
 
     for i in range(1, len(ranges) - 1):
         start_ind = ranges[i][0]
@@ -41,16 +32,12 @@ const NESTED_LOOP_CODE = `def extract_highlights_candidates_from_transcript(
         topic_blocks = []
         for j in range(start_ind, end_ind + 1):      # O(n) starts
             for k in range(j + 1, end_ind + 1):       # O(n) ends
-                start_time = utterances[j][0]
-                end_time = utterances[k][1]
-                duration = end_time - start_time
+                duration = utterances[k][1] - utterances[j][0]
                 if duration_thresh_low <= duration <= duration_thresh_high:
-                    utt = [ut[2] for ut in utterances[j:k+1]]
-                    subset = {
+                    topic_blocks.append({
                         "utterance_range": [j, k],
-                        "uttrances_texts": utt,
-                    }
-                    topic_blocks.append(subset)
+                        "uttrances_texts": [ut[2] for ut in utterances[j:k+1]],
+                    })
         result.append(topic_blocks)
     return result`;
 
@@ -77,7 +64,7 @@ const Ch4_S1_NestedLoopComponent: React.FC = () => {
             code={NESTED_LOOP_CODE}
             language="python"
             title="highlights_utils.py  --  lines 199-234"
-            highlightLines={[20, 21]}
+            highlightLines={[11, 12]}
             fontSize={12}
           />
         )}
@@ -441,4 +428,327 @@ export const Ch4_S3_Visualized = defineSlide({
     ]
   },
   component: Ch4_S3_VisualizedComponent
+});
+
+// ---------- Slide 4: Output Safety ----------
+
+const Ch4_S4_OutputSafetyComponent: React.FC = () => {
+  const { reduced } = useReducedMotion();
+  const { isSegmentVisible } = useSegmentedAnimation();
+  const theme = useTheme();
+
+  return (
+    <SlideContainer maxWidth={950}>
+      {/* Segment 0: Call 2's Full Picture */}
+      <AnimatePresence>
+        {isSegmentVisible(0) && (
+          <motion.div
+            variants={fadeUp(reduced)}
+            initial="hidden"
+            animate="visible"
+          >
+            <SlideTitle reduced={reduced} subtitle="V1 Call 2 (Extractives): Input → Output">
+              Output Safety
+            </SlideTitle>
+
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '1.5rem',
+              marginTop: '1.5rem',
+            }}>
+              {/* Input box */}
+              <div style={{
+                background: 'rgba(251, 191, 36, 0.08)',
+                border: '1px solid rgba(251, 191, 36, 0.3)',
+                borderRadius: 12,
+                padding: '1rem 1.5rem',
+                textAlign: 'center',
+                flex: 1,
+                maxWidth: 260,
+              }}>
+                <div style={{ ...typography.caption, fontSize: 11, color: theme.colors.warning, letterSpacing: 1, textTransform: 'uppercase', marginBottom: '0.4rem' }}>
+                  Input
+                </div>
+                <div style={{
+                  fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+                  fontSize: 15,
+                  color: theme.colors.warning,
+                  fontWeight: 700,
+                }}>
+                  2,000+ Candidate Rows
+                </div>
+                <div style={{ ...typography.caption, fontSize: 11, marginTop: '0.3rem' }}>
+                  Numbered list of precomputed ranges
+                </div>
+              </div>
+
+              {/* Arrow */}
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '0.25rem',
+              }}>
+                <div style={{
+                  fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+                  fontSize: 11,
+                  color: theme.colors.textSecondary,
+                }}>
+                  Call 2
+                </div>
+                <div style={{ fontSize: 28, color: theme.colors.textMuted }}>&#8594;</div>
+              </div>
+
+              {/* Output box */}
+              <div style={{
+                background: 'rgba(16, 185, 129, 0.08)',
+                border: `1px solid ${theme.colors.success}`,
+                borderRadius: 12,
+                padding: '1rem 1.5rem',
+                textAlign: 'center',
+                flex: 1,
+                maxWidth: 260,
+              }}>
+                <div style={{ ...typography.caption, fontSize: 11, color: theme.colors.success, letterSpacing: 1, textTransform: 'uppercase', marginBottom: '0.4rem' }}>
+                  Output
+                </div>
+                <div style={{
+                  fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+                  fontSize: 15,
+                  color: theme.colors.success,
+                  fontWeight: 700,
+                }}>
+                  selected: [3, 17, 42]
+                </div>
+                <div style={{ ...typography.caption, fontSize: 11, marginTop: '0.3rem' }}>
+                  Index numbers — not freeform text
+                </div>
+              </div>
+            </div>
+
+            <div style={{
+              textAlign: 'center',
+              marginTop: '1rem',
+              ...typography.caption,
+              fontSize: 13,
+              color: theme.colors.textSecondary,
+            }}>
+              Model picks from a closed list — output is an index, not freeform text
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Segment 1: Why Precompute? */}
+      <AnimatePresence>
+        {isSegmentVisible(1) && (
+          <motion.div
+            variants={staggerContainer(reduced, 0.15)}
+            initial="hidden"
+            animate="visible"
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '1rem',
+              marginTop: '2rem',
+            }}
+          >
+            {/* WITH precomputation */}
+            <motion.div
+              variants={tileVariants(reduced)}
+              style={{
+                background: 'rgba(16, 185, 129, 0.06)',
+                border: `1px solid ${theme.colors.success}`,
+                borderRadius: 12,
+                padding: '1rem 1.5rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '1rem',
+              }}
+            >
+              <div style={{
+                ...typography.caption,
+                fontSize: 11,
+                color: theme.colors.success,
+                letterSpacing: 1,
+                textTransform: 'uppercase',
+                minWidth: 180,
+                fontWeight: 700,
+              }}>
+                With Precomputation
+              </div>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+                fontSize: 13,
+              }}>
+                <span style={{ color: theme.colors.success }}>selected: [1]</span>
+                <span style={{ color: theme.colors.textMuted }}>&#8594;</span>
+                <span style={{ color: theme.colors.textSecondary }}>maps to valid range</span>
+                <span style={{ color: theme.colors.textMuted }}>&#8594;</span>
+                <span style={{ color: theme.colors.success, fontWeight: 700 }}>valid video segment</span>
+              </div>
+            </motion.div>
+
+            {/* WITHOUT precomputation */}
+            <motion.div
+              variants={tileVariants(reduced)}
+              style={{
+                background: 'rgba(239, 68, 68, 0.06)',
+                border: `1px solid ${theme.colors.error}`,
+                borderRadius: 12,
+                padding: '1rem 1.5rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '1rem',
+              }}
+            >
+              <div style={{
+                ...typography.caption,
+                fontSize: 11,
+                color: theme.colors.error,
+                letterSpacing: 1,
+                textTransform: 'uppercase',
+                minWidth: 180,
+                fontWeight: 700,
+              }}>
+                Without Precomputation
+              </div>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+                fontSize: 13,
+              }}>
+                <span style={{ color: theme.colors.error, textDecoration: 'line-through' }}>start: u0, end: u7</span>
+                <span style={{ color: theme.colors.textMuted }}>&#8594;</span>
+                <span style={{ color: theme.colors.error }}>u7 out of range</span>
+                <span style={{ color: theme.colors.textMuted }}>&#8594;</span>
+                <span style={{ color: theme.colors.error, fontWeight: 700 }}>broken video</span>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Segment 2: The Trade-Off and V2 Preview */}
+      <AnimatePresence>
+        {isSegmentVisible(2) && (
+          <motion.div
+            variants={fadeUp(reduced)}
+            initial="hidden"
+            animate="visible"
+            style={{ marginTop: '2rem' }}
+          >
+            {/* Balance panel */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'stretch',
+              gap: 0,
+              marginBottom: '1.25rem',
+            }}>
+              <div style={{
+                flex: 1,
+                background: 'rgba(16, 185, 129, 0.06)',
+                border: `1px solid ${theme.colors.success}`,
+                borderRadius: '12px 0 0 12px',
+                padding: '1rem 1.25rem',
+                textAlign: 'center',
+              }}>
+                <div style={{ fontSize: 24, marginBottom: '0.25rem' }}>{'\u2713'}</div>
+                <div style={{ ...typography.caption, fontSize: 13, color: theme.colors.success, fontWeight: 700 }}>
+                  Output Safety
+                </div>
+                <div style={{ ...typography.caption, fontSize: 11, marginTop: '0.25rem' }}>
+                  Every candidate pre-validated
+                </div>
+              </div>
+
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                background: theme.colors.bgSurface,
+                border: `1px solid ${theme.colors.bgBorder}`,
+                borderLeft: 'none',
+                borderRight: 'none',
+                padding: '0 1rem',
+              }}>
+                <div style={{
+                  ...typography.caption,
+                  fontSize: 12,
+                  color: theme.colors.textSecondary,
+                  fontWeight: 700,
+                  whiteSpace: 'nowrap',
+                }}>
+                  V1's Trade-Off
+                </div>
+              </div>
+
+              <div style={{
+                flex: 1,
+                background: 'rgba(239, 68, 68, 0.06)',
+                border: `1px solid ${theme.colors.error}`,
+                borderRadius: '0 12px 12px 0',
+                padding: '1rem 1.25rem',
+                textAlign: 'center',
+              }}>
+                <div style={{ fontSize: 24, marginBottom: '0.25rem' }}>{'\u2717'}</div>
+                <div style={{ ...typography.caption, fontSize: 13, color: theme.colors.error, fontWeight: 700 }}>
+                  O(n{'\u00B2'}) Input Cost
+                </div>
+                <div style={{ ...typography.caption, fontSize: 11, marginTop: '0.25rem' }}>
+                  Fills 128K context window
+                </div>
+              </div>
+            </div>
+
+            {/* V2 forward-looking callout */}
+            <div style={{
+              background: 'rgba(0, 183, 195, 0.08)',
+              border: `1px solid rgba(0, 183, 195, 0.3)`,
+              borderRadius: 10,
+              padding: '0.85rem 1.5rem',
+              textAlign: 'center',
+            }}>
+              <p style={{ ...typography.body, fontSize: 14, margin: 0 }}>
+                <span style={{ color: theme.colors.primary, fontWeight: 700 }}>V2</span>
+                <span style={{ color: theme.colors.textSecondary }}>
+                  {' achieves the same safety with '}
+                </span>
+                <span style={{
+                  fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+                  color: theme.colors.primary,
+                  fontWeight: 700,
+                }}>
+                  max_end_utterance_id
+                </span>
+                <span style={{ color: theme.colors.textSecondary }}>
+                  {' — an inline constraint at linear cost'}
+                </span>
+              </p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </SlideContainer>
+  );
+};
+
+export const Ch4_S4_OutputSafety = defineSlide({
+  metadata: {
+    chapter: 4,
+    slide: 4,
+    title: 'Output Safety',
+    audioSegments: [
+      { id: 'input_output' },
+      { id: 'rationale' },
+      { id: 'tradeoff' }
+    ]
+  },
+  component: Ch4_S4_OutputSafetyComponent
 });
