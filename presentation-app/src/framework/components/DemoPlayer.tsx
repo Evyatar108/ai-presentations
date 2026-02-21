@@ -30,6 +30,7 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideIn
   const [isNarratedMode, setIsNarratedMode] = useState(false);
   const [manualSlideChange, setManualSlideChange] = useState<{ chapter: number; slide: number } | null>(null);
   const [hideInterface, setHideInterface] = useState(false);
+  const [zoomEnabled, setZoomEnabled] = useState(false);
 
   const handleHideInterfaceChange = useCallback((hidden: boolean) => {
     setHideInterface(hidden);
@@ -326,7 +327,7 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideIn
     <DemoPlayerBoundary onBack={onBack}>
     <HideInterfaceProvider value={hideInterface}>
     <SegmentProvider>
-      <div style={{ position: 'relative' }}>
+      <div style={{ position: 'relative', overflow: 'hidden' }}>
         {/* Floating Back Button */}
         {!hideInterface && (
           <motion.button
@@ -376,17 +377,28 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideIn
           manualSlideChange={manualSlideChange}
           hideInterface={hideInterface}
           onHideInterfaceChange={handleHideInterfaceChange}
+          zoomEnabled={zoomEnabled}
+          onZoomEnabledChange={setZoomEnabled}
         />
         {/* Slide Player */}
-        <SlidePlayer
-          demoId={demoId}
-          slides={slides}
-          slidesWithMetadata={slidesWithResolvedPaths}
-          autoAdvance={false}
-          externalSlide={currentSlide}
-          onSlideChange={handleManualSlideChange}
-          disableManualNav={isNarratedMode}
-        />
+        <div
+          style={{
+            transform: zoomEnabled ? 'scale(1.8)' : undefined,
+            transformOrigin: 'center center',
+            width: '100%',
+            height: '100%',
+          }}
+        >
+          <SlidePlayer
+            demoId={demoId}
+            slides={slides}
+            slidesWithMetadata={slidesWithResolvedPaths}
+            autoAdvance={false}
+            externalSlide={currentSlide}
+            onSlideChange={handleManualSlideChange}
+            disableManualNav={isNarratedMode}
+          />
+        </div>
       </div>
     </SegmentProvider>
     </HideInterfaceProvider>

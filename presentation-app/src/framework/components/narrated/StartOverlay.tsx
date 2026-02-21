@@ -14,6 +14,8 @@ export interface StartOverlayProps {
   showRuntimeTimerOption: boolean;
   onShowRuntimeTimerOptionChange: (value: boolean) => void;
   finalElapsedSeconds: number | null;
+  zoomEnabled: boolean;
+  onZoomEnabledChange: (value: boolean) => void;
   visible: boolean;
   onStartNarrated: () => void;
   onStartManual: () => void;
@@ -28,6 +30,8 @@ export const StartOverlay: React.FC<StartOverlayProps> = ({
   showRuntimeTimerOption,
   onShowRuntimeTimerOptionChange,
   finalElapsedSeconds,
+  zoomEnabled,
+  onZoomEnabledChange,
   visible,
   onStartNarrated,
   onStartManual,
@@ -140,6 +144,16 @@ export const StartOverlay: React.FC<StartOverlayProps> = ({
                     style={{ width: 18, height: 18, cursor: 'pointer' }}
                   />
                   <span>Show runtime timer (narrated)</span>
+                </label>
+
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: 14, color: theme.colors.textSecondary }}>
+                  <input
+                    type="checkbox"
+                    checked={zoomEnabled}
+                    onChange={(e) => onZoomEnabledChange(e.target.checked)}
+                    style={{ width: 18, height: 18, cursor: 'pointer' }}
+                  />
+                  <span>Enable zoom</span>
                 </label>
               </div>
               {showRuntimeTimerOption && demoMetadata.durationInfo?.total && (

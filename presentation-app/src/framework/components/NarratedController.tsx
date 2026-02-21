@@ -53,6 +53,8 @@ export interface NarratedControllerProps {
   manualSlideChange?: { chapter: number; slide: number } | null;
   hideInterface: boolean;
   onHideInterfaceChange: (hidden: boolean) => void;
+  zoomEnabled: boolean;
+  onZoomEnabledChange: (enabled: boolean) => void;
 }
 
 export const NarratedController: React.FC<NarratedControllerProps> = ({
@@ -65,7 +67,9 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
   onPlaybackEnd,
   manualSlideChange,
   hideInterface,
-  onHideInterfaceChange
+  onHideInterfaceChange,
+  zoomEnabled,
+  onZoomEnabledChange
 }) => {
   // Use provided slides or empty array if not loaded yet
   const allSlides = slides || [];
@@ -395,6 +399,8 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
         visible={showStartOverlay}
         onStartNarrated={handleStart}
         onStartManual={handleManualMode}
+        zoomEnabled={zoomEnabled}
+        onZoomEnabledChange={onZoomEnabledChange}
       />
 
       <AnimatePresence>
