@@ -91,8 +91,8 @@ const Ch5_S1_FormatComparisonComponent: React.FC = () => {
               </thead>
               <tbody>
                 {[
-                  ['Speaker', 'Per-utterance key', 'Turn tag header'],
-                  ['Timestamps', 'Start + End per row', 'Omitted (pre-computed)'],
+                  ['Speaker', 'Per-utterance key', 'Once per turn'],
+                  ['Timestamps', 'Start + End per row', 'Omitted'],
                   ['Keys', '5 keys x N rows', '3 columns, once'],
                   ['IDs', 'Global sequential', 'Local per-turn (u0, u1...)'],
                   ['Boundaries', 'Not encoded', 'max_end_utterance_id column']
@@ -105,6 +105,15 @@ const Ch5_S1_FormatComparisonComponent: React.FC = () => {
                 ))}
               </tbody>
             </table>
+            <div style={{
+              ...typography.caption,
+              fontSize: 12,
+              color: theme.colors.textMuted,
+              marginTop: '0.75rem',
+              textAlign: 'center',
+            }}>
+              <strong>Turn</strong> = a continuous range of utterances from the same speaker
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

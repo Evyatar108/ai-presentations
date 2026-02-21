@@ -1,24 +1,24 @@
 {
   "highlights-deep-dive": {
     "demoId": "highlights-deep-dive",
-    "audioOnlyDuration": 1079.2,
+    "audioOnlyDuration": 1076.48,
     "segmentDelays": 79.5,
     "slideDelays": 48,
     "finalDelay": 2,
     "startSilence": 1,
-    "totalDuration": 1209.7,
+    "totalDuration": 1206.98,
     "slideBreakdowns": [
       {
         "slideIndex": 1,
         "slideTitle": "Title",
         "chapterIndex": 0,
-        "totalDuration": 19.92,
-        "audioDuration": 17.92,
+        "totalDuration": 18.08,
+        "audioDuration": 16.08,
         "delaysDuration": 2,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 17.92,
+            "audioDuration": 16.08,
             "delayAfter": 2
           }
         ]
@@ -267,8 +267,8 @@
         "slideIndex": 1,
         "slideTitle": "Format Comparison",
         "chapterIndex": 5,
-        "totalDuration": 38.76,
-        "audioDuration": 33.76,
+        "totalDuration": 37.879999999999995,
+        "audioDuration": 32.879999999999995,
         "delaysDuration": 5,
         "segments": [
           {
@@ -283,7 +283,7 @@
           },
           {
             "segmentIndex": 2,
-            "audioDuration": 12.56,
+            "audioDuration": 11.68,
             "delayAfter": 2
           }
         ]
@@ -650,8 +650,8 @@
       }
     ],
     "formattedDurations": {
-      "audioOnly": "17:59",
-      "total": "20:09"
+      "audioOnly": "17:56",
+      "total": "20:06"
     }
   }
 }

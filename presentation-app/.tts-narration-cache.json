@@ -191,9 +191,9 @@
   },
   "highlights-deep-dive": {
     "c0\\s1_segment_01_main.wav": {
-      "narrationText": "Hello, I'm Qwen TTS, and I'll be narrating this presentation for Evyahtar... We'll cover how the Meeting Highlights prompt was redesigned — from a four-call GPT-4 pipeline down to a single unified prompt — cutting GPU costs by roughly seventy percent.",
+      "narrationText": "Hello, I'm Kwen tee-tee-ess, and I'll be narrating this presentation for Evyahtar... We'll cover how the Meeting Highlights prompt was redesigned — from a four-call GPT-4 pipeline down to a single unified prompt — cutting GPU costs by roughly seventy percent.",
       "instruct": "Speak with calm authority and a hint of intrigue, like opening a keynote.",
-      "generatedAt": "2026-02-21T00:23:36.190Z"
+      "generatedAt": "2026-02-21T02:06:28.134Z"
     },
     "c1\\s1_segment_01_title.wav": {
       "narrationText": "Let's start with what Meeting Highlights actually produces.",
@@ -321,9 +321,9 @@
       "generatedAt": "2026-02-21T00:47:30.990Z"
     },
     "c5\\s1_segment_03_table.wav": {
-      "narrationText": "Speaker info moves to a turn tag header. Timestamps are omitted — pre-computed downstream. And the third column, max_end_utterance_id, encodes topic boundaries directly in the data.",
+      "narrationText": "Speaker info appears once per turn — in the turn tag. Timestamps are omitted entirely. And the third column, max_end_utterance_id, encodes topic boundaries directly in the data.",
       "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-20T19:36:37.398Z"
+      "generatedAt": "2026-02-21T02:43:32.573Z"
     },
     "c5\\s2_segment_01_row.wav": {
       "narrationText": "This is the key insight. Remember, V1 precomputed all candidate combinations so the model could only output safe indices. V2 replaces that entire approach. Look at this single row: u2, the utterance text, and u4 as the max_end_utterance_id. That third column tells the model: if you start a clip at u2, the furthest you can extend it is u4. The model outputs the range directly — and the boundary constraint guarantees it's valid. This single column replaces the entire O of n-squared candidate enumeration.",
@@ -582,5 +582,9 @@
     }
   },
   "example-demo-1": {},
-  "example-demo-2": {}
+  "example-demo-2": {},
+  "c0/s1_segment_01_main.wav": {
+    "narrationText": "Hello, I'm Kwen tee-tee-ess, and I'll be narrating this presentation for Evyahtar... We'll cover how the Meeting Highlights prompt was redesigned — from a four-call GPT-4 pipeline down to a single unified prompt — cutting GPU costs by roughly seventy percent.",
+    "generatedAt": "2026-02-21T02:04:21.463Z"
+  }
 }

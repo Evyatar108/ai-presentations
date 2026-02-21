@@ -19,14 +19,14 @@ export const metadata: DemoMetadata = {
   narrationFallback: 'silent',
 
   durationInfo: {
-    audioOnly: 1079.2,
+    audioOnly: 1076.48,
     segmentDelays: 79.5,
     slideDelays: 48,
     finalDelay: 2,
     startSilence: 1,
-    total: 1209.7,
+    total: 1206.98,
     slideBreakdown: [
-      { slideIndex: 1, slideTitle: 'Title', chapterIndex: 0, totalDuration: 19.92, audioDuration: 17.92, delaysDuration: 2, segments: [{ segmentIndex: 0, audioDuration: 17.92, delayAfter: 2 }] },
+      { slideIndex: 1, slideTitle: 'Title', chapterIndex: 0, totalDuration: 18.08, audioDuration: 16.08, delaysDuration: 2, segments: [{ segmentIndex: 0, audioDuration: 16.08, delayAfter: 2 }] },
       { slideIndex: 1, slideTitle: 'Product Context', chapterIndex: 1, totalDuration: 50.2, audioDuration: 45.2, delaysDuration: 5, segments: [{ segmentIndex: 0, audioDuration: 3.44, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 26.4, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 15.36, delayAfter: 2 }] },
       { slideIndex: 2, slideTitle: 'COGS Problem', chapterIndex: 1, totalDuration: 38.2, audioDuration: 33.2, delaysDuration: 5, segments: [{ segmentIndex: 0, audioDuration: 18.8, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 8, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 6.4, delayAfter: 2 }] },
       { slideIndex: 1, slideTitle: 'Four-Call Pipeline', chapterIndex: 2, totalDuration: 48.88, audioDuration: 40.88, delaysDuration: 8, segments: [{ segmentIndex: 0, audioDuration: 4, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 8, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 12.24, delayAfter: 1.5 }, { segmentIndex: 3, audioDuration: 7.12, delayAfter: 1.5 }, { segmentIndex: 4, audioDuration: 9.52, delayAfter: 2 }] },
@@ -36,7 +36,7 @@ export const metadata: DemoMetadata = {
       { slideIndex: 2, slideTitle: 'Candidate Rows', chapterIndex: 4, totalDuration: 48.36, audioDuration: 43.36, delaysDuration: 5, segments: [{ segmentIndex: 0, audioDuration: 12.96, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 17.12, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 13.28, delayAfter: 2 }] },
       { slideIndex: 3, slideTitle: 'O(n^2) Visualized', chapterIndex: 4, totalDuration: 34.76, audioDuration: 29.76, delaysDuration: 5, segments: [{ segmentIndex: 0, audioDuration: 5.12, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 9.12, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 15.52, delayAfter: 2 }] },
       { slideIndex: 4, slideTitle: 'Output Safety', chapterIndex: 4, totalDuration: 86.04, audioDuration: 81.04, delaysDuration: 5, segments: [{ segmentIndex: 0, audioDuration: 21.6, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 33.2, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 26.24, delayAfter: 2 }] },
-      { slideIndex: 1, slideTitle: 'Format Comparison', chapterIndex: 5, totalDuration: 38.76, audioDuration: 33.76, delaysDuration: 5, segments: [{ segmentIndex: 0, audioDuration: 6.96, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 14.24, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 12.56, delayAfter: 2 }] },
+      { slideIndex: 1, slideTitle: 'Format Comparison', chapterIndex: 5, totalDuration: 37.88, audioDuration: 32.88, delaysDuration: 5, segments: [{ segmentIndex: 0, audioDuration: 6.96, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 14.24, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 11.68, delayAfter: 2 }] },
       { slideIndex: 2, slideTitle: 'max_end_utterance_id', chapterIndex: 5, totalDuration: 63.56, audioDuration: 58.56, delaysDuration: 5, segments: [{ segmentIndex: 0, audioDuration: 39.04, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 9.84, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 9.68, delayAfter: 2 }] },
       { slideIndex: 3, slideTitle: 'Turn/Utterance Concept', chapterIndex: 5, totalDuration: 71.32, audioDuration: 66.32, delaysDuration: 5, segments: [{ segmentIndex: 0, audioDuration: 6.32, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 33.6, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 26.4, delayAfter: 2 }] },
       { slideIndex: 1, slideTitle: 'Prompt Overview', chapterIndex: 6, totalDuration: 67.08, audioDuration: 62.08, delaysDuration: 5, segments: [{ segmentIndex: 0, audioDuration: 12.88, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 31.2, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 18, delayAfter: 2 }] },

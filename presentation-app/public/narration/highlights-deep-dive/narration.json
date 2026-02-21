@@ -12,7 +12,7 @@
       "segments": [
         {
           "id": "main",
-          "narrationText": "Hello, I'm Qwen TTS, and I'll be narrating this presentation for Evyahtar... We'll cover how the Meeting Highlights prompt was redesigned — from a four-call GPT-4 pipeline down to a single unified prompt — cutting GPU costs by roughly seventy percent.",
+          "narrationText": "Hello, I'm Kwen tee-tee-ess, and I'll be narrating this presentation for Evyahtar... We'll cover how the Meeting Highlights prompt was redesigned — from a four-call GPT-4 pipeline down to a single unified prompt — cutting GPU costs by roughly seventy percent.",
           "visualDescription": "Title slide: 'From 4 Calls to 1: Redesigning the Meeting Highlights Prompt'",
           "notes": ""
         }
@@ -284,7 +284,7 @@
         },
         {
           "id": "table",
-          "narrationText": "Speaker info moves to a turn tag header. Timestamps are omitted — pre-computed downstream. And the third column, max_end_utterance_id, encodes topic boundaries directly in the data.",
+          "narrationText": "Speaker info appears once per turn — in the turn tag. Timestamps are omitted entirely. And the third column, max_end_utterance_id, encodes topic boundaries directly in the data.",
           "visualDescription": "Comparison table: what changed across 5 aspects",
           "notes": ""
         }
