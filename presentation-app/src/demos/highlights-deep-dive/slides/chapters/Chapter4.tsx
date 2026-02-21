@@ -96,7 +96,7 @@ const Ch4_S1_NestedLoopComponent: React.FC = () => {
                 {' \u00D7 '}
                 <span style={{ color: theme.colors.warning, fontWeight: 700 }}>O(n) ends</span>
                 {' = '}
-                <span style={{ color: theme.colors.error, fontWeight: 700 }}>O(n\u00B2) candidates</span>
+                <span style={{ color: theme.colors.error, fontWeight: 700 }}>O(n²) candidates</span>
               </p>
             </div>
             <div style={{
