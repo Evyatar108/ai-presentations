@@ -78,7 +78,6 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const currentIndexRef = useRef(currentIndex);
-  const lastAutoAdvanceFromIndexRef = useRef<number | null>(null);
 
   // Segment context for multi-segment slides
   const segmentContext = useSegmentContext();
@@ -320,7 +319,6 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
             const nextIndex = currentIndexRef.current + 1;
             if (nextIndex < allSlides.length) {
               setTimeout(() => {
-                lastAutoAdvanceFromIndexRef.current = currentIndexRef.current;
                 setCurrentIndex(nextIndex);
                 onSlideChange(allSlides[nextIndex].metadata.chapter, allSlides[nextIndex].metadata.slide);
               }, timing.betweenSlides);
@@ -346,21 +344,19 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
   }, [currentIndex, isManualMode, audioEnabled, autoAdvanceOnAudioEnd, onSlideChange, segmentContext.currentSegmentIndex]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Consume external manual slide changes
+  // Only react to actual manualSlideChange events (from user navigation in SlidePlayer),
+  // NOT to currentIndex changes (from auto-advance). This prevents stale manualSlideChange
+  // values from being re-consumed on every auto-advance and jumping back to old slides.
   useEffect(() => {
     if (!isManualMode || manualSlideChange == null) return;
     const slideIndex = allSlides.findIndex(s =>
       s.metadata.chapter === manualSlideChange.chapter && s.metadata.slide === manualSlideChange.slide
     );
     if (slideIndex === -1) return;
-    if (lastAutoAdvanceFromIndexRef.current !== null && slideIndex === lastAutoAdvanceFromIndexRef.current) {
-      lastAutoAdvanceFromIndexRef.current = null;
-      return;
-    }
-    if (slideIndex !== currentIndex) {
+    if (slideIndex !== currentIndexRef.current) {
       setCurrentIndex(slideIndex);
-      lastAutoAdvanceFromIndexRef.current = null;
     }
-  }, [manualSlideChange, isManualMode, currentIndex]);
+  }, [manualSlideChange, isManualMode]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Restart from beginning
   const handleRestart = () => {
