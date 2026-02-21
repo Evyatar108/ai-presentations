@@ -7,11 +7,11 @@ import {
   SlideContainer,
   SlideTitle,
   Reveal,
+  CodeBlock,
+  BeforeAfterSplit,
   typography,
   fadeUp,
 } from '@framework';
-import CodeBlock from '../components/CodeBlock';
-import BeforeAfterSplit from '../components/BeforeAfterSplit';
 
 /**
  * Chapter 3: Five Cost Drivers (2 slides)

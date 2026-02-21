@@ -22,6 +22,7 @@ npm run test:watch   # Run tests in watch mode
 npm run tts:generate -- --demo {id}  # Generate TTS audio for a specific demo (requires Python TTS server running)
 npm run tts:generate -- --demo {id} --segments ch1:s2:intro,ch3:s1:summary  # Regenerate specific segments only
 npm run tts:duration -- --demo {id}  # Calculate audio durations and auto-update metadata.ts durationInfo
+npm run tts:verify -- --demo {id}    # Transcribe TTS audio via Whisper and output side-by-side comparison
 npm run check-narration              # Validate narration structure
 npm run test:overflow -- --demo {id}  # Playwright test: detect viewport overflow on every slide/segment (requires dev server running)
 npm run test:overflow -- --demo {id} --viewport 1920x1019  # Same, at a custom viewport size
@@ -127,4 +128,4 @@ Audio naming: `s{slide}_segment_{number}_{id}.wav`
 
 ## Documentation
 
-Detailed docs in `docs/`: ANIMATION_REFERENCE.md, ARCHITECTURE.md, ADDING_DEMOS.md, COMPONENTS.md, TIMING_SYSTEM.md, TTS_GUIDE.md, TROUBLESHOOTING.md, FRAMEWORK.md, THEMING.md, NARRATION_SYSTEM_GUIDE.md, NARRATION_API_REFERENCE.md, NARRATION_TROUBLESHOOTING.md. Per-demo docs in `docs/demos/{demo-id}/`.
+Detailed docs in `docs/`: ANIMATION_REFERENCE.md, ARCHITECTURE.md, ADDING_DEMOS.md, COMPONENT_CATALOG.md, COMPONENTS.md, TIMING_SYSTEM.md, TTS_GUIDE.md, TROUBLESHOOTING.md, FRAMEWORK.md, THEMING.md, NARRATION_SYSTEM_GUIDE.md, NARRATION_API_REFERENCE.md, NARRATION_TROUBLESHOOTING.md. Per-demo docs in `docs/demos/{demo-id}/`.

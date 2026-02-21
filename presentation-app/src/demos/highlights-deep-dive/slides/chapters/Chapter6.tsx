@@ -8,13 +8,13 @@ import {
   SlideTitle,
   Reveal,
   RevealSequence,
+  CodeBlock,
+  BeforeAfterSplit,
   typography,
   layouts,
   fadeUp,
   Checkmark,
 } from '@framework';
-import CodeBlock from '../components/CodeBlock';
-import BeforeAfterSplit from '../components/BeforeAfterSplit';
 
 /**
  * Chapter 6: Prompt Overview + Pseudocode Algorithm (4 slides)

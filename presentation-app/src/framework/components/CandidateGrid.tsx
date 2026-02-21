@@ -1,21 +1,25 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { useTheme, useReducedMotion } from '@framework';
+import { useTheme } from '../theme/ThemeContext';
+import { useReducedMotion } from '../accessibility/ReducedMotion';
 
-interface CandidateGridProps {
+export interface CandidateGridProps {
   n: number;
   animate?: boolean;
   /** Topic ranges — only pairs within the same range become candidates. */
   topicRanges?: [number, number][];
   /** Hide the last diagonal label (useful when the last u has no candidates to its right). */
   hideLastLabel?: boolean;
+  /** Label shown below the grid with the candidate count. Defaults to "Candidates". */
+  counterLabel?: string;
 }
 
-const CandidateGrid: React.FC<CandidateGridProps> = ({
+export const CandidateGrid: React.FC<CandidateGridProps> = ({
   n,
   animate = true,
   topicRanges,
   hideLastLabel = false,
+  counterLabel = 'Candidates',
 }) => {
   const theme = useTheme();
   const { reduced } = useReducedMotion();
@@ -151,10 +155,8 @@ const CandidateGrid: React.FC<CandidateGridProps> = ({
         color: visibleCount >= totalCandidates ? theme.colors.error : theme.colors.warning,
         fontFamily: "'JetBrains Mono', 'Fira Code', monospace"
       }}>
-        Candidates: {visibleCount} / {totalCandidates}
+        {counterLabel}: {visibleCount} / {totalCandidates}
       </div>
     </div>
   );
 };
-
-export default CandidateGrid;

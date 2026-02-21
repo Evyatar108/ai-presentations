@@ -6,11 +6,11 @@ import {
   SlideContainer,
   SlideTitle,
   Reveal,
+  CodeBlock,
+  BeforeAfterSplit,
   typography,
   fadeUp,
 } from '@framework';
-import CodeBlock from '../components/CodeBlock';
-import BeforeAfterSplit from '../components/BeforeAfterSplit';
 
 /**
  * Chapter 5: Compact Transcript Table (3 slides)

@@ -1,16 +1,18 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useTheme, useReducedMotion, fadeLeft, fadeRight, ArrowRight } from '@framework';
+import { useTheme } from '../theme/ThemeContext';
+import { useReducedMotion } from '../accessibility/ReducedMotion';
+import { fadeLeft, fadeRight } from '../slides/AnimationVariants';
+import { ArrowRight } from '../slides/SlideIcons';
 
-interface BeforeAfterSplitProps {
+export interface BeforeAfterSplitProps {
   beforeTitle: string;
   afterTitle: string;
   beforeContent: React.ReactNode;
   afterContent: React.ReactNode;
-  reduced?: boolean;
 }
 
-const BeforeAfterSplit: React.FC<BeforeAfterSplitProps> = ({
+export const BeforeAfterSplit: React.FC<BeforeAfterSplitProps> = ({
   beforeTitle,
   afterTitle,
   beforeContent,
@@ -98,5 +100,3 @@ const BeforeAfterSplit: React.FC<BeforeAfterSplitProps> = ({
     </div>
   );
 };
-
-export default BeforeAfterSplit;

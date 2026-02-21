@@ -26,13 +26,15 @@
 - `slides/SlidesRegistry.ts` — Ordered array of all 24 slide components
 - `slides/chapters/Chapter{0-10}.tsx` — Slide definitions grouped by chapter
 
-### Custom Components
-Located in `slides/components/`:
+### Reusable Components
+This demo uses framework components imported from `@framework`:
 
-- **CodeBlock.tsx** — Syntax-colored code display with regex-based tokenization. Supports Python, JSON, and Markdown. Features line numbers, optional line highlighting (amber background), and monospace font.
-- **BeforeAfterSplit.tsx** — Two-column V1 vs V2 comparison. Left panel uses amber/warning styling, right panel uses teal/primary styling. Includes directional fade animations.
-- **PipelineDiagram.tsx** — Animated vertical pipeline showing 4 sequential LLM calls. Active step gets a glow border, past steps dim, arrows labeled "markdown table".
-- **CandidateGrid.tsx** — Animated upper-triangle grid visualizing O(n^2) candidate explosion. Cells light up with a fast stagger, gradient from warning to error colors. Running counter shows progress.
+- **CodeBlock** — Syntax-colored code display with regex-based tokenization. Supports Python, JSON, and Markdown. Features line numbers, optional line highlighting (amber background), and monospace font.
+- **BeforeAfterSplit** — Two-column V1 vs V2 comparison. Left panel uses amber/warning styling, right panel uses teal/primary styling. Includes directional fade animations.
+- **PipelineDiagram** — Animated vertical pipeline showing sequential LLM calls. Active step gets a glow border, past steps dim, configurable arrow labels.
+- **CandidateGrid** — Animated upper-triangle grid visualizing O(n^2) candidate explosion. Cells light up with a fast stagger, gradient from warning to error colors. Running counter shows progress.
+
+See [COMPONENT_CATALOG.md](../../../../docs/COMPONENT_CATALOG.md) for full props and usage examples.
 
 ### Audio Files
 TTS audio expected at `public/audio/highlights-deep-dive/c{chapter}/s{slide}_segment_{nn}_{id}.wav`
@@ -60,6 +62,5 @@ TTS style/tone instructions (`instruct`) are defined in the narration JSON at th
 - **Metadata**: [`metadata.ts`](./metadata.ts)
 - **Slide registry**: [`slides/SlidesRegistry.ts`](./slides/SlidesRegistry.ts)
 - **Chapters**: [`slides/chapters/`](./slides/chapters/)
-- **Components**: [`slides/components/`](./slides/components/)
 - **Documentation**: [`docs/demos/highlights-deep-dive/`](../../../../docs/demos/highlights-deep-dive/highlights-deep-dive.md)
 - **Context files**: [`docs/demos/highlights-deep-dive/context/`](../../../../docs/demos/highlights-deep-dive/context/)

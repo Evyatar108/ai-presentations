@@ -30,6 +30,14 @@ export { SlideErrorBoundary } from './components/SlideErrorBoundary';
 export { DemoPlayerBoundary } from './components/DemoPlayerBoundary';
 export { HoverButton } from './components/HoverButton';
 export type { HoverButtonProps } from './components/HoverButton';
+export { CodeBlock } from './components/CodeBlock';
+export type { CodeBlockProps } from './components/CodeBlock';
+export { BeforeAfterSplit } from './components/BeforeAfterSplit';
+export type { BeforeAfterSplitProps } from './components/BeforeAfterSplit';
+export { PipelineDiagram } from './components/PipelineDiagram';
+export type { PipelineDiagramProps, PipelineStep } from './components/PipelineDiagram';
+export { CandidateGrid } from './components/CandidateGrid';
+export type { CandidateGridProps } from './components/CandidateGrid';
 
 // Reveal components
 export { Reveal, RevealGroup, RevealContext, RevealSequence } from './components/reveal';

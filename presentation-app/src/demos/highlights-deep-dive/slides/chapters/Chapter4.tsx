@@ -8,14 +8,14 @@ import {
   SlideTitle,
   Reveal,
   RevealSequence,
+  CodeBlock,
+  CandidateGrid,
   typography,
   fadeUp,
   expandWidth,
   staggerContainer,
   tileVariants,
 } from '@framework';
-import CodeBlock from '../components/CodeBlock';
-import CandidateGrid from '../components/CandidateGrid';
 
 /**
  * Chapter 4: The O(n^2) Problem (4 slides)

@@ -7,11 +7,11 @@ import {
   SlideContainer,
   SlideTitle,
   Reveal,
+  CodeBlock,
   typography,
   fadeUp,
   ArrowDown,
 } from '@framework';
-import CodeBlock from '../components/CodeBlock';
 
 /**
  * Chapter 7: Copy-then-Parse + Self-Checks (2 slides)

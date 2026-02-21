@@ -1,22 +1,24 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useTheme, useReducedMotion, ArrowDown } from '@framework';
+import { useTheme } from '../theme/ThemeContext';
+import { useReducedMotion } from '../accessibility/ReducedMotion';
+import { ArrowDown } from '../slides/SlideIcons';
 
-interface PipelineDiagramProps {
-  visibleSteps: number;
-  steps?: { name: string; purpose: string }[];
+export interface PipelineStep {
+  name: string;
+  purpose: string;
 }
 
-const DEFAULT_STEPS = [
-  { name: 'highlights_abstractives', purpose: 'Identify topics, write narration' },
-  { name: 'highlights_extractives', purpose: 'Select clips from pre-enumerated candidates' },
-  { name: 'highlights_extractive_ranking', purpose: 'Rank clips by quality' },
-  { name: 'highlights_final', purpose: 'Merge into unified narrative' }
-];
+export interface PipelineDiagramProps {
+  visibleSteps: number;
+  steps: PipelineStep[];
+  arrowLabel?: string;
+}
 
-const PipelineDiagram: React.FC<PipelineDiagramProps> = ({
+export const PipelineDiagram: React.FC<PipelineDiagramProps> = ({
   visibleSteps,
-  steps = DEFAULT_STEPS
+  steps,
+  arrowLabel
 }) => {
   const theme = useTheme();
   const { reduced } = useReducedMotion();
@@ -118,9 +120,11 @@ const PipelineDiagram: React.FC<PipelineDiagramProps> = ({
                 }}
               >
                 <ArrowDown />
-                <span style={{ fontSize: 10, marginTop: 2, color: theme.colors.textMuted }}>
-                  markdown table
-                </span>
+                {arrowLabel && (
+                  <span style={{ fontSize: 10, marginTop: 2, color: theme.colors.textMuted }}>
+                    {arrowLabel}
+                  </span>
+                )}
               </motion.div>
             )}
           </React.Fragment>
@@ -129,5 +133,3 @@ const PipelineDiagram: React.FC<PipelineDiagramProps> = ({
     </div>
   );
 };
-
-export default PipelineDiagram;

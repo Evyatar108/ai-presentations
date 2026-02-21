@@ -1,8 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useTheme, useReducedMotion } from '@framework';
+import { useTheme } from '../theme/ThemeContext';
+import { useReducedMotion } from '../accessibility/ReducedMotion';
 
-interface CodeBlockProps {
+export interface CodeBlockProps {
   code: string;
   language?: 'python' | 'json' | 'markdown';
   highlightLines?: number[];
@@ -73,7 +74,7 @@ function tokenize(code: string, language: string, colors: Record<string, string>
   return nodes;
 }
 
-const CodeBlock: React.FC<CodeBlockProps> = ({
+export const CodeBlock: React.FC<CodeBlockProps> = ({
   code,
   language = 'python',
   highlightLines = [],
@@ -166,5 +167,3 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
     </motion.div>
   );
 };
-
-export default CodeBlock;

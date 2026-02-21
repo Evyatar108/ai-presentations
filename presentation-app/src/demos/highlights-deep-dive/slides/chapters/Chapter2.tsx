@@ -6,8 +6,15 @@ import {
   SlideContainer,
   SlideTitle,
   Reveal,
+  PipelineDiagram,
 } from '@framework';
-import PipelineDiagram from '../components/PipelineDiagram';
+
+const DEFAULT_STEPS = [
+  { name: 'highlights_abstractives', purpose: 'Identify topics, write narration' },
+  { name: 'highlights_extractives', purpose: 'Select clips from pre-enumerated candidates' },
+  { name: 'highlights_extractive_ranking', purpose: 'Rank clips by quality' },
+  { name: 'highlights_final', purpose: 'Merge into unified narrative' }
+];
 
 /**
  * Chapter 2: V1 Pipeline Architecture (1 slide)
@@ -31,7 +38,7 @@ const Ch2_S1_FourCallsComponent: React.FC = () => {
       </Reveal>
 
       {isSegmentVisible(1) && (
-        <PipelineDiagram visibleSteps={visibleSteps} />
+        <PipelineDiagram visibleSteps={visibleSteps} steps={DEFAULT_STEPS} arrowLabel="markdown table" />
       )}
     </SlideContainer>
   );
