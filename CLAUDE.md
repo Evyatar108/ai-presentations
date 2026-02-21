@@ -111,7 +111,9 @@ Audio naming: `s{slide}_segment_{number}_{id}.wav`
 - When using hooks inside `defineSlide()`, extract the component to a named `const` (ESLint `rules-of-hooks` requires hooks in named functions)
 - Accessibility: animations respect `prefers-reduced-motion` via `useReducedMotion()` hook
 - Framework components use `useTheme()` for colors; demo slides may use static style exports or theme-aware `create*()` factories
+- **`<Reveal>` is the preferred pattern for segment-based visibility** — use `useSegmentedAnimation()` hook only for non-visual logic (data computation, conditional styling, components with built-in `isVisible` props)
+- See `docs/ANIMATION_REFERENCE.md` for the full animation catalog; keep it updated when adding or modifying animation factories
 
 ## Documentation
 
-Detailed docs in `docs/`: ARCHITECTURE.md, ADDING_DEMOS.md, COMPONENTS.md, TIMING_SYSTEM.md, TTS_GUIDE.md, TROUBLESHOOTING.md, FRAMEWORK.md, THEMING.md, NARRATION_SYSTEM_GUIDE.md, NARRATION_API_REFERENCE.md, NARRATION_TROUBLESHOOTING.md. Per-demo docs in `docs/demos/{demo-id}/`.
+Detailed docs in `docs/`: ANIMATION_REFERENCE.md, ARCHITECTURE.md, ADDING_DEMOS.md, COMPONENTS.md, TIMING_SYSTEM.md, TTS_GUIDE.md, TROUBLESHOOTING.md, FRAMEWORK.md, THEMING.md, NARRATION_SYSTEM_GUIDE.md, NARRATION_API_REFERENCE.md, NARRATION_TROUBLESHOOTING.md. Per-demo docs in `docs/demos/{demo-id}/`.

@@ -31,6 +31,10 @@ export { DemoPlayerBoundary } from './components/DemoPlayerBoundary';
 export { HoverButton } from './components/HoverButton';
 export type { HoverButtonProps } from './components/HoverButton';
 
+// Reveal components
+export { Reveal, RevealGroup, RevealContext } from './components/reveal';
+export type { RevealProps, RevealGroupProps, RevealContextProps, RevealAnimation, RevealVisibilityProps } from './components/reveal';
+
 // Contexts
 export { SegmentProvider, useSegmentContext, useSegmentedAnimation } from './contexts/SegmentContext';
 export type { SegmentedAnimationAPI, SegmentState, SegmentControls, SegmentContextValue } from './contexts/SegmentContext';
