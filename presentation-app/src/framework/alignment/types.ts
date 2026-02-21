@@ -18,6 +18,8 @@ export interface ResolvedMarker {
 export interface SegmentAlignment {
   segmentId: string;
   audioHash: string;
+  /** Hash of narrationText including markers — detects marker changes even when audio is unchanged */
+  narrationHash: string;
   words: AlignedWord[];
   markers: ResolvedMarker[];
 }

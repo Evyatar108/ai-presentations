@@ -66,6 +66,7 @@ interface SegmentToAlign {
   filepath: string;          // relative to demo audio dir
   fullPath: string;          // absolute
   audioHash: string;
+  narrationHash: string;     // hash of narrationText (with markers) for cache invalidation
 }
 
 // ── Helpers ────────────────────────────────────────────────────────
@@ -241,6 +242,7 @@ async function generateAlignment(config: AlignConfig) {
   // Collect segments to align
   const segmentsToAlign: SegmentToAlign[] = [];
   let skippedCount = 0;
+  let reResolvedCount = 0;
   let missingAudioCount = 0;
   const demoAudioDir = path.join(config.audioDir, config.demoFilter);
 
@@ -299,14 +301,36 @@ async function generateAlignment(config: AlignConfig) {
       // Parse markers from narration text
       const { cleanText, markers } = parseMarkers(segment.narrationText);
 
-      // Check cache: skip if audio hash unchanged and alignment exists
+      // Hash narration text (with markers) to detect marker changes even when audio is unchanged
+      const narrationHash = crypto.createHash('sha256')
+        .update(segment.narrationText.trim())
+        .digest('hex');
+
+      // Check cache
       if (!config.force) {
         const existingSlide = existingAlignment?.slides[slideKey];
         const existingSeg = existingSlide?.segments.find(s => s.segmentId === segment.id);
-        if (existingSeg && existingSeg.audioHash === audioHash) {
-          alignment.slides[slideKey].segments.push(existingSeg);
-          skippedCount++;
-          continue;
+        if (existingSeg) {
+          if (existingSeg.audioHash === audioHash && existingSeg.narrationHash === narrationHash) {
+            // Both audio and markers unchanged — fully cached
+            alignment.slides[slideKey].segments.push(existingSeg);
+            skippedCount++;
+            continue;
+          }
+
+          if (existingSeg.audioHash === audioHash && existingSeg.words.length > 0) {
+            // Audio unchanged but markers changed — re-resolve markers from cached words
+            const resolvedMarkers = resolveMarkers(markers, existingSeg.words);
+            const updatedSeg: SegmentAlignment = {
+              ...existingSeg,
+              narrationHash,
+              markers: resolvedMarkers,
+            };
+            alignment.slides[slideKey].segments.push(updatedSeg);
+            reResolvedCount++;
+            console.log(`   \u267b\ufe0f  ${segment.id}: re-resolved ${resolvedMarkers.length} markers from cached words (audio unchanged)`);
+            continue;
+          }
         }
       }
 
@@ -321,6 +345,7 @@ async function generateAlignment(config: AlignConfig) {
         filepath,
         fullPath,
         audioHash,
+        narrationHash,
       });
     }
   }
@@ -329,7 +354,7 @@ async function generateAlignment(config: AlignConfig) {
     console.log(`\u26a0\ufe0f  ${missingAudioCount} segments missing audio files\n`);
   }
 
-  console.log(`Found ${segmentsToAlign.length} segments to align (${skippedCount} cached)\n`);
+  console.log(`Found ${segmentsToAlign.length} segments to align (${skippedCount} cached, ${reResolvedCount} re-resolved)\n`);
 
   if (segmentsToAlign.length === 0 && skippedCount > 0) {
     // Write alignment file (preserves cached data)
@@ -391,6 +416,7 @@ async function generateAlignment(config: AlignConfig) {
           const segAlignment: SegmentAlignment = {
             segmentId: seg.segmentId,
             audioHash: seg.audioHash,
+            narrationHash: seg.narrationHash,
             words,
             markers: resolvedMarkers,
           };
@@ -441,6 +467,7 @@ async function generateAlignment(config: AlignConfig) {
   console.log('\u2550'.repeat(60));
   console.log(`Segments aligned: ${processedCount}`);
   console.log(`Segments cached: ${skippedCount}`);
+  console.log(`Markers re-resolved: ${reResolvedCount}`);
   console.log(`Errors: ${errorCount}`);
   console.log(`\ud83d\udcbe Alignment saved: ${path.relative(path.join(__dirname, '..'), alignmentPath)}`);
   console.log('\u2550'.repeat(60) + '\n');
