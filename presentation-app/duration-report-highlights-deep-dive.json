@@ -1,24 +1,24 @@
 {
   "highlights-deep-dive": {
     "demoId": "highlights-deep-dive",
-    "audioOnlyDuration": 915.2000000000002,
-    "segmentDelays": 75,
-    "slideDelays": 46,
+    "audioOnlyDuration": 1079.2,
+    "segmentDelays": 79.5,
+    "slideDelays": 48,
     "finalDelay": 2,
     "startSilence": 1,
-    "totalDuration": 1039.2000000000003,
+    "totalDuration": 1209.7,
     "slideBreakdowns": [
       {
         "slideIndex": 1,
         "slideTitle": "Title",
         "chapterIndex": 0,
-        "totalDuration": 21.44,
-        "audioDuration": 19.44,
+        "totalDuration": 19.92,
+        "audioDuration": 17.92,
         "delaysDuration": 2,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 19.44,
+            "audioDuration": 17.92,
             "delayAfter": 2
           }
         ]
@@ -109,26 +109,6 @@
         ]
       },
       {
-        "slideIndex": 2,
-        "slideTitle": "Call Detail",
-        "chapterIndex": 2,
-        "totalDuration": 36.54,
-        "audioDuration": 33.04,
-        "delaysDuration": 3.5,
-        "segments": [
-          {
-            "segmentIndex": 0,
-            "audioDuration": 17.44,
-            "delayAfter": 1.5
-          },
-          {
-            "segmentIndex": 1,
-            "audioDuration": 15.6,
-            "delayAfter": 2
-          }
-        ]
-      },
-      {
         "slideIndex": 1,
         "slideTitle": "Four Cost Drivers",
         "chapterIndex": 3,
@@ -167,13 +147,13 @@
         "slideIndex": 2,
         "slideTitle": "Verbose JSON",
         "chapterIndex": 3,
-        "totalDuration": 16.700000000000003,
-        "audioDuration": 13.200000000000001,
+        "totalDuration": 20.86,
+        "audioDuration": 17.36,
         "delaysDuration": 3.5,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 10.72,
+            "audioDuration": 14.88,
             "delayAfter": 1.5
           },
           {
@@ -187,13 +167,13 @@
         "slideIndex": 1,
         "slideTitle": "Nested Loop",
         "chapterIndex": 4,
-        "totalDuration": 25.64,
-        "audioDuration": 20.64,
+        "totalDuration": 34.120000000000005,
+        "audioDuration": 29.12,
         "delaysDuration": 5,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 4.48,
+            "audioDuration": 12.96,
             "delayAfter": 1.5
           },
           {
@@ -212,13 +192,13 @@
         "slideIndex": 2,
         "slideTitle": "Candidate Rows",
         "chapterIndex": 4,
-        "totalDuration": 41.480000000000004,
-        "audioDuration": 36.480000000000004,
+        "totalDuration": 48.36,
+        "audioDuration": 43.36,
         "delaysDuration": 5,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 6.08,
+            "audioDuration": 12.96,
             "delayAfter": 1.5
           },
           {
@@ -237,8 +217,8 @@
         "slideIndex": 3,
         "slideTitle": "O(n^2) Visualized",
         "chapterIndex": 4,
-        "totalDuration": 34.599999999999994,
-        "audioDuration": 29.599999999999998,
+        "totalDuration": 34.76,
+        "audioDuration": 29.759999999999998,
         "delaysDuration": 5,
         "segments": [
           {
@@ -253,7 +233,32 @@
           },
           {
             "segmentIndex": 2,
-            "audioDuration": 15.36,
+            "audioDuration": 15.52,
+            "delayAfter": 2
+          }
+        ]
+      },
+      {
+        "slideIndex": 4,
+        "slideTitle": "Output Safety",
+        "chapterIndex": 4,
+        "totalDuration": 86.04,
+        "audioDuration": 81.04,
+        "delaysDuration": 5,
+        "segments": [
+          {
+            "segmentIndex": 0,
+            "audioDuration": 21.6,
+            "delayAfter": 1.5
+          },
+          {
+            "segmentIndex": 1,
+            "audioDuration": 33.2,
+            "delayAfter": 1.5
+          },
+          {
+            "segmentIndex": 2,
+            "audioDuration": 26.24,
             "delayAfter": 2
           }
         ]
@@ -262,8 +267,8 @@
         "slideIndex": 1,
         "slideTitle": "Format Comparison",
         "chapterIndex": 5,
-        "totalDuration": 37.88,
-        "audioDuration": 32.88,
+        "totalDuration": 38.76,
+        "audioDuration": 33.76,
         "delaysDuration": 5,
         "segments": [
           {
@@ -273,7 +278,7 @@
           },
           {
             "segmentIndex": 1,
-            "audioDuration": 13.36,
+            "audioDuration": 14.24,
             "delayAfter": 1.5
           },
           {
@@ -287,13 +292,13 @@
         "slideIndex": 2,
         "slideTitle": "max_end_utterance_id",
         "chapterIndex": 5,
-        "totalDuration": 46.120000000000005,
-        "audioDuration": 41.120000000000005,
+        "totalDuration": 63.559999999999995,
+        "audioDuration": 58.559999999999995,
         "delaysDuration": 5,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 21.6,
+            "audioDuration": 39.04,
             "delayAfter": 1.5
           },
           {
@@ -399,6 +404,31 @@
           {
             "segmentIndex": 1,
             "audioDuration": 12.72,
+            "delayAfter": 2
+          }
+        ]
+      },
+      {
+        "slideIndex": 4,
+        "slideTitle": "Output Schema",
+        "chapterIndex": 6,
+        "totalDuration": 84.52,
+        "audioDuration": 79.52,
+        "delaysDuration": 5,
+        "segments": [
+          {
+            "segmentIndex": 0,
+            "audioDuration": 22.8,
+            "delayAfter": 1.5
+          },
+          {
+            "segmentIndex": 1,
+            "audioDuration": 34.16,
+            "delayAfter": 1.5
+          },
+          {
+            "segmentIndex": 2,
+            "audioDuration": 22.56,
             "delayAfter": 2
           }
         ]
@@ -620,8 +650,8 @@
       }
     ],
     "formattedDurations": {
-      "audioOnly": "15:15",
-      "total": "17:19"
+      "audioOnly": "17:59",
+      "total": "20:09"
     }
   }
 }
