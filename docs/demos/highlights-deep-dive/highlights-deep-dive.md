@@ -8,7 +8,7 @@ This demo targets **engineering peers** familiar with LLMs and prompt engineerin
 
 ## Demo Structure
 
-**Total Slides**: 24 slides across 11 chapters
+**Total Slides**: 25 slides across 11 chapters
 **Estimated Duration**: ~15-18 minutes (narrated)
 **Demo ID**: `highlights-deep-dive`
 
@@ -29,20 +29,22 @@ This demo targets **engineering peers** familiar with LLMs and prompt engineerin
 - **Ch3_S1_CostDrivers** — Progressive reveal of 5 structural cost drivers, with O(n^2) highlighted in red
 - **Ch3_S2_VerboseJSON** — Before/after: V1 verbose JSON vs token waste analysis
 
-#### Chapter 4: The O(n^2) Problem (3 slides)
+#### Chapter 4: The O(n^2) Problem (4 slides)
 - **Ch4_S1_NestedLoop** — The nested loop code from highlights_utils.py with highlighted for-loops
 - **Ch4_S2_CandidateRows** — Concrete example showing overlapping candidate ranges with duplication callout
 - **Ch4_S3_Visualized** — Animated upper-triangle grid, scale-up math, 128K context bar
+- **Ch4_S4_OutputSafety** — Why V1 precomputed candidates: output safety via closed index list, trade-off balance, V2 preview
 
 #### Chapter 5: Compact Transcript Table (3 slides)
 - **Ch5_S1_FormatComparison** — Side-by-side V1 JSON vs V2 compact table with comparison table
 - **Ch5_S2_MaxEndId** — Annotated row showing max_end_utterance_id, V1 vs V2 complexity comparison
 - **Ch5_S3_TurnUtteranceConcept** — Turn/utterance grouping model: V1 flat list vs V2 turn-grouped, valid/invalid extractive range cards
 
-#### Chapter 6: Prompt Overview + Pseudocode Algorithm (3 slides)
+#### Chapter 6: Prompt Overview + Pseudocode Algorithm (4 slides)
 - **Ch6_S1_PromptOverview** — Full V2 prompt overview with six section cards
 - **Ch6_S2_Pseudocode** — Full generate_highlights() pseudocode with 6 output field checkmarks
 - **Ch6_S3_ProseVsPseudocode** — Side-by-side V1 prose vs V2 pseudocode with 4 benefit cards
+- **Ch6_S4_OutputSchema** — V2's single JSON response: 6 fields replacing 4 calls, extractive_ranges schema with copy-then-parse field names
 
 #### Chapter 7: Copy-then-Parse + Self-Checks (2 slides)
 - **Ch7_S1_CopyThenParse** — Two-step code: copy raw strings, then parse structured values
@@ -117,7 +119,7 @@ All slides and segments inherit this unless overridden:
 
 > *"Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers."*
 
-### Slide-Level Overrides (6 of 24 slides)
+### Slide-Level Overrides (6 of 25 slides)
 
 | Chapter.Slide | Title | Instruct |
 |---|---|---|

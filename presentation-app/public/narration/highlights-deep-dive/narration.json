@@ -241,6 +241,31 @@
       ]
     },
     {
+      "chapter": 4,
+      "slide": 4,
+      "title": "Output Safety",
+      "segments": [
+        {
+          "id": "input_output",
+          "narrationText": "So we've seen that Call 2 receives over two thousand candidate rows as input. But what does it actually output? Not freeform text — just index numbers. The model receives a numbered list of precomputed candidates and returns which indices it wants to keep. That's the entire output: a list of candidate identifiers.",
+          "visualDescription": "Horizontal flow: [2000+ Candidate Rows] → Call 2 → [selected: [3, 17, 42]]. Left amber, right green.",
+          "notes": ""
+        },
+        {
+          "id": "rationale",
+          "narrationText": "This is deliberate. By precomputing every valid candidate range programmatically, V1 constrains the model's output space. The model can only pick from ranges that are guaranteed to be valid — correct utterance boundaries, within duration thresholds, within a single topic. If the model output arbitrary start and end utterances, it could reference non-existent IDs or cross topic boundaries — producing invalid video editing instructions and a broken highlights video.",
+          "visualDescription": "Two stacked cards: WITH PRECOMPUTATION (green, valid path) vs WITHOUT PRECOMPUTATION (red, broken path).",
+          "notes": ""
+        },
+        {
+          "id": "tradeoff",
+          "narrationText": "So V1 made a deliberate trade-off: accept the O of n-squared input cost in exchange for guaranteed output safety. Every candidate the model could select was pre-validated. But as we've seen, this fills the entire 128K context window. Next, we'll see how V2 achieves the same output safety at linear cost — using a single column called max_end_utterance_id.",
+          "visualDescription": "Balance panel: Output Safety (green, checkmark) vs O(n²) Input Cost (red). Below: V2 callout with max_end_utterance_id.",
+          "notes": ""
+        }
+      ]
+    },
+    {
       "chapter": 5,
       "slide": 1,
       "title": "Format Comparison",
@@ -272,7 +297,7 @@
       "segments": [
         {
           "id": "row",
-          "narrationText": "This is the key insight. Look at this single row: u2, the utterance text, and u4 as the max_end_utterance_id. That third column tells the model: if you start a clip at u2, the furthest you can extend it is u4. This single integer replaces the entire O of n-squared candidate enumeration.",
+          "narrationText": "This is the key insight. Remember, V1 precomputed all candidate combinations so the model could only output safe indices. V2 replaces that entire approach. Look at this single row: u2, the utterance text, and u4 as the max_end_utterance_id. That third column tells the model: if you start a clip at u2, the furthest you can extend it is u4. The model outputs the range directly — and the boundary constraint guarantees it's valid. This single column replaces the entire O of n-squared candidate enumeration.",
           "visualDescription": "Highlighted row with annotated arrows pointing to each column",
           "notes": ""
         },
@@ -380,6 +405,31 @@
           "id": "benefits",
           "narrationText": "Four benefits. Unambiguous execution order. Named variables as shared state. More precision than prose. And a single source of truth — one prompt, not four.",
           "visualDescription": "Four benefit cards with checkmarks",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 6,
+      "slide": 4,
+      "title": "Output Schema",
+      "segments": [
+        {
+          "id": "skeleton",
+          "narrationText": "This is what a single V2 response looks like: six top-level fields in one JSON object. Abstractive topics from Call 1. Extractive ranges from Call 2. Ranking from Call 3. And the final narrative from Call 4. Everything V1 spread across four separate LLM calls, produced in a single pass.",
+          "visualDescription": "3x2 grid: six fields with monospace names, descriptions, and V1 call badges",
+          "notes": ""
+        },
+        {
+          "id": "extractive_zoom",
+          "narrationText": "The most interesting part is extractive_ranges. Look at the field names — they're instructions. 'Selected turn opening tag raw copy from input' forces the model to copy the exact turn tag from the transcript. Then 'speaker name' and 'turn id' are parsed from that copy. Same pattern below: first copy the raw pipe-delimited row, then parse the utterance IDs from it. The schema itself guides the model through copy-then-parse — which we'll see in detail next.",
+          "visualDescription": "JSON code block showing extractive_ranges[0] with amber-highlighted copy fields and legend",
+          "notes": ""
+        },
+        {
+          "id": "insight",
+          "narrationText": "This is a key takeaway: the output schema isn't just a data format — it's a prompt engineering tool. The field names tell the model what to do. The nested structure constrains what it can output. And self-checks close the loop with built-in validation. When you design an LLM's output schema, you're writing part of the prompt.",
+          "visualDescription": "Callout card with teal accent + three pills: 'Field names = instructions', 'Structure = constraints', 'self_checks = validation'",
           "notes": ""
         }
       ]

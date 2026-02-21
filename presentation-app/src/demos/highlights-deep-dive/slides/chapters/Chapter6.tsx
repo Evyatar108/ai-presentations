@@ -16,7 +16,7 @@ import CodeBlock from '../components/CodeBlock';
 import BeforeAfterSplit from '../components/BeforeAfterSplit';
 
 /**
- * Chapter 6: Prompt Overview + Pseudocode Algorithm (3 slides)
+ * Chapter 6: Prompt Overview + Pseudocode Algorithm (4 slides)
  */
 
 // ---------- Slide 1: Prompt Overview ----------
@@ -155,9 +155,9 @@ export const Ch6_S1_PromptOverview = defineSlide({
     slide: 1,
     title: 'Prompt Overview',
     audioSegments: [
-      { id: 'title', audioFilePath: '/audio/highlights-deep-dive/c6/s1_segment_01_title.wav' },
-      { id: 'sections', audioFilePath: '/audio/highlights-deep-dive/c6/s1_segment_02_sections.wav' },
-      { id: 'insight', audioFilePath: '/audio/highlights-deep-dive/c6/s1_segment_03_insight.wav' }
+      { id: 'title' },
+      { id: 'sections' },
+      { id: 'insight' }
     ]
   },
   component: Ch6_S1_PromptOverviewComponent
@@ -294,9 +294,9 @@ export const Ch6_S2_Pseudocode = defineSlide({
     slide: 2,
     title: 'Pseudocode Algorithm',
     audioSegments: [
-      { id: 'title', audioFilePath: '/audio/highlights-deep-dive/c6/s2_segment_01_title.wav' },
-      { id: 'code', audioFilePath: '/audio/highlights-deep-dive/c6/s2_segment_02_code.wav' },
-      { id: 'outputs', audioFilePath: '/audio/highlights-deep-dive/c6/s2_segment_03_outputs.wav' }
+      { id: 'title' },
+      { id: 'code' },
+      { id: 'outputs' }
     ]
   },
   component: Ch6_S2_PseudocodeComponent
@@ -389,9 +389,243 @@ export const Ch6_S3_ProseVsPseudocode = defineSlide({
     slide: 3,
     title: 'Prose vs Pseudocode',
     audioSegments: [
-      { id: 'comparison', audioFilePath: '/audio/highlights-deep-dive/c6/s3_segment_01_comparison.wav' },
-      { id: 'benefits', audioFilePath: '/audio/highlights-deep-dive/c6/s3_segment_02_benefits.wav' }
+      { id: 'comparison' },
+      { id: 'benefits' }
     ]
   },
   component: Ch6_S3_ProseVsPseudocodeComponent
+});
+
+// ---------- Slide 4: Output Schema ----------
+
+const SCHEMA_FIELDS = [
+  { name: 'abstractive_topics', desc: '1–7 topics with narration', call: 'Call 1' },
+  { name: 'topic_order', desc: 'Chronological sequence', call: 'Call 4' },
+  { name: 'extractive_ranges', desc: 'Selected verbatim clips', call: 'Call 2' },
+  { name: 'ranking', desc: 'Quality scores & ordering', call: 'Call 3' },
+  { name: 'final_narrative', desc: 'Unified topic + clip rows', call: 'Call 4' },
+  { name: 'self_checks', desc: '10 boolean validators', call: null },
+];
+
+const EXTRACTIVE_SAMPLE = `{
+  "selected_turn_opening_tag_raw_copy_from_input": "<t5 Sarah>",
+  "speaker_name": "Sarah",
+  "turn_id": 5,
+  "selected_start_position": {
+    "raw_pipe_delimited_table_row_copied_from_input":
+        "u2|Sprint metrics look good|u4",
+    "start_utterance_id_parsed_from_first_column": "u2",
+    "max_end_utterance_id_parsed_from_third_column": "u4"
+  },
+  "candidate_end_utterance_ids_within_max_boundary": ["u2","u3","u4"],
+  "final_chosen_end_utterance_id_from_candidates": "u3"
+}`;
+
+const SCHEMA_INSIGHT_PILLS = [
+  'Field names = instructions',
+  'Structure = constraints',
+  'self_checks = validation',
+];
+
+const Ch6_S4_OutputSchemaComponent: React.FC = () => {
+  const { reduced } = useReducedMotion();
+  const { isSegmentVisible } = useSegmentedAnimation();
+  const theme = useTheme();
+
+  return (
+    <SlideContainer maxWidth={1000}>
+      {/* Segment 0: Six-field overview */}
+      <AnimatePresence>
+        {isSegmentVisible(0) && (
+          <div>
+            <div style={{ textAlign: 'center' }}>
+              <SlideTitle reduced={reduced} subtitle="Six Fields, One JSON Response">
+                Output Schema
+              </SlideTitle>
+            </div>
+            <motion.div
+              variants={fadeUp(reduced)}
+              initial="hidden"
+              animate="visible"
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(3, 1fr)',
+                gap: '0.6rem',
+                marginTop: '0.25rem',
+              }}
+            >
+              {SCHEMA_FIELDS.map((field, i) => (
+                <motion.div
+                  key={field.name}
+                  initial={{ opacity: 0, y: reduced ? 0 : 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    duration: reduced ? 0.1 : 0.3,
+                    delay: reduced ? 0 : i * 0.06,
+                  }}
+                  style={{
+                    background: theme.colors.bgSurface,
+                    border: `1px solid ${theme.colors.bgBorder}`,
+                    borderRadius: 10,
+                    padding: '0.55rem 0.75rem',
+                    textAlign: 'left',
+                  }}
+                >
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    marginBottom: '0.25rem',
+                  }}>
+                    <span style={{
+                      fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+                      fontSize: 11,
+                      fontWeight: 600,
+                      color: theme.colors.primary,
+                    }}>
+                      {field.name}
+                    </span>
+                    <span style={{
+                      fontSize: 9,
+                      fontWeight: 700,
+                      color: field.call ? '#fbbf24' : theme.colors.success,
+                      background: field.call
+                        ? 'rgba(251, 191, 36, 0.15)'
+                        : `${theme.colors.success}20`,
+                      borderRadius: 5,
+                      padding: '0.15rem 0.4rem',
+                      whiteSpace: 'nowrap',
+                    }}>
+                      {field.call ? `V1: ${field.call}` : 'New'}
+                    </span>
+                  </div>
+                  <div style={{
+                    ...typography.body,
+                    fontSize: 11,
+                    color: theme.colors.textSecondary,
+                    lineHeight: 1.3,
+                  }}>
+                    {field.desc}
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Segment 1: extractive_ranges zoom */}
+      <AnimatePresence>
+        {isSegmentVisible(1) && (
+          <motion.div
+            variants={fadeUp(reduced)}
+            initial="hidden"
+            animate="visible"
+            style={{ marginTop: '1rem' }}
+          >
+            <CodeBlock
+              code={EXTRACTIVE_SAMPLE}
+              language="json"
+              title="extractive_ranges[0]  —  field names as instructions"
+              fontSize={11}
+              highlightLines={[2, 6, 7]}
+            />
+            <div style={{
+              display: 'flex',
+              gap: '1.5rem',
+              marginTop: '0.4rem',
+              justifyContent: 'center',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                <div style={{
+                  width: 10, height: 10, borderRadius: 2,
+                  background: 'rgba(251, 191, 36, 0.35)',
+                  border: '2px solid #fbbf24',
+                }} />
+                <span style={{ ...typography.body, fontSize: 10, color: theme.colors.textSecondary }}>
+                  Step 1: Copy from input
+                </span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                <div style={{
+                  width: 10, height: 10, borderRadius: 2,
+                  background: 'transparent',
+                  border: `2px solid ${theme.colors.primary}`,
+                }} />
+                <span style={{ ...typography.body, fontSize: 10, color: theme.colors.textSecondary }}>
+                  Step 2: Parse from copy
+                </span>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Segment 2: Insight callout + pills */}
+      <AnimatePresence>
+        {isSegmentVisible(2) && (
+          <motion.div
+            variants={fadeUp(reduced)}
+            initial="hidden"
+            animate="visible"
+            style={{ marginTop: '0.75rem' }}
+          >
+            <div style={{
+              padding: '0.7rem 1.1rem',
+              borderRadius: 10,
+              background: `linear-gradient(135deg, ${theme.colors.primary}15, ${theme.colors.secondary}15)`,
+              borderLeft: `3px solid ${theme.colors.primary}`,
+            }}>
+              <p style={{
+                ...typography.body,
+                fontSize: 13,
+                color: theme.colors.textPrimary,
+                margin: 0,
+                fontStyle: 'italic',
+              }}>
+                The output schema isn't just a data format — it's a prompt engineering tool.
+                Field names guide execution order, nested structure enforces constraints,
+                and self_checks close the validation loop.
+              </p>
+            </div>
+            <div style={{
+              display: 'flex',
+              gap: '0.6rem',
+              marginTop: '0.6rem',
+              justifyContent: 'center',
+            }}>
+              {SCHEMA_INSIGHT_PILLS.map((pill) => (
+                <div key={pill} style={{
+                  background: theme.colors.bgSurface,
+                  border: `1px solid ${theme.colors.bgBorder}`,
+                  borderRadius: 8,
+                  padding: '0.3rem 0.7rem',
+                  fontSize: 12,
+                  fontWeight: 600,
+                  color: theme.colors.primary,
+                  fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+                }}>
+                  {pill}
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </SlideContainer>
+  );
+};
+
+export const Ch6_S4_OutputSchema = defineSlide({
+  metadata: {
+    chapter: 6,
+    slide: 4,
+    title: 'Output Schema',
+    audioSegments: [
+      { id: 'skeleton' },
+      { id: 'extractive_zoom' },
+      { id: 'insight' }
+    ]
+  },
+  component: Ch6_S4_OutputSchemaComponent
 });

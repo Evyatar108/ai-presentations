@@ -13,13 +13,13 @@ import { Ch2_S1_FourCalls } from './chapters/Chapter2';
 import { Ch3_S1_CostDrivers, Ch3_S2_VerboseJSON } from './chapters/Chapter3';
 
 // Chapter 4: The O(n^2) Problem
-import { Ch4_S1_NestedLoop, Ch4_S2_CandidateRows, Ch4_S3_Visualized } from './chapters/Chapter4';
+import { Ch4_S1_NestedLoop, Ch4_S2_CandidateRows, Ch4_S3_Visualized, Ch4_S4_OutputSafety } from './chapters/Chapter4';
 
 // Chapter 5: Compact Transcript Table
 import { Ch5_S1_FormatComparison, Ch5_S2_MaxEndId, Ch5_S3_TurnUtteranceConcept } from './chapters/Chapter5';
 
 // Chapter 6: Prompt Overview + Pseudocode Algorithm
-import { Ch6_S1_PromptOverview, Ch6_S2_Pseudocode, Ch6_S3_ProseVsPseudocode } from './chapters/Chapter6';
+import { Ch6_S1_PromptOverview, Ch6_S2_Pseudocode, Ch6_S3_ProseVsPseudocode, Ch6_S4_OutputSchema } from './chapters/Chapter6';
 
 // Chapter 7: Copy-then-Parse + Self-Checks
 import { Ch7_S1_CopyThenParse, Ch7_S2_SelfChecks } from './chapters/Chapter7';
@@ -35,7 +35,7 @@ import { Ch10_S1_Lessons, Ch10_S2_Closing } from './chapters/Chapter10';
 
 /**
  * Central registry of all slide components for the Highlights Deep-Dive demo.
- * 23 slides across 11 chapters.
+ * 25 slides across 11 chapters.
  */
 export const allSlides: SlideComponentWithMetadata[] = [
   Ch0_S1_Title,
@@ -47,12 +47,14 @@ export const allSlides: SlideComponentWithMetadata[] = [
   Ch4_S1_NestedLoop,
   Ch4_S2_CandidateRows,
   Ch4_S3_Visualized,
+  Ch4_S4_OutputSafety,
   Ch5_S1_FormatComparison,
   Ch5_S2_MaxEndId,
   Ch5_S3_TurnUtteranceConcept,
   Ch6_S1_PromptOverview,
   Ch6_S2_Pseudocode,
   Ch6_S3_ProseVsPseudocode,
+  Ch6_S4_OutputSchema,
   Ch7_S1_CopyThenParse,
   Ch7_S2_SelfChecks,
   Ch8_S1_ValidationChallenges,
