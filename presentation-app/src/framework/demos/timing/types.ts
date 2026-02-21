@@ -63,7 +63,7 @@ export const DEFAULT_TIMING: Required<TimingConfig> = {
   betweenSegments: 500,
   betweenSlides: 1000,
   afterFinalSlide: 2000,
-  beforeFirstSlide: 1000,
+  beforeFirstSlide: 3000,
   custom: {}
 };
 
