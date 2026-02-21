@@ -165,6 +165,18 @@ The script automatically updates `durationInfo` in your demo's `metadata.ts` fil
 
 See [Adding Demos Guide](./ADDING_DEMOS.md) for complete demo creation workflow.
 
+## Related: Sub-Segment Timing (Inline Markers)
+
+The three-level `TimingConfig` hierarchy controls delays *between* segments and slides. For timing *within* a segment (e.g., revealing content at a specific moment during audio playback), use the inline marker system.
+
+Inline markers (`{#id}` / `{id#}` tokens in `narrationText`) are resolved to word-level timestamps via WhisperX forced alignment and delivered through `AudioTimeContext`. Components like `<RevealAtMarker>` and hooks like `useMarker()` consume this continuous time signal, which is independent of the discrete `TimingConfig` delays.
+
+In summary:
+- **TimingConfig** = delays between segments/slides (discrete, milliseconds)
+- **AudioTimeContext + markers** = cue points within a segment's audio (continuous, seconds)
+
+See [MARKERS_GUIDE.md](../presentation-app/docs/MARKERS_GUIDE.md) for the full marker reference.
+
 ## Related: Instruct Hierarchy
 
 The TTS `instruct` parameter (voice style/tone for Qwen3-TTS) follows the same three-level hierarchy pattern: Demo → Slide → Segment (most specific wins). See [TTS_GUIDE.md](./TTS_GUIDE.md#instruct-hierarchy) for details.

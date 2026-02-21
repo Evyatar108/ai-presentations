@@ -20,6 +20,7 @@
     "check-narration": "tsx scripts/check-narration.ts",
     "narration-api": "node server/narration-api.cjs",
     "dev:full": "concurrently \"npm run narration-api\" \"npm run dev\" --names \"API,VITE\" --prefix-colors \"cyan,magenta\"",
+    "tts:align": "tsx scripts/generate-alignment.ts",
     "tts:verify": "tsx scripts/verify-tts.ts",
     "test:overflow": "tsx scripts/run-overflow-test.ts",
     "test:screenshot": "tsx scripts/run-screenshot-test.ts",

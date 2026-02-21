@@ -7,11 +7,14 @@ import { validateDemoSlides } from '../slides/validateSlideMetadata';
 import { NarratedController } from './NarratedController';
 import { SlidePlayer, Slide } from './SlidePlayer';
 import { SegmentProvider } from '../contexts/SegmentContext';
+import { AudioTimeProvider } from '../contexts/AudioTimeContext';
 import { HideInterfaceProvider } from '../contexts/HideInterfaceContext';
 import { loadNarration, getNarrationText, type NarrationData } from '../utils/narrationLoader';
+import { loadAlignment } from '../utils/alignmentLoader';
 import { resolveAudioFilePath } from '../utils/audioPath';
 import { useTheme } from '../theme/ThemeContext';
 import { DemoPlayerBoundary } from './DemoPlayerBoundary';
+import type { DemoAlignment } from '../alignment/types';
 
 export interface DemoPlayerProps {
   demoId: string;
@@ -24,6 +27,7 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideIn
   const [demoConfig, setDemoConfig] = useState<DemoConfig | null>(null);
   const [loadedSlides, setLoadedSlides] = useState<SlideComponentWithMetadata[]>([]);
   const [narrationData, setNarrationData] = useState<NarrationData | null>(null);
+  const [alignmentData, setAlignmentData] = useState<DemoAlignment | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentSlide, setCurrentSlide] = useState<{ chapter: number; slide: number } | undefined>(undefined);
@@ -72,7 +76,12 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideIn
           if (!mounted) return;
           setNarrationData(narration);
         }
-        
+
+        // Load alignment data (for marker-based sub-segment reveals)
+        const alignment = await loadAlignment(demoId);
+        if (!mounted) return;
+        setAlignmentData(alignment);
+
         // Dev-only validation of slide metadata
         if (import.meta.env.DEV) {
           validateDemoSlides(slides);
@@ -327,6 +336,7 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideIn
     <DemoPlayerBoundary onBack={onBack}>
     <HideInterfaceProvider value={hideInterface}>
     <SegmentProvider>
+    <AudioTimeProvider alignment={alignmentData}>
       <div style={{ position: 'relative', overflow: 'hidden' }}>
         {/* Floating Back Button */}
         {!hideInterface && (
@@ -371,6 +381,7 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideIn
           demoTiming={demoConfig.timing}
           startTransition={demoConfig.startTransition}
           slides={slidesWithResolvedPaths}
+          alignmentData={alignmentData}
           onSlideChange={handleSlideChange}
           onPlaybackStart={handlePlaybackStart}
           onPlaybackEnd={handlePlaybackEnd}
@@ -400,6 +411,7 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideIn
           />
         </div>
       </div>
+    </AudioTimeProvider>
     </SegmentProvider>
     </HideInterfaceProvider>
     </DemoPlayerBoundary>

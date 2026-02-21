@@ -138,14 +138,52 @@ How it works:
 
 ---
 
-## When to Use `<Reveal>` vs the Hook
+## Using with `<RevealAtMarker>` (Time-Based)
+
+`<RevealAtMarker>` uses inline markers in narration text to trigger animations at specific moments during audio playback, rather than at segment boundaries. It shares the same animation factories as `<Reveal>`.
+
+### Progressive reveal (stays visible once narrator reaches the marker)
+
+```tsx
+import { RevealAtMarker, fadeUp } from '@framework';
+
+<RevealAtMarker at="pipeline" animation={fadeUp}>
+  <PipelineDiagram />
+</RevealAtMarker>
+```
+
+### Bounded range (visible only while audio is between two markers)
+
+```tsx
+<RevealAtMarker from="llm" until="topics">
+  <LLMHighlight />
+</RevealAtMarker>
+```
+
+### How markers are declared
+
+Markers are `{#id}` (forward anchor) or `{id#}` (backward anchor) tokens embedded in `narrationText`:
+
+```tsx
+narrationText: 'Our system uses a {#pipeline}four-stage pipeline. {#stage1}First, we transcribe the audio.{stage1-done#} {#stage2}Then we extract key topics.'
+```
+
+After `tts:generate` strips markers and `tts:align` resolves timestamps, `<RevealAtMarker>` reads timing from `AudioTimeContext`. When alignment data is missing, children render immediately (graceful degradation).
+
+> See [docs/MARKERS_GUIDE.md](../presentation-app/docs/MARKERS_GUIDE.md) for the full marker syntax reference, hooks (`useMarker`, `useMarkerRange`, `useAudioTime`), and end-to-end workflow.
+
+---
+
+## When to Use `<Reveal>` vs `<RevealAtMarker>` vs the Hook
 
 | Use case | Tool |
 |----------|------|
-| Element show/hide with animation (~70% of slides) | `<Reveal>` |
+| Element show/hide at segment boundaries (~70% of slides) | `<Reveal>` |
+| Sub-segment timing synced to narration | `<RevealAtMarker>` |
 | Staggered lists/grids | `<RevealGroup stagger>` |
 | Exit-before-enter sequencing | `<RevealSequence>` wrapper |
 | Non-visual logic (data, conditional styling, highlighting) | `useSegmentedAnimation()` hook |
+| Sub-segment logic (timestamps, progress) | `useMarker()` / `useMarkerRange()` hooks |
 | Components with built-in `isVisible` prop (`BenefitCard`, etc.) | `useSegmentedAnimation()` hook |
 | Continuous/looping animations | `motion` elements directly |
 

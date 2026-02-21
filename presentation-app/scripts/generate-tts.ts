@@ -6,6 +6,7 @@ import axios from 'axios';
 import * as crypto from 'crypto';
 import { AudioSegment, SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
 import { runDurationCalculation } from './calculate-durations';
+import { stripMarkers } from './utils/marker-parser';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -760,8 +761,8 @@ async function generateTTS(config: TTSConfig) {
       try {
         console.log(`\n🔊 Sending batch request to server...`);
 
-        // Prepare texts for batch request
-        const texts = batch.map(item => `Speaker 0: ${item.segment.narrationText}`);
+        // Prepare texts for batch request (strip {#markers} before TTS)
+        const texts = batch.map(item => `Speaker 0: ${stripMarkers(item.segment.narrationText!)}`);
 
         // Call batch endpoint
         const response = await axios.post(`${config.serverUrl}/generate_batch`, {

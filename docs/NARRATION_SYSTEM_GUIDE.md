@@ -166,6 +166,25 @@ npm run check-narration
 npm run tts:from-json -- --demo meeting-highlights
 ```
 
+### Inline Markers in Narration Text
+
+Narration text (both inline in slide components and in external `narration.json` files) can contain inline marker tokens for sub-segment animation timing:
+
+```json
+{
+  "id": "explain",
+  "narrationText": "Our system uses a {#pipeline}four-stage pipeline. {#stage1}First, we transcribe the audio."
+}
+```
+
+Markers are **preserved as-is** in narration files and in slide component `narrationText` fields. They are only stripped at TTS generation time (automatically by `tts:generate`). This means:
+
+- Editing narration via the browser UI or JSON files should keep markers in place
+- The `check-narration` change detection includes marker tokens in its hashes
+- If you add, move, or rename markers, re-run `npm run tts:align` to update alignment timestamps
+
+See [MARKERS_GUIDE.md](../presentation-app/docs/MARKERS_GUIDE.md) for marker syntax details.
+
 ### Narration JSON Schema
 
 **Required Fields**:

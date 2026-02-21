@@ -2,7 +2,9 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { hasAudioSegments, SlideComponentWithMetadata } from '../slides/SlideMetadata';
 import { useSegmentContext } from '../contexts/SegmentContext';
+import { useAudioTimeContextOptional } from '../contexts/AudioTimeContext';
 import type { DemoMetadata } from '../demos/types';
+import type { DemoAlignment } from '../alignment/types';
 import { resolveTimingConfig, TimingConfig, DEFAULT_START_TRANSITION } from '../demos/timing/types';
 import type { StartTransition } from '../demos/timing/types';
 import { NarrationEditModal } from './NarrationEditModal';
@@ -47,6 +49,7 @@ export interface NarratedControllerProps {
   demoTiming?: TimingConfig;
   startTransition?: StartTransition;
   slides: SlideComponentWithMetadata[];
+  alignmentData?: DemoAlignment | null;
   onSlideChange: (chapter: number, slide: number) => void;
   onPlaybackStart?: () => void;
   onPlaybackEnd?: () => void;
@@ -62,6 +65,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
   demoTiming,
   startTransition,
   slides,
+  alignmentData,
   onSlideChange,
   onPlaybackStart,
   onPlaybackEnd,
@@ -89,6 +93,9 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
 
   // Segment context for multi-segment slides
   const segmentContext = useSegmentContext();
+
+  // Audio time context for sub-segment marker tracking
+  const audioTimeCtx = useAudioTimeContextOptional();
 
   // Theme for overlay
   const theme = useTheme();
@@ -193,6 +200,8 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
         audioRef.current.onerror = null;
         audioRef.current.onplay = null;
         audioRef.current.oncanplaythrough = null;
+        audioRef.current.ontimeupdate = null;
+        audioRef.current.onloadedmetadata = null;
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -229,9 +238,27 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
         audioRef.current.onplay = null;
       }
 
+      // Initialize audio time context with markers and words for this segment
+      if (audioTimeCtx) {
+        audioTimeCtx.reset();
+        const coordKey = `c${slideMetadata.chapter}_s${slideMetadata.slide}`;
+        const segAlignment = alignmentData?.slides[coordKey]
+          ?.segments.find(s => s.segmentId === segment.id);
+        audioTimeCtx.initializeSegmentAlignment(
+          segAlignment?.markers ?? [],
+          segAlignment?.words ?? []
+        );
+      }
+
       setIsLoading(true);
       loadAudioWithFallback(segment.audioFilePath ?? '', segment.id).then(audio => {
         audioRef.current = audio;
+
+        // Wire audio time tracking for sub-segment markers
+        if (audioTimeCtx) {
+          audio.ontimeupdate = () => audioTimeCtx.setCurrentTime(audio.currentTime);
+          audio.onloadedmetadata = () => audioTimeCtx.setDuration(audio.duration);
+        }
 
         audio.onended = () => {
           setError(null);
@@ -267,7 +294,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     };
 
     playSegment(0);
-  }, [advanceSlide, segmentContext, demoTiming]);
+  }, [advanceSlide, segmentContext, demoTiming, audioTimeCtx, alignmentData]);
 
   // Start narrated playback
   const handleStart = () => {
@@ -314,9 +341,28 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
 
     let isActive = true;
 
+    // Initialize audio time context for manual+audio mode
+    if (audioTimeCtx) {
+      audioTimeCtx.reset();
+      const coordKey = `c${slide.chapter}_s${slide.slide}`;
+      const segAlignment = alignmentData?.slides[coordKey]
+        ?.segments.find(s => s.segmentId === segment.id);
+      audioTimeCtx.initializeSegmentAlignment(
+        segAlignment?.markers ?? [],
+        segAlignment?.words ?? []
+      );
+    }
+
     loadAudioWithFallback(segment.audioFilePath ?? '', segment.id).then(audio => {
       if (!isActive) return;
       audioRef.current = audio;
+
+      // Wire audio time tracking for sub-segment markers
+      if (audioTimeCtx) {
+        audio.ontimeupdate = () => audioTimeCtx.setCurrentTime(audio.currentTime);
+        audio.onloadedmetadata = () => audioTimeCtx.setDuration(audio.duration);
+      }
+
       audio.onended = () => {
         setError(null);
         if (autoAdvanceOnAudioEnd) {
@@ -346,6 +392,8 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
         audioRef.current.onended = null;
         audioRef.current.onerror = null;
         audioRef.current.onplay = null;
+        audioRef.current.ontimeupdate = null;
+        audioRef.current.onloadedmetadata = null;
         audioRef.current = null;
       }
     };

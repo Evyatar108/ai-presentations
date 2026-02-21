@@ -265,6 +265,61 @@ npm run tts:generate -- --demo my-demo --instruct "speak slowly and clearly"
 
 Changing the instruct for a segment triggers TTS regeneration (the instruct value is included in the cache hash). The narration cache (`narration-cache.json`) also factors instruct into its hashes.
 
+## Inline Markers
+
+### Marker Syntax in Narration Text
+
+Narration text can contain inline marker tokens that define animation cue points within a segment's audio:
+
+- **`{#id}`** (forward anchor) — resolves to the start time of the next word
+- **`{id#}`** (backward anchor) — resolves to the end time of the preceding word
+
+```typescript
+narrationText: 'Our system uses a {#pipeline}four-stage pipeline.{done#} {#llm}The transcript goes into an LLM.'
+```
+
+Markers are purely metadata for the alignment system. They do not affect how the text sounds.
+
+### Marker Stripping During Generation
+
+`tts:generate` automatically strips all `{#id}` and `{id#}` tokens from narration text before sending it to the TTS server. The audio file contains only the clean spoken text. No special flags are needed — stripping is always on.
+
+### Generating Alignment Data
+
+After generating audio, run the alignment command to resolve marker positions to timestamps:
+
+```bash
+# Align all segments for a demo
+npm run tts:align -- --demo my-demo
+
+# Force re-alignment (ignore cache)
+npm run tts:align -- --demo my-demo --force
+
+# Align specific segments only
+npm run tts:align -- --demo my-demo --segments ch1:s2:explain
+```
+
+This sends each audio file plus its clean text to a WhisperX server for forced alignment, then maps marker positions to word-level timestamps. The result is stored in `public/audio/{demoId}/alignment.json`.
+
+### WhisperX Server Setup
+
+The alignment system uses WhisperX (not standard Whisper) for word-level forced alignment. The server script is `tts/server_whisperx.py`, which replaces `server_whisper.py` and runs on the same default port (5001):
+
+```bash
+cd tts
+python server_whisperx.py --model large-v3 --port 5001
+```
+
+WhisperX provides accurate word-level timestamps needed for marker resolution. Standard Whisper only provides segment-level timestamps, which are too coarse for inline markers.
+
+The `WHISPER_URL` environment variable works with both `tts:verify` and `tts:align`:
+
+```bash
+WHISPER_URL=http://gpu-server:5001 npm run tts:align -- --demo my-demo
+```
+
+> See [MARKERS_GUIDE.md](../presentation-app/docs/MARKERS_GUIDE.md) for the full marker syntax reference and `<RevealAtMarker>` component usage.
+
 ## Troubleshooting
 
 ### Server Not Responding

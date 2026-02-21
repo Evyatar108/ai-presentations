@@ -40,12 +40,14 @@ export { CandidateGrid } from './components/CandidateGrid';
 export type { CandidateGridProps } from './components/CandidateGrid';
 
 // Reveal components
-export { Reveal, RevealGroup, RevealContext, RevealSequence } from './components/reveal';
+export { Reveal, RevealAtMarker, RevealGroup, RevealContext, RevealSequence } from './components/reveal';
 export type { RevealProps, RevealGroupProps, RevealContextProps, RevealAnimation, RevealVisibilityProps } from './components/reveal';
 
 // Contexts
 export { SegmentProvider, useSegmentContext, useSegmentedAnimation } from './contexts/SegmentContext';
 export type { SegmentedAnimationAPI, SegmentState, SegmentControls, SegmentContextValue } from './contexts/SegmentContext';
+export { AudioTimeProvider, useAudioTimeContext, useAudioTimeContextOptional } from './contexts/AudioTimeContext';
+export type { AudioTimeContextValue } from './contexts/AudioTimeContext';
 export { HideInterfaceProvider, useHideInterface } from './contexts/HideInterfaceContext';
 
 // Slides
@@ -114,11 +116,15 @@ export type { TimingConfig, ResolvedTimingConfig, StartTransition } from './demo
 export { calculateSlideDuration, calculatePresentationDuration } from './demos/timing/calculator';
 export type { SlideDurationBreakdown, PresentationDurationReport, SegmentDurationInfo } from './demos/timing/calculator';
 
+// Alignment types
+export type { AlignedWord, ResolvedMarker, SegmentAlignment, DemoAlignment } from './alignment/types';
+
 // Utils
 export { loadNarration, getNarrationText } from './utils/narrationLoader';
 export { checkApiHealth, saveNarrationToFile } from './utils/narrationApiClient';
 export { debug } from './utils/debug';
 export { buildAudioFileName, buildAudioOutputPath, buildAudioFilePath, resolveAudioFilePath } from './utils/audioPath';
+export { loadAlignment, clearAlignmentCache } from './utils/alignmentLoader';
 
 // Hooks
 export { useTtsRegeneration } from './hooks/useTtsRegeneration';
@@ -127,6 +133,12 @@ export { useRuntimeTimer } from './hooks/useRuntimeTimer';
 export { useApiHealth } from './hooks/useApiHealth';
 export { useNarrationEditor } from './hooks/useNarrationEditor';
 export { useFocusTrap } from './hooks/useFocusTrap';
+export { useAudioTime } from './hooks/useAudioTime';
+export type { AudioTimeState } from './hooks/useAudioTime';
+export { useMarker, useMarkerRange } from './hooks/useMarker';
+export type { MarkerState, MarkerRangeState } from './hooks/useMarker';
+export { useWordHighlight } from './hooks/useWordHighlight';
+export type { WordHighlightState } from './hooks/useWordHighlight';
 
 // Accessibility
 export { ReducedMotionProvider, WithReducedMotionProvider, ReducedMotionToggle, useReducedMotion } from './accessibility/ReducedMotion';

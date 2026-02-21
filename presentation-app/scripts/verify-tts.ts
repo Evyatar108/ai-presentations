@@ -193,9 +193,9 @@ async function verifyTTS(config: VerifyConfig) {
     console.log(`   Model: ${health.model_size}`);
     console.log(`   GPU: ${health.gpu_name || 'Unknown'}\n`);
   } catch (error: any) {
-    console.error(`\u274c Cannot connect to Whisper server at ${config.whisperUrl}`);
-    console.error(`   Please ensure the Whisper server is running:`);
-    console.error(`   cd tts && python server_whisper.py --model large-v3 --port 5001\n`);
+    console.error(`\u274c Cannot connect to WhisperX server at ${config.whisperUrl}`);
+    console.error(`   Please ensure the WhisperX server is running:`);
+    console.error(`   cd tts && python server_whisperx.py --model large-v3 --port 5001\n`);
     return;
   }
 

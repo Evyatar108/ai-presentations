@@ -85,6 +85,48 @@ export const demo: DemoConfig = {
 
 Note: `DemoConfig` no longer has an `id` field — the ID comes exclusively from `metadata.id`.
 
+## Alignment System (Sub-Segment Timing)
+
+The alignment system enables animations triggered at specific moments *within* a segment's audio, complementing the discrete segment-based `<Reveal>` model.
+
+### Data Flow
+
+```
+narrationText with {#markers}
+       │
+  [tts:generate]           → strips markers, generates audio
+  [tts:align + WhisperX]   → forced alignment → word timestamps → marker resolution
+       │
+  alignment.json           → stored at public/audio/{demoId}/alignment.json
+       │
+  DemoPlayer               → loads alignment via alignmentLoader.ts, passes to AudioTimeProvider
+  NarratedController       → feeds audio.currentTime into AudioTimeContext on each timeupdate
+       │
+  <RevealAtMarker>         → reads markers + currentTime from context, triggers animations
+  useMarker() / useMarkerRange() → hooks for custom time-based logic
+```
+
+### Key Files
+
+| File | Role |
+|------|------|
+| `src/framework/alignment/types.ts` | `AlignedWord`, `ResolvedMarker`, `SegmentAlignment`, `DemoAlignment` types |
+| `src/framework/contexts/AudioTimeContext.tsx` | React context: continuous `currentTime`, per-segment `markers` and `words` |
+| `src/framework/utils/alignmentLoader.ts` | Lazy fetch + in-memory cache for `alignment.json` |
+| `src/framework/components/reveal/RevealAtMarker.tsx` | Time-based reveal component (progressive `at` or bounded `from`/`until`) |
+| `src/framework/hooks/useMarker.ts` | `useMarker()`, `useMarkerRange()`, `useAudioTime()`, `useWordHighlight()` hooks |
+
+### Composing with Segments
+
+Segments and markers operate at different granularities and compose naturally:
+
+- **Segments** control which audio file plays and which integer index is active (`segment >= N`)
+- **Markers** control sub-segment timing within that audio file (`currentTime >= markerTime`)
+- A slide can use both `<Reveal>` (segment-based) and `<RevealAtMarker>` (time-based) together
+- `AudioTimeContext` resets when the segment changes, so marker timestamps are always relative to the current segment's audio
+
+When `alignment.json` is missing, `<RevealAtMarker>` degrades gracefully by rendering children immediately.
+
 ## Benefits
 
 ### Scalability

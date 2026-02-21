@@ -24,6 +24,46 @@
 | PipelineDiagram | Data Visualization | `framework/components/PipelineDiagram.tsx` | Vertical step-by-step pipeline |
 | CandidateGrid | Data Visualization | `framework/components/CandidateGrid.tsx` | Animated upper-triangle matrix grid |
 | VideoPlayer | Media | `framework/components/VideoPlayer.tsx` | Controlled video with play/pause/end |
+| RevealAtMarker | Animation | `framework/components/reveal/RevealAtMarker.tsx` | Time-based reveal driven by inline markers |
+
+---
+
+## Animation
+
+### RevealAtMarker
+
+Time-based reveal component that triggers animations at specific moments during audio playback, using inline markers (`{#id}` / `{id#}`) in narration text. Complements the segment-based `<Reveal>` for sub-segment timing.
+
+**Source:** `src/framework/components/reveal/RevealAtMarker.tsx`
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `at` | `string` | — | Marker ID for progressive reveal (mutually exclusive with `from`/`until`) |
+| `from` | `string` | — | Start marker ID for bounded range |
+| `until` | `string` | — | End marker ID for bounded range |
+| `animation` | `RevealAnimation` | `fadeIn` | Entrance animation factory |
+| `exitAnimation` | `RevealAnimation` | — | Exit animation factory |
+| `as` | `'div' \| 'span' \| 'li' \| 'section' \| 'article' \| 'p'` | `'div'` | HTML element type |
+| `className` | `string` | — | CSS class |
+| `style` | `CSSProperties` | — | Inline styles |
+
+```tsx
+import { RevealAtMarker, fadeUp } from '@framework';
+
+// Progressive: visible once narrator reaches {#pipeline}
+<RevealAtMarker at="pipeline" animation={fadeUp}>
+  <PipelineDiagram />
+</RevealAtMarker>
+
+// Bounded: visible only between {#llm} and {#topics}
+<RevealAtMarker from="llm" until="topics">
+  <LLMHighlight />
+</RevealAtMarker>
+```
+
+**Graceful degradation:** When `alignment.json` is missing (markers not yet aligned), children render immediately without waiting for audio timestamps.
+
+**Tips:** Use `at` for content that should stay visible once introduced. Use `from`/`until` for temporary highlights or callouts. Combine with segment-based `<Reveal>` on the same slide for mixed granularity.
 
 ---
 
