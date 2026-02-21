@@ -458,9 +458,22 @@ const Ch4_S4_OutputSafetyComponent: React.FC = () => {
             initial="hidden"
             animate="visible"
           >
-            <SlideTitle reduced={reduced} subtitle="V1 Call 2 (Extractives): Input">
+            <motion.h1
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: reduced ? 0.2 : 0.5 }}
+              style={{ ...typography.h1, marginBottom: '0.5rem' }}
+            >
               What the Model Receives
-            </SlideTitle>
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: reduced ? 0.2 : 0.5, delay: reduced ? 0 : 0.2 }}
+              style={{ ...typography.caption, marginBottom: '1rem' }}
+            >
+              V1 Call 2 (Extractives): Input
+            </motion.p>
 
             <CodeBlock
               code={EXTRACTIVE_INPUT_TABLE}
@@ -478,17 +491,30 @@ const Ch4_S4_OutputSafetyComponent: React.FC = () => {
             variants={fadeUp(reduced)}
             initial="hidden"
             animate="visible"
+            style={{ marginTop: '2rem' }}
           >
-            <SlideTitle reduced={reduced} subtitle="V1 Call 2 (Extractives): Input → Output">
+            <motion.h1
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: reduced ? 0.2 : 0.5 }}
+              style={{ ...typography.h1, marginBottom: '0.5rem' }}
+            >
               Output Safety
-            </SlideTitle>
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: reduced ? 0.2 : 0.5, delay: reduced ? 0 : 0.2 }}
+              style={{ ...typography.caption, marginBottom: '1rem' }}
+            >
+              V1 Call 2 (Extractives): Input → Output
+            </motion.p>
 
             <div style={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               gap: '1.5rem',
-              marginTop: '1.5rem',
             }}>
               {/* Input box */}
               <div style={{
@@ -512,7 +538,7 @@ const Ch4_S4_OutputSafetyComponent: React.FC = () => {
                   2,000+ Candidate Rows
                 </div>
                 <div style={{ ...typography.caption, fontSize: 11, marginTop: '0.3rem' }}>
-                  Numbered list of precomputed ranges
+                  Table of precomputed candidate ranges
                 </div>
               </div>
 
@@ -541,21 +567,24 @@ const Ch4_S4_OutputSafetyComponent: React.FC = () => {
                 padding: '1rem 1.5rem',
                 textAlign: 'center',
                 flex: 1,
-                maxWidth: 260,
+                maxWidth: 320,
               }}>
                 <div style={{ ...typography.caption, fontSize: 11, color: theme.colors.success, letterSpacing: 1, textTransform: 'uppercase', marginBottom: '0.4rem' }}>
                   Output
                 </div>
                 <div style={{
                   fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
-                  fontSize: 15,
+                  fontSize: 11,
                   color: theme.colors.success,
-                  fontWeight: 700,
+                  fontWeight: 600,
+                  textAlign: 'left',
+                  lineHeight: 1.5,
+                  whiteSpace: 'pre',
                 }}>
-                  selected: [3, 17, 42]
+                  {`|utterance_range|selection_reason|\n|[1, 3]|important feedback|\n|[2, 4]|exciting news|`}
                 </div>
                 <div style={{ ...typography.caption, fontSize: 11, marginTop: '0.3rem' }}>
-                  Index numbers — not freeform text
+                  Selected rows from the input table
                 </div>
               </div>
             </div>
@@ -567,7 +596,7 @@ const Ch4_S4_OutputSafetyComponent: React.FC = () => {
               fontSize: 13,
               color: theme.colors.textSecondary,
             }}>
-              Model picks from a closed list — output is an index, not freeform text
+              Model selects rows from the input table — every range is pre-validated
             </div>
           </motion.div>
         )}
@@ -618,9 +647,9 @@ const Ch4_S4_OutputSafetyComponent: React.FC = () => {
                 fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
                 fontSize: 13,
               }}>
-                <span style={{ color: theme.colors.success }}>selected: [1]</span>
+                <span style={{ color: theme.colors.success }}>|[1, 3]|important feedback|</span>
                 <span style={{ color: theme.colors.textMuted }}>&#8594;</span>
-                <span style={{ color: theme.colors.textSecondary }}>maps to valid range</span>
+                <span style={{ color: theme.colors.textSecondary }}>range [1, 3] pre-validated</span>
                 <span style={{ color: theme.colors.textMuted }}>&#8594;</span>
                 <span style={{ color: theme.colors.success, fontWeight: 700 }}>valid video segment</span>
               </div>
