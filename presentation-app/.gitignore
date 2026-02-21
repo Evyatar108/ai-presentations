@@ -5,6 +5,11 @@ node_modules
 
 # testing
 /coverage
+/screenshots
+
+# playwright
+/test-results
+/playwright-report
 
 # production
 /dist
