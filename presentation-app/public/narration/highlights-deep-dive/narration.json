@@ -378,7 +378,7 @@
       "segments": [
         {
           "id": "title",
-          "narrationText": "The second innovation: replacing prose instructions with a pseudocode algorithm. The principle is simple — prose invites creative interpretation. Pseudocode demands systematic execution.",
+          "narrationText": "The second innovation: replacing prose instructions with a pseudocode algorithm. GPT-4o is a model built for programmers — it's trained heavily on code. So we leaned into that strength and wrote the prompt as executable pseudocode rather than natural language.",
           "visualDescription": "Title + quote: 'Prose = creative interpretation. Pseudocode = systematic execution.'",
           "notes": ""
         },
@@ -409,7 +409,7 @@
         },
         {
           "id": "benefits",
-          "narrationText": "Four benefits. Unambiguous execution order. Named variables as shared state. More precision than prose. And a single source of truth — one prompt, not four.",
+          "narrationText": "Four benefits. Unambiguous execution order. Named variables as shared state. It plays to GPT-4o's strengths as a code-trained model. And a single source of truth — one prompt, not four.",
           "visualDescription": "Four benefit cards with checkmarks",
           "notes": ""
         }
@@ -625,7 +625,7 @@
         },
         {
           "id": "lesson3",
-          "narrationText": "Lesson three: pseudocode beats prose. When you need the model to follow a specific algorithm, write it as pseudocode. It reduces ambiguity and makes the output more predictable.",
+          "narrationText": "Lesson three: play to your model's strengths. GPT-4o is trained heavily on code, so pseudocode was a natural fit — it gave the model unambiguous, executable instructions. With a different model, the best format might be different.",
           "visualDescription": "Card 3: Pseudocode beats prose",
           "notes": ""
         },

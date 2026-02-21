@@ -209,7 +209,7 @@ const Ch6_S2_PseudocodeComponent: React.FC = () => {
             marginTop: '-1rem'
           }}
         >
-          "Prose = creative interpretation. Pseudocode = systematic execution."
+          "GPT-4o is built for code — so we wrote the prompt as code."
         </motion.p>
       </Reveal>
 
@@ -289,7 +289,7 @@ for topic in topics:
 const BENEFITS = [
   'Unambiguous execution order',
   'Named variables = shared state',
-  'More precise than prose',
+  'Plays to GPT-4o\'s strengths',
   'Single source of truth'
 ];
 

@@ -18,7 +18,7 @@ import {
 const LESSONS = [
   { num: 1, title: 'Challenge the multi-call assumption', desc: 'A single well-structured prompt can replace an entire pipeline' },
   { num: 2, title: 'Input format is a cost lever', desc: 'Compact representation (turn tags, pipe-delimited) slashes tokens' },
-  { num: 3, title: 'Pseudocode beats prose', desc: 'Executable instructions reduce ambiguity and improve consistency' },
+  { num: 3, title: 'Play to your model\'s strengths', desc: 'GPT-4o is code-trained — pseudocode gave it unambiguous, executable instructions' },
   { num: 4, title: 'Force the model to ground itself', desc: 'Copy-then-parse prevents hallucination of IDs and references' },
   { num: 5, title: 'Self-checks enable automation', desc: 'Boolean validators let you detect and retry failures automatically' },
   { num: 6, title: 'Build a local evaluation loop', desc: 'Quantitative error stats + qualitative video review accelerate prompt iteration' }
