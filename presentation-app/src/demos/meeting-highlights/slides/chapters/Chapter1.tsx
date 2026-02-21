@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   useReducedMotion,
   useSegmentedAnimation,
@@ -10,6 +10,7 @@ import {
   ContentCard,
   GradientHighlightBox,
   SlideTitle,
+  Reveal,
   typography,
   gradientBox,
   fadeUp,
@@ -28,7 +29,7 @@ import {
  */
 const Ch1_S1_WhatIsMeetingHighlightsComponent: React.FC = () => {
     const { reduced } = useReducedMotion();
-    const { isSegmentVisible, isOnSegment } = useSegmentedAnimation();
+    const { isOnSegment } = useSegmentedAnimation();
     const theme = useTheme();
 
     return (
@@ -76,74 +77,60 @@ const Ch1_S1_WhatIsMeetingHighlightsComponent: React.FC = () => {
             />
           </div>
 
-          <AnimatePresence>
-            {isSegmentVisible(1) && (
-              <>
-                <motion.div
-                  variants={fadeLeft(reduced)}
-                  initial="hidden"
-                  animate="visible"
-                  style={{ display: 'flex', justifyContent: 'center', gap: '2rem', marginBottom: '1rem' }}
-                >
-                  <div style={{ ...gradientBox, padding: '1.5rem', flex: 1, maxWidth: 240 }}>
-                    <div style={{ color: '#fff', fontSize: 16, fontWeight: 600 }}>
-                      AI-Generated<br/>Summaries
-                    </div>
-                  </div>
-                  <div style={{
-                    background: `linear-gradient(135deg, ${theme.colors.secondary}, ${theme.colors.primary})`,
-                    borderRadius: 12,
-                    padding: '1.5rem',
-                    flex: 1,
-                    maxWidth: 240
-                  }}>
-                    <div style={{ color: '#fff', fontSize: 16, fontWeight: 600 }}>
-                      Authentic<br/>Video Clips
-                    </div>
-                  </div>
-                </motion.div>
+          <Reveal from={1}>
+            <motion.div
+              variants={fadeLeft(reduced)}
+              initial="hidden"
+              animate="visible"
+              style={{ display: 'flex', justifyContent: 'center', gap: '2rem', marginBottom: '1rem' }}
+            >
+              <div style={{ ...gradientBox, padding: '1.5rem', flex: 1, maxWidth: 240 }}>
+                <div style={{ color: '#fff', fontSize: 16, fontWeight: 600 }}>
+                  AI-Generated<br/>Summaries
+                </div>
+              </div>
+              <div style={{
+                background: `linear-gradient(135deg, ${theme.colors.secondary}, ${theme.colors.primary})`,
+                borderRadius: 12,
+                padding: '1.5rem',
+                flex: 1,
+                maxWidth: 240
+              }}>
+                <div style={{ color: '#fff', fontSize: 16, fontWeight: 600 }}>
+                  Authentic<br/>Video Clips
+                </div>
+              </div>
+            </motion.div>
 
-                <motion.p
-                  variants={fadeUp(reduced)}
-                  initial="hidden"
-                  animate="visible"
-                  transition={{ delay: reduced ? 0 : 0.4 }}
-                  style={{ ...typography.caption, fontSize: 16, marginBottom: '2rem' }}
-                >
-                  Preserves original tone, reactions, and discussion flow
-                </motion.p>
-              </>
-            )}
-          </AnimatePresence>
+            <motion.p
+              variants={fadeUp(reduced)}
+              initial="hidden"
+              animate="visible"
+              transition={{ delay: reduced ? 0 : 0.4 }}
+              style={{ ...typography.caption, fontSize: 16, marginBottom: '2rem' }}
+            >
+              Preserves original tone, reactions, and discussion flow
+            </motion.p>
+          </Reveal>
 
-          <AnimatePresence>
-            {isSegmentVisible(2) && (
-              <motion.div
-                initial={{ opacity: 0, y: 30, scale: 0.9 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
+          <Reveal from={2} animation={(r) => ({
+            hidden: { opacity: 0, y: r ? 0 : 30, scale: r ? 1 : 0.9 },
+            visible: { opacity: 1, y: 0, scale: 1, transition: { duration: r ? 0.3 : 0.8, type: 'spring', bounce: 0.4 } }
+          })}>
+            <GradientHighlightBox reduced={reduced}>
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
                 transition={{
-                  duration: reduced ? 0.3 : 0.8,
-                  type: 'spring',
-                  bounce: 0.4
+                  duration: reduced ? 0.2 : 0.5,
+                  delay: reduced ? 0 : 0.3
                 }}
+                style={{ color: theme.colors.primary, fontSize: 20, fontWeight: 600, margin: 0 }}
               >
-                <GradientHighlightBox reduced={reduced}>
-                  <motion.p
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{
-                      duration: reduced ? 0.2 : 0.5,
-                      delay: reduced ? 0 : 0.3
-                    }}
-                    style={{ color: theme.colors.primary, fontSize: 20, fontWeight: 600, margin: 0 }}
-                  >
-                    Catch up on missed meetings without watching hour-long recordings
-                  </motion.p>
-                </GradientHighlightBox>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                Catch up on missed meetings without watching hour-long recordings
+              </motion.p>
+            </GradientHighlightBox>
+          </Reveal>
         </div>
       </SlideContainer>
     );
@@ -186,118 +173,74 @@ const Ch1_S2_HowToAccessComponent: React.FC = () => {
 
     return (
       <SlideContainer maxWidth={1200}>
-        <AnimatePresence>
-          {isSegmentVisible(0) && (
-            <SlideTitle reduced={reduced}>
-              How to Access Meeting Highlights via BizChat
-            </SlideTitle>
-          )}
-        </AnimatePresence>
+        <Reveal from={0}>
+          <SlideTitle reduced={reduced}>
+            How to Access Meeting Highlights via BizChat
+          </SlideTitle>
+        </Reveal>
 
-        <AnimatePresence>
-          {isSegmentVisible(1) && (
-            <motion.div
-              variants={scaleIn(reduced)}
-              initial="hidden"
-              animate="visible"
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '1.2fr 1fr',
-                gap: '2rem',
-                alignItems: 'start'
-              }}
-            >
-              {/* Left column: Video */}
-              <ContentCard style={{ padding: '0.5rem' }}>
-                <p style={{ ...typography.body, fontSize: 18, marginBottom: '1.5rem', marginTop: 0 }}>
-                  Open <strong style={{ color: theme.colors.primary }}>BizChat</strong> and ask it to recap a specific meeting
+        <Reveal from={1} animation={scaleIn} style={{
+          display: 'grid',
+          gridTemplateColumns: '1.2fr 1fr',
+          gap: '2rem',
+          alignItems: 'start'
+        }}>
+          {/* Left column: Video */}
+          <ContentCard style={{ padding: '0.5rem' }}>
+            <p style={{ ...typography.body, fontSize: 18, marginBottom: '1.5rem', marginTop: 0 }}>
+              Open <strong style={{ color: theme.colors.primary }}>BizChat</strong> and ask it to recap a specific meeting
+            </p>
+            <div style={{
+              background: theme.colors.bgDeep,
+              borderRadius: 12,
+              padding: '0.5rem'
+            }}>
+              <VideoPlayer
+                videoPath="/videos/meeting-highlights/meeting_highlights_usage_in_bizchat.mp4"
+                isPlaying={isSegmentVisible(1)}
+                freezeOnEnd={true}
+              />
+            </div>
+          </ContentCard>
+
+          {/* Right column: Instructions */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <Reveal from={2} animation={fadeRight}>
+              <ContentCard style={{ padding: '1.5rem' }}>
+                <p style={{ ...typography.body, fontSize: 15, margin: 0 }}>
+                  💡 <em>Tip:</em> Use <strong style={{ color: theme.colors.primary }}>/</strong> (slash) for CIQ (Contextual Instant Query) - an easy way to reference meetings
                 </p>
-                <div style={{
-                  background: theme.colors.bgDeep,
-                  borderRadius: 12,
-                  padding: '0.5rem'
-                }}>
-                  <VideoPlayer
-                    videoPath="/videos/meeting-highlights/meeting_highlights_usage_in_bizchat.mp4"
-                    isPlaying={isSegmentVisible(1)}
-                    freezeOnEnd={true}
-                  />
-                </div>
               </ContentCard>
+            </Reveal>
 
-              {/* Right column: Instructions */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                <AnimatePresence>
-                  {isSegmentVisible(2) && (
-                    <motion.div
-                      variants={fadeRight(reduced)}
-                      initial="hidden"
-                      animate="visible"
-                    >
-                      <ContentCard style={{ padding: '1.5rem' }}>
-                        <p style={{ ...typography.body, fontSize: 15, margin: 0 }}>
-                          💡 <em>Tip:</em> Use <strong style={{ color: theme.colors.primary }}>/</strong> (slash) for CIQ (Contextual Instant Query) - an easy way to reference meetings
-                        </p>
-                      </ContentCard>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+            <Reveal from={3} animation={fadeRight}>
+              <ContentCard style={{ padding: '1.5rem' }}>
+                <p style={{ ...typography.body, fontSize: 15, margin: 0 }}>
+                  📋 Select and search for meetings from the menu
+                </p>
+              </ContentCard>
+            </Reveal>
 
-                <AnimatePresence>
-                  {isSegmentVisible(3) && (
-                    <motion.div
-                      variants={fadeRight(reduced)}
-                      initial="hidden"
-                      animate="visible"
-                    >
-                      <ContentCard style={{ padding: '1.5rem' }}>
-                        <p style={{ ...typography.body, fontSize: 15, margin: 0 }}>
-                          📋 Select and search for meetings from the menu
-                        </p>
-                      </ContentCard>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+            <Reveal from={4} animation={fadeRight}>
+              <GradientHighlightBox reduced={reduced} style={{ padding: '1.5rem' }}>
+                <p style={{ color: theme.colors.textPrimary, fontSize: 15, margin: 0 }}>
+                  🎬 Video player with highlights appears at the bottom
+                </p>
+              </GradientHighlightBox>
+            </Reveal>
 
-                <AnimatePresence>
-                  {isSegmentVisible(4) && (
-                    <motion.div
-                      variants={fadeRight(reduced)}
-                      initial="hidden"
-                      animate="visible"
-                    >
-                      <GradientHighlightBox reduced={reduced} style={{ padding: '1.5rem' }}>
-                        <p style={{ color: theme.colors.textPrimary, fontSize: 15, margin: 0 }}>
-                          🎬 Video player with highlights appears at the bottom
-                        </p>
-                      </GradientHighlightBox>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                <AnimatePresence>
-                  {isSegmentVisible(5) && (
-                    <motion.div
-                      variants={fadeRight(reduced)}
-                      initial="hidden"
-                      animate="visible"
-                      style={{
-                        background: '#1e40af',
-                        borderRadius: 12,
-                        padding: '1.25rem',
-                        border: '1px solid #60a5fa'
-                      }}
-                    >
-                      <p style={{ color: '#dbeafe', fontSize: 14, margin: 0 }}>
-                        💡 For meeting series: Click the arrow on the right side of the series to open the list of instances, then select a recorded instance
-                      </p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            <Reveal from={5} animation={fadeRight} style={{
+              background: '#1e40af',
+              borderRadius: 12,
+              padding: '1.25rem',
+              border: '1px solid #60a5fa'
+            }}>
+              <p style={{ color: '#dbeafe', fontSize: 14, margin: 0 }}>
+                💡 For meeting series: Click the arrow on the right side of the series to open the list of instances, then select a recorded instance
+              </p>
+            </Reveal>
+          </div>
+        </Reveal>
       </SlideContainer>
     );
 };
@@ -354,98 +297,63 @@ const Ch1_S3_HowToAccessSharePointComponent: React.FC = () => {
 
     return (
       <SlideContainer maxWidth={1200}>
-        <AnimatePresence>
-          {isSegmentVisible(0) && (
-            <SlideTitle reduced={reduced}>
-              How to Access Meeting Highlights via SharePoint
-            </SlideTitle>
-          )}
-        </AnimatePresence>
+        <Reveal from={0}>
+          <SlideTitle reduced={reduced}>
+            How to Access Meeting Highlights via SharePoint
+          </SlideTitle>
+        </Reveal>
 
-        <AnimatePresence>
-          {isSegmentVisible(1) && (
-            <motion.div
-              variants={scaleIn(reduced)}
-              initial="hidden"
-              animate="visible"
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '1.2fr 1fr',
-                gap: '2rem',
-                alignItems: 'start'
-              }}
-            >
-              {/* Left column: Video */}
-              <ContentCard style={{ padding: '0.5rem' }}>
-                <p style={{ ...typography.body, fontSize: 18, marginBottom: '1.5rem', marginTop: 0 }}>
-                  Access highlights directly from <strong style={{ color: theme.colors.primary }}>SharePoint</strong> meeting recap page
+        <Reveal from={1} animation={scaleIn} style={{
+          display: 'grid',
+          gridTemplateColumns: '1.2fr 1fr',
+          gap: '2rem',
+          alignItems: 'start'
+        }}>
+          {/* Left column: Video */}
+          <ContentCard style={{ padding: '0.5rem' }}>
+            <p style={{ ...typography.body, fontSize: 18, marginBottom: '1.5rem', marginTop: 0 }}>
+              Access highlights directly from <strong style={{ color: theme.colors.primary }}>SharePoint</strong> meeting recap page
+            </p>
+            <div style={{
+              background: theme.colors.bgDeep,
+              borderRadius: 12,
+              padding: '0.5rem'
+            }}>
+              <VideoPlayer
+                videoPath="/videos/meeting-highlights/meeting_highlights_usage_in_sharepoint.mp4"
+                isPlaying={isSegmentVisible(1)}
+                freezeOnEnd={true}
+              />
+            </div>
+          </ContentCard>
+
+          {/* Right column: Instructions */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <Reveal from={2} animation={fadeRight}>
+              <ContentCard style={{ padding: '1.5rem' }}>
+                <p style={{ ...typography.body, fontSize: 15, margin: 0 }}>
+                  📝 Go to meeting recording recap page via recording link or Recap tab
                 </p>
-                <div style={{
-                  background: theme.colors.bgDeep,
-                  borderRadius: 12,
-                  padding: '0.5rem'
-                }}>
-                  <VideoPlayer
-                    videoPath="/videos/meeting-highlights/meeting_highlights_usage_in_sharepoint.mp4"
-                    isPlaying={isSegmentVisible(1)}
-                    freezeOnEnd={true}
-                  />
-                </div>
               </ContentCard>
+            </Reveal>
 
-              {/* Right column: Instructions */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                <AnimatePresence>
-                  {isSegmentVisible(2) && (
-                    <motion.div
-                      variants={fadeRight(reduced)}
-                      initial="hidden"
-                      animate="visible"
-                    >
-                      <ContentCard style={{ padding: '1.5rem' }}>
-                        <p style={{ ...typography.body, fontSize: 15, margin: 0 }}>
-                          📝 Go to meeting recording recap page via recording link or Recap tab
-                        </p>
-                      </ContentCard>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+            <Reveal from={3} animation={fadeRight}>
+              <ContentCard style={{ padding: '1.5rem' }}>
+                <p style={{ ...typography.body, fontSize: 15, margin: 0 }}>
+                  🌐 Click <strong style={{ color: theme.colors.primary }}>"Watch in browser"</strong> button
+                </p>
+              </ContentCard>
+            </Reveal>
 
-                <AnimatePresence>
-                  {isSegmentVisible(3) && (
-                    <motion.div
-                      variants={fadeRight(reduced)}
-                      initial="hidden"
-                      animate="visible"
-                    >
-                      <ContentCard style={{ padding: '1.5rem' }}>
-                        <p style={{ ...typography.body, fontSize: 15, margin: 0 }}>
-                          🌐 Click <strong style={{ color: theme.colors.primary }}>"Watch in browser"</strong> button
-                        </p>
-                      </ContentCard>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                <AnimatePresence>
-                  {isSegmentVisible(4) && (
-                    <motion.div
-                      variants={fadeRight(reduced)}
-                      initial="hidden"
-                      animate="visible"
-                    >
-                      <GradientHighlightBox reduced={reduced} style={{ padding: '1.5rem' }}>
-                        <p style={{ color: theme.colors.textPrimary, fontSize: 15, margin: 0 }}>
-                          🎬 Click <strong>"Play highlights"</strong> button to view
-                        </p>
-                      </GradientHighlightBox>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            <Reveal from={4} animation={fadeRight}>
+              <GradientHighlightBox reduced={reduced} style={{ padding: '1.5rem' }}>
+                <p style={{ color: theme.colors.textPrimary, fontSize: 15, margin: 0 }}>
+                  🎬 Click <strong>"Play highlights"</strong> button to view
+                </p>
+              </GradientHighlightBox>
+            </Reveal>
+          </div>
+        </Reveal>
       </SlideContainer>
     );
 };

@@ -1,14 +1,13 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import {
   useReducedMotion,
-  useSegmentedAnimation,
   useTheme,
   defineSlide,
   SlideContainer,
   SlideTitle,
   MetricTile,
   TestimonialCard,
+  Reveal,
   typography,
   layouts,
   fadeUp,
@@ -22,96 +21,75 @@ import {
 
 const Ch1_S1_ProductContextComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
-  const { isSegmentVisible } = useSegmentedAnimation();
   const theme = useTheme();
 
   return (
     <SlideContainer maxWidth={1000}>
-      <AnimatePresence>
-        {isSegmentVisible(0) && (
-          <SlideTitle reduced={reduced}>
-            Meeting Highlights: AI Video Recaps
-          </SlideTitle>
-        )}
-      </AnimatePresence>
+      <Reveal from={0}>
+        <SlideTitle reduced={reduced}>
+          Meeting Highlights: AI Video Recaps
+        </SlideTitle>
+      </Reveal>
 
-      <AnimatePresence>
-        {isSegmentVisible(1) && (
-          <motion.div
-            variants={fadeUp(reduced)}
-            initial="hidden"
-            animate="visible"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '1.5rem',
-              marginBottom: '2rem'
-            }}
-          >
-            {['Transcript', 'LLM', 'Metadata + TTS', 'On-Demand Streaming'].map((label, i) => (
-              <React.Fragment key={label}>
-                {i > 0 && (
-                  <span style={{ fontSize: 20, color: theme.colors.primary }}>&#8594;</span>
-                )}
-                <div style={{
-                  padding: '0.75rem 1.25rem',
-                  borderRadius: 12,
-                  background: i === 1
-                    ? `linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))`
-                    : theme.colors.bgSurface,
-                  border: i === 1
-                    ? `2px solid ${theme.colors.primary}`
-                    : `1px solid ${theme.colors.bgBorder}`,
-                  color: theme.colors.textPrimary,
-                  fontWeight: 600,
-                  fontSize: 14
-                }}>
-                  {label}
-                </div>
-              </React.Fragment>
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <Reveal from={1} animation={fadeUp} style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '1.5rem',
+        marginBottom: '2rem'
+      }}>
+        {['Transcript', 'LLM', 'Metadata + TTS', 'On-Demand Streaming'].map((label, i) => (
+          <React.Fragment key={label}>
+            {i > 0 && (
+              <span style={{ fontSize: 20, color: theme.colors.primary }}>&#8594;</span>
+            )}
+            <div style={{
+              padding: '0.75rem 1.25rem',
+              borderRadius: 12,
+              background: i === 1
+                ? `linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))`
+                : theme.colors.bgSurface,
+              border: i === 1
+                ? `2px solid ${theme.colors.primary}`
+                : `1px solid ${theme.colors.bgBorder}`,
+              color: theme.colors.textPrimary,
+              fontWeight: 600,
+              fontSize: 14
+            }}>
+              {label}
+            </div>
+          </React.Fragment>
+        ))}
+      </Reveal>
 
-      <AnimatePresence>
-        {isSegmentVisible(2) && (
-          <motion.div
-            variants={fadeUp(reduced)}
-            initial="hidden"
-            animate="visible"
-            style={{ ...layouts.grid2Col('2rem') }}
-          >
-            <div style={{
-              background: theme.colors.bgSurface,
-              borderRadius: 16,
-              padding: '1.5rem',
-              border: `1px solid ${theme.colors.bgBorder}`,
-              textAlign: 'center'
-            }}>
-              <div style={{ fontSize: 36, marginBottom: '0.75rem' }}>&#x1F4DD;</div>
-              <h3 style={{ ...typography.h2 }}>Abstractive Narration</h3>
-              <p style={{ ...typography.caption, fontSize: 14 }}>
-                AI-generated topic summaries spoken over video
-              </p>
-            </div>
-            <div style={{
-              background: theme.colors.bgSurface,
-              borderRadius: 16,
-              padding: '1.5rem',
-              border: `1px solid ${theme.colors.bgBorder}`,
-              textAlign: 'center'
-            }}>
-              <div style={{ fontSize: 36, marginBottom: '0.75rem' }}>&#x1F3AC;</div>
-              <h3 style={{ ...typography.h2 }}>Extractive Clips</h3>
-              <p style={{ ...typography.caption, fontSize: 14 }}>
-                Key meeting moments with original audio
-              </p>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <Reveal from={2} animation={fadeUp} style={{ ...layouts.grid2Col('2rem') }}>
+        <div style={{
+          background: theme.colors.bgSurface,
+          borderRadius: 16,
+          padding: '1.5rem',
+          border: `1px solid ${theme.colors.bgBorder}`,
+          textAlign: 'center'
+        }}>
+          <div style={{ fontSize: 36, marginBottom: '0.75rem' }}>&#x1F4DD;</div>
+          <h3 style={{ ...typography.h2 }}>Abstractive Narration</h3>
+          <p style={{ ...typography.caption, fontSize: 14 }}>
+            AI-generated topic summaries spoken over video
+          </p>
+        </div>
+        <div style={{
+          background: theme.colors.bgSurface,
+          borderRadius: 16,
+          padding: '1.5rem',
+          border: `1px solid ${theme.colors.bgBorder}`,
+          textAlign: 'center'
+        }}>
+          <div style={{ fontSize: 36, marginBottom: '0.75rem' }}>&#x1F3AC;</div>
+          <h3 style={{ ...typography.h2 }}>Extractive Clips</h3>
+          <p style={{ ...typography.caption, fontSize: 14 }}>
+            Key meeting moments with original audio
+          </p>
+        </div>
+      </Reveal>
     </SlideContainer>
   );
 };
@@ -134,64 +112,37 @@ export const Ch1_S1_ProductContext = defineSlide({
 
 const Ch1_S2_COGSProblemComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
-  const { isSegmentVisible } = useSegmentedAnimation();
   const theme = useTheme();
 
   return (
     <SlideContainer maxWidth={900}>
-      <AnimatePresence>
-        {isSegmentVisible(0) && (
-          <motion.div
-            variants={fadeUp(reduced)}
-            initial="hidden"
-            animate="visible"
-            style={{ ...layouts.flexRow('1.5rem'), marginBottom: '2rem' }}
-          >
-            <MetricTile label="LLM Calls" after="4" note="Sequential pipeline" />
-            <MetricTile label="Projected GPUs" after="~600" note="A100 GPUs" />
-            <MetricTile label="Status" after="Capacity Blocker" note="Blocking GA rollout" />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <Reveal from={0} animation={fadeUp} style={{ ...layouts.flexRow('1.5rem'), marginBottom: '2rem' }}>
+        <MetricTile label="LLM Calls" after="4" note="Sequential pipeline" />
+        <MetricTile label="Projected GPUs" after="~600" note="A100 GPUs" />
+        <MetricTile label="Status" after="Capacity Blocker" note="Blocking GA rollout" />
+      </Reveal>
 
-      <AnimatePresence>
-        {isSegmentVisible(1) && (
-          <motion.div
-            variants={fadeUp(reduced)}
-            initial="hidden"
-            animate="visible"
-            style={{ marginBottom: '1.5rem' }}
-          >
-            <TestimonialCard
-              quote="The current approach was consuming too many GPUs. We needed a fundamentally different strategy to make GA viable."
-              author="Eli Lekhtser, Engineering Manager"
-              reduced={reduced}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <Reveal from={1} animation={fadeUp} style={{ marginBottom: '1.5rem' }}>
+        <TestimonialCard
+          quote="The current approach was consuming too many GPUs. We needed a fundamentally different strategy to make GA viable."
+          author="Eli Lekhtser, Engineering Manager"
+          reduced={reduced}
+        />
+      </Reveal>
 
-      <AnimatePresence>
-        {isSegmentVisible(2) && (
-          <motion.div
-            variants={fadeUp(reduced)}
-            initial="hidden"
-            animate="visible"
-          >
-            <div style={{
-              background: 'rgba(239, 68, 68, 0.1)',
-              border: '2px solid rgba(239, 68, 68, 0.4)',
-              borderRadius: 12,
-              padding: '1.25rem',
-              textAlign: 'center'
-            }}>
-              <p style={{ ...typography.body, margin: 0, fontWeight: 600, color: theme.colors.error }}>
-                The fix had to come from prompt engineering
-              </p>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <Reveal from={2} animation={fadeUp}>
+        <div style={{
+          background: 'rgba(239, 68, 68, 0.1)',
+          border: '2px solid rgba(239, 68, 68, 0.4)',
+          borderRadius: 12,
+          padding: '1.25rem',
+          textAlign: 'center'
+        }}>
+          <p style={{ ...typography.body, margin: 0, fontWeight: 600, color: theme.colors.error }}>
+            The fix had to come from prompt engineering
+          </p>
+        </div>
+      </Reveal>
     </SlideContainer>
   );
 };

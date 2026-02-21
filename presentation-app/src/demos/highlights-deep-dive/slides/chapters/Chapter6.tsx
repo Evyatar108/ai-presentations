@@ -1,12 +1,12 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   useReducedMotion,
-  useSegmentedAnimation,
   useTheme,
   defineSlide,
   SlideContainer,
   SlideTitle,
+  Reveal,
   typography,
   layouts,
   fadeUp,
@@ -32,119 +32,98 @@ const PROMPT_SECTIONS = [
 
 const Ch6_S1_PromptOverviewComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
-  const { isSegmentVisible } = useSegmentedAnimation();
   const theme = useTheme();
 
   return (
     <SlideContainer maxWidth={950}>
-      <AnimatePresence>
-        {isSegmentVisible(0) && (
-          <SlideTitle reduced={reduced} subtitle="Six Sections at a Glance">
-            V2 Prompt Overview
-          </SlideTitle>
-        )}
-      </AnimatePresence>
+      <Reveal from={0}>
+        <SlideTitle reduced={reduced} subtitle="Six Sections at a Glance">
+          V2 Prompt Overview
+        </SlideTitle>
+      </Reveal>
 
-      <AnimatePresence>
-        {isSegmentVisible(1) && (
+      <Reveal from={1} animation={fadeUp} style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(3, 1fr)',
+        gap: '0.75rem',
+        marginTop: '0.5rem'
+      }}>
+        {PROMPT_SECTIONS.map((section, i) => (
           <motion.div
-            variants={fadeUp(reduced)}
-            initial="hidden"
-            animate="visible"
+            key={section.num}
+            initial={{ opacity: 0, y: reduced ? 0 : 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: reduced ? 0.1 : 0.3,
+              delay: reduced ? 0 : i * 0.08
+            }}
             style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(3, 1fr)',
-              gap: '0.75rem',
-              marginTop: '0.5rem'
+              background: theme.colors.bgSurface,
+              border: `1px solid ${theme.colors.bgBorder}`,
+              borderRadius: 12,
+              padding: '1rem 1.1rem',
+              textAlign: 'left'
             }}
           >
-            {PROMPT_SECTIONS.map((section, i) => (
-              <motion.div
-                key={section.num}
-                initial={{ opacity: 0, y: reduced ? 0 : 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: reduced ? 0.1 : 0.3,
-                  delay: reduced ? 0 : i * 0.08
-                }}
-                style={{
-                  background: theme.colors.bgSurface,
-                  border: `1px solid ${theme.colors.bgBorder}`,
-                  borderRadius: 12,
-                  padding: '1rem 1.1rem',
-                  textAlign: 'left'
-                }}
-              >
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  marginBottom: '0.4rem'
-                }}>
-                  <div style={{
-                    width: 24,
-                    height: 24,
-                    borderRadius: '50%',
-                    background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: 12,
-                    color: '#fff',
-                    fontWeight: 700,
-                    flexShrink: 0
-                  }}>
-                    {section.num}
-                  </div>
-                  <span style={{
-                    ...typography.body,
-                    fontSize: 14,
-                    fontWeight: 700,
-                    color: theme.colors.textPrimary
-                  }}>
-                    {section.name}
-                  </span>
-                </div>
-                <div style={{
-                  ...typography.body,
-                  fontSize: 12,
-                  color: theme.colors.textSecondary,
-                  lineHeight: 1.4
-                }}>
-                  {section.desc}
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {isSegmentVisible(2) && (
-          <motion.div
-            variants={fadeUp(reduced)}
-            initial="hidden"
-            animate="visible"
-            style={{
-              marginTop: '1.25rem',
-              padding: '0.85rem 1.25rem',
-              borderRadius: 10,
-              background: `linear-gradient(135deg, ${theme.colors.primary}15, ${theme.colors.secondary}15)`,
-              borderLeft: `3px solid ${theme.colors.primary}`,
-            }}
-          >
-            <p style={{
-              ...typography.body,
-              fontSize: 14,
-              color: theme.colors.textPrimary,
-              margin: 0,
-              fontStyle: 'italic'
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              marginBottom: '0.4rem'
             }}>
-              Rules & constraints up front, then a precise algorithm, then quality & safety guidelines, and finally self-validation — all processed in a single pass.
-            </p>
+              <div style={{
+                width: 24,
+                height: 24,
+                borderRadius: '50%',
+                background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: 12,
+                color: '#fff',
+                fontWeight: 700,
+                flexShrink: 0
+              }}>
+                {section.num}
+              </div>
+              <span style={{
+                ...typography.body,
+                fontSize: 14,
+                fontWeight: 700,
+                color: theme.colors.textPrimary
+              }}>
+                {section.name}
+              </span>
+            </div>
+            <div style={{
+              ...typography.body,
+              fontSize: 12,
+              color: theme.colors.textSecondary,
+              lineHeight: 1.4
+            }}>
+              {section.desc}
+            </div>
           </motion.div>
-        )}
-      </AnimatePresence>
+        ))}
+      </Reveal>
+
+      <Reveal from={2} animation={fadeUp} style={{
+        marginTop: '1.25rem',
+        padding: '0.85rem 1.25rem',
+        borderRadius: 10,
+        background: `linear-gradient(135deg, ${theme.colors.primary}15, ${theme.colors.secondary}15)`,
+        borderLeft: `3px solid ${theme.colors.primary}`,
+      }}>
+        <p style={{
+          ...typography.body,
+          fontSize: 14,
+          color: theme.colors.textPrimary,
+          margin: 0,
+          fontStyle: 'italic'
+        }}>
+          Rules & constraints up front, then a precise algorithm, then quality & safety guidelines, and finally self-validation — all processed in a single pass.
+        </p>
+      </Reveal>
     </SlideContainer>
   );
 };
@@ -210,80 +189,64 @@ const OUTPUT_FIELDS = [
 
 const Ch6_S2_PseudocodeComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
-  const { isSegmentVisible } = useSegmentedAnimation();
   const theme = useTheme();
 
   return (
     <SlideContainer maxWidth={1000} textAlign="left">
-      <AnimatePresence>
-        {isSegmentVisible(0) && (
-          <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-            <SlideTitle reduced={reduced}>
-              Pseudocode Algorithm
-            </SlideTitle>
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: reduced ? 0 : 0.3, duration: 0.4 }}
-              style={{
-                ...typography.body,
-                fontSize: 16,
-                fontStyle: 'italic',
-                color: theme.colors.textSecondary,
-                marginTop: '-1rem'
-              }}
-            >
-              "Prose = creative interpretation. Pseudocode = systematic execution."
-            </motion.p>
+      <Reveal from={0} style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+        <SlideTitle reduced={reduced}>
+          Pseudocode Algorithm
+        </SlideTitle>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: reduced ? 0 : 0.3, duration: 0.4 }}
+          style={{
+            ...typography.body,
+            fontSize: 16,
+            fontStyle: 'italic',
+            color: theme.colors.textSecondary,
+            marginTop: '-1rem'
+          }}
+        >
+          "Prose = creative interpretation. Pseudocode = systematic execution."
+        </motion.p>
+      </Reveal>
+
+      <Reveal from={1}>
+        <CodeBlock
+          code={PSEUDOCODE}
+          language="python"
+          title="prompt.md  --  generate_highlights()"
+          fontSize={11}
+          highlightLines={[1, 7, 16, 21, 22, 24]}
+        />
+      </Reveal>
+
+      <Reveal from={2} animation={fadeUp} style={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: '0.5rem',
+        marginTop: '1rem',
+        justifyContent: 'center'
+      }}>
+        {OUTPUT_FIELDS.map((field) => (
+          <div key={field} style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.4rem',
+            background: theme.colors.bgSurface,
+            border: `1px solid ${theme.colors.bgBorder}`,
+            borderRadius: 8,
+            padding: '0.35rem 0.75rem',
+            fontSize: 13,
+            fontFamily: "'JetBrains Mono', 'Fira Code', monospace"
+          }}>
+            <span style={{ color: theme.colors.success }}><Checkmark /></span>
+            <span style={{ color: theme.colors.textPrimary }}>{field}</span>
           </div>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {isSegmentVisible(1) && (
-          <CodeBlock
-            code={PSEUDOCODE}
-            language="python"
-            title="prompt.md  --  generate_highlights()"
-            fontSize={11}
-            highlightLines={[1, 7, 16, 21, 22, 24]}
-          />
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {isSegmentVisible(2) && (
-          <motion.div
-            variants={fadeUp(reduced)}
-            initial="hidden"
-            animate="visible"
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: '0.5rem',
-              marginTop: '1rem',
-              justifyContent: 'center'
-            }}
-          >
-            {OUTPUT_FIELDS.map((field) => (
-              <div key={field} style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.4rem',
-                background: theme.colors.bgSurface,
-                border: `1px solid ${theme.colors.bgBorder}`,
-                borderRadius: 8,
-                padding: '0.35rem 0.75rem',
-                fontSize: 13,
-                fontFamily: "'JetBrains Mono', 'Fira Code', monospace"
-              }}>
-                <span style={{ color: theme.colors.success }}><Checkmark /></span>
-                <span style={{ color: theme.colors.textPrimary }}>{field}</span>
-              </div>
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
+        ))}
+      </Reveal>
     </SlideContainer>
   );
 };
@@ -331,54 +294,41 @@ const BENEFITS = [
 ];
 
 const Ch6_S3_ProseVsPseudocodeComponent: React.FC = () => {
-  const { reduced } = useReducedMotion();
-  const { isSegmentVisible } = useSegmentedAnimation();
   const theme = useTheme();
 
   return (
     <SlideContainer maxWidth={1050} textAlign="left">
-      <AnimatePresence>
-        {isSegmentVisible(0) && (
-          <BeforeAfterSplit
-            beforeTitle="V1: Prose Instructions"
-            afterTitle="V2: Pseudocode"
-            beforeContent={<CodeBlock code={V1_PROSE} language="markdown" fontSize={12} />}
-            afterContent={<CodeBlock code={V2_PSEUDO} language="python" fontSize={12} />}
-          />
-        )}
-      </AnimatePresence>
+      <Reveal from={0}>
+        <BeforeAfterSplit
+          beforeTitle="V1: Prose Instructions"
+          afterTitle="V2: Pseudocode"
+          beforeContent={<CodeBlock code={V1_PROSE} language="markdown" fontSize={12} />}
+          afterContent={<CodeBlock code={V2_PSEUDO} language="python" fontSize={12} />}
+        />
+      </Reveal>
 
-      <AnimatePresence>
-        {isSegmentVisible(1) && (
-          <motion.div
-            variants={fadeUp(reduced)}
-            initial="hidden"
-            animate="visible"
-            style={{
-              ...layouts.grid2Col('1rem'),
-              gridTemplateColumns: 'repeat(4, 1fr)',
-              marginTop: '1.5rem'
-            }}
-          >
-            {BENEFITS.map((benefit) => (
-              <div key={benefit} style={{
-                background: theme.colors.bgSurface,
-                border: `1px solid ${theme.colors.bgBorder}`,
-                borderRadius: 10,
-                padding: '0.75rem',
-                textAlign: 'center'
-              }}>
-                <div style={{ color: theme.colors.success, fontSize: 20, marginBottom: '0.3rem' }}>
-                  <Checkmark />
-                </div>
-                <div style={{ ...typography.body, fontSize: 13, fontWeight: 600 }}>
-                  {benefit}
-                </div>
-              </div>
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <Reveal from={1} animation={fadeUp} style={{
+        ...layouts.grid2Col('1rem'),
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        marginTop: '1.5rem'
+      }}>
+        {BENEFITS.map((benefit) => (
+          <div key={benefit} style={{
+            background: theme.colors.bgSurface,
+            border: `1px solid ${theme.colors.bgBorder}`,
+            borderRadius: 10,
+            padding: '0.75rem',
+            textAlign: 'center'
+          }}>
+            <div style={{ color: theme.colors.success, fontSize: 20, marginBottom: '0.3rem' }}>
+              <Checkmark />
+            </div>
+            <div style={{ ...typography.body, fontSize: 13, fontWeight: 600 }}>
+              {benefit}
+            </div>
+          </div>
+        ))}
+      </Reveal>
     </SlideContainer>
   );
 };
@@ -455,7 +405,6 @@ const CATEGORY_STYLES = {
 
 const Ch6_S4_OutputSchemaComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
-  const { isSegmentVisible } = useSegmentedAnimation();
   const theme = useTheme();
 
   const renderFieldCard = (
@@ -524,251 +473,220 @@ const Ch6_S4_OutputSchemaComponent: React.FC = () => {
   return (
     <SlideContainer maxWidth={1000}>
       {/* Segment 0: Grouped six-field overview — CoT vs Deliverable vs Validation */}
-      <AnimatePresence>
-        {isSegmentVisible(0) && (
-          <div>
-            <div style={{ textAlign: 'center' }}>
-              <SlideTitle reduced={reduced} subtitle="Six Fields, Two Purposes">
-                Output Schema
-              </SlideTitle>
-            </div>
+      <Reveal from={0}>
+        <div style={{ textAlign: 'center' }}>
+          <SlideTitle reduced={reduced} subtitle="Six Fields, Two Purposes">
+            Output Schema
+          </SlideTitle>
+        </div>
 
-            {/* Row 1: CoT scaffolding label + 4 compact cards */}
-            <motion.div
-              variants={fadeUp(reduced)}
-              initial="hidden"
-              animate="visible"
-            >
-              <div style={{
-                ...typography.body,
-                fontSize: 10,
-                fontWeight: 700,
-                textTransform: 'uppercase' as const,
-                letterSpacing: '0.08em',
-                color: CATEGORY_STYLES.cot.accent,
-                marginBottom: '0.35rem',
-                marginTop: '0.15rem',
-              }}>
-                {CATEGORY_STYLES.cot.label}
-              </div>
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(4, 1fr)',
-                gap: '0.5rem',
-              }}>
-                {COT_FIELDS.map((field, i) =>
-                  renderFieldCard(field, i, CATEGORY_STYLES.cot.accent, CATEGORY_STYLES.cot.bg, true)
-                )}
-              </div>
-            </motion.div>
-
-            {/* Row 2: Deliverable + Validation */}
-            <motion.div
-              initial={{ opacity: 0, y: reduced ? 0 : 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: reduced ? 0.1 : 0.3, delay: reduced ? 0 : 0.3 }}
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '2fr 1fr',
-                gap: '0.5rem',
-                marginTop: '0.6rem',
-              }}
-            >
-              <div>
-                <div style={{
-                  ...typography.body,
-                  fontSize: 10,
-                  fontWeight: 700,
-                  textTransform: 'uppercase' as const,
-                  letterSpacing: '0.08em',
-                  color: CATEGORY_STYLES.deliverable.accent,
-                  marginBottom: '0.35rem',
-                }}>
-                  {CATEGORY_STYLES.deliverable.label}
-                </div>
-                {renderFieldCard(DELIVERABLE_FIELD, 4, CATEGORY_STYLES.deliverable.accent, CATEGORY_STYLES.deliverable.bg)}
-              </div>
-              <div>
-                <div style={{
-                  ...typography.body,
-                  fontSize: 10,
-                  fontWeight: 700,
-                  textTransform: 'uppercase' as const,
-                  letterSpacing: '0.08em',
-                  color: CATEGORY_STYLES.validation.accent,
-                  marginBottom: '0.35rem',
-                }}>
-                  {CATEGORY_STYLES.validation.label}
-                </div>
-                {renderFieldCard(VALIDATION_FIELD, 5, CATEGORY_STYLES.validation.accent, CATEGORY_STYLES.validation.bg)}
-              </div>
-            </motion.div>
+        {/* Row 1: CoT scaffolding label + 4 compact cards */}
+        <motion.div
+          variants={fadeUp(reduced)}
+          initial="hidden"
+          animate="visible"
+        >
+          <div style={{
+            ...typography.body,
+            fontSize: 10,
+            fontWeight: 700,
+            textTransform: 'uppercase' as const,
+            letterSpacing: '0.08em',
+            color: CATEGORY_STYLES.cot.accent,
+            marginBottom: '0.35rem',
+            marginTop: '0.15rem',
+          }}>
+            {CATEGORY_STYLES.cot.label}
           </div>
-        )}
-      </AnimatePresence>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, 1fr)',
+            gap: '0.5rem',
+          }}>
+            {COT_FIELDS.map((field, i) =>
+              renderFieldCard(field, i, CATEGORY_STYLES.cot.accent, CATEGORY_STYLES.cot.bg, true)
+            )}
+          </div>
+        </motion.div>
+
+        {/* Row 2: Deliverable + Validation */}
+        <motion.div
+          initial={{ opacity: 0, y: reduced ? 0 : 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: reduced ? 0.1 : 0.3, delay: reduced ? 0 : 0.3 }}
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '2fr 1fr',
+            gap: '0.5rem',
+            marginTop: '0.6rem',
+          }}
+        >
+          <div>
+            <div style={{
+              ...typography.body,
+              fontSize: 10,
+              fontWeight: 700,
+              textTransform: 'uppercase' as const,
+              letterSpacing: '0.08em',
+              color: CATEGORY_STYLES.deliverable.accent,
+              marginBottom: '0.35rem',
+            }}>
+              {CATEGORY_STYLES.deliverable.label}
+            </div>
+            {renderFieldCard(DELIVERABLE_FIELD, 4, CATEGORY_STYLES.deliverable.accent, CATEGORY_STYLES.deliverable.bg)}
+          </div>
+          <div>
+            <div style={{
+              ...typography.body,
+              fontSize: 10,
+              fontWeight: 700,
+              textTransform: 'uppercase' as const,
+              letterSpacing: '0.08em',
+              color: CATEGORY_STYLES.validation.accent,
+              marginBottom: '0.35rem',
+            }}>
+              {CATEGORY_STYLES.validation.label}
+            </div>
+            {renderFieldCard(VALIDATION_FIELD, 5, CATEGORY_STYLES.validation.accent, CATEGORY_STYLES.validation.bg)}
+          </div>
+        </motion.div>
+      </Reveal>
 
       {/* Segment 1: final_narrative zoom — the actual deliverable */}
-      <AnimatePresence>
-        {isSegmentVisible(1) && (
-          <motion.div
-            variants={fadeUp(reduced)}
-            initial="hidden"
-            animate="visible"
-            style={{ marginTop: '1rem' }}
-          >
-            <CodeBlock
-              code={FINAL_NARRATIVE_SAMPLE}
-              language="json"
-              title="final_narrative[0]  —  the product deliverable"
-              fontSize={11}
-              highlightLines={[6, 7, 8, 10, 11, 12]}
-            />
+      <Reveal from={1} animation={fadeUp} style={{ marginTop: '1rem' }}>
+        <CodeBlock
+          code={FINAL_NARRATIVE_SAMPLE}
+          language="json"
+          title="final_narrative[0]  —  the product deliverable"
+          fontSize={11}
+          highlightLines={[6, 7, 8, 10, 11, 12]}
+        />
+        <div style={{
+          display: 'flex',
+          gap: '1.5rem',
+          marginTop: '0.4rem',
+          justifyContent: 'center',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
             <div style={{
-              display: 'flex',
-              gap: '1.5rem',
-              marginTop: '0.4rem',
-              justifyContent: 'center',
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                <div style={{
-                  width: 10, height: 10, borderRadius: 2,
-                  background: 'rgba(0, 183, 195, 0.35)',
-                  border: '2px solid #00B7C3',
-                }} />
-                <span style={{ ...typography.body, fontSize: 10, color: theme.colors.textSecondary }}>
-                  Playback coordinates (video seeking)
-                </span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                <div style={{
-                  width: 10, height: 10, borderRadius: 2,
-                  background: 'rgba(0, 183, 195, 0.35)',
-                  border: '2px solid #00B7C3',
-                }} />
-                <span style={{ ...typography.body, fontSize: 10, color: theme.colors.textSecondary }}>
-                  Extractive clip boundaries
-                </span>
-              </div>
-            </div>
+              width: 10, height: 10, borderRadius: 2,
+              background: 'rgba(0, 183, 195, 0.35)',
+              border: '2px solid #00B7C3',
+            }} />
+            <span style={{ ...typography.body, fontSize: 10, color: theme.colors.textSecondary }}>
+              Playback coordinates (video seeking)
+            </span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
             <div style={{
-              marginTop: '0.5rem',
-              padding: '0.5rem 0.85rem',
-              borderRadius: 8,
-              background: `${CATEGORY_STYLES.deliverable.accent}10`,
-              borderLeft: `3px solid ${CATEGORY_STYLES.deliverable.accent}`,
-              textAlign: 'center',
-            }}>
-              <span style={{
-                ...typography.body,
-                fontSize: 11.5,
-                color: theme.colors.textPrimary,
-                fontStyle: 'italic',
-              }}>
-                This is what the video player actually uses. Everything else in the schema is reasoning scaffolding.
-              </span>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              width: 10, height: 10, borderRadius: 2,
+              background: 'rgba(0, 183, 195, 0.35)',
+              border: '2px solid #00B7C3',
+            }} />
+            <span style={{ ...typography.body, fontSize: 10, color: theme.colors.textSecondary }}>
+              Extractive clip boundaries
+            </span>
+          </div>
+        </div>
+        <div style={{
+          marginTop: '0.5rem',
+          padding: '0.5rem 0.85rem',
+          borderRadius: 8,
+          background: `${CATEGORY_STYLES.deliverable.accent}10`,
+          borderLeft: `3px solid ${CATEGORY_STYLES.deliverable.accent}`,
+          textAlign: 'center',
+        }}>
+          <span style={{
+            ...typography.body,
+            fontSize: 11.5,
+            color: theme.colors.textPrimary,
+            fontStyle: 'italic',
+          }}>
+            This is what the video player actually uses. Everything else in the schema is reasoning scaffolding.
+          </span>
+        </div>
+      </Reveal>
 
       {/* Segment 2: extractive_ranges zoom */}
-      <AnimatePresence>
-        {isSegmentVisible(2) && (
-          <motion.div
-            variants={fadeUp(reduced)}
-            initial="hidden"
-            animate="visible"
-            style={{ marginTop: '1rem' }}
-          >
-            <CodeBlock
-              code={EXTRACTIVE_SAMPLE}
-              language="json"
-              title="extractive_ranges[0]  —  field names as instructions"
-              fontSize={11}
-              highlightLines={[2, 6, 7]}
-            />
+      <Reveal from={2} animation={fadeUp} style={{ marginTop: '1rem' }}>
+        <CodeBlock
+          code={EXTRACTIVE_SAMPLE}
+          language="json"
+          title="extractive_ranges[0]  —  field names as instructions"
+          fontSize={11}
+          highlightLines={[2, 6, 7]}
+        />
+        <div style={{
+          display: 'flex',
+          gap: '1.5rem',
+          marginTop: '0.4rem',
+          justifyContent: 'center',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
             <div style={{
-              display: 'flex',
-              gap: '1.5rem',
-              marginTop: '0.4rem',
-              justifyContent: 'center',
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                <div style={{
-                  width: 10, height: 10, borderRadius: 2,
-                  background: 'rgba(251, 191, 36, 0.35)',
-                  border: '2px solid #fbbf24',
-                }} />
-                <span style={{ ...typography.body, fontSize: 10, color: theme.colors.textSecondary }}>
-                  Step 1: Copy from input
-                </span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                <div style={{
-                  width: 10, height: 10, borderRadius: 2,
-                  background: 'transparent',
-                  border: `2px solid ${theme.colors.primary}`,
-                }} />
-                <span style={{ ...typography.body, fontSize: 10, color: theme.colors.textSecondary }}>
-                  Step 2: Parse from copy
-                </span>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              width: 10, height: 10, borderRadius: 2,
+              background: 'rgba(251, 191, 36, 0.35)',
+              border: '2px solid #fbbf24',
+            }} />
+            <span style={{ ...typography.body, fontSize: 10, color: theme.colors.textSecondary }}>
+              Step 1: Copy from input
+            </span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+            <div style={{
+              width: 10, height: 10, borderRadius: 2,
+              background: 'transparent',
+              border: `2px solid ${theme.colors.primary}`,
+            }} />
+            <span style={{ ...typography.body, fontSize: 10, color: theme.colors.textSecondary }}>
+              Step 2: Parse from copy
+            </span>
+          </div>
+        </div>
+      </Reveal>
 
       {/* Segment 3: Insight callout + pills */}
-      <AnimatePresence>
-        {isSegmentVisible(3) && (
-          <motion.div
-            variants={fadeUp(reduced)}
-            initial="hidden"
-            animate="visible"
-            style={{ marginTop: '0.75rem' }}
-          >
-            <div style={{
-              padding: '0.7rem 1.1rem',
-              borderRadius: 10,
-              background: `linear-gradient(135deg, ${theme.colors.primary}15, ${theme.colors.secondary}15)`,
-              borderLeft: `3px solid ${theme.colors.primary}`,
+      <Reveal from={3} animation={fadeUp} style={{ marginTop: '0.75rem' }}>
+        <div style={{
+          padding: '0.7rem 1.1rem',
+          borderRadius: 10,
+          background: `linear-gradient(135deg, ${theme.colors.primary}15, ${theme.colors.secondary}15)`,
+          borderLeft: `3px solid ${theme.colors.primary}`,
+        }}>
+          <p style={{
+            ...typography.body,
+            fontSize: 13,
+            color: theme.colors.textPrimary,
+            margin: 0,
+            fontStyle: 'italic',
+          }}>
+            The output schema isn't just a data format — it's a chain-of-thought scaffold.
+            Five fields guide the model's reasoning, one field captures the deliverable.
+            Field names become execution steps, and self_checks closes the validation loop.
+          </p>
+        </div>
+        <div style={{
+          display: 'flex',
+          gap: '0.6rem',
+          marginTop: '0.6rem',
+          justifyContent: 'center',
+        }}>
+          {SCHEMA_INSIGHT_PILLS.map((pill) => (
+            <div key={pill} style={{
+              background: theme.colors.bgSurface,
+              border: `1px solid ${theme.colors.bgBorder}`,
+              borderRadius: 8,
+              padding: '0.3rem 0.7rem',
+              fontSize: 12,
+              fontWeight: 600,
+              color: theme.colors.primary,
+              fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
             }}>
-              <p style={{
-                ...typography.body,
-                fontSize: 13,
-                color: theme.colors.textPrimary,
-                margin: 0,
-                fontStyle: 'italic',
-              }}>
-                The output schema isn't just a data format — it's a chain-of-thought scaffold.
-                Five fields guide the model's reasoning, one field captures the deliverable.
-                Field names become execution steps, and self_checks closes the validation loop.
-              </p>
+              {pill}
             </div>
-            <div style={{
-              display: 'flex',
-              gap: '0.6rem',
-              marginTop: '0.6rem',
-              justifyContent: 'center',
-            }}>
-              {SCHEMA_INSIGHT_PILLS.map((pill) => (
-                <div key={pill} style={{
-                  background: theme.colors.bgSurface,
-                  border: `1px solid ${theme.colors.bgBorder}`,
-                  borderRadius: 8,
-                  padding: '0.3rem 0.7rem',
-                  fontSize: 12,
-                  fontWeight: 600,
-                  color: theme.colors.primary,
-                  fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
-                }}>
-                  {pill}
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          ))}
+        </div>
+      </Reveal>
     </SlideContainer>
   );
 };

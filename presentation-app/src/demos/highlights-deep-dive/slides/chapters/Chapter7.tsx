@@ -1,12 +1,12 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   useReducedMotion,
-  useSegmentedAnimation,
   useTheme,
   defineSlide,
   SlideContainer,
   SlideTitle,
+  Reveal,
   typography,
   fadeUp,
   ArrowDown,
@@ -44,72 +44,43 @@ const SELF_CHECKS = [
 
 const Ch7_S1_CopyThenParseComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
-  const { isSegmentVisible } = useSegmentedAnimation();
   const theme = useTheme();
 
   return (
     <SlideContainer maxWidth={900} textAlign="left">
-      <AnimatePresence>
-        {isSegmentVisible(0) && (
-          <div style={{ textAlign: 'center' }}>
-            <SlideTitle reduced={reduced} subtitle="Chain-of-Thought Grounding">
-              Copy-then-Parse
-            </SlideTitle>
-          </div>
-        )}
-      </AnimatePresence>
+      <Reveal from={0} style={{ textAlign: 'center' }}>
+        <SlideTitle reduced={reduced} subtitle="Chain-of-Thought Grounding">
+          Copy-then-Parse
+        </SlideTitle>
+      </Reveal>
 
-      <AnimatePresence>
-        {isSegmentVisible(1) && (
-          <motion.div
-            variants={fadeUp(reduced)}
-            initial="hidden"
-            animate="visible"
-            style={{ marginBottom: '0.75rem' }}
-          >
-            <CodeBlock
-              code={COPY_CODE}
-              language="python"
-              title="Step 1: Copy raw strings verbatim"
-              highlightLines={[2, 3]}
-              fontSize={13}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <Reveal from={1} animation={fadeUp} style={{ marginBottom: '0.75rem' }}>
+        <CodeBlock
+          code={COPY_CODE}
+          language="python"
+          title="Step 1: Copy raw strings verbatim"
+          highlightLines={[2, 3]}
+          fontSize={13}
+        />
+      </Reveal>
 
       {/* Arrow connector */}
-      {isSegmentVisible(2) && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
-          style={{ textAlign: 'center', margin: '0.5rem 0', color: theme.colors.primary }}
-        >
-          <ArrowDown />
-          <span style={{ ...typography.caption, fontSize: 12, display: 'block' }}>
-            parse from copies
-          </span>
-        </motion.div>
-      )}
+      <Reveal from={2} style={{ textAlign: 'center', margin: '0.5rem 0', color: theme.colors.primary }}>
+        <ArrowDown />
+        <span style={{ ...typography.caption, fontSize: 12, display: 'block' }}>
+          parse from copies
+        </span>
+      </Reveal>
 
-      <AnimatePresence>
-        {isSegmentVisible(2) && (
-          <motion.div
-            variants={fadeUp(reduced)}
-            initial="hidden"
-            animate="visible"
-          >
-            <CodeBlock
-              code={PARSE_CODE}
-              language="python"
-              title="Step 2: Parse structured values from copied text"
-              highlightLines={[2, 3, 4, 5]}
-              fontSize={13}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <Reveal from={2} animation={fadeUp}>
+        <CodeBlock
+          code={PARSE_CODE}
+          language="python"
+          title="Step 2: Parse structured values from copied text"
+          highlightLines={[2, 3, 4, 5]}
+          fontSize={13}
+        />
+      </Reveal>
     </SlideContainer>
   );
 };
@@ -132,77 +103,65 @@ export const Ch7_S1_CopyThenParse = defineSlide({
 
 const Ch7_S2_SelfChecksComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
-  const { isSegmentVisible } = useSegmentedAnimation();
   const theme = useTheme();
 
   return (
     <SlideContainer maxWidth={900}>
-      <AnimatePresence>
-        {isSegmentVisible(0) && (
-          <SlideTitle reduced={reduced}>
-            Self-Checks: Model Validates Its Own Output
-          </SlideTitle>
-        )}
-      </AnimatePresence>
+      <Reveal from={0}>
+        <SlideTitle reduced={reduced}>
+          Self-Checks: Model Validates Its Own Output
+        </SlideTitle>
+      </Reveal>
 
-      <AnimatePresence>
-        {isSegmentVisible(1) && (
+      <Reveal from={1} animation={fadeUp} style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(2, 1fr)',
+        gap: '0.6rem'
+      }}>
+        {SELF_CHECKS.map((check, i) => (
           <motion.div
-            variants={fadeUp(reduced)}
-            initial="hidden"
-            animate="visible"
+            key={check}
+            initial={{ opacity: 0, x: reduced ? 0 : -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{
+              duration: reduced ? 0.1 : 0.2,
+              delay: reduced ? 0 : i * 0.06
+            }}
             style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(2, 1fr)',
-              gap: '0.6rem'
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.6rem',
+              background: theme.colors.bgSurface,
+              border: `1px solid ${theme.colors.bgBorder}`,
+              borderRadius: 8,
+              padding: '0.6rem 0.85rem'
             }}
           >
-            {SELF_CHECKS.map((check, i) => (
-              <motion.div
-                key={check}
-                initial={{ opacity: 0, x: reduced ? 0 : -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{
-                  duration: reduced ? 0.1 : 0.2,
-                  delay: reduced ? 0 : i * 0.06
-                }}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.6rem',
-                  background: theme.colors.bgSurface,
-                  border: `1px solid ${theme.colors.bgBorder}`,
-                  borderRadius: 8,
-                  padding: '0.6rem 0.85rem'
-                }}
-              >
-                <div style={{
-                  width: 22,
-                  height: 22,
-                  borderRadius: 6,
-                  background: `linear-gradient(135deg, ${theme.colors.success}, #059669)`,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: 12,
-                  color: '#fff',
-                  fontWeight: 700,
-                  flexShrink: 0
-                }}>
-                  &#10003;
-                </div>
-                <span style={{
-                  fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
-                  fontSize: 12,
-                  color: theme.colors.textPrimary
-                }}>
-                  {check}
-                </span>
-              </motion.div>
-            ))}
+            <div style={{
+              width: 22,
+              height: 22,
+              borderRadius: 6,
+              background: `linear-gradient(135deg, ${theme.colors.success}, #059669)`,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: 12,
+              color: '#fff',
+              fontWeight: 700,
+              flexShrink: 0
+            }}>
+              &#10003;
+            </div>
+            <span style={{
+              fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+              fontSize: 12,
+              color: theme.colors.textPrimary
+            }}>
+              {check}
+            </span>
           </motion.div>
-        )}
-      </AnimatePresence>
+        ))}
+      </Reveal>
     </SlideContainer>
   );
 };

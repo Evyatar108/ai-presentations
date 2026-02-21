@@ -1,14 +1,13 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import {
   useReducedMotion,
-  useSegmentedAnimation,
   useTheme,
   defineSlide,
   SlideContainer,
   SlideTitle,
   MetricDisplay,
   TestimonialCard,
+  Reveal,
   typography,
   layouts,
   fadeUp,
@@ -29,31 +28,26 @@ const METRICS = [
 
 const Ch9_S1_MetricsComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
-  const { isSegmentVisible } = useSegmentedAnimation();
 
   return (
     <SlideContainer maxWidth={1000}>
-      <AnimatePresence>
-        {isSegmentVisible(0) && (
-          <SlideTitle reduced={reduced}>
-            Results
-          </SlideTitle>
-        )}
-      </AnimatePresence>
+      <Reveal from={0}>
+        <SlideTitle reduced={reduced}>
+          Results
+        </SlideTitle>
+      </Reveal>
 
       <div style={{ ...layouts.grid3Col('2rem') }}>
         {METRICS.map((metric, i) => (
-          <AnimatePresence key={metric.label}>
-            {isSegmentVisible(i + 1) && (
-              <MetricDisplay
-                value={metric.value}
-                label={metric.label}
-                reduced={reduced}
-                emphasis={metric.emphasis}
-                delay={reduced ? 0 : 0.1}
-              />
-            )}
-          </AnimatePresence>
+          <Reveal key={metric.label} from={i + 1}>
+            <MetricDisplay
+              value={metric.value}
+              label={metric.label}
+              reduced={reduced}
+              emphasis={metric.emphasis}
+              delay={reduced ? 0 : 0.1}
+            />
+          </Reveal>
         ))}
       </div>
     </SlideContainer>
@@ -79,93 +73,72 @@ export const Ch9_S1_Metrics = defineSlide({
 
 const Ch9_S2_QualityAndImpactComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
-  const { isSegmentVisible } = useSegmentedAnimation();
   const theme = useTheme();
 
   return (
     <SlideContainer maxWidth={950}>
-      <AnimatePresence>
-        {isSegmentVisible(0) && (
-          <motion.div
-            variants={fadeUp(reduced)}
-            initial="hidden"
-            animate="visible"
-            style={{
-              ...layouts.grid3Col('1.5rem'),
-              marginBottom: '2rem'
-            }}
-          >
-            {[
-              { label: 'Grounding', value: 'No regression', color: theme.colors.success },
-              { label: 'Coverage', value: '~75-80%', color: theme.colors.primary },
-              { label: 'Reviewers', value: 'Prefer V2', color: theme.colors.success }
-            ].map((tile) => (
-              <div key={tile.label} style={{
-                background: theme.colors.bgSurface,
-                border: `1px solid ${theme.colors.bgBorder}`,
-                borderRadius: 12,
-                padding: '1rem',
-                textAlign: 'center'
-              }}>
-                <div style={{ ...typography.caption, fontSize: 12, letterSpacing: 1, textTransform: 'uppercase', marginBottom: '0.3rem' }}>
-                  {tile.label}
-                </div>
-                <div style={{ fontSize: 20, fontWeight: 700, color: tile.color }}>
-                  {tile.value}
-                </div>
-              </div>
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <Reveal from={0} animation={fadeUp} style={{
+        ...layouts.grid3Col('1.5rem'),
+        marginBottom: '2rem'
+      }}>
+        {[
+          { label: 'Grounding', value: 'No regression', color: theme.colors.success },
+          { label: 'Coverage', value: '~75-80%', color: theme.colors.primary },
+          { label: 'Reviewers', value: 'Prefer V2', color: theme.colors.success }
+        ].map((tile) => (
+          <div key={tile.label} style={{
+            background: theme.colors.bgSurface,
+            border: `1px solid ${theme.colors.bgBorder}`,
+            borderRadius: 12,
+            padding: '1rem',
+            textAlign: 'center'
+          }}>
+            <div style={{ ...typography.caption, fontSize: 12, letterSpacing: 1, textTransform: 'uppercase', marginBottom: '0.3rem' }}>
+              {tile.label}
+            </div>
+            <div style={{ fontSize: 20, fontWeight: 700, color: tile.color }}>
+              {tile.value}
+            </div>
+          </div>
+        ))}
+      </Reveal>
 
-      <AnimatePresence>
-        {isSegmentVisible(1) && (
-          <motion.div
-            variants={fadeUp(reduced)}
-            initial="hidden"
-            animate="visible"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '1rem',
-              marginBottom: '2rem'
-            }}
-          >
-            {['Cost Reduction', 'Private Preview', 'GA Rollout'].map((step, i) => (
-              <React.Fragment key={step}>
-                {i > 0 && <span style={{ color: theme.colors.primary }}><ArrowRight /></span>}
-                <div style={{
-                  padding: '0.6rem 1.25rem',
-                  borderRadius: 8,
-                  background: i === 2
-                    ? `linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))`
-                    : theme.colors.bgSurface,
-                  border: i === 2
-                    ? `2px solid ${theme.colors.primary}`
-                    : `1px solid ${theme.colors.bgBorder}`,
-                  fontSize: 14,
-                  fontWeight: 600,
-                  color: theme.colors.textPrimary
-                }}>
-                  {step}
-                </div>
-              </React.Fragment>
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <Reveal from={1} animation={fadeUp} style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '1rem',
+        marginBottom: '2rem'
+      }}>
+        {['Cost Reduction', 'Private Preview', 'GA Rollout'].map((step, i) => (
+          <React.Fragment key={step}>
+            {i > 0 && <span style={{ color: theme.colors.primary }}><ArrowRight /></span>}
+            <div style={{
+              padding: '0.6rem 1.25rem',
+              borderRadius: 8,
+              background: i === 2
+                ? `linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))`
+                : theme.colors.bgSurface,
+              border: i === 2
+                ? `2px solid ${theme.colors.primary}`
+                : `1px solid ${theme.colors.bgBorder}`,
+              fontSize: 14,
+              fontWeight: 600,
+              color: theme.colors.textPrimary
+            }}>
+              {step}
+            </div>
+          </React.Fragment>
+        ))}
+      </Reveal>
 
-      <AnimatePresence>
-        {isSegmentVisible(2) && (
-          <TestimonialCard
-            quote="V2 is a compact prompt with only one LLM request that combines abstractive and extractive highlights generation into a single unified pipeline."
-            author="Eli Lekhtser, Engineering Manager"
-            reduced={reduced}
-          />
-        )}
-      </AnimatePresence>
+      <Reveal from={2}>
+        <TestimonialCard
+          quote="V2 is a compact prompt with only one LLM request that combines abstractive and extractive highlights generation into a single unified pipeline."
+          author="Eli Lekhtser, Engineering Manager"
+          reduced={reduced}
+        />
+      </Reveal>
     </SlideContainer>
   );
 };

@@ -1,8 +1,7 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   useReducedMotion,
-  useSegmentedAnimation,
   useTheme,
   defineSlide,
   SlideContainer,
@@ -47,75 +46,61 @@ const NESTED_LOOP_CODE = `def extract_highlights_candidates_from_transcript(
 
 const Ch4_S1_NestedLoopComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
-  const { isSegmentVisible } = useSegmentedAnimation();
   const theme = useTheme();
 
   return (
     <SlideContainer maxWidth={1000} textAlign="left">
-      <AnimatePresence>
-        {isSegmentVisible(0) && (
-          <SlideTitle reduced={reduced} subtitle="highlights_utils.py : extract_highlights_candidates_from_transcript()">
-            Combinatorial Candidate Explosion
-          </SlideTitle>
-        )}
-      </AnimatePresence>
+      <Reveal from={0}>
+        <SlideTitle reduced={reduced} subtitle="highlights_utils.py : extract_highlights_candidates_from_transcript()">
+          Combinatorial Candidate Explosion
+        </SlideTitle>
+      </Reveal>
 
-      <AnimatePresence>
-        {isSegmentVisible(1) && (
-          <CodeBlock
-            code={NESTED_LOOP_CODE}
-            language="python"
-            title="highlights_utils.py  --  lines 199-234"
-            highlightLines={[11, 12]}
-            fontSize={12}
-          />
-        )}
-      </AnimatePresence>
+      <Reveal from={1}>
+        <CodeBlock
+          code={NESTED_LOOP_CODE}
+          language="python"
+          title="highlights_utils.py  --  lines 199-234"
+          highlightLines={[11, 12]}
+          fontSize={12}
+        />
+      </Reveal>
 
-      <AnimatePresence>
-        {isSegmentVisible(2) && (
-          <motion.div
-            variants={fadeUp(reduced)}
-            initial="hidden"
-            animate="visible"
-            style={{
-              display: 'flex',
-              gap: '1rem',
-              marginTop: '1rem',
-              justifyContent: 'center'
-            }}
-          >
-            <div style={{
-              background: 'rgba(251, 191, 36, 0.1)',
-              border: '1px solid rgba(251, 191, 36, 0.3)',
-              borderRadius: 10,
-              padding: '0.75rem 1.25rem',
-              flex: 1,
-              textAlign: 'center'
-            }}>
-              <p style={{ ...typography.body, fontSize: 14, margin: 0 }}>
-                <span style={{ color: theme.colors.warning, fontWeight: 700 }}>O(n) starts</span>
-                {' \u00D7 '}
-                <span style={{ color: theme.colors.warning, fontWeight: 700 }}>O(n) ends</span>
-                {' = '}
-                <span style={{ color: theme.colors.error, fontWeight: 700 }}>O(n²) candidates</span>
-              </p>
-            </div>
-            <div style={{
-              background: 'rgba(239, 68, 68, 0.1)',
-              border: '1px solid rgba(239, 68, 68, 0.3)',
-              borderRadius: 10,
-              padding: '0.75rem 1.25rem',
-              flex: 1,
-              textAlign: 'center'
-            }}>
-              <p style={{ ...typography.body, fontSize: 14, margin: 0, color: theme.colors.error }}>
-                Full text duplicated per candidate
-              </p>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <Reveal from={2} animation={fadeUp} style={{
+        display: 'flex',
+        gap: '1rem',
+        marginTop: '1rem',
+        justifyContent: 'center'
+      }}>
+        <div style={{
+          background: 'rgba(251, 191, 36, 0.1)',
+          border: '1px solid rgba(251, 191, 36, 0.3)',
+          borderRadius: 10,
+          padding: '0.75rem 1.25rem',
+          flex: 1,
+          textAlign: 'center'
+        }}>
+          <p style={{ ...typography.body, fontSize: 14, margin: 0 }}>
+            <span style={{ color: theme.colors.warning, fontWeight: 700 }}>O(n) starts</span>
+            {' \u00D7 '}
+            <span style={{ color: theme.colors.warning, fontWeight: 700 }}>O(n) ends</span>
+            {' = '}
+            <span style={{ color: theme.colors.error, fontWeight: 700 }}>O(n²) candidates</span>
+          </p>
+        </div>
+        <div style={{
+          background: 'rgba(239, 68, 68, 0.1)',
+          border: '1px solid rgba(239, 68, 68, 0.3)',
+          borderRadius: 10,
+          padding: '0.75rem 1.25rem',
+          flex: 1,
+          textAlign: 'center'
+        }}>
+          <p style={{ ...typography.body, fontSize: 14, margin: 0, color: theme.colors.error }}>
+            Full text duplicated per candidate
+          </p>
+        </div>
+      </Reveal>
     </SlideContainer>
   );
 };
@@ -159,152 +144,132 @@ const GRID_COLS = '80px repeat(5, 1fr)';
 
 const Ch4_S2_CandidateRowsComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
-  const { isSegmentVisible } = useSegmentedAnimation();
   const theme = useTheme();
 
   return (
     <SlideContainer maxWidth={950}>
-      <AnimatePresence>
-        {isSegmentVisible(0) && (
-          <SlideTitle reduced={reduced} subtitle="V1 Call 2 (Extractives): Input">
-            Candidate Rows
-          </SlideTitle>
-        )}
-      </AnimatePresence>
+      <Reveal from={0}>
+        <SlideTitle reduced={reduced} subtitle="V1 Call 2 (Extractives): Input">
+          Candidate Rows
+        </SlideTitle>
+      </Reveal>
 
-      <AnimatePresence>
-        {isSegmentVisible(1) && (
+      <Reveal from={1} animation={(r) => staggerContainer(r, 0.1)}>
+        {/* Reference utterance labels */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: GRID_COLS,
+          gap: 6,
+          marginBottom: 16,
+        }}>
+          <div style={{
+            fontSize: 11,
+            color: theme.colors.textSecondary,
+            alignSelf: 'end',
+            paddingBottom: 4,
+          }}>
+            Source
+          </div>
+          {UTTERANCE_LABELS.map((u, i) => (
+            <motion.div
+              key={u.id}
+              variants={tileVariants(reduced)}
+              style={{
+                background: `${UTTERANCE_COLORS[i]}20`,
+                border: `1px solid ${UTTERANCE_COLORS[i]}66`,
+                borderRadius: 8,
+                padding: '6px 8px',
+                textAlign: 'center',
+              }}
+            >
+              <div style={{
+                fontSize: 12,
+                color: UTTERANCE_COLORS[i],
+                fontWeight: 700,
+                fontFamily: 'monospace',
+              }}>
+                {u.id}
+              </div>
+              <div style={{
+                fontSize: 10,
+                color: theme.colors.textSecondary,
+                marginTop: 2,
+                lineHeight: 1.2,
+              }}>
+                {u.text}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Divider */}
+        <div style={{ height: 1, background: theme.colors.bgBorder, marginBottom: 12 }} />
+
+        {/* Candidate rows */}
+        {CANDIDATES.map((c, rowIdx) => (
           <motion.div
-            variants={staggerContainer(reduced, 0.1)}
-            initial="hidden"
-            animate="visible"
-          >
-            {/* Reference utterance labels */}
-            <div style={{
+            key={rowIdx}
+            variants={tileVariants(reduced)}
+            style={{
               display: 'grid',
               gridTemplateColumns: GRID_COLS,
               gap: 6,
-              marginBottom: 16,
-            }}>
-              <div style={{
-                fontSize: 11,
-                color: theme.colors.textSecondary,
-                alignSelf: 'end',
-                paddingBottom: 4,
-              }}>
-                Source
-              </div>
-              {UTTERANCE_LABELS.map((u, i) => (
-                <motion.div
-                  key={u.id}
-                  variants={tileVariants(reduced)}
-                  style={{
-                    background: `${UTTERANCE_COLORS[i]}20`,
-                    border: `1px solid ${UTTERANCE_COLORS[i]}66`,
-                    borderRadius: 8,
-                    padding: '6px 8px',
-                    textAlign: 'center',
-                  }}
-                >
-                  <div style={{
-                    fontSize: 12,
-                    color: UTTERANCE_COLORS[i],
-                    fontWeight: 700,
-                    fontFamily: 'monospace',
-                  }}>
-                    {u.id}
-                  </div>
-                  <div style={{
-                    fontSize: 10,
-                    color: theme.colors.textSecondary,
-                    marginTop: 2,
-                    lineHeight: 1.2,
-                  }}>
-                    {u.text}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-
-            {/* Divider */}
-            <div style={{ height: 1, background: theme.colors.bgBorder, marginBottom: 12 }} />
-
-            {/* Candidate rows */}
-            {CANDIDATES.map((c, rowIdx) => (
-              <motion.div
-                key={rowIdx}
-                variants={tileVariants(reduced)}
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: GRID_COLS,
-                  gap: 6,
-                  marginBottom: 8,
-                }}
-              >
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  fontSize: 12,
-                  color: theme.colors.textSecondary,
-                  fontFamily: 'monospace',
-                }}>
-                  [{c.label}]
-                </div>
-                {UTTERANCE_LABELS.map((u, colIdx) => {
-                  const included = colIdx >= c.start && colIdx <= c.end;
-                  const color = UTTERANCE_COLORS[colIdx];
-                  return (
-                    <div
-                      key={u.id}
-                      style={{
-                        height: 38,
-                        borderRadius: 6,
-                        background: included ? `${color}30` : 'transparent',
-                        border: included ? `1px solid ${color}66` : '1px solid transparent',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: 11,
-                        color: included ? color : 'transparent',
-                        fontFamily: 'monospace',
-                        fontWeight: 600,
-                      }}
-                    >
-                      {included ? u.id : ''}
-                    </div>
-                  );
-                })}
-              </motion.div>
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {isSegmentVisible(2) && (
-          <motion.div
-            variants={fadeUp(reduced)}
-            initial="hidden"
-            animate="visible"
-            style={{ marginTop: '1.25rem', textAlign: 'center' }}
+              marginBottom: 8,
+            }}
           >
             <div style={{
-              background: 'rgba(239, 68, 68, 0.1)',
-              border: '1px solid rgba(239, 68, 68, 0.3)',
-              borderRadius: 10,
-              padding: '0.75rem 1.5rem',
-              display: 'inline-block',
+              display: 'flex',
+              alignItems: 'center',
+              fontSize: 12,
+              color: theme.colors.textSecondary,
+              fontFamily: 'monospace',
             }}>
-              <p style={{ ...typography.body, fontSize: 15, margin: 0 }}>
-                <span style={{ color: UTTERANCE_COLORS[2], fontWeight: 700 }}>u2</span>
-                <span style={{ color: theme.colors.textSecondary }}>{' appears in '}</span>
-                <span style={{ color: theme.colors.error, fontWeight: 700 }}>5 of 6</span>
-                <span style={{ color: theme.colors.textSecondary }}>{' candidates \u2014 same text, sent 5\u00D7'}</span>
-              </p>
+              [{c.label}]
             </div>
+            {UTTERANCE_LABELS.map((u, colIdx) => {
+              const included = colIdx >= c.start && colIdx <= c.end;
+              const color = UTTERANCE_COLORS[colIdx];
+              return (
+                <div
+                  key={u.id}
+                  style={{
+                    height: 38,
+                    borderRadius: 6,
+                    background: included ? `${color}30` : 'transparent',
+                    border: included ? `1px solid ${color}66` : '1px solid transparent',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: 11,
+                    color: included ? color : 'transparent',
+                    fontFamily: 'monospace',
+                    fontWeight: 600,
+                  }}
+                >
+                  {included ? u.id : ''}
+                </div>
+              );
+            })}
           </motion.div>
-        )}
-      </AnimatePresence>
+        ))}
+      </Reveal>
+
+      <Reveal from={2} animation={fadeUp} style={{ marginTop: '1.25rem', textAlign: 'center' }}>
+        <div style={{
+          background: 'rgba(239, 68, 68, 0.1)',
+          border: '1px solid rgba(239, 68, 68, 0.3)',
+          borderRadius: 10,
+          padding: '0.75rem 1.5rem',
+          display: 'inline-block',
+        }}>
+          <p style={{ ...typography.body, fontSize: 15, margin: 0 }}>
+            <span style={{ color: UTTERANCE_COLORS[2], fontWeight: 700 }}>u2</span>
+            <span style={{ color: theme.colors.textSecondary }}>{' appears in '}</span>
+            <span style={{ color: theme.colors.error, fontWeight: 700 }}>5 of 6</span>
+            <span style={{ color: theme.colors.textSecondary }}>{' candidates \u2014 same text, sent 5\u00D7'}</span>
+          </p>
+        </div>
+      </Reveal>
     </SlideContainer>
   );
 };
@@ -327,93 +292,65 @@ export const Ch4_S2_CandidateRows = defineSlide({
 
 const Ch4_S3_VisualizedComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
-  const { isSegmentVisible } = useSegmentedAnimation();
   const theme = useTheme();
 
   return (
     <SlideContainer maxWidth={900}>
-      <AnimatePresence>
-        {isSegmentVisible(0) && (
-          <motion.div
-            variants={fadeUp(reduced)}
-            initial="hidden"
-            animate="visible"
-            style={{ marginBottom: '2rem' }}
-          >
-            <CandidateGrid n={30} animate topicRanges={[[0, 9], [10, 19], [20, 29]]} />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <Reveal from={0} animation={fadeUp} style={{ marginBottom: '2rem' }}>
+        <CandidateGrid n={30} animate topicRanges={[[0, 9], [10, 19], [20, 29]]} />
+      </Reveal>
 
-      <AnimatePresence>
-        {isSegmentVisible(1) && (
-          <motion.div
-            variants={fadeUp(reduced)}
-            initial="hidden"
-            animate="visible"
-            style={{ textAlign: 'center', marginBottom: '1.5rem' }}
-          >
-            <p style={{ ...typography.body, fontSize: 18, margin: 0 }}>
-              In this example: 10 utterances &#215; 3 topics {'  '}<span style={{ color: theme.colors.warning }}>&#8594;</span>{'  '}
-              <span style={{ color: theme.colors.warning, fontWeight: 700 }}>135 candidates</span>
-            </p>
-            <p style={{ ...typography.body, fontSize: 18, margin: '0.25rem 0 0' }}>
-              Each candidate &#8776; 5 utterances long {'  '}<span style={{ color: theme.colors.error }}>&#8594;</span>{'  '}
-              <span style={{ color: theme.colors.error, fontWeight: 700 }}>~630 duplicated utterance copies</span>
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <Reveal from={1} animation={fadeUp} style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+        <p style={{ ...typography.body, fontSize: 18, margin: 0 }}>
+          In this example: 10 utterances &#215; 3 topics {'  '}<span style={{ color: theme.colors.warning }}>&#8594;</span>{'  '}
+          <span style={{ color: theme.colors.warning, fontWeight: 700 }}>135 candidates</span>
+        </p>
+        <p style={{ ...typography.body, fontSize: 18, margin: '0.25rem 0 0' }}>
+          Each candidate &#8776; 5 utterances long {'  '}<span style={{ color: theme.colors.error }}>&#8594;</span>{'  '}
+          <span style={{ color: theme.colors.error, fontWeight: 700 }}>~630 duplicated utterance copies</span>
+        </p>
+      </Reveal>
 
-      <AnimatePresence>
-        {isSegmentVisible(2) && (
-          <motion.div
-            variants={fadeUp(reduced)}
-            initial="hidden"
-            animate="visible"
-            style={{ textAlign: 'center' }}
-          >
+      <Reveal from={2} animation={fadeUp} style={{ textAlign: 'center' }}>
+        <div style={{
+          background: theme.colors.bgSurface,
+          borderRadius: 12,
+          padding: '1rem 1.5rem',
+          border: `1px solid ${theme.colors.bgBorder}`,
+          display: 'inline-block',
+          width: '80%'
+        }}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            marginBottom: '0.5rem'
+          }}>
+            <span style={{ ...typography.caption, fontSize: 12 }}>0K</span>
             <div style={{
-              background: theme.colors.bgSurface,
-              borderRadius: 12,
-              padding: '1rem 1.5rem',
-              border: `1px solid ${theme.colors.bgBorder}`,
-              display: 'inline-block',
-              width: '80%'
+              flex: 1,
+              height: 24,
+              background: theme.colors.bgBorder,
+              borderRadius: 6,
+              overflow: 'hidden'
             }}>
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                marginBottom: '0.5rem'
-              }}>
-                <span style={{ ...typography.caption, fontSize: 12 }}>0K</span>
-                <div style={{
-                  flex: 1,
-                  height: 24,
-                  background: theme.colors.bgBorder,
+              <motion.div
+                {...expandWidth(reduced, 2000, 0.3)}
+                style={{
+                  height: '100%',
+                  background: `linear-gradient(90deg, ${theme.colors.warning}, ${theme.colors.error})`,
                   borderRadius: 6,
-                  overflow: 'hidden'
-                }}>
-                  <motion.div
-                    {...expandWidth(reduced, 2000, 0.3)}
-                    style={{
-                      height: '100%',
-                      background: `linear-gradient(90deg, ${theme.colors.warning}, ${theme.colors.error})`,
-                      borderRadius: 6,
-                      maxWidth: '93%'
-                    }}
-                  />
-                </div>
-                <span style={{ ...typography.caption, fontSize: 12 }}>128K</span>
-              </div>
-              <p style={{ ...typography.caption, fontSize: 13, margin: 0 }}>
-                Greedily fills the entire <span style={{ color: theme.colors.error, fontWeight: 600 }}>128K context window</span>
-              </p>
+                  maxWidth: '93%'
+                }}
+              />
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            <span style={{ ...typography.caption, fontSize: 12 }}>128K</span>
+          </div>
+          <p style={{ ...typography.caption, fontSize: 13, margin: 0 }}>
+            Greedily fills the entire <span style={{ color: theme.colors.error, fontWeight: 600 }}>128K context window</span>
+          </p>
+        </div>
+      </Reveal>
     </SlideContainer>
   );
 };
@@ -447,7 +384,6 @@ const EXTRACTIVE_INPUT_TABLE = `# Meeting's utterance blocks:
 
 const Ch4_S4_OutputSafetyComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
-  const { isSegmentVisible } = useSegmentedAnimation();
   const theme = useTheme();
 
   return (
@@ -676,104 +612,95 @@ const Ch4_S4_OutputSafetyComponent: React.FC = () => {
       </RevealSequence>
 
       {/* Segment 3: The Trade-Off and V2 Preview */}
-      <AnimatePresence>
-        {isSegmentVisible(3) && (
-          <motion.div
-            variants={fadeUp(reduced)}
-            initial="hidden"
-            animate="visible"
-            style={{ marginTop: '2rem' }}
-          >
-            {/* Balance panel */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'stretch',
-              gap: 0,
-              marginBottom: '1.25rem',
-            }}>
-              <div style={{
-                flex: 1,
-                background: 'rgba(16, 185, 129, 0.06)',
-                border: `1px solid ${theme.colors.success}`,
-                borderRadius: '12px 0 0 12px',
-                padding: '1rem 1.25rem',
-                textAlign: 'center',
-              }}>
-                <div style={{ fontSize: 24, marginBottom: '0.25rem' }}>{'\u2713'}</div>
-                <div style={{ ...typography.caption, fontSize: 13, color: theme.colors.success, fontWeight: 700 }}>
-                  Output Safety
-                </div>
-                <div style={{ ...typography.caption, fontSize: 11, marginTop: '0.25rem' }}>
-                  Every candidate pre-validated
-                </div>
-              </div>
-
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                background: theme.colors.bgSurface,
-                border: `1px solid ${theme.colors.bgBorder}`,
-                borderLeft: 'none',
-                borderRight: 'none',
-                padding: '0 1rem',
-              }}>
-                <div style={{
-                  ...typography.caption,
-                  fontSize: 12,
-                  color: theme.colors.textSecondary,
-                  fontWeight: 700,
-                  whiteSpace: 'nowrap',
-                }}>
-                  V1's Trade-Off
-                </div>
-              </div>
-
-              <div style={{
-                flex: 1,
-                background: 'rgba(239, 68, 68, 0.06)',
-                border: `1px solid ${theme.colors.error}`,
-                borderRadius: '0 12px 12px 0',
-                padding: '1rem 1.25rem',
-                textAlign: 'center',
-              }}>
-                <div style={{ fontSize: 24, marginBottom: '0.25rem' }}>{'\u2717'}</div>
-                <div style={{ ...typography.caption, fontSize: 13, color: theme.colors.error, fontWeight: 700 }}>
-                  O(n{'\u00B2'}) Input Cost
-                </div>
-                <div style={{ ...typography.caption, fontSize: 11, marginTop: '0.25rem' }}>
-                  Fills 128K context window
-                </div>
-              </div>
+      <Reveal from={3} animation={fadeUp} style={{ marginTop: '2rem' }}>
+        {/* Balance panel */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'stretch',
+          gap: 0,
+          marginBottom: '1.25rem',
+        }}>
+          <div style={{
+            flex: 1,
+            background: 'rgba(16, 185, 129, 0.06)',
+            border: `1px solid ${theme.colors.success}`,
+            borderRadius: '12px 0 0 12px',
+            padding: '1rem 1.25rem',
+            textAlign: 'center',
+          }}>
+            <div style={{ fontSize: 24, marginBottom: '0.25rem' }}>{'\u2713'}</div>
+            <div style={{ ...typography.caption, fontSize: 13, color: theme.colors.success, fontWeight: 700 }}>
+              Output Safety
             </div>
-
-            {/* V2 forward-looking callout */}
-            <div style={{
-              background: 'rgba(0, 183, 195, 0.08)',
-              border: `1px solid rgba(0, 183, 195, 0.3)`,
-              borderRadius: 10,
-              padding: '0.85rem 1.5rem',
-              textAlign: 'center',
-            }}>
-              <p style={{ ...typography.body, fontSize: 14, margin: 0 }}>
-                <span style={{ color: theme.colors.primary, fontWeight: 700 }}>V2</span>
-                <span style={{ color: theme.colors.textSecondary }}>
-                  {' achieves the same safety with '}
-                </span>
-                <span style={{
-                  fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
-                  color: theme.colors.primary,
-                  fontWeight: 700,
-                }}>
-                  max_end_utterance_id
-                </span>
-                <span style={{ color: theme.colors.textSecondary }}>
-                  {' — an inline constraint at linear cost'}
-                </span>
-              </p>
+            <div style={{ ...typography.caption, fontSize: 11, marginTop: '0.25rem' }}>
+              Every candidate pre-validated
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            background: theme.colors.bgSurface,
+            border: `1px solid ${theme.colors.bgBorder}`,
+            borderLeft: 'none',
+            borderRight: 'none',
+            padding: '0 1rem',
+          }}>
+            <div style={{
+              ...typography.caption,
+              fontSize: 12,
+              color: theme.colors.textSecondary,
+              fontWeight: 700,
+              whiteSpace: 'nowrap',
+            }}>
+              V1's Trade-Off
+            </div>
+          </div>
+
+          <div style={{
+            flex: 1,
+            background: 'rgba(239, 68, 68, 0.06)',
+            border: `1px solid ${theme.colors.error}`,
+            borderRadius: '0 12px 12px 0',
+            padding: '1rem 1.25rem',
+            textAlign: 'center',
+          }}>
+            <div style={{ fontSize: 24, marginBottom: '0.25rem' }}>{'\u2717'}</div>
+            <div style={{ ...typography.caption, fontSize: 13, color: theme.colors.error, fontWeight: 700 }}>
+              O(n{'\u00B2'}) Input Cost
+            </div>
+            <div style={{ ...typography.caption, fontSize: 11, marginTop: '0.25rem' }}>
+              Fills 128K context window
+            </div>
+          </div>
+        </div>
+
+        {/* V2 forward-looking callout */}
+        <div style={{
+          background: 'rgba(0, 183, 195, 0.08)',
+          border: `1px solid rgba(0, 183, 195, 0.3)`,
+          borderRadius: 10,
+          padding: '0.85rem 1.5rem',
+          textAlign: 'center',
+        }}>
+          <p style={{ ...typography.body, fontSize: 14, margin: 0 }}>
+            <span style={{ color: theme.colors.primary, fontWeight: 700 }}>V2</span>
+            <span style={{ color: theme.colors.textSecondary }}>
+              {' achieves the same safety with '}
+            </span>
+            <span style={{
+              fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+              color: theme.colors.primary,
+              fontWeight: 700,
+            }}>
+              max_end_utterance_id
+            </span>
+            <span style={{ color: theme.colors.textSecondary }}>
+              {' — an inline constraint at linear cost'}
+            </span>
+          </p>
+        </div>
+      </Reveal>
     </SlideContainer>
   );
 };

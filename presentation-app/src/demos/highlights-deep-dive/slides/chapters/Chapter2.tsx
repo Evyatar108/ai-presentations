@@ -1,11 +1,11 @@
 import React from 'react';
-import { AnimatePresence } from 'framer-motion';
 import {
   useReducedMotion,
   useSegmentedAnimation,
   defineSlide,
   SlideContainer,
   SlideTitle,
+  Reveal,
 } from '@framework';
 import PipelineDiagram from '../components/PipelineDiagram';
 
@@ -24,13 +24,11 @@ const Ch2_S1_FourCallsComponent: React.FC = () => {
 
   return (
     <SlideContainer maxWidth={900}>
-      <AnimatePresence>
-        {isSegmentVisible(0) && (
-          <SlideTitle reduced={reduced}>
-            The Four-Call Pipeline
-          </SlideTitle>
-        )}
-      </AnimatePresence>
+      <Reveal from={0}>
+        <SlideTitle reduced={reduced}>
+          The Four-Call Pipeline
+        </SlideTitle>
+      </Reveal>
 
       {isSegmentVisible(1) && (
         <PipelineDiagram visibleSteps={visibleSteps} />
@@ -54,4 +52,3 @@ export const Ch2_S1_FourCalls = defineSlide({
   },
   component: Ch2_S1_FourCallsComponent
 });
-
