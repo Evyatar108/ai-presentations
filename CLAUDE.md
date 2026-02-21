@@ -24,12 +24,16 @@ npm run tts:generate -- --demo {id} --segments ch1:s2:intro,ch3:s1:summary  # Re
 npm run tts:duration -- --demo {id}  # Calculate audio durations and auto-update metadata.ts durationInfo
 npm run tts:verify -- --demo {id}    # Transcribe TTS audio via Whisper and output side-by-side comparison
 npm run check-narration              # Validate narration structure
-npm run test:overflow -- --demo {id}  # Playwright test: detect viewport overflow on every slide/segment (requires dev server running)
+npm run test:overflow -- --demo {id}  # Playwright (static): detect viewport overflow on every slide/segment
 npm run test:overflow -- --demo {id} --viewport 1920x1019  # Same, at a custom viewport size
-npm run test:screenshot -- --demo {id}  # Playwright: screenshot every slide/segment (requires dev server running)
+npm run test:screenshot -- --demo {id}  # Playwright (static): screenshot every slide/segment
 npm run test:screenshot -- --demo {id} --slides 3-5  # Screenshot only slides 3 through 5
-npm run test:record -- --demo {id}  # Playwright: record narrated playback as .webm video (requires dev server running)
+npm run test:record -- --demo {id}  # Playwright (record): record narrated playback as .webm video
 ```
+
+Playwright tests require the dev server running on localhost:5173. Two Playwright projects in `playwright.config.ts`:
+- **`static`** — `reducedMotion: 'reduce'` for fast tests (overflow, screenshot)
+- **`record`** — full animations for video recording
 
 Scaffold a new demo: `.\scripts\new-demo.ps1 -DemoId "my-demo" [-DemoTitle "My Demo"]`
 
@@ -112,7 +116,7 @@ Audio naming: `s{slide}_segment_{number}_{id}.wav`
 | `vite-plugin-audio-writer.ts` | Custom Vite plugin for /api/save-audio |
 | `tests/overflow.spec.ts` | Playwright test: viewport overflow detection for all slides/segments |
 | `tests/screenshot.spec.ts` | Playwright test: screenshot every slide/segment for visual review |
-| `playwright.config.ts` | Playwright config (viewport configurable via VIEWPORT_HEIGHT/WIDTH env vars) |
+| `playwright.config.ts` | Playwright config: `static` project (overflow/screenshot, reducedMotion) + `record` project (full animations) |
 
 ## Conventions
 
