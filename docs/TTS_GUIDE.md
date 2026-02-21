@@ -45,6 +45,14 @@ The `--instruct` flag sets a demo-wide TTS style instruction (lowest priority). 
 
 By default, the generator skips segments whose audio file already exists and whose narration text and instruct haven't changed (based on the TTS cache). Only new or modified segments are generated.
 
+### Regenerate Specific Segments
+
+```bash
+npm run tts:generate -- --demo meeting-highlights --segments ch1:s2:intro,ch1:s2:details,ch3:s1:summary
+```
+
+Regenerates only the listed segments, bypassing cache checks. All other segments are skipped entirely. Requires `--demo`. The format is `ch{N}:s{N}:{segmentId}`. Orphan cleanup is skipped in this mode. Unmatched segment keys produce a warning.
+
 ### Force Regeneration
 
 ```bash

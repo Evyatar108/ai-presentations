@@ -20,6 +20,7 @@ npm run type-check   # TypeScript type checking (tsc --noEmit)
 npm run test         # Run tests (vitest run)
 npm run test:watch   # Run tests in watch mode
 npm run tts:generate -- --demo {id}  # Generate TTS audio for a specific demo (requires Python TTS server running)
+npm run tts:generate -- --demo {id} --segments ch1:s2:intro,ch3:s1:summary  # Regenerate specific segments only
 npm run tts:duration -- --demo {id}  # Calculate audio durations and auto-update metadata.ts durationInfo
 npm run check-narration              # Validate narration structure
 ```

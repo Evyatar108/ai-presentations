@@ -47,6 +47,7 @@ Once either server is running, use the standard commands from `presentation-app/
 ```bash
 npm run tts:generate -- --demo my-demo
 npm run tts:generate -- --demo my-demo --instruct "speak slowly and clearly"
+npm run tts:generate -- --demo my-demo --segments ch1:s2:intro,ch3:s1:summary  # Regenerate specific segments
 npm run tts:duration -- --demo my-demo
 ```
 
