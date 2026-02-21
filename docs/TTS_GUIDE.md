@@ -354,19 +354,23 @@ The script produces:
 
 ### `/fix-tts` Skill
 
-The `/fix-tts` Claude Code command automates the full verify-evaluate-regenerate cycle:
+The `/fix-tts` Claude Code command runs an interactive verify-evaluate-regenerate cycle:
 
 ```
 /fix-tts highlights-deep-dive
 ```
 
 This will:
-1. Transcribe all audio via Whisper
-2. Compare original vs. transcribed using LLM judgment
-3. Regenerate problematic segments
-4. Re-verify up to 3 times
+1. Transcribe all audio via Whisper (cached — only re-transcribes changed audio)
+2. Auto-approve trivial differences (whitespace, punctuation)
+3. For each flagged segment: show diff, play audio, ask the user to decide
+4. Log decisions to `.tts-verification-decisions.json` for future calibration
+5. Regenerate only user-flagged segments
+6. Re-verify up to 3 times
 
-Differences in acronyms (GPT, AI), product names, and punctuation are treated as acceptable. Only meaning-altering differences trigger regeneration.
+Use `--force` to re-transcribe all segments regardless of cache.
+
+**Decisions log**: Each decision records the original text, transcription, diff summary, user choice (`ok` or `regenerate`), and the reason why. Over time this log helps calibrate which differences are benign (e.g., acronym casing) vs. problematic (e.g., missing words).
 
 ### Custom Whisper URL
 
