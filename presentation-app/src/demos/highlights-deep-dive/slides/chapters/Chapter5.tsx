@@ -178,7 +178,7 @@ const Ch5_S2_MaxEndIdComponent: React.FC = () => {
               color: theme.colors.textSecondary
             }}>
               <span style={{ color: theme.colors.primary }}>&#8593; utterance_id (start)</span>
-              <span>&#8593; verbatim text</span>
+              <span>&#8593; text of u2</span>
               <span style={{ color: theme.colors.warning }}>&#8593; max_end_utterance_id (ceiling)</span>
             </div>
           </motion.div>
