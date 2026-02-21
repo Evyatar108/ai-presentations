@@ -18,6 +18,7 @@ interface TTSConfig {
   batchSize: number;          // Number of segments per batch request
   cacheFile: string;          // Path to narration cache file
   demoFilter?: string;        // Optional: generate only for specific demo
+  segmentFilter?: string[];   // Optional: regenerate only these segments (e.g. ["ch1:s2:intro", "ch3:s1:summary"])
   fromJson?: boolean;         // NEW: Use JSON exclusively
   instruct?: string;          // CLI-level default instruct (lowest priority)
 }
@@ -67,6 +68,14 @@ interface SegmentToGenerate {
   filepath: string;
   /** Resolved instruct for this segment (segment → slide → narrationJSON → CLI) */
   instruct?: string;
+}
+
+function buildSegmentKey(chapter: number, slide: number, segmentId: string): string {
+  return `ch${chapter}:s${slide}:${segmentId}`;
+}
+
+function parseSegmentFilter(raw: string): string[] {
+  return raw.split(',').map(s => s.trim()).filter(Boolean);
 }
 
 // Get all demo IDs by scanning the demos directory
@@ -459,8 +468,13 @@ async function generateTTS(config: TTSConfig) {
     }
     
     // Step 1: Detect orphaned audio files (don't delete yet — we may rename them)
-    console.log('🔍 Scanning for unused audio files...\n');
-    const cleanup = cleanupUnusedAudio(demoId, config.outputDir, cache, allSlides);
+    // Skip orphan cleanup when targeting specific segments
+    const cleanup = config.segmentFilter
+      ? { orphanedFiles: [], orphanedCacheKeys: [] }
+      : (() => {
+          console.log('🔍 Scanning for unused audio files...\n');
+          return cleanupUnusedAudio(demoId, config.outputDir, cache, allSlides);
+        })();
 
     if (cleanup.orphanedFiles.length > 0) {
       console.log(`📁 Orphaned audio files: ${cleanup.orphanedFiles.length}`);
@@ -486,6 +500,7 @@ async function generateTTS(config: TTSConfig) {
     const segmentsToGenerate: SegmentToGenerate[] = [];
     let totalSegments = 0;
     let skippedCount = 0;
+    const matchedFilterKeys = new Set<string>();
 
     console.log('Scanning slides for segments to generate...\n');
 
@@ -512,6 +527,13 @@ async function generateTTS(config: TTSConfig) {
           continue;
         }
 
+        // If --segments filter is active, only process matching segments
+        const segmentKey = buildSegmentKey(chapter, slideNum, segment.id);
+        if (config.segmentFilter && !config.segmentFilter.includes(segmentKey)) {
+          skippedCount++;
+          continue;
+        }
+
         // Generate filename
         const filename = `s${slideNum}_segment_${String(i + 1).padStart(2, '0')}_${segment.id}.wav`;
         const filepath = path.join(chapterDir, filename);
@@ -523,10 +545,10 @@ async function generateTTS(config: TTSConfig) {
           slide.metadata.instruct ??
           config.instruct;
 
-        // Check if we should skip this segment
+        // Check if we should skip this segment (bypass cache when --segments targets it)
         let shouldSkip = false;
 
-        if (config.skipExisting && fs.existsSync(filepath)) {
+        if (!config.segmentFilter && config.skipExisting && fs.existsSync(filepath)) {
           // File exists - check if narration or instruct has changed
           const cachedEntry = cache[demoId][relativeFilepath];
           if (
@@ -545,6 +567,11 @@ async function generateTTS(config: TTSConfig) {
           continue;
         }
 
+        // Track matched filter keys
+        if (config.segmentFilter) {
+          matchedFilterKeys.add(segmentKey);
+        }
+
         // Add to generation queue
         segmentsToGenerate.push({
           demoId,
@@ -556,6 +583,16 @@ async function generateTTS(config: TTSConfig) {
           filepath,
           instruct: resolvedInstruct
         });
+      }
+    }
+
+    // Report any --segments keys that didn't match a real segment
+    if (config.segmentFilter) {
+      const unmatched = config.segmentFilter.filter(key => !matchedFilterKeys.has(key));
+      if (unmatched.length > 0) {
+        console.log(`⚠️  No matching segments found for ${unmatched.length} filter(s):`);
+        unmatched.forEach(key => console.log(`   - ${key}`));
+        console.log();
       }
     }
 
@@ -858,9 +895,9 @@ function loadServerConfig(): string {
 }
 
 // Parse CLI arguments
-function parseCLIArgs(): { demoFilter?: string; skipExisting: boolean; fromJson: boolean; instruct?: string } {
+function parseCLIArgs(): { demoFilter?: string; segmentFilter?: string[]; skipExisting: boolean; fromJson: boolean; instruct?: string } {
   const args = process.argv.slice(2);
-  const result: { demoFilter?: string; skipExisting: boolean; fromJson: boolean; instruct?: string } = {
+  const result: { demoFilter?: string; segmentFilter?: string[]; skipExisting: boolean; fromJson: boolean; instruct?: string } = {
     skipExisting: !args.includes('--force'),
     fromJson: args.includes('--from-json')
   };
@@ -869,6 +906,20 @@ function parseCLIArgs(): { demoFilter?: string; skipExisting: boolean; fromJson:
   const demoIndex = args.indexOf('--demo');
   if (demoIndex !== -1 && args[demoIndex + 1]) {
     result.demoFilter = args[demoIndex + 1];
+  }
+
+  // Check for --segments parameter
+  const segmentsIndex = args.indexOf('--segments');
+  if (segmentsIndex !== -1 && args[segmentsIndex + 1]) {
+    if (!result.demoFilter) {
+      console.error('❌ --segments requires --demo to be specified (segments are demo-scoped)');
+      process.exit(1);
+    }
+    result.segmentFilter = parseSegmentFilter(args[segmentsIndex + 1]);
+    if (result.segmentFilter.length === 0) {
+      console.error('❌ --segments value is empty or invalid');
+      process.exit(1);
+    }
   }
 
   // Check for --instruct parameter
@@ -889,6 +940,7 @@ const config: TTSConfig = {
   batchSize: parseInt(process.env.BATCH_SIZE || '10', 10),
   cacheFile: path.join(__dirname, '../.tts-narration-cache.json'),
   demoFilter: cliArgs.demoFilter,
+  segmentFilter: cliArgs.segmentFilter,
   fromJson: cliArgs.fromJson,
   instruct: cliArgs.instruct
 };
