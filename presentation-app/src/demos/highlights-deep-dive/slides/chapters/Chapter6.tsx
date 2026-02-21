@@ -7,6 +7,7 @@ import {
   SlideContainer,
   SlideTitle,
   Reveal,
+  RevealSequence,
   typography,
   layouts,
   fadeUp,
@@ -167,14 +168,7 @@ const PSEUDOCODE = `def generate_highlights(transcript_markdown):
 
     self_checks = validate_all_constraints(topics, selected, ranking, final_narrative, topic_order)
 
-    return MeetingHighlightsOutput(
-        abstractive_topics=topics,
-        topic_order=topic_order,
-        extractive_ranges=selected,
-        ranking=ranking,
-        final_narrative=final_narrative,
-        self_checks=self_checks
-    )`;
+    return MeetingHighlightsOutput(topics, topic_order, selected, ranking, final_narrative, self_checks)`;
 
 const OUTPUT_FIELDS = [
   'abstractive_topics',
@@ -472,221 +466,226 @@ const Ch6_S4_OutputSchemaComponent: React.FC = () => {
 
   return (
     <SlideContainer maxWidth={1000}>
-      {/* Segment 0: Grouped six-field overview — CoT vs Deliverable vs Validation */}
+      {/* Title persists across all segments */}
       <Reveal from={0}>
         <div style={{ textAlign: 'center' }}>
           <SlideTitle reduced={reduced} subtitle="Six Fields, Two Purposes">
             Output Schema
           </SlideTitle>
         </div>
+      </Reveal>
 
-        {/* Row 1: CoT scaffolding label + 4 compact cards */}
-        <motion.div
-          variants={fadeUp(reduced)}
-          initial="hidden"
-          animate="visible"
-        >
+      <RevealSequence delay={300}>
+        {/* Segment 0: Grouped six-field overview — exits when code block enters */}
+        <Reveal from={0} until={0}>
+          {/* Row 1: CoT scaffolding label + 4 compact cards */}
+          <motion.div
+            variants={fadeUp(reduced)}
+            initial="hidden"
+            animate="visible"
+          >
+            <div style={{
+              ...typography.body,
+              fontSize: 10,
+              fontWeight: 700,
+              textTransform: 'uppercase' as const,
+              letterSpacing: '0.08em',
+              color: CATEGORY_STYLES.cot.accent,
+              marginBottom: '0.35rem',
+              marginTop: '0.15rem',
+            }}>
+              {CATEGORY_STYLES.cot.label}
+            </div>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(4, 1fr)',
+              gap: '0.5rem',
+            }}>
+              {COT_FIELDS.map((field, i) =>
+                renderFieldCard(field, i, CATEGORY_STYLES.cot.accent, CATEGORY_STYLES.cot.bg, true)
+              )}
+            </div>
+          </motion.div>
+
+          {/* Row 2: Deliverable + Validation */}
+          <motion.div
+            initial={{ opacity: 0, y: reduced ? 0 : 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: reduced ? 0.1 : 0.3, delay: reduced ? 0 : 0.3 }}
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '2fr 1fr',
+              gap: '0.5rem',
+              marginTop: '0.6rem',
+            }}
+          >
+            <div>
+              <div style={{
+                ...typography.body,
+                fontSize: 10,
+                fontWeight: 700,
+                textTransform: 'uppercase' as const,
+                letterSpacing: '0.08em',
+                color: CATEGORY_STYLES.deliverable.accent,
+                marginBottom: '0.35rem',
+              }}>
+                {CATEGORY_STYLES.deliverable.label}
+              </div>
+              {renderFieldCard(DELIVERABLE_FIELD, 4, CATEGORY_STYLES.deliverable.accent, CATEGORY_STYLES.deliverable.bg)}
+            </div>
+            <div>
+              <div style={{
+                ...typography.body,
+                fontSize: 10,
+                fontWeight: 700,
+                textTransform: 'uppercase' as const,
+                letterSpacing: '0.08em',
+                color: CATEGORY_STYLES.validation.accent,
+                marginBottom: '0.35rem',
+              }}>
+                {CATEGORY_STYLES.validation.label}
+              </div>
+              {renderFieldCard(VALIDATION_FIELD, 5, CATEGORY_STYLES.validation.accent, CATEGORY_STYLES.validation.bg)}
+            </div>
+          </motion.div>
+        </Reveal>
+
+        {/* Segment 1: final_narrative zoom — exits when extractive enters */}
+        <Reveal from={1} until={1} animation={fadeUp} style={{ marginTop: '1rem' }}>
+          <CodeBlock
+            code={FINAL_NARRATIVE_SAMPLE}
+            language="json"
+            title="final_narrative[0]  —  the product deliverable"
+            fontSize={11}
+            highlightLines={[6, 7, 8, 10, 11, 12]}
+          />
           <div style={{
-            ...typography.body,
-            fontSize: 10,
-            fontWeight: 700,
-            textTransform: 'uppercase' as const,
-            letterSpacing: '0.08em',
-            color: CATEGORY_STYLES.cot.accent,
-            marginBottom: '0.35rem',
-            marginTop: '0.15rem',
+            display: 'flex',
+            gap: '1.5rem',
+            marginTop: '0.4rem',
+            justifyContent: 'center',
           }}>
-            {CATEGORY_STYLES.cot.label}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+              <div style={{
+                width: 10, height: 10, borderRadius: 2,
+                background: 'rgba(0, 183, 195, 0.35)',
+                border: '2px solid #00B7C3',
+              }} />
+              <span style={{ ...typography.body, fontSize: 10, color: theme.colors.textSecondary }}>
+                Playback coordinates (video seeking)
+              </span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+              <div style={{
+                width: 10, height: 10, borderRadius: 2,
+                background: 'rgba(0, 183, 195, 0.35)',
+                border: '2px solid #00B7C3',
+              }} />
+              <span style={{ ...typography.body, fontSize: 10, color: theme.colors.textSecondary }}>
+                Extractive clip boundaries
+              </span>
+            </div>
           </div>
           <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
-            gap: '0.5rem',
+            marginTop: '0.5rem',
+            padding: '0.5rem 0.85rem',
+            borderRadius: 8,
+            background: `${CATEGORY_STYLES.deliverable.accent}10`,
+            borderLeft: `3px solid ${CATEGORY_STYLES.deliverable.accent}`,
+            textAlign: 'center',
           }}>
-            {COT_FIELDS.map((field, i) =>
-              renderFieldCard(field, i, CATEGORY_STYLES.cot.accent, CATEGORY_STYLES.cot.bg, true)
-            )}
+            <span style={{
+              ...typography.body,
+              fontSize: 11.5,
+              color: theme.colors.textPrimary,
+              fontStyle: 'italic',
+            }}>
+              This is what the video player actually uses. Everything else in the schema is reasoning scaffolding.
+            </span>
           </div>
-        </motion.div>
+        </Reveal>
 
-        {/* Row 2: Deliverable + Validation */}
-        <motion.div
-          initial={{ opacity: 0, y: reduced ? 0 : 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: reduced ? 0.1 : 0.3, delay: reduced ? 0 : 0.3 }}
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '2fr 1fr',
-            gap: '0.5rem',
+        {/* Segment 2: extractive_ranges zoom — exits when insight enters */}
+        <Reveal from={2} until={2} animation={fadeUp} style={{ marginTop: '1rem' }}>
+          <CodeBlock
+            code={EXTRACTIVE_SAMPLE}
+            language="json"
+            title="extractive_ranges[0]  —  field names as instructions"
+            fontSize={11}
+            highlightLines={[2, 6, 7]}
+          />
+          <div style={{
+            display: 'flex',
+            gap: '1.5rem',
+            marginTop: '0.4rem',
+            justifyContent: 'center',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+              <div style={{
+                width: 10, height: 10, borderRadius: 2,
+                background: 'rgba(251, 191, 36, 0.35)',
+                border: '2px solid #fbbf24',
+              }} />
+              <span style={{ ...typography.body, fontSize: 10, color: theme.colors.textSecondary }}>
+                Step 1: Copy from input
+              </span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+              <div style={{
+                width: 10, height: 10, borderRadius: 2,
+                background: 'transparent',
+                border: `2px solid ${theme.colors.primary}`,
+              }} />
+              <span style={{ ...typography.body, fontSize: 10, color: theme.colors.textSecondary }}>
+                Step 2: Parse from copy
+              </span>
+            </div>
+          </div>
+        </Reveal>
+
+        {/* Segment 3: Insight callout + pills */}
+        <Reveal from={3} animation={fadeUp} style={{ marginTop: '0.75rem' }}>
+          <div style={{
+            padding: '0.7rem 1.1rem',
+            borderRadius: 10,
+            background: `linear-gradient(135deg, ${theme.colors.primary}15, ${theme.colors.secondary}15)`,
+            borderLeft: `3px solid ${theme.colors.primary}`,
+          }}>
+            <p style={{
+              ...typography.body,
+              fontSize: 13,
+              color: theme.colors.textPrimary,
+              margin: 0,
+              fontStyle: 'italic',
+            }}>
+              The output schema isn't just a data format — it's a chain-of-thought scaffold.
+              Five fields guide the model's reasoning, one field captures the deliverable.
+              Field names become execution steps, and self_checks closes the validation loop.
+            </p>
+          </div>
+          <div style={{
+            display: 'flex',
+            gap: '0.6rem',
             marginTop: '0.6rem',
-          }}
-        >
-          <div>
-            <div style={{
-              ...typography.body,
-              fontSize: 10,
-              fontWeight: 700,
-              textTransform: 'uppercase' as const,
-              letterSpacing: '0.08em',
-              color: CATEGORY_STYLES.deliverable.accent,
-              marginBottom: '0.35rem',
-            }}>
-              {CATEGORY_STYLES.deliverable.label}
-            </div>
-            {renderFieldCard(DELIVERABLE_FIELD, 4, CATEGORY_STYLES.deliverable.accent, CATEGORY_STYLES.deliverable.bg)}
-          </div>
-          <div>
-            <div style={{
-              ...typography.body,
-              fontSize: 10,
-              fontWeight: 700,
-              textTransform: 'uppercase' as const,
-              letterSpacing: '0.08em',
-              color: CATEGORY_STYLES.validation.accent,
-              marginBottom: '0.35rem',
-            }}>
-              {CATEGORY_STYLES.validation.label}
-            </div>
-            {renderFieldCard(VALIDATION_FIELD, 5, CATEGORY_STYLES.validation.accent, CATEGORY_STYLES.validation.bg)}
-          </div>
-        </motion.div>
-      </Reveal>
-
-      {/* Segment 1: final_narrative zoom — the actual deliverable */}
-      <Reveal from={1} animation={fadeUp} style={{ marginTop: '1rem' }}>
-        <CodeBlock
-          code={FINAL_NARRATIVE_SAMPLE}
-          language="json"
-          title="final_narrative[0]  —  the product deliverable"
-          fontSize={11}
-          highlightLines={[6, 7, 8, 10, 11, 12]}
-        />
-        <div style={{
-          display: 'flex',
-          gap: '1.5rem',
-          marginTop: '0.4rem',
-          justifyContent: 'center',
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-            <div style={{
-              width: 10, height: 10, borderRadius: 2,
-              background: 'rgba(0, 183, 195, 0.35)',
-              border: '2px solid #00B7C3',
-            }} />
-            <span style={{ ...typography.body, fontSize: 10, color: theme.colors.textSecondary }}>
-              Playback coordinates (video seeking)
-            </span>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-            <div style={{
-              width: 10, height: 10, borderRadius: 2,
-              background: 'rgba(0, 183, 195, 0.35)',
-              border: '2px solid #00B7C3',
-            }} />
-            <span style={{ ...typography.body, fontSize: 10, color: theme.colors.textSecondary }}>
-              Extractive clip boundaries
-            </span>
-          </div>
-        </div>
-        <div style={{
-          marginTop: '0.5rem',
-          padding: '0.5rem 0.85rem',
-          borderRadius: 8,
-          background: `${CATEGORY_STYLES.deliverable.accent}10`,
-          borderLeft: `3px solid ${CATEGORY_STYLES.deliverable.accent}`,
-          textAlign: 'center',
-        }}>
-          <span style={{
-            ...typography.body,
-            fontSize: 11.5,
-            color: theme.colors.textPrimary,
-            fontStyle: 'italic',
+            justifyContent: 'center',
           }}>
-            This is what the video player actually uses. Everything else in the schema is reasoning scaffolding.
-          </span>
-        </div>
-      </Reveal>
-
-      {/* Segment 2: extractive_ranges zoom */}
-      <Reveal from={2} animation={fadeUp} style={{ marginTop: '1rem' }}>
-        <CodeBlock
-          code={EXTRACTIVE_SAMPLE}
-          language="json"
-          title="extractive_ranges[0]  —  field names as instructions"
-          fontSize={11}
-          highlightLines={[2, 6, 7]}
-        />
-        <div style={{
-          display: 'flex',
-          gap: '1.5rem',
-          marginTop: '0.4rem',
-          justifyContent: 'center',
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-            <div style={{
-              width: 10, height: 10, borderRadius: 2,
-              background: 'rgba(251, 191, 36, 0.35)',
-              border: '2px solid #fbbf24',
-            }} />
-            <span style={{ ...typography.body, fontSize: 10, color: theme.colors.textSecondary }}>
-              Step 1: Copy from input
-            </span>
+            {SCHEMA_INSIGHT_PILLS.map((pill) => (
+              <div key={pill} style={{
+                background: theme.colors.bgSurface,
+                border: `1px solid ${theme.colors.bgBorder}`,
+                borderRadius: 8,
+                padding: '0.3rem 0.7rem',
+                fontSize: 12,
+                fontWeight: 600,
+                color: theme.colors.primary,
+                fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+              }}>
+                {pill}
+              </div>
+            ))}
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-            <div style={{
-              width: 10, height: 10, borderRadius: 2,
-              background: 'transparent',
-              border: `2px solid ${theme.colors.primary}`,
-            }} />
-            <span style={{ ...typography.body, fontSize: 10, color: theme.colors.textSecondary }}>
-              Step 2: Parse from copy
-            </span>
-          </div>
-        </div>
-      </Reveal>
-
-      {/* Segment 3: Insight callout + pills */}
-      <Reveal from={3} animation={fadeUp} style={{ marginTop: '0.75rem' }}>
-        <div style={{
-          padding: '0.7rem 1.1rem',
-          borderRadius: 10,
-          background: `linear-gradient(135deg, ${theme.colors.primary}15, ${theme.colors.secondary}15)`,
-          borderLeft: `3px solid ${theme.colors.primary}`,
-        }}>
-          <p style={{
-            ...typography.body,
-            fontSize: 13,
-            color: theme.colors.textPrimary,
-            margin: 0,
-            fontStyle: 'italic',
-          }}>
-            The output schema isn't just a data format — it's a chain-of-thought scaffold.
-            Five fields guide the model's reasoning, one field captures the deliverable.
-            Field names become execution steps, and self_checks closes the validation loop.
-          </p>
-        </div>
-        <div style={{
-          display: 'flex',
-          gap: '0.6rem',
-          marginTop: '0.6rem',
-          justifyContent: 'center',
-        }}>
-          {SCHEMA_INSIGHT_PILLS.map((pill) => (
-            <div key={pill} style={{
-              background: theme.colors.bgSurface,
-              border: `1px solid ${theme.colors.bgBorder}`,
-              borderRadius: 8,
-              padding: '0.3rem 0.7rem',
-              fontSize: 12,
-              fontWeight: 600,
-              color: theme.colors.primary,
-              fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
-            }}>
-              {pill}
-            </div>
-          ))}
-        </div>
-      </Reveal>
+        </Reveal>
+      </RevealSequence>
     </SlideContainer>
   );
 };

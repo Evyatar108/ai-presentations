@@ -23,6 +23,8 @@ npm run tts:generate -- --demo {id}  # Generate TTS audio for a specific demo (r
 npm run tts:generate -- --demo {id} --segments ch1:s2:intro,ch3:s1:summary  # Regenerate specific segments only
 npm run tts:duration -- --demo {id}  # Calculate audio durations and auto-update metadata.ts durationInfo
 npm run check-narration              # Validate narration structure
+npm run test:overflow -- --demo {id}  # Playwright test: detect viewport overflow on every slide/segment (requires dev server running)
+npm run test:overflow -- --demo {id} --viewport 1920x1019  # Same, at a custom viewport size
 ```
 
 Scaffold a new demo: `.\scripts\new-demo.ps1 -DemoId "my-demo" [-DemoTitle "My Demo"]`
@@ -46,6 +48,9 @@ Each demo lives in `src/demos/{demo-id}/` with:
 
 ### Slide Model
 Slides are objects with `metadata` (chapter, slide number, title, audio segments) and a `component` React function receiving `{ segment }`. Progressive reveals use `segment >= N` conditionals. Audio segments define `narrationText`, and optional `timing` and `instruct` overrides. `audioFilePath` is **auto-derived** at runtime from slide coordinates (via `resolveAudioFilePath` in `DemoPlayer`) — do not hardcode it. The pattern is `/audio/{demoId}/c{chapter}/s{slide}_segment_{paddedIndex}_{segmentId}.wav`. To override, set `audioFilePath` explicitly on the segment.
+
+### Viewport Overflow Detection
+`SlideContainer` has a `viewportFraction` prop (default `0.75`) that controls dev-mode overflow detection. When content exceeds `window.innerHeight * viewportFraction`, a red outline + badge appears and a `data-overflow` attribute is set (used by the Playwright `test:overflow` command). The console.warn includes the slide heading for identification. Fix overflows with `<RevealSequence>` + `until={N}` to swap content instead of accumulating it. Note: Playwright's headless Chromium renders text ~15-20px shorter than real browsers due to font fallbacks, so always test at a viewport slightly shorter than target (e.g., `--viewport 1920x1019` for 1080p monitors).
 
 ### Theme System
 Colors and typography are centralized in `src/framework/theme/`. Framework components use `useTheme()` hook. Demo slides can use static exports from `SlideStyles.ts` or opt into theme-aware `create*()` factory functions. Override colors via `src/project.config.ts`.
@@ -101,6 +106,8 @@ Audio naming: `s{slide}_segment_{number}_{id}.wav`
 | `src/framework/utils/audioPath.ts` | Audio file path derivation (buildAudioFilePath, resolveAudioFilePath) |
 | `src/framework/utils/formatTime.ts` | Time formatting utilities (mm:ss, delta colors) |
 | `vite-plugin-audio-writer.ts` | Custom Vite plugin for /api/save-audio |
+| `tests/overflow.spec.ts` | Playwright test: viewport overflow detection for all slides/segments |
+| `playwright.config.ts` | Playwright config (viewport configurable via VIEWPORT_HEIGHT/WIDTH env vars) |
 
 ## Conventions
 

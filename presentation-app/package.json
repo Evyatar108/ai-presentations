@@ -19,7 +19,8 @@
     "extract-narration": "tsx scripts/extract-narration.ts",
     "check-narration": "tsx scripts/check-narration.ts",
     "narration-api": "node server/narration-api.cjs",
-    "dev:full": "concurrently \"npm run narration-api\" \"npm run dev\" --names \"API,VITE\" --prefix-colors \"cyan,magenta\""
+    "dev:full": "concurrently \"npm run narration-api\" \"npm run dev\" --names \"API,VITE\" --prefix-colors \"cyan,magenta\"",
+    "test:overflow": "tsx scripts/run-overflow-test.ts"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -30,6 +31,7 @@
     "reactflow": "^11.11.4"
   },
   "devDependencies": {
+    "@playwright/test": "^1.58.2",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@types/node": "^24.8.1",

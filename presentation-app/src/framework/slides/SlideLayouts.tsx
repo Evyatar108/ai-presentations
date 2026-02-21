@@ -3,7 +3,7 @@
  * Extracted from AnimatedSlides.tsx to reduce duplication
  */
 
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { contentBox, highlightOverlayBox, typography, createSlideContainer } from './SlideStyles';
 import { useTheme } from '../theme/ThemeContext';
@@ -12,23 +12,92 @@ export interface SlideContainerProps {
   children: React.ReactNode;
   maxWidth?: number;
   textAlign?: 'center' | 'left' | 'right';
+  /** Fraction of viewport height considered the safe content area (default 0.75). */
+  viewportFraction?: number;
 }
 
 /**
  * Standard slide container with dark background.
  * Theme-aware via useTheme() — uses theme's bgDeep and fontFamily.
+ * In dev mode, detects content overflow and shows a red outline + badge.
+ * Sets data-overflow attribute on the content div for Playwright testing.
  * Used in: ~20 slides
  */
 export const SlideContainer: React.FC<SlideContainerProps> = ({
   children,
   maxWidth = 900,
-  textAlign = 'center'
+  textAlign = 'center',
+  viewportFraction = 0.75
 }) => {
   const theme = useTheme();
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [overflowPx, setOverflowPx] = useState(0);
+
+  useEffect(() => {
+    if (!import.meta.env.DEV) return;
+    const el = contentRef.current;
+    if (!el) return;
+
+    const measure = () => {
+      const threshold = window.innerHeight * viewportFraction;
+      const overflow = Math.max(0, Math.round(el.scrollHeight - threshold));
+      setOverflowPx(overflow);
+      if (overflow > 0) {
+        const h1 = el.querySelector('h1, h2');
+        const hint = h1?.textContent?.slice(0, 60) || '(no heading)';
+        console.warn(
+          `[SlideContainer] Overflow: ${overflow}px (scrollHeight: ${el.scrollHeight}px, threshold: ${Math.round(threshold)}px) — "${hint}"`
+        );
+      }
+    };
+
+    measure();
+
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    window.addEventListener('resize', measure);
+
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', measure);
+    };
+  }, [viewportFraction]);
+
+  const isOverflowing = import.meta.env.DEV && overflowPx > 0;
+
   return (
     <div style={createSlideContainer(theme)}>
-      <div style={{ maxWidth, width: '100%', textAlign }}>
+      <div
+        ref={contentRef}
+        data-overflow={String(overflowPx)}
+        style={{
+          maxWidth,
+          width: '100%',
+          textAlign,
+          position: 'relative',
+          ...(isOverflowing ? { outline: '2px solid red' } : {})
+        }}
+      >
         {children}
+        {isOverflowing && (
+          <div
+            style={{
+              position: 'absolute',
+              top: -12,
+              right: -12,
+              background: 'red',
+              color: 'white',
+              fontSize: 11,
+              fontWeight: 700,
+              padding: '2px 7px',
+              borderRadius: 8,
+              zIndex: 9999,
+              pointerEvents: 'none',
+            }}
+          >
+            +{overflowPx}px
+          </div>
+        )}
       </div>
     </div>
   );
