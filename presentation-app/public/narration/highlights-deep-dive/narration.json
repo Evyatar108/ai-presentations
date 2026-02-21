@@ -84,19 +84,19 @@
         {
           "id": "call1",
           "narrationText": "Call one: abstractive generation. This identifies the key meeting topics and writes narration summaries for each one.",
-          "visualDescription": "First pipeline box appears: highlights_abstractives",
+          "visualDescription": "First pipeline box appears: highlights abstractives",
           "notes": ""
         },
         {
           "id": "call2",
           "narrationText": "Call two: extractive selection. This selects the best verbatim clips from a pre-enumerated set of candidate ranges. I'll come back to how those candidates are generated — it's the critical cost driver.",
-          "visualDescription": "Second pipeline box appears: highlights_extractives",
+          "visualDescription": "Second pipeline box appears: highlights extractives",
           "notes": ""
         },
         {
           "id": "call3",
           "narrationText": "Call three: extractive ranking. This ranks the selected clips by quality — interest level, clarity, and self-containment.",
-          "visualDescription": "Third pipeline box appears: highlights_extractive_ranking",
+          "visualDescription": "Third pipeline box appears: highlights extractive ranking",
           "notes": ""
         },
         {
@@ -152,7 +152,7 @@
       "segments": [
         {
           "id": "comparison",
-          "narrationText": "This is how Call 1 — highlights_abstractives — sees the meeting transcript. Each utterance wrapped in a five-key JSON object. Five hundred utterances means twenty-five hundred wasted key tokens before any actual content.",
+          "narrationText": "This is how Call 1 — highlights abstractives — sees the meeting transcript. Each utterance wrapped in a five-key JSON object. Five hundred utterances means twenty-five hundred wasted key tokens before any actual content.",
           "visualDescription": "BeforeAfterSplit — Left: V1 verbose JSON. Right: token counter",
           "notes": ""
         },
@@ -171,7 +171,7 @@
       "segments": [
         {
           "id": "title",
-          "narrationText": "Now for the biggest cost driver: the combinatorial candidate explosion. This code runs between Call 1 and Call 2, generating the candidate rows that become input to Call 2 — highlights_extractives.",
+          "narrationText": "Now for the biggest cost driver: the combinatorial candidate explosion. This code runs between Call 1 and Call 2, generating the candidate rows that become input to Call 2 — highlights extractives.",
           "visualDescription": "Title: 'Combinatorial Candidate Explosion'",
           "notes": ""
         },
@@ -196,7 +196,7 @@
       "segments": [
         {
           "id": "title",
-          "narrationText": "What does that nested loop actually produce? These candidate rows become the input to Call 2 — highlights_extractives. Let's look at a concrete example with five utterances.",
+          "narrationText": "What does that nested loop actually produce? These candidate rows become the input to Call 2 — highlights extractives. Let's look at a concrete example with five utterances.",
           "visualDescription": "Title: 'Candidate Rows'",
           "notes": ""
         },
@@ -234,7 +234,7 @@
         },
         {
           "id": "context_window",
-          "narrationText": "The V1 code then greedily packs these candidates into Call 2's prompt until it fills the entire 128K context window. This is why highlights_extractives alone could consume more tokens than all other calls combined.",
+          "narrationText": "The V1 code then greedily packs these candidates into Call 2's prompt until it fills the entire 128K context window. This is why highlights extractives alone could consume more tokens than all other calls combined.",
           "visualDescription": "Animated bar filling to 128K tokens",
           "notes": ""
         }
@@ -265,8 +265,8 @@
         },
         {
           "id": "tradeoff",
-          "narrationText": "So V1 made a deliberate trade-off: accept the O of n-squared input cost in exchange for guaranteed output safety. Every candidate the model could select was pre-validated. But as we've seen, this fills the entire 128K context window. Next, we'll see how V2 achieves the same output safety at linear cost — using a single column called max_end_utterance_id.",
-          "visualDescription": "Balance panel: Output Safety (green, checkmark) vs O(n²) Input Cost (red). Below: V2 callout with max_end_utterance_id.",
+          "narrationText": "So V1 made a deliberate trade-off: accept the O of n-squared input cost in exchange for guaranteed output safety. Every candidate the model could select was pre-validated. But as we've seen, this fills the entire 128K context window. Next, we'll see how V2 achieves the same output safety at linear cost — using a single column called max end utterance ID.",
+          "visualDescription": "Balance panel: Output Safety (green, checkmark) vs O(n²) Input Cost (red). Below: V2 callout with max end utterance ID.",
           "notes": ""
         }
       ]
@@ -290,7 +290,7 @@
         },
         {
           "id": "table",
-          "narrationText": "Speaker info appears once per turn — in the turn tag. Timestamps are omitted entirely. And the third column, max_end_utterance_id, encodes topic boundaries directly in the data.",
+          "narrationText": "Speaker info appears once per turn — in the turn tag. Timestamps are omitted entirely. And the third column, max end utterance ID, encodes topic boundaries directly in the data.",
           "visualDescription": "Comparison table: what changed across 5 aspects",
           "notes": ""
         }
@@ -299,11 +299,11 @@
     {
       "chapter": 5,
       "slide": 2,
-      "title": "max_end_utterance_id",
+      "title": "max end utterance ID",
       "segments": [
         {
           "id": "row",
-          "narrationText": "This is the key insight. Remember, V1 precomputed all candidate combinations so the model could only output safe indices. V2 replaces that entire approach. Look at this single row: u2, the utterance text, and u4 as the max_end_utterance_id. That third column tells the model: if you start a clip at u2, the furthest you can extend it is u4. The model outputs the range directly — and the boundary constraint guarantees it's valid. This single column replaces the entire O of n-squared candidate enumeration.",
+          "narrationText": "This is the key insight. Remember, V1 precomputed all candidate combinations so the model could only output safe indices. V2 replaces that entire approach. Look at this single row: u2, the utterance text, and u4 as the max end utterance ID. That third column tells the model: if you start a clip at u2, the furthest you can extend it is u4. The model outputs the range directly — and the boundary constraint guarantees it's valid. This single column replaces the entire O of n-squared candidate enumeration.",
           "visualDescription": "Highlighted row with annotated arrows pointing to each column",
           "notes": ""
         },
@@ -359,7 +359,7 @@
         },
         {
           "id": "sections",
-          "narrationText": "Section one: critical rules — the copy-then-parse pattern and core constraints like topic non-overlap. Section two: the algorithm — pseudocode defining the entire pipeline. Section three: content priorities — what makes a good topic, speaker references, style rules. Section four: transition sentences — how to bridge from narration to raw audio. Section five: compressed safety rules. And section six: self-checks — boolean validators the model runs on its own output.",
+          "narrationText": "Section one: critical rules — the copy then parse pattern and core constraints like topic non-overlap. Section two: the algorithm — pseudocode defining the entire pipeline. Section three: content priorities — what makes a good topic, speaker references, style rules. Section four: transition sentences — how to bridge from narration to raw audio. Section five: compressed safety rules. And section six: self-checks — boolean validators the model runs on its own output.",
           "visualDescription": "Six section cards in a 3x2 grid, each with number, name, and one-line description",
           "notes": ""
         },
@@ -422,20 +422,20 @@
       "segments": [
         {
           "id": "skeleton",
-          "narrationText": "This is a single V2 response — six top-level fields in one JSON object. But they serve two very different purposes. The first four fields — abstractive topics, topic order, extractive ranges, and ranking — are structured chain-of-thought. They guide the model through segmentation, selection, and ranking. Only the fifth field, final_narrative, is the actual deliverable — the video editing instructions consumed by the product. And self_checks adds runtime validation.",
-          "visualDescription": "Grouped grid: Row 1 = 4 CoT cards (amber accent), Row 2 = final_narrative (teal, prominent) + self_checks (green)",
+          "narrationText": "This is a single V2 response — six top-level fields in one JSON object. But they serve two very different purposes. The first four fields — abstractive topics, topic order, extractive ranges, and ranking — are structured chain-of-thought. They guide the model through segmentation, selection, and ranking. Only the fifth field, final narrative, is the actual deliverable — the video editing instructions consumed by the product. And self checks adds runtime validation.",
+          "visualDescription": "Grouped grid: Row 1 = 4 CoT cards (amber accent), Row 2 = final narrative (teal, prominent) + self checks (green)",
           "notes": ""
         },
         {
           "id": "deliverable_zoom",
-          "narrationText": "Let's zoom into what final_narrative actually contains. Each row has a topic with narration text for TTS voiceover, and playback_start — the turn and utterance coordinates that tell the video player where to seek. Plus an optional extractive object defining clip boundaries. These coordinates are what the product uses to assemble the highlights video. Everything else in the schema — all five other fields — is reasoning scaffolding that helped the model produce this.",
-          "visualDescription": "JSON code block showing final_narrative[0] with highlighted playback_start and extractive fields, plus legend and callout",
+          "narrationText": "Let's zoom into what final narrative actually contains. Each row has a topic with narration text for TTS voiceover, and playback start — the turn and utterance coordinates that tell the video player where to seek. Plus an optional extractive object defining clip boundaries. These coordinates are what the product uses to assemble the highlights video. Everything else in the schema — all five other fields — is reasoning scaffolding that helped the model produce this.",
+          "visualDescription": "JSON code block showing final narrative[0] with highlighted playback start and extractive fields, plus legend and callout",
           "notes": ""
         },
         {
           "id": "extractive_zoom",
-          "narrationText": "Now contrast that with extractive_ranges — pure chain-of-thought. Look at the field names — they're instructions. 'Selected turn opening tag raw copy from input' forces the model to copy the exact turn tag. Then 'speaker name' and 'turn id' are parsed from that copy. Same pattern below: first copy the raw pipe-delimited row, then parse the utterance IDs. The schema guides the model through copy-then-parse — which we'll see in detail next.",
-          "visualDescription": "JSON code block showing extractive_ranges[0] with amber-highlighted copy fields and legend",
+          "narrationText": "Now contrast that with extractive ranges — pure chain-of-thought. Look at the field names — they're instructions. 'Selected turn opening tag raw copy from input' forces the model to copy the exact turn tag. Then 'speaker name' and 'turn id' are parsed from that copy. Same pattern below: first copy the raw pipe-delimited row, then parse the utterance IDs. The schema guides the model through copy then parse — which we'll see in detail next.",
+          "visualDescription": "JSON code block showing extractive ranges[0] with amber-highlighted copy fields and legend",
           "notes": ""
         },
         {
@@ -453,7 +453,7 @@
       "segments": [
         {
           "id": "title",
-          "narrationText": "The third innovation: copy-then-parse. The idea is to break the model's work into two subtasks — a simple one that almost always succeeds, followed by a harder one that benefits from having the first result in context.",
+          "narrationText": "The third innovation: copy then parse. The idea is to break the model's work into two subtasks — a simple one that almost always succeeds, followed by a harder one that benefits from having the first result in context.",
           "visualDescription": "Title: 'Copy-then-Parse: Chain-of-Thought Grounding'",
           "notes": ""
         },
@@ -503,14 +503,14 @@
         },
         {
           "id": "checks",
-          "narrationText": "We added two automated verifications. First, output range validation — every turn and utterance combination in the output must actually exist in the input transcript. Second, a max utterance threshold check — the beginning utterance of an extractive clip must not exceed the max_end_utterance_id from the transcript table. These checks caught errors that would otherwise produce invalid video edits.",
+          "narrationText": "We added two automated verifications. First, output range validation — every turn and utterance combination in the output must actually exist in the input transcript. Second, a max utterance threshold check — the beginning utterance of an extractive clip must not exceed the max end utterance ID from the transcript table. These checks caught errors that would otherwise produce invalid video edits.",
           "visualDescription": "Two verification cards: range validation + threshold check",
           "notes": ""
         },
         {
           "id": "challenge",
-          "narrationText": "Getting the model to output correct turn-utterance combinations was by far the hardest challenge. We tracked error statistics — the rate of invalid combinations — as our primary stability metric across prompt iterations. This is where copy-then-parse, which we covered earlier, proved essential. By forcing the model to first copy the raw turn tag and pipe-delimited row, then parse the IDs from those copies, the error rate dropped dramatically.",
-          "visualDescription": "Emphasis callout linking back to copy-then-parse technique",
+          "narrationText": "Getting the model to output correct turn-utterance combinations was by far the hardest challenge. We tracked error statistics — the rate of invalid combinations — as our primary stability metric across prompt iterations. This is where copy then parse, which we covered earlier, proved essential. By forcing the model to first copy the raw turn tag and pipe-delimited row, then parse the IDs from those copies, the error rate dropped dramatically.",
+          "visualDescription": "Emphasis callout linking back to copy then parse technique",
           "notes": ""
         }
       ]
@@ -534,8 +534,8 @@
         },
         {
           "id": "metrics",
-          "narrationText": "We used error statistics about incorrect turn-utterance combinations as our primary metric. Each prompt revision was run across a set of test transcripts, and we tracked how the invalid combination rate changed. This gave us a quantitative signal to complement the qualitative video review — and let us measure whether techniques like copy-then-parse were actually working.",
-          "visualDescription": "Error rate tracking callout",
+          "narrationText": "The real power of the local tool was the iteration speed. We could change a line in the prompt, run it across test transcripts, and within minutes see both the automated validation results and the generated video. That tight feedback loop meant we could test dozens of prompt revisions in a single day — something that would have been impossible with a cloud deployment cycle. Each change got an immediate, dual-signal verdict: did the structural checks pass, and did the video actually look right?",
+          "visualDescription": "Rapid iteration feedback loop callout",
           "notes": ""
         }
       ]

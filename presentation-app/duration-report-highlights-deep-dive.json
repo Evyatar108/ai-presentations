@@ -1,12 +1,12 @@
 {
   "highlights-deep-dive": {
     "demoId": "highlights-deep-dive",
-    "audioOnlyDuration": 1161.6,
+    "audioOnlyDuration": 1195.12,
     "segmentDelays": 82.5,
     "slideDelays": 48,
     "finalDelay": 2,
     "startSilence": 1,
-    "totalDuration": 1295.1,
+    "totalDuration": 1328.62,
     "slideBreakdowns": [
       {
         "slideIndex": 1,
@@ -77,8 +77,8 @@
         "slideIndex": 1,
         "slideTitle": "Four-Call Pipeline",
         "chapterIndex": 2,
-        "totalDuration": 48.88,
-        "audioDuration": 40.88,
+        "totalDuration": 50.239999999999995,
+        "audioDuration": 42.239999999999995,
         "delaysDuration": 8,
         "segments": [
           {
@@ -98,7 +98,7 @@
           },
           {
             "segmentIndex": 3,
-            "audioDuration": 7.12,
+            "audioDuration": 8.48,
             "delayAfter": 1.5
           },
           {
@@ -112,8 +112,8 @@
         "slideIndex": 1,
         "slideTitle": "Four Cost Drivers",
         "chapterIndex": 3,
-        "totalDuration": 54,
-        "audioDuration": 46,
+        "totalDuration": 53.28,
+        "audioDuration": 45.28,
         "delaysDuration": 8,
         "segments": [
           {
@@ -123,7 +123,7 @@
           },
           {
             "segmentIndex": 1,
-            "audioDuration": 7.6,
+            "audioDuration": 6.88,
             "delayAfter": 1.5
           },
           {
@@ -147,13 +147,13 @@
         "slideIndex": 2,
         "slideTitle": "Verbose JSON",
         "chapterIndex": 3,
-        "totalDuration": 20.86,
-        "audioDuration": 17.36,
+        "totalDuration": 21.34,
+        "audioDuration": 17.84,
         "delaysDuration": 3.5,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 14.88,
+            "audioDuration": 15.36,
             "delayAfter": 1.5
           },
           {
@@ -167,13 +167,13 @@
         "slideIndex": 1,
         "slideTitle": "Nested Loop",
         "chapterIndex": 4,
-        "totalDuration": 34.120000000000005,
-        "audioDuration": 29.12,
+        "totalDuration": 33.96,
+        "audioDuration": 28.96,
         "delaysDuration": 5,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 12.96,
+            "audioDuration": 12.8,
             "delayAfter": 1.5
           },
           {
@@ -192,13 +192,13 @@
         "slideIndex": 2,
         "slideTitle": "Candidate Rows",
         "chapterIndex": 4,
-        "totalDuration": 48.36,
-        "audioDuration": 43.36,
+        "totalDuration": 46.44,
+        "audioDuration": 41.44,
         "delaysDuration": 5,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 12.96,
+            "audioDuration": 11.04,
             "delayAfter": 1.5
           },
           {
@@ -217,8 +217,8 @@
         "slideIndex": 3,
         "slideTitle": "O(n^2) Visualized",
         "chapterIndex": 4,
-        "totalDuration": 41.08,
-        "audioDuration": 36.08,
+        "totalDuration": 41.64,
+        "audioDuration": 36.64,
         "delaysDuration": 5,
         "segments": [
           {
@@ -233,7 +233,7 @@
           },
           {
             "segmentIndex": 2,
-            "audioDuration": 15.52,
+            "audioDuration": 16.08,
             "delayAfter": 2
           }
         ]
@@ -242,8 +242,8 @@
         "slideIndex": 4,
         "slideTitle": "Output Safety",
         "chapterIndex": 4,
-        "totalDuration": 127.22,
-        "audioDuration": 120.72,
+        "totalDuration": 126.10000000000001,
+        "audioDuration": 119.60000000000001,
         "delaysDuration": 6.5,
         "segments": [
           {
@@ -253,7 +253,7 @@
           },
           {
             "segmentIndex": 1,
-            "audioDuration": 25.04,
+            "audioDuration": 25.76,
             "delayAfter": 1.5
           },
           {
@@ -263,7 +263,7 @@
           },
           {
             "segmentIndex": 3,
-            "audioDuration": 28.96,
+            "audioDuration": 27.12,
             "delayAfter": 2
           }
         ]
@@ -272,8 +272,8 @@
         "slideIndex": 1,
         "slideTitle": "Format Comparison",
         "chapterIndex": 5,
-        "totalDuration": 37.879999999999995,
-        "audioDuration": 32.879999999999995,
+        "totalDuration": 38.28,
+        "audioDuration": 33.28,
         "delaysDuration": 5,
         "segments": [
           {
@@ -288,7 +288,7 @@
           },
           {
             "segmentIndex": 2,
-            "audioDuration": 11.68,
+            "audioDuration": 12.08,
             "delayAfter": 2
           }
         ]
@@ -297,13 +297,13 @@
         "slideIndex": 2,
         "slideTitle": "max_end_utterance_id",
         "chapterIndex": 5,
-        "totalDuration": 63.559999999999995,
-        "audioDuration": 58.559999999999995,
+        "totalDuration": 62.36000000000001,
+        "audioDuration": 57.36000000000001,
         "delaysDuration": 5,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 39.04,
+            "audioDuration": 37.84,
             "delayAfter": 1.5
           },
           {
@@ -372,13 +372,13 @@
         "slideIndex": 2,
         "slideTitle": "Pseudocode Algorithm",
         "chapterIndex": 6,
-        "totalDuration": 43.16,
-        "audioDuration": 38.16,
+        "totalDuration": 46.67999999999999,
+        "audioDuration": 41.67999999999999,
         "delaysDuration": 5,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 13.12,
+            "audioDuration": 16.64,
             "delayAfter": 1.5
           },
           {
@@ -397,8 +397,8 @@
         "slideIndex": 3,
         "slideTitle": "Prose vs Pseudocode",
         "chapterIndex": 6,
-        "totalDuration": 28.22,
-        "audioDuration": 24.72,
+        "totalDuration": 30.14,
+        "audioDuration": 26.64,
         "delaysDuration": 3.5,
         "segments": [
           {
@@ -408,7 +408,7 @@
           },
           {
             "segmentIndex": 1,
-            "audioDuration": 12.72,
+            "audioDuration": 14.64,
             "delayAfter": 2
           }
         ]
@@ -417,23 +417,23 @@
         "slideIndex": 4,
         "slideTitle": "Output Schema",
         "chapterIndex": 6,
-        "totalDuration": 125.14,
-        "audioDuration": 118.64,
+        "totalDuration": 127.62,
+        "audioDuration": 121.12,
         "delaysDuration": 6.5,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 31.44,
+            "audioDuration": 33.04,
             "delayAfter": 1.5
           },
           {
             "segmentIndex": 1,
-            "audioDuration": 28.72,
+            "audioDuration": 29.44,
             "delayAfter": 1.5
           },
           {
             "segmentIndex": 2,
-            "audioDuration": 31.92,
+            "audioDuration": 32.08,
             "delayAfter": 1.5
           },
           {
@@ -447,13 +447,13 @@
         "slideIndex": 1,
         "slideTitle": "Copy-then-Parse",
         "chapterIndex": 7,
-        "totalDuration": 65,
-        "audioDuration": 60,
+        "totalDuration": 64.36,
+        "audioDuration": 59.36,
         "delaysDuration": 5,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 15.6,
+            "audioDuration": 14.96,
             "delayAfter": 1.5
           },
           {
@@ -472,18 +472,18 @@
         "slideIndex": 2,
         "slideTitle": "Self-Checks",
         "chapterIndex": 7,
-        "totalDuration": 27.58,
-        "audioDuration": 24.08,
+        "totalDuration": 46.3,
+        "audioDuration": 42.8,
         "delaysDuration": 3.5,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 13.52,
+            "audioDuration": 26.4,
             "delayAfter": 1.5
           },
           {
             "segmentIndex": 1,
-            "audioDuration": 10.56,
+            "audioDuration": 16.4,
             "delayAfter": 2
           }
         ]
@@ -492,8 +492,8 @@
         "slideIndex": 1,
         "slideTitle": "Validation Challenges",
         "chapterIndex": 8,
-        "totalDuration": 74.52,
-        "audioDuration": 69.52,
+        "totalDuration": 72.36,
+        "audioDuration": 67.36,
         "delaysDuration": 5,
         "segments": [
           {
@@ -503,12 +503,12 @@
           },
           {
             "segmentIndex": 1,
-            "audioDuration": 28.08,
+            "audioDuration": 26.32,
             "delayAfter": 1.5
           },
           {
             "segmentIndex": 2,
-            "audioDuration": 29.76,
+            "audioDuration": 29.36,
             "delayAfter": 2
           }
         ]
@@ -517,8 +517,8 @@
         "slideIndex": 2,
         "slideTitle": "Eval Tool",
         "chapterIndex": 8,
-        "totalDuration": 59.64,
-        "audioDuration": 54.64,
+        "totalDuration": 66.52,
+        "audioDuration": 61.519999999999996,
         "delaysDuration": 5,
         "segments": [
           {
@@ -533,7 +533,7 @@
           },
           {
             "segmentIndex": 2,
-            "audioDuration": 24.16,
+            "audioDuration": 31.04,
             "delayAfter": 2
           }
         ]
@@ -597,8 +597,8 @@
         "slideIndex": 1,
         "slideTitle": "Six Lessons",
         "chapterIndex": 10,
-        "totalDuration": 77.08,
-        "audioDuration": 66.08,
+        "totalDuration": 82.2,
+        "audioDuration": 71.2,
         "delaysDuration": 11,
         "segments": [
           {
@@ -618,7 +618,7 @@
           },
           {
             "segmentIndex": 3,
-            "audioDuration": 10.8,
+            "audioDuration": 15.92,
             "delayAfter": 1.5
           },
           {
@@ -660,8 +660,8 @@
       }
     ],
     "formattedDurations": {
-      "audioOnly": "19:21",
-      "total": "21:35"
+      "audioOnly": "19:55",
+      "total": "22:08"
     }
   }
 }

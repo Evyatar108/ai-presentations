@@ -228,7 +228,7 @@
     "c2\\s1_segment_04_call3.wav": {
       "narrationText": "Call three: extractive ranking. This ranks the selected clips by quality — interest level, clarity, and self-containment.",
       "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-20T19:12:27.319Z"
+      "generatedAt": "2026-02-21T10:23:10.337Z"
     },
     "c2\\s1_segment_05_call4.wav": {
       "narrationText": "Call four: final assembly. This merges everything into a unified narrative, interleaving abstractive summaries with extractive clips in coherent order.",
@@ -243,7 +243,7 @@
     "c3\\s1_segment_02_driver1.wav": {
       "narrationText": "Driver one: four sequential calls means four times the compute cost — each consuming its own GPU allocation.",
       "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-20T19:20:04.772Z"
+      "generatedAt": "2026-02-21T10:23:10.343Z"
     },
     "c3\\s1_segment_03_driver2.wav": {
       "narrationText": "Driver two: the transcript is sent as verbose JSON with keys like Index, Speaker, Start, End, and Utterance repeated for every single utterance — often five hundred or more times per meeting.",
@@ -261,9 +261,9 @@
       "generatedAt": "2026-02-20T20:31:10.681Z"
     },
     "c3\\s2_segment_01_comparison.wav": {
-      "narrationText": "This is how Call 1 — highlights_abstractives — sees the meeting transcript. Each utterance wrapped in a five-key JSON object. Five hundred utterances means twenty-five hundred wasted key tokens before any actual content.",
+      "narrationText": "This is how Call 1 — highlights abstractives — sees the meeting transcript. Each utterance wrapped in a five-key JSON object. Five hundred utterances means twenty-five hundred wasted key tokens before any actual content.",
       "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-21T00:47:30.982Z"
+      "generatedAt": "2026-02-21T10:23:10.353Z"
     },
     "c3\\s2_segment_02_caption.wav": {
       "narrationText": "A cost lever we'll address in V2.",
@@ -271,9 +271,9 @@
       "generatedAt": "2026-02-20T19:20:04.779Z"
     },
     "c4\\s1_segment_01_title.wav": {
-      "narrationText": "Now for the biggest cost driver: the combinatorial candidate explosion. This code runs between Call 1 and Call 2, generating the candidate rows that become input to Call 2 — highlights_extractives.",
+      "narrationText": "Now for the biggest cost driver: the combinatorial candidate explosion. This code runs between Call 1 and Call 2, generating the candidate rows that become input to Call 2 — highlights extractives.",
       "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-21T00:47:30.986Z"
+      "generatedAt": "2026-02-21T10:23:10.376Z"
     },
     "c4\\s1_segment_02_code.wav": {
       "narrationText": "Look at the two highlighted for-loops. For each topic, the outer loop iterates over every start utterance, the inner loop over every end after that start.",
@@ -321,14 +321,14 @@
       "generatedAt": "2026-02-21T00:47:30.990Z"
     },
     "c5\\s1_segment_03_table.wav": {
-      "narrationText": "Speaker info appears once per turn — in the turn tag. Timestamps are omitted entirely. And the third column, max_end_utterance_id, encodes topic boundaries directly in the data.",
+      "narrationText": "Speaker info appears once per turn — in the turn tag. Timestamps are omitted entirely. And the third column, max end utterance ID, encodes topic boundaries directly in the data.",
       "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-21T02:43:32.573Z"
+      "generatedAt": "2026-02-21T10:23:10.420Z"
     },
     "c5\\s2_segment_01_row.wav": {
-      "narrationText": "This is the key insight. Remember, V1 precomputed all candidate combinations so the model could only output safe indices. V2 replaces that entire approach. Look at this single row: u2, the utterance text, and u4 as the max_end_utterance_id. That third column tells the model: if you start a clip at u2, the furthest you can extend it is u4. The model outputs the range directly — and the boundary constraint guarantees it's valid. This single column replaces the entire O of n-squared candidate enumeration.",
+      "narrationText": "This is the key insight. Remember, V1 precomputed all candidate combinations so the model could only output safe indices. V2 replaces that entire approach. Look at this single row: u2, the utterance text, and u4 as the max end utterance ID. That third column tells the model: if you start a clip at u2, the furthest you can extend it is u4. The model outputs the range directly — and the boundary constraint guarantees it's valid. This single column replaces the entire O of n-squared candidate enumeration.",
       "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-21T01:51:30.992Z"
+      "generatedAt": "2026-02-21T10:23:10.435Z"
     },
     "c5\\s2_segment_02_visual.wav": {
       "narrationText": "V1 fans out hundreds of candidate rows from each start. V2 encodes the same constraint as a single row with a ceiling boundary.",
@@ -346,9 +346,9 @@
       "generatedAt": "2026-02-20T19:58:24.671Z"
     },
     "c7\\s1_segment_01_title.wav": {
-      "narrationText": "The third innovation: copy-then-parse. The idea is to break the model's work into two subtasks — a simple one that almost always succeeds, followed by a harder one that benefits from having the first result in context.",
+      "narrationText": "The third innovation: copy then parse. The idea is to break the model's work into two subtasks — a simple one that almost always succeeds, followed by a harder one that benefits from having the first result in context.",
       "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-20T19:58:24.690Z"
+      "generatedAt": "2026-02-21T10:33:56.099Z"
     },
     "c7\\s1_segment_02_copy.wav": {
       "narrationText": "Step one: copy raw strings verbatim from the input — the turn opening tag, the pipe-delimited row. This is deliberately easy. The model just echoes what it sees. And now those exact strings sit at the bottom of the output, right where the model looks when generating its next tokens.",
@@ -361,19 +361,19 @@
       "generatedAt": "2026-02-20T20:23:41.035Z"
     },
     "c7\\s2_segment_01_title.wav": {
-      "narrationText": "The V2 prompt includes a self-checks section — ten boolean validators the model runs against its own output. They catch errors at generation time, and in production they show you which constraints fail most often.",
+      "narrationText": "The V2 prompt includes a self-checks section — ten boolean validators the model runs against its own output. But they're not just for catching errors. By spelling out what 'correct' looks like inside the prompt itself, the checks reinforce the target format — the model is more likely to produce conforming output in the first place. In production, they double as telemetry, showing you which constraints fail most often.",
       "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-20T20:23:41.038Z"
+      "generatedAt": "2026-02-21T06:36:14.297Z"
     },
     "c7\\s2_segment_02_grid.wav": {
-      "narrationText": "Ten checks covering structural correctness — topic boundaries, ID uniqueness, extractive constraints, narrative alignment, and more. Any failure triggers an automatic retry.",
+      "narrationText": "Ten checks covering structural correctness — topic boundaries, ID uniqueness, extractive constraints, narrative alignment, and more. Each one is both an instruction to the model and a runtime gate. Any failure triggers an automatic retry.",
       "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-20T20:23:41.040Z"
+      "generatedAt": "2026-02-21T06:36:14.301Z"
     },
     "c4\\s2_segment_01_title.wav": {
-      "narrationText": "What does that nested loop actually produce? These candidate rows become the input to Call 2 — highlights_extractives. Let's look at a concrete example with five utterances.",
+      "narrationText": "What does that nested loop actually produce? These candidate rows become the input to Call 2 — highlights extractives. Let's look at a concrete example with five utterances.",
       "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-21T00:47:30.988Z"
+      "generatedAt": "2026-02-21T10:23:10.388Z"
     },
     "c4\\s3_segment_01_grid.wav": {
       "narrationText": "Each lit cell is one candidate range. Watch how quickly they multiply.",
@@ -386,9 +386,9 @@
       "generatedAt": "2026-02-21T03:32:31.378Z"
     },
     "c4\\s3_segment_03_context_window.wav": {
-      "narrationText": "The V1 code then greedily packs these candidates into Call 2's prompt until it fills the entire 128K context window. This is why highlights_extractives alone could consume more tokens than all other calls combined.",
+      "narrationText": "The V1 code then greedily packs these candidates into Call 2's prompt until it fills the entire 128K context window. This is why highlights extractives alone could consume more tokens than all other calls combined.",
       "instruct": "Speak with building intensity, like revealing the scale of a problem.",
-      "generatedAt": "2026-02-21T00:49:07.846Z"
+      "generatedAt": "2026-02-21T10:35:36.064Z"
     },
     "c9\\s2_segment_01_quality.wav": {
       "narrationText": "Quality held strong. No grounding regression. Seventy-five to eighty percent coverage. And in blind A-B tests, reviewers preferred V2.",
@@ -426,9 +426,9 @@
       "generatedAt": "2026-02-20T20:44:22.984Z"
     },
     "c10\\s1_segment_04_lesson3.wav": {
-      "narrationText": "Lesson three: pseudocode beats prose. When you need the model to follow a specific algorithm, write it as pseudocode. It reduces ambiguity and makes the output more predictable.",
+      "narrationText": "Lesson three: play to your model's strengths. GPT-4o is trained heavily on code, so pseudocode was a natural fit — it gave the model unambiguous, executable instructions. With a different model, the best format might be different.",
       "instruct": "Speak in a thoughtful, advisory tone, like sharing hard-won wisdom.",
-      "generatedAt": "2026-02-20T20:44:22.986Z"
+      "generatedAt": "2026-02-21T06:37:53.672Z"
     },
     "c10\\s1_segment_05_lesson4.wav": {
       "narrationText": "Lesson four: force the model to ground itself. Copy first, parse second — it creates a verifiable chain.",
@@ -491,9 +491,9 @@
       "generatedAt": "2026-02-20T19:58:24.678Z"
     },
     "c6\\s2_segment_01_title.wav": {
-      "narrationText": "The second innovation: replacing prose instructions with a pseudocode algorithm. The principle is simple — prose invites creative interpretation. Pseudocode demands systematic execution.",
+      "narrationText": "The second innovation: replacing prose instructions with a pseudocode algorithm. GPT-4o is a model built for programmers — it's trained heavily on code. So we leaned into that strength and wrote the prompt as executable pseudocode rather than natural language.",
       "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-20T19:58:24.680Z"
+      "generatedAt": "2026-02-21T06:36:14.290Z"
     },
     "c6\\s2_segment_02_code.wav": {
       "narrationText": "Here's the main function from the V2 prompt. It reads like executable code — parse turn markers, skip intro and closing, segment into topics, write narration, enumerate extractive candidates, filter, rank, and build the final narrative.",
@@ -511,19 +511,19 @@
       "generatedAt": "2026-02-20T19:58:24.686Z"
     },
     "c6\\s3_segment_02_benefits.wav": {
-      "narrationText": "Four benefits. Unambiguous execution order. Named variables as shared state. More precision than prose. And a single source of truth — one prompt, not four.",
+      "narrationText": "Four benefits. Unambiguous execution order. Named variables as shared state. It plays to GPT-4o's strengths as a code-trained model. And a single source of truth — one prompt, not four.",
       "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-20T19:58:24.688Z"
+      "generatedAt": "2026-02-21T06:36:14.292Z"
     },
     "c8\\s1_segment_02_checks.wav": {
-      "narrationText": "We added two automated verifications. First, output range validation — every turn and utterance combination in the output must actually exist in the input transcript. Second, a max utterance threshold check — the beginning utterance of an extractive clip must not exceed the max_end_utterance_id from the transcript table. These checks caught errors that would otherwise produce invalid video edits.",
+      "narrationText": "We added two automated verifications. First, output range validation — every turn and utterance combination in the output must actually exist in the input transcript. Second, a max utterance threshold check — the beginning utterance of an extractive clip must not exceed the max end utterance ID from the transcript table. These checks caught errors that would otherwise produce invalid video edits.",
       "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-20T20:23:41.046Z"
+      "generatedAt": "2026-02-21T10:33:56.103Z"
     },
     "c8\\s1_segment_03_challenge.wav": {
-      "narrationText": "Getting the model to output correct turn-utterance combinations was by far the hardest challenge. We tracked error statistics — the rate of invalid combinations — as our primary stability metric across prompt iterations. This is where copy-then-parse, which we covered earlier, proved essential. By forcing the model to first copy the raw turn tag and pipe-delimited row, then parse the IDs from those copies, the error rate dropped dramatically.",
+      "narrationText": "Getting the model to output correct turn-utterance combinations was by far the hardest challenge. We tracked error statistics — the rate of invalid combinations — as our primary stability metric across prompt iterations. This is where copy then parse, which we covered earlier, proved essential. By forcing the model to first copy the raw turn tag and pipe-delimited row, then parse the IDs from those copies, the error rate dropped dramatically.",
       "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-20T20:23:41.050Z"
+      "generatedAt": "2026-02-21T10:33:56.107Z"
     },
     "c8\\s2_segment_01_title.wav": {
       "narrationText": "To iterate quickly, we built a local evaluation tool that ran the full flow on downloaded transcripts and recordings — no cloud deployment needed.",
@@ -536,9 +536,9 @@
       "generatedAt": "2026-02-20T20:23:41.056Z"
     },
     "c8\\s2_segment_03_metrics.wav": {
-      "narrationText": "We used error statistics about incorrect turn-utterance combinations as our primary metric. Each prompt revision was run across a set of test transcripts, and we tracked how the invalid combination rate changed. This gave us a quantitative signal to complement the qualitative video review — and let us measure whether techniques like copy-then-parse were actually working.",
+      "narrationText": "The real power of the local tool was the iteration speed. We could change a line in the prompt, run it across test transcripts, and within minutes see both the automated validation results and the generated video. That tight feedback loop meant we could test dozens of prompt revisions in a single day — something that would have been impossible with a cloud deployment cycle. Each change got an immediate, dual-signal verdict: did the structural checks pass, and did the video actually look right?",
       "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-20T20:23:41.059Z"
+      "generatedAt": "2026-02-21T06:23:48.930Z"
     },
     "c9\\s1_segment_02_calls.wav": {
       "narrationText": "Seventy-five percent call reduction — four down to one.",
@@ -551,9 +551,9 @@
       "generatedAt": "2026-02-20T20:35:11.147Z"
     },
     "c6\\s4_segment_01_skeleton.wav": {
-      "narrationText": "This is a single V2 response — six top-level fields in one JSON object. But they serve two very different purposes. The first four fields — abstractive topics, topic order, extractive ranges, and ranking — are structured chain-of-thought. They guide the model through segmentation, selection, and ranking. Only the fifth field, final_narrative, is the actual deliverable — the video editing instructions consumed by the product. And self_checks adds runtime validation.",
+      "narrationText": "This is a single V2 response — six top-level fields in one JSON object. But they serve two very different purposes. The first four fields — abstractive topics, topic order, extractive ranges, and ranking — are structured chain-of-thought. They guide the model through segmentation, selection, and ranking. Only the fifth field, final narrative, is the actual deliverable — the video editing instructions consumed by the product. And self checks adds runtime validation.",
       "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-21T03:59:59.009Z"
+      "generatedAt": "2026-02-21T10:23:10.445Z"
     },
     "c4\\s4_segment_01_input_example.wav": {
       "narrationText": "Before we look at the output, let's see what Call 2 actually receives as input. It's a markdown table — each row is one candidate range with the full text of every utterance in that range. Notice how the same phrases repeat across rows — 'Velocity is up twelve percent' appears in four of the six candidates. Now scale this to thirty utterances per topic and five topics — that's over two thousand rows of heavily duplicated text, greedily packed until the 128K context window is full.",
@@ -561,9 +561,9 @@
       "generatedAt": "2026-02-21T03:00:11.859Z"
     },
     "c4\\s4_segment_02_input_output.wav": {
-      "narrationText": "So we've seen that Call 2 receives over two thousand candidate rows as input. But what does it actually output? Not freeform text — just index numbers. The model receives a numbered list of precomputed candidates and returns which indices it wants to keep. That's the entire output: a list of candidate identifiers.",
+      "narrationText": "So we've seen that Call 2 receives over two thousand candidate rows as input. But what does it actually output? A filtered subset of those same rows. The model echoes back the utterance ranges it wants to keep, along with a selection reason and self-assessment flags. The key insight is that every range in the output was already pre-computed and validated in the input — the model can only select from what it was given.",
       "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-21T03:00:11.864Z"
+      "generatedAt": "2026-02-21T06:36:14.285Z"
     },
     "c4\\s4_segment_03_rationale.wav": {
       "narrationText": "This is deliberate. By precomputing every valid candidate range programmatically, V1 constrains the model's output space. The model can only pick from ranges that are guaranteed to be valid — correct utterance boundaries, within duration thresholds, within a single topic. If the model output arbitrary start and end utterances, it could reference non-existent IDs or cross topic boundaries — producing invalid video editing instructions and a broken highlights video.",
@@ -571,19 +571,19 @@
       "generatedAt": "2026-02-21T03:00:11.867Z"
     },
     "c4\\s4_segment_04_tradeoff.wav": {
-      "narrationText": "So V1 made a deliberate trade-off: accept the O of n-squared input cost in exchange for guaranteed output safety. Every candidate the model could select was pre-validated. But as we've seen, this fills the entire 128K context window. Next, we'll see how V2 achieves the same output safety at linear cost — using a single column called max_end_utterance_id.",
+      "narrationText": "So V1 made a deliberate trade-off: accept the O of n-squared input cost in exchange for guaranteed output safety. Every candidate the model could select was pre-validated. But as we've seen, this fills the entire 128K context window. Next, we'll see how V2 achieves the same output safety at linear cost — using a single column called max end utterance ID.",
       "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-21T03:00:11.870Z"
+      "generatedAt": "2026-02-21T10:23:10.410Z"
     },
     "c6\\s4_segment_02_deliverable_zoom.wav": {
-      "narrationText": "Let's zoom into what final_narrative actually contains. Each row has a topic with narration text for TTS voiceover, and playback_start — the turn and utterance coordinates that tell the video player where to seek. Plus an optional extractive object defining clip boundaries. These coordinates are what the product uses to assemble the highlights video. Everything else in the schema — all five other fields — is reasoning scaffolding that helped the model produce this.",
+      "narrationText": "Let's zoom into what final narrative actually contains. Each row has a topic with narration text for TTS voiceover, and playback start — the turn and utterance coordinates that tell the video player where to seek. Plus an optional extractive object defining clip boundaries. These coordinates are what the product uses to assemble the highlights video. Everything else in the schema — all five other fields — is reasoning scaffolding that helped the model produce this.",
       "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-21T03:59:59.013Z"
+      "generatedAt": "2026-02-21T10:23:10.455Z"
     },
     "c6\\s4_segment_03_extractive_zoom.wav": {
-      "narrationText": "Now contrast that with extractive_ranges — pure chain-of-thought. Look at the field names — they're instructions. 'Selected turn opening tag raw copy from input' forces the model to copy the exact turn tag. Then 'speaker name' and 'turn id' are parsed from that copy. Same pattern below: first copy the raw pipe-delimited row, then parse the utterance IDs. The schema guides the model through copy-then-parse — which we'll see in detail next.",
+      "narrationText": "Now contrast that with extractive ranges — pure chain-of-thought. Look at the field names — they're instructions. 'Selected turn opening tag raw copy from input' forces the model to copy the exact turn tag. Then 'speaker name' and 'turn id' are parsed from that copy. Same pattern below: first copy the raw pipe-delimited row, then parse the utterance IDs. The schema guides the model through copy then parse — which we'll see in detail next.",
       "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-21T03:59:59.017Z"
+      "generatedAt": "2026-02-21T10:33:56.096Z"
     },
     "c6\\s4_segment_04_insight.wav": {
       "narrationText": "So here's the key takeaway. The output schema isn't just a data format — it's a chain-of-thought scaffold and a prompt engineering tool. Five fields guide the model's reasoning, one field captures the deliverable. Field names become execution steps, nested structure enforces constraints, and self-checks close the validation loop. When you design an LLM's output schema, you're designing the reasoning path.",
