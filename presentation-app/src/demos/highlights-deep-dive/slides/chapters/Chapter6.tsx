@@ -558,18 +558,20 @@ const InsightPill: React.FC<{
   );
 };
 
-const Ch6_S4_OutputSchemaComponent: React.FC = () => {
+const MarkerFieldCard: React.FC<{
+  field: typeof SCHEMA_FIELDS[number];
+  index: number;
+  accent: string;
+  bg: string;
+  compact?: boolean;
+}> = ({ field, index, accent, bg, compact }) => {
   const { reduced } = useReducedMotion();
   const theme = useTheme();
+  const { reached: dimmed } = useMarker('dim-all');
+  const { reached: highlighted } = useMarker(field.marker);
+  const reached = !dimmed || highlighted;
 
-  const renderFieldCard = (
-    field: typeof SCHEMA_FIELDS[number],
-    index: number,
-    accent: string,
-    bg: string,
-    compact = false,
-    reached = true,
-  ) => (
+  return (
     <motion.div
       key={field.name}
       initial={{ opacity: 0, y: reduced ? 0 : 12 }}
@@ -625,19 +627,11 @@ const Ch6_S4_OutputSchemaComponent: React.FC = () => {
       </div>
     </motion.div>
   );
+};
 
-  const MarkerFieldCard: React.FC<{
-    field: typeof SCHEMA_FIELDS[number];
-    index: number;
-    accent: string;
-    bg: string;
-    compact?: boolean;
-  }> = ({ field, index, accent, bg, compact }) => {
-    const { reached: dimmed } = useMarker('dim-all');
-    const { reached: highlighted } = useMarker(field.marker);
-    const reached = !dimmed || highlighted;
-    return renderFieldCard(field, index, accent, bg, compact, reached);
-  };
+const Ch6_S4_OutputSchemaComponent: React.FC = () => {
+  const { reduced } = useReducedMotion();
+  const theme = useTheme();
 
   return (
     <SlideContainer maxWidth={1000}>
