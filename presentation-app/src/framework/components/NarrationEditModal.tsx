@@ -16,7 +16,7 @@ interface AudioPreview {
   id: string;        // "take-1", "take-2", ...
   takeNumber: number;
   servePath: string;  // URL served by Vite (for playback)
-  stale: boolean;     // generated from different text than current
+  narrationText: string; // text this take was generated from
 }
 
 export interface NarrationEditModalProps {
@@ -72,7 +72,6 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const audioElRef = useRef<HTMLAudioElement | null>(null);
   const modalRef = useRef<HTMLDivElement>(null);
-  const textAtGenerationRef = useRef(currentText);
   useFocusTrap(modalRef, true);
 
   // Marker validation
@@ -131,38 +130,16 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
       .then(data => {
         if (!data.previews || data.previews.length === 0) return;
 
-        const textMatches = data.narrationText === currentText;
-        if (!textMatches) {
-          // Stale previews — clear them
-          fetch('/api/narration/clear-previews', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ demoId, chapter, slide, segmentId })
-          }).catch(() => { /* ignore */ });
-          return;
-        }
-
-        // Restore existing takes
-        textAtGenerationRef.current = data.narrationText;
         const restored: AudioPreview[] = data.previews.map((p: any) => ({
           id: `take-${p.takeNumber}`,
           takeNumber: p.takeNumber,
           servePath: p.servePath,
-          stale: false,
+          narrationText: p.narrationText ?? '',
         }));
         setPreviews(restored);
       })
       .catch(() => { /* ignore */ });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // Mark previews as stale when text changes from what they were generated from
-  useEffect(() => {
-    if (previews.length === 0) return;
-    const isStale = text !== textAtGenerationRef.current;
-    if (isStale !== previews[0]?.stale) {
-      setPreviews(prev => prev.map(p => ({ ...p, stale: isStale })));
-    }
-  }, [text, previews]);
 
   // Stop playback
   const stopPlayback = useCallback(() => {
@@ -211,20 +188,14 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
       const saveData = await saveResp.json();
       if (!saveData.success) throw new Error(saveData.error || 'Failed to save preview');
 
-      textAtGenerationRef.current = text;
-
       const newPreview: AudioPreview = {
         id: `take-${saveData.takeNumber}`,
         takeNumber: saveData.takeNumber,
         servePath: saveData.servePath,
-        stale: false,
+        narrationText: text,
       };
 
-      // Clear stale previews (different text) and add the new one
-      setPreviews(prev => {
-        const fresh = prev.filter(p => !p.stale);
-        return [...fresh, newPreview];
-      });
+      setPreviews(prev => [...prev, newPreview]);
 
     } catch (error: any) {
       setStatusMessage(`Generation failed: ${error.message}`);
@@ -500,71 +471,99 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
             <div style={{ color: theme.colors.textSecondary, fontSize: 13, fontWeight: 600, marginBottom: '0.5rem' }}>
               Audio Previews
             </div>
-            {previews.map(preview => (
-              <div
-                key={preview.id}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  padding: '0.5rem 0.75rem',
-                  marginBottom: '0.25rem',
-                  background: playingId === preview.id ? 'rgba(0, 183, 195, 0.1)' : 'rgba(148, 163, 184, 0.05)',
-                  borderRadius: 6,
-                  border: `1px solid ${playingId === preview.id ? 'rgba(0, 183, 195, 0.3)' : 'rgba(148, 163, 184, 0.1)'}`,
-                }}
-              >
-                {/* Play/Stop toggle */}
-                <HoverButton
-                  onClick={() => playingId === preview.id ? stopPlayback() : handlePlay(preview)}
-                  disabled={isBusy}
+            {previews.map(preview => {
+              const isStale = preview.narrationText !== text;
+              return (
+                <div
+                  key={preview.id}
                   style={{
-                    background: 'transparent',
-                    border: 'none',
-                    color: theme.colors.primary,
-                    cursor: 'pointer',
-                    padding: '0.25rem 0.5rem',
-                    fontSize: 16,
-                    borderRadius: 4,
-                    flexShrink: 0,
-                  }}
-                  hoverStyle={{ background: 'rgba(0, 183, 195, 0.15)' }}
-                >
-                  {playingId === preview.id ? '\u23F9' : '\u25B6'}
-                </HoverButton>
-
-                {/* Label */}
-                <span style={{ color: theme.colors.textPrimary, fontSize: 13, flex: 1 }}>
-                  Take {preview.takeNumber}
-                  {preview.stale && (
-                    <span style={{ color: theme.colors.warning, fontSize: 11, marginLeft: '0.5rem' }}>
-                      (generated from different text)
-                    </span>
-                  )}
-                </span>
-
-                {/* Accept button */}
-                <HoverButton
-                  onClick={() => handleAccept(preview)}
-                  disabled={isBusy || preview.stale}
-                  style={{
-                    background: preview.stale ? 'rgba(148, 163, 184, 0.2)' : `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`,
-                    color: preview.stale ? theme.colors.textMuted : '#fff',
-                    border: 'none',
-                    padding: '0.35rem 0.75rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    padding: '0.5rem 0.75rem',
+                    marginBottom: '0.25rem',
+                    background: playingId === preview.id ? 'rgba(0, 183, 195, 0.1)' : 'rgba(148, 163, 184, 0.05)',
                     borderRadius: 6,
-                    fontSize: 12,
-                    fontWeight: 500,
-                    cursor: (isBusy || preview.stale) ? 'not-allowed' : 'pointer',
-                    opacity: (isBusy || preview.stale) ? 0.5 : 1,
-                    flexShrink: 0,
+                    border: `1px solid ${playingId === preview.id ? 'rgba(0, 183, 195, 0.3)' : 'rgba(148, 163, 184, 0.1)'}`,
                   }}
-                  hoverStyle={{ opacity: 0.9 }}
                 >
-                  {accepting ? <><Spinner size={12} /> Accepting...</> : 'Accept'}
-                </HoverButton>
-              </div>
-            ))}
+                  {/* Play/Stop toggle */}
+                  <HoverButton
+                    onClick={() => playingId === preview.id ? stopPlayback() : handlePlay(preview)}
+                    disabled={isBusy}
+                    style={{
+                      background: 'transparent',
+                      border: 'none',
+                      color: theme.colors.primary,
+                      cursor: 'pointer',
+                      padding: '0.25rem 0.5rem',
+                      fontSize: 16,
+                      borderRadius: 4,
+                      flexShrink: 0,
+                    }}
+                    hoverStyle={{ background: 'rgba(0, 183, 195, 0.15)' }}
+                  >
+                    {playingId === preview.id ? '\u23F9' : '\u25B6'}
+                  </HoverButton>
+
+                  {/* Label */}
+                  <span style={{ color: theme.colors.textPrimary, fontSize: 13, flex: 1 }}>
+                    Take {preview.takeNumber}
+                    {isStale && (
+                      <span style={{ color: theme.colors.warning, fontSize: 11, marginLeft: '0.5rem' }}>
+                        (different text)
+                      </span>
+                    )}
+                  </span>
+
+                  {/* Load text button — restores the text this take was generated from */}
+                  {isStale && (
+                    <HoverButton
+                      onClick={() => setText(preview.narrationText)}
+                      disabled={isBusy}
+                      title="Load the narration text this take was generated from"
+                      style={{
+                        background: 'transparent',
+                        border: `1px solid ${theme.colors.warning}`,
+                        color: theme.colors.warning,
+                        padding: '0.25rem 0.6rem',
+                        borderRadius: 5,
+                        fontSize: 11,
+                        fontWeight: 500,
+                        cursor: isBusy ? 'not-allowed' : 'pointer',
+                        opacity: isBusy ? 0.5 : 1,
+                        flexShrink: 0,
+                        whiteSpace: 'nowrap',
+                      }}
+                      hoverStyle={{ background: 'rgba(251, 146, 60, 0.1)' }}
+                    >
+                      Load text
+                    </HoverButton>
+                  )}
+
+                  {/* Accept button */}
+                  <HoverButton
+                    onClick={() => handleAccept(preview)}
+                    disabled={isBusy || isStale}
+                    style={{
+                      background: isStale ? 'rgba(148, 163, 184, 0.2)' : `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`,
+                      color: isStale ? theme.colors.textMuted : '#fff',
+                      border: 'none',
+                      padding: '0.35rem 0.75rem',
+                      borderRadius: 6,
+                      fontSize: 12,
+                      fontWeight: 500,
+                      cursor: (isBusy || isStale) ? 'not-allowed' : 'pointer',
+                      opacity: (isBusy || isStale) ? 0.5 : 1,
+                      flexShrink: 0,
+                    }}
+                    hoverStyle={{ opacity: 0.9 }}
+                  >
+                    {accepting ? <><Spinner size={12} /> Accepting...</> : 'Accept'}
+                  </HoverButton>
+                </div>
+              );
+            })}
           </div>
         )}
 

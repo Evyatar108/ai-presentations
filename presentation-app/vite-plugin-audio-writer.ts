@@ -281,25 +281,14 @@ export function audioWriterPlugin(): Plugin {
             fs.mkdirSync(previewDir, { recursive: true });
           }
 
-          // Read or create previews.json
+          // Read or create previews.json (narrationText stored per-take)
           const metaFile = path.join(previewDir, 'previews.json');
-          let meta: { narrationText: string; takes: { takeNumber: number; generatedAt: string }[] } = {
-            narrationText: data.narrationText || '',
+          let meta: { takes: { takeNumber: number; narrationText: string; generatedAt: string }[] } = {
             takes: []
           };
           if (fs.existsSync(metaFile)) {
             try { meta = JSON.parse(fs.readFileSync(metaFile, 'utf-8')); }
             catch { /* use default */ }
-          }
-
-          // If narrationText changed, clear old takes
-          if (meta.narrationText !== (data.narrationText || '')) {
-            // Remove old take files
-            for (const take of meta.takes) {
-              const takeFile = path.join(previewDir, `take_${take.takeNumber}.wav`);
-              if (fs.existsSync(takeFile)) fs.unlinkSync(takeFile);
-            }
-            meta = { narrationText: data.narrationText || '', takes: [] };
           }
 
           const takeNumber = meta.takes.length > 0
@@ -310,7 +299,11 @@ export function audioWriterPlugin(): Plugin {
           const takeFile = path.join(previewDir, `take_${takeNumber}.wav`);
           fs.writeFileSync(takeFile, Buffer.from(data.audioBase64, 'base64'));
 
-          meta.takes.push({ takeNumber, generatedAt: new Date().toISOString() });
+          meta.takes.push({
+            takeNumber,
+            narrationText: data.narrationText || '',
+            generatedAt: new Date().toISOString(),
+          });
           fs.writeFileSync(metaFile, JSON.stringify(meta, null, 2));
 
           const servePath = `/audio/${data.demoId}/.previews/ch${data.chapter}_s${data.slide}_${data.segmentId}/take_${takeNumber}.wav`;
@@ -347,11 +340,12 @@ export function audioWriterPlugin(): Plugin {
           const meta = JSON.parse(fs.readFileSync(metaFile, 'utf-8'));
           const previews = (meta.takes || []).map((t: any) => ({
             takeNumber: t.takeNumber,
+            narrationText: t.narrationText ?? meta.narrationText ?? '',
             servePath: `/audio/${q.demoId}/.previews/ch${q.chapter}_s${q.slide}_${q.segmentId}/take_${t.takeNumber}.wav`,
             generatedAt: t.generatedAt
           }));
 
-          sendJson(res, 200, { narrationText: meta.narrationText, previews });
+          sendJson(res, 200, { previews });
         } catch (error: any) {
           console.error('[narration] List previews error:', error);
           sendJson(res, 500, { success: false, error: error.message });
