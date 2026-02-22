@@ -53,6 +53,13 @@ export const StalenessWarning: React.FC<StalenessWarningProps> = ({
   const [editingSegment, setEditingSegment] = useState<ChangedSegmentDetail | null>(null);
   const [hiddenForEdit, setHiddenForEdit] = useState(false);
 
+  // Regenerate-all progress state
+  type SegmentStatus = 'pending' | 'generating' | 'aligning' | 'done' | 'error';
+  const [bulkProgress, setBulkProgress] = useState<Record<string, SegmentStatus> | null>(null);
+  const [bulkPhase, setBulkPhase] = useState<string | null>(null);
+  const bulkAbortRef = useRef(false);
+  const isBulkRunning = bulkProgress !== null;
+
   // Hidden during narrated playback or when dismissed or not stale
   if (isNarratedMode || dismissed || !staleness?.stale) {
     return null;
@@ -70,10 +77,94 @@ export const StalenessWarning: React.FC<StalenessWarningProps> = ({
   }
 
   const handleRegenerateAll = async () => {
-    await regenerate();
+    const segments = staleness.changedSegments;
+    if (segments.length === 0) {
+      // No changed segments — fall back to bulk (handles markers/alignment only)
+      await regenerate();
+      clearAlignmentCache(demoId);
+      const newAlignment = await loadAlignment(demoId);
+      onAlignmentFixed?.(newAlignment);
+      return;
+    }
+
+    bulkAbortRef.current = false;
+    stopPlayback();
+
+    // Initialize progress for all segments
+    const initial: Record<string, SegmentStatus> = {};
+    for (const seg of segments) initial[seg.key] = 'pending';
+    setBulkProgress(initial);
+
+    let completedCount = 0;
+    let errorCount = 0;
+
+    for (const seg of segments) {
+      if (bulkAbortRef.current) break;
+
+      // Phase: generating TTS
+      setBulkPhase(`Generating TTS ${completedCount + 1}/${segments.length}: ${seg.key}`);
+      setBulkProgress(prev => prev ? { ...prev, [seg.key]: 'generating' } : prev);
+
+      const resolvedInstr = resolveInstruct(allSlides, seg.chapter, seg.slide, seg.segmentId, demoInstruct);
+
+      try {
+        const result = await regenerateSegment({
+          demoId,
+          chapter: seg.chapter,
+          slide: seg.slide,
+          segmentIndex: seg.segmentIndex,
+          segmentId: seg.segmentId,
+          narrationText: seg.currentText,
+          instruct: resolvedInstr,
+        });
+
+        if (!result.success) {
+          setBulkProgress(prev => prev ? { ...prev, [seg.key]: 'error' } : prev);
+          setSegmentErrors(prev => ({ ...prev, [seg.key]: result.error || 'Failed' }));
+          errorCount++;
+          continue;
+        }
+
+        // Update in-memory audioFilePath
+        const slideComp = allSlides.find(
+          s => s.metadata.chapter === seg.chapter && s.metadata.slide === seg.slide,
+        );
+        if (slideComp) {
+          const segMeta = slideComp.metadata.audioSegments[seg.segmentIndex];
+          if (segMeta) {
+            const basePath = (segMeta.audioFilePath ?? '').split('?')[0];
+            segMeta.audioFilePath = `${basePath}?t=${result.timestamp}`;
+          }
+        }
+
+        // Phase: aligning
+        setBulkPhase(`Aligning ${completedCount + 1}/${segments.length}: ${seg.key}`);
+        setBulkProgress(prev => prev ? { ...prev, [seg.key]: 'aligning' } : prev);
+
+        await realignSegment({ demoId, chapter: seg.chapter, slide: seg.slide, segmentId: seg.segmentId });
+
+        setBulkProgress(prev => prev ? { ...prev, [seg.key]: 'done' } : prev);
+        completedCount++;
+      } catch (err: unknown) {
+        setBulkProgress(prev => prev ? { ...prev, [seg.key]: 'error' } : prev);
+        setSegmentErrors(prev => ({ ...prev, [seg.key]: err instanceof Error ? err.message : 'Error' }));
+        errorCount++;
+      }
+    }
+
+    // Finalize: refresh alignment + staleness
+    setBulkPhase('Finalizing...');
     clearAlignmentCache(demoId);
     const newAlignment = await loadAlignment(demoId);
     onAlignmentFixed?.(newAlignment);
+    await refetch();
+
+    setBulkProgress(null);
+    setBulkPhase(null);
+
+    if (errorCount > 0) {
+      console.warn(`[staleness] Regenerate All: ${completedCount} succeeded, ${errorCount} failed`);
+    }
   };
 
   // ── Per-segment actions ──────────────────────────────────────────
@@ -309,14 +400,116 @@ export const StalenessWarning: React.FC<StalenessWarningProps> = ({
                 const isPlaying = playingKey === seg.key;
                 const isRegenerating = regeneratingKey === seg.key;
                 const errMsg = segmentErrors[seg.key];
+                const bulkStatus = bulkProgress?.[seg.key];
+                const isBusy = fixing || !!regeneratingKey || isBulkRunning;
+
+                // During bulk regen, show progress badge instead of NEW/CHANGED
+                const statusBadge = bulkStatus === 'generating' ? (
+                  <span style={{
+                    background: 'rgba(251, 191, 36, 0.2)',
+                    color: '#fbbf24',
+                    fontSize: '10px',
+                    fontWeight: 600,
+                    padding: '2px 6px',
+                    borderRadius: 4,
+                    flexShrink: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                  }}>
+                    <span style={{
+                      display: 'inline-block',
+                      width: 8,
+                      height: 8,
+                      border: '1.5px solid rgba(251, 191, 36, 0.3)',
+                      borderTop: '1.5px solid #fbbf24',
+                      borderRadius: '50%',
+                      animation: 'staleness-spin 0.8s linear infinite',
+                    }} />
+                    TTS
+                  </span>
+                ) : bulkStatus === 'aligning' ? (
+                  <span style={{
+                    background: 'rgba(0, 183, 195, 0.15)',
+                    color: '#00b7c3',
+                    fontSize: '10px',
+                    fontWeight: 600,
+                    padding: '2px 6px',
+                    borderRadius: 4,
+                    flexShrink: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                  }}>
+                    <span style={{
+                      display: 'inline-block',
+                      width: 8,
+                      height: 8,
+                      border: '1.5px solid rgba(0, 183, 195, 0.3)',
+                      borderTop: '1.5px solid #00b7c3',
+                      borderRadius: '50%',
+                      animation: 'staleness-spin 0.8s linear infinite',
+                    }} />
+                    ALIGN
+                  </span>
+                ) : bulkStatus === 'done' ? (
+                  <span style={{
+                    background: 'rgba(34, 197, 94, 0.15)',
+                    color: '#22c55e',
+                    fontSize: '10px',
+                    fontWeight: 600,
+                    padding: '2px 6px',
+                    borderRadius: 4,
+                    flexShrink: 0,
+                  }}>
+                    DONE
+                  </span>
+                ) : bulkStatus === 'error' ? (
+                  <span style={{
+                    background: 'rgba(239, 68, 68, 0.15)',
+                    color: '#ef4444',
+                    fontSize: '10px',
+                    fontWeight: 600,
+                    padding: '2px 6px',
+                    borderRadius: 4,
+                    flexShrink: 0,
+                  }}>
+                    ERROR
+                  </span>
+                ) : isNew ? (
+                  <span style={{
+                    background: 'rgba(96, 165, 250, 0.15)',
+                    color: '#60a5fa',
+                    fontSize: '10px',
+                    fontWeight: 600,
+                    padding: '2px 6px',
+                    borderRadius: 4,
+                    flexShrink: 0,
+                  }}>
+                    NEW
+                  </span>
+                ) : (
+                  <span style={{
+                    background: 'rgba(251, 191, 36, 0.15)',
+                    color: '#fbbf24',
+                    fontSize: '10px',
+                    fontWeight: 600,
+                    padding: '2px 6px',
+                    borderRadius: 4,
+                    flexShrink: 0,
+                  }}>
+                    CHANGED
+                  </span>
+                );
 
                 return (
                   <div key={seg.key} style={{
-                    background: '#262626',
+                    background: bulkStatus === 'done' ? '#1a2e1a' : '#262626',
                     borderRadius: 8,
                     padding: '10px 12px',
                     marginBottom: '6px',
-                    border: '1px solid #333',
+                    border: `1px solid ${bulkStatus === 'done' ? '#2d4a2d' : '#333'}`,
+                    opacity: bulkStatus === 'done' ? 0.7 : 1,
                   }}>
                     {/* Segment header row */}
                     <div style={{
@@ -338,34 +531,10 @@ export const StalenessWarning: React.FC<StalenessWarningProps> = ({
                       </span>
 
                       {/* Status badge */}
-                      {isNew ? (
-                        <span style={{
-                          background: 'rgba(96, 165, 250, 0.15)',
-                          color: '#60a5fa',
-                          fontSize: '10px',
-                          fontWeight: 600,
-                          padding: '2px 6px',
-                          borderRadius: 4,
-                          flexShrink: 0,
-                        }}>
-                          NEW
-                        </span>
-                      ) : (
-                        <span style={{
-                          background: 'rgba(251, 191, 36, 0.15)',
-                          color: '#fbbf24',
-                          fontSize: '10px',
-                          fontWeight: 600,
-                          padding: '2px 6px',
-                          borderRadius: 4,
-                          flexShrink: 0,
-                        }}>
-                          CHANGED
-                        </span>
-                      )}
+                      {statusBadge}
 
-                      {/* Play button */}
-                      {seg.audioExists && (
+                      {/* Play button — hidden during bulk */}
+                      {seg.audioExists && !isBulkRunning && (
                         <button
                           onClick={() => handlePlay(seg)}
                           disabled={isRegenerating}
@@ -386,72 +555,78 @@ export const StalenessWarning: React.FC<StalenessWarningProps> = ({
                         </button>
                       )}
 
-                      {/* Regen button */}
-                      <button
-                        onClick={() => handleRegenSingle(seg)}
-                        disabled={fixing || !!regeneratingKey}
-                        title="Regenerate this segment"
-                        style={{
-                          background: isRegenerating ? '#444' : 'transparent',
-                          border: `1px solid ${isRegenerating ? '#555' : '#e6a700'}`,
-                          color: isRegenerating ? '#999' : '#e6a700',
-                          borderRadius: 6,
-                          padding: '3px 8px',
-                          fontSize: '12px',
-                          fontWeight: 500,
-                          cursor: (fixing || !!regeneratingKey) ? 'wait' : 'pointer',
-                          opacity: (fixing || !!regeneratingKey) ? 0.5 : 1,
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '4px',
-                          flexShrink: 0,
-                        }}
-                      >
-                        {isRegenerating && (
-                          <span style={{
-                            display: 'inline-block',
-                            width: 10,
-                            height: 10,
-                            border: '2px solid rgba(150, 150, 150, 0.3)',
-                            borderTop: '2px solid #999',
-                            borderRadius: '50%',
-                            animation: 'staleness-spin 0.8s linear infinite',
-                          }} />
-                        )}
-                        {isRegenerating ? 'Regen...' : 'Regen'}
-                      </button>
+                      {/* Regen button — hidden during bulk */}
+                      {!isBulkRunning && (
+                        <button
+                          onClick={() => handleRegenSingle(seg)}
+                          disabled={isBusy}
+                          title="Regenerate this segment"
+                          style={{
+                            background: isRegenerating ? '#444' : 'transparent',
+                            border: `1px solid ${isRegenerating ? '#555' : '#e6a700'}`,
+                            color: isRegenerating ? '#999' : '#e6a700',
+                            borderRadius: 6,
+                            padding: '3px 8px',
+                            fontSize: '12px',
+                            fontWeight: 500,
+                            cursor: isBusy ? 'wait' : 'pointer',
+                            opacity: isBusy ? 0.5 : 1,
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '4px',
+                            flexShrink: 0,
+                          }}
+                        >
+                          {isRegenerating && (
+                            <span style={{
+                              display: 'inline-block',
+                              width: 10,
+                              height: 10,
+                              border: '2px solid rgba(150, 150, 150, 0.3)',
+                              borderTop: '2px solid #999',
+                              borderRadius: '50%',
+                              animation: 'staleness-spin 0.8s linear infinite',
+                            }} />
+                          )}
+                          {isRegenerating ? 'Regen...' : 'Regen'}
+                        </button>
+                      )}
 
-                      {/* Edit button */}
-                      <button
-                        onClick={() => handleEditSingle(seg)}
-                        disabled={fixing || !!regeneratingKey}
-                        title="Open edit modal for this segment"
-                        style={{
-                          background: 'transparent',
-                          border: '1px solid #555',
-                          color: '#aaa',
-                          borderRadius: 6,
-                          padding: '3px 8px',
-                          fontSize: '12px',
-                          fontWeight: 500,
-                          cursor: (fixing || !!regeneratingKey) ? 'not-allowed' : 'pointer',
-                          opacity: (fixing || !!regeneratingKey) ? 0.5 : 1,
-                          flexShrink: 0,
-                        }}
-                      >
-                        Edit
-                      </button>
+                      {/* Edit button — hidden during bulk */}
+                      {!isBulkRunning && (
+                        <button
+                          onClick={() => handleEditSingle(seg)}
+                          disabled={isBusy}
+                          title="Open edit modal for this segment"
+                          style={{
+                            background: 'transparent',
+                            border: '1px solid #555',
+                            color: '#aaa',
+                            borderRadius: 6,
+                            padding: '3px 8px',
+                            fontSize: '12px',
+                            fontWeight: 500,
+                            cursor: isBusy ? 'not-allowed' : 'pointer',
+                            opacity: isBusy ? 0.5 : 1,
+                            flexShrink: 0,
+                          }}
+                        >
+                          Edit
+                        </button>
+                      )}
                     </div>
 
-                    {/* Text preview */}
-                    <div style={{
-                      color: '#888',
-                      fontSize: '11px',
-                      lineHeight: 1.4,
-                      marginTop: '4px',
-                    }}>
-                      {truncate(seg.currentText, 120)}
-                    </div>
+                    {/* Text preview — hide when done during bulk to reduce noise */}
+                    {bulkStatus !== 'done' && (
+                      <div style={{
+                        color: '#888',
+                        fontSize: '11px',
+                        lineHeight: 1.4,
+                        marginTop: '4px',
+                      }}>
+                        {truncate(seg.currentText, 120)}
+                      </div>
+                    )}
 
                     {/* Error message */}
                     {errMsg && (
@@ -469,6 +644,32 @@ export const StalenessWarning: React.FC<StalenessWarningProps> = ({
             </div>
           )}
 
+          {/* Progress phase indicator during bulk regen */}
+          {bulkPhase && (
+            <div style={{
+              textAlign: 'center',
+              color: '#bbb',
+              fontSize: '12px',
+              marginBottom: '10px',
+              flexShrink: 0,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+            }}>
+              <span style={{
+                display: 'inline-block',
+                width: 12,
+                height: 12,
+                border: '2px solid rgba(230, 167, 0, 0.3)',
+                borderTop: '2px solid #e6a700',
+                borderRadius: '50%',
+                animation: 'staleness-spin 0.8s linear infinite',
+              }} />
+              {bulkPhase}
+            </div>
+          )}
+
           {/* Bottom action buttons */}
           <div style={{
             display: 'flex',
@@ -478,37 +679,27 @@ export const StalenessWarning: React.FC<StalenessWarningProps> = ({
           }}>
             <button
               onClick={handleRegenerateAll}
-              disabled={fixing}
+              disabled={isBulkRunning || fixing || !!regeneratingKey}
               style={{
-                background: fixing ? '#444' : '#e6a700',
-                color: fixing ? '#999' : '#111',
+                background: (isBulkRunning || fixing) ? '#444' : '#e6a700',
+                color: (isBulkRunning || fixing) ? '#999' : '#111',
                 border: 'none',
                 borderRadius: 8,
                 padding: '8px 20px',
                 fontSize: '14px',
                 fontWeight: 600,
-                cursor: fixing ? 'wait' : 'pointer',
+                cursor: (isBulkRunning || fixing) ? 'wait' : 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
               }}
             >
-              {fixing && (
-                <span style={{
-                  display: 'inline-block',
-                  width: 14,
-                  height: 14,
-                  border: '2px solid rgba(150, 150, 150, 0.3)',
-                  borderTop: '2px solid #999',
-                  borderRadius: '50%',
-                  animation: 'staleness-spin 0.8s linear infinite',
-                }} />
-              )}
-              {fixing ? 'Regenerating...' : 'Regenerate All'}
+              {isBulkRunning ? 'Regenerating...' : 'Regenerate All'}
             </button>
 
             <button
               onClick={dismiss}
+              disabled={isBulkRunning}
               style={{
                 background: 'transparent',
                 color: '#999',
@@ -516,7 +707,8 @@ export const StalenessWarning: React.FC<StalenessWarningProps> = ({
                 borderRadius: 8,
                 padding: '8px 20px',
                 fontSize: '14px',
-                cursor: 'pointer',
+                cursor: isBulkRunning ? 'not-allowed' : 'pointer',
+                opacity: isBulkRunning ? 0.5 : 1,
               }}
             >
               Dismiss
