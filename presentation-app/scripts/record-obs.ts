@@ -210,16 +210,16 @@ async function main() {
     const url = `http://localhost:${devPort}?demo=${encodeURIComponent(demoId)}&autoplay=narrated&hideUI&zoom&signal=${signal.port}`;
 
     // 3. Ensure Browser source exists, create if missing
+    const { currentProgramSceneName: sceneName } = await obs.call('GetCurrentProgramScene') as any;
     let currentSettings: any = null;
     try {
       const result = await obs.call('GetInputSettings', { inputName: sourceName }) as any;
       currentSettings = result.inputSettings;
     } catch {
-      // Source doesn't exist — find the current scene and create it
+      // Source doesn't exist — create it in the current scene
       console.log(`  Browser source "${sourceName}" not found, creating...`);
-      const { currentProgramSceneName } = await obs.call('GetCurrentProgramScene') as any;
       await obs.call('CreateInput', {
-        sceneName: currentProgramSceneName,
+        sceneName,
         inputName: sourceName,
         inputKind: 'browser_source',
         inputSettings: {
@@ -229,8 +229,21 @@ async function main() {
           shutdown: true,
         },
       });
-      console.log(`  Created Browser source "${sourceName}" in scene "${currentProgramSceneName}"`);
+      console.log(`  Created Browser source "${sourceName}" in scene "${sceneName}"`);
     }
+
+    // 3b. Re-enable the scene item in case it was disabled from a previous run
+    try {
+      const { sceneItemId } = await obs.call('GetSceneItemId', {
+        sceneName,
+        sourceName,
+      }) as any;
+      await obs.call('SetSceneItemEnabled', {
+        sceneName,
+        sceneItemId,
+        sceneItemEnabled: true,
+      });
+    } catch { /* source may not be in scene yet */ }
 
     // 4. Update Browser source settings
     await obs.call('SetInputSettings', {
@@ -298,6 +311,22 @@ async function main() {
       console.log(`  Recording stopped`);
     } catch (err: any) {
       console.warn(`  StopRecord failed (may already be stopped): ${err.message ?? err}`);
+    }
+
+    // 8b. Disable Browser source so OBS shuts down its internal browser
+    try {
+      const { sceneItemId } = await obs.call('GetSceneItemId', {
+        sceneName,
+        sourceName,
+      }) as any;
+      await obs.call('SetSceneItemEnabled', {
+        sceneName,
+        sceneItemId,
+        sceneItemEnabled: false,
+      });
+      console.log(`  Browser source "${sourceName}" disabled`);
+    } catch (err: any) {
+      console.warn(`  Could not disable browser source: ${err.message ?? err}`);
     }
 
     // 9. Rename output file (retry to handle EBUSY when OBS still holds the file)
