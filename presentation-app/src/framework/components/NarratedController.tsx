@@ -338,7 +338,11 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
       return;
     }
 
-    setCurrentIndex(nextIndex);
+    const currentSlide = allSlides[currentIdx].metadata;
+    const timing = resolveTimingConfig(demoTiming, currentSlide.timing);
+    setTimeout(() => {
+      setCurrentIndex(nextIndex);
+    }, timing.betweenSlides);
   }, [onPlaybackEnd, demoMetadata.durationInfo?.total, demoMetadata.title, showRuntimeTimerOption, runtimeStart, demoTiming, allSlides, demoMetadata.id, setFinalElapsedSeconds]);
 
   // Play audio for current slide in narrated mode
@@ -396,8 +400,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
 
     const playSegment = (segmentIndex: number) => {
       if (segmentIndex >= segments.length) {
-        const timing = resolveTimingConfig(demoTiming, slideMetadata.timing);
-        setTimeout(advanceSlide, timing.betweenSlides);
+        advanceSlide();
         return;
       }
 
@@ -450,8 +453,12 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
         audio.onended = () => {
           setError(null);
           currentSegmentIndex++;
-          const timing = resolveTimingConfig(demoTiming, slideMetadata.timing, segment.timing);
-          setTimeout(() => playSegment(currentSegmentIndex), timing.betweenSegments);
+          if (currentSegmentIndex < segments.length) {
+            const timing = resolveTimingConfig(demoTiming, slideMetadata.timing, segment.timing);
+            setTimeout(() => playSegment(currentSegmentIndex), timing.betweenSegments);
+          } else {
+            playSegment(currentSegmentIndex);
+          }
         };
 
         audio.onerror = (e) => {

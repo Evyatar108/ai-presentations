@@ -150,9 +150,9 @@ describe('calculatePresentationDuration', () => {
       })
     ];
     const result = calculatePresentationDuration(slides);
-    // Default beforeFirstSlide is 1000ms = 1s
-    expect(result.startSilenceDuration).toBe(1);
-    expect(result.totalDuration).toBe(13); // 10 audio + 2 final + 1 start silence
+    // Default beforeFirstSlide is 3000ms = 3s
+    expect(result.startSilenceDuration).toBe(3);
+    expect(result.totalDuration).toBe(15); // 10 audio + 2 final + 3 start silence
   });
 
   it('excludes start silence when beforeFirstSlide is 0', () => {

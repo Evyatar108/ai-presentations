@@ -15,7 +15,7 @@ export interface UseStalenessCheckResult {
   dismiss: () => void;
 }
 
-const isDev = import.meta.env.DEV;
+const isDev = import.meta.env?.DEV;
 
 export function useStalenessCheck(demoId: string): UseStalenessCheckResult {
   const [staleness, setStaleness] = useState<StalenessResult | null>(null);

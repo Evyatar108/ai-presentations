@@ -1,30 +1,30 @@
 {
   "highlights-deep-dive": {
     "demoId": "highlights-deep-dive",
-    "audioOnlyDuration": 1196.8799999999999,
+    "audioOnlyDuration": 1196.56,
     "segmentDelays": 84,
-    "slideDelays": 48,
-    "finalDelay": 2,
+    "slideDelays": 84,
+    "finalDelay": 5,
     "startSilence": 3,
-    "totalDuration": 1333.8799999999999,
+    "totalDuration": 1372.56,
     "slideBreakdowns": [
       {
         "slideIndex": 1,
         "slideTitle": "Title",
         "chapterIndex": 0,
-        "totalDuration": 20.54,
-        "audioDuration": 17.04,
-        "delaysDuration": 3.5,
+        "totalDuration": 21.72,
+        "audioDuration": 16.72,
+        "delaysDuration": 5,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 5.6,
+            "audioDuration": 5.28,
             "delayAfter": 1.5
           },
           {
             "segmentIndex": 1,
             "audioDuration": 11.44,
-            "delayAfter": 2
+            "delayAfter": 3.5
           }
         ]
       },
@@ -32,9 +32,9 @@
         "slideIndex": 1,
         "slideTitle": "Product Context",
         "chapterIndex": 1,
-        "totalDuration": 50.2,
+        "totalDuration": 51.7,
         "audioDuration": 45.2,
-        "delaysDuration": 5,
+        "delaysDuration": 6.5,
         "segments": [
           {
             "segmentIndex": 0,
@@ -49,7 +49,7 @@
           {
             "segmentIndex": 2,
             "audioDuration": 15.36,
-            "delayAfter": 2
+            "delayAfter": 3.5
           }
         ]
       },
@@ -57,9 +57,9 @@
         "slideIndex": 2,
         "slideTitle": "COGS Problem",
         "chapterIndex": 1,
-        "totalDuration": 39,
+        "totalDuration": 40.5,
         "audioDuration": 34,
-        "delaysDuration": 5,
+        "delaysDuration": 6.5,
         "segments": [
           {
             "segmentIndex": 0,
@@ -74,7 +74,7 @@
           {
             "segmentIndex": 2,
             "audioDuration": 6.4,
-            "delayAfter": 2
+            "delayAfter": 3.5
           }
         ]
       },
@@ -82,9 +82,9 @@
         "slideIndex": 1,
         "slideTitle": "Four-Call Pipeline",
         "chapterIndex": 2,
-        "totalDuration": 50.239999999999995,
+        "totalDuration": 51.739999999999995,
         "audioDuration": 42.239999999999995,
-        "delaysDuration": 8,
+        "delaysDuration": 9.5,
         "segments": [
           {
             "segmentIndex": 0,
@@ -109,7 +109,7 @@
           {
             "segmentIndex": 4,
             "audioDuration": 9.52,
-            "delayAfter": 2
+            "delayAfter": 3.5
           }
         ]
       },
@@ -117,9 +117,9 @@
         "slideIndex": 1,
         "slideTitle": "Four Cost Drivers",
         "chapterIndex": 3,
-        "totalDuration": 53.28,
+        "totalDuration": 54.78,
         "audioDuration": 45.28,
-        "delaysDuration": 8,
+        "delaysDuration": 9.5,
         "segments": [
           {
             "segmentIndex": 0,
@@ -144,7 +144,7 @@
           {
             "segmentIndex": 4,
             "audioDuration": 14.24,
-            "delayAfter": 2
+            "delayAfter": 3.5
           }
         ]
       },
@@ -152,9 +152,9 @@
         "slideIndex": 2,
         "slideTitle": "Verbose JSON",
         "chapterIndex": 3,
-        "totalDuration": 21.34,
+        "totalDuration": 22.84,
         "audioDuration": 17.84,
-        "delaysDuration": 3.5,
+        "delaysDuration": 5,
         "segments": [
           {
             "segmentIndex": 0,
@@ -164,7 +164,7 @@
           {
             "segmentIndex": 1,
             "audioDuration": 2.48,
-            "delayAfter": 2
+            "delayAfter": 3.5
           }
         ]
       },
@@ -172,9 +172,9 @@
         "slideIndex": 1,
         "slideTitle": "Nested Loop",
         "chapterIndex": 4,
-        "totalDuration": 33.96,
+        "totalDuration": 35.46,
         "audioDuration": 28.96,
-        "delaysDuration": 5,
+        "delaysDuration": 6.5,
         "segments": [
           {
             "segmentIndex": 0,
@@ -189,7 +189,7 @@
           {
             "segmentIndex": 2,
             "audioDuration": 7.12,
-            "delayAfter": 2
+            "delayAfter": 3.5
           }
         ]
       },
@@ -197,9 +197,9 @@
         "slideIndex": 2,
         "slideTitle": "Candidate Rows",
         "chapterIndex": 4,
-        "totalDuration": 46.44,
+        "totalDuration": 47.94,
         "audioDuration": 41.44,
-        "delaysDuration": 5,
+        "delaysDuration": 6.5,
         "segments": [
           {
             "segmentIndex": 0,
@@ -214,7 +214,7 @@
           {
             "segmentIndex": 2,
             "audioDuration": 13.28,
-            "delayAfter": 2
+            "delayAfter": 3.5
           }
         ]
       },
@@ -222,9 +222,9 @@
         "slideIndex": 3,
         "slideTitle": "O(n^2) Visualized",
         "chapterIndex": 4,
-        "totalDuration": 41.64,
+        "totalDuration": 43.14,
         "audioDuration": 36.64,
-        "delaysDuration": 5,
+        "delaysDuration": 6.5,
         "segments": [
           {
             "segmentIndex": 0,
@@ -239,7 +239,7 @@
           {
             "segmentIndex": 2,
             "audioDuration": 16.08,
-            "delayAfter": 2
+            "delayAfter": 3.5
           }
         ]
       },
@@ -247,9 +247,9 @@
         "slideIndex": 4,
         "slideTitle": "Output Safety",
         "chapterIndex": 4,
-        "totalDuration": 126.10000000000001,
+        "totalDuration": 127.60000000000001,
         "audioDuration": 119.60000000000001,
-        "delaysDuration": 6.5,
+        "delaysDuration": 8,
         "segments": [
           {
             "segmentIndex": 0,
@@ -269,7 +269,7 @@
           {
             "segmentIndex": 3,
             "audioDuration": 27.12,
-            "delayAfter": 2
+            "delayAfter": 3.5
           }
         ]
       },
@@ -277,9 +277,9 @@
         "slideIndex": 1,
         "slideTitle": "Format Comparison",
         "chapterIndex": 5,
-        "totalDuration": 38.28,
+        "totalDuration": 39.78,
         "audioDuration": 33.28,
-        "delaysDuration": 5,
+        "delaysDuration": 6.5,
         "segments": [
           {
             "segmentIndex": 0,
@@ -294,7 +294,7 @@
           {
             "segmentIndex": 2,
             "audioDuration": 12.08,
-            "delayAfter": 2
+            "delayAfter": 3.5
           }
         ]
       },
@@ -302,9 +302,9 @@
         "slideIndex": 2,
         "slideTitle": "max_end_utterance_id",
         "chapterIndex": 5,
-        "totalDuration": 62.36000000000001,
+        "totalDuration": 63.86000000000001,
         "audioDuration": 57.36000000000001,
-        "delaysDuration": 5,
+        "delaysDuration": 6.5,
         "segments": [
           {
             "segmentIndex": 0,
@@ -319,7 +319,7 @@
           {
             "segmentIndex": 2,
             "audioDuration": 9.68,
-            "delayAfter": 2
+            "delayAfter": 3.5
           }
         ]
       },
@@ -327,9 +327,9 @@
         "slideIndex": 3,
         "slideTitle": "Turn/Utterance Concept",
         "chapterIndex": 5,
-        "totalDuration": 71.32,
+        "totalDuration": 72.82,
         "audioDuration": 66.32,
-        "delaysDuration": 5,
+        "delaysDuration": 6.5,
         "segments": [
           {
             "segmentIndex": 0,
@@ -344,7 +344,7 @@
           {
             "segmentIndex": 2,
             "audioDuration": 26.4,
-            "delayAfter": 2
+            "delayAfter": 3.5
           }
         ]
       },
@@ -352,9 +352,9 @@
         "slideIndex": 1,
         "slideTitle": "Prompt Overview",
         "chapterIndex": 6,
-        "totalDuration": 67.08,
+        "totalDuration": 68.58,
         "audioDuration": 62.08,
-        "delaysDuration": 5,
+        "delaysDuration": 6.5,
         "segments": [
           {
             "segmentIndex": 0,
@@ -369,7 +369,7 @@
           {
             "segmentIndex": 2,
             "audioDuration": 18,
-            "delayAfter": 2
+            "delayAfter": 3.5
           }
         ]
       },
@@ -377,9 +377,9 @@
         "slideIndex": 2,
         "slideTitle": "Pseudocode Algorithm",
         "chapterIndex": 6,
-        "totalDuration": 46.67999999999999,
+        "totalDuration": 48.17999999999999,
         "audioDuration": 41.67999999999999,
-        "delaysDuration": 5,
+        "delaysDuration": 6.5,
         "segments": [
           {
             "segmentIndex": 0,
@@ -394,7 +394,7 @@
           {
             "segmentIndex": 2,
             "audioDuration": 8.8,
-            "delayAfter": 2
+            "delayAfter": 3.5
           }
         ]
       },
@@ -402,9 +402,9 @@
         "slideIndex": 3,
         "slideTitle": "Prose vs Pseudocode",
         "chapterIndex": 6,
-        "totalDuration": 30.14,
+        "totalDuration": 31.64,
         "audioDuration": 26.64,
-        "delaysDuration": 3.5,
+        "delaysDuration": 5,
         "segments": [
           {
             "segmentIndex": 0,
@@ -414,7 +414,7 @@
           {
             "segmentIndex": 1,
             "audioDuration": 14.64,
-            "delayAfter": 2
+            "delayAfter": 3.5
           }
         ]
       },
@@ -422,9 +422,9 @@
         "slideIndex": 4,
         "slideTitle": "Output Schema",
         "chapterIndex": 6,
-        "totalDuration": 127.62,
+        "totalDuration": 129.12,
         "audioDuration": 121.12,
-        "delaysDuration": 6.5,
+        "delaysDuration": 8,
         "segments": [
           {
             "segmentIndex": 0,
@@ -444,7 +444,7 @@
           {
             "segmentIndex": 3,
             "audioDuration": 26.56,
-            "delayAfter": 2
+            "delayAfter": 3.5
           }
         ]
       },
@@ -452,9 +452,9 @@
         "slideIndex": 1,
         "slideTitle": "Copy-then-Parse",
         "chapterIndex": 7,
-        "totalDuration": 64.36,
+        "totalDuration": 65.86,
         "audioDuration": 59.36,
-        "delaysDuration": 5,
+        "delaysDuration": 6.5,
         "segments": [
           {
             "segmentIndex": 0,
@@ -469,7 +469,7 @@
           {
             "segmentIndex": 2,
             "audioDuration": 25.12,
-            "delayAfter": 2
+            "delayAfter": 3.5
           }
         ]
       },
@@ -477,9 +477,9 @@
         "slideIndex": 2,
         "slideTitle": "Self-Checks",
         "chapterIndex": 7,
-        "totalDuration": 46.3,
+        "totalDuration": 47.8,
         "audioDuration": 42.8,
-        "delaysDuration": 3.5,
+        "delaysDuration": 5,
         "segments": [
           {
             "segmentIndex": 0,
@@ -489,7 +489,7 @@
           {
             "segmentIndex": 1,
             "audioDuration": 16.4,
-            "delayAfter": 2
+            "delayAfter": 3.5
           }
         ]
       },
@@ -497,9 +497,9 @@
         "slideIndex": 1,
         "slideTitle": "Validation Challenges",
         "chapterIndex": 8,
-        "totalDuration": 72.36,
+        "totalDuration": 73.86,
         "audioDuration": 67.36,
-        "delaysDuration": 5,
+        "delaysDuration": 6.5,
         "segments": [
           {
             "segmentIndex": 0,
@@ -514,7 +514,7 @@
           {
             "segmentIndex": 2,
             "audioDuration": 29.36,
-            "delayAfter": 2
+            "delayAfter": 3.5
           }
         ]
       },
@@ -522,9 +522,9 @@
         "slideIndex": 2,
         "slideTitle": "Eval Tool",
         "chapterIndex": 8,
-        "totalDuration": 66.52,
+        "totalDuration": 68.02,
         "audioDuration": 61.519999999999996,
-        "delaysDuration": 5,
+        "delaysDuration": 6.5,
         "segments": [
           {
             "segmentIndex": 0,
@@ -539,7 +539,7 @@
           {
             "segmentIndex": 2,
             "audioDuration": 31.04,
-            "delayAfter": 2
+            "delayAfter": 3.5
           }
         ]
       },
@@ -547,9 +547,9 @@
         "slideIndex": 1,
         "slideTitle": "Results Metrics",
         "chapterIndex": 9,
-        "totalDuration": 24.58,
+        "totalDuration": 26.08,
         "audioDuration": 18.08,
-        "delaysDuration": 6.5,
+        "delaysDuration": 8,
         "segments": [
           {
             "segmentIndex": 0,
@@ -569,7 +569,7 @@
           {
             "segmentIndex": 3,
             "audioDuration": 9.28,
-            "delayAfter": 2
+            "delayAfter": 3.5
           }
         ]
       },
@@ -577,9 +577,9 @@
         "slideIndex": 2,
         "slideTitle": "Quality and Impact",
         "chapterIndex": 9,
-        "totalDuration": 35.72,
+        "totalDuration": 37.22,
         "audioDuration": 30.72,
-        "delaysDuration": 5,
+        "delaysDuration": 6.5,
         "segments": [
           {
             "segmentIndex": 0,
@@ -594,7 +594,7 @@
           {
             "segmentIndex": 2,
             "audioDuration": 13.04,
-            "delayAfter": 2
+            "delayAfter": 3.5
           }
         ]
       },
@@ -602,9 +602,9 @@
         "slideIndex": 1,
         "slideTitle": "Six Lessons",
         "chapterIndex": 10,
-        "totalDuration": 82.2,
+        "totalDuration": 83.7,
         "audioDuration": 71.2,
-        "delaysDuration": 11,
+        "delaysDuration": 12.5,
         "segments": [
           {
             "segmentIndex": 0,
@@ -639,7 +639,7 @@
           {
             "segmentIndex": 6,
             "audioDuration": 18.16,
-            "delayAfter": 2
+            "delayAfter": 3.5
           }
         ]
       },
@@ -647,9 +647,9 @@
         "slideIndex": 2,
         "slideTitle": "Closing",
         "chapterIndex": 10,
-        "totalDuration": 12.62,
+        "totalDuration": 15.62,
         "audioDuration": 9.12,
-        "delaysDuration": 3.5,
+        "delaysDuration": 6.5,
         "segments": [
           {
             "segmentIndex": 0,
@@ -659,14 +659,14 @@
           {
             "segmentIndex": 1,
             "audioDuration": 7.84,
-            "delayAfter": 2
+            "delayAfter": 5
           }
         ]
       }
     ],
     "formattedDurations": {
       "audioOnly": "19:56",
-      "total": "22:13"
+      "total": "22:52"
     }
   }
 }
