@@ -8,6 +8,7 @@ import { AudioSegment, SlideComponentWithMetadata } from '@framework/slides/Slid
 import { runDurationCalculation } from './calculate-durations';
 import { generateAlignment, loadWhisperUrl } from './generate-alignment';
 import { stripMarkers } from './utils/marker-parser';
+import { loadTtsCache, saveTtsCache, normalizeCachePath, type TtsCache } from './utils/tts-cache';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -25,15 +26,7 @@ interface TTSConfig {
   instruct?: string;          // CLI-level default instruct (lowest priority)
 }
 
-interface NarrationCache {
-  [demoId: string]: {
-    [filepath: string]: {
-      narrationText: string;
-      instruct?: string;
-      generatedAt: string;
-    };
-  };
-}
+type NarrationCache = TtsCache;
 
 // Narration JSON structure (from narrationLoader.ts)
 interface NarrationSegment {
@@ -238,23 +231,9 @@ function updateNarrationCache(
   console.log(`✅ Updated narration cache: ${path.relative(path.join(__dirname, '..'), cacheFile)}`);
 }
 
-// Load cache
-function loadCache(cacheFile: string): NarrationCache {
-  if (fs.existsSync(cacheFile)) {
-    try {
-      const content = fs.readFileSync(cacheFile, 'utf-8');
-      return JSON.parse(content);
-    } catch (error) {
-      return {};
-    }
-  }
-  return {};
-}
-
-// Save cache
-function saveCache(cacheFile: string, cache: NarrationCache) {
-  fs.writeFileSync(cacheFile, JSON.stringify(cache, null, 2));
-}
+// Re-export shared cache functions under local names for minimal diff
+const loadCache = loadTtsCache;
+const saveCache = saveTtsCache;
 
 // Scan for orphaned audio files and cache entries for a specific demo
 function cleanupUnusedAudio(
@@ -540,7 +519,7 @@ async function generateTTS(config: TTSConfig) {
         // Generate filename
         const filename = `s${slideNum}_segment_${String(i + 1).padStart(2, '0')}_${segment.id}.wav`;
         const filepath = path.join(chapterDir, filename);
-        const relativeFilepath = path.relative(demoOutputDir, filepath);
+        const relativeFilepath = path.relative(demoOutputDir, filepath).replace(/\\/g, '/');
 
         // Resolve instruct: segment → slide → narrationJSON → CLI
         const resolvedInstruct =

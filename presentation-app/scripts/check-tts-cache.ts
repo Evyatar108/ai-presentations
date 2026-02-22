@@ -9,6 +9,7 @@ import { execSync } from 'child_process';
 import * as crypto from 'crypto';
 import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
 import { stripMarkers } from './utils/marker-parser';
+import { loadTtsCache, type TtsCache } from './utils/tts-cache';
 
 // Narration JSON structure
 interface NarrationData {
@@ -35,14 +36,7 @@ interface NarrationData {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-interface TTSNarrationCache {
-  [demoId: string]: {
-    [filepath: string]: {
-      narrationText: string;
-      generatedAt: string;
-    };
-  };
-}
+type TTSNarrationCache = TtsCache;
 
 interface ChangeDetectionResult {
   hasChanges: boolean;
@@ -255,18 +249,7 @@ async function loadDemoSlides(demoId: string): Promise<SlideComponentWithMetadat
   }
 }
 
-// Load TTS cache
-function loadCache(cacheFile: string): TTSNarrationCache {
-  if (fs.existsSync(cacheFile)) {
-    try {
-      const content = fs.readFileSync(cacheFile, 'utf-8');
-      return JSON.parse(content);
-    } catch (error) {
-      return {};
-    }
-  }
-  return {};
-}
+const loadCache = loadTtsCache;
 
 // Scan for orphaned audio files and cache entries for a specific demo
 function detectOrphanedAudio(

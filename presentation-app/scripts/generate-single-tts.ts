@@ -10,6 +10,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import { loadTtsCache, saveTtsCache, normalizeCachePath } from './utils/tts-cache';
 import axios from 'axios';
 import * as crypto from 'crypto';
 
@@ -102,31 +103,23 @@ async function generateSingleSegment(config: SingleSegmentConfig): Promise<void>
 
       // Update TTS cache
       const cacheFile = path.join(__dirname, '../.tts-narration-cache.json');
-      let cache: any = {};
-
-      if (fs.existsSync(cacheFile)) {
-        try {
-          cache = JSON.parse(fs.readFileSync(cacheFile, 'utf-8'));
-        } catch (error) {
-          console.warn('⚠️  Could not load TTS cache, creating new entry');
-        }
-      }
+      const cache = loadTtsCache(cacheFile);
 
       if (!cache[config.demoId]) {
         cache[config.demoId] = {};
       }
 
-      const relativeFilepath = path.relative(
+      const relativeFilepath = normalizeCachePath(path.relative(
         path.join(__dirname, '../public/audio', config.demoId),
         filepath
-      ).replace(/\\/g, '/');
+      ));
 
       cache[config.demoId][relativeFilepath] = {
         narrationText: config.narrationText,
         generatedAt: new Date().toISOString()
       };
 
-      fs.writeFileSync(cacheFile, JSON.stringify(cache, null, 2));
+      saveTtsCache(cacheFile, cache);
       console.log('✅ Updated TTS cache');
 
       // Update narration cache

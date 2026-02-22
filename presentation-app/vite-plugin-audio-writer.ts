@@ -1,8 +1,8 @@
 import { Plugin } from 'vite';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as crypto from 'crypto';
 import { execSync } from 'child_process';
+import { loadTtsCache } from './scripts/utils/tts-cache';
 
 interface SaveAudioRequest {
   audioBase64: string;
@@ -586,11 +586,7 @@ export function audioWriterPlugin(): Plugin {
           // --- Check TTS narration cache for changed segments ---
           const changedSegments: string[] = [];
 
-          let ttsCache: Record<string, any> = {};
-          if (fs.existsSync(cacheFile)) {
-            try { ttsCache = JSON.parse(fs.readFileSync(cacheFile, 'utf-8')); }
-            catch { ttsCache = {}; }
-          }
+          const ttsCache = loadTtsCache(cacheFile);
           const demoCache = ttsCache[q.demoId] || {};
 
           for (const slide of narration.slides) {
@@ -601,8 +597,7 @@ export function audioWriterPlugin(): Plugin {
               const paddedIdx = String(segIdx + 1).padStart(2, '0');
               const relPath = `c${slide.chapter}/s${slide.slide}_segment_${paddedIdx}_${segment.id}.wav`;
 
-              // Cache may use backslashes (Windows) — check both separators
-              const cached = demoCache[relPath] || demoCache[relPath.replace(/\//g, '\\')];
+              const cached = demoCache[relPath];
               if (!cached) {
                 // No cache entry — segment is new or was never generated
                 changedSegments.push(segKey);
