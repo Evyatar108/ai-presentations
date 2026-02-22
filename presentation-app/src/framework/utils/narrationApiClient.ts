@@ -195,6 +195,52 @@ export async function updateNarrationCache(
 }
 
 /**
+ * Trigger re-alignment for a specific segment via the Vite plugin.
+ * Shells out to `generate-alignment.ts` on the server side.
+ *
+ * @param params - Segment coordinates
+ * @returns Promise resolving to success/error
+ */
+export async function realignSegment(params: {
+  demoId: string; chapter: number; slide: number; segmentId: string;
+}): Promise<{ success: boolean; error?: string }> {
+  try {
+    console.log('[NarrationAPI] Realigning segment:', `ch${params.chapter}:s${params.slide}:${params.segmentId}`);
+
+    const response = await fetch(`${getApiBaseUrl()}/api/narration/realign-segment`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(params)
+    });
+
+    if (!response.ok) {
+      let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.error || errorMessage;
+      } catch {
+        // use default
+      }
+      return { success: false, error: errorMessage };
+    }
+
+    const result = await response.json();
+    if (!result.success) {
+      return { success: false, error: result.error || 'Realignment failed' };
+    }
+
+    console.log('[NarrationAPI] Realignment successful');
+    return { success: true };
+  } catch (error) {
+    console.error('[NarrationAPI] Realignment failed:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Network error'
+    };
+  }
+}
+
+/**
  * Helper to create a SHA-256 hash of text (matches backend implementation).
  * Used for cache validation.
  * 

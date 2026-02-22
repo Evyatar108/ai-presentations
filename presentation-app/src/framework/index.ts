@@ -121,7 +121,7 @@ export type { AlignedWord, ResolvedMarker, SegmentAlignment, DemoAlignment } fro
 
 // Utils
 export { loadNarration, getNarrationText } from './utils/narrationLoader';
-export { checkApiHealth, saveNarrationToFile } from './utils/narrationApiClient';
+export { checkApiHealth, saveNarrationToFile, realignSegment } from './utils/narrationApiClient';
 export { debug } from './utils/debug';
 export { buildAudioFileName, buildAudioOutputPath, buildAudioFilePath, resolveAudioFilePath } from './utils/audioPath';
 export { loadAlignment, clearAlignmentCache } from './utils/alignmentLoader';

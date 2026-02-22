@@ -48,6 +48,7 @@ const loadAudioWithFallback = async (primaryPath: string, segmentId: string): Pr
 export interface NarratedControllerProps {
   demoMetadata: DemoMetadata;
   demoTiming?: TimingConfig;
+  demoInstruct?: string;
   startTransition?: StartTransition;
   slides: SlideComponentWithMetadata[];
   alignmentData?: DemoAlignment | null;
@@ -67,6 +68,7 @@ export interface NarratedControllerProps {
 export const NarratedController: React.FC<NarratedControllerProps> = ({
   demoMetadata,
   demoTiming,
+  demoInstruct,
   startTransition,
   slides,
   alignmentData,
@@ -119,22 +121,14 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
   const theme = useTheme();
 
   // Extracted hooks
-  const { notifications, showSuccess, showError, showWarning } = useNotifications();
+  const { notifications, showSuccess, showError: _showError, showWarning: _showWarning } = useNotifications();
   const timer = useRuntimeTimer({ isPlaying, enabled: true });
   const { showRuntimeTimerOption, setShowRuntimeTimerOption, elapsedMs, finalElapsedSeconds, setFinalElapsedSeconds, runtimeStart } = timer;
   const { apiAvailable } = useApiHealth();
   const editor = useNarrationEditor({
-    demoMetadata,
     allSlides,
     currentIndex,
     currentSegmentIndex: segmentContext.currentSegmentIndex,
-    audioEnabled,
-    audioRef,
-    apiAvailable,
-    showSuccess,
-    showError,
-    showWarning,
-    loadAudioWithFallback,
   });
 
   // TTS regeneration (for top bar button)
@@ -658,9 +652,32 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
             slideKey={editor.editingSegment.slideKey}
             segmentId={editor.editingSegment.segmentId}
             currentText={editor.editingSegment.currentText}
-            isRegenerating={editor.isRegeneratingAudio}
-            regenerationError={editor.regenerationError}
-            onSave={editor.handleSaveNarration}
+            apiAvailable={apiAvailable}
+            demoId={demoMetadata.id}
+            chapter={editor.editingSegment.chapter}
+            slide={editor.editingSegment.slide}
+            segmentIndex={editor.editingSegment.segmentIndex}
+            instruct={
+              currentSlideMetadata?.audioSegments[segmentContext.currentSegmentIndex]?.instruct ??
+              currentSlideMetadata?.instruct ??
+              demoInstruct
+            }
+            allSlides={allSlides}
+            onAcceptAudio={(filePath, timestamp) => {
+              editor.handleAcceptAudio(filePath, timestamp);
+              // Reload audio if currently playing
+              if (audioEnabled && audioRef.current) {
+                audioRef.current.pause();
+                audioRef.current = null;
+              }
+            }}
+            onTextSaved={() => {
+              const seg = currentSlideMetadata?.audioSegments[segmentContext.currentSegmentIndex];
+              if (seg) {
+                // The modal saved the narration text — just notify
+                showSuccess('Narration saved');
+              }
+            }}
             onCancel={editor.handleCancelEdit}
           />
         )}

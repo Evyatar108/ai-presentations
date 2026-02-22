@@ -70,13 +70,13 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideIn
         
         if (!mounted) return;
         
-        // Load external narration if enabled
-        let narration: NarrationData | null = null;
-        if (config.metadata.useExternalNarration) {
-          narration = await loadNarration(config.metadata.id);
-          if (!mounted) return;
-          setNarrationData(narration);
-        }
+        // Always try to load narration.json (silent for inline demos)
+        const narration = await loadNarration(
+          config.metadata.id,
+          config.metadata.useExternalNarration ? undefined : { silent: true }
+        );
+        if (!mounted) return;
+        setNarrationData(narration);
 
         // Load alignment data (for marker-based sub-segment reveals)
         const alignment = await loadAlignment(demoId);
@@ -108,11 +108,11 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideIn
   // Build slides with narration merged from JSON (if enabled)
   const slidesWithNarration = useMemo((): SlideComponentWithMetadata[] => {
     if (!loadedSlides || loadedSlides.length === 0) return [];
-    if (!demoConfig?.metadata.useExternalNarration) return loadedSlides;
+    if (!narrationData) return loadedSlides;
     
     // Merge external narration into slide metadata
     return loadedSlides.map(slideComponent => {
-      const fallbackMode = demoConfig.metadata.narrationFallback || 'inline';
+      const fallbackMode = demoConfig?.metadata.narrationFallback || 'inline';
       
       // Update each segment's narration text
       const updatedSegments = slideComponent.metadata.audioSegments.map(segment => {
@@ -380,6 +380,7 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideIn
         <NarratedController
           demoMetadata={demoConfig.metadata}
           demoTiming={demoConfig.timing}
+          demoInstruct={demoConfig.instruct}
           startTransition={demoConfig.startTransition}
           slides={slidesWithResolvedPaths}
           alignmentData={alignmentData}

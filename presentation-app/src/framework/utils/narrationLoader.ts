@@ -54,13 +54,18 @@ export interface NarrationData {
  *   console.log(`Loaded ${narration.slides.length} slides`);
  * }
  */
-export async function loadNarration(demoId: string): Promise<NarrationData | null> {
+export async function loadNarration(
+  demoId: string,
+  options?: { silent?: boolean }
+): Promise<NarrationData | null> {
   try {
     const response = await fetch(`/narration/${demoId}/narration.json`);
-    
+
     if (!response.ok) {
       if (response.status === 404) {
-        console.info(`[NarrationLoader] No external narration found for demo "${demoId}" (404)`);
+        if (!options?.silent) {
+          console.info(`[NarrationLoader] No external narration found for demo "${demoId}" (404)`);
+        }
         return null;
       }
       throw new Error(`HTTP ${response.status}: ${response.statusText}`);
