@@ -177,17 +177,14 @@ export const StalenessWarning: React.FC<StalenessWarningProps> = ({
       }
     }
 
-    // Phase 3: batch alignment for all saved segments
+    // Phase 3: full-demo alignment (resolves all markers, not just changed segments)
     if (savedSegments.length > 0) {
-      setBulkPhase(`Aligning ${savedSegments.length} segments (batch)...`);
+      setBulkPhase('Aligning full demo...');
       for (const seg of savedSegments) {
         setBulkProgress(prev => prev ? { ...prev, [seg.key]: 'aligning' } : prev);
       }
 
-      const alignResult = await realignSegments({
-        demoId,
-        segments: savedSegments.map(s => ({ chapter: s.chapter, slide: s.slide, segmentId: s.segmentId })),
-      });
+      const alignResult = await realignSegments({ demoId });
 
       for (const seg of savedSegments) {
         if (alignResult.success) {
