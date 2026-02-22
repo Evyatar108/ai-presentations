@@ -161,6 +161,22 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
     audio.play().catch(() => setPlayingId(null));
   }, [stopPlayback]);
 
+  // Delete a preview take
+  const handleDelete = useCallback(async (preview: AudioPreview) => {
+    if (isBusy) return;
+    if (playingId === preview.id) stopPlayback();
+
+    // Remove from UI immediately
+    setPreviews(prev => prev.filter(p => p.id !== preview.id));
+
+    // Delete from disk
+    fetch('/api/narration/delete-preview', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ demoId, chapter, slide, segmentId, takeNumber: preview.takeNumber })
+    }).catch(() => { /* best-effort */ });
+  }, [isBusy, playingId, stopPlayback, demoId, chapter, slide, segmentId]);
+
   // Generate a TTS preview
   const handleGenerate = useCallback(async () => {
     if (!canGenerate) return;
@@ -538,6 +554,27 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
                       Load text
                     </HoverButton>
                   )}
+
+                  {/* Delete button */}
+                  <HoverButton
+                    onClick={() => handleDelete(preview)}
+                    disabled={isBusy}
+                    title="Remove this take"
+                    style={{
+                      background: 'transparent',
+                      border: 'none',
+                      color: theme.colors.textMuted,
+                      padding: '0.25rem 0.4rem',
+                      borderRadius: 4,
+                      fontSize: 14,
+                      cursor: isBusy ? 'not-allowed' : 'pointer',
+                      opacity: isBusy ? 0.5 : 0.6,
+                      flexShrink: 0,
+                    }}
+                    hoverStyle={{ color: theme.colors.error, opacity: 1 }}
+                  >
+                    {'\u2715'}
+                  </HoverButton>
 
                   {/* Accept button */}
                   <HoverButton

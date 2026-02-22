@@ -404,6 +404,51 @@ export function audioWriterPlugin(): Plugin {
         }
       });
 
+      // ─── POST /api/narration/delete-preview ────────────────────────
+      server.middlewares.use('/api/narration/delete-preview', async (req, res, next) => {
+        if (req.method !== 'POST') { next(); return; }
+
+        try {
+          const data = await readJsonBody<{
+            demoId: string; chapter: number; slide: number;
+            segmentId: string; takeNumber: number;
+          }>(req);
+          if (!data.demoId || !data.segmentId || !data.takeNumber) {
+            throw new Error('Missing required fields');
+          }
+
+          const previewDir = path.join(
+            projectRoot, 'public', 'audio', data.demoId,
+            '.previews', `ch${data.chapter}_s${data.slide}_${data.segmentId}`
+          );
+
+          // Delete the .wav file
+          const takeFile = path.join(previewDir, `take_${data.takeNumber}.wav`);
+          if (fs.existsSync(takeFile)) fs.unlinkSync(takeFile);
+
+          // Update previews.json
+          const metaFile = path.join(previewDir, 'previews.json');
+          if (fs.existsSync(metaFile)) {
+            try {
+              const meta = JSON.parse(fs.readFileSync(metaFile, 'utf-8'));
+              meta.takes = (meta.takes || []).filter((t: any) => t.takeNumber !== data.takeNumber);
+              if (meta.takes.length === 0) {
+                // No takes left — remove the whole preview dir
+                fs.rmSync(previewDir, { recursive: true, force: true });
+              } else {
+                fs.writeFileSync(metaFile, JSON.stringify(meta, null, 2));
+              }
+            } catch { /* ignore parse errors */ }
+          }
+
+          console.log(`[narration] Deleted preview take ${data.takeNumber}`);
+          sendJson(res, 200, { success: true });
+        } catch (error: any) {
+          console.error('[narration] Delete preview error:', error);
+          sendJson(res, 500, { success: false, error: error.message });
+        }
+      });
+
       // ─── POST /api/narration/clear-previews ────────────────────────
       server.middlewares.use('/api/narration/clear-previews', async (req, res, next) => {
         if (req.method !== 'POST') { next(); return; }
