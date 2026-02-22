@@ -1,6 +1,6 @@
 {
   "demoId": "highlights-deep-dive",
-  "generatedAt": "2026-02-22T00:17:41.235Z",
+  "generatedAt": "2026-02-22T00:39:13.449Z",
   "slides": {
     "c0_s1": {
       "chapter": 0,
@@ -89,475 +89,481 @@
         {
           "segmentId": "skeleton",
           "audioHash": "bb032d95ea62765b8a194bd0948b7f8be03d65ddf8ae0653e659ab276834daaf",
-          "narrationHash": "772176f08e77e1224ecedac889ff7973b6ddaea9a2441146db203f645bf5057d",
+          "narrationHash": "bc8fa0b056d1dd2e0f448ccd6da95ae1183cd783b5db0a4ee63582f81a486edb",
           "words": [
             {
-              "end": 0.46,
-              "score": 0.924,
+              "end": 0.32,
+              "score": 0.89,
               "start": 0,
               "word": "This"
             },
             {
-              "end": 0.701,
-              "score": 0.959,
-              "start": 0.6,
+              "end": 0.481,
+              "score": 0.757,
+              "start": 0.4,
               "word": "is"
             },
             {
-              "end": 0.981,
-              "score": 0.995,
-              "start": 0.921,
+              "end": 0.661,
+              "score": 0.996,
+              "start": 0.601,
               "word": "a"
             },
             {
-              "end": 1.882,
-              "score": 0.818,
-              "start": 1.361,
+              "end": 1.262,
+              "score": 0.816,
+              "start": 0.901,
               "word": "single"
             },
             {
-              "end": 2.582,
-              "score": 0.878,
-              "start": 1.982,
+              "end": 1.742,
+              "score": 0.828,
+              "start": 1.322,
               "word": "V2"
             },
             {
-              "end": 3.443,
-              "score": 0.88,
-              "start": 2.682,
+              "end": 2.323,
+              "score": 0.872,
+              "start": 1.782,
               "word": "response"
             },
             {
-              "end": 4.544,
-              "score": 0.981,
-              "start": 3.463,
+              "end": 3.024,
+              "score": 0,
+              "start": 3.004,
               "word": "—"
             },
             {
-              "end": 4.984,
-              "score": 0.986,
-              "start": 4.564,
+              "end": 3.344,
+              "score": 0.953,
+              "start": 3.044,
               "word": "six"
             },
             {
-              "end": 6.065,
-              "score": 0.723,
-              "start": 5.264,
+              "end": 4.065,
+              "score": 0.71,
+              "start": 3.504,
               "word": "top-level"
             },
             {
-              "end": 6.685,
-              "score": 0.672,
-              "start": 6.185,
+              "end": 4.465,
+              "score": 0.814,
+              "start": 4.125,
               "word": "fields"
             },
             {
-              "end": 6.926,
-              "score": 0.951,
-              "start": 6.826,
+              "end": 4.646,
+              "score": 0.947,
+              "start": 4.566,
               "word": "in"
             },
             {
-              "end": 7.366,
-              "score": 0.872,
-              "start": 7.206,
+              "end": 4.926,
+              "score": 0.765,
+              "start": 4.806,
               "word": "one"
             },
             {
-              "end": 8.167,
-              "score": 0.874,
-              "start": 7.506,
+              "end": 5.467,
+              "score": 0.878,
+              "start": 5.006,
               "word": "JSON"
             },
             {
-              "end": 8.767,
-              "score": 0.942,
-              "start": 8.327,
+              "end": 5.887,
+              "score": 0.795,
+              "start": 5.547,
               "word": "object."
             },
             {
-              "end": 9.608,
-              "score": 0.785,
-              "start": 9.488,
+              "end": 6.408,
+              "score": 0.792,
+              "start": 6.328,
               "word": "But"
             },
             {
-              "end": 9.848,
-              "score": 0.746,
-              "start": 9.648,
+              "end": 6.568,
+              "score": 0.75,
+              "start": 6.448,
               "word": "they"
             },
             {
-              "end": 10.368,
-              "score": 0.871,
-              "start": 9.928,
+              "end": 6.928,
+              "score": 0.762,
+              "start": 6.628,
               "word": "serve"
             },
             {
-              "end": 10.909,
-              "score": 0.884,
-              "start": 10.549,
+              "end": 7.289,
+              "score": 0.752,
+              "start": 7.029,
               "word": "two"
             },
             {
-              "end": 11.729,
-              "score": 0.877,
-              "start": 11.349,
+              "end": 7.85,
+              "score": 0.853,
+              "start": 7.349,
               "word": "very"
             },
             {
-              "end": 12.29,
-              "score": 0.85,
-              "start": 11.85,
+              "end": 8.21,
+              "score": 0.885,
+              "start": 7.91,
               "word": "different"
             },
             {
-              "end": 13.091,
-              "score": 0.882,
-              "start": 12.39,
+              "end": 8.751,
+              "score": 0.968,
+              "start": 8.27,
               "word": "purposes."
             },
             {
-              "end": 14.071,
-              "score": 0.989,
-              "start": 13.971,
+              "end": 9.391,
+              "score": 0.812,
+              "start": 9.311,
               "word": "The"
             },
             {
-              "end": 14.492,
-              "score": 0.83,
-              "start": 14.151,
+              "end": 9.672,
+              "score": 0.817,
+              "start": 9.431,
               "word": "first"
             },
             {
-              "end": 14.912,
-              "score": 0.73,
-              "start": 14.592,
+              "end": 9.972,
+              "score": 0.829,
+              "start": 9.732,
               "word": "four"
             },
             {
-              "end": 15.573,
-              "score": 0.752,
-              "start": 15.032,
+              "end": 10.413,
+              "score": 0.796,
+              "start": 10.032,
               "word": "fields"
             },
             {
-              "end": 16.553,
-              "score": 0.979,
-              "start": 15.593,
+              "end": 11.033,
+              "score": 0.967,
+              "start": 10.433,
               "word": "—"
             },
             {
-              "end": 17.594,
-              "score": 0.894,
-              "start": 16.573,
+              "end": 11.754,
+              "score": 0.873,
+              "start": 11.053,
               "word": "abstractive"
             },
             {
-              "end": 18.375,
-              "score": 0.885,
-              "start": 17.734,
+              "end": 12.295,
+              "score": 0.96,
+              "start": 11.834,
               "word": "topics,"
             },
             {
-              "end": 19.236,
-              "score": 0.847,
-              "start": 18.815,
+              "end": 12.836,
+              "score": 0.884,
+              "start": 12.535,
               "word": "topic"
             },
             {
-              "end": 19.676,
-              "score": 0.936,
-              "start": 19.416,
+              "end": 13.156,
+              "score": 0.866,
+              "start": 12.936,
               "word": "order,"
             },
             {
-              "end": 21.377,
-              "score": 0.876,
-              "start": 20.557,
+              "end": 14.277,
+              "score": 0.888,
+              "start": 13.717,
               "word": "extractive"
             },
             {
-              "end": 22.058,
-              "score": 0.922,
-              "start": 21.497,
+              "end": 14.718,
+              "score": 0.933,
+              "start": 14.337,
               "word": "ranges,"
             },
             {
-              "end": 22.358,
-              "score": 0.668,
-              "start": 22.258,
+              "end": 14.938,
+              "score": 0.767,
+              "start": 14.838,
               "word": "and"
             },
             {
-              "end": 23.039,
-              "score": 0.83,
-              "start": 22.498,
+              "end": 15.399,
+              "score": 0.799,
+              "start": 14.998,
               "word": "ranking"
             },
             {
-              "end": 23.079,
-              "score": 1,
-              "start": 23.059,
+              "end": 15.899,
+              "score": 0.958,
+              "start": 15.419,
               "word": "—"
             },
             {
-              "end": 23.999,
-              "score": 0.578,
-              "start": 23.879,
+              "end": 16.019,
+              "score": 0.906,
+              "start": 15.919,
               "word": "are"
             },
             {
-              "end": 24.9,
-              "score": 0.805,
-              "start": 24.099,
+              "end": 16.62,
+              "score": 0.738,
+              "start": 16.079,
               "word": "structured"
             },
             {
-              "end": 26.161,
-              "score": 0.745,
-              "start": 25.08,
+              "end": 17.461,
+              "score": 0.741,
+              "start": 16.74,
               "word": "chain-of-thought."
             },
             {
-              "end": 27.002,
-              "score": 0.8,
-              "start": 26.842,
+              "end": 18.022,
+              "score": 0.885,
+              "start": 17.902,
               "word": "They"
             },
             {
-              "end": 27.442,
-              "score": 0.856,
-              "start": 27.062,
+              "end": 18.302,
+              "score": 0.815,
+              "start": 18.062,
               "word": "guide"
             },
             {
-              "end": 27.582,
-              "score": 0.946,
-              "start": 27.502,
+              "end": 18.402,
+              "score": 0.997,
+              "start": 18.342,
               "word": "the"
             },
             {
-              "end": 28.083,
-              "score": 0.797,
-              "start": 27.662,
+              "end": 18.743,
+              "score": 0.75,
+              "start": 18.462,
               "word": "model"
             },
             {
-              "end": 28.483,
-              "score": 0.725,
-              "start": 28.163,
+              "end": 19.003,
+              "score": 0.713,
+              "start": 18.783,
               "word": "through"
             },
             {
-              "end": 29.784,
-              "score": 0.904,
-              "start": 28.643,
+              "end": 19.884,
+              "score": 0.879,
+              "start": 19.103,
               "word": "segmentation,"
             },
             {
-              "end": 30.985,
-              "score": 0.865,
-              "start": 30.244,
+              "end": 20.665,
+              "score": 0.802,
+              "start": 20.164,
               "word": "selection,"
             },
             {
-              "end": 31.445,
-              "score": 0.768,
-              "start": 31.305,
+              "end": 20.965,
+              "score": 0.654,
+              "start": 20.865,
               "word": "and"
             },
             {
-              "end": 32.106,
-              "score": 0.964,
-              "start": 31.585,
+              "end": 21.446,
+              "score": 0.9,
+              "start": 21.045,
               "word": "ranking."
             },
             {
-              "end": 33.307,
-              "score": 0.81,
-              "start": 33.047,
+              "end": 22.227,
+              "score": 0.91,
+              "start": 22.047,
               "word": "Only"
             },
             {
-              "end": 33.507,
-              "score": 0.637,
-              "start": 33.347,
+              "end": 22.367,
+              "score": 0.592,
+              "start": 22.247,
               "word": "the"
             },
             {
-              "end": 33.967,
-              "score": 0.766,
-              "start": 33.647,
+              "end": 22.667,
+              "score": 0.921,
+              "start": 22.447,
               "word": "fifth"
             },
             {
-              "end": 34.608,
-              "score": 0.755,
-              "start": 34.088,
+              "end": 23.088,
+              "score": 0.841,
+              "start": 22.748,
               "word": "field,"
             },
             {
-              "end": 35.709,
-              "score": 0.861,
-              "start": 35.268,
+              "end": 23.829,
+              "score": 0.832,
+              "start": 23.528,
               "word": "final"
             },
             {
-              "end": 36.469,
-              "score": 0.831,
-              "start": 35.809,
+              "end": 24.37,
+              "score": 0.909,
+              "start": 23.889,
               "word": "narrative,"
             },
             {
-              "end": 37.13,
-              "score": 0.634,
-              "start": 37.01,
+              "end": 24.79,
+              "score": 0.794,
+              "start": 24.39,
               "word": "is"
             },
             {
-              "end": 37.43,
-              "score": 0.559,
-              "start": 37.25,
+              "end": 24.97,
+              "score": 0.66,
+              "start": 24.85,
               "word": "the"
             },
             {
-              "end": 38.331,
-              "score": 0.864,
-              "start": 37.77,
+              "end": 25.571,
+              "score": 0.944,
+              "start": 25.19,
               "word": "actual"
             },
             {
-              "end": 39.252,
-              "score": 0.786,
-              "start": 38.431,
+              "end": 26.212,
+              "score": 0.849,
+              "start": 25.651,
               "word": "deliverable"
             },
             {
-              "end": 39.292,
-              "score": 1,
-              "start": 39.272,
+              "end": 26.712,
+              "score": 0.958,
+              "start": 26.232,
               "word": "—"
             },
             {
-              "end": 40.212,
-              "score": 0.804,
-              "start": 40.092,
+              "end": 26.812,
+              "score": 0.8,
+              "start": 26.732,
               "word": "the"
             },
             {
-              "end": 40.713,
-              "score": 0.861,
-              "start": 40.252,
+              "end": 27.173,
+              "score": 0.907,
+              "start": 26.853,
               "word": "video"
             },
             {
-              "end": 41.333,
-              "score": 0.945,
-              "start": 40.933,
+              "end": 27.573,
+              "score": 0.862,
+              "start": 27.293,
               "word": "editing"
             },
             {
-              "end": 42.374,
-              "score": 0.791,
-              "start": 41.433,
+              "end": 28.274,
+              "score": 0.722,
+              "start": 27.633,
               "word": "instructions"
             },
             {
-              "end": 43.455,
-              "score": 0.754,
-              "start": 42.514,
+              "end": 28.995,
+              "score": 0.831,
+              "start": 28.354,
               "word": "consumed"
             },
             {
-              "end": 43.735,
-              "score": 0.995,
-              "start": 43.575,
+              "end": 29.175,
+              "score": 0.998,
+              "start": 29.075,
               "word": "by"
             },
             {
-              "end": 43.855,
-              "score": 0.67,
-              "start": 43.795,
+              "end": 29.275,
+              "score": 0.999,
+              "start": 29.215,
               "word": "the"
             },
             {
-              "end": 44.496,
-              "score": 0.897,
-              "start": 43.955,
+              "end": 29.696,
+              "score": 0.861,
+              "start": 29.336,
               "word": "product."
             },
             {
-              "end": 45.737,
-              "score": 0.76,
-              "start": 45.497,
+              "end": 30.517,
+              "score": 0.82,
+              "start": 30.357,
               "word": "And"
             },
             {
-              "end": 46.317,
-              "score": 0.835,
-              "start": 45.917,
+              "end": 30.857,
+              "score": 0.857,
+              "start": 30.617,
               "word": "self"
             },
             {
-              "end": 46.798,
-              "score": 0.934,
-              "start": 46.337,
+              "end": 31.238,
+              "score": 0.882,
+              "start": 30.897,
               "word": "checks"
             },
             {
-              "end": 47.498,
-              "score": 0.89,
-              "start": 47.258,
+              "end": 31.678,
+              "score": 0.939,
+              "start": 31.518,
               "word": "adds"
             },
             {
-              "end": 48.399,
-              "score": 0.903,
-              "start": 47.638,
+              "end": 32.279,
+              "score": 0.827,
+              "start": 31.778,
               "word": "runtime"
             },
             {
-              "end": 49.58,
-              "score": 0.778,
-              "start": 48.479,
+              "end": 33.06,
+              "score": 0.89,
+              "start": 32.339,
               "word": "validation."
             }
           ],
           "markers": [
             {
+              "id": "dim-all",
+              "time": 9.311,
+              "anchor": "start",
+              "wordIndex": 21
+            },
+            {
               "id": "abstractive",
-              "time": 16.573,
+              "time": 11.053,
               "anchor": "start",
               "wordIndex": 26
             },
             {
               "id": "topic-order",
-              "time": 18.815,
+              "time": 12.535,
               "anchor": "start",
               "wordIndex": 28
             },
             {
               "id": "extractive",
-              "time": 20.557,
+              "time": 13.717,
               "anchor": "start",
               "wordIndex": 30
             },
             {
               "id": "ranking",
-              "time": 22.498,
+              "time": 14.998,
               "anchor": "start",
               "wordIndex": 33
             },
             {
               "id": "final-narrative",
-              "time": 35.268,
+              "time": 23.528,
               "anchor": "start",
               "wordIndex": 51
             },
             {
               "id": "self-checks",
-              "time": 45.917,
+              "time": 30.617,
               "anchor": "start",
               "wordIndex": 67
             }

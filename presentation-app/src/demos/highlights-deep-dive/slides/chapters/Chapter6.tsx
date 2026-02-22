@@ -473,7 +473,9 @@ const Ch6_S4_OutputSchemaComponent: React.FC = () => {
     bg: string;
     compact?: boolean;
   }> = ({ field, index, accent, bg, compact }) => {
-    const { reached } = useMarker(field.marker);
+    const { reached: dimmed } = useMarker('dim-all');
+    const { reached: highlighted } = useMarker(field.marker);
+    const reached = !dimmed || highlighted;
     return renderFieldCard(field, index, accent, bg, compact, reached);
   };
 
