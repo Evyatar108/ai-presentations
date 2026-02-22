@@ -20,6 +20,9 @@ export interface ProgressBarProps {
   onAudioToggle: () => void;
   autoAdvanceOnAudioEnd: boolean;
   onAutoAdvanceToggle: (value: boolean) => void;
+  // Marker info
+  currentMarkerLabel?: string | null;
+  nextMarkerLabel?: string | null;
   // Edit / regenerate / restart
   showEditButton: boolean;
   onEdit: () => void;
@@ -42,6 +45,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   onAudioToggle,
   autoAdvanceOnAudioEnd,
   onAutoAdvanceToggle,
+  currentMarkerLabel,
+  nextMarkerLabel,
   showEditButton,
   onEdit,
   showRegenerateButton,
@@ -76,6 +81,19 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
       <span>
         Slide {currentIndex} of {totalSlides} (Ch{currentSlideMetadata.chapter}:S{currentSlideMetadata.slide})
       </span>
+
+      {/* Current / next marker labels (manual mode with markers) */}
+      {currentMarkerLabel != null && (
+        <span style={{ fontSize: 11, color: theme.colors.textSecondary, display: 'flex', alignItems: 'center', gap: 4 }}>
+          <span style={{ color: theme.colors.primary }}>{currentMarkerLabel}</span>
+          {nextMarkerLabel != null && (
+            <>
+              <span style={{ opacity: 0.4 }}>&rarr;</span>
+              <span style={{ opacity: 0.6 }}>{nextMarkerLabel}</span>
+            </>
+          )}
+        </span>
+      )}
 
       {/* Runtime timer (only in narrated mode & enabled) */}
       {isPlaying && showRuntimeTimer && (

@@ -619,6 +619,23 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
           onAudioToggle={() => setAudioEnabled(!audioEnabled)}
           autoAdvanceOnAudioEnd={autoAdvanceOnAudioEnd}
           onAutoAdvanceToggle={setAutoAdvanceOnAudioEnd}
+          currentMarkerLabel={(() => {
+            const m = audioTimeCtx?.markers;
+            if (!m || m.length === 0) return null;
+            const t = audioTimeCtx?.currentTime ?? 0;
+            let last: string | null = null;
+            for (const marker of m) {
+              if (marker.time <= t + 0.02) last = marker.id;
+            }
+            return last ?? m[0].id;
+          })()}
+          nextMarkerLabel={(() => {
+            const m = audioTimeCtx?.markers;
+            if (!m || m.length === 0) return null;
+            const t = audioTimeCtx?.currentTime ?? 0;
+            const next = m.find(marker => marker.time > t + 0.05);
+            return next?.id ?? null;
+          })()}
           showEditButton={isManualMode && currentIndex < allSlides.length && hasAudioSegments(allSlides[currentIndex].metadata)}
           onEdit={editor.handleEditNarration}
           showRegenerateButton={isManualMode && currentIndex < allSlides.length && hasAudioSegments(allSlides[currentIndex].metadata)}
