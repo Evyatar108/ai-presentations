@@ -58,6 +58,24 @@ def clean_text(text: str) -> str:
 
 # ── Audio helpers ───────────────────────────────────────────────────
 
+def wav_to_base64(audio_np, sr: int) -> str:
+    """Convert a numpy audio array to base64-encoded WAV at 24 kHz."""
+    if isinstance(audio_np, torch.Tensor):
+        audio_np = audio_np.cpu().numpy()
+    audio_np = audio_np.squeeze().astype(np.float32)
+
+    # Resample to 24 kHz if the model outputs a different rate
+    if sr != 24000:
+        audio_np = librosa.resample(audio_np, orig_sr=sr, target_sr=24000)
+
+    buf = io.BytesIO()
+    sf.write(buf, audio_np, 24000, format="WAV", subtype="PCM_16")
+    buf.seek(0)
+    b64 = base64.b64encode(buf.read()).decode("utf-8")
+    buf.close()
+    return b64
+
+
 def generate_one(text: str, instruct: str | None = None) -> str:
     """Generate audio for a single text and return base64-encoded WAV."""
     cleaned = clean_text(text)
@@ -73,20 +91,30 @@ def generate_one(text: str, instruct: str | None = None) -> str:
     wavs, sr = model.generate_custom_voice(**kwargs)
 
     audio_np = wavs[0] if isinstance(wavs, list) else wavs
-    if isinstance(audio_np, torch.Tensor):
-        audio_np = audio_np.cpu().numpy()
-    audio_np = audio_np.squeeze().astype(np.float32)
+    return wav_to_base64(audio_np, sr)
 
-    # Resample to 24 kHz if the model outputs a different rate
-    if sr != 24000:
-        audio_np = librosa.resample(audio_np, orig_sr=sr, target_sr=24000)
 
-    buf = io.BytesIO()
-    sf.write(buf, audio_np, 24000, format="WAV", subtype="PCM_16")
-    buf.seek(0)
-    b64 = base64.b64encode(buf.read()).decode("utf-8")
-    buf.close()
-    return b64
+def generate_batch_native(texts: list[str], instruct: str | None = None,
+                          instructs: list[str] | None = None) -> list[str]:
+    """Generate audio for multiple texts using the model's native batch support."""
+    cleaned = [clean_text(t) for t in texts]
+    n = len(cleaned)
+
+    kwargs = dict(
+        text=cleaned,
+        language=[default_language] * n,
+        speaker=[default_speaker] * n,
+    )
+
+    # Per-item instructs take priority over global instruct
+    if instructs and len(instructs) == n:
+        kwargs["instruct"] = [inst or "" for inst in instructs]
+    elif instruct:
+        kwargs["instruct"] = [instruct] * n
+
+    wavs, sr = model.generate_custom_voice(**kwargs)
+
+    return [wav_to_base64(wavs[i], sr) for i in range(n)]
 
 
 # ── Endpoints ───────────────────────────────────────────────────────
@@ -143,28 +171,45 @@ def generate_audio():
 def generate_audio_batch():
     """
     Generate audio for multiple texts.
-    Expects JSON: {"texts": ["Speaker 0: Hello!", "Speaker 0: Hi!"], "instruct": "speak clearly"}  (instruct is optional, applied to all)
+    Expects JSON:
+      {"texts": ["Speaker 0: Hello!", "Speaker 0: Hi!"], "instruct": "speak clearly"}
+      or with per-item instructs:
+      {"texts": [...], "instructs": ["instruct1", "instruct2"]}
+    When "batch" is true (default for >1 texts), uses native model batch inference.
+    When "batch" is false, falls back to sequential generation.
     Returns JSON: {"audios": [b64_1, b64_2, ...], "sample_rate": 24000, "count": N, "success": true}
     """
     try:
         data = request.get_json()
         texts = data.get("texts", [])
         instruct = data.get("instruct") or None
+        instructs = data.get("instructs") or None
+        use_batch = data.get("batch", len(texts) > 1)
 
         if not texts:
             return jsonify({"error": "No texts provided"}), 400
         if model is None:
             return jsonify({"error": "Model not initialized"}), 500
 
-        print(f"Generating audio for {len(texts)} utterances sequentially...")
-        if instruct:
-            print(f"Instruct: {instruct}")
+        if use_batch and len(texts) > 1:
+            print(f"Generating audio for {len(texts)} utterances (native batch)...")
+            if instructs:
+                print(f"Per-item instructs: {len(instructs)} entries")
+            elif instruct:
+                print(f"Instruct: {instruct}")
 
-        audios_b64 = []
-        for idx, text in enumerate(texts):
-            audio_b64 = generate_one(text, instruct)
-            audios_b64.append(audio_b64)
-            print(f"  Generated audio {idx + 1}/{len(texts)}")
+            audios_b64 = generate_batch_native(texts, instruct, instructs)
+        else:
+            print(f"Generating audio for {len(texts)} utterance(s) sequentially...")
+            if instruct:
+                print(f"Instruct: {instruct}")
+
+            audios_b64 = []
+            for idx, text in enumerate(texts):
+                per_instruct = instructs[idx] if instructs and idx < len(instructs) else instruct
+                audio_b64 = generate_one(text, per_instruct or None)
+                audios_b64.append(audio_b64)
+                print(f"  Generated audio {idx + 1}/{len(texts)}")
 
         # Free GPU memory between batches
         torch.cuda.empty_cache()

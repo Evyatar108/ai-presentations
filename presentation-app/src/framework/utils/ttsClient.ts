@@ -182,6 +182,64 @@ export async function generateTtsPreview(
   return { base64: ttsData.audios[0] };
 }
 
+export interface GenerateTtsBatchItem {
+  narrationText: string;
+  addPauses?: boolean;
+  instruct?: string;
+}
+
+/**
+ * Generate TTS for multiple texts in a single batch call.
+ * Supports per-item instructs via the `instructs` array.
+ * Returns base64 audio in the same order as the input texts.
+ */
+export async function generateTtsBatch(
+  items: GenerateTtsBatchItem[],
+): Promise<string[]> {
+  const config = await loadConfig();
+
+  const texts = items.map(item => {
+    const addPauses = item.addPauses !== false;
+    const suffix = addPauses
+      ? (item.narrationText.trim().endsWith('.') ? ' Amazing.' : '. Amazing.')
+      : '';
+    return `Speaker 0: ${item.narrationText}${suffix}`;
+  });
+
+  const instructs = items.map(item => item.instruct || '');
+  const hasAnyInstruct = instructs.some(i => i.length > 0);
+
+  const ttsResponse = await fetch(
+    `${config.remoteTTSServerUrl}/generate_batch`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        texts,
+        batch: true,
+        ...(hasAnyInstruct ? { instructs } : {}),
+      }),
+      signal: AbortSignal.timeout(1800000) // 30 minute timeout
+    }
+  );
+
+  if (!ttsResponse.ok) {
+    throw new Error(`TTS server error: ${ttsResponse.status} ${ttsResponse.statusText}`);
+  }
+
+  const ttsData = await ttsResponse.json();
+
+  if (!ttsData.success) {
+    throw new Error(ttsData.error || 'TTS batch generation failed');
+  }
+
+  if (!ttsData.audios || ttsData.audios.length !== items.length) {
+    throw new Error(`Expected ${items.length} audios, got ${ttsData.audios?.length ?? 0}`);
+  }
+
+  return ttsData.audios;
+}
+
 /**
  * Save base64 audio to disk via the Vite plugin endpoint.
  * Returns the file path and a cache-busting timestamp.

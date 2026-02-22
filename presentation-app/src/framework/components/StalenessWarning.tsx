@@ -5,7 +5,7 @@ import { useStalenessCheck } from '../hooks/useStalenessCheck';
 import type { ChangedSegmentDetail } from '../hooks/useStalenessCheck';
 import { clearAlignmentCache, loadAlignment } from '../utils/alignmentLoader';
 import { useApiHealth } from '../hooks/useApiHealth';
-import { regenerateSegment } from '../utils/ttsClient';
+import { regenerateSegment, generateTtsBatch, saveGeneratedAudio } from '../utils/ttsClient';
 import { realignSegment } from '../utils/narrationApiClient';
 import { NarrationEditModal } from './NarrationEditModal';
 import type { DemoAlignment } from '../alignment/types';
@@ -59,6 +59,7 @@ export const StalenessWarning: React.FC<StalenessWarningProps> = ({
   const [bulkPhase, setBulkPhase] = useState<string | null>(null);
   const bulkAbortRef = useRef(false);
   const isBulkRunning = bulkProgress !== null;
+  const [batchMode, setBatchMode] = useState(true);
 
   // Hidden during narrated playback or when dismissed or not stale
   if (isNarratedMode || dismissed || !staleness?.stale) {
@@ -95,13 +96,98 @@ export const StalenessWarning: React.FC<StalenessWarningProps> = ({
     for (const seg of segments) initial[seg.key] = 'pending';
     setBulkProgress(initial);
 
+    if (batchMode) {
+      await handleRegenerateAllBatch(segments);
+    } else {
+      await handleRegenerateAllSequential(segments);
+    }
+
+    // Finalize: refresh alignment + staleness
+    setBulkPhase('Finalizing...');
+    clearAlignmentCache(demoId);
+    const newAlignment = await loadAlignment(demoId);
+    onAlignmentFixed?.(newAlignment);
+    await refetch();
+
+    setBulkProgress(null);
+    setBulkPhase(null);
+  };
+
+  /** Batch mode: generate all TTS audio in one call, then save + align sequentially. */
+  const handleRegenerateAllBatch = async (segments: ChangedSegmentDetail[]) => {
+    // Phase 1: batch TTS generation
+    setBulkPhase(`Generating TTS for ${segments.length} segments (batch)...`);
+    for (const seg of segments) {
+      setBulkProgress(prev => prev ? { ...prev, [seg.key]: 'generating' } : prev);
+    }
+
+    const batchItems = segments.map(seg => ({
+      narrationText: seg.currentText,
+      addPauses: true,
+      instruct: resolveInstruct(allSlides, seg.chapter, seg.slide, seg.segmentId, demoInstruct),
+    }));
+
+    let audios: string[];
+    try {
+      audios = await generateTtsBatch(batchItems);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Batch generation failed';
+      for (const seg of segments) {
+        setBulkProgress(prev => prev ? { ...prev, [seg.key]: 'error' } : prev);
+        setSegmentErrors(prev => ({ ...prev, [seg.key]: msg }));
+      }
+      return;
+    }
+
+    // Phase 2: save each audio + align
+    for (let i = 0; i < segments.length; i++) {
+      if (bulkAbortRef.current) break;
+      const seg = segments[i];
+
+      setBulkPhase(`Saving ${i + 1}/${segments.length}: ${seg.key}`);
+      try {
+        const saved = await saveGeneratedAudio({
+          demoId,
+          chapter: seg.chapter,
+          slide: seg.slide,
+          segmentIndex: seg.segmentIndex,
+          segmentId: seg.segmentId,
+          narrationText: seg.currentText,
+          audioBase64: audios[i],
+          instruct: batchItems[i].instruct,
+        });
+
+        // Update in-memory audioFilePath
+        const slideComp = allSlides.find(
+          s => s.metadata.chapter === seg.chapter && s.metadata.slide === seg.slide,
+        );
+        if (slideComp) {
+          const segMeta = slideComp.metadata.audioSegments[seg.segmentIndex];
+          if (segMeta) {
+            const basePath = (segMeta.audioFilePath ?? '').split('?')[0];
+            segMeta.audioFilePath = `${basePath}?t=${saved.timestamp}`;
+          }
+        }
+
+        setBulkPhase(`Aligning ${i + 1}/${segments.length}: ${seg.key}`);
+        setBulkProgress(prev => prev ? { ...prev, [seg.key]: 'aligning' } : prev);
+        await realignSegment({ demoId, chapter: seg.chapter, slide: seg.slide, segmentId: seg.segmentId });
+
+        setBulkProgress(prev => prev ? { ...prev, [seg.key]: 'done' } : prev);
+      } catch (err: unknown) {
+        setBulkProgress(prev => prev ? { ...prev, [seg.key]: 'error' } : prev);
+        setSegmentErrors(prev => ({ ...prev, [seg.key]: err instanceof Error ? err.message : 'Error' }));
+      }
+    }
+  };
+
+  /** Sequential mode: generate + save + align one segment at a time. */
+  const handleRegenerateAllSequential = async (segments: ChangedSegmentDetail[]) => {
     let completedCount = 0;
-    let errorCount = 0;
 
     for (const seg of segments) {
       if (bulkAbortRef.current) break;
 
-      // Phase: generating TTS
       setBulkPhase(`Generating TTS ${completedCount + 1}/${segments.length}: ${seg.key}`);
       setBulkProgress(prev => prev ? { ...prev, [seg.key]: 'generating' } : prev);
 
@@ -121,7 +207,6 @@ export const StalenessWarning: React.FC<StalenessWarningProps> = ({
         if (!result.success) {
           setBulkProgress(prev => prev ? { ...prev, [seg.key]: 'error' } : prev);
           setSegmentErrors(prev => ({ ...prev, [seg.key]: result.error || 'Failed' }));
-          errorCount++;
           continue;
         }
 
@@ -137,7 +222,6 @@ export const StalenessWarning: React.FC<StalenessWarningProps> = ({
           }
         }
 
-        // Phase: aligning
         setBulkPhase(`Aligning ${completedCount + 1}/${segments.length}: ${seg.key}`);
         setBulkProgress(prev => prev ? { ...prev, [seg.key]: 'aligning' } : prev);
 
@@ -148,22 +232,7 @@ export const StalenessWarning: React.FC<StalenessWarningProps> = ({
       } catch (err: unknown) {
         setBulkProgress(prev => prev ? { ...prev, [seg.key]: 'error' } : prev);
         setSegmentErrors(prev => ({ ...prev, [seg.key]: err instanceof Error ? err.message : 'Error' }));
-        errorCount++;
       }
-    }
-
-    // Finalize: refresh alignment + staleness
-    setBulkPhase('Finalizing...');
-    clearAlignmentCache(demoId);
-    const newAlignment = await loadAlignment(demoId);
-    onAlignmentFixed?.(newAlignment);
-    await refetch();
-
-    setBulkProgress(null);
-    setBulkPhase(null);
-
-    if (errorCount > 0) {
-      console.warn(`[staleness] Regenerate All: ${completedCount} succeeded, ${errorCount} failed`);
     }
   };
 
@@ -642,6 +711,29 @@ export const StalenessWarning: React.FC<StalenessWarningProps> = ({
                 );
               })}
             </div>
+          )}
+
+          {/* Batch mode checkbox */}
+          {!isBulkRunning && staleness.changedSegments.length > 1 && (
+            <label style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              color: '#999',
+              fontSize: '12px',
+              cursor: 'pointer',
+              justifyContent: 'center',
+              marginBottom: '10px',
+              flexShrink: 0,
+            }}>
+              <input
+                type="checkbox"
+                checked={batchMode}
+                onChange={e => setBatchMode(e.target.checked)}
+                style={{ accentColor: '#e6a700', cursor: 'pointer' }}
+              />
+              Batch TTS (all segments in one GPU call)
+            </label>
           )}
 
           {/* Progress phase indicator during bulk regen */}
