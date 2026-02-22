@@ -14,6 +14,7 @@ import { loadAlignment } from '../utils/alignmentLoader';
 import { resolveAudioFilePath } from '../utils/audioPath';
 import { useTheme } from '../theme/ThemeContext';
 import { DemoPlayerBoundary } from './DemoPlayerBoundary';
+import { StalenessWarning } from './StalenessWarning';
 import type { DemoAlignment } from '../alignment/types';
 
 export interface AutoplayConfig {
@@ -347,6 +348,17 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideIn
     <SegmentProvider>
     <AudioTimeProvider alignment={alignmentData}>
       <div style={{ position: 'relative', overflow: 'hidden' }}>
+        {/* Dev-mode staleness warning */}
+        {import.meta.env.DEV && (
+          <StalenessWarning
+            demoId={demoId}
+            isNarratedMode={isNarratedMode}
+            onAlignmentFixed={(newAlignment) => {
+              setAlignmentData(newAlignment);
+            }}
+          />
+        )}
+
         {/* Floating Back Button */}
         {!hideInterface && (
           <motion.button

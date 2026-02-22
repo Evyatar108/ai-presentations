@@ -62,6 +62,25 @@
 3. Restart TTS server
 4. Generate single demo at a time
 
+## Dev Server
+
+### Staleness Banner
+
+**Symptoms**: A yellow "Stale data" banner appears at the top of the browser in manual mode
+
+**What it means**: The narration text or markers have changed but the TTS audio or alignment data hasn't been regenerated yet. This can happen when you edit `narration.json` and skip the `npm run dev` regeneration prompt.
+
+**Solutions**:
+1. Click **Regenerate** on the banner — runs TTS generation + alignment automatically
+2. Click **Dismiss** to hide the banner for the current session (reappears on page refresh)
+3. Or run manually:
+   ```bash
+   npm run tts:generate -- --demo {demo-id}
+   npm run tts:align -- --demo {demo-id} --force
+   ```
+
+**Notes**: The banner only appears in dev mode and only in manual mode (hidden during narrated playback). The `npm run dev` startup check also auto-chains `tts:align` after `tts:generate` when you accept regeneration.
+
 ## Demo Issues
 
 ### Demo Not Appearing in Welcome Screen

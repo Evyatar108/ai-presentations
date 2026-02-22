@@ -216,7 +216,8 @@ Markers are transparent to the TTS cache. Both the narration cache (`narration-c
 
 - **Adding or moving markers** in narration text does **not** trigger TTS regeneration
 - Only changes to the actual spoken text or instruct require new audio
-- The `npm run dev` startup check (Step 3) validates that all markers have resolved timestamps in `alignment.json` — run `npm run tts:align -- --demo {id}` if any are missing
+- The `npm run dev` startup check (Step 3) validates that all markers have resolved timestamps in `alignment.json`. If you say "yes" to regenerate, the script auto-chains `tts:align` after `tts:generate` for all affected demos — no manual alignment step needed
+- If you skip the dev-start prompt, a **staleness banner** appears in the browser (manual mode only) with a "Regenerate" button that runs TTS generation + alignment in one click. The banner is dismissed per session and reappears on page refresh
 
 ## CLI Commands
 

@@ -753,6 +753,7 @@ async function checkTTSCache(): Promise<void> {
   console.log('📋 Step 3: Checking marker alignment...\n');
 
   let totalMissingMarkers = 0;
+  const demosNeedingAlignment = new Set<string>();
 
   for (const demoId of demoIds) {
     const markerCheck = checkMarkerAlignment(demoId);
@@ -762,6 +763,7 @@ async function checkTTSCache(): Promise<void> {
       console.log(`   ❌ ${demoId}: alignment.json missing — ${markerCheck.totalMarkers} markers unresolved`);
       console.log(`      Run: npm run tts:align -- --demo ${demoId}`);
       totalMissingMarkers += markerCheck.missingMarkers.length;
+      demosNeedingAlignment.add(demoId);
     } else if (markerCheck.missingMarkers.length > 0) {
       console.log(`   ⚠️  ${demoId}: ${markerCheck.missingMarkers.length} of ${markerCheck.totalMarkers} markers missing from alignment`);
       for (const m of markerCheck.missingMarkers.slice(0, 5)) {
@@ -772,6 +774,7 @@ async function checkTTSCache(): Promise<void> {
       }
       console.log(`      Run: npm run tts:align -- --demo ${demoId} --force`);
       totalMissingMarkers += markerCheck.missingMarkers.length;
+      demosNeedingAlignment.add(demoId);
     } else {
       console.log(`   ✅ ${demoId}: all ${markerCheck.totalMarkers} markers resolved`);
     }
@@ -830,19 +833,50 @@ async function checkTTSCache(): Promise<void> {
   const shouldRegenerate = await promptUser('Do you want to regenerate? (y/n): ');
   
   if (shouldRegenerate) {
-    console.log('\n🔊 Starting TTS generation (smart cache - only changed segments)...\n');
-    try {
-      // Run TTS generation script (skip-existing is now the default)
-      execSync('npm run tts:generate', {
-        stdio: 'inherit',
-        cwd: path.join(__dirname, '..')
-      });
-      console.log('\n✅ Audio regeneration complete! Starting app...\n');
-      process.exit(0);
-    } catch (error) {
-      console.error('\n❌ TTS generation failed. Please check the error above.\n');
-      process.exit(1);
+    // Demos with TTS/narration changes also need alignment (new audio invalidates alignment hashes)
+    const demosWithTtsChanges = new Set([
+      ...Object.keys(result.demos),
+      ...Object.keys(narrationChanges)
+    ]);
+    for (const id of demosWithTtsChanges) {
+      demosNeedingAlignment.add(id);
     }
+
+    const hasTtsChanges = result.hasChanges || totalNarrationChanges > 0;
+
+    if (hasTtsChanges) {
+      console.log('\n🔊 Starting TTS generation (smart cache - only changed segments)...\n');
+      try {
+        execSync('npm run tts:generate', {
+          stdio: 'inherit',
+          cwd: path.join(__dirname, '..')
+        });
+        console.log('\n✅ Audio regeneration complete!');
+      } catch (error) {
+        console.error('\n❌ TTS generation failed. Please check the error above.\n');
+        process.exit(1);
+      }
+    }
+
+    // Chain tts:align for demos that need alignment
+    if (demosNeedingAlignment.size > 0) {
+      console.log(`\n🎯 Running alignment for ${demosNeedingAlignment.size} demo(s)...\n`);
+      for (const id of demosNeedingAlignment) {
+        try {
+          console.log(`   Running alignment for ${id}...`);
+          execSync(`npx tsx scripts/generate-alignment.ts --demo ${id} --force`, {
+            stdio: 'inherit',
+            cwd: path.join(__dirname, '..')
+          });
+        } catch (error) {
+          console.error(`   ❌ Alignment failed for ${id}. Please check the error above.`);
+        }
+      }
+      console.log('\n✅ Alignment complete!');
+    }
+
+    console.log('\nStarting app...\n');
+    process.exit(0);
   } else {
     console.log('\n⚠️  Skipping regeneration. Starting app with current audio files...\n');
     process.exit(0);
