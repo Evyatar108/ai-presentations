@@ -26,6 +26,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# TTS preview takes (generated in narration edit modal)
+public/audio/**/.previews
+
 # TTS cache and config
 .tts-narration-cache.json
 .tts-verification-cache.json
