@@ -51,6 +51,7 @@ export interface SaveGeneratedAudioParams {
   segmentId: string;
   narrationText: string;
   audioBase64: string;
+  instruct?: string;
 }
 
 export interface SaveGeneratedAudioResult {
@@ -201,7 +202,8 @@ export async function saveGeneratedAudio(
       narrationText: params.narrationText,
       chapter: params.chapter,
       slide: params.slide,
-      segmentId: params.segmentId
+      segmentId: params.segmentId,
+      ...(params.instruct ? { instruct: params.instruct } : {}),
     })
   });
 
@@ -260,6 +262,7 @@ export async function regenerateSegment(
       segmentId: params.segmentId,
       narrationText: params.narrationText,
       audioBase64: preview.base64,
+      instruct: params.instruct,
     });
 
     console.log(`[TTS] Audio saved successfully: ${saved.filePath}`);

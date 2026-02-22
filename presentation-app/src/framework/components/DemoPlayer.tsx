@@ -353,6 +353,8 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideIn
           <StalenessWarning
             demoId={demoId}
             isNarratedMode={isNarratedMode}
+            allSlides={slidesWithResolvedPaths}
+            demoInstruct={demoConfig?.instruct}
             onAlignmentFixed={(newAlignment) => {
               setAlignmentData(newAlignment);
             }}

@@ -96,10 +96,22 @@ export function createStalenessHandlers(ctx: HandlerContext): StalenessRoute[] {
       }
 
       // --- Check TTS narration cache for changed segments ---
-      const changedSegments: string[] = [];
+      interface ChangedSegmentDetail {
+        key: string;
+        chapter: number;
+        slide: number;
+        segmentId: string;
+        segmentIndex: number;
+        currentText: string;
+        cachedText?: string;
+        audioRelPath: string;
+        audioExists: boolean;
+      }
+      const changedSegments: ChangedSegmentDetail[] = [];
 
       const ttsCache = loadTtsCache(cacheFile);
       const demoCache = ttsCache[q.demoId] || {};
+      const audioDir = path.join(projectRoot, 'public', 'audio', q.demoId);
 
       for (const slide of narration.slides) {
         for (const segment of slide.segments) {
@@ -110,14 +122,36 @@ export function createStalenessHandlers(ctx: HandlerContext): StalenessRoute[] {
           const relPath = `c${slide.chapter}/s${slide.slide}_segment_${paddedIdx}_${segment.id}.wav`;
 
           const cached = demoCache[relPath];
+          const audioFile = path.join(audioDir, relPath);
+          const audioExists = fs.existsSync(audioFile);
+
           if (!cached) {
             // No cache entry — segment is new or was never generated
-            changedSegments.push(segKey);
+            changedSegments.push({
+              key: segKey,
+              chapter: slide.chapter,
+              slide: slide.slide,
+              segmentId: segment.id,
+              segmentIndex: segIdx,
+              currentText: segment.narrationText,
+              audioRelPath: relPath,
+              audioExists,
+            });
           } else {
             const strippedCurrent = stripMarkersLocal(segment.narrationText).trim();
             const strippedCached = stripMarkersLocal(cached.narrationText || '').trim();
             if (strippedCurrent !== strippedCached) {
-              changedSegments.push(segKey);
+              changedSegments.push({
+                key: segKey,
+                chapter: slide.chapter,
+                slide: slide.slide,
+                segmentId: segment.id,
+                segmentIndex: segIdx,
+                currentText: segment.narrationText,
+                cachedText: cached.narrationText,
+                audioRelPath: relPath,
+                audioExists,
+              });
             }
           }
         }

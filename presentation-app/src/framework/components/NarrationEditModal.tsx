@@ -32,6 +32,7 @@ export interface NarrationEditModalProps {
   allSlides: SlideComponentWithMetadata[];
   onAcceptAudio: (filePath: string, timestamp: number) => void;
   onTextSaved: () => void;
+  onInstructChanged?: (instruct: string | undefined) => void;
   onCancel: () => void;
 }
 
@@ -59,10 +60,13 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
   allSlides,
   onAcceptAudio,
   onTextSaved,
+  onInstructChanged,
   onCancel
 }) => {
   const theme = useTheme();
   const [text, setText] = useState(currentText);
+  const [instructText, setInstructText] = useState(instruct ?? '');
+  const [instructOpen, setInstructOpen] = useState(false);
   const [previews, setPreviews] = useState<AudioPreview[]>([]);
   const [playingId, setPlayingId] = useState<string | null>(null);
   const [generatingPreview, setGeneratingPreview] = useState(false);
@@ -201,10 +205,11 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
 
     try {
       // Step 1: Call TTS server to generate audio
+      const resolvedInstruct = instructText.trim() || undefined;
       const result = await generateTtsPreview({
         narrationText: text,
         addPauses: true,
-        instruct,
+        instruct: resolvedInstruct,
       });
 
       // Step 2: Save preview to disk
@@ -215,6 +220,7 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
           demoId, chapter, slide, segmentId,
           audioBase64: result.base64,
           narrationText: text,
+          ...(resolvedInstruct ? { instruct: resolvedInstruct } : {}),
         })
       });
       const saveData = await saveResp.json();
@@ -234,9 +240,9 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
     } finally {
       setGeneratingPreview(false);
     }
-  }, [canGenerate, text, instruct, demoId, chapter, slide, segmentId]);
+  }, [canGenerate, text, instructText, demoId, chapter, slide, segmentId]);
 
-  // Build NarrationData from current slides + the edited text
+  // Build NarrationData from current slides + the edited text/instruct
   const buildNarrationData = useCallback((): NarrationData => {
     const data: NarrationData = {
       demoId,
@@ -251,24 +257,29 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
         slide: slideMeta.slide,
         title: slideMeta.title,
         segments: [],
+        ...(slideMeta.instruct ? { instruct: slideMeta.instruct } : {}),
       };
       for (const seg of slideMeta.audioSegments) {
-        // Use edited text for the current segment
+        // Use edited text/instruct for the current segment
         const isCurrentSegment =
           slideMeta.chapter === chapter &&
           slideMeta.slide === slide &&
           seg.id === segmentId;
+        const segInstruct = isCurrentSegment
+          ? (instructText.trim() || undefined)
+          : seg.instruct;
         slideData.segments.push({
           id: seg.id,
           narrationText: isCurrentSegment ? text : (seg.narrationText || ''),
           visualDescription: seg.visualDescription || '',
           notes: '',
+          ...(segInstruct ? { instruct: segInstruct } : {}),
         });
       }
       data.slides.push(slideData);
     }
     return data;
-  }, [demoId, allSlides, chapter, slide, segmentId, text]);
+  }, [demoId, allSlides, chapter, slide, segmentId, text, instructText]);
 
   // Save text only (no audio regeneration)
   const handleSaveTextOnly = useCallback(async () => {
@@ -281,12 +292,17 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
       await saveNarrationToFile({ demoId, narrationData });
       setStatusMessage('Text saved to narration.json');
       onTextSaved();
+      // Notify instruct change if it was edited
+      const resolvedInstruct = instructText.trim() || undefined;
+      if (resolvedInstruct !== instruct) {
+        onInstructChanged?.(resolvedInstruct);
+      }
     } catch (error: any) {
       setStatusMessage(`Save failed: ${error.message}`);
     } finally {
       setSavingText(false);
     }
-  }, [canSaveText, buildNarrationData, demoId, onTextSaved]);
+  }, [canSaveText, buildNarrationData, demoId, onTextSaved, instructText, instruct, onInstructChanged]);
 
   // Accept a preview take
   const handleAccept = useCallback(async (preview: AudioPreview) => {
@@ -326,6 +342,11 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
       // Notify parent
       onAcceptAudio(acceptData.filePath, acceptData.timestamp);
       onTextSaved();
+      // Notify instruct change if it was edited
+      const resolvedInstruct = instructText.trim() || undefined;
+      if (resolvedInstruct !== instruct) {
+        onInstructChanged?.(resolvedInstruct);
+      }
       onCancel(); // Close modal
 
     } catch (error: any) {
@@ -334,7 +355,7 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
       setAccepting(false);
       setRealigning(false);
     }
-  }, [demoId, chapter, slide, segmentId, segmentIndex, stopPlayback, buildNarrationData, onAcceptAudio, onTextSaved, onCancel]);
+  }, [demoId, chapter, slide, segmentId, segmentIndex, stopPlayback, buildNarrationData, onAcceptAudio, onTextSaved, onInstructChanged, instructText, instruct, onCancel]);
 
   // Save subtitle corrections
   const handleSaveCorrections = useCallback(async () => {
@@ -492,6 +513,66 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
             >
               Reset to current
             </button>
+          )}
+        </div>
+
+        {/* TTS Instruct (collapsible) */}
+        <div style={{ marginTop: '0.75rem' }}>
+          <button
+            onClick={() => setInstructOpen(o => !o)}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: theme.colors.textSecondary,
+              fontSize: 13,
+              fontWeight: 600,
+              cursor: 'pointer',
+              padding: '0.25rem 0',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+            }}
+          >
+            <span style={{
+              display: 'inline-block',
+              transition: 'transform 0.15s',
+              transform: instructOpen ? 'rotate(90deg)' : 'rotate(0deg)',
+              fontSize: 10,
+            }}>
+              {'\u25B6'}
+            </span>
+            TTS Instruct
+            {instructText.trim() && (
+              <span style={{ fontWeight: 400, color: theme.colors.textMuted, fontSize: 11 }}>
+                ({instructText.trim().length} chars)
+              </span>
+            )}
+          </button>
+
+          {instructOpen && (
+            <textarea
+              value={instructText}
+              onChange={(e) => setInstructText(e.target.value)}
+              disabled={isBusy}
+              placeholder='e.g. "speak slowly and clearly with a warm tone"'
+              style={{
+                width: '100%',
+                minHeight: 60,
+                padding: '0.75rem',
+                marginTop: '0.35rem',
+                background: theme.colors.bgDeep,
+                color: theme.colors.textPrimary,
+                border: '1px solid rgba(148, 163, 184, 0.3)',
+                borderRadius: 8,
+                fontSize: 13,
+                lineHeight: 1.5,
+                fontFamily: theme.fontFamily,
+                resize: 'vertical',
+                outline: 'none',
+                boxSizing: 'border-box',
+                opacity: isBusy ? 0.6 : 1
+              }}
+            />
           )}
         </div>
 

@@ -438,6 +438,12 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
                 showSuccess('Narration saved');
               }
             }}
+            onInstructChanged={(newInstruct) => {
+              const seg = currentSlideMetadata?.audioSegments[segmentContext.currentSegmentIndex];
+              if (seg) {
+                seg.instruct = newInstruct;
+              }
+            }}
             onCancel={editor.handleCancelEdit}
           />
         )}

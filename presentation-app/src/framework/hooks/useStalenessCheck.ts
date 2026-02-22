@@ -1,9 +1,21 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 
+export interface ChangedSegmentDetail {
+  key: string;           // "ch1:s2:intro"
+  chapter: number;
+  slide: number;
+  segmentId: string;
+  segmentIndex: number;
+  currentText: string;   // Text from narration.json
+  cachedText?: string;   // Text TTS was generated from (undefined if never generated)
+  audioRelPath: string;  // "c1/s2_segment_01_intro.wav"
+  audioExists: boolean;  // Whether .wav exists on disk
+}
+
 export interface StalenessResult {
   stale: boolean;
   missingMarkers: Array<{ segment: string; markerId: string }>;
-  changedSegments: string[];
+  changedSegments: ChangedSegmentDetail[];
   alignmentMissing: boolean;
 }
 
@@ -13,6 +25,7 @@ export interface UseStalenessCheckResult {
   dismissed: boolean;
   regenerate: () => Promise<void>;
   dismiss: () => void;
+  refetch: () => Promise<void>;
 }
 
 const isDev = import.meta.env?.DEV;
@@ -30,38 +43,39 @@ export function useStalenessCheck(demoId: string): UseStalenessCheckResult {
     };
   }, []);
 
-  // Fetch staleness on mount (dev-mode only)
-  useEffect(() => {
+  // Reusable fetch logic
+  const fetchStaleness = useCallback(async () => {
     if (!isDev) return;
 
     const controller = new AbortController();
     abortRef.current = controller;
 
-    fetch(`/api/staleness-check?demoId=${encodeURIComponent(demoId)}`, {
-      signal: controller.signal,
-    })
-      .then(r => {
-        if (!r.ok) throw new Error(`Staleness check failed: ${r.status}`);
-        return r.json();
-      })
-      .then((data: StalenessResult) => {
-        if (controller.signal.aborted) return;
-        setStaleness(data);
-        if (data.stale) {
-          const parts: string[] = [];
-          if (data.missingMarkers.length > 0) parts.push(`${data.missingMarkers.length} markers unresolved`);
-          if (data.changedSegments.length > 0) parts.push(`${data.changedSegments.length} segments changed`);
-          if (data.alignmentMissing) parts.push('alignment.json missing');
-          console.warn(`[staleness] ${demoId}: ${parts.join(', ')}`);
-        }
-      })
-      .catch((err) => {
-        if (err instanceof DOMException && err.name === 'AbortError') return;
-        // API not available — ignore silently in dev
+    try {
+      const r = await fetch(`/api/staleness-check?demoId=${encodeURIComponent(demoId)}`, {
+        signal: controller.signal,
       });
-
-    return () => { controller.abort(); };
+      if (!r.ok) throw new Error(`Staleness check failed: ${r.status}`);
+      const data: StalenessResult = await r.json();
+      if (controller.signal.aborted) return;
+      setStaleness(data);
+      if (data.stale) {
+        const parts: string[] = [];
+        if (data.missingMarkers.length > 0) parts.push(`${data.missingMarkers.length} markers unresolved`);
+        if (data.changedSegments.length > 0) parts.push(`${data.changedSegments.length} segments changed`);
+        if (data.alignmentMissing) parts.push('alignment.json missing');
+        console.warn(`[staleness] ${demoId}: ${parts.join(', ')}`);
+      }
+    } catch (err) {
+      if (err instanceof DOMException && err.name === 'AbortError') return;
+      // API not available — ignore silently in dev
+    }
   }, [demoId]);
+
+  // Fetch staleness on mount (dev-mode only)
+  useEffect(() => {
+    fetchStaleness();
+    return () => { abortRef.current?.abort(); };
+  }, [fetchStaleness]);
 
   const regenerate = useCallback(async () => {
     if (!isDev) return;
@@ -113,5 +127,5 @@ export function useStalenessCheck(demoId: string): UseStalenessCheckResult {
     setDismissed(true);
   }, []);
 
-  return { staleness, fixing, dismissed, regenerate, dismiss };
+  return { staleness, fixing, dismissed, regenerate, dismiss, refetch: fetchStaleness };
 }

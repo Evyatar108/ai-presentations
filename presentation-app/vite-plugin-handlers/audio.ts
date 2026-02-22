@@ -75,14 +75,21 @@ export function createAudioHandlers(ctx: HandlerContext): AudioRoute[] {
         }
       }
 
-      const cacheKey = data.outputPath.replace(/\\/g, '/');
-      cache[cacheKey] = {
+      // Split outputPath into demoId and relative path for nested cache format
+      const normalizedPath = data.outputPath.replace(/\\/g, '/');
+      const firstSlash = normalizedPath.indexOf('/');
+      const cacheDemoId = firstSlash > 0 ? normalizedPath.substring(0, firstSlash) : normalizedPath;
+      const cacheRelPath = firstSlash > 0 ? normalizedPath.substring(firstSlash + 1) : normalizedPath;
+
+      if (!cache[cacheDemoId]) cache[cacheDemoId] = {};
+      cache[cacheDemoId][cacheRelPath] = {
         narrationText: data.narrationText,
+        ...(data.instruct ? { instruct: data.instruct } : {}),
         generatedAt: new Date().toISOString()
       };
       fs.writeFileSync(cacheFile, JSON.stringify(cache, null, 2));
 
-      console.log(`[audio-writer] Updated cache entry: ${cacheKey}`);
+      console.log(`[audio-writer] Updated cache entry: ${cacheDemoId}/${cacheRelPath}`);
 
       sendJson(res, 200, {
         success: true,

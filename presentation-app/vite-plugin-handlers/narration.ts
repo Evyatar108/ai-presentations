@@ -14,6 +14,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { execSync } from 'child_process';
 import type { Connect } from 'vite';
+import { loadTtsCache, saveTtsCache } from '../scripts/utils/tts-cache';
 import {
   readJsonBody,
   sendJson,
@@ -142,6 +143,7 @@ export function createNarrationHandlers(ctx: HandlerContext): NarrationRoute[] {
       const data = await readJsonBody<{
         demoId: string; chapter: number; slide: number;
         segmentId: string; audioBase64: string; narrationText: string;
+        instruct?: string;
       }>(req);
       if (!data.demoId || !data.segmentId || !data.audioBase64) {
         throw new Error('Missing required fields');
@@ -155,9 +157,9 @@ export function createNarrationHandlers(ctx: HandlerContext): NarrationRoute[] {
         fs.mkdirSync(previewDir, { recursive: true });
       }
 
-      // Read or create previews.json (narrationText stored per-take)
+      // Read or create previews.json (narrationText + instruct stored per-take)
       const metaFile = path.join(previewDir, 'previews.json');
-      let meta: { takes: { takeNumber: number; narrationText: string; generatedAt: string }[] } = {
+      let meta: { takes: { takeNumber: number; narrationText: string; instruct?: string; generatedAt: string }[] } = {
         takes: []
       };
       if (fs.existsSync(metaFile)) {
@@ -176,6 +178,7 @@ export function createNarrationHandlers(ctx: HandlerContext): NarrationRoute[] {
       meta.takes.push({
         takeNumber,
         narrationText: data.narrationText || '',
+        ...(data.instruct ? { instruct: data.instruct } : {}),
         generatedAt: new Date().toISOString(),
       });
       fs.writeFileSync(metaFile, JSON.stringify(meta, null, 2));
@@ -259,9 +262,37 @@ export function createNarrationHandlers(ctx: HandlerContext): NarrationRoute[] {
         fs.mkdirSync(destDir, { recursive: true });
       }
 
+      // Read take metadata from previews.json before deleting
+      const metaFile = path.join(previewDir, 'previews.json');
+      let takeNarrationText = '';
+      let takeInstruct: string | undefined;
+      if (fs.existsSync(metaFile)) {
+        try {
+          const meta = JSON.parse(fs.readFileSync(metaFile, 'utf-8'));
+          const take = meta.takes?.find((t: any) => t.takeNumber === data.takeNumber);
+          if (take) {
+            takeNarrationText = take.narrationText || '';
+            takeInstruct = take.instruct;
+          }
+        } catch { /* use defaults */ }
+      }
+
       // Copy take to real audio path
       fs.copyFileSync(takeFile, destFull);
       console.log(`[narration] Accepted take ${data.takeNumber} → ${destRelative}`);
+
+      // Update TTS narration cache
+      const cacheFile = path.join(projectRoot, '.tts-narration-cache.json');
+      const cache = loadTtsCache(cacheFile);
+      if (!cache[data.demoId]) cache[data.demoId] = {};
+      const cacheRelPath = `c${data.chapter}/s${data.slide}_segment_${paddedIndex}_${data.segmentId}.wav`;
+      cache[data.demoId][cacheRelPath] = {
+        narrationText: takeNarrationText,
+        ...(takeInstruct ? { instruct: takeInstruct } : {}),
+        generatedAt: new Date().toISOString(),
+      };
+      saveTtsCache(cacheFile, cache);
+      console.log(`[narration] Updated TTS cache: ${data.demoId}/${cacheRelPath}`);
 
       // Delete entire preview dir
       fs.rmSync(previewDir, { recursive: true, force: true });

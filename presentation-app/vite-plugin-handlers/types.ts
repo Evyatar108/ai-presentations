@@ -9,6 +9,7 @@ export interface SaveAudioRequest {
   chapter: number;
   slide: number;
   segmentId: string;
+  instruct?: string;       // TTS style/tone instruction
 }
 
 export interface SaveAudioResponse {
