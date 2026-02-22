@@ -6,6 +6,7 @@ import axios from 'axios';
 import * as crypto from 'crypto';
 import { AudioSegment, SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
 import { runDurationCalculation } from './calculate-durations';
+import { generateAlignment, loadWhisperUrl } from './generate-alignment';
 import { stripMarkers } from './utils/marker-parser';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -858,7 +859,7 @@ async function generateTTS(config: TTSConfig) {
     console.log();
   }
 
-  // Auto-run duration calculation if any audio files changed
+  // Auto-run duration calculation and alignment if any audio files changed
   const audioChanged = totalGenerated > 0 || totalDeleted > 0 || totalRenamed > 0;
   if (audioChanged) {
     console.log('⏱️  Audio files changed — recalculating durations...\n');
@@ -867,6 +868,18 @@ async function generateTTS(config: TTSConfig) {
       demoFilter: config.demoFilter,
       reportPath: path.join(__dirname, '../duration-report.json'),
     });
+
+    if (config.demoFilter) {
+      console.log('\n🔗  Audio files changed — regenerating alignment...\n');
+      await generateAlignment({
+        whisperUrl: process.env.WHISPER_URL || loadWhisperUrl(),
+        audioDir: config.outputDir,
+        demoFilter: config.demoFilter,
+        segmentFilter: config.segmentFilter,
+        force: false,
+        batchSize: 10,
+      });
+    }
   }
 }
 

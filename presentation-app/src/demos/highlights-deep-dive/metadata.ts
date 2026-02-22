@@ -19,14 +19,14 @@ export const metadata: DemoMetadata = {
   narrationFallback: 'silent',
 
   durationInfo: {
-    audioOnly: 1197.76,
-    segmentDelays: 82.5,
+    audioOnly: 1196.88,
+    segmentDelays: 84,
     slideDelays: 48,
     finalDelay: 2,
-    startSilence: 1,
-    total: 1331.26,
+    startSilence: 3,
+    total: 1333.88,
     slideBreakdown: [
-      { slideIndex: 1, slideTitle: 'Title', chapterIndex: 0, totalDuration: 19.92, audioDuration: 17.92, delaysDuration: 2, segments: [{ segmentIndex: 0, audioDuration: 17.92, delayAfter: 2 }] },
+      { slideIndex: 1, slideTitle: 'Title', chapterIndex: 0, totalDuration: 20.54, audioDuration: 17.04, delaysDuration: 3.5, segments: [{ segmentIndex: 0, audioDuration: 5.6, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 11.44, delayAfter: 2 }] },
       { slideIndex: 1, slideTitle: 'Product Context', chapterIndex: 1, totalDuration: 50.2, audioDuration: 45.2, delaysDuration: 5, segments: [{ segmentIndex: 0, audioDuration: 3.44, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 26.4, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 15.36, delayAfter: 2 }] },
       { slideIndex: 2, slideTitle: 'COGS Problem', chapterIndex: 1, totalDuration: 39, audioDuration: 34, delaysDuration: 5, segments: [{ segmentIndex: 0, audioDuration: 19.6, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 8, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 6.4, delayAfter: 2 }] },
       { slideIndex: 1, slideTitle: 'Four-Call Pipeline', chapterIndex: 2, totalDuration: 50.24, audioDuration: 42.24, delaysDuration: 8, segments: [{ segmentIndex: 0, audioDuration: 4, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 8, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 12.24, delayAfter: 1.5 }, { segmentIndex: 3, audioDuration: 8.48, delayAfter: 1.5 }, { segmentIndex: 4, audioDuration: 9.52, delayAfter: 2 }] },

@@ -589,6 +589,16 @@
       "narrationText": "So here's the key takeaway. The output schema isn't just a data format — it's a chain-of-thought scaffold and a prompt engineering tool. Five fields guide the model's reasoning, one field captures the deliverable. Field names become execution steps, nested structure enforces constraints, and self-checks close the validation loop. When you design an LLM's output schema, you're designing the reasoning path.",
       "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
       "generatedAt": "2026-02-21T03:59:59.020Z"
+    },
+    "c0\\s1_segment_01_intro.wav": {
+      "narrationText": "Hello, I'm Kwen tee-tee-ess, and I'll be narrating this presentation for Evyah-tar.",
+      "instruct": "Speak with calm authority and a hint of intrigue, like opening a keynote.",
+      "generatedAt": "2026-02-22T04:39:21.463Z"
+    },
+    "c0\\s1_segment_02_main.wav": {
+      "narrationText": "We'll cover how the Meeting Highlights prompt was redesigned — from a four-call GPT-4 pipeline down to a single unified prompt — cutting GPU costs by roughly seventy percent.",
+      "instruct": "Speak with calm authority and a hint of intrigue, like opening a keynote.",
+      "generatedAt": "2026-02-22T04:39:21.466Z"
     }
   },
   "example-demo-1": {},

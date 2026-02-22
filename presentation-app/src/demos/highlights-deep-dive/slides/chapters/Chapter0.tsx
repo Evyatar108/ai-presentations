@@ -67,7 +67,7 @@ export const Ch0_S1_Title = defineSlide({
     chapter: 0,
     slide: 1,
     title: 'Title',
-    audioSegments: [{ id: 'main' }]
+    audioSegments: [{ id: 'intro' }, { id: 'main' }]
   },
   component: Ch0_S1_TitleComponent
 });

@@ -1,54 +1,54 @@
 {
   "version": "1.0",
-  "generatedAt": "2026-02-22T01:34:41.961Z",
+  "generatedAt": "2026-02-22T04:39:21.474Z",
   "segments": {
     "ch0:s1:main": {
-      "hash": "6afdb50853a9d077a9b1c9ff1d95b28f2ebbaf5c7eeaf30a3527a84e7071eb7e",
-      "lastChecked": "2026-02-21T11:33:23.874Z"
+      "hash": "dd39490123260e43663f0b434dc89ec4aa41b6a1f778ac9e41a416416ec4f3af",
+      "lastChecked": "2026-02-22T04:39:21.473Z"
     },
     "ch1:s1:title": {
       "hash": "a5787adf4cdc9028853bbca2a1ab46c3f43811e5bb1c055e97f288da278ed39b",
-      "lastChecked": "2026-02-21T11:33:23.874Z"
+      "lastChecked": "2026-02-22T04:39:21.473Z"
     },
     "ch1:s1:pipeline": {
       "hash": "2c2fb39a0cf5469c9a2bba84bc454bf1385f00d115464e26e15661be75778b22",
-      "lastChecked": "2026-02-21T11:33:23.874Z"
+      "lastChecked": "2026-02-22T04:39:21.473Z"
     },
     "ch1:s1:types": {
       "hash": "fd7bf1903d7f6ca08b96cfb819b89f3dd3538883f924c877096e4347ebe02ee3",
-      "lastChecked": "2026-02-21T11:33:23.874Z"
+      "lastChecked": "2026-02-22T04:39:21.473Z"
     },
     "ch1:s2:metrics": {
       "hash": "d2a2579d104e6fe91346760ee610920a6affc8f3dc609908c2268c53a9171d07",
-      "lastChecked": "2026-02-21T11:33:23.874Z"
+      "lastChecked": "2026-02-22T04:39:21.473Z"
     },
     "ch1:s2:quote": {
       "hash": "efc123870d1b5d319f9d6efda9d0ace39d087a6b47a488c376681fb1593fded5",
-      "lastChecked": "2026-02-21T11:33:23.874Z"
+      "lastChecked": "2026-02-22T04:39:21.473Z"
     },
     "ch1:s2:emphasis": {
       "hash": "4c9ebce512e5bc07ba188f9fe4535c14857ee0125e96cd558de413de9457835c",
-      "lastChecked": "2026-02-21T11:33:23.874Z"
+      "lastChecked": "2026-02-22T04:39:21.473Z"
     },
     "ch2:s1:title": {
       "hash": "ad832f715864d75dc704e48cd2cb7e6290586e56181394eaad90461fe666afd1",
-      "lastChecked": "2026-02-21T11:33:23.875Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch2:s1:call1": {
       "hash": "e6c8f1d5d180c811ca1f23c736ff25678780b633fce2ffbb8ba3134647e04849",
-      "lastChecked": "2026-02-21T11:33:23.875Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch2:s1:call2": {
       "hash": "3cb6f23b0e9df2c72a1d136d62ad3c3774ed8de27b27a60ee7957488c13701bb",
-      "lastChecked": "2026-02-21T11:33:23.875Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch2:s1:call3": {
       "hash": "680369b178dba086e6ee6a03a1d1e7b30e70d492eab41c9723547e55d4bed756",
-      "lastChecked": "2026-02-21T11:33:23.875Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch2:s1:call4": {
       "hash": "9c01c59570b3d432bdcb4952b00c4f29872f01a7cee3e15bb1ea94d0cfd77141",
-      "lastChecked": "2026-02-21T11:33:23.875Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch2:s2:code": {
       "hash": "5776978432cff041258c55109bc347ccc74e360732b46603d2aaf2cc5cc8aa1d",
@@ -60,23 +60,23 @@
     },
     "ch3:s1:title": {
       "hash": "edf36e7cab507d9610c414c4363b988a0500ad566e08b13c54e064c98e96cf04",
-      "lastChecked": "2026-02-21T11:33:23.875Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch3:s1:driver1": {
       "hash": "3b8384b822bb4dee73797af150db257f827102272a37852b4528307969ab71e8",
-      "lastChecked": "2026-02-21T11:33:23.875Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch3:s1:driver2": {
       "hash": "8c89daa03e1023f343a9b8cdf7c673c7e1893848c035a6d0b9617b4421331272",
-      "lastChecked": "2026-02-21T11:33:23.875Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch3:s1:driver3": {
       "hash": "0ed80a7d16e8176e3800804b2f860f7f86344274a81c5703bdae2aefe896ff11",
-      "lastChecked": "2026-02-21T11:33:23.875Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch3:s1:driver4": {
       "hash": "8cb36c0d63efbef7e9175063609576e714bf4b3ae294c0d6025f60f668a8d564",
-      "lastChecked": "2026-02-21T11:33:23.875Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch3:s1:driver5": {
       "hash": "873c1db937d32be8a8323bad168e9a911c1522b37bf9a89ab92ca58d06a1d688",
@@ -84,23 +84,23 @@
     },
     "ch3:s2:comparison": {
       "hash": "c4da7b929f0f09de5a4e52dc3ca502e75232116f23fb96716be64f317e36ef7a",
-      "lastChecked": "2026-02-21T11:33:23.875Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch3:s2:caption": {
       "hash": "68666b11b2e2281c850dfe7437a891b33a2c2ffd05bcf98cd79f2b9afe25e08a",
-      "lastChecked": "2026-02-21T11:33:23.875Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch4:s1:title": {
       "hash": "1ca697faa2c83bfafa0d653c89182f92bf69de1cb2d4e966b5ef4141eb393216",
-      "lastChecked": "2026-02-21T11:33:23.875Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch4:s1:code": {
       "hash": "d29ce68cfcd037fa21c466d535e3ae9b42faa0befa039a9d2583d8a546a721d3",
-      "lastChecked": "2026-02-21T11:33:23.875Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch4:s1:annotation": {
       "hash": "2b1c222779dae9ed8c7a831daf710cf44e0fc5786dd84023074070873c84e6ce",
-      "lastChecked": "2026-02-21T11:33:23.875Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch4:s2:grid": {
       "hash": "747ad2b4982580cfd5dace7a8e7e3049334aeb9177653fdc3b7164d3209b91d5",
@@ -116,31 +116,31 @@
     },
     "ch5:s1:title": {
       "hash": "f326951a3993f50403d6e98200e60000bed12c84d412e92203400cab61e429bc",
-      "lastChecked": "2026-02-21T11:33:23.875Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch5:s1:split": {
       "hash": "8abc082cb71350d60ed2b37b3029f9cb7bd03b821db923406abc6352dc84f94f",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch5:s1:table": {
       "hash": "86eadfbf0250703d8bf58ea4ca9e7a84183bdbc737cbbcaea5a11b99fe699cd7",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch5:s2:row": {
       "hash": "3191625a3e0aed4029816d0a8ff4ffcbf0fe2138506dad76c4e441fe9b0ec3f8",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch5:s2:visual": {
       "hash": "46b00fcc7abcdddd1e8267cd4fff3ac9fee2ada6acd0f9e72776396964d280ac",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch5:s2:comparison": {
       "hash": "b623b819267d70fd95527b2b2e7619c51fd2f6e9a831a29fb1c30def38c602c8",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch6:s1:title": {
       "hash": "40676e93145eaceac058a982ccf5f793467cefd5a7effd94d0244591ef3fa7b2",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch6:s1:code": {
       "hash": "116e9426cbf13c2cbea913f13d59c766212f2788044932b14e3e4be5d394c277",
@@ -160,27 +160,27 @@
     },
     "ch7:s1:title": {
       "hash": "93f07e766646a7fc7b549c07961e9cbeba0bd18cb7366e8b06e10e05ad5e5e1e",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch7:s1:copy": {
       "hash": "d66f0be35ee7f451bcae94684f623f49afacc0e7f1d70016ac100a0587ee3281",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch7:s1:parse": {
       "hash": "1a1b8d7b4b8564004b999669218bc54ecd179de390119346503ddddd2f09d38e",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch7:s2:title": {
       "hash": "18ddd1d9f8c7735473e7391eb5be9abda0bbceb873ec03fe0d065fed2676a0c8",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch7:s2:grid": {
       "hash": "643fc3fe21838fb292df949eb3823689bba1eda7f9838684d8023dc104d842e9",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch8:s1:title": {
       "hash": "475cdae83b99de524119e6555aab6a0fc36bcf94252fe94d7118233d05ef0dff",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch8:s1:calls": {
       "hash": "08a54ecf3cd69c7e9accb489faf93629d82c6c02da8fff25614d5e4f921ade05",
@@ -208,7 +208,7 @@
     },
     "ch9:s1:title": {
       "hash": "d62728dc62836936ddde55307a15839eeebb1631b44c7f2ce309240ebba9d92c",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch9:s1:lesson1": {
       "hash": "74264085ec25fcd04d7904970967e07af06ae3da30332ee8c81bc5aa8ac890a4",
@@ -240,179 +240,183 @@
     },
     "ch4:s2:title": {
       "hash": "0d5426e4fc3568683a4074e44320248938aef0145910aac7e745007079aed766",
-      "lastChecked": "2026-02-21T11:33:23.875Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch4:s2:rows": {
       "hash": "1a99bf4c3a990c3bde2e3e37396ebf4a809c01d5e7911aa9f7c847a8f56907d4",
-      "lastChecked": "2026-02-21T11:33:23.875Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch4:s2:waste": {
       "hash": "1b9e228b27b1ca88c7c0f9d6304dac903ae559674709cdfc33ae4b125c6985ad",
-      "lastChecked": "2026-02-21T11:33:23.875Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch4:s3:grid": {
       "hash": "747ad2b4982580cfd5dace7a8e7e3049334aeb9177653fdc3b7164d3209b91d5",
-      "lastChecked": "2026-02-21T11:33:23.875Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch4:s3:math": {
       "hash": "9bfab6039f955a1f4b62d6680bc3aa2b44c06c9ed13f8f531807b3427c97f944",
-      "lastChecked": "2026-02-21T11:33:23.875Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch4:s3:context_window": {
       "hash": "b4f65c88e6bd0aa2b3356090cb9dbc0281ccb387427d92f17d581d3fe1c28ba2",
-      "lastChecked": "2026-02-21T11:33:23.875Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch6:s1:sections": {
       "hash": "42917c9cf89f6abad058d628b5765a9c7b0674391842358c938d5f5a448b7d97",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch6:s1:insight": {
       "hash": "1a931e69cbee165a738f07401e8675b5974669b101cfb45a323b807a491e6663",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch6:s2:title": {
       "hash": "4eb0402113c41e9c086f272d639b011acf66de59d9f66f807dd80e7f7875006a",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch6:s2:code": {
       "hash": "116e9426cbf13c2cbea913f13d59c766212f2788044932b14e3e4be5d394c277",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch6:s2:outputs": {
       "hash": "a5384874454997bee8f4136562cd6f1ae2bb8d514a8d25880ea1bedc4dd9f298",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch6:s3:comparison": {
       "hash": "71547c26413753bab1b9b78c861682895a8cb50bd401758a8580a14630fecbc8",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch6:s3:benefits": {
       "hash": "e32834e8149e464a9cc38e1ce9e810fde1b271b7a147a77428f5b600b3de45ed",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch5:s3:title": {
       "hash": "3ba50fa687dbda29b424a6cc73b25c261da10c40926943d06431910c053331e1",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch5:s3:concept": {
       "hash": "d40775b24bbd6425bc23072e075cd2df238b3203790077dcb71e6c804e677f2d",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch5:s3:constraint": {
       "hash": "639897aa70299d5a538a37c8f0a08ad89dafc22136972136c5338247a14ca487",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch8:s1:checks": {
       "hash": "f774b35eb37a18918f85483d4582b7595fe691f5002bf4350d51c971c25c72c3",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch8:s1:challenge": {
       "hash": "109482f6f5c0a489efa316977d64b7e0a77e3972935e50dcc81fa53f60f56e81",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch8:s2:title": {
       "hash": "d47ea3ee33873e0466fa658c3e544097ed89dcf8d864f68b0679d66d8c989492",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch8:s2:pipeline": {
       "hash": "e463b1063bcea7076ea382151c8f4d3eef78930a18fac9418795531aa0dcc276",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch8:s2:metrics": {
       "hash": "6aed036ac52b7f9fe8fed1a7aca739dcb8a5c5a8cad7798a5ffe51dd3f366d13",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch9:s1:calls": {
       "hash": "08a54ecf3cd69c7e9accb489faf93629d82c6c02da8fff25614d5e4f921ade05",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch9:s1:tokens": {
       "hash": "63ec7b753ffef0ac1623b992b71efac44ccc7888364768cdaf1cd135075ddd24",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch9:s1:gpus": {
       "hash": "e135fb88da90061c2ef2e46a2cdab9ca542c4585cbccf44db1a640a7fea58295",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch9:s2:quality": {
       "hash": "e5e890cf0cc545a402cf0fa163619c6f993e9a6e3358627650675cba09e99a62",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch9:s2:roadmap": {
       "hash": "d2ff9b1e42cdee7ee798fdd2fd4157d4055c6e3306073340c26d9471a570ded0",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch9:s2:quote": {
       "hash": "49b78523d8819efe7bd49f01b7285f9aa228d76f5a955939fa3fbbfaa81390c4",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch10:s1:title": {
       "hash": "19458f8ec579de7febf9bab79392d698081a9068e27ce131bef44b3c92e81dc2",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch10:s1:lesson1": {
       "hash": "74264085ec25fcd04d7904970967e07af06ae3da30332ee8c81bc5aa8ac890a4",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch10:s1:lesson2": {
       "hash": "5975a7811deae79e5b61f8297e79f6efae229fa249a33b1afa94c16424d5d7e1",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch10:s1:lesson3": {
       "hash": "eaa30d1f8b18afeae6555a05ebb50b5a3adf6332cd3bc5aeeee884ebf51b7f0a",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch10:s1:lesson4": {
       "hash": "f205685dcf20ef1e3bb767f8e08d8c92f348383ba431974d6ef1ee4b3a03fbb7",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch10:s1:lesson5": {
       "hash": "a2006e19650f5dac7096b9a2d31c237a02089dad76c5d58c985edef8560602f0",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch10:s1:lesson6": {
       "hash": "5616e368d16080b90c72d5b072e712aef60ec9e39ff414a239873df07a218970",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch10:s2:thankyou": {
       "hash": "2adc3a84c24812dd829a7f86dae058e43b29e0509ad9a8767978d8608bcb800e",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch10:s2:cta": {
       "hash": "bb44915e62fece9d5e01f96dc2ef24f587d3254a85aa6fee0b997279d196c4ed",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch4:s4:input_output": {
       "hash": "6a6e60bd7b2237043ad1dc6331ae16d8f74c24c7f4b8eaee5f6d73a26a8cb68b",
-      "lastChecked": "2026-02-21T11:33:23.875Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch4:s4:rationale": {
       "hash": "5e641d8ef2ad7a9a124bdda597cea3877d6db2f4d86a4f51b1a08dd3cf4a7064",
-      "lastChecked": "2026-02-21T11:33:23.875Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch4:s4:tradeoff": {
       "hash": "ebe873bad5d8aa30a3bafcae7938297e84aff52f9b48d27907fcd1fb538cd3f1",
-      "lastChecked": "2026-02-21T11:33:23.875Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch6:s4:skeleton": {
       "hash": "2fb239dfcdb873940517ee2368fa1608c06fa284ffab75c82ef64f6941282812",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch6:s4:extractive_zoom": {
       "hash": "88312b416e1efa9b62ec2045434ce8f8d78f0d3909d1e6c3f6e2d32b70f9a25e",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch6:s4:insight": {
       "hash": "4cef6c4e4fe84923c9f041a676ddf2a20c53b351f5b44bc357d5a8d2165e7e4b",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch4:s4:input_example": {
       "hash": "14307c454d4e180ae1fc5d38095d08baaca2b8b1b9b7263c32b65fb4be9a0056",
-      "lastChecked": "2026-02-21T11:33:23.875Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
     },
     "ch6:s4:deliverable_zoom": {
       "hash": "1cf6096cf939a747732ca8a026169a3faabc7b19d3827f9f09a86b6c1984b54c",
-      "lastChecked": "2026-02-21T11:33:23.876Z"
+      "lastChecked": "2026-02-22T04:39:21.474Z"
+    },
+    "ch0:s1:intro": {
+      "hash": "b32646f150245220914a203749e94b660ed7b0df558ef7a4bfd4f741451dabbe",
+      "lastChecked": "2026-02-22T04:39:21.473Z"
     }
   }
 }

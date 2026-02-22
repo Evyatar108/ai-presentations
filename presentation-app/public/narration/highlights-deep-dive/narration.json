@@ -11,8 +11,14 @@
       "instruct": "Speak with calm authority and a hint of intrigue, like opening a keynote.",
       "segments": [
         {
+          "id": "intro",
+          "narrationText": "Hello, I'm Kwen tee-tee-ess, and I'll be narrating this presentation for Evyah-tar.",
+          "visualDescription": "Title slide: 'From 4 Calls to 1: Redesigning the Meeting Highlights Prompt'",
+          "notes": ""
+        },
+        {
           "id": "main",
-          "narrationText": "Hello, I'm Kwen tee-tee-ess, and I'll be narrating this presentation for Evyah-tar... We'll cover how the Meeting Highlights prompt was redesigned — from a four-call GPT-4 pipeline down to a single unified prompt — cutting GPU costs by roughly seventy percent.",
+          "narrationText": "We'll cover how the Meeting Highlights prompt was redesigned — from a four-call GPT-4 pipeline down to a single unified prompt — cutting GPU costs by roughly seventy percent.",
           "visualDescription": "Title slide: 'From 4 Calls to 1: Redesigning the Meeting Highlights Prompt'",
           "notes": ""
         }

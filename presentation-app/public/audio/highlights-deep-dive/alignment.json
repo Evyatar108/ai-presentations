@@ -1,260 +1,268 @@
 {
   "demoId": "highlights-deep-dive",
-  "generatedAt": "2026-02-22T01:44:37.129Z",
+  "generatedAt": "2026-02-22T04:40:02.418Z",
   "slides": {
     "c0_s1": {
       "chapter": 0,
       "slide": 1,
       "segments": [
         {
-          "segmentId": "main",
-          "audioHash": "a8a953bb5d252ecbcc1ffec1ae01b98b50bdcc73da004d455831a14ecd70ef7b",
-          "narrationHash": "d1899372b6a2ed4a3ffaa7be288f1e22262761e66d5e47eef6c510aea3e3e91a",
+          "segmentId": "intro",
+          "audioHash": "c5b75fff1e9da87e1375ed50cd95de822197a9ae02d654b617b583c39ee24e28",
+          "narrationHash": "9c2df491acb5c59dac01412cbd9a8b3b0cc63c25fd565e4e33958c2312adaa6f",
           "words": [
             {
-              "end": 0.421,
-              "score": 0.934,
+              "end": 0.403,
+              "score": 0.94,
               "start": 0,
               "word": "Hello,"
             },
             {
-              "end": 0.982,
-              "score": 0.942,
-              "start": 0.842,
+              "end": 0.947,
+              "score": 0.953,
+              "start": 0.443,
               "word": "I'm"
             },
             {
-              "end": 1.243,
-              "score": 0.611,
-              "start": 1.022,
+              "end": 1.289,
+              "score": 0.758,
+              "start": 1.007,
               "word": "Kwen"
             },
             {
-              "end": 1.944,
-              "score": 0.698,
-              "start": 1.283,
+              "end": 2.478,
+              "score": 0.764,
+              "start": 1.35,
               "word": "tee-tee-ess,"
             },
             {
-              "end": 2.486,
-              "score": 0.631,
-              "start": 2.405,
+              "end": 2.578,
+              "score": 0.924,
+              "start": 2.498,
               "word": "and"
             },
             {
-              "end": 2.646,
-              "score": 0.805,
-              "start": 2.506,
+              "end": 2.76,
+              "score": 0.816,
+              "start": 2.619,
               "word": "I'll"
             },
             {
-              "end": 2.746,
-              "score": 0.633,
-              "start": 2.686,
+              "end": 2.881,
+              "score": 0.77,
+              "start": 2.8,
               "word": "be"
             },
             {
-              "end": 3.207,
-              "score": 0.873,
-              "start": 2.806,
+              "end": 3.424,
+              "score": 0.808,
+              "start": 2.941,
               "word": "narrating"
             },
             {
-              "end": 3.368,
-              "score": 0.87,
-              "start": 3.247,
+              "end": 3.646,
+              "score": 0.754,
+              "start": 3.485,
               "word": "this"
             },
             {
-              "end": 4.129,
-              "score": 0.905,
-              "start": 3.428,
+              "end": 4.472,
+              "score": 0.913,
+              "start": 3.727,
               "word": "presentation"
             },
             {
-              "end": 4.35,
-              "score": 0.99,
-              "start": 4.229,
+              "end": 4.714,
+              "score": 0.84,
+              "start": 4.573,
               "word": "for"
             },
             {
-              "end": 6.074,
-              "score": 0.918,
-              "start": 4.43,
-              "word": "Evyah-tar..."
-            },
+              "end": 5.62,
+              "score": 0.783,
+              "start": 4.855,
+              "word": "Evyah-tar."
+            }
+          ],
+          "markers": []
+        },
+        {
+          "segmentId": "main",
+          "audioHash": "f08183a234ecfa1061639184c1f77f11af04aab6f05c7b5dfcd7d5e91325bb3c",
+          "narrationHash": "4520c500f0effcc86e51a0320271dc7bc8c97f13e371485744ba3ae8d815b404",
+          "words": [
             {
-              "end": 6.314,
-              "score": 0.802,
-              "start": 6.094,
+              "end": 0.261,
+              "score": 0.593,
+              "start": 0,
               "word": "We'll"
             },
             {
-              "end": 6.675,
-              "score": 0.891,
-              "start": 6.354,
+              "end": 0.542,
+              "score": 0.863,
+              "start": 0.301,
               "word": "cover"
             },
             {
-              "end": 6.915,
-              "score": 0.992,
-              "start": 6.775,
+              "end": 0.682,
+              "score": 0.643,
+              "start": 0.582,
               "word": "how"
             },
             {
-              "end": 7.076,
-              "score": 0.829,
-              "start": 6.976,
+              "end": 0.803,
+              "score": 0.984,
+              "start": 0.743,
               "word": "the"
             },
             {
-              "end": 7.437,
-              "score": 0.919,
-              "start": 7.176,
+              "end": 1.144,
+              "score": 0.792,
+              "start": 0.863,
               "word": "Meeting"
             },
             {
-              "end": 7.898,
-              "score": 0.801,
-              "start": 7.477,
+              "end": 1.606,
+              "score": 0.724,
+              "start": 1.184,
               "word": "Highlights"
             },
             {
-              "end": 8.258,
-              "score": 0.648,
-              "start": 7.978,
+              "end": 2.027,
+              "score": 0.733,
+              "start": 1.686,
               "word": "prompt"
             },
             {
-              "end": 8.419,
-              "score": 0.508,
-              "start": 8.299,
+              "end": 2.188,
+              "score": 0.831,
+              "start": 2.067,
               "word": "was"
             },
             {
-              "end": 9.08,
-              "score": 0.923,
-              "start": 8.499,
+              "end": 2.89,
+              "score": 0.856,
+              "start": 2.248,
               "word": "redesigned"
             },
             {
-              "end": 9.601,
-              "score": 0.96,
-              "start": 9.1,
+              "end": 3.312,
+              "score": 0.95,
+              "start": 2.91,
               "word": "—"
             },
             {
-              "end": 9.742,
-              "score": 0.883,
-              "start": 9.621,
+              "end": 3.452,
+              "score": 0.926,
+              "start": 3.332,
               "word": "from"
             },
             {
-              "end": 9.862,
-              "score": 0.959,
-              "start": 9.822,
+              "end": 3.532,
+              "score": 0.987,
+              "start": 3.512,
               "word": "a"
             },
             {
-              "end": 10.584,
-              "score": 0.8,
-              "start": 9.962,
+              "end": 4.255,
+              "score": 0.743,
+              "start": 3.613,
               "word": "four-call"
             },
             {
-              "end": 11.566,
-              "score": 0.754,
-              "start": 10.664,
+              "end": 5.078,
+              "score": 0.838,
+              "start": 4.315,
               "word": "GPT-4"
             },
             {
-              "end": 12.147,
-              "score": 0.851,
-              "start": 11.626,
+              "end": 5.66,
+              "score": 0.869,
+              "start": 5.138,
               "word": "pipeline"
             },
             {
-              "end": 12.568,
-              "score": 0.884,
-              "start": 12.368,
+              "end": 6.282,
+              "score": 0.881,
+              "start": 6.101,
               "word": "down"
             },
             {
-              "end": 12.748,
-              "score": 0.873,
-              "start": 12.628,
+              "end": 6.443,
+              "score": 0.811,
+              "start": 6.342,
               "word": "to"
             },
             {
-              "end": 12.829,
-              "score": 0.95,
-              "start": 12.809,
+              "end": 6.523,
+              "score": 0.994,
+              "start": 6.503,
               "word": "a"
             },
             {
-              "end": 13.29,
-              "score": 0.89,
-              "start": 12.969,
+              "end": 6.964,
+              "score": 0.829,
+              "start": 6.623,
               "word": "single"
             },
             {
-              "end": 13.811,
-              "score": 0.834,
-              "start": 13.41,
+              "end": 7.566,
+              "score": 0.776,
+              "start": 7.125,
               "word": "unified"
             },
             {
-              "end": 14.252,
-              "score": 0.826,
-              "start": 13.891,
+              "end": 7.988,
+              "score": 0.725,
+              "start": 7.627,
               "word": "prompt"
             },
             {
-              "end": 14.873,
-              "score": 0,
-              "start": 14.853,
+              "end": 8.67,
+              "score": 0.97,
+              "start": 8.008,
               "word": "—"
             },
             {
-              "end": 15.154,
-              "score": 0.838,
-              "start": 14.893,
+              "end": 8.971,
+              "score": 0.922,
+              "start": 8.69,
               "word": "cutting"
             },
             {
-              "end": 15.855,
-              "score": 0.842,
-              "start": 15.214,
+              "end": 9.533,
+              "score": 0.825,
+              "start": 9.052,
               "word": "GPU"
             },
             {
-              "end": 16.316,
-              "score": 0.936,
-              "start": 15.936,
+              "end": 9.955,
+              "score": 0.862,
+              "start": 9.614,
               "word": "costs"
             },
             {
-              "end": 16.537,
+              "end": 10.156,
               "score": 0.998,
-              "start": 16.397,
+              "start": 10.035,
               "word": "by"
             },
             {
-              "end": 16.938,
-              "score": 0.715,
-              "start": 16.617,
+              "end": 10.577,
+              "score": 0.788,
+              "start": 10.196,
               "word": "roughly"
             },
             {
-              "end": 17.459,
-              "score": 0.828,
-              "start": 17.078,
+              "end": 10.998,
+              "score": 0.802,
+              "start": 10.657,
               "word": "seventy"
             },
             {
-              "end": 17.94,
-              "score": 0.818,
-              "start": 17.519,
+              "end": 11.46,
+              "score": 0.688,
+              "start": 11.039,
               "word": "percent."
             }
           ],

@@ -23,7 +23,7 @@ const __dirname = dirname(__filename);
 
 // ── Types ──────────────────────────────────────────────────────────
 
-interface AlignConfig {
+export interface AlignConfig {
   whisperUrl: string;
   audioDir: string;
   demoFilter: string;
@@ -129,7 +129,7 @@ function chunkArray<T>(array: T[], size: number): T[][] {
   return chunks;
 }
 
-function loadWhisperUrl(): string {
+export function loadWhisperUrl(): string {
   const configPath = path.join(__dirname, '../../tts/server_config.json');
   try {
     if (fs.existsSync(configPath)) {
@@ -180,7 +180,7 @@ function resolveMarkers(
 
 // ── Main ───────────────────────────────────────────────────────────
 
-async function generateAlignment(config: AlignConfig) {
+export async function generateAlignment(config: AlignConfig) {
   console.log('\ud83d\udd17  Starting Alignment Generation via WhisperX...\n');
 
   // Health check
