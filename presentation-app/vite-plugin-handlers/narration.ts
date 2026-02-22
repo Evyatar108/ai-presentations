@@ -110,15 +110,28 @@ export function createNarrationHandlers(ctx: HandlerContext): NarrationRoute[] {
     try {
       const data = await readJsonBody<{
         demoId: string; chapter: number; slide: number; segmentId: string;
+        segments?: Array<{ chapter: number; slide: number; segmentId: string }>;
       }>(req);
-      if (!data.demoId || data.chapter == null || data.slide == null || !data.segmentId) {
-        throw new Error('Missing required fields: demoId, chapter, slide, segmentId');
+      if (!data.demoId) {
+        throw new Error('Missing required field: demoId');
       }
 
-      const segKey = `ch${data.chapter}:s${data.slide}:${data.segmentId}`;
-      console.log(`[narration] Realigning segment: ${segKey} for demo ${data.demoId}`);
+      // Support both single segment and batch: { segments: [...] } takes priority
+      const segList = data.segments && data.segments.length > 0
+        ? data.segments
+        : (data.chapter != null && data.slide != null && data.segmentId)
+          ? [{ chapter: data.chapter, slide: data.slide, segmentId: data.segmentId }]
+          : null;
 
-      const cmd = `npx tsx scripts/generate-alignment.ts --demo ${data.demoId} --segments ${segKey} --force`;
+      if (!segList || segList.length === 0) {
+        throw new Error('Missing required fields: provide chapter/slide/segmentId or segments array');
+      }
+
+      const segKeys = segList.map(s => `ch${s.chapter}:s${s.slide}:${s.segmentId}`);
+      const segKeysStr = segKeys.join(',');
+      console.log(`[narration] Realigning ${segKeys.length} segment(s): ${segKeysStr} for demo ${data.demoId}`);
+
+      const cmd = `npx tsx scripts/generate-alignment.ts --demo ${data.demoId} --segments ${segKeysStr} --force`;
       execSync(cmd, {
         cwd: projectRoot,
         timeout: 120_000,
@@ -126,7 +139,7 @@ export function createNarrationHandlers(ctx: HandlerContext): NarrationRoute[] {
         encoding: 'utf-8',
       });
 
-      console.log(`[narration] Realignment completed for ${segKey}`);
+      console.log(`[narration] Realignment completed for ${segKeysStr}`);
       sendJson(res, 200, { success: true });
     } catch (error: any) {
       console.error('[narration] Realignment error:', error);

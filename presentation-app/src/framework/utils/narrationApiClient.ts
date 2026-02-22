@@ -201,6 +201,45 @@ export async function updateNarrationCache(
  * @param params - Segment coordinates
  * @returns Promise resolving to success/error
  */
+export async function realignSegments(params: {
+  demoId: string;
+  segments: Array<{ chapter: number; slide: number; segmentId: string }>;
+}): Promise<{ success: boolean; error?: string }> {
+  try {
+    const segKeys = params.segments.map(s => `ch${s.chapter}:s${s.slide}:${s.segmentId}`).join(', ');
+    console.log('[NarrationAPI] Realigning segments:', segKeys);
+
+    const response = await fetch(`${getApiBaseUrl()}/api/narration/realign-segment`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ demoId: params.demoId, segments: params.segments })
+    });
+
+    if (!response.ok) {
+      let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.error || errorMessage;
+      } catch { /* use default */ }
+      return { success: false, error: errorMessage };
+    }
+
+    const result = await response.json();
+    if (!result.success) {
+      return { success: false, error: result.error || 'Realignment failed' };
+    }
+
+    console.log('[NarrationAPI] Batch realignment successful');
+    return { success: true };
+  } catch (error) {
+    console.error('[NarrationAPI] Batch realignment failed:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Network error'
+    };
+  }
+}
+
 export async function realignSegment(params: {
   demoId: string; chapter: number; slide: number; segmentId: string;
 }): Promise<{ success: boolean; error?: string }> {

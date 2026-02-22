@@ -6,7 +6,7 @@ import type { ChangedSegmentDetail } from '../hooks/useStalenessCheck';
 import { clearAlignmentCache, loadAlignment } from '../utils/alignmentLoader';
 import { useApiHealth } from '../hooks/useApiHealth';
 import { regenerateSegment, generateTtsBatch, saveGeneratedAudio } from '../utils/ttsClient';
-import { realignSegment } from '../utils/narrationApiClient';
+import { realignSegment, realignSegments } from '../utils/narrationApiClient';
 import { NarrationEditModal } from './NarrationEditModal';
 import type { DemoAlignment } from '../alignment/types';
 import type { SlideComponentWithMetadata } from '../slides/SlideMetadata';
@@ -54,7 +54,7 @@ export const StalenessWarning: React.FC<StalenessWarningProps> = ({
   const [hiddenForEdit, setHiddenForEdit] = useState(false);
 
   // Regenerate-all progress state
-  type SegmentStatus = 'pending' | 'generating' | 'aligning' | 'done' | 'error';
+  type SegmentStatus = 'pending' | 'generating' | 'saved' | 'aligning' | 'done' | 'error';
   const [bulkProgress, setBulkProgress] = useState<Record<string, SegmentStatus> | null>(null);
   const [bulkPhase, setBulkPhase] = useState<string | null>(null);
   const bulkAbortRef = useRef(false);
@@ -113,7 +113,7 @@ export const StalenessWarning: React.FC<StalenessWarningProps> = ({
     setBulkPhase(null);
   };
 
-  /** Batch mode: generate all TTS audio in one call, then save + align sequentially. */
+  /** Batch mode: generate all TTS audio in one call, save sequentially, then align all at once. */
   const handleRegenerateAllBatch = async (segments: ChangedSegmentDetail[]) => {
     // Phase 1: batch TTS generation
     setBulkPhase(`Generating TTS for ${segments.length} segments (batch)...`);
@@ -139,12 +139,14 @@ export const StalenessWarning: React.FC<StalenessWarningProps> = ({
       return;
     }
 
-    // Phase 2: save each audio + align
+    // Phase 2: save each audio to disk
+    const savedSegments: ChangedSegmentDetail[] = [];
     for (let i = 0; i < segments.length; i++) {
       if (bulkAbortRef.current) break;
       const seg = segments[i];
 
       setBulkPhase(`Saving ${i + 1}/${segments.length}: ${seg.key}`);
+      setBulkProgress(prev => prev ? { ...prev, [seg.key]: 'saved' } : prev);
       try {
         const saved = await saveGeneratedAudio({
           demoId,
@@ -168,15 +170,32 @@ export const StalenessWarning: React.FC<StalenessWarningProps> = ({
             segMeta.audioFilePath = `${basePath}?t=${saved.timestamp}`;
           }
         }
-
-        setBulkPhase(`Aligning ${i + 1}/${segments.length}: ${seg.key}`);
-        setBulkProgress(prev => prev ? { ...prev, [seg.key]: 'aligning' } : prev);
-        await realignSegment({ demoId, chapter: seg.chapter, slide: seg.slide, segmentId: seg.segmentId });
-
-        setBulkProgress(prev => prev ? { ...prev, [seg.key]: 'done' } : prev);
+        savedSegments.push(seg);
       } catch (err: unknown) {
         setBulkProgress(prev => prev ? { ...prev, [seg.key]: 'error' } : prev);
         setSegmentErrors(prev => ({ ...prev, [seg.key]: err instanceof Error ? err.message : 'Error' }));
+      }
+    }
+
+    // Phase 3: batch alignment for all saved segments
+    if (savedSegments.length > 0) {
+      setBulkPhase(`Aligning ${savedSegments.length} segments (batch)...`);
+      for (const seg of savedSegments) {
+        setBulkProgress(prev => prev ? { ...prev, [seg.key]: 'aligning' } : prev);
+      }
+
+      const alignResult = await realignSegments({
+        demoId,
+        segments: savedSegments.map(s => ({ chapter: s.chapter, slide: s.slide, segmentId: s.segmentId })),
+      });
+
+      for (const seg of savedSegments) {
+        if (alignResult.success) {
+          setBulkProgress(prev => prev ? { ...prev, [seg.key]: 'done' } : prev);
+        } else {
+          setBulkProgress(prev => prev ? { ...prev, [seg.key]: 'error' } : prev);
+          setSegmentErrors(prev => ({ ...prev, [seg.key]: alignResult.error || 'Alignment failed' }));
+        }
       }
     }
   };
@@ -496,6 +515,18 @@ export const StalenessWarning: React.FC<StalenessWarningProps> = ({
                       animation: 'staleness-spin 0.8s linear infinite',
                     }} />
                     TTS
+                  </span>
+                ) : bulkStatus === 'saved' ? (
+                  <span style={{
+                    background: 'rgba(148, 163, 184, 0.15)',
+                    color: '#94a3b8',
+                    fontSize: '10px',
+                    fontWeight: 600,
+                    padding: '2px 6px',
+                    borderRadius: 4,
+                    flexShrink: 0,
+                  }}>
+                    SAVED
                   </span>
                 ) : bulkStatus === 'aligning' ? (
                   <span style={{
