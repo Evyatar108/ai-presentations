@@ -2,6 +2,7 @@ import React from 'react';
 import {
   useReducedMotion,
   useTheme,
+  useMarker,
   defineSlide,
   SlideContainer,
   SlideTitle,
@@ -38,6 +39,9 @@ u0|Across all key engagement metrics|u2
 const Ch5_S1_FormatComparisonComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
   const theme = useTheme();
+  const { reached: v1Focused } = useMarker('v1-format');
+  const { reached: v2Focused } = useMarker('v2-format');
+  const anyFocused = v1Focused || v2Focused;
 
   return (
     <SlideContainer maxWidth={1100} textAlign="left">
@@ -51,8 +55,22 @@ const Ch5_S1_FormatComparisonComponent: React.FC = () => {
         <BeforeAfterSplit
           beforeTitle="V1 Call 1 (Abstractives): JSON"
           afterTitle="V2: Compact Table"
-          beforeContent={<CodeBlock code={V1_JSON_SAMPLE} language="json" fontSize={11} />}
-          afterContent={<CodeBlock code={V2_TABLE_SAMPLE} language="markdown" fontSize={11} />}
+          beforeContent={
+            <div style={{
+              opacity: !anyFocused || v1Focused ? 1 : 0.3,
+              transition: 'opacity 0.4s ease',
+            }}>
+              <CodeBlock code={V1_JSON_SAMPLE} language="json" fontSize={11} />
+            </div>
+          }
+          afterContent={
+            <div style={{
+              opacity: !anyFocused || v2Focused ? 1 : 0.3,
+              transition: 'opacity 0.4s ease',
+            }}>
+              <CodeBlock code={V2_TABLE_SAMPLE} language="markdown" fontSize={11} />
+            </div>
+          }
         />
       </Reveal>
 

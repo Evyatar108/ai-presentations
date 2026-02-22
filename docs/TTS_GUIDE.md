@@ -79,11 +79,13 @@ The cache (`.tts-narration-cache.json`) tracks narration text and instruct per a
 }
 ```
 
+Inline markers (`{#id}`, `{id#}`) are stripped before caching and comparison — they don't affect TTS audio and won't trigger regeneration. Only the clean spoken text and instruct are factored into cache validity.
+
 When you run generation:
-1. Script reads all slide narration text and resolved instruct
-2. Compares against cache
-3. Only regenerates files where narration text or instruct changed
-4. Updates cache with new narration text and instruct
+1. Script reads all slide narration text, strips markers, and resolves instruct
+2. Compares stripped text + instruct against cache
+3. Only regenerates files where spoken text or instruct changed
+4. Updates cache with stripped narration text and instruct
 
 ### Pre-flight Cache Check
 

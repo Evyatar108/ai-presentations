@@ -11,7 +11,7 @@ Multi-demo presentation system built with React + TypeScript + Vite. Each demo i
 All commands run from `presentation-app/`:
 
 ```bash
-npm run dev          # Start dev server (auto-checks TTS cache + calculates durations, then starts Vite on :5173)
+npm run dev          # Start dev server (auto-checks TTS cache + marker alignment + calculates durations, then starts Vite on :5173)
 npm run dev:full     # Start dev server + Express narration API (port 3001) concurrently
 npm run build        # Production build
 npm run lint         # ESLint on src/

@@ -210,6 +210,14 @@ npm run tts:align -- --demo my-demo
 
 Open in browser — content appears synchronized to the narrator's speech.
 
+## Cache Behavior
+
+Markers are transparent to the TTS cache. Both the narration cache (`narration-cache.json`) and the TTS cache (`.tts-narration-cache.json`) strip markers before hashing and comparison. This means:
+
+- **Adding or moving markers** in narration text does **not** trigger TTS regeneration
+- Only changes to the actual spoken text or instruct require new audio
+- The `npm run dev` startup check (Step 3) validates that all markers have resolved timestamps in `alignment.json` — run `npm run tts:align -- --demo {id}` if any are missing
+
 ## CLI Commands
 
 | Command | Description |

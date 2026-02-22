@@ -31,13 +31,13 @@
         },
         {
           "id": "pipeline",
-          "narrationText": "It's a four-stage pipeline. A meeting transcript goes into an LLM, which produces structured metadata — timestamps, topic boundaries, and narration text. That metadata is used to generate TTS audio for the narration. Then the highlights video is streamed on demand by seeking into the original recording at those timestamps. There's no video rendering step — the model produces editing instructions, and playback happens live.",
+          "narrationText": "It's a four-stage pipeline. {#dim-pipeline}A meeting {#transcript}transcript goes into an {#llm}LLM, which produces {#tts}structured metadata — timestamps, topic boundaries, and narration text. That metadata is used to generate TTS audio for the narration. Then the highlights video is {#streaming}streamed on demand by seeking into the original recording at those timestamps. There's no video rendering step — the model produces editing instructions, and playback happens live.",
           "visualDescription": "Four-box pipeline diagram: Transcript → LLM → Metadata + TTS → On-Demand Streaming",
           "notes": ""
         },
         {
           "id": "types",
-          "narrationText": "The LLM produces two types of content. Abstractive narration — AI-written topic summaries spoken over muted meeting video. And extractive clips — the actual best moments from the meeting, with original audio and video preserved.",
+          "narrationText": "The LLM produces two types of content. {#abstractive-card}Abstractive narration — AI-written topic summaries spoken over muted meeting video. And {#extractive-card}extractive clips — the actual best moments from the meeting, with original audio and video preserved.",
           "visualDescription": "Two cards: Abstractive Narration and Extractive Clips",
           "notes": ""
         }
@@ -152,7 +152,7 @@
       "segments": [
         {
           "id": "comparison",
-          "narrationText": "This is how Call 1 — highlights abstractives — sees the meeting transcript. Each utterance wrapped in a five-key JSON object. Five hundred utterances means twenty-five hundred wasted key tokens before any actual content.",
+          "narrationText": "This is how Call 1 — highlights abstractives — sees the meeting transcript. {#json-side}Each utterance wrapped in a five-key JSON object. {#counter-side}Five hundred utterances means twenty-five hundred wasted key tokens before any actual content.",
           "visualDescription": "BeforeAfterSplit — Left: V1 verbose JSON. Right: token counter",
           "notes": ""
         },
@@ -177,7 +177,7 @@
         },
         {
           "id": "code",
-          "narrationText": "Look at the two highlighted for-loops. For each topic, the outer loop iterates over every start utterance, the inner loop over every end after that start.",
+          "narrationText": "Look at the two highlighted for-loops. For each topic, the {#outer-loop}outer loop iterates over every start utterance, the {#inner-loop}inner loop over every end after that start.",
           "visualDescription": "CodeBlock with nested for-loops highlighted in amber",
           "notes": ""
         },
@@ -228,7 +228,7 @@
         },
         {
           "id": "math",
-          "narrationText": "In this example, ten utterances across three topics produce one hundred thirty-five candidates. But each candidate is several utterances long — so the actual number of duplicated utterance copies is over six hundred. And this is a small example.",
+          "narrationText": "In this example, {#ten-utterances}ten utterances across three topics produce {#candidates}one hundred thirty-five candidates. But each candidate is several utterances long — so the actual number of {#copies}duplicated utterance copies is over six hundred. And this is a small example.",
           "visualDescription": "Example math: 10 utterances × 3 topics → 135 candidates, ~5 utterances each → ~630 duplicated copies",
           "notes": ""
         },
@@ -284,7 +284,7 @@
         },
         {
           "id": "split",
-          "narrationText": "Call 1's verbose JSON input on the left. On the right, V2's replacement: turn markers group utterances by speaker, pipe-delimited columns replace JSON keys, and local IDs restart within each turn.",
+          "narrationText": "On the left, {#v1-format}V1's verbose JSON — five keys per utterance. On the right, {#v2-format}V2's compact turn-grouped table — speaker name appears once, utterances are pipe-delimited.",
           "visualDescription": "BeforeAfterSplit — V1 JSON vs V2 compact table",
           "notes": ""
         },
@@ -359,7 +359,7 @@
         },
         {
           "id": "sections",
-          "narrationText": "Section one: critical rules — the copy then parse pattern and core constraints like topic non-overlap. Section two: the algorithm — pseudocode defining the entire pipeline. Section three: content priorities — what makes a good topic, speaker references, style rules. Section four: transition sentences — how to bridge from narration to raw audio. Section five: compressed safety rules. And section six: self-checks — boolean validators the model runs on its own output.",
+          "narrationText": "{#dim-sections}Section one: {#s1}critical rules — the copy then parse pattern and core constraints like topic non-overlap. Section two: {#s2}the algorithm — pseudocode defining the entire pipeline. Section three: {#s3}content priorities — what makes a good topic, speaker references, style rules. Section four: {#s4}transition sentences — how to bridge from narration to raw audio. Section five: {#s5}compressed safety rules. And section six: {#s6}self-checks — boolean validators the model runs on its own output.",
           "visualDescription": "Six section cards in a 3x2 grid, each with number, name, and one-line description",
           "notes": ""
         },
@@ -384,13 +384,13 @@
         },
         {
           "id": "code",
-          "narrationText": "Here's the main function from the V2 prompt. It reads like executable code — parse turn markers, skip intro and closing, segment into topics, write narration, enumerate extractive candidates, filter, rank, and build the final narrative.",
+          "narrationText": "Here's the main function from the V2 prompt. It reads like executable code — {#parse}parse turn markers, {#skip}skip intro and closing, {#segment}segment into topics, {#narrate}write narration, {#enumerate}enumerate extractive candidates, {#filter}filter, {#rank}rank, and {#build}build the final narrative.",
           "visualDescription": "Large CodeBlock showing generate_highlights() pseudocode",
           "notes": ""
         },
         {
           "id": "outputs",
-          "narrationText": "All six output fields in a single response: topics, order, ranges, ranking, narrative, and self-checks.",
+          "narrationText": "All six output fields in a single response: {#pill-topics}topics, {#pill-order}order, {#pill-ranges}ranges, {#pill-ranking}ranking, {#pill-narrative}narrative, and {#pill-checks}self-checks.",
           "visualDescription": "Six output fields listed with checkmarks",
           "notes": ""
         }
@@ -403,13 +403,13 @@
       "segments": [
         {
           "id": "comparison",
-          "narrationText": "On the left, V1's prose — vague guidance about coverage and distinctness. On the right, V2's pseudocode — explicit function calls with constraints and named variables.",
+          "narrationText": "On the left, {#prose-side}V1's prose — vague guidance about coverage and distinctness. On the right, {#pseudo-side}V2's pseudocode — explicit function calls with constraints and named variables.",
           "visualDescription": "BeforeAfterSplit — V1 prose paragraph vs V2 pseudocode function calls",
           "notes": ""
         },
         {
           "id": "benefits",
-          "narrationText": "Four benefits. Unambiguous execution order. Named variables as shared state. It plays to GPT-4o's strengths as a code-trained model. And a single source of truth — one prompt, not four.",
+          "narrationText": "Four benefits. {#benefit-exec}Unambiguous execution order. {#benefit-vars}Named variables as shared state. It {#benefit-strengths}plays to GPT-4o's strengths as a code-trained model. And a {#benefit-single}single source of truth — one prompt, not four.",
           "visualDescription": "Four benefit cards with checkmarks",
           "notes": ""
         }
@@ -428,19 +428,19 @@
         },
         {
           "id": "deliverable_zoom",
-          "narrationText": "Let's zoom into what final narrative actually contains. Each row has a topic with narration text for TTS voiceover, and playback start — the turn and utterance coordinates that tell the video player where to seek. Plus an optional extractive object defining clip boundaries. These coordinates are what the product uses to assemble the highlights video. Everything else in the schema — all five other fields — is reasoning scaffolding that helped the model produce this.",
+          "narrationText": "Let's zoom into what final narrative actually contains. Each row has a topic with narration text for TTS voiceover, and {#playback}playback start — the turn and utterance coordinates that tell the video player where to seek. Plus an optional {#extractive-obj}extractive object defining clip boundaries. These coordinates are what the product uses to assemble the highlights video. Everything else in the schema — all five other fields — is reasoning scaffolding that helped the model produce this.",
           "visualDescription": "JSON code block showing final narrative[0] with highlighted playback start and extractive fields, plus legend and callout",
           "notes": ""
         },
         {
           "id": "extractive_zoom",
-          "narrationText": "Now contrast that with extractive ranges — pure chain-of-thought. Look at the field names — they're instructions. 'Selected turn opening tag raw copy from input' forces the model to copy the exact turn tag. Then 'speaker name' and 'turn id' are parsed from that copy. Same pattern below: first copy the raw pipe-delimited row, then parse the utterance IDs. The schema guides the model through copy then parse — which we'll see in detail next.",
+          "narrationText": "Now contrast that with extractive ranges — pure chain-of-thought. Look at the field names — they're instructions. {#copy-tag}'Selected turn opening tag raw copy from input' forces the model to copy the exact turn tag. Then {#parse-tag}'speaker name' and 'turn id' are parsed from that copy. Same pattern below: first {#copy-row}copy the raw pipe-delimited row, then {#parse-ids}parse the utterance IDs. The schema guides the model through copy then parse — which we'll see in detail next.",
           "visualDescription": "JSON code block showing extractive ranges[0] with amber-highlighted copy fields and legend",
           "notes": ""
         },
         {
           "id": "insight",
-          "narrationText": "So here's the key takeaway. The output schema isn't just a data format — it's a chain-of-thought scaffold and a prompt engineering tool. Five fields guide the model's reasoning, one field captures the deliverable. Field names become execution steps, nested structure enforces constraints, and self-checks close the validation loop. When you design an LLM's output schema, you're designing the reasoning path.",
+          "narrationText": "So here's the key takeaway. The output schema isn't just a data format — it's a chain-of-thought scaffold and a prompt engineering tool. Five fields guide the model's reasoning, one field captures the deliverable. {#pill-names}Field names become execution steps, {#pill-structure}nested structure enforces constraints, and {#pill-validation}self-checks close the validation loop. When you design an LLM's output schema, you're designing the reasoning path.",
           "visualDescription": "Callout card with teal accent + three pills: 'Field names = instructions', 'Structure = constraints', 'Chain-of-thought → deliverable'",
           "notes": ""
         }
@@ -503,7 +503,7 @@
         },
         {
           "id": "checks",
-          "narrationText": "We added two automated verifications. First, output range validation — every turn and utterance combination in the output must actually exist in the input transcript. Second, a max utterance threshold check — the beginning utterance of an extractive clip must not exceed the max end utterance ID from the transcript table. These checks caught errors that would otherwise produce invalid video edits.",
+          "narrationText": "We added two automated verifications. First, {#range-check}output range validation — every turn and utterance combination in the output must actually exist in the input transcript. Second, a {#threshold-check}max utterance threshold check — the beginning utterance of an extractive clip must not exceed the max end utterance ID from the transcript table. These checks caught errors that would otherwise produce invalid video edits.",
           "visualDescription": "Two verification cards: range validation + threshold check",
           "notes": ""
         },
@@ -528,7 +528,7 @@
         },
         {
           "id": "pipeline",
-          "narrationText": "The tool takes a transcript and recording as input, runs the prompt locally, and produces two outputs. A highlights JSON file for automated validation — checking structural correctness and turn-utterance accuracy. And a highlights video for subjective quality review — letting us see and hear exactly what the model selected.",
+          "narrationText": "The tool takes a {#input}transcript and recording as input, runs the prompt {#runner}locally, and produces two outputs. A {#json-output}highlights JSON file for automated validation — checking structural correctness and turn-utterance accuracy. And a {#video-output}highlights video for subjective quality review — letting us see and hear exactly what the model selected.",
           "visualDescription": "Pipeline diagram: Transcript + Recording → Local Runner → JSON + Video, with two output cards",
           "notes": ""
         },
@@ -580,13 +580,13 @@
       "segments": [
         {
           "id": "quality",
-          "narrationText": "Quality held strong. No grounding regression. Seventy-five to eighty percent coverage. And in blind A-B tests, reviewers preferred V2.",
+          "narrationText": "Quality held strong. {#grounding}No grounding regression. {#coverage}Seventy-five to eighty percent coverage. And in blind A-B tests, {#reviewers}reviewers preferred V2.",
           "visualDescription": "Three quality tiles: Grounding, Coverage, Reviewers",
           "notes": ""
         },
         {
           "id": "roadmap",
-          "narrationText": "This cost reduction directly unblocked the product roadmap. The feature entered private preview and is now on track for GA rollout.",
+          "narrationText": "This {#cost-step}cost reduction directly unblocked the product roadmap. The feature entered {#preview-step}private preview and is now on track for {#ga-step}GA rollout.",
           "visualDescription": "Roadmap arrow: Cost Reduction → Private Preview → GA Rollout",
           "notes": ""
         },

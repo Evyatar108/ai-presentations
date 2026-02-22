@@ -3,6 +3,7 @@ import {
   useReducedMotion,
   useSegmentedAnimation,
   useTheme,
+  useMarker,
   defineSlide,
   SlideContainer,
   SlideTitle,
@@ -138,6 +139,9 @@ Wasted key tokens: ~2,500+
 
 const Ch3_S2_VerboseJSONComponent: React.FC = () => {
   const theme = useTheme();
+  const { reached: jsonFocused } = useMarker('json-side');
+  const { reached: counterFocused } = useMarker('counter-side');
+  const anyFocused = jsonFocused || counterFocused;
 
   return (
     <SlideContainer maxWidth={1050} textAlign="left">
@@ -146,7 +150,12 @@ const Ch3_S2_VerboseJSONComponent: React.FC = () => {
           beforeTitle="V1 Call 1 (Abstractives): Input Format"
           afterTitle="Token Waste"
           beforeContent={
-            <CodeBlock code={VERBOSE_JSON} language="json" fontSize={12} />
+            <div style={{
+              opacity: !anyFocused || jsonFocused ? 1 : 0.3,
+              transition: 'opacity 0.4s ease',
+            }}>
+              <CodeBlock code={VERBOSE_JSON} language="json" fontSize={12} />
+            </div>
           }
           afterContent={
             <div style={{
@@ -154,7 +163,9 @@ const Ch3_S2_VerboseJSONComponent: React.FC = () => {
               fontSize: 14,
               color: theme.colors.warning,
               lineHeight: 2,
-              padding: '1rem'
+              padding: '1rem',
+              opacity: !anyFocused || counterFocused ? 1 : 0.3,
+              transition: 'opacity 0.4s ease',
             }}>
               {TOKEN_COUNTER.split('\n').map((line, i) => (
                 <div key={i}>{line}</div>

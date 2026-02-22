@@ -8,6 +8,7 @@ import * as readline from 'readline';
 import { execSync } from 'child_process';
 import * as crypto from 'crypto';
 import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
+import { stripMarkers } from './utils/marker-parser';
 
 // Narration JSON structure
 interface NarrationData {
@@ -124,9 +125,10 @@ function checkNarrationChanges(demoId: string): {
       for (const segment of slide.segments) {
         const key = `ch${slide.chapter}:s${slide.slide}:${segment.id}`;
         // Include resolved instruct in hash so instruct changes trigger regeneration
+        // Strip markers before hashing — markers don't affect TTS audio
         const resolvedInstruct = segment.instruct ?? slide.instruct ?? narrationData.instruct ?? '';
         const currentHash = crypto.createHash('sha256')
-          .update(segment.narrationText.trim() + '\0' + resolvedInstruct)
+          .update(stripMarkers(segment.narrationText).trim() + '\0' + resolvedInstruct)
           .digest('hex');
         
         if (!cache || !cache.segments[key]) {
@@ -401,8 +403,8 @@ function detectChanges(
         continue;
       }
       
-      // Check if narration changed
-      if (demoCache[relativeFilepath].narrationText !== segment.narrationText) {
+      // Check if narration changed (strip markers — they don't affect TTS audio)
+      if (stripMarkers(demoCache[relativeFilepath].narrationText) !== stripMarkers(segment.narrationText)) {
         result.changedSegments.push({
           chapter,
           slide: slideNum,
@@ -439,7 +441,7 @@ function detectRenameableFiles(
     if (cacheEntry?.narrationText) {
       const instruct = (cacheEntry as any).instruct ?? '';
       const hash = crypto.createHash('sha256')
-        .update(cacheEntry.narrationText.trim() + '\0' + instruct)
+        .update(stripMarkers(cacheEntry.narrationText).trim() + '\0' + instruct)
         .digest('hex');
       if (!orphansByHash.has(hash)) {
         orphansByHash.set(hash, normalizedPath);
@@ -463,7 +465,7 @@ function detectRenameableFiles(
 
     const resolvedInstruct = segment.instruct ?? slide.metadata.instruct ?? '';
     const hash = crypto.createHash('sha256')
-      .update(segment.narrationText.trim() + '\0' + resolvedInstruct)
+      .update(stripMarkers(segment.narrationText).trim() + '\0' + resolvedInstruct)
       .digest('hex');
 
     const orphanPath = orphansByHash.get(hash);
@@ -490,6 +492,106 @@ function promptUser(question: string): Promise<boolean> {
       resolve(normalized === 'y' || normalized === 'yes');
     });
   });
+}
+
+// Marker regex (same as marker-parser.ts but kept local to avoid import issues)
+const MARKER_RE = /\{#?([a-zA-Z0-9_-]+)#?\}/g;
+
+/** Extract all marker IDs from narration text */
+function extractMarkerIds(text: string): string[] {
+  const ids: string[] = [];
+  let m: RegExpExecArray | null;
+  const re = new RegExp(MARKER_RE.source, 'g');
+  while ((m = re.exec(text)) !== null) {
+    ids.push(m[1]);
+  }
+  return ids;
+}
+
+interface AlignmentData {
+  demoId: string;
+  slides: Record<string, {
+    chapter: number;
+    slide: number;
+    segments: Array<{
+      segmentId: string;
+      markers: Array<{ id: string; time: number }>;
+    }>;
+  }>;
+}
+
+/**
+ * Check that every {#marker} in narration text has a resolved timestamp
+ * in alignment.json. Returns missing markers grouped by segment.
+ */
+function checkMarkerAlignment(demoId: string): {
+  totalMarkers: number;
+  missingMarkers: Array<{ segment: string; markerId: string }>;
+  noAlignmentFile: boolean;
+} {
+  const result = {
+    totalMarkers: 0,
+    missingMarkers: [] as Array<{ segment: string; markerId: string }>,
+    noAlignmentFile: false,
+  };
+
+  const narrationFile = path.join(__dirname, `../public/narration/${demoId}/narration.json`);
+  const alignmentFile = path.join(__dirname, `../public/audio/${demoId}/alignment.json`);
+
+  if (!fs.existsSync(narrationFile)) return result;
+
+  // Collect all expected markers from narration text
+  const narration: NarrationData = JSON.parse(fs.readFileSync(narrationFile, 'utf-8'));
+  const expectedMarkers: Array<{ slideKey: string; segmentId: string; markerId: string }> = [];
+
+  for (const slide of narration.slides) {
+    const slideKey = `c${slide.chapter}_s${slide.slide}`;
+    for (const segment of slide.segments) {
+      const markerIds = extractMarkerIds(segment.narrationText);
+      for (const id of markerIds) {
+        expectedMarkers.push({ slideKey, segmentId: segment.id, markerId: id });
+      }
+    }
+  }
+
+  result.totalMarkers = expectedMarkers.length;
+  if (expectedMarkers.length === 0) return result;
+
+  // Load alignment data
+  if (!fs.existsSync(alignmentFile)) {
+    result.noAlignmentFile = true;
+    result.missingMarkers = expectedMarkers.map(m => ({
+      segment: `${m.slideKey}:${m.segmentId}`,
+      markerId: m.markerId,
+    }));
+    return result;
+  }
+
+  const alignment: AlignmentData = JSON.parse(fs.readFileSync(alignmentFile, 'utf-8'));
+
+  // Build a set of resolved marker IDs per segment
+  const resolvedMarkers = new Map<string, Set<string>>();
+  for (const [slideKey, slideData] of Object.entries(alignment.slides)) {
+    for (const seg of slideData.segments) {
+      const key = `${slideKey}:${seg.segmentId}`;
+      const ids = new Set(seg.markers.map(m => m.id));
+      resolvedMarkers.set(key, ids);
+    }
+  }
+
+  // Check each expected marker
+  for (const expected of expectedMarkers) {
+    const key = `${expected.slideKey}:${expected.segmentId}`;
+    const resolved = resolvedMarkers.get(key);
+    if (!resolved || !resolved.has(expected.markerId)) {
+      result.missingMarkers.push({
+        segment: key,
+        markerId: expected.markerId,
+      });
+    }
+  }
+
+  return result;
 }
 
 // Main check function
@@ -646,16 +748,52 @@ async function checkTTSCache(): Promise<void> {
       console.log('✅ All audio files are up-to-date for this demo');
     }
   }
+  // STEP 3: Check marker alignment
+  console.log('\n' + '─'.repeat(70));
+  console.log('📋 Step 3: Checking marker alignment...\n');
+
+  let totalMissingMarkers = 0;
+
+  for (const demoId of demoIds) {
+    const markerCheck = checkMarkerAlignment(demoId);
+    if (markerCheck.totalMarkers === 0) continue;
+
+    if (markerCheck.noAlignmentFile) {
+      console.log(`   ❌ ${demoId}: alignment.json missing — ${markerCheck.totalMarkers} markers unresolved`);
+      console.log(`      Run: npm run tts:align -- --demo ${demoId}`);
+      totalMissingMarkers += markerCheck.missingMarkers.length;
+    } else if (markerCheck.missingMarkers.length > 0) {
+      console.log(`   ⚠️  ${demoId}: ${markerCheck.missingMarkers.length} of ${markerCheck.totalMarkers} markers missing from alignment`);
+      for (const m of markerCheck.missingMarkers.slice(0, 5)) {
+        console.log(`      - ${m.segment} → {#${m.markerId}}`);
+      }
+      if (markerCheck.missingMarkers.length > 5) {
+        console.log(`      ... and ${markerCheck.missingMarkers.length - 5} more`);
+      }
+      console.log(`      Run: npm run tts:align -- --demo ${demoId} --force`);
+      totalMissingMarkers += markerCheck.missingMarkers.length;
+    } else {
+      console.log(`   ✅ ${demoId}: all ${markerCheck.totalMarkers} markers resolved`);
+    }
+  }
+
+  if (totalMissingMarkers === 0) {
+    console.log('   ✅ All markers resolved in alignment data\n');
+  } else {
+    console.log();
+  }
+
   // Final summary
-  const hasAnyChanges = result.hasChanges || totalNarrationChanges > 0;
-  
+  const hasAnyChanges = result.hasChanges || totalNarrationChanges > 0 || totalMissingMarkers > 0;
+
   if (!hasAnyChanges) {
-    console.log('\n' + '═'.repeat(70));
+    console.log('═'.repeat(70));
     console.log('✅ All systems up-to-date!');
     console.log('═'.repeat(70));
     console.log('\n   ✓ Narration JSON matches cache');
     console.log('   ✓ TTS audio matches narration text');
-    console.log('   ✓ No missing or orphaned files\n');
+    console.log('   ✓ No missing or orphaned files');
+    console.log('   ✓ All markers resolved in alignment\n');
     console.log('Starting React application...\n');
     process.exit(0);
   }
@@ -675,7 +813,11 @@ async function checkTTSCache(): Promise<void> {
   if (totalNarrationChanges > 0) {
     console.log(`   📝 Narration JSON changes: ${totalNarrationChanges}`);
   }
-  
+
+  if (totalMissingMarkers > 0) {
+    console.log(`   🎯 Missing markers: ${totalMissingMarkers} (run tts:align --force)`);
+  }
+
   if (result.hasChanges) {
     const totalTTSChanges = Object.values(result.demos).reduce(
       (sum, demo) => sum + demo.changedSegments.length + demo.missingFiles.length,

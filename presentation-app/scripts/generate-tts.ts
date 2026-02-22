@@ -212,6 +212,7 @@ function updateNarrationCache(
   }
   
   // Update with new hashes from slides (include instruct in hash)
+  // Strip markers before hashing — markers don't affect TTS audio
   for (const slide of slides) {
     for (const segment of slide.metadata.audioSegments) {
       if (!segment.narrationText) continue;
@@ -219,7 +220,7 @@ function updateNarrationCache(
       const key = `ch${slide.metadata.chapter}:s${slide.metadata.slide}:${segment.id}`;
       const resolvedInstruct = segment.instruct ?? slide.metadata.instruct ?? '';
       const hash = crypto.createHash('sha256')
-        .update(segment.narrationText.trim() + '\0' + resolvedInstruct)
+        .update(stripMarkers(segment.narrationText).trim() + '\0' + resolvedInstruct)
         .digest('hex');
 
       cache.segments[key] = {
@@ -554,7 +555,7 @@ async function generateTTS(config: TTSConfig) {
           const cachedEntry = cache[demoId][relativeFilepath];
           if (
             cachedEntry &&
-            cachedEntry.narrationText === segment.narrationText &&
+            stripMarkers(cachedEntry.narrationText) === stripMarkers(segment.narrationText) &&
             (cachedEntry.instruct ?? undefined) === resolvedInstruct
           ) {
             // Narration and instruct haven't changed - skip
@@ -610,7 +611,7 @@ async function generateTTS(config: TTSConfig) {
         const cacheEntry = cache[demoId][normalizedPath] || cache[demoId][orphanRelPath];
         if (cacheEntry?.narrationText) {
           const hash = crypto.createHash('sha256')
-            .update(cacheEntry.narrationText.trim() + '\0' + (cacheEntry.instruct ?? ''))
+            .update(stripMarkers(cacheEntry.narrationText).trim() + '\0' + (cacheEntry.instruct ?? ''))
             .digest('hex');
           // Only keep first match per hash (prefer the first orphan found)
           if (!orphansByHash.has(hash)) {
@@ -633,7 +634,7 @@ async function generateTTS(config: TTSConfig) {
         }
 
         const hash = crypto.createHash('sha256')
-          .update(seg.segment.narrationText.trim() + '\0' + (seg.instruct ?? ''))
+          .update(stripMarkers(seg.segment.narrationText).trim() + '\0' + (seg.instruct ?? ''))
           .digest('hex');
 
         const orphan = orphansByHash.get(hash);
@@ -792,7 +793,7 @@ async function generateTTS(config: TTSConfig) {
             // Update cache
             const relativeFilepath = path.relative(path.join(config.outputDir, item.demoId), item.filepath);
             cache[item.demoId][relativeFilepath] = {
-              narrationText: item.segment.narrationText!,
+              narrationText: stripMarkers(item.segment.narrationText!),
               ...(item.instruct ? { instruct: item.instruct } : {}),
               generatedAt: new Date().toISOString()
             };

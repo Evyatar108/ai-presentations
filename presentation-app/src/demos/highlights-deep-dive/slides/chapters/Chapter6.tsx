@@ -24,17 +24,85 @@ import {
 // ---------- Slide 1: Prompt Overview ----------
 
 const PROMPT_SECTIONS = [
-  { num: 1, name: 'Critical Rules', desc: 'Copy-then-parse pattern + core constraints' },
-  { num: 2, name: 'Algorithm', desc: 'Pseudocode generate_highlights() function' },
-  { num: 3, name: 'Content Priorities', desc: 'Topic guidance, speaker references, style rules' },
-  { num: 4, name: 'Transition Sentences', desc: 'Bridging narration to extractive audio' },
-  { num: 5, name: 'Safety (RAI)', desc: 'Gender/role/emotion guardrails (compressed)' },
-  { num: 6, name: 'Self-Checks', desc: '10 boolean validators on model output' },
+  { num: 1, name: 'Critical Rules', desc: 'Copy-then-parse pattern + core constraints', marker: 's1' },
+  { num: 2, name: 'Algorithm', desc: 'Pseudocode generate_highlights() function', marker: 's2' },
+  { num: 3, name: 'Content Priorities', desc: 'Topic guidance, speaker references, style rules', marker: 's3' },
+  { num: 4, name: 'Transition Sentences', desc: 'Bridging narration to extractive audio', marker: 's4' },
+  { num: 5, name: 'Safety (RAI)', desc: 'Gender/role/emotion guardrails (compressed)', marker: 's5' },
+  { num: 6, name: 'Self-Checks', desc: '10 boolean validators on model output', marker: 's6' },
 ];
+
+const PromptSectionCard: React.FC<{
+  section: typeof PROMPT_SECTIONS[number];
+  index: number;
+  dimmed: boolean;
+  theme: ReturnType<typeof useTheme>;
+  reduced: boolean;
+}> = ({ section, index, dimmed, theme, reduced }) => {
+  const { reached: highlighted } = useMarker(section.marker);
+  const lit = !dimmed || highlighted;
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: reduced ? 0 : 15 }}
+      animate={{ opacity: lit ? 1 : 0.15, y: 0 }}
+      transition={{
+        duration: reduced ? 0.1 : 0.3,
+        delay: reduced ? 0 : index * 0.08
+      }}
+      style={{
+        background: theme.colors.bgSurface,
+        border: `1px solid ${theme.colors.bgBorder}`,
+        borderRadius: 12,
+        padding: '1rem 1.1rem',
+        textAlign: 'left'
+      }}
+    >
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.5rem',
+        marginBottom: '0.4rem'
+      }}>
+        <div style={{
+          width: 24,
+          height: 24,
+          borderRadius: '50%',
+          background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: 12,
+          color: '#fff',
+          fontWeight: 700,
+          flexShrink: 0
+        }}>
+          {section.num}
+        </div>
+        <span style={{
+          ...typography.body,
+          fontSize: 14,
+          fontWeight: 700,
+          color: theme.colors.textPrimary
+        }}>
+          {section.name}
+        </span>
+      </div>
+      <div style={{
+        ...typography.body,
+        fontSize: 12,
+        color: theme.colors.textSecondary,
+        lineHeight: 1.4
+      }}>
+        {section.desc}
+      </div>
+    </motion.div>
+  );
+};
 
 const Ch6_S1_PromptOverviewComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
   const theme = useTheme();
+  const { reached: dimmed } = useMarker('dim-sections');
 
   return (
     <SlideContainer maxWidth={950}>
@@ -51,61 +119,14 @@ const Ch6_S1_PromptOverviewComponent: React.FC = () => {
         marginTop: '0.5rem'
       }}>
         {PROMPT_SECTIONS.map((section, i) => (
-          <motion.div
+          <PromptSectionCard
             key={section.num}
-            initial={{ opacity: 0, y: reduced ? 0 : 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: reduced ? 0.1 : 0.3,
-              delay: reduced ? 0 : i * 0.08
-            }}
-            style={{
-              background: theme.colors.bgSurface,
-              border: `1px solid ${theme.colors.bgBorder}`,
-              borderRadius: 12,
-              padding: '1rem 1.1rem',
-              textAlign: 'left'
-            }}
-          >
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              marginBottom: '0.4rem'
-            }}>
-              <div style={{
-                width: 24,
-                height: 24,
-                borderRadius: '50%',
-                background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: 12,
-                color: '#fff',
-                fontWeight: 700,
-                flexShrink: 0
-              }}>
-                {section.num}
-              </div>
-              <span style={{
-                ...typography.body,
-                fontSize: 14,
-                fontWeight: 700,
-                color: theme.colors.textPrimary
-              }}>
-                {section.name}
-              </span>
-            </div>
-            <div style={{
-              ...typography.body,
-              fontSize: 12,
-              color: theme.colors.textSecondary,
-              lineHeight: 1.4
-            }}>
-              {section.desc}
-            </div>
-          </motion.div>
+            section={section}
+            index={i}
+            dimmed={dimmed}
+            theme={theme}
+            reduced={reduced}
+          />
         ))}
       </Reveal>
 
@@ -171,16 +192,72 @@ const PSEUDOCODE = `def generate_highlights(transcript_markdown):
 
     return MeetingHighlightsOutput(topics, topic_order, selected, ranking, final_narrative, self_checks)`;
 
-const OUTPUT_FIELDS = [
-  'abstractive_topics',
-  'topic_order',
-  'extractive_ranges',
-  'ranking',
-  'final_narrative',
-  'self_checks'
+// ---------- Slide 2: Pseudocode ----------
+
+const PseudocodeBlock: React.FC = () => {
+  const { reached: rParse } = useMarker('parse');
+  const { reached: rSkip } = useMarker('skip');
+  const { reached: rSegment } = useMarker('segment');
+  const { reached: rNarrate } = useMarker('narrate');
+  const { reached: rEnum } = useMarker('enumerate');
+  const { reached: rFilter } = useMarker('filter');
+  const { reached: rRank } = useMarker('rank');
+  const { reached: rBuild } = useMarker('build');
+
+  const lines: number[] = [];
+  if (rParse) lines.push(3);
+  if (rSkip) lines.push(5, 6);
+  if (rSegment) lines.push(7);
+  if (rNarrate) lines.push(9);
+  if (rEnum) lines.push(16);
+  if (rFilter) lines.push(17);
+  if (rRank) lines.push(21);
+  if (rBuild) lines.push(22);
+
+  return (
+    <CodeBlock
+      code={PSEUDOCODE}
+      language="python"
+      title="prompt.md  --  generate_highlights()"
+      fontSize={11}
+      highlightLines={lines.length > 0 ? lines : undefined}
+    />
+  );
+};
+
+const OUTPUT_PILL_MARKERS = [
+  { field: 'abstractive_topics', marker: 'pill-topics' },
+  { field: 'topic_order', marker: 'pill-order' },
+  { field: 'extractive_ranges', marker: 'pill-ranges' },
+  { field: 'ranking', marker: 'pill-ranking' },
+  { field: 'final_narrative', marker: 'pill-narrative' },
+  { field: 'self_checks', marker: 'pill-checks' },
 ];
 
-// ---------- Slide 2: Pseudocode ----------
+const OutputPill: React.FC<{
+  field: string; marker: string;
+  theme: ReturnType<typeof useTheme>;
+}> = ({ field, marker, theme }) => {
+  const { reached } = useMarker(marker);
+  return (
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: '0.4rem',
+      background: theme.colors.bgSurface,
+      border: `1px solid ${theme.colors.bgBorder}`,
+      borderRadius: 8,
+      padding: '0.35rem 0.75rem',
+      fontSize: 13,
+      fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+      opacity: reached ? 1 : 0.15,
+      transition: 'opacity 0.4s ease',
+    }}>
+      <span style={{ color: theme.colors.success }}><Checkmark /></span>
+      <span style={{ color: theme.colors.textPrimary }}>{field}</span>
+    </div>
+  );
+};
 
 const Ch6_S2_PseudocodeComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
@@ -209,13 +286,7 @@ const Ch6_S2_PseudocodeComponent: React.FC = () => {
       </Reveal>
 
       <Reveal from={1}>
-        <CodeBlock
-          code={PSEUDOCODE}
-          language="python"
-          title="prompt.md  --  generate_highlights()"
-          fontSize={11}
-          highlightLines={[1, 7, 16, 21, 22, 24]}
-        />
+        <PseudocodeBlock />
       </Reveal>
 
       <Reveal from={2} animation={fadeUp} style={{
@@ -225,21 +296,13 @@ const Ch6_S2_PseudocodeComponent: React.FC = () => {
         marginTop: '1rem',
         justifyContent: 'center'
       }}>
-        {OUTPUT_FIELDS.map((field) => (
-          <div key={field} style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.4rem',
-            background: theme.colors.bgSurface,
-            border: `1px solid ${theme.colors.bgBorder}`,
-            borderRadius: 8,
-            padding: '0.35rem 0.75rem',
-            fontSize: 13,
-            fontFamily: "'JetBrains Mono', 'Fira Code', monospace"
-          }}>
-            <span style={{ color: theme.colors.success }}><Checkmark /></span>
-            <span style={{ color: theme.colors.textPrimary }}>{field}</span>
-          </div>
+        {OUTPUT_PILL_MARKERS.map((pill) => (
+          <OutputPill
+            key={pill.field}
+            field={pill.field}
+            marker={pill.marker}
+            theme={theme}
+          />
         ))}
       </Reveal>
     </SlideContainer>
@@ -282,14 +345,42 @@ for topic in topics:
     topic.topic_id = generate_topic_id()`;
 
 const BENEFITS = [
-  'Unambiguous execution order',
-  'Named variables = shared state',
-  'Plays to GPT-4o\'s strengths',
-  'Single source of truth'
+  { label: 'Unambiguous execution order', marker: 'benefit-exec' },
+  { label: 'Named variables = shared state', marker: 'benefit-vars' },
+  { label: 'Plays to GPT-4o\'s strengths', marker: 'benefit-strengths' },
+  { label: 'Single source of truth', marker: 'benefit-single' },
 ];
+
+const BenefitCard: React.FC<{
+  label: string; marker: string;
+  theme: ReturnType<typeof useTheme>;
+}> = ({ label, marker, theme }) => {
+  const { reached } = useMarker(marker);
+  return (
+    <div style={{
+      background: theme.colors.bgSurface,
+      border: `1px solid ${theme.colors.bgBorder}`,
+      borderRadius: 10,
+      padding: '0.75rem',
+      textAlign: 'center',
+      opacity: reached ? 1 : 0.15,
+      transition: 'opacity 0.4s ease',
+    }}>
+      <div style={{ color: theme.colors.success, fontSize: 20, marginBottom: '0.3rem' }}>
+        <Checkmark />
+      </div>
+      <div style={{ ...typography.body, fontSize: 13, fontWeight: 600 }}>
+        {label}
+      </div>
+    </div>
+  );
+};
 
 const Ch6_S3_ProseVsPseudocodeComponent: React.FC = () => {
   const theme = useTheme();
+  const { reached: proseFocused } = useMarker('prose-side');
+  const { reached: pseudoFocused } = useMarker('pseudo-side');
+  const anyFocused = proseFocused || pseudoFocused;
 
   return (
     <SlideContainer maxWidth={1050} textAlign="left">
@@ -297,8 +388,22 @@ const Ch6_S3_ProseVsPseudocodeComponent: React.FC = () => {
         <BeforeAfterSplit
           beforeTitle="V1: Prose Instructions"
           afterTitle="V2: Pseudocode"
-          beforeContent={<CodeBlock code={V1_PROSE} language="markdown" fontSize={12} />}
-          afterContent={<CodeBlock code={V2_PSEUDO} language="python" fontSize={12} />}
+          beforeContent={
+            <div style={{
+              opacity: !anyFocused || proseFocused ? 1 : 0.3,
+              transition: 'opacity 0.4s ease',
+            }}>
+              <CodeBlock code={V1_PROSE} language="markdown" fontSize={12} />
+            </div>
+          }
+          afterContent={
+            <div style={{
+              opacity: !anyFocused || pseudoFocused ? 1 : 0.3,
+              transition: 'opacity 0.4s ease',
+            }}>
+              <CodeBlock code={V2_PSEUDO} language="python" fontSize={12} />
+            </div>
+          }
         />
       </Reveal>
 
@@ -308,20 +413,12 @@ const Ch6_S3_ProseVsPseudocodeComponent: React.FC = () => {
         marginTop: '1.5rem'
       }}>
         {BENEFITS.map((benefit) => (
-          <div key={benefit} style={{
-            background: theme.colors.bgSurface,
-            border: `1px solid ${theme.colors.bgBorder}`,
-            borderRadius: 10,
-            padding: '0.75rem',
-            textAlign: 'center'
-          }}>
-            <div style={{ color: theme.colors.success, fontSize: 20, marginBottom: '0.3rem' }}>
-              <Checkmark />
-            </div>
-            <div style={{ ...typography.body, fontSize: 13, fontWeight: 600 }}>
-              {benefit}
-            </div>
-          </div>
+          <BenefitCard
+            key={benefit.label}
+            label={benefit.label}
+            marker={benefit.marker}
+            theme={theme}
+          />
         ))}
       </Reveal>
     </SlideContainer>
@@ -383,9 +480,9 @@ const EXTRACTIVE_SAMPLE = `{
 }`;
 
 const SCHEMA_INSIGHT_PILLS = [
-  'Field names = instructions',
-  'Structure = constraints',
-  'Chain-of-thought → deliverable',
+  { label: 'Field names = instructions', marker: 'pill-names' },
+  { label: 'Structure = constraints', marker: 'pill-structure' },
+  { label: 'Chain-of-thought → deliverable', marker: 'pill-validation' },
 ];
 
 const COT_FIELDS = SCHEMA_FIELDS.filter(f => f.category === 'cot');
@@ -397,6 +494,69 @@ const CATEGORY_STYLES = {
   deliverable: { accent: '#00B7C3', label: 'Deliverable',                 bg: 'rgba(0, 183, 195, 0.08)' },
   validation:  { accent: '#10b981', label: 'Validation',                  bg: 'rgba(16, 185, 129, 0.08)' },
 } as const;
+
+const DeliverableZoomCode: React.FC = () => {
+  const { reached: rPlayback } = useMarker('playback');
+  const { reached: rExtObj } = useMarker('extractive-obj');
+  const lines: number[] = [];
+  if (rPlayback) lines.push(6, 7, 8);
+  if (rExtObj) lines.push(10, 11, 12);
+
+  return (
+    <CodeBlock
+      code={FINAL_NARRATIVE_SAMPLE}
+      language="json"
+      title="final_narrative[0]  —  the product deliverable"
+      fontSize={11}
+      highlightLines={lines.length > 0 ? lines : undefined}
+    />
+  );
+};
+
+const ExtractiveZoomCode: React.FC = () => {
+  const { reached: rCopyTag } = useMarker('copy-tag');
+  const { reached: rParseTag } = useMarker('parse-tag');
+  const { reached: rCopyRow } = useMarker('copy-row');
+  const { reached: rParseIds } = useMarker('parse-ids');
+  const lines: number[] = [];
+  if (rCopyTag) lines.push(2);
+  if (rParseTag) lines.push(3, 4);
+  if (rCopyRow) lines.push(6);
+  if (rParseIds) lines.push(7);
+
+  return (
+    <CodeBlock
+      code={EXTRACTIVE_SAMPLE}
+      language="json"
+      title="extractive_ranges[0]  —  field names as instructions"
+      fontSize={11}
+      highlightLines={lines.length > 0 ? lines : undefined}
+    />
+  );
+};
+
+const InsightPill: React.FC<{
+  label: string; marker: string;
+  theme: ReturnType<typeof useTheme>;
+}> = ({ label, marker, theme }) => {
+  const { reached } = useMarker(marker);
+  return (
+    <div style={{
+      background: theme.colors.bgSurface,
+      border: `1px solid ${theme.colors.bgBorder}`,
+      borderRadius: 8,
+      padding: '0.3rem 0.7rem',
+      fontSize: 12,
+      fontWeight: 600,
+      color: theme.colors.primary,
+      fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+      opacity: reached ? 1 : 0.15,
+      transition: 'opacity 0.4s ease',
+    }}>
+      {label}
+    </div>
+  );
+};
 
 const Ch6_S4_OutputSchemaComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
@@ -567,13 +727,7 @@ const Ch6_S4_OutputSchemaComponent: React.FC = () => {
 
         {/* Segment 1: final_narrative zoom — exits when extractive enters */}
         <Reveal from={1} until={1} animation={fadeUp} style={{ marginTop: '1rem' }}>
-          <CodeBlock
-            code={FINAL_NARRATIVE_SAMPLE}
-            language="json"
-            title="final_narrative[0]  —  the product deliverable"
-            fontSize={11}
-            highlightLines={[6, 7, 8, 10, 11, 12]}
-          />
+          <DeliverableZoomCode />
           <div style={{
             display: 'flex',
             gap: '1.5rem',
@@ -622,13 +776,7 @@ const Ch6_S4_OutputSchemaComponent: React.FC = () => {
 
         {/* Segment 2: extractive_ranges zoom — exits when insight enters */}
         <Reveal from={2} until={2} animation={fadeUp} style={{ marginTop: '1rem' }}>
-          <CodeBlock
-            code={EXTRACTIVE_SAMPLE}
-            language="json"
-            title="extractive_ranges[0]  —  field names as instructions"
-            fontSize={11}
-            highlightLines={[2, 6, 7]}
-          />
+          <ExtractiveZoomCode />
           <div style={{
             display: 'flex',
             gap: '1.5rem',
@@ -685,18 +833,12 @@ const Ch6_S4_OutputSchemaComponent: React.FC = () => {
             justifyContent: 'center',
           }}>
             {SCHEMA_INSIGHT_PILLS.map((pill) => (
-              <div key={pill} style={{
-                background: theme.colors.bgSurface,
-                border: `1px solid ${theme.colors.bgBorder}`,
-                borderRadius: 8,
-                padding: '0.3rem 0.7rem',
-                fontSize: 12,
-                fontWeight: 600,
-                color: theme.colors.primary,
-                fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
-              }}>
-                {pill}
-              </div>
+              <InsightPill
+                key={pill.label}
+                label={pill.label}
+                marker={pill.marker}
+                theme={theme}
+              />
             ))}
           </div>
         </Reveal>
