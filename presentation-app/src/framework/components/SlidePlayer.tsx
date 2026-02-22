@@ -327,16 +327,17 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
                 </div>
                 <button
                   onClick={() => {
-                    const prev = [...markers].reverse().find(m => m.time < currentTime - 0.05);
-                    if (prev) audioTimeCtx?.seekToTime(prev.time);
+                    if (currentMarkerIndex >= 0) {
+                      audioTimeCtx?.seekToTime(currentMarkerIndex > 0 ? markers[currentMarkerIndex - 1].time : 0);
+                    }
                   }}
-                  disabled={currentMarkerIndex <= 0}
+                  disabled={currentMarkerIndex < 0}
                   aria-label="Previous marker"
                   style={{
                     background: 'none',
                     border: 'none',
-                    color: currentMarkerIndex <= 0 ? theme.colors.textMuted : theme.colors.textPrimary,
-                    cursor: currentMarkerIndex <= 0 ? 'not-allowed' : 'pointer',
+                    color: currentMarkerIndex < 0 ? theme.colors.textMuted : theme.colors.textPrimary,
+                    cursor: currentMarkerIndex < 0 ? 'not-allowed' : 'pointer',
                     fontSize: 20,
                     padding: '0.25rem 0.4rem',
                     display: 'flex',
@@ -376,8 +377,10 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
               <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: '0.3rem' }}>
                 <button
                   onClick={() => {
-                    const next = markers.find(m => m.time > currentTime + 0.05);
-                    if (next) audioTimeCtx?.seekToTime(next.time);
+                    const nextIdx = currentMarkerIndex + 1;
+                    if (nextIdx < markers.length) {
+                      audioTimeCtx?.seekToTime(markers[nextIdx].time);
+                    }
                   }}
                   disabled={currentMarkerIndex >= markers.length - 1}
                   aria-label="Next marker"
@@ -447,9 +450,9 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
                     aria-current={idx === segmentContext.currentSegmentIndex ? 'true' : 'false'}
                     title={segment.id}
                     style={{
-                      width: idx === segmentContext.currentSegmentIndex ? 20 : 8,
-                      height: 8,
-                      borderRadius: 4,
+                      width: idx === segmentContext.currentSegmentIndex ? 20 : 12,
+                      height: 5,
+                      borderRadius: 3,
                       background: idx === segmentContext.currentSegmentIndex ? theme.colors.primary : theme.colors.textMuted,
                       border: 'none',
                       cursor: 'pointer',
