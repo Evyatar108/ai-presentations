@@ -422,7 +422,7 @@
       "segments": [
         {
           "id": "skeleton",
-          "narrationText": "This is a single V2 response — six top-level fields in one JSON object. But they serve two very different purposes. The first four fields — abstractive topics, topic order, extractive ranges, and ranking — are structured chain-of-thought. They guide the model through segmentation, selection, and ranking. Only the fifth field, final narrative, is the actual deliverable — the video editing instructions consumed by the product. And self checks adds runtime validation.",
+          "narrationText": "This is a single V2 response — six top-level fields in one JSON object. But they serve two very different purposes. The first four fields — {#abstractive}abstractive topics, {#topic-order}topic order, {#extractive}extractive ranges, and {#ranking}ranking — are structured chain-of-thought. They guide the model through segmentation, selection, and ranking. Only the fifth field, {#final-narrative}final narrative, is the actual deliverable — the video editing instructions consumed by the product. And {#self-checks}self checks adds runtime validation.",
           "visualDescription": "Grouped grid: Row 1 = 4 CoT cards (amber accent), Row 2 = final narrative (teal, prominent) + self checks (green)",
           "notes": ""
         },

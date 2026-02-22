@@ -10,6 +10,7 @@ import {
   RevealSequence,
   CodeBlock,
   BeforeAfterSplit,
+  useMarker,
   typography,
   layouts,
   fadeUp,
@@ -343,12 +344,12 @@ export const Ch6_S3_ProseVsPseudocode = defineSlide({
 // ---------- Slide 4: Output Schema ----------
 
 const SCHEMA_FIELDS = [
-  { name: 'abstractive_topics', desc: '1–7 topics with narration',  call: 'Call 1', category: 'cot' as const },
-  { name: 'topic_order',        desc: 'Chronological sequence',     call: 'Call 4', category: 'cot' as const },
-  { name: 'extractive_ranges',  desc: 'Selected verbatim clips',    call: 'Call 2', category: 'cot' as const },
-  { name: 'ranking',            desc: 'Quality scores & ordering',  call: 'Call 3', category: 'cot' as const },
-  { name: 'final_narrative',    desc: 'Playback coordinates + narration text', call: 'Call 4', category: 'deliverable' as const },
-  { name: 'self_checks',        desc: '10 boolean validators',      call: null,     category: 'validation' as const },
+  { name: 'abstractive_topics', desc: '1–7 topics with narration',  call: 'Call 1', category: 'cot' as const, marker: 'abstractive' },
+  { name: 'topic_order',        desc: 'Chronological sequence',     call: 'Call 4', category: 'cot' as const, marker: 'topic-order' },
+  { name: 'extractive_ranges',  desc: 'Selected verbatim clips',    call: 'Call 2', category: 'cot' as const, marker: 'extractive' },
+  { name: 'ranking',            desc: 'Quality scores & ordering',  call: 'Call 3', category: 'cot' as const, marker: 'ranking' },
+  { name: 'final_narrative',    desc: 'Playback coordinates + narration text', call: 'Call 4', category: 'deliverable' as const, marker: 'final-narrative' },
+  { name: 'self_checks',        desc: '10 boolean validators',      call: null,     category: 'validation' as const, marker: 'self-checks' },
 ];
 
 const FINAL_NARRATIVE_SAMPLE = `[{
@@ -407,11 +408,12 @@ const Ch6_S4_OutputSchemaComponent: React.FC = () => {
     accent: string,
     bg: string,
     compact = false,
+    reached = true,
   ) => (
     <motion.div
       key={field.name}
       initial={{ opacity: 0, y: reduced ? 0 : 12 }}
-      animate={{ opacity: 1, y: 0 }}
+      animate={{ opacity: reached ? 1 : 0.15, y: 0 }}
       transition={{
         duration: reduced ? 0.1 : 0.3,
         delay: reduced ? 0 : index * 0.06,
@@ -464,6 +466,17 @@ const Ch6_S4_OutputSchemaComponent: React.FC = () => {
     </motion.div>
   );
 
+  const MarkerFieldCard: React.FC<{
+    field: typeof SCHEMA_FIELDS[number];
+    index: number;
+    accent: string;
+    bg: string;
+    compact?: boolean;
+  }> = ({ field, index, accent, bg, compact }) => {
+    const { reached } = useMarker(field.marker);
+    return renderFieldCard(field, index, accent, bg, compact, reached);
+  };
+
   return (
     <SlideContainer maxWidth={1000}>
       {/* Title persists across all segments */}
@@ -502,7 +515,7 @@ const Ch6_S4_OutputSchemaComponent: React.FC = () => {
               gap: '0.5rem',
             }}>
               {COT_FIELDS.map((field, i) =>
-                renderFieldCard(field, i, CATEGORY_STYLES.cot.accent, CATEGORY_STYLES.cot.bg, true)
+                <MarkerFieldCard key={field.name} field={field} index={i} accent={CATEGORY_STYLES.cot.accent} bg={CATEGORY_STYLES.cot.bg} compact />
               )}
             </div>
           </motion.div>
@@ -531,7 +544,7 @@ const Ch6_S4_OutputSchemaComponent: React.FC = () => {
               }}>
                 {CATEGORY_STYLES.deliverable.label}
               </div>
-              {renderFieldCard(DELIVERABLE_FIELD, 4, CATEGORY_STYLES.deliverable.accent, CATEGORY_STYLES.deliverable.bg)}
+              <MarkerFieldCard field={DELIVERABLE_FIELD} index={4} accent={CATEGORY_STYLES.deliverable.accent} bg={CATEGORY_STYLES.deliverable.bg} />
             </div>
             <div>
               <div style={{
@@ -545,7 +558,7 @@ const Ch6_S4_OutputSchemaComponent: React.FC = () => {
               }}>
                 {CATEGORY_STYLES.validation.label}
               </div>
-              {renderFieldCard(VALIDATION_FIELD, 5, CATEGORY_STYLES.validation.accent, CATEGORY_STYLES.validation.bg)}
+              <MarkerFieldCard field={VALIDATION_FIELD} index={5} accent={CATEGORY_STYLES.validation.accent} bg={CATEGORY_STYLES.validation.bg} />
             </div>
           </motion.div>
         </Reveal>

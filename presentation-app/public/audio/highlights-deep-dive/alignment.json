@@ -1,0 +1,609 @@
+{
+  "demoId": "highlights-deep-dive",
+  "generatedAt": "2026-02-22T00:17:41.235Z",
+  "slides": {
+    "c0_s1": {
+      "chapter": 0,
+      "slide": 1,
+      "segments": []
+    },
+    "c1_s1": {
+      "chapter": 1,
+      "slide": 1,
+      "segments": []
+    },
+    "c1_s2": {
+      "chapter": 1,
+      "slide": 2,
+      "segments": []
+    },
+    "c2_s1": {
+      "chapter": 2,
+      "slide": 1,
+      "segments": []
+    },
+    "c3_s1": {
+      "chapter": 3,
+      "slide": 1,
+      "segments": []
+    },
+    "c3_s2": {
+      "chapter": 3,
+      "slide": 2,
+      "segments": []
+    },
+    "c4_s1": {
+      "chapter": 4,
+      "slide": 1,
+      "segments": []
+    },
+    "c4_s2": {
+      "chapter": 4,
+      "slide": 2,
+      "segments": []
+    },
+    "c4_s3": {
+      "chapter": 4,
+      "slide": 3,
+      "segments": []
+    },
+    "c4_s4": {
+      "chapter": 4,
+      "slide": 4,
+      "segments": []
+    },
+    "c5_s1": {
+      "chapter": 5,
+      "slide": 1,
+      "segments": []
+    },
+    "c5_s2": {
+      "chapter": 5,
+      "slide": 2,
+      "segments": []
+    },
+    "c5_s3": {
+      "chapter": 5,
+      "slide": 3,
+      "segments": []
+    },
+    "c6_s1": {
+      "chapter": 6,
+      "slide": 1,
+      "segments": []
+    },
+    "c6_s2": {
+      "chapter": 6,
+      "slide": 2,
+      "segments": []
+    },
+    "c6_s3": {
+      "chapter": 6,
+      "slide": 3,
+      "segments": []
+    },
+    "c6_s4": {
+      "chapter": 6,
+      "slide": 4,
+      "segments": [
+        {
+          "segmentId": "skeleton",
+          "audioHash": "bb032d95ea62765b8a194bd0948b7f8be03d65ddf8ae0653e659ab276834daaf",
+          "narrationHash": "772176f08e77e1224ecedac889ff7973b6ddaea9a2441146db203f645bf5057d",
+          "words": [
+            {
+              "end": 0.46,
+              "score": 0.924,
+              "start": 0,
+              "word": "This"
+            },
+            {
+              "end": 0.701,
+              "score": 0.959,
+              "start": 0.6,
+              "word": "is"
+            },
+            {
+              "end": 0.981,
+              "score": 0.995,
+              "start": 0.921,
+              "word": "a"
+            },
+            {
+              "end": 1.882,
+              "score": 0.818,
+              "start": 1.361,
+              "word": "single"
+            },
+            {
+              "end": 2.582,
+              "score": 0.878,
+              "start": 1.982,
+              "word": "V2"
+            },
+            {
+              "end": 3.443,
+              "score": 0.88,
+              "start": 2.682,
+              "word": "response"
+            },
+            {
+              "end": 4.544,
+              "score": 0.981,
+              "start": 3.463,
+              "word": "—"
+            },
+            {
+              "end": 4.984,
+              "score": 0.986,
+              "start": 4.564,
+              "word": "six"
+            },
+            {
+              "end": 6.065,
+              "score": 0.723,
+              "start": 5.264,
+              "word": "top-level"
+            },
+            {
+              "end": 6.685,
+              "score": 0.672,
+              "start": 6.185,
+              "word": "fields"
+            },
+            {
+              "end": 6.926,
+              "score": 0.951,
+              "start": 6.826,
+              "word": "in"
+            },
+            {
+              "end": 7.366,
+              "score": 0.872,
+              "start": 7.206,
+              "word": "one"
+            },
+            {
+              "end": 8.167,
+              "score": 0.874,
+              "start": 7.506,
+              "word": "JSON"
+            },
+            {
+              "end": 8.767,
+              "score": 0.942,
+              "start": 8.327,
+              "word": "object."
+            },
+            {
+              "end": 9.608,
+              "score": 0.785,
+              "start": 9.488,
+              "word": "But"
+            },
+            {
+              "end": 9.848,
+              "score": 0.746,
+              "start": 9.648,
+              "word": "they"
+            },
+            {
+              "end": 10.368,
+              "score": 0.871,
+              "start": 9.928,
+              "word": "serve"
+            },
+            {
+              "end": 10.909,
+              "score": 0.884,
+              "start": 10.549,
+              "word": "two"
+            },
+            {
+              "end": 11.729,
+              "score": 0.877,
+              "start": 11.349,
+              "word": "very"
+            },
+            {
+              "end": 12.29,
+              "score": 0.85,
+              "start": 11.85,
+              "word": "different"
+            },
+            {
+              "end": 13.091,
+              "score": 0.882,
+              "start": 12.39,
+              "word": "purposes."
+            },
+            {
+              "end": 14.071,
+              "score": 0.989,
+              "start": 13.971,
+              "word": "The"
+            },
+            {
+              "end": 14.492,
+              "score": 0.83,
+              "start": 14.151,
+              "word": "first"
+            },
+            {
+              "end": 14.912,
+              "score": 0.73,
+              "start": 14.592,
+              "word": "four"
+            },
+            {
+              "end": 15.573,
+              "score": 0.752,
+              "start": 15.032,
+              "word": "fields"
+            },
+            {
+              "end": 16.553,
+              "score": 0.979,
+              "start": 15.593,
+              "word": "—"
+            },
+            {
+              "end": 17.594,
+              "score": 0.894,
+              "start": 16.573,
+              "word": "abstractive"
+            },
+            {
+              "end": 18.375,
+              "score": 0.885,
+              "start": 17.734,
+              "word": "topics,"
+            },
+            {
+              "end": 19.236,
+              "score": 0.847,
+              "start": 18.815,
+              "word": "topic"
+            },
+            {
+              "end": 19.676,
+              "score": 0.936,
+              "start": 19.416,
+              "word": "order,"
+            },
+            {
+              "end": 21.377,
+              "score": 0.876,
+              "start": 20.557,
+              "word": "extractive"
+            },
+            {
+              "end": 22.058,
+              "score": 0.922,
+              "start": 21.497,
+              "word": "ranges,"
+            },
+            {
+              "end": 22.358,
+              "score": 0.668,
+              "start": 22.258,
+              "word": "and"
+            },
+            {
+              "end": 23.039,
+              "score": 0.83,
+              "start": 22.498,
+              "word": "ranking"
+            },
+            {
+              "end": 23.079,
+              "score": 1,
+              "start": 23.059,
+              "word": "—"
+            },
+            {
+              "end": 23.999,
+              "score": 0.578,
+              "start": 23.879,
+              "word": "are"
+            },
+            {
+              "end": 24.9,
+              "score": 0.805,
+              "start": 24.099,
+              "word": "structured"
+            },
+            {
+              "end": 26.161,
+              "score": 0.745,
+              "start": 25.08,
+              "word": "chain-of-thought."
+            },
+            {
+              "end": 27.002,
+              "score": 0.8,
+              "start": 26.842,
+              "word": "They"
+            },
+            {
+              "end": 27.442,
+              "score": 0.856,
+              "start": 27.062,
+              "word": "guide"
+            },
+            {
+              "end": 27.582,
+              "score": 0.946,
+              "start": 27.502,
+              "word": "the"
+            },
+            {
+              "end": 28.083,
+              "score": 0.797,
+              "start": 27.662,
+              "word": "model"
+            },
+            {
+              "end": 28.483,
+              "score": 0.725,
+              "start": 28.163,
+              "word": "through"
+            },
+            {
+              "end": 29.784,
+              "score": 0.904,
+              "start": 28.643,
+              "word": "segmentation,"
+            },
+            {
+              "end": 30.985,
+              "score": 0.865,
+              "start": 30.244,
+              "word": "selection,"
+            },
+            {
+              "end": 31.445,
+              "score": 0.768,
+              "start": 31.305,
+              "word": "and"
+            },
+            {
+              "end": 32.106,
+              "score": 0.964,
+              "start": 31.585,
+              "word": "ranking."
+            },
+            {
+              "end": 33.307,
+              "score": 0.81,
+              "start": 33.047,
+              "word": "Only"
+            },
+            {
+              "end": 33.507,
+              "score": 0.637,
+              "start": 33.347,
+              "word": "the"
+            },
+            {
+              "end": 33.967,
+              "score": 0.766,
+              "start": 33.647,
+              "word": "fifth"
+            },
+            {
+              "end": 34.608,
+              "score": 0.755,
+              "start": 34.088,
+              "word": "field,"
+            },
+            {
+              "end": 35.709,
+              "score": 0.861,
+              "start": 35.268,
+              "word": "final"
+            },
+            {
+              "end": 36.469,
+              "score": 0.831,
+              "start": 35.809,
+              "word": "narrative,"
+            },
+            {
+              "end": 37.13,
+              "score": 0.634,
+              "start": 37.01,
+              "word": "is"
+            },
+            {
+              "end": 37.43,
+              "score": 0.559,
+              "start": 37.25,
+              "word": "the"
+            },
+            {
+              "end": 38.331,
+              "score": 0.864,
+              "start": 37.77,
+              "word": "actual"
+            },
+            {
+              "end": 39.252,
+              "score": 0.786,
+              "start": 38.431,
+              "word": "deliverable"
+            },
+            {
+              "end": 39.292,
+              "score": 1,
+              "start": 39.272,
+              "word": "—"
+            },
+            {
+              "end": 40.212,
+              "score": 0.804,
+              "start": 40.092,
+              "word": "the"
+            },
+            {
+              "end": 40.713,
+              "score": 0.861,
+              "start": 40.252,
+              "word": "video"
+            },
+            {
+              "end": 41.333,
+              "score": 0.945,
+              "start": 40.933,
+              "word": "editing"
+            },
+            {
+              "end": 42.374,
+              "score": 0.791,
+              "start": 41.433,
+              "word": "instructions"
+            },
+            {
+              "end": 43.455,
+              "score": 0.754,
+              "start": 42.514,
+              "word": "consumed"
+            },
+            {
+              "end": 43.735,
+              "score": 0.995,
+              "start": 43.575,
+              "word": "by"
+            },
+            {
+              "end": 43.855,
+              "score": 0.67,
+              "start": 43.795,
+              "word": "the"
+            },
+            {
+              "end": 44.496,
+              "score": 0.897,
+              "start": 43.955,
+              "word": "product."
+            },
+            {
+              "end": 45.737,
+              "score": 0.76,
+              "start": 45.497,
+              "word": "And"
+            },
+            {
+              "end": 46.317,
+              "score": 0.835,
+              "start": 45.917,
+              "word": "self"
+            },
+            {
+              "end": 46.798,
+              "score": 0.934,
+              "start": 46.337,
+              "word": "checks"
+            },
+            {
+              "end": 47.498,
+              "score": 0.89,
+              "start": 47.258,
+              "word": "adds"
+            },
+            {
+              "end": 48.399,
+              "score": 0.903,
+              "start": 47.638,
+              "word": "runtime"
+            },
+            {
+              "end": 49.58,
+              "score": 0.778,
+              "start": 48.479,
+              "word": "validation."
+            }
+          ],
+          "markers": [
+            {
+              "id": "abstractive",
+              "time": 16.573,
+              "anchor": "start",
+              "wordIndex": 26
+            },
+            {
+              "id": "topic-order",
+              "time": 18.815,
+              "anchor": "start",
+              "wordIndex": 28
+            },
+            {
+              "id": "extractive",
+              "time": 20.557,
+              "anchor": "start",
+              "wordIndex": 30
+            },
+            {
+              "id": "ranking",
+              "time": 22.498,
+              "anchor": "start",
+              "wordIndex": 33
+            },
+            {
+              "id": "final-narrative",
+              "time": 35.268,
+              "anchor": "start",
+              "wordIndex": 51
+            },
+            {
+              "id": "self-checks",
+              "time": 45.917,
+              "anchor": "start",
+              "wordIndex": 67
+            }
+          ]
+        }
+      ]
+    },
+    "c7_s1": {
+      "chapter": 7,
+      "slide": 1,
+      "segments": []
+    },
+    "c7_s2": {
+      "chapter": 7,
+      "slide": 2,
+      "segments": []
+    },
+    "c8_s1": {
+      "chapter": 8,
+      "slide": 1,
+      "segments": []
+    },
+    "c8_s2": {
+      "chapter": 8,
+      "slide": 2,
+      "segments": []
+    },
+    "c9_s1": {
+      "chapter": 9,
+      "slide": 1,
+      "segments": []
+    },
+    "c9_s2": {
+      "chapter": 9,
+      "slide": 2,
+      "segments": []
+    },
+    "c10_s1": {
+      "chapter": 10,
+      "slide": 1,
+      "segments": []
+    },
+    "c10_s2": {
+      "chapter": 10,
+      "slide": 2,
+      "segments": []
+    }
+  }
+}

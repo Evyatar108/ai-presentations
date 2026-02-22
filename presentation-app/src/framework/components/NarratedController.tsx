@@ -195,6 +195,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
 
     return () => {
       if (audioRef.current) {
+        (audioRef.current as any)._stopRaf?.();
         audioRef.current.pause();
         audioRef.current.onended = null;
         audioRef.current.onerror = null;
@@ -244,6 +245,10 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
         const coordKey = `c${slideMetadata.chapter}_s${slideMetadata.slide}`;
         const segAlignment = alignmentData?.slides[coordKey]
           ?.segments.find(s => s.segmentId === segment.id);
+        if (import.meta.env.DEV && segAlignment?.markers.length) {
+          console.log(`[AudioTime] Loaded ${segAlignment.markers.length} markers for ${coordKey}:${segment.id}`,
+            segAlignment.markers.map(m => `${m.id}@${m.time.toFixed(2)}s`));
+        }
         audioTimeCtx.initializeSegmentAlignment(
           segAlignment?.markers ?? [],
           segAlignment?.words ?? []
@@ -254,10 +259,20 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
       loadAudioWithFallback(segment.audioFilePath ?? '', segment.id).then(audio => {
         audioRef.current = audio;
 
-        // Wire audio time tracking for sub-segment markers
+        // Poll audio.currentTime via rAF for sub-frame marker responsiveness
+        // (ontimeupdate only fires ~4Hz; rAF gives ~60Hz)
         if (audioTimeCtx) {
-          audio.ontimeupdate = () => audioTimeCtx.setCurrentTime(audio.currentTime);
+          let rafId: number;
+          const pollTime = () => {
+            if (audioRef.current === audio && !audio.paused) {
+              audioTimeCtx.setCurrentTime(audio.currentTime);
+            }
+            rafId = requestAnimationFrame(pollTime);
+          };
+          rafId = requestAnimationFrame(pollTime);
           audio.onloadedmetadata = () => audioTimeCtx.setDuration(audio.duration);
+          // Store cleanup on the audio element for the effect teardown
+          (audio as any)._stopRaf = () => cancelAnimationFrame(rafId);
         }
 
         audio.onended = () => {
@@ -357,10 +372,18 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
       if (!isActive) return;
       audioRef.current = audio;
 
-      // Wire audio time tracking for sub-segment markers
+      // Poll audio.currentTime via rAF for sub-frame marker responsiveness
       if (audioTimeCtx) {
-        audio.ontimeupdate = () => audioTimeCtx.setCurrentTime(audio.currentTime);
+        let rafId: number;
+        const pollTime = () => {
+          if (audioRef.current === audio && !audio.paused) {
+            audioTimeCtx.setCurrentTime(audio.currentTime);
+          }
+          rafId = requestAnimationFrame(pollTime);
+        };
+        rafId = requestAnimationFrame(pollTime);
         audio.onloadedmetadata = () => audioTimeCtx.setDuration(audio.duration);
+        (audio as any)._stopRaf = () => cancelAnimationFrame(rafId);
       }
 
       audio.onended = () => {
@@ -388,6 +411,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     return () => {
       isActive = false;
       if (audioRef.current) {
+        (audioRef.current as any)._stopRaf?.();
         audioRef.current.pause();
         audioRef.current.onended = null;
         audioRef.current.onerror = null;

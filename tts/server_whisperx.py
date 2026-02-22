@@ -70,8 +70,11 @@ def load_align_model(language="en"):
     print("Alignment model loaded.")
 
 
+WHISPERX_SAMPLE_RATE = 16000
+
+
 def decode_audio(audio_b64):
-    """Decode base64 WAV to float32 numpy array and sample rate."""
+    """Decode base64 WAV to float32 numpy array, resampled to 16kHz for WhisperX."""
     audio_bytes = base64.b64decode(audio_b64)
     buf = io.BytesIO(audio_bytes)
     audio_np, sample_rate = sf.read(buf)
@@ -80,6 +83,14 @@ def decode_audio(audio_b64):
     if audio_np.ndim > 1:
         audio_np = audio_np.mean(axis=1)
     audio_np = audio_np.astype(np.float32)
+
+    # Resample to 16kHz if needed (WhisperX expects 16kHz)
+    if sample_rate != WHISPERX_SAMPLE_RATE:
+        import librosa
+        audio_np = librosa.resample(
+            audio_np, orig_sr=sample_rate, target_sr=WHISPERX_SAMPLE_RATE
+        )
+        sample_rate = WHISPERX_SAMPLE_RATE
 
     return audio_np, sample_rate
 
