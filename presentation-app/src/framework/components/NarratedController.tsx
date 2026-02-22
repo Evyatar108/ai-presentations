@@ -1,14 +1,15 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { hasAudioSegments, SlideComponentWithMetadata } from '../slides/SlideMetadata';
 import { useSegmentContext } from '../contexts/SegmentContext';
 import { useAudioTimeContextOptional } from '../contexts/AudioTimeContext';
 import type { DemoMetadata } from '../demos/types';
 import type { DemoAlignment } from '../alignment/types';
-import { resolveTimingConfig, TimingConfig, DEFAULT_START_TRANSITION } from '../demos/timing/types';
+import { TimingConfig, DEFAULT_START_TRANSITION } from '../demos/timing/types';
 import type { StartTransition } from '../demos/timing/types';
 import { NarrationEditModal } from './NarrationEditModal';
 import { getConfig } from '../config';
+import { MARKER_TIME_EPSILON, AUTOPLAY_PROBE_DELAY_MS } from '../constants';
 import { StartOverlay } from './narrated/StartOverlay';
 import { ProgressBar } from './narrated/ProgressBar';
 import { ErrorToast } from './narrated/ErrorToast';
@@ -18,32 +19,11 @@ import { useRuntimeTimer } from '../hooks/useRuntimeTimer';
 import { useApiHealth } from '../hooks/useApiHealth';
 import { useNarrationEditor } from '../hooks/useNarrationEditor';
 import { useTtsRegeneration } from '../hooks/useTtsRegeneration';
+import { useAudioPlayback } from '../hooks/useAudioPlayback';
 import { useTheme } from '../theme/ThemeContext';
 
 // Fallback audio file for missing segments
 const getFallbackAudio = () => getConfig().fallbackAudioPath;
-
-// Helper to load audio with fallback
-const loadAudioWithFallback = async (primaryPath: string, segmentId: string): Promise<HTMLAudioElement> => {
-  const audio = new Audio(primaryPath);
-
-  return new Promise((resolve) => {
-    const handleError = () => {
-      console.warn(`[Audio] File not found: ${primaryPath}, using fallback silence for segment: ${segmentId}`);
-      const fallbackAudio = new Audio(getFallbackAudio());
-      resolve(fallbackAudio);
-    };
-
-    const handleSuccess = () => {
-      audio.removeEventListener('error', handleError);
-      audio.removeEventListener('canplaythrough', handleSuccess);
-      resolve(audio);
-    };
-
-    audio.addEventListener('error', handleError);
-    audio.addEventListener('canplaythrough', handleSuccess);
-  });
-};
 
 export interface AutoplayConfig {
   mode: 'narrated';
@@ -103,7 +83,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     return chapterNums.size > 1;
   }, [allSlides]);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [_isLoading, setIsLoading] = useState(false);
+  const [, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showStartOverlay, setShowStartOverlay] = useState(true);
   const setHideInterface = onHideInterfaceChange;
@@ -111,18 +91,6 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
   const [audioEnabled, setAudioEnabled] = useState(true);
   const [autoAdvanceOnAudioEnd, setAutoAdvanceOnAudioEnd] = useState(false);
   const [startSilenceActive, setStartSilenceActive] = useState(false);
-
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const currentIndexRef = useRef(currentIndex);
-
-  // Ref so the manual-mode audio effect can read the latest value without
-  // re-running (which would stop and replay the audio from scratch).
-  const autoAdvanceRef = useRef(autoAdvanceOnAudioEnd);
-  useEffect(() => { autoAdvanceRef.current = autoAdvanceOnAudioEnd; }, [autoAdvanceOnAudioEnd]);
-
-  // Ref so playSlideSegments can read autoplay without adding it to callback deps
-  const autoplayRef = useRef(autoplay);
-  useEffect(() => { autoplayRef.current = autoplay; }, [autoplay]);
 
   // Segment context for multi-segment slides
   const segmentContext = useSegmentContext();
@@ -134,7 +102,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
   const theme = useTheme();
 
   // Extracted hooks
-  const { notifications, showSuccess, showError: _showError, showWarning: _showWarning } = useNotifications();
+  const { notifications, showSuccess } = useNotifications();
   const timer = useRuntimeTimer({ isPlaying, enabled: true });
   const { showRuntimeTimerOption, setShowRuntimeTimerOption, elapsedMs, finalElapsedSeconds, setFinalElapsedSeconds, runtimeStart } = timer;
   const { apiAvailable } = useApiHealth();
@@ -153,37 +121,68 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     onSegmentRefresh: () => segmentContext.setCurrentSegment(segmentContext.currentSegmentIndex),
   });
 
-  // Keep ref in sync with state
-  useEffect(() => {
-    currentIndexRef.current = currentIndex;
-  }, [currentIndex]);
+  // Audio playback orchestration (narrated + manual modes)
+  const { audioRef, currentIndexRef } = useAudioPlayback({
+    allSlides,
+    currentIndex,
+    setCurrentIndex,
+    isPlaying,
+    setIsPlaying,
+    isManualMode,
+    audioEnabled,
+    startSilenceActive,
+    setStartSilenceActive,
+    autoAdvanceOnAudioEnd,
+    demoTiming,
+    alignmentData,
+    segmentContext,
+    audioTimeCtx,
+    autoplaySignalPort: autoplay?.signalPort,
+    setError,
+    setIsLoading,
+    onSlideChange,
+    onPlaybackEnd,
+    onNarratedComplete: () => {
+      let finalElapsedSec: number | null = null;
+      if (runtimeStart != null) {
+        finalElapsedSec = (performance.now() - runtimeStart) / 1000;
+        setFinalElapsedSeconds(finalElapsedSec);
+      }
 
-  // Register audio seek handler so AudioTimeContext.seekToTime() can control the <audio> element
-  useEffect(() => {
-    if (!audioTimeCtx) return;
-    return audioTimeCtx.registerSeekHandler((time: number) => {
-      if (audioRef.current) {
-        audioRef.current.currentTime = time;
-        // When paused/ended, rAF polling isn't updating — push the time manually
-        if (audioRef.current.paused || audioRef.current.ended) {
-          audioTimeCtx.setCurrentTime(time);
+      const plannedTotal = demoMetadata.durationInfo?.total ?? null;
+      if (showRuntimeTimerOption && plannedTotal != null && finalElapsedSec != null) {
+        const delta = finalElapsedSec - plannedTotal;
+        console.log(`[RuntimeTimer] Completed. Elapsed=${finalElapsedSec.toFixed(2)}s Planned=${plannedTotal.toFixed(2)}s Δ=${delta.toFixed(2)}s`);
+      } else if (showRuntimeTimerOption && finalElapsedSec != null) {
+        console.log(`[RuntimeTimer] Completed. Elapsed=${finalElapsedSec.toFixed(2)}s (no planned total)`);
+      }
+
+      if (finalElapsedSec != null) {
+        try {
+          localStorage.setItem(`demoRuntime:${demoMetadata.id}`, JSON.stringify({
+            elapsed: finalElapsedSec,
+            plannedTotal: plannedTotal ?? finalElapsedSec,
+          }));
+        } catch (e) {
+          console.warn('[RuntimeTimer] Persist failed', e);
         }
       }
-    });
-  }, [audioTimeCtx]);
 
-  // Expose __seekToTime on window for Playwright tests (dev only)
-  useEffect(() => {
-    if (!import.meta.env.DEV || !audioTimeCtx) return;
-    (window as any).__seekToTime = (time: number) => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = time;
-      }
-      audioTimeCtx.setCurrentTime(time);
-    };
-    return () => { delete (window as any).__seekToTime; };
-  }, [audioTimeCtx]);
+      setShowStartOverlay(true);
+      document.title = `[COMPLETE] ${demoMetadata.title}`;
+    },
+    demoId: demoMetadata.id,
+    demoTitle: demoMetadata.title,
+  });
+
+  // Stable refs for marker keyboard handler — avoids re-registering
+  // the capture-phase listener on every frame when currentTime changes.
+  const markerNavMarkersRef = useRef(audioTimeCtx?.markers);
+  const markerNavTimeRef = useRef(audioTimeCtx?.currentTime ?? 0);
+  const markerNavSeekRef = useRef(audioTimeCtx?.seekToTime);
+  markerNavMarkersRef.current = audioTimeCtx?.markers;
+  markerNavTimeRef.current = audioTimeCtx?.currentTime ?? 0;
+  markerNavSeekRef.current = audioTimeCtx?.seekToTime;
 
   // Capture-phase keyboard handler for marker navigation in manual mode.
   // Fires before SlidePlayer's bubble-phase listener so markers are stepped
@@ -192,21 +191,14 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
   useEffect(() => {
     if (!isManualMode || !audioTimeCtx) return;
 
-    // Use refs to avoid stale closures — the handler stays stable while
-    // markers and currentTime change on every frame.
-    const markersRef = { current: audioTimeCtx.markers };
-    const timeRef = { current: audioTimeCtx.currentTime };
-    // Keep refs fresh via the closure (they update every render)
-    markersRef.current = audioTimeCtx.markers;
-    timeRef.current = audioTimeCtx.currentTime;
-
     const handler = (e: KeyboardEvent) => {
       if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
-      const markers = markersRef.current;
-      if (!markers || markers.length === 0) return;
+      const markers = markerNavMarkersRef.current;
+      const seekToTime = markerNavSeekRef.current;
+      if (!markers || markers.length === 0 || !seekToTime) return;
 
-      const t = timeRef.current;
-      const EPS = 0.02;
+      const t = markerNavTimeRef.current;
+      const EPS = MARKER_TIME_EPSILON;
 
       // Compute current marker index (last marker at or before current time)
       let currentIdx = -1;
@@ -219,7 +211,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
         if (nextIdx < markers.length) {
           e.preventDefault();
           e.stopPropagation();
-          audioTimeCtx.seekToTime(markers[nextIdx].time);
+          seekToTime(markers[nextIdx].time);
         }
         // else: let the event propagate to SlidePlayer for segment/slide nav
       } else {
@@ -227,7 +219,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
         if (currentIdx >= 0) {
           e.preventDefault();
           e.stopPropagation();
-          audioTimeCtx.seekToTime(currentIdx > 0 ? markers[currentIdx - 1].time : 0);
+          seekToTime(currentIdx > 0 ? markers[currentIdx - 1].time : 0);
         }
         // else: before any marker, let event propagate
       }
@@ -235,28 +227,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
 
     window.addEventListener('keydown', handler, true); // capture phase
     return () => window.removeEventListener('keydown', handler, true);
-  }, [isManualMode, audioTimeCtx, audioTimeCtx?.markers, audioTimeCtx?.currentTime]);
-
-  // Initialize markers in muted manual mode (audio effect skips when !audioEnabled,
-  // but we still want marker dots and keyboard nav to work)
-  useEffect(() => {
-    if (!isManualMode || audioEnabled || !audioTimeCtx) return;
-    if (currentIndex >= allSlides.length) return;
-    const slide = allSlides[currentIndex].metadata;
-    const segments = slide.audioSegments;
-    if (!segments || segments.length === 0) return;
-    const segment = segments[segmentContext.currentSegmentIndex];
-    if (!segment) return;
-
-    audioTimeCtx.reset();
-    const coordKey = `c${slide.chapter}_s${slide.slide}`;
-    const segAlignment = alignmentData?.slides[coordKey]
-      ?.segments.find(s => s.segmentId === segment.id);
-    audioTimeCtx.initializeSegmentAlignment(
-      segAlignment?.markers ?? [],
-      segAlignment?.words ?? []
-    );
-  }, [isManualMode, audioEnabled, currentIndex, segmentContext.currentSegmentIndex]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isManualMode, audioTimeCtx]); // stable deps — no per-frame values
 
   // Autoplay: auto-start narrated playback once slides are loaded.
   // Browsers block audio.play() without a user gesture; OBS Browser source allows it.
@@ -281,7 +252,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
         // Browser blocked autoplay — show click-to-start overlay
         setAutoplayBlocked(true);
       }
-    }, 100);
+    }, AUTOPLAY_PROBE_DELAY_MS);
     return () => clearTimeout(timer);
   }, [allSlides.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -290,216 +261,6 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     autoplayFiredRef.current = true;
     handleStart();
   };
-
-  // Advance to next slide (narrated mode)
-  const advanceSlide = useCallback(() => {
-    const currentIdx = currentIndexRef.current;
-    const nextIndex = currentIdx + 1;
-
-    if (nextIndex >= allSlides.length) {
-      const lastSlide = allSlides[allSlides.length - 1].metadata;
-      const timing = resolveTimingConfig(demoTiming, lastSlide.timing);
-      const plannedTotal = demoMetadata.durationInfo?.total ?? null;
-
-      setTimeout(() => {
-        let finalElapsedSec: number | null = null;
-        if (runtimeStart != null) {
-          finalElapsedSec = (performance.now() - runtimeStart) / 1000;
-          setFinalElapsedSeconds(finalElapsedSec);
-        }
-        setIsPlaying(false);
-
-        if (showRuntimeTimerOption && plannedTotal != null && finalElapsedSec != null) {
-          const delta = finalElapsedSec - plannedTotal;
-          console.log(`[RuntimeTimer] Completed. Elapsed=${finalElapsedSec.toFixed(2)}s Planned=${plannedTotal.toFixed(2)}s Δ=${delta.toFixed(2)}s`);
-        } else if (showRuntimeTimerOption && finalElapsedSec != null) {
-          console.log(`[RuntimeTimer] Completed. Elapsed=${finalElapsedSec.toFixed(2)}s (no planned total)`);
-        }
-
-        if (finalElapsedSec != null) {
-          try {
-            localStorage.setItem(`demoRuntime:${demoMetadata.id}`, JSON.stringify({
-              elapsed: finalElapsedSec,
-              plannedTotal: plannedTotal ?? finalElapsedSec,
-            }));
-          } catch (e) {
-            console.warn('[RuntimeTimer] Persist failed', e);
-          }
-        }
-
-        setShowStartOverlay(true);
-        document.title = `[COMPLETE] ${demoMetadata.title}`;
-        // Signal the recording script that playback is done
-        if (autoplay?.signalPort) {
-          fetch(`http://localhost:${autoplay.signalPort}/complete`, { mode: 'no-cors' }).catch(() => {});
-        }
-        onPlaybackEnd?.();
-      }, timing.afterFinalSlide);
-      return;
-    }
-
-    const currentSlide = allSlides[currentIdx].metadata;
-    const timing = resolveTimingConfig(demoTiming, currentSlide.timing);
-    setTimeout(() => {
-      setCurrentIndex(nextIndex);
-    }, timing.betweenSlides);
-  }, [onPlaybackEnd, demoMetadata.durationInfo?.total, demoMetadata.title, showRuntimeTimerOption, runtimeStart, demoTiming, allSlides, demoMetadata.id, setFinalElapsedSeconds]);
-
-  // Play audio for current slide in narrated mode
-  useEffect(() => {
-    if (!isPlaying || currentIndex >= allSlides.length || isManualMode) return;
-
-    // Start silence: delay before the first slide appears
-    if (currentIndex === 0 && startSilenceActive) {
-      const timing = resolveTimingConfig(demoTiming);
-      if (timing.beforeFirstSlide > 0) {
-        const timer = setTimeout(() => setStartSilenceActive(false), timing.beforeFirstSlide);
-        return () => clearTimeout(timer);
-      }
-      // beforeFirstSlide is 0, proceed immediately
-      setStartSilenceActive(false);
-      return;
-    }
-
-    const currentSlide = allSlides[currentIndex].metadata;
-    const slideKey = `Ch${currentSlide.chapter}:U${currentSlide.slide}`;
-
-    console.log(`[NarratedController] Playing slide: ${slideKey} with ${currentSlide.audioSegments.length} segment(s)`);
-    playSlideSegments(currentSlide, slideKey);
-
-    onSlideChange(currentSlide.chapter, currentSlide.slide);
-
-    return () => {
-      if (audioRef.current) {
-        (audioRef.current as any)._stopRaf?.();
-        audioRef.current.pause();
-        audioRef.current.onended = null;
-        audioRef.current.onerror = null;
-        audioRef.current.onplay = null;
-        audioRef.current.oncanplaythrough = null;
-        audioRef.current.ontimeupdate = null;
-        audioRef.current.onloadedmetadata = null;
-      }
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isPlaying, currentIndex, isManualMode, startSilenceActive]);
-
-  // Play slide segments
-  const playSlideSegments = useCallback((slideMetadata: typeof allSlides[0]['metadata'], slideKey: string) => {
-    const segments = slideMetadata.audioSegments;
-
-    if (!segments || segments.length === 0) {
-      console.warn(`[NarratedController] No audio segments for ${slideKey}, advancing immediately`);
-      setTimeout(advanceSlide, 100);
-      return;
-    }
-
-    segmentContext.initializeSegments(slideKey, segments);
-
-    let currentSegmentIndex = 0;
-
-    const playSegment = (segmentIndex: number) => {
-      if (segmentIndex >= segments.length) {
-        advanceSlide();
-        return;
-      }
-
-      const segment = segments[segmentIndex];
-      segmentContext.setCurrentSegment(segmentIndex);
-
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.onended = null;
-        audioRef.current.onerror = null;
-        audioRef.current.onplay = null;
-      }
-
-      // Initialize audio time context with markers and words for this segment
-      if (audioTimeCtx) {
-        audioTimeCtx.reset();
-        const coordKey = `c${slideMetadata.chapter}_s${slideMetadata.slide}`;
-        const segAlignment = alignmentData?.slides[coordKey]
-          ?.segments.find(s => s.segmentId === segment.id);
-        if (import.meta.env.DEV && segAlignment?.markers.length) {
-          console.log(`[AudioTime] Loaded ${segAlignment.markers.length} markers for ${coordKey}:${segment.id}`,
-            segAlignment.markers.map(m => `${m.id}@${m.time.toFixed(2)}s`));
-        }
-        audioTimeCtx.initializeSegmentAlignment(
-          segAlignment?.markers ?? [],
-          segAlignment?.words ?? []
-        );
-      }
-
-      setIsLoading(true);
-      loadAudioWithFallback(segment.audioFilePath ?? '', segment.id).then(audio => {
-        audioRef.current = audio;
-
-        // Poll audio.currentTime via rAF for sub-frame marker responsiveness
-        // (ontimeupdate only fires ~4Hz; rAF gives ~60Hz)
-        if (audioTimeCtx) {
-          let rafId: number;
-          const pollTime = () => {
-            if (audioRef.current === audio && !audio.paused) {
-              audioTimeCtx.setCurrentTime(audio.currentTime);
-            }
-            rafId = requestAnimationFrame(pollTime);
-          };
-          rafId = requestAnimationFrame(pollTime);
-          audio.onloadedmetadata = () => audioTimeCtx.setDuration(audio.duration);
-          // Store cleanup on the audio element for the effect teardown
-          (audio as any)._stopRaf = () => cancelAnimationFrame(rafId);
-        }
-
-        audio.onended = () => {
-          setError(null);
-          currentSegmentIndex++;
-          if (currentSegmentIndex < segments.length) {
-            const timing = resolveTimingConfig(demoTiming, slideMetadata.timing, segment.timing);
-            setTimeout(() => playSegment(currentSegmentIndex), timing.betweenSegments);
-          } else {
-            playSegment(currentSegmentIndex);
-          }
-        };
-
-        audio.onerror = (e) => {
-          console.error(`[NarratedController] Playback error for ${segment.id}:`, e);
-          setError(`Playback error: ${segment.id}`);
-          setIsLoading(false);
-          setTimeout(() => {
-            setError(null);
-            currentSegmentIndex++;
-            playSegment(currentSegmentIndex);
-          }, 1000);
-        };
-
-        audio.onplay = () => {
-          setError(null);
-          setIsLoading(false);
-          // Signal segment start to the recording script for VTT subtitle generation
-          const ap = autoplayRef.current;
-          if (ap?.signalPort) {
-            const params = new URLSearchParams({
-              chapter: String(slideMetadata.chapter),
-              slide: String(slideMetadata.slide),
-              segmentIndex: String(segmentIndex),
-              segmentId: segment.id,
-            });
-            fetch(`http://localhost:${ap.signalPort}/segment-start?${params}`, { mode: 'no-cors' }).catch(() => {});
-          }
-        };
-
-        audio.oncanplaythrough = () => setIsLoading(false);
-
-        audio.play().catch(err => {
-          console.error(`[NarratedController] Playback failed for ${segment.id}:`, err);
-          setError(`Playback failed: ${segment.id}`);
-          setIsLoading(false);
-        });
-      });
-    };
-
-    playSegment(0);
-  }, [advanceSlide, segmentContext, demoTiming, audioTimeCtx, alignmentData]);
 
   // Start narrated playback
   const handleStart = () => {
@@ -526,102 +287,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     onSlideChange(allSlides[0].metadata.chapter, allSlides[0].metadata.slide);
   };
 
-  // Initialize segments when slide changes in manual mode (audio or muted).
-  // totalSegments in deps ensures re-init after HMR resets the context.
-  useEffect(() => {
-    if (!isManualMode || currentIndex >= allSlides.length) return;
-    const slide = allSlides[currentIndex].metadata;
-    const slideKey = `Ch${slide.chapter}:S${slide.slide}`;
-    if (!hasAudioSegments(slide) || slide.audioSegments.length === 0) return;
-    segmentContext.initializeSegments(slideKey, slide.audioSegments);
-  }, [currentIndex, isManualMode, segmentContext.totalSegments]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // Play audio for current segment in manual mode
-  useEffect(() => {
-    if (!isManualMode || !audioEnabled || currentIndex >= allSlides.length) return;
-    const slide = allSlides[currentIndex].metadata;
-    const currentSegmentIdx = segmentContext.currentSegmentIndex;
-    if (!hasAudioSegments(slide) || slide.audioSegments.length === 0) return;
-    const segments = slide.audioSegments;
-    const segment = segments[currentSegmentIdx];
-    if (!segment) return;
-
-    let isActive = true;
-
-    // Initialize audio time context for manual+audio mode
-    if (audioTimeCtx) {
-      audioTimeCtx.reset();
-      const coordKey = `c${slide.chapter}_s${slide.slide}`;
-      const segAlignment = alignmentData?.slides[coordKey]
-        ?.segments.find(s => s.segmentId === segment.id);
-      audioTimeCtx.initializeSegmentAlignment(
-        segAlignment?.markers ?? [],
-        segAlignment?.words ?? []
-      );
-    }
-
-    loadAudioWithFallback(segment.audioFilePath ?? '', segment.id).then(audio => {
-      if (!isActive) return;
-      audioRef.current = audio;
-
-      // Poll audio.currentTime via rAF for sub-frame marker responsiveness
-      if (audioTimeCtx) {
-        let rafId: number;
-        const pollTime = () => {
-          if (audioRef.current === audio && !audio.paused) {
-            audioTimeCtx.setCurrentTime(audio.currentTime);
-          }
-          rafId = requestAnimationFrame(pollTime);
-        };
-        rafId = requestAnimationFrame(pollTime);
-        audio.onloadedmetadata = () => audioTimeCtx.setDuration(audio.duration);
-        (audio as any)._stopRaf = () => cancelAnimationFrame(rafId);
-      }
-
-      audio.onended = () => {
-        setError(null);
-        // Read from ref so toggling the checkbox doesn't restart the effect
-        if (autoAdvanceRef.current) {
-          const timing = resolveTimingConfig(demoTiming, slide.timing, segment.timing);
-          if (currentSegmentIdx < segments.length - 1) {
-            setTimeout(() => segmentContext.nextSegment(), timing.betweenSegments);
-          } else {
-            const nextIndex = currentIndexRef.current + 1;
-            if (nextIndex < allSlides.length) {
-              setTimeout(() => {
-                setCurrentIndex(nextIndex);
-                onSlideChange(allSlides[nextIndex].metadata.chapter, allSlides[nextIndex].metadata.slide);
-              }, timing.betweenSlides);
-            }
-          }
-        }
-      };
-      audio.onerror = () => setError(`Playback error: ${segment.id}`);
-      audio.onplay = () => setError(null);
-      audio.play().catch(() => setError(`Playback failed: ${segment.id}`));
-    });
-
-    return () => {
-      isActive = false;
-      if (audioRef.current) {
-        (audioRef.current as any)._stopRaf?.();
-        audioRef.current.pause();
-        audioRef.current.onended = null;
-        audioRef.current.onerror = null;
-        audioRef.current.onplay = null;
-        audioRef.current.ontimeupdate = null;
-        audioRef.current.onloadedmetadata = null;
-        audioRef.current = null;
-      }
-    };
-    // autoAdvanceOnAudioEnd intentionally omitted — read via autoAdvanceRef
-    // to avoid restarting audio when the checkbox is toggled mid-playback.
-  }, [currentIndex, isManualMode, audioEnabled, onSlideChange, segmentContext.currentSegmentIndex]); // eslint-disable-line react-hooks/exhaustive-deps
-
   // Consume external manual slide changes
-  // Only react to actual manualSlideChange events (from user navigation in SlidePlayer),
-  // NOT to currentIndex changes (from auto-advance). This prevents stale manualSlideChange
-  // values from being re-consumed on every auto-advance and jumping back to old slides.
   useEffect(() => {
     if (!isManualMode || manualSlideChange == null) return;
     const slideIndex = allSlides.findIndex(s =>

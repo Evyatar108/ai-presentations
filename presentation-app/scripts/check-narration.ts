@@ -17,32 +17,14 @@ import * as crypto from 'crypto';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import * as readline from 'readline';
+import { getArg, hasFlag } from './utils/cli-parser';
+import { getNarrationDemoIds } from './utils/demo-discovery';
+import { loadNarrationJson } from './utils/narration-loader';
+import type { NarrationData } from './utils/narration-loader';
 
 // ES module __dirname equivalent
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
-// Narration JSON structure (from narrationLoader.ts)
-interface NarrationSegment {
-  id: string;
-  narrationText: string;
-  visualDescription?: string;
-  notes?: string;
-}
-
-interface NarrationSlide {
-  chapter: number;
-  slide: number;
-  title: string;
-  segments: NarrationSegment[];
-}
-
-interface NarrationData {
-  demoId: string;
-  version: string;
-  lastModified: string;
-  slides: NarrationSlide[];
-}
 
 // Cache structure
 interface NarrationCacheEntry {
@@ -86,45 +68,6 @@ interface ChangeDetectionResult {
  */
 function hashNarrationText(text: string): string {
   return crypto.createHash('sha256').update(text.trim()).digest('hex');
-}
-
-/**
- * Get all demo IDs by scanning the public/narration directory
- */
-function getAllDemoIds(narrationDir: string): string[] {
-  if (!fs.existsSync(narrationDir)) {
-    return [];
-  }
-
-  const entries = fs.readdirSync(narrationDir, { withFileTypes: true });
-  
-  return entries
-    .filter(entry => entry.isDirectory())
-    .map(entry => entry.name)
-    .filter(name => {
-      // Verify it has a narration.json file
-      const narrationPath = path.join(narrationDir, name, 'narration.json');
-      return fs.existsSync(narrationPath);
-    });
-}
-
-/**
- * Load narration.json for a demo
- */
-function loadNarrationJSON(demoId: string, narrationDir: string): NarrationData | null {
-  const narrationPath = path.join(narrationDir, demoId, 'narration.json');
-  
-  if (!fs.existsSync(narrationPath)) {
-    return null;
-  }
-  
-  try {
-    const content = fs.readFileSync(narrationPath, 'utf-8');
-    return JSON.parse(content) as NarrationData;
-  } catch (error: any) {
-    console.error(`  ❌ Failed to parse narration.json for "${demoId}": ${error.message}`);
-    return null;
-  }
 }
 
 /**
@@ -330,18 +273,16 @@ function promptUser(question: string): Promise<boolean> {
  * Main check function
  */
 async function checkNarration(): Promise<void> {
-  const args = process.argv.slice(2);
-  const demoIndex = args.indexOf('--demo');
-  const demoFilter = demoIndex !== -1 && args[demoIndex + 1] ? args[demoIndex + 1] : undefined;
-  const verbose = args.includes('--verbose');
-  const autoRegenerate = args.includes('--auto-regenerate');
-  
+  const demoFilter = getArg('demo');
+  const verbose = hasFlag('verbose');
+  const autoRegenerate = hasFlag('auto-regenerate');
+
   const narrationDir = path.join(__dirname, '../public/narration');
-  
+
   console.log('🔍 Checking narration changes...\n');
-  
+
   // Get all demos
-  const allDemoIds = getAllDemoIds(narrationDir);
+  const allDemoIds = getNarrationDemoIds(narrationDir);
   const demosToCheck = demoFilter
     ? allDemoIds.filter(id => id === demoFilter)
     : allDemoIds;
@@ -372,7 +313,7 @@ async function checkNarration(): Promise<void> {
       console.log('─'.repeat(60));
     }
     
-    const narrationData = loadNarrationJSON(demoId, narrationDir);
+    const narrationData = loadNarrationJson(demoId, narrationDir);
     
     if (!narrationData) {
       console.log(`\n⚠️  No narration.json found for demo '${demoId}', skipping...`);

@@ -16,6 +16,8 @@ import {
   fadeUp,
   Checkmark,
 } from '@framework';
+import { PromptSectionCard } from '../../components/PromptSectionCard';
+import { MarkerFieldCard } from '../../components/MarkerFieldCard';
 
 /**
  * Chapter 6: Prompt Overview + Pseudocode Algorithm (4 slides)
@@ -32,72 +34,6 @@ const PROMPT_SECTIONS = [
   { num: 6, name: 'Self-Checks', desc: '10 boolean validators on model output', marker: 's6' },
 ];
 
-const PromptSectionCard: React.FC<{
-  section: typeof PROMPT_SECTIONS[number];
-  index: number;
-  dimmed: boolean;
-  theme: ReturnType<typeof useTheme>;
-  reduced: boolean;
-}> = ({ section, index, dimmed, theme, reduced }) => {
-  const { reached: highlighted } = useMarker(section.marker);
-  const lit = !dimmed || highlighted;
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: reduced ? 0 : 15 }}
-      animate={{ opacity: lit ? 1 : 0.15, y: 0 }}
-      transition={{
-        duration: reduced ? 0.1 : 0.3,
-        delay: reduced ? 0 : index * 0.08
-      }}
-      style={{
-        background: theme.colors.bgSurface,
-        border: `1px solid ${theme.colors.bgBorder}`,
-        borderRadius: 12,
-        padding: '1rem 1.1rem',
-        textAlign: 'left'
-      }}
-    >
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '0.5rem',
-        marginBottom: '0.4rem'
-      }}>
-        <div style={{
-          width: 24,
-          height: 24,
-          borderRadius: '50%',
-          background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: 12,
-          color: '#fff',
-          fontWeight: 700,
-          flexShrink: 0
-        }}>
-          {section.num}
-        </div>
-        <span style={{
-          ...typography.body,
-          fontSize: 14,
-          fontWeight: 700,
-          color: theme.colors.textPrimary
-        }}>
-          {section.name}
-        </span>
-      </div>
-      <div style={{
-        ...typography.body,
-        fontSize: 12,
-        color: theme.colors.textSecondary,
-        lineHeight: 1.4
-      }}>
-        {section.desc}
-      </div>
-    </motion.div>
-  );
-};
 
 const Ch6_S1_PromptOverviewComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
@@ -558,76 +494,6 @@ const InsightPill: React.FC<{
   );
 };
 
-const MarkerFieldCard: React.FC<{
-  field: typeof SCHEMA_FIELDS[number];
-  index: number;
-  accent: string;
-  bg: string;
-  compact?: boolean;
-}> = ({ field, index, accent, bg, compact }) => {
-  const { reduced } = useReducedMotion();
-  const theme = useTheme();
-  const { reached: dimmed } = useMarker('dim-all');
-  const { reached: highlighted } = useMarker(field.marker);
-  const reached = !dimmed || highlighted;
-
-  return (
-    <motion.div
-      key={field.name}
-      initial={{ opacity: 0, y: reduced ? 0 : 12 }}
-      animate={{ opacity: reached ? 1 : 0.15, y: 0 }}
-      transition={{
-        duration: reduced ? 0.1 : 0.3,
-        delay: reduced ? 0 : index * 0.06,
-      }}
-      style={{
-        background: bg,
-        border: `1px solid ${theme.colors.bgBorder}`,
-        borderLeft: `3px solid ${accent}`,
-        borderRadius: 10,
-        padding: compact ? '0.45rem 0.65rem' : '0.55rem 0.75rem',
-        textAlign: 'left',
-      }}
-    >
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginBottom: '0.2rem',
-      }}>
-        <span style={{
-          fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
-          fontSize: compact ? 10.5 : 11,
-          fontWeight: 600,
-          color: accent,
-        }}>
-          {field.name}
-        </span>
-        <span style={{
-          fontSize: 9,
-          fontWeight: 700,
-          color: field.call ? '#fbbf24' : theme.colors.success,
-          background: field.call
-            ? 'rgba(251, 191, 36, 0.15)'
-            : `${theme.colors.success}20`,
-          borderRadius: 5,
-          padding: '0.15rem 0.4rem',
-          whiteSpace: 'nowrap',
-        }}>
-          {field.call ? `V1: ${field.call}` : 'New'}
-        </span>
-      </div>
-      <div style={{
-        ...typography.body,
-        fontSize: compact ? 10.5 : 11,
-        color: theme.colors.textSecondary,
-        lineHeight: 1.3,
-      }}>
-        {field.desc}
-      </div>
-    </motion.div>
-  );
-};
 
 const Ch6_S4_OutputSchemaComponent: React.FC = () => {
   const { reduced } = useReducedMotion();

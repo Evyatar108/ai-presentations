@@ -10,6 +10,9 @@ export { ThemeProvider, useTheme } from './theme/ThemeContext';
 export { defaultTheme } from './theme/defaultTheme';
 export type { PresentationTheme, PartialTheme, ThemeColors } from './theme/types';
 
+// Constants
+export { MARKER_TIME_EPSILON, AUTOPLAY_PROBE_DELAY_MS, NO_AUDIO_ADVANCE_DELAY_MS, PLAYBACK_ERROR_ADVANCE_DELAY_MS } from './constants';
+
 // Config
 export { getConfig, setProjectConfig, defaultConfig } from './config';
 export type { FrameworkConfig } from './config';
@@ -85,8 +88,11 @@ export {
   createTypography,
   createOverlayContainer,
   createFixedButton,
-  createModalBackdrop
+  createModalBackdrop,
+  cardStyle,
+  createCard
 } from './slides/SlideStyles';
+export type { CardVariant } from './slides/SlideStyles';
 export {
   fadeIn,
   fadeUp,
@@ -127,6 +133,8 @@ export { buildAudioFileName, buildAudioOutputPath, buildAudioFilePath, resolveAu
 export { loadAlignment, clearAlignmentCache } from './utils/alignmentLoader';
 
 // Hooks
+export { useAudioPlayback } from './hooks/useAudioPlayback';
+export type { UseAudioPlaybackOptions, UseAudioPlaybackResult } from './hooks/useAudioPlayback';
 export { useTtsRegeneration } from './hooks/useTtsRegeneration';
 export { useNotifications } from './hooks/useNotifications';
 export { useRuntimeTimer } from './hooks/useRuntimeTimer';

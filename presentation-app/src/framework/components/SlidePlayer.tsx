@@ -5,6 +5,7 @@ import { useAudioTimeContextOptional } from '../contexts/AudioTimeContext';
 import type { SlideComponentWithMetadata } from '../slides/SlideMetadata';
 import { useTheme } from '../theme/ThemeContext';
 import { SlideErrorBoundary } from './SlideErrorBoundary';
+import { MARKER_TIME_EPSILON } from '../constants';
 
 export interface Slide {
   chapter: number;
@@ -167,7 +168,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
     if (markers.length === 0) return -1;
     let last = -1;
     for (let i = 0; i < markers.length; i++) {
-      if (markers[i].time <= currentTime + 0.02) last = i;
+      if (markers[i].time <= currentTime + MARKER_TIME_EPSILON) last = i;
     }
     return last;
   }, [markers, currentTime]);

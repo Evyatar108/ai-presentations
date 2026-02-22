@@ -10,27 +10,8 @@ import * as crypto from 'crypto';
 import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
 import { stripMarkers } from './utils/marker-parser';
 import { loadTtsCache, type TtsCache } from './utils/tts-cache';
-
-// Narration JSON structure
-interface NarrationData {
-  demoId: string;
-  version: string;
-  lastModified: string;
-  instruct?: string;
-  slides: Array<{
-    chapter: number;
-    slide: number;
-    title: string;
-    instruct?: string;
-    segments: Array<{
-      id: string;
-      narrationText: string;
-      visualDescription?: string;
-      notes?: string;
-      instruct?: string;
-    }>;
-  }>;
-}
+import { getAllDemoIds, loadDemoSlides } from './utils/demo-discovery';
+import { loadNarrationJson, type NarrationData } from './utils/narration-loader';
 
 // ES module __dirname equivalent
 const __filename = fileURLToPath(import.meta.url);
@@ -143,38 +124,6 @@ function checkNarrationChanges(demoId: string): {
   return result;
 }
 
-// Get all demo IDs by scanning the demos directory
-async function getAllDemoIds(): Promise<string[]> {
-  const demosDir = path.join(__dirname, '../src/demos');
-  const entries = fs.readdirSync(demosDir, { withFileTypes: true });
-  
-  return entries
-    .filter((entry: any) => entry.isDirectory() && entry.name !== 'types.ts')
-    .map((entry: any) => entry.name)
-    .filter((name: string) => {
-      // Verify it has an index.ts file
-      const indexPath = path.join(demosDir, name, 'index.ts');
-      return fs.existsSync(indexPath);
-    });
-}
-
-// Load narration JSON for a demo (Node.js version - no fetch API)
-function loadNarrationJson(demoId: string): NarrationData | null {
-  const narrationFile = path.join(__dirname, `../public/narration/${demoId}/narration.json`);
-  
-  if (!fs.existsSync(narrationFile)) {
-    return null;
-  }
-  
-  try {
-    const content = fs.readFileSync(narrationFile, 'utf-8');
-    return JSON.parse(content) as NarrationData;
-  } catch (error: any) {
-    console.warn(`⚠️  Failed to parse narration.json for '${demoId}': ${error.message}`);
-    return null;
-  }
-}
-
 // Merge narration from JSON into slide metadata
 function mergeNarrationIntoSlides(
   slides: SlideComponentWithMetadata[],
@@ -228,25 +177,19 @@ function mergeNarrationIntoSlides(
 }
 
 // Load slides for a specific demo (with narration JSON merging)
-async function loadDemoSlides(demoId: string): Promise<SlideComponentWithMetadata[]> {
-  try {
-    const slidesRegistryPath = `../src/demos/${demoId}/slides/SlidesRegistry.js`;
-    const module = await import(slidesRegistryPath);
-    const slides = module.allSlides || [];
-    
-    // Load and merge narration from JSON if available
-    const narrationData = loadNarrationJson(demoId);
-    
-    if (narrationData) {
-      console.log(`   📝 Loaded narration.json with ${narrationData.slides.length} slides`);
-      return mergeNarrationIntoSlides(slides, narrationData);
-    }
-    
-    return slides;
-  } catch (error: any) {
-    console.warn(`⚠️  Could not load slides for demo '${demoId}': ${error.message}`);
-    return [];
+async function loadDemoSlidesWithNarration(demoId: string): Promise<SlideComponentWithMetadata[]> {
+  const slides = await loadDemoSlides(demoId) as SlideComponentWithMetadata[];
+  if (slides.length === 0) return slides;
+
+  // Load and merge narration from JSON if available
+  const narrationData = loadNarrationJson(demoId);
+
+  if (narrationData) {
+    console.log(`   📝 Loaded narration.json with ${narrationData.slides.length} slides`);
+    return mergeNarrationIntoSlides(slides, narrationData);
   }
+
+  return slides;
 }
 
 const loadCache = loadTtsCache;
@@ -645,7 +588,7 @@ async function checkTTSCache(): Promise<void> {
     console.log(`📁 Checking demo: ${demoId}`);
     console.log('─'.repeat(60));
     
-    const allSlides = await loadDemoSlides(demoId);
+    const allSlides = await loadDemoSlidesWithNarration(demoId);
     
     if (allSlides.length === 0) {
       console.log(`⚠️  No slides found for demo '${demoId}', skipping...\n`);

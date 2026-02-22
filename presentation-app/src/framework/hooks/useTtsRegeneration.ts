@@ -3,7 +3,7 @@
  * Encapsulates regeneration state, status messages, and the ttsClient interaction.
  */
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import type { SlideMetadata } from '../slides/SlideMetadata';
 import { regenerateSegment } from '../utils/ttsClient';
 
@@ -50,6 +50,35 @@ export function useTtsRegeneration({
   const [regeneratingSegment, setRegeneratingSegment] = useState(false);
   const [regenerationStatus, setRegenerationStatus] = useState<RegenerationStatus | null>(null);
 
+  // Track timeouts and audio elements for cleanup on unmount
+  const timersRef = useRef<Set<ReturnType<typeof setTimeout>>>(new Set());
+  const previewAudioRef = useRef<HTMLAudioElement | null>(null);
+
+  // Cleanup on unmount: clear all pending timeouts and stop preview audio
+  useEffect(() => {
+    const timers = timersRef.current;
+    return () => {
+      for (const id of timers) clearTimeout(id);
+      timers.clear();
+      if (previewAudioRef.current) {
+        previewAudioRef.current.pause();
+        previewAudioRef.current.onended = null;
+        previewAudioRef.current.onerror = null;
+        previewAudioRef.current = null;
+      }
+    };
+  }, []);
+
+  /** Schedule a timeout and track it for cleanup */
+  const safeTimeout = useCallback((fn: () => void, ms: number) => {
+    const id = setTimeout(() => {
+      timersRef.current.delete(id);
+      fn();
+    }, ms);
+    timersRef.current.add(id);
+    return id;
+  }, []);
+
   const handleRegenerateSegment = useCallback(async (addPauses: boolean = true) => {
     const segment = currentSlideMetadata?.audioSegments[currentSegmentIndex];
 
@@ -58,7 +87,7 @@ export function useTtsRegeneration({
         type: 'error',
         message: 'No narration text available',
       });
-      setTimeout(() => setRegenerationStatus(null), 5000);
+      safeTimeout(() => setRegenerationStatus(null), 5000);
       return;
     }
 
@@ -112,11 +141,20 @@ export function useTtsRegeneration({
           await postProcess(newAudioPath);
         }
 
+        // Stop any previous preview before playing the new one
+        if (previewAudioRef.current) {
+          previewAudioRef.current.pause();
+          previewAudioRef.current.onended = null;
+          previewAudioRef.current.onerror = null;
+        }
+
         // Play the newly generated audio immediately
         console.log('[SlidePlayer] Playing regenerated audio:', newAudioPath);
         const audio = new Audio(newAudioPath);
+        previewAudioRef.current = audio;
         audio.onended = () => {
           console.log('[SlidePlayer] Regenerated audio playback completed');
+          if (previewAudioRef.current === audio) previewAudioRef.current = null;
         };
         audio.onerror = (e) => {
           console.error('[SlidePlayer] Failed to play regenerated audio:', e);
@@ -124,6 +162,7 @@ export function useTtsRegeneration({
             type: 'error',
             message: 'Audio playback failed',
           });
+          if (previewAudioRef.current === audio) previewAudioRef.current = null;
         };
         audio.play().catch((err) => {
           console.error('[SlidePlayer] Audio play() rejected:', err);
@@ -133,7 +172,7 @@ export function useTtsRegeneration({
         onSegmentRefresh();
 
         // Auto-clear success message after 3s
-        setTimeout(() => setRegenerationStatus(null), 3000);
+        safeTimeout(() => setRegenerationStatus(null), 3000);
       } else {
         console.error('[SlidePlayer] Regeneration failed:', result.error);
 
@@ -143,7 +182,7 @@ export function useTtsRegeneration({
         });
 
         // Clear error after 5s
-        setTimeout(() => setRegenerationStatus(null), 5000);
+        safeTimeout(() => setRegenerationStatus(null), 5000);
       }
     } catch (error: unknown) {
       console.error('[SlidePlayer] Regeneration exception:', error);
@@ -153,11 +192,11 @@ export function useTtsRegeneration({
         message: error instanceof Error ? error.message : 'Network error',
       });
 
-      setTimeout(() => setRegenerationStatus(null), 5000);
+      safeTimeout(() => setRegenerationStatus(null), 5000);
     } finally {
       setRegeneratingSegment(false);
     }
-  }, [demoId, currentSlideMetadata, currentSegmentIndex, onSegmentRefresh, preCheck, postProcess, demoInstruct]);
+  }, [demoId, currentSlideMetadata, currentSegmentIndex, onSegmentRefresh, preCheck, postProcess, demoInstruct, safeTimeout]);
 
   return {
     regeneratingSegment,

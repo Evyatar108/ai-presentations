@@ -170,6 +170,83 @@ export const layouts = {
   })
 };
 
+/**
+ * Card variant type for createCard()
+ */
+export type CardVariant = 'default' | 'primary' | 'error' | 'warning' | 'success';
+
+/**
+ * Card style - configurable container with background, border, and rounded corners.
+ * Replaces 50+ inline card style definitions across demo slides.
+ *
+ * Variants:
+ *   - `default` — theme surface background, subtle border
+ *   - `primary` — teal/blue tinted background, primary border
+ *   - `error`   — red-tinted background, red border
+ *   - `warning` — amber-tinted background, amber border
+ *   - `success` — green-tinted background, success border
+ *
+ * @example
+ * ```tsx
+ * <div style={{ ...cardStyle(), padding: '2rem' }}>Default card</div>
+ * <div style={cardStyle('error')}>Error card</div>
+ * ```
+ */
+export const cardStyle = (variant: CardVariant = 'default'): CSSProperties => {
+  switch (variant) {
+    case 'primary':
+      return {
+        background: 'rgba(0, 183, 195, 0.06)',
+        border: '1px solid rgba(0, 183, 195, 0.3)',
+        borderRadius: 12,
+        padding: '1rem 1.25rem',
+      };
+    case 'error':
+      return {
+        background: 'rgba(239, 68, 68, 0.1)',
+        border: '2px solid rgba(239, 68, 68, 0.4)',
+        borderRadius: 12,
+        padding: '1.25rem',
+      };
+    case 'warning':
+      return {
+        background: 'rgba(251, 191, 36, 0.1)',
+        border: '1px solid rgba(251, 191, 36, 0.3)',
+        borderRadius: 12,
+        padding: '1rem 1.25rem',
+      };
+    case 'success':
+      return {
+        background: 'rgba(16, 185, 129, 0.06)',
+        border: '1px solid rgba(16, 185, 129, 0.4)',
+        borderRadius: 12,
+        padding: '1rem 1.25rem',
+      };
+    default:
+      return {
+        background: '#1e293b',
+        border: '1px solid #334155',
+        borderRadius: 12,
+        padding: '1rem 1.25rem',
+      };
+  }
+};
+
+/**
+ * Theme-aware card factory. Use in framework components that call useTheme().
+ */
+export function createCard(theme: PresentationTheme, variant: CardVariant = 'default'): CSSProperties {
+  const base = cardStyle(variant);
+  if (variant === 'default') {
+    return {
+      ...base,
+      background: theme.colors.bgSurface,
+      border: `1px solid ${theme.colors.bgBorder}`,
+    };
+  }
+  return base;
+}
+
 // ============================================================================
 // Theme-aware factory functions (for framework components using useTheme())
 // ============================================================================

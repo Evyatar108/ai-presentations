@@ -6,7 +6,8 @@ import { getAudioDurationInSeconds } from 'get-audio-duration';
 import { SlideComponentWithMetadata, SlideMetadata } from '@framework/slides/SlideMetadata';
 import { calculatePresentationDuration, PresentationDurationReport } from '@framework/demos/timing/calculator';
 import { TimingConfig } from '@framework/demos/timing/types';
-import { DemoConfig } from '@framework/demos/types';
+import { getArg, hasFlag } from './utils/cli-parser.js';
+import { getAllDemoIds, loadDemoConfig } from './utils/demo-discovery.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -51,50 +52,6 @@ interface EnhancedDemoReport {
     audioOnly: string;
     total: string;
   };
-}
-
-// Get all demo IDs by scanning the demos directory
-async function getAllDemoIds(): Promise<string[]> {
-  const demosDir = path.join(__dirname, '../src/demos');
-  const entries = fs.readdirSync(demosDir, { withFileTypes: true });
-  
-  return entries
-    .filter((entry: any) => entry.isDirectory() && entry.name !== 'types.ts')
-    .map((entry: any) => entry.name)
-    .filter((name: string) => {
-      // Verify it has an index.ts file
-      const indexPath = path.join(demosDir, name, 'index.ts');
-      return fs.existsSync(indexPath);
-    });
-}
-
-/**
- * Load demo configuration including timing settings.
- */
-async function loadDemoConfig(demoId: string): Promise<{ config: DemoConfig | null, slides: SlideComponentWithMetadata[] }> {
-  try {
-    // Load demo config (includes timing configuration)
-    const configPath = `../src/demos/${demoId}/index.js`;
-    const configModule = await import(configPath);
-    const config: DemoConfig = configModule.default || configModule.demoConfig;
-    
-    // Load slides through the config's getSlides method
-    const slides = await config.getSlides();
-    
-    return { config, slides };
-  } catch (error: any) {
-    console.warn(`⚠️  Could not load config for demo '${demoId}': ${error.message}`);
-    
-    // Fallback: try to load slides directly
-    try {
-      const slidesRegistryPath = `../src/demos/${demoId}/slides/SlidesRegistry.js`;
-      const module = await import(slidesRegistryPath);
-      return { config: null, slides: module.allSlides || [] };
-    } catch (fallbackError: any) {
-      console.warn(`⚠️  Could not load slides for demo '${demoId}': ${fallbackError.message}`);
-      return { config: null, slides: [] };
-    }
-  }
 }
 
 /**
@@ -146,7 +103,7 @@ async function calculateDurations(audioDir: string, demoFilter?: string): Promis
   const report: DurationReport = {};
   
   // Get demos to process
-  const allDemoIds = await getAllDemoIds();
+  const allDemoIds = getAllDemoIds();
   const demosToProcess = demoFilter
     ? allDemoIds.filter(id => id === demoFilter)
     : allDemoIds;
@@ -414,33 +371,12 @@ export async function runDurationCalculation(options: {
   }
 }
 
-// Parse CLI arguments
-/**
- * Parse CLI arguments.
- */
-function parseCLIArgs(): { demoFilter?: string; verbose?: boolean } {
-  const args = process.argv.slice(2);
-  const result: { demoFilter?: string; verbose?: boolean } = {};
-
-  // Check for --demo parameter
-  const demoIndex = args.indexOf('--demo');
-  if (demoIndex !== -1 && args[demoIndex + 1]) {
-    result.demoFilter = args[demoIndex + 1];
-  }
-
-  // Check for --verbose parameter
-  result.verbose = args.includes('--verbose') || args.includes('-v');
-
-  return result;
-}
-
 // CLI execution — only when run directly
 if (path.resolve(process.argv[1]) === path.resolve(__filename)) {
-  const cliArgs = parseCLIArgs();
   runDurationCalculation({
     audioDir: path.join(__dirname, '../public/audio'),
-    demoFilter: cliArgs.demoFilter,
+    demoFilter: getArg('demo'),
     reportPath: path.join(__dirname, '../duration-report.json'),
-    verbose: cliArgs.verbose,
+    verbose: hasFlag('verbose'),
   }).catch(console.error);
 }

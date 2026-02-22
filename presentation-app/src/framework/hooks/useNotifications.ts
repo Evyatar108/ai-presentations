@@ -1,5 +1,7 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import type { Notification } from '../components/narrated/NotificationStack';
+
+const MAX_NOTIFICATIONS = 10;
 
 export interface UseNotificationsResult {
   notifications: Notification[];
@@ -13,15 +15,31 @@ export interface UseNotificationsResult {
 export function useNotifications(): UseNotificationsResult {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const idRef = useRef(0);
+  const timersRef = useRef<Set<ReturnType<typeof setTimeout>>>(new Set());
+
+  // Clear all pending timers on unmount
+  useEffect(() => {
+    const timers = timersRef.current;
+    return () => {
+      for (const id of timers) clearTimeout(id);
+      timers.clear();
+    };
+  }, []);
 
   const showNotification = useCallback((type: Notification['type'], message: string, duration = 3000) => {
     const id = ++idRef.current;
-    setNotifications(prev => [...prev, { id, type, message }]);
+    setNotifications(prev => {
+      const next = [...prev, { id, type, message }];
+      // Cap at MAX_NOTIFICATIONS — drop oldest
+      return next.length > MAX_NOTIFICATIONS ? next.slice(-MAX_NOTIFICATIONS) : next;
+    });
 
     if (duration > 0) {
-      setTimeout(() => {
+      const timerId = setTimeout(() => {
+        timersRef.current.delete(timerId);
         setNotifications(prev => prev.filter(n => n.id !== id));
       }, duration);
+      timersRef.current.add(timerId);
     }
   }, []);
 

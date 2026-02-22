@@ -57,7 +57,12 @@ export function useNarrationEditor({
     setShowEditModal(true);
   }, [currentIndex, currentSegmentIndex, allSlides]);
 
-  // After text is saved in the modal, update in-memory segment text
+  // After text is saved in the modal, update in-memory segment text.
+  // NOTE: This intentionally mutates the shared metadata singleton.
+  // Slide metadata objects are module-level globals (loaded once from SlidesRegistry)
+  // and persist across re-renders. Mutation is the correct pattern here — it ensures
+  // subsequent reads (e.g., re-opening the modal) see the updated text without
+  // requiring a full state management system for dev-mode editing.
   const handleTextSaved = useCallback((newText: string) => {
     if (!editingSegment) return;
     if (currentIndex >= allSlides.length) return;
@@ -68,7 +73,8 @@ export function useNarrationEditor({
     }
   }, [editingSegment, currentIndex, allSlides]);
 
-  // After audio is accepted, update the audioFilePath with cache-busting timestamp
+  // After audio is accepted, update the audioFilePath with cache-busting timestamp.
+  // See handleTextSaved for rationale on intentional metadata mutation.
   const handleAcceptAudio = useCallback((filePath: string, timestamp: number) => {
     if (!editingSegment) return;
     if (currentIndex >= allSlides.length) return;

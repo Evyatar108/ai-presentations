@@ -17,6 +17,9 @@ import * as crypto from 'crypto';
 import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
 import { parseMarkers, stripMarkers } from './utils/marker-parser';
 import type { AlignedWord, ResolvedMarker, SegmentAlignment, DemoAlignment } from '../src/framework/alignment/types';
+import { getArg, hasFlag, parseSegmentFilter, buildSegmentKey, chunkArray } from './utils/cli-parser';
+import { loadDemoSlides } from './utils/demo-discovery';
+import { loadNarrationJson, getNarrationText } from './utils/narration-loader';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -30,29 +33,6 @@ export interface AlignConfig {
   segmentFilter?: string[];
   force: boolean;
   batchSize: number;
-}
-
-// Narration JSON structure
-interface NarrationSegment {
-  id: string;
-  narrationText: string;
-  instruct?: string;
-}
-
-interface NarrationSlide {
-  chapter: number;
-  slide: number;
-  title: string;
-  segments: NarrationSegment[];
-  instruct?: string;
-}
-
-interface NarrationData {
-  demoId: string;
-  version: string;
-  lastModified: string;
-  slides: NarrationSlide[];
-  instruct?: string;
 }
 
 interface SegmentToAlign {
@@ -71,62 +51,9 @@ interface SegmentToAlign {
 
 // ── Helpers ────────────────────────────────────────────────────────
 
-function buildSegmentKey(chapter: number, slide: number, segmentId: string): string {
-  return `ch${chapter}:s${slide}:${segmentId}`;
-}
-
-function parseSegmentFilter(raw: string): string[] {
-  return raw.split(',').map(s => s.trim()).filter(Boolean);
-}
-
-async function loadDemoSlides(demoId: string): Promise<SlideComponentWithMetadata[]> {
-  try {
-    const slidesRegistryPath = `../src/demos/${demoId}/slides/SlidesRegistry.js`;
-    const module = await import(slidesRegistryPath);
-    return module.allSlides || [];
-  } catch (error: any) {
-    console.warn(`\u26a0\ufe0f  Could not load slides for demo '${demoId}': ${error.message}`);
-    return [];
-  }
-}
-
-function loadNarrationJson(demoId: string): NarrationData | null {
-  const narrationFile = path.join(__dirname, `../public/narration/${demoId}/narration.json`);
-  if (!fs.existsSync(narrationFile)) return null;
-  try {
-    const content = fs.readFileSync(narrationFile, 'utf-8');
-    const data = JSON.parse(content) as NarrationData;
-    if (!data.demoId || !Array.isArray(data.slides)) return null;
-    return data;
-  } catch {
-    return null;
-  }
-}
-
-function getNarrationText(
-  narrationData: NarrationData | null,
-  chapter: number,
-  slide: number,
-  segmentId: string
-): string | null {
-  if (!narrationData) return null;
-  const slideData = narrationData.slides.find(s => s.chapter === chapter && s.slide === slide);
-  if (!slideData) return null;
-  const segment = slideData.segments.find(seg => seg.id === segmentId);
-  return segment?.narrationText ?? null;
-}
-
 function hashFile(filePath: string): string {
   const content = fs.readFileSync(filePath);
   return crypto.createHash('sha256').update(content).digest('hex');
-}
-
-function chunkArray<T>(array: T[], size: number): T[][] {
-  const chunks: T[][] = [];
-  for (let i = 0; i < array.length; i += size) {
-    chunks.push(array.slice(i, i + size));
-  }
-  return chunks;
 }
 
 export function loadWhisperUrl(): string {
@@ -475,30 +402,19 @@ export async function generateAlignment(config: AlignConfig) {
 
 // ── CLI ────────────────────────────────────────────────────────────
 
-function parseCLIArgs(): { demoFilter?: string; segmentFilter?: string[]; force: boolean } {
-  const args = process.argv.slice(2);
-  const result: { demoFilter?: string; segmentFilter?: string[]; force: boolean } = {
-    force: args.includes('--force'),
-  };
-
-  const demoIndex = args.indexOf('--demo');
-  if (demoIndex !== -1 && args[demoIndex + 1]) {
-    result.demoFilter = args[demoIndex + 1];
-  }
-
-  const segmentsIndex = args.indexOf('--segments');
-  if (segmentsIndex !== -1 && args[segmentsIndex + 1]) {
-    if (!result.demoFilter) {
+const cliArgs = (() => {
+  const demoFilter = getArg('demo');
+  const segmentsRaw = getArg('segments');
+  let segmentFilter: string[] | undefined;
+  if (segmentsRaw) {
+    if (!demoFilter) {
       console.error('\u274c --segments requires --demo to be specified');
       process.exit(1);
     }
-    result.segmentFilter = parseSegmentFilter(args[segmentsIndex + 1]);
+    segmentFilter = parseSegmentFilter(segmentsRaw);
   }
-
-  return result;
-}
-
-const cliArgs = parseCLIArgs();
+  return { demoFilter, segmentFilter, force: hasFlag('force') };
+})();
 
 if (!cliArgs.demoFilter) {
   console.error('\u274c --demo is required');
