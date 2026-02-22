@@ -234,7 +234,7 @@
         },
         {
           "id": "context_window",
-          "narrationText": "The V1 code then greedily packs these candidates into Call 2's prompt until it fills the entire 128K context window. This is why highlights extractives alone could consume more tokens than all other calls combined.",
+          "narrationText": "The V1 code then greedily packs these candidates into Call 2's prompt until it fills the entire 128K context window. This is why highlights extractives alone could consume more tokens than all other calls combined. And it's not just a cost problem — there's a direct negative correlation between context window utilization and output quality. The more tokens the model has to attend to, the less accurate its outputs become.",
           "visualDescription": "",
           "notes": ""
         }
@@ -378,7 +378,7 @@
       "segments": [
         {
           "id": "title",
-          "narrationText": "The second innovation: replacing prose instructions with a pseudocode algorithm. GPT-4o is a model built for programmers — it's trained heavily on code. So we leaned into that strength and wrote the prompt as executable pseudocode rather than natural language.",
+          "narrationText": "The second innovation: replacing prose instructions with a pseudocode algorithm. GPT-4o is a model built for programmers — it's trained heavily on code. So I leaned into that strength and wrote the prompt as executable pseudocode rather than natural language.",
           "visualDescription": "",
           "notes": ""
         },
@@ -459,13 +459,13 @@
         },
         {
           "id": "copy",
-          "narrationText": "Step one: copy raw strings verbatim from the input — the turn opening tag, the pipe-delimited row. This is deliberately easy. The model just echoes what it sees. And now those exact strings sit at the bottom of the output, right where the model looks when generating its next tokens.",
+          "narrationText": "Step one: copy raw strings verbatim from the input — {#turn-tag}the turn opening tag, {#pipe-row}the pipe-delimited row. This is deliberately easy. The model just echoes what it sees. And now those exact strings sit at the bottom of the output, right where the model looks when generating its next tokens.",
           "visualDescription": "",
           "notes": ""
         },
         {
           "id": "parse",
-          "narrationText": "Step two: parse structured values from those copies. Speaker name from the turn tag, turn ID by stripping the t prefix, utterance ID by stripping the u. Because the raw strings are right there in context — just tokens back — the model is far more likely to parse correctly than if it had to retrieve values from the original input thousands of tokens above.",
+          "narrationText": "Step two: parse structured values from those copies. {#speaker}Speaker name from the turn tag, {#turn-id}turn ID by stripping the t prefix, {#utt-id}utterance ID by stripping the u. Because the raw strings are right there in context — just tokens back — the model is far more likely to parse correctly than if it had to retrieve values from the original input thousands of tokens above.",
           "visualDescription": "",
           "notes": ""
         }
@@ -484,7 +484,7 @@
         },
         {
           "id": "grid",
-          "narrationText": "Ten checks covering structural correctness — topic boundaries, ID uniqueness, extractive constraints, narrative alignment, and more. Each one is both an instruction to the model and a runtime gate. Any failure triggers an automatic retry.",
+          "narrationText": "Ten checks covering structural correctness — {#topic-checks}topic boundaries, {#id-checks}ID uniqueness, {#extractive-checks}extractive constraints, {#narrative-checks}narrative alignment, and more. Each one is both an instruction to the model and a runtime gate. Any failure triggers an automatic retry.",
           "visualDescription": "",
           "notes": ""
         }
@@ -497,19 +497,19 @@
       "segments": [
         {
           "id": "title",
-          "narrationText": "With the prompt built, we needed a way to validate that changes actually improved output quality. The biggest challenge was getting the model to output correct turn and utterance combinations.",
+          "narrationText": "With the prompt built, I needed a way to validate that changes actually improved output quality. The biggest challenge was getting the model to output correct turn and utterance combinations.",
           "visualDescription": "",
           "notes": ""
         },
         {
           "id": "checks",
-          "narrationText": "We added two automated verifications. First, {#range-check}output range validation — every turn and utterance combination in the output must actually exist in the input transcript. Second, a {#threshold-check}max utterance threshold check — the beginning utterance of an extractive clip must not exceed the max end utterance ID from the transcript table. These checks caught errors that would otherwise produce invalid video edits.",
+          "narrationText": "I added two automated verifications. First, {#range-check}output range validation — every turn and utterance combination in the output must actually exist in the input transcript. Second, a {#threshold-check}max utterance threshold check — the beginning utterance of an extractive clip must not exceed the max end utterance ID from the transcript table. These checks caught errors that would otherwise produce invalid video edits.",
           "visualDescription": "",
           "notes": ""
         },
         {
           "id": "challenge",
-          "narrationText": "Getting the model to output correct turn-utterance combinations was by far the hardest challenge. We tracked error statistics — the rate of invalid combinations — as our primary stability metric across prompt iterations. This is where copy then parse, which we covered earlier, proved essential. By forcing the model to first copy the raw turn tag and pipe-delimited row, then parse the IDs from those copies, the error rate dropped dramatically.",
+          "narrationText": "Getting the model to output correct turn-utterance combinations was by far the hardest challenge. I tracked error statistics — the rate of invalid combinations — as my primary stability metric across prompt iterations. This is where copy then parse, which I covered earlier, proved essential. By forcing the model to first copy the raw turn tag and pipe-delimited row, then parse the IDs from those copies, the error rate dropped dramatically.",
           "visualDescription": "",
           "notes": ""
         }
@@ -522,19 +522,19 @@
       "segments": [
         {
           "id": "title",
-          "narrationText": "To iterate quickly, we built a local evaluation tool that ran the full flow on downloaded transcripts and recordings — no cloud deployment needed.",
+          "narrationText": "To iterate quickly, I built a local evaluation tool that ran the full flow on downloaded transcripts and recordings — no cloud deployment needed.",
           "visualDescription": "",
           "notes": ""
         },
         {
           "id": "pipeline",
-          "narrationText": "The tool takes a {#input}transcript and recording as input, runs the prompt {#runner}locally, and produces two outputs. A {#json-output}highlights JSON file for automated validation — checking structural correctness and turn-utterance accuracy. And a {#video-output}highlights video for subjective quality review — letting us see and hear exactly what the model selected.",
+          "narrationText": "The tool takes a {#input}transcript and recording as input, runs the prompt {#runner}locally, and produces two outputs. A {#json-output}highlights JSON file for automated validation — checking structural correctness and turn-utterance accuracy. And a {#video-output}highlights video for subjective quality review — letting me see and hear exactly what the model selected.",
           "visualDescription": "",
           "notes": ""
         },
         {
           "id": "metrics",
-          "narrationText": "The real power of the local tool was the iteration speed. We could change a line in the prompt, run it across test transcripts, and within minutes see both the automated validation results and the generated video. That tight feedback loop meant we could test dozens of prompt revisions in a single day — something that would have been impossible with a cloud deployment cycle. Each change got an immediate, dual-signal verdict: did the structural checks pass, and did the video actually look right?",
+          "narrationText": "The real power of the local tool was the iteration speed. I could change a line in the prompt, run it across test transcripts, and within minutes see both the automated validation results and the generated video. That tight feedback loop meant I could test dozens of prompt revisions in a single day — something that would have been impossible with a cloud deployment cycle. Each change got an immediate, dual-signal verdict: did the structural checks pass, and did the video actually look right?",
           "visualDescription": "",
           "notes": ""
         }
