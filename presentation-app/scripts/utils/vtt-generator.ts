@@ -1,9 +1,11 @@
 /**
  * VTT Subtitle Generator
  *
- * Generates WebVTT subtitle files with per-word timestamps (karaoke-style)
- * from segment timing events captured during OBS recording + WhisperX
- * word-level alignment data.
+ * Generates WebVTT subtitle files with per-word timestamps from segment timing
+ * events captured during OBS recording + WhisperX word-level alignment data.
+ *
+ * Outputs a `-words.json` intermediate file with all word timestamps in video
+ * time, so VTT can be regenerated without re-recording.
  *
  * Used by record-obs.ts after recording completes.
  */
@@ -12,8 +14,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import { stripMarkers } from './marker-parser';
-import type { DemoAlignment, AlignedWord } from '../../src/framework/alignment/types';
+import type { DemoAlignment } from '../../src/framework/alignment/types';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -28,28 +29,73 @@ export interface SegmentEvent {
   videoTime: number; // seconds since recording started
 }
 
-// Narration JSON structure (same as generate-alignment.ts)
-interface NarrationSegment {
-  id: string;
-  narrationText: string;
+/** A word with video-absolute timestamps (ready for VTT generation). */
+export interface VideoWord {
+  word: string;      // display form (corrected spelling for subtitles)
+  ttsWord?: string;  // TTS form (only present when different from display)
+  start: number;     // video time (seconds)
+  end: number;       // video time (seconds)
 }
 
-interface NarrationSlide {
+/**
+ * Load per-demo subtitle corrections from public/audio/{demoId}/subtitle-corrections.json.
+ * The file maps TTS pronunciation spellings (lowercase keys) to correct display forms.
+ *
+ * Example file:
+ * {
+ *   "kwen": "Qwen",
+ *   "evyatar": "Evyatar",
+ *   "l-l-m": "LLM"
+ * }
+ */
+function loadSubtitleCorrections(demoId: string): Record<string, string> {
+  const filePath = path.join(__dirname, `../../public/audio/${demoId}/subtitle-corrections.json`);
+  if (!fs.existsSync(filePath)) return {};
+  try {
+    return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+  } catch {
+    return {};
+  }
+}
+
+/**
+ * Correct a TTS word for subtitle display using a corrections map.
+ * Preserves trailing punctuation from the original.
+ */
+function correctWord(ttsWord: string, corrections: Record<string, string>): { display: string; corrected: boolean } {
+  if (Object.keys(corrections).length === 0) return { display: ttsWord, corrected: false };
+  // Separate trailing punctuation
+  const match = ttsWord.match(/^(.+?)([.!?,;:\u2014]*)$/);
+  if (!match) return { display: ttsWord, corrected: false };
+  const [, core, punct] = match;
+  const correction = corrections[core.toLowerCase()];
+  if (correction) {
+    return { display: correction + punct, corrected: true };
+  }
+  return { display: ttsWord, corrected: false };
+}
+
+/** A segment with words mapped to video time. */
+export interface VideoSegment {
   chapter: number;
   slide: number;
-  segments: NarrationSegment[];
+  segmentIndex: number;
+  segmentId: string;
+  videoTime: number;
+  words: VideoWord[];
 }
 
-interface NarrationData {
+/** The intermediate words file — everything needed to regenerate VTT. */
+export interface VideoWordsData {
   demoId: string;
-  slides: NarrationSlide[];
+  recordedAt: string;
+  segments: VideoSegment[];
 }
 
 interface VttCue {
   start: number;
   end: number;
-  text: string; // plain text (for fallback)
-  wordTimestamps?: { time: number; word: string }[];
+  words: VideoWord[];
 }
 
 // ── Helpers ────────────────────────────────────────────────────────
@@ -71,192 +117,177 @@ function loadAlignmentData(demoId: string): DemoAlignment | null {
   }
 }
 
-function loadNarrationJson(demoId: string): NarrationData | null {
-  const narrationFile = path.join(__dirname, `../../public/narration/${demoId}/narration.json`);
-  if (!fs.existsSync(narrationFile)) return null;
-  try {
-    const data = JSON.parse(fs.readFileSync(narrationFile, 'utf-8'));
-    if (!data.demoId || !Array.isArray(data.slides)) return null;
-    return data;
-  } catch {
-    return null;
-  }
-}
-
-async function loadDemoSlides(demoId: string) {
-  try {
-    const slidesRegistryPath = `../../src/demos/${demoId}/slides/SlidesRegistry.js`;
-    const module = await import(slidesRegistryPath);
-    return module.allSlides || [];
-  } catch {
-    return [];
-  }
-}
+// ── Words data generation ──────────────────────────────────────────
 
 /**
- * Get narration text for a segment, checking external narration JSON first,
- * then falling back to inline slide data.
+ * Build the intermediate words data from segment events + alignment.
+ * Each word gets video-absolute start/end timestamps.
  */
-function getNarrationTextForSegment(
-  narrationData: NarrationData | null,
-  slides: any[],
-  chapter: number,
-  slide: number,
-  segmentId: string,
-): string | null {
-  // Try external narration JSON first
-  if (narrationData) {
-    const slideData = narrationData.slides.find(
-      (s) => s.chapter === chapter && s.slide === slide,
-    );
-    if (slideData) {
-      const segment = slideData.segments.find((seg) => seg.id === segmentId);
-      if (segment?.narrationText) return segment.narrationText;
-    }
+export function buildVideoWordsData(
+  demoId: string,
+  segmentEvents: SegmentEvent[],
+): VideoWordsData {
+  const alignment = loadAlignmentData(demoId);
+  if (!alignment) {
+    console.warn(`  No alignment.json found for "${demoId}". Run: npm run tts:align -- --demo ${demoId}`);
   }
 
-  // Fall back to inline slides
-  for (const s of slides) {
-    if (s.metadata?.chapter === chapter && s.metadata?.slide === slide) {
-      const seg = s.metadata.audioSegments?.find(
-        (seg: any) => seg.id === segmentId,
-      );
-      if (seg?.narrationText) return seg.narrationText;
-    }
+  const corrections = loadSubtitleCorrections(demoId);
+  const correctionCount = Object.keys(corrections).length;
+  if (correctionCount > 0) {
+    console.log(`  Loaded ${correctionCount} subtitle corrections`);
   }
 
-  return null;
+  const segments: VideoSegment[] = [];
+  let alignedCount = 0;
+  let missingCount = 0;
+
+  for (const event of segmentEvents) {
+    const coordKey = `c${event.chapter}_s${event.slide}`;
+    const segAlignment = alignment?.slides[coordKey]
+      ?.segments.find(s => s.segmentId === event.segmentId);
+
+    const words: VideoWord[] = [];
+    if (segAlignment && segAlignment.words.length > 0) {
+      for (const w of segAlignment.words) {
+        const { display, corrected } = correctWord(w.word, corrections);
+        const vw: VideoWord = {
+          word: display,
+          start: event.videoTime + w.start,
+          end: event.videoTime + w.end,
+        };
+        if (corrected) vw.ttsWord = w.word;
+        words.push(vw);
+      }
+      alignedCount++;
+    } else {
+      missingCount++;
+    }
+
+    segments.push({
+      chapter: event.chapter,
+      slide: event.slide,
+      segmentIndex: event.segmentIndex,
+      segmentId: event.segmentId,
+      videoTime: event.videoTime,
+      words,
+    });
+  }
+
+  if (missingCount > 0) {
+    console.warn(`  ${missingCount} of ${segmentEvents.length} segments have no alignment data`);
+  }
+  console.log(`  ${alignedCount} segments with word-level timestamps`);
+
+  return {
+    demoId,
+    recordedAt: new Date().toISOString(),
+    segments,
+  };
 }
 
 // ── Cue grouping ───────────────────────────────────────────────────
 
 const SENTENCE_END_RE = /[.!?]$/;
-const MAX_CUE_DURATION = 7; // seconds
+const CLAUSE_BREAK_RE = /[,;:\u2014]$/;
+const MAX_CUE_WORDS = 12;
+const MAX_CUE_DURATION = 5; // seconds
 
 /**
- * Group words into sentence-based cues, splitting at sentence-ending
- * punctuation and enforcing a max duration cap.
+ * Group words into cues, splitting at sentence/clause boundaries
+ * and enforcing max word count and duration caps.
  */
-function groupWordsIntoCues(
-  words: AlignedWord[],
-  videoTimeOffset: number,
-): VttCue[] {
+function groupWordsIntoCues(words: VideoWord[]): VttCue[] {
   if (words.length === 0) return [];
 
   const cues: VttCue[] = [];
-  let currentWords: { time: number; word: string }[] = [];
-  let cueStart = videoTimeOffset + words[0].start;
+  let current: VideoWord[] = [];
+  let cueStart = words[0].start;
 
   for (let i = 0; i < words.length; i++) {
     const w = words[i];
-    const wordVideoTime = videoTimeOffset + w.start;
-    currentWords.push({ time: wordVideoTime, word: w.word });
+    current.push(w);
 
     const isSentenceEnd = SENTENCE_END_RE.test(w.word);
-    const cueDuration = videoTimeOffset + w.end - cueStart;
+    const isClauseBreak = CLAUSE_BREAK_RE.test(w.word);
+    const duration = w.end - cueStart;
     const isLast = i === words.length - 1;
+    const tooMany = current.length >= MAX_CUE_WORDS;
 
-    if (isSentenceEnd || cueDuration >= MAX_CUE_DURATION || isLast) {
-      cues.push({
-        start: cueStart,
-        end: videoTimeOffset + w.end,
-        text: currentWords.map((cw) => cw.word).join(' '),
-        wordTimestamps: currentWords,
-      });
-      currentWords = [];
+    if (isSentenceEnd || isLast || duration >= MAX_CUE_DURATION || (tooMany && isClauseBreak)) {
+      cues.push({ start: cueStart, end: w.end, words: current });
+      current = [];
       if (i < words.length - 1) {
-        cueStart = videoTimeOffset + words[i + 1].start;
+        cueStart = words[i + 1].start;
       }
     }
   }
 
-  return cues;
-}
-
-// ── Main ───────────────────────────────────────────────────────────
-
-/**
- * Generate a WebVTT subtitle file from segment timing events and alignment data.
- *
- * Each word gets a per-word timestamp tag for karaoke-style highlighting:
- * ```
- * 00:00:03.120 --> 00:00:07.500
- * <00:00:03.120>Hello, <00:00:03.543>I'm <00:00:04.220>narrating.
- * ```
- */
-export async function generateVtt(
-  demoId: string,
-  segmentEvents: SegmentEvent[],
-): Promise<string> {
-  const alignment = loadAlignmentData(demoId);
-  const narrationData = loadNarrationJson(demoId);
-  const slides = await loadDemoSlides(demoId);
-
-  const cues: VttCue[] = [];
-
-  for (let i = 0; i < segmentEvents.length; i++) {
-    const event = segmentEvents[i];
-    const coordKey = `c${event.chapter}_s${event.slide}`;
-
-    // Try to find word-level alignment for this segment
-    const slideAlignment = alignment?.slides[coordKey];
-    const segAlignment = slideAlignment?.segments.find(
-      (s) => s.segmentId === event.segmentId,
-    );
-
-    if (segAlignment && segAlignment.words.length > 0) {
-      // Word-level cues from alignment data
-      const segmentCues = groupWordsIntoCues(
-        segAlignment.words,
-        event.videoTime,
-      );
-      cues.push(...segmentCues);
+  // Force-split any oversized cues that had no clause breaks
+  const result: VttCue[] = [];
+  for (const cue of cues) {
+    if (cue.words.length > MAX_CUE_WORDS) {
+      for (let i = 0; i < cue.words.length; i += MAX_CUE_WORDS) {
+        const chunk = cue.words.slice(i, i + MAX_CUE_WORDS);
+        result.push({
+          start: chunk[0].start,
+          end: chunk[chunk.length - 1].end,
+          words: chunk,
+        });
+      }
     } else {
-      // Fallback: single cue from narration text
-      const rawText = getNarrationTextForSegment(
-        narrationData,
-        slides,
-        event.chapter,
-        event.slide,
-        event.segmentId,
-      );
-      if (!rawText) continue;
-
-      const text = stripMarkers(rawText);
-      if (!text) continue;
-
-      // Estimate end time from next segment start or add a default duration
-      const nextEvent = segmentEvents[i + 1];
-      const estimatedEnd = nextEvent
-        ? nextEvent.videoTime - 0.1
-        : event.videoTime + 5;
-
-      cues.push({
-        start: event.videoTime,
-        end: estimatedEnd,
-        text,
-      });
+      result.push(cue);
     }
   }
 
-  // Build VTT output
+  return result;
+}
+
+// ── VTT generation ─────────────────────────────────────────────────
+
+/**
+ * Generate VTT content from a VideoWordsData structure.
+ * Can be called with freshly built data or loaded from a `-words.json` file.
+ */
+export function generateVttFromWordsData(data: VideoWordsData): string {
+  const allCues: VttCue[] = [];
+
+  for (const segment of data.segments) {
+    if (segment.words.length === 0) continue;
+    allCues.push(...groupWordsIntoCues(segment.words));
+  }
+
   const lines: string[] = ['WEBVTT', ''];
 
-  for (const cue of cues) {
+  for (const cue of allCues) {
     lines.push(`${formatVttTime(cue.start)} --> ${formatVttTime(cue.end)}`);
-
-    if (cue.wordTimestamps && cue.wordTimestamps.length > 0) {
-      // Per-word timestamp tags for karaoke highlighting
-      const wordLine = cue.wordTimestamps
-        .map((wt) => `<${formatVttTime(wt.time)}>${wt.word}`)
-        .join(' ');
-      lines.push(wordLine);
-    } else {
-      lines.push(cue.text);
-    }
-
+    const wordLine = cue.words
+      .map(w => `<${formatVttTime(w.start)}>${w.word}`)
+      .join(' ');
+    lines.push(wordLine);
     lines.push('');
   }
 
   return lines.join('\n');
+}
+
+/**
+ * Build words data from segment events + alignment, then generate VTT.
+ * Returns both the words data (for saving) and the VTT content.
+ */
+export function generateVtt(
+  demoId: string,
+  segmentEvents: SegmentEvent[],
+): { wordsData: VideoWordsData; vttContent: string } {
+  const wordsData = buildVideoWordsData(demoId, segmentEvents);
+  const vttContent = generateVttFromWordsData(wordsData);
+  return { wordsData, vttContent };
+}
+
+/**
+ * Load a `-words.json` file and regenerate VTT from it.
+ */
+export function regenerateVttFromFile(wordsFilePath: string): string {
+  const data: VideoWordsData = JSON.parse(fs.readFileSync(wordsFilePath, 'utf-8'));
+  return generateVttFromWordsData(data);
 }

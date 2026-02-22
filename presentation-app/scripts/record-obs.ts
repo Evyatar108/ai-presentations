@@ -15,7 +15,7 @@ import http from 'http';
 import path from 'path';
 import fs from 'fs';
 import { pathToFileURL } from 'url';
-import { generateVtt, SegmentEvent } from './utils/vtt-generator';
+import { generateVtt, type SegmentEvent } from './utils/vtt-generator';
 
 // ---------------------------------------------------------------------------
 // CLI argument parsing
@@ -335,24 +335,24 @@ async function main() {
       console.log(`  Saved: ${outputPath}`);
     }
 
-    // 10. Generate VTT subtitles from segment timing events
+    // 10. Generate VTT subtitles + words data from segment timing events
     if (signal.segmentEvents.length > 0) {
       try {
-        const vttContent = await generateVtt(demoId, signal.segmentEvents);
-        // Place VTT next to the final video file (or fallback to cwd)
+        const { wordsData, vttContent } = generateVtt(demoId, signal.segmentEvents);
         const videoFile = finalVideoPath ?? '';
-        const vttPath = videoFile
-          ? videoFile.replace(/\.[^.]+$/, '.vtt')
-          : path.join(process.cwd(), `${demoId}.vtt`);
-        fs.writeFileSync(vttPath, vttContent, 'utf-8');
-        console.log(`  Subtitles: ${vttPath} (${signal.segmentEvents.length} segments)`);
+        const basePath = videoFile
+          ? videoFile.replace(/\.[^.]+$/, '')
+          : path.join(process.cwd(), demoId);
 
-        // Also write segment timing JSON for debugging
-        const timingPath = videoFile
-          ? videoFile.replace(/\.[^.]+$/, '-timing.json')
-          : path.join(process.cwd(), `${demoId}-timing.json`);
-        fs.writeFileSync(timingPath, JSON.stringify(signal.segmentEvents, null, 2), 'utf-8');
-        console.log(`  Timing:    ${timingPath}`);
+        // Write words data (reusable intermediate for VTT regeneration)
+        const wordsPath = `${basePath}-words.json`;
+        fs.writeFileSync(wordsPath, JSON.stringify(wordsData, null, 2), 'utf-8');
+        console.log(`  Words:     ${wordsPath}`);
+
+        // Write VTT subtitle file
+        const vttPath = `${basePath}.vtt`;
+        fs.writeFileSync(vttPath, vttContent, 'utf-8');
+        console.log(`  Subtitles: ${vttPath}`);
       } catch (err: any) {
         console.warn(`  VTT generation failed: ${err.message ?? err}`);
       }

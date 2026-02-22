@@ -70,7 +70,7 @@ npm run record:obs -- --demo highlights-deep-dive --password mypass --dev-port 5
 8. Waits for the app to send a completion signal to `http://localhost:PORT/complete` (safety timeout: 1.5x estimated duration)
 9. Stops recording after a 2-second buffer for the final slide
 10. Renames the output file to `{demo-id}.{ext}` (retries if file is still locked by OBS)
-11. Generates a `.vtt` subtitle file and `-timing.json` from segment events received during playback
+11. Generates a `-words.json` (word timestamps in video time) and `.vtt` subtitle file from segment events + alignment data
 
 ### Subtitles (VTT)
 
@@ -81,11 +81,26 @@ The recording script automatically generates a WebVTT subtitle file (`.vtt`) alo
 
 **Prerequisites:**
 - Run `npm run tts:align -- --demo <demo-id>` before recording to generate word-level alignment data
-- Without alignment data, subtitles fall back to one cue per segment (no per-word timestamps)
 
 **Output files:**
-- `{demo-id}.vtt` — WebVTT subtitle file (next to the video)
-- `{demo-id}-timing.json` — Raw segment timing data for debugging
+- `{demo-id}.vtt` — WebVTT subtitle file with per-word timestamps (next to the video)
+- `{demo-id}-words.json` — Word-level timing data in video time; can be used to regenerate VTT without re-recording
+
+**Subtitle corrections:** TTS narration uses phonetic spellings for better pronunciation (e.g., "Kwen" for "Qwen", "EvYatar" for "Evyatar"). To display correct spellings in subtitles, create a `subtitle-corrections.json` in the demo's audio directory:
+
+```
+public/audio/{demo-id}/subtitle-corrections.json
+```
+
+```json
+{
+  "kwen": "Qwen",
+  "evyatar": "Evyatar",
+  "l-l-m": "LLM"
+}
+```
+
+Keys are lowercase TTS forms; values are the correct display forms. Both forms are stored in the `-words.json` output (`word` for display, `ttsWord` when different).
 
 **Using subtitles:**
 - **VLC**: Open video, then Subtitle > Add Subtitle File > select the `.vtt`
