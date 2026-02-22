@@ -51,3 +51,12 @@ __pycache__/
 *.so
 *.egg
 *.egg-info/
+
+# Windows artifacts
+nul
+
+# Claude Code local settings
+.claude/settings.local.json
+
+# TTS verification reports
+presentation-app/verification-report-*.json

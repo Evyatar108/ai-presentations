@@ -1,25 +1,23 @@
 {
   "demoId": "highlights-deep-dive",
   "version": "1.0",
-  "lastModified": "2026-02-20T10:00:00.000Z",
-  "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
+  "lastModified": "2026-02-22T04:54:47.549Z",
   "slides": [
     {
       "chapter": 0,
       "slide": 1,
       "title": "Title",
-      "instruct": "Speak with calm authority and a hint of intrigue, like opening a keynote.",
       "segments": [
         {
           "id": "intro",
-          "narrationText": "Hello, I'm Kwen tee-tee-ess, and I'll be narrating this presentation for Evyah-tar.",
-          "visualDescription": "Title slide: 'From 4 Calls to 1: Redesigning the Meeting Highlights Prompt'",
+          "narrationText": "Hello, I'm Kwen TTS, and I'll be narrating this presentation for EvYatar.",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "main",
           "narrationText": "We'll cover how the Meeting Highlights prompt was redesigned — from a four-call GPT-4 pipeline down to a single unified prompt — cutting GPU costs by roughly seventy percent.",
-          "visualDescription": "Title slide: 'From 4 Calls to 1: Redesigning the Meeting Highlights Prompt'",
+          "visualDescription": "",
           "notes": ""
         }
       ]
@@ -32,19 +30,19 @@
         {
           "id": "title",
           "narrationText": "Let's start with what Meeting Highlights actually produces.",
-          "visualDescription": "Title: 'Meeting Highlights: AI Video Recaps'",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "pipeline",
           "narrationText": "It's a four-stage pipeline. {#dim-pipeline}A meeting {#transcript}transcript goes into an {#llm}LLM, which produces {#tts}structured metadata — timestamps, topic boundaries, and narration text. That metadata is used to generate TTS audio for the narration. Then the highlights video is {#streaming}streamed on demand by seeking into the original recording at those timestamps. There's no video rendering step — the model produces editing instructions, and playback happens live.",
-          "visualDescription": "Four-box pipeline diagram: Transcript → LLM → Metadata + TTS → On-Demand Streaming",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "types",
           "narrationText": "The LLM produces two types of content. {#abstractive-card}Abstractive narration — AI-written topic summaries spoken over muted meeting video. And {#extractive-card}extractive clips — the actual best moments from the meeting, with original audio and video preserved.",
-          "visualDescription": "Two cards: Abstractive Narration and Extractive Clips",
+          "visualDescription": "",
           "notes": ""
         }
       ]
@@ -53,25 +51,23 @@
       "chapter": 1,
       "slide": 2,
       "title": "COGS Problem",
-      "instruct": "Speak with urgency and concern, emphasizing the severity of the cost problem.",
       "segments": [
         {
           "id": "metrics",
           "narrationText": "Here's the problem I faced. The V1 implementation used four sequential LLM calls per meeting. At projected GA scale, that would require roughly six hundred A100 GPUs — far exceeding approved quotas. This made Meeting Highlights a capacity blocker, preventing the GA rollout.",
-          "visualDescription": "Three metric tiles: 4 LLM Calls, ~600 GPUs, Capacity Blocker",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "quote",
           "narrationText": "As my engineering manager put it — I needed a fundamentally different strategy. This wasn't a problem we could solve by adding more hardware.",
-          "visualDescription": "Blockquote card with Eli Lekhtser quote",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "emphasis",
-          "instruct": "Speak with firm conviction, slower pace, emphasizing every word.",
           "narrationText": "The cost was inherent in the prompt architecture itself. The fix had to come from prompt engineering.",
-          "visualDescription": "Red emphasis box: 'The fix had to come from prompt engineering'",
+          "visualDescription": "",
           "notes": ""
         }
       ]
@@ -84,31 +80,31 @@
         {
           "id": "title",
           "narrationText": "Let's walk through the V1 architecture — the four-call pipeline.",
-          "visualDescription": "Title: 'The Four-Call Pipeline'",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "call1",
           "narrationText": "Call one: abstractive generation. This identifies the key meeting topics and writes narration summaries for each one.",
-          "visualDescription": "First pipeline box appears: highlights abstractives",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "call2",
           "narrationText": "Call two: extractive selection. This selects the best verbatim clips from a pre-enumerated set of candidate ranges. I'll come back to how those candidates are generated — it's the critical cost driver.",
-          "visualDescription": "Second pipeline box appears: highlights extractives",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "call3",
           "narrationText": "Call three: extractive ranking. This ranks the selected clips by quality — interest level, clarity, and self-containment.",
-          "visualDescription": "Third pipeline box appears: highlights extractive ranking",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "call4",
           "narrationText": "Call four: final assembly. This merges everything into a unified narrative, interleaving abstractive summaries with extractive clips in coherent order.",
-          "visualDescription": "Fourth pipeline box appears: highlights_final",
+          "visualDescription": "",
           "notes": ""
         }
       ]
@@ -121,32 +117,31 @@
         {
           "id": "title",
           "narrationText": "When I analyzed the V1 pipeline, I identified four structural cost drivers.",
-          "visualDescription": "Title: 'Four Structural Cost Drivers'",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "driver1",
           "narrationText": "Driver one: four sequential calls means four times the compute cost — each consuming its own GPU allocation.",
-          "visualDescription": "Card 1: 4 sequential calls = 4x compute cost",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "driver2",
           "narrationText": "Driver two: the transcript is sent as verbose JSON with keys like Index, Speaker, Start, End, and Utterance repeated for every single utterance — often five hundred or more times per meeting.",
-          "visualDescription": "Card 2: Verbose JSON input",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "driver3",
           "narrationText": "Driver three: fragile markdown parsing between calls. One malformed table breaks the whole chain.",
-          "visualDescription": "Card 3: Fragile markdown table parsing between calls",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "driver4",
-          "instruct": "Speak with dramatic emphasis, pausing before revealing the biggest driver.",
           "narrationText": "And driver four — the biggest one. A combinatorial candidate explosion that generates O of n-squared candidate ranges. This was the single largest cost driver, and the one that required the most creative solution.",
-          "visualDescription": "Card 4 highlighted in red: Combinatorial candidate explosion O(n²)",
+          "visualDescription": "",
           "notes": ""
         }
       ]
@@ -159,13 +154,13 @@
         {
           "id": "comparison",
           "narrationText": "This is how Call 1 — highlights abstractives — sees the meeting transcript. {#json-side}Each utterance wrapped in a five-key JSON object. {#counter-side}Five hundred utterances means twenty-five hundred wasted key tokens before any actual content.",
-          "visualDescription": "BeforeAfterSplit — Left: V1 verbose JSON. Right: token counter",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "caption",
           "narrationText": "A cost lever we'll address in V2.",
-          "visualDescription": "Caption: 'Thousands of tokens spent on structural noise'",
+          "visualDescription": "",
           "notes": ""
         }
       ]
@@ -178,19 +173,19 @@
         {
           "id": "title",
           "narrationText": "Now for the biggest cost driver: the combinatorial candidate explosion. This code runs between Call 1 and Call 2, generating the candidate rows that become input to Call 2 — highlights extractives.",
-          "visualDescription": "Title: 'Combinatorial Candidate Explosion'",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "code",
           "narrationText": "Look at the two highlighted for-loops. For each topic, the {#outer-loop}outer loop iterates over every start utterance, the {#inner-loop}inner loop over every end after that start.",
-          "visualDescription": "CodeBlock with nested for-loops highlighted in amber",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "annotation",
           "narrationText": "O of n-squared candidates per topic — each with the full duplicated text. This is where the token budget explodes.",
-          "visualDescription": "Annotations: O(n) starts × O(n) ends = O(n²) candidates, full text duplicated",
+          "visualDescription": "",
           "notes": ""
         }
       ]
@@ -203,19 +198,19 @@
         {
           "id": "title",
           "narrationText": "What does that nested loop actually produce? These candidate rows become the input to Call 2 — highlights extractives. Let's look at a concrete example with five utterances.",
-          "visualDescription": "Title: 'Candidate Rows'",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "rows",
           "narrationText": "Each candidate is a contiguous range of utterances — start to end — with the full text of every utterance in that range. Notice how the ranges overlap. Utterances one and two appear in almost every candidate, their text duplicated each time.",
-          "visualDescription": "Six candidate rows animate in showing overlapping utterance ranges as colored bars",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "waste",
           "narrationText": "Utterance two alone appears in five of the six candidates. That's the same text sent to the model five times. Now multiply that across thirty utterances per topic and five topics per meeting.",
-          "visualDescription": "Duplication callout: u2 appears in 5 of 6 candidates",
+          "visualDescription": "",
           "notes": ""
         }
       ]
@@ -224,24 +219,23 @@
       "chapter": 4,
       "slide": 3,
       "title": "O(n^2) Visualized",
-      "instruct": "Speak with building intensity, like revealing the scale of a problem.",
       "segments": [
         {
           "id": "grid",
           "narrationText": "Each lit cell is one candidate range. Watch how quickly they multiply.",
-          "visualDescription": "CandidateGrid: animated upper-triangle grid lighting up progressively",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "math",
           "narrationText": "In this example, {#ten-utterances}ten utterances across three topics produce {#candidates}one hundred thirty-five candidates. But each candidate is several utterances long — so the actual number of {#copies}duplicated utterance copies is over six hundred. And this is a small example.",
-          "visualDescription": "Example math: 10 utterances × 3 topics → 135 candidates, ~5 utterances each → ~630 duplicated copies",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "context_window",
           "narrationText": "The V1 code then greedily packs these candidates into Call 2's prompt until it fills the entire 128K context window. This is why highlights extractives alone could consume more tokens than all other calls combined.",
-          "visualDescription": "Animated bar filling to 128K tokens",
+          "visualDescription": "",
           "notes": ""
         }
       ]
@@ -254,25 +248,25 @@
         {
           "id": "input_example",
           "narrationText": "Before we look at the output, let's see what Call 2 actually receives as input. It's a markdown table — each row is one candidate range with the full text of every utterance in that range. Notice how the same phrases repeat across rows — 'Velocity is up twelve percent' appears in four of the six candidates. Now scale this to thirty utterances per topic and five topics — that's over two thousand rows of heavily duplicated text, greedily packed until the 128K context window is full.",
-          "visualDescription": "CodeBlock showing a markdown table with utterance_range and uttrances_texts columns, 6 candidate rows with visible text duplication, followed by a comment about 128K packing",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "input_output",
           "narrationText": "So we've seen that Call 2 receives over two thousand candidate rows as input. But what does it actually output? A filtered subset of those same rows. The model echoes back the utterance ranges it wants to keep, along with a selection reason and self-assessment flags. The key insight is that every range in the output was already pre-computed and validated in the input — the model can only select from what it was given.",
-          "visualDescription": "Horizontal flow: [2000+ Candidate Rows] → Call 2 → [table excerpt with utterance_range and selection_reason columns]. Left amber, right green.",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "rationale",
           "narrationText": "This is deliberate. By precomputing every valid candidate range programmatically, V1 constrains the model's output space. The model can only pick from ranges that are guaranteed to be valid — correct utterance boundaries, within duration thresholds, within a single topic. If the model output arbitrary start and end utterances, it could reference non-existent IDs or cross topic boundaries — producing invalid video editing instructions and a broken highlights video.",
-          "visualDescription": "Two stacked cards: WITH PRECOMPUTATION (green, valid path) vs WITHOUT PRECOMPUTATION (red, broken path).",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "tradeoff",
           "narrationText": "So V1 made a deliberate trade-off: accept the O of n-squared input cost in exchange for guaranteed output safety. Every candidate the model could select was pre-validated. But as we've seen, this fills the entire 128K context window. Next, we'll see how V2 achieves the same output safety at linear cost — using a single column called max end utterance ID.",
-          "visualDescription": "Balance panel: Output Safety (green, checkmark) vs O(n²) Input Cost (red). Below: V2 callout with max end utterance ID.",
+          "visualDescription": "",
           "notes": ""
         }
       ]
@@ -285,19 +279,19 @@
         {
           "id": "title",
           "narrationText": "Now let's look at the V2 solution, starting with the first innovation: the compact transcript table.",
-          "visualDescription": "Title: 'V2 Innovation: Compact Transcript Table'",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "split",
           "narrationText": "On the left, {#v1-format}V1's verbose JSON — five keys per utterance. On the right, {#v2-format}V2's compact turn-grouped table — speaker name appears once, utterances are pipe-delimited.",
-          "visualDescription": "BeforeAfterSplit — V1 JSON vs V2 compact table",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "table",
           "narrationText": "Speaker info appears once per turn — in the turn tag. Timestamps are omitted entirely. And the third column, max end utterance ID, encodes topic boundaries directly in the data.",
-          "visualDescription": "Comparison table: what changed across 5 aspects",
+          "visualDescription": "",
           "notes": ""
         }
       ]
@@ -305,24 +299,24 @@
     {
       "chapter": 5,
       "slide": 2,
-      "title": "max end utterance ID",
+      "title": "max_end_utterance_id",
       "segments": [
         {
           "id": "row",
           "narrationText": "This is the key insight. Remember, V1 precomputed all candidate combinations so the model could only output safe indices. V2 replaces that entire approach. Look at this single row: u2, the utterance text, and u4 as the max end utterance ID. That third column tells the model: if you start a clip at u2, the furthest you can extend it is u4. The model outputs the range directly — and the boundary constraint guarantees it's valid. This single column replaces the entire O of n-squared candidate enumeration.",
-          "visualDescription": "Highlighted row with annotated arrows pointing to each column",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "visual",
           "narrationText": "V1 fans out hundreds of candidate rows from each start. V2 encodes the same constraint as a single row with a ceiling boundary.",
-          "visualDescription": "Split visual — V1 many rows fanning out vs V2 single row with boundary",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "comparison",
           "narrationText": "The result: from filling the 128K context window to roughly five to ten thousand tokens. Quadratic to linear.",
-          "visualDescription": "Comparison table: Representation, Token budget, Complexity — V1 vs V2",
+          "visualDescription": "",
           "notes": ""
         }
       ]
@@ -335,19 +329,19 @@
         {
           "id": "title",
           "narrationText": "Before we move on to the prompt itself, let's look at the turn and utterance model that the compact format is built on.",
-          "visualDescription": "Title: 'Turns and Utterances'",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "concept",
           "narrationText": "In V1, every utterance repeats the speaker name — Alice, Alice, Alice, Bob, Bob. In V2, we group consecutive utterances by the same speaker into a turn. The speaker name appears once on the turn tag — t5 Alice — and all utterances inside restart their IDs from u0. This eliminates redundant speaker tokens and makes the structure self-describing: one turn equals one speaker's consecutive utterances.",
-          "visualDescription": "Before/after split — V1 flat list with repeated speakers vs V2 turn-grouped format",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "constraint",
           "narrationText": "This grouping also enforces a critical rule: extractive clips must be contained within a single turn — meaning a single speaker. You can select u0 through u2 within turn t5, but you cannot cross from t5 into t6. The local utterance IDs make this constraint easy for the model to verify — if start and end share the same turn tag, the clip is valid.",
-          "visualDescription": "Valid vs invalid extractive range cards — same turn vs cross-turn",
+          "visualDescription": "",
           "notes": ""
         }
       ]
@@ -360,19 +354,19 @@
         {
           "id": "title",
           "narrationText": "Before we zoom into specific techniques, here's the full V2 prompt at a glance. Everything that took four separate prompts in V1 lives in a single document with six sections.",
-          "visualDescription": "Title: 'V2 Prompt: Six Sections at a Glance'",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "sections",
           "narrationText": "{#dim-sections}Section one: {#s1}critical rules — the copy then parse pattern and core constraints like topic non-overlap. Section two: {#s2}the algorithm — pseudocode defining the entire pipeline. Section three: {#s3}content priorities — what makes a good topic, speaker references, style rules. Section four: {#s4}transition sentences — how to bridge from narration to raw audio. Section five: {#s5}compressed safety rules. And section six: {#s6}self-checks — boolean validators the model runs on its own output.",
-          "visualDescription": "Six section cards in a 3x2 grid, each with number, name, and one-line description",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "insight",
           "narrationText": "Notice the structure. Rules and constraints up front, then a precise algorithm, then guidelines for quality and safety, and finally self-validation. Each section has a clear job — and the model processes them all in a single pass.",
-          "visualDescription": "Callout box highlighting the logical progression of sections",
+          "visualDescription": "",
           "notes": ""
         }
       ]
@@ -385,19 +379,19 @@
         {
           "id": "title",
           "narrationText": "The second innovation: replacing prose instructions with a pseudocode algorithm. GPT-4o is a model built for programmers — it's trained heavily on code. So we leaned into that strength and wrote the prompt as executable pseudocode rather than natural language.",
-          "visualDescription": "Title + quote: 'Prose = creative interpretation. Pseudocode = systematic execution.'",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "code",
           "narrationText": "Here's the main function from the V2 prompt. It reads like executable code — {#parse}parse turn markers, {#skip}skip intro and closing, {#segment}segment into topics, {#narrate}write narration, {#enumerate}enumerate extractive candidates, {#filter}filter, {#rank}rank, and {#build}build the final narrative.",
-          "visualDescription": "Large CodeBlock showing generate_highlights() pseudocode",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "outputs",
           "narrationText": "All six output fields in a single response: {#pill-topics}topics, {#pill-order}order, {#pill-ranges}ranges, {#pill-ranking}ranking, {#pill-narrative}narrative, and {#pill-checks}self-checks.",
-          "visualDescription": "Six output fields listed with checkmarks",
+          "visualDescription": "",
           "notes": ""
         }
       ]
@@ -410,13 +404,13 @@
         {
           "id": "comparison",
           "narrationText": "On the left, {#prose-side}V1's prose — vague guidance about coverage and distinctness. On the right, {#pseudo-side}V2's pseudocode — explicit function calls with constraints and named variables.",
-          "visualDescription": "BeforeAfterSplit — V1 prose paragraph vs V2 pseudocode function calls",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "benefits",
           "narrationText": "Four benefits. {#benefit-exec}Unambiguous execution order. {#benefit-vars}Named variables as shared state. It {#benefit-strengths}plays to GPT-4o's strengths as a code-trained model. And a {#benefit-single}single source of truth — one prompt, not four.",
-          "visualDescription": "Four benefit cards with checkmarks",
+          "visualDescription": "",
           "notes": ""
         }
       ]
@@ -429,25 +423,25 @@
         {
           "id": "skeleton",
           "narrationText": "This is a single V2 response — six top-level fields in one JSON object. But they serve two very different purposes. {#dim-all}The first four fields — {#abstractive}abstractive topics, {#topic-order}topic order, {#extractive}extractive ranges, and {#ranking}ranking — are structured chain-of-thought. They guide the model through segmentation, selection, and ranking. Only the fifth field, {#final-narrative}final narrative, is the actual deliverable — the video editing instructions consumed by the product. And {#self-checks}self checks adds runtime validation.",
-          "visualDescription": "Grouped grid: Row 1 = 4 CoT cards (amber accent), Row 2 = final narrative (teal, prominent) + self checks (green)",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "deliverable_zoom",
           "narrationText": "Let's zoom into what final narrative actually contains. Each row has a topic with narration text for TTS voiceover, and {#playback}playback start — the turn and utterance coordinates that tell the video player where to seek. Plus an optional {#extractive-obj}extractive object defining clip boundaries. These coordinates are what the product uses to assemble the highlights video. Everything else in the schema — all five other fields — is reasoning scaffolding that helped the model produce this.",
-          "visualDescription": "JSON code block showing final narrative[0] with highlighted playback start and extractive fields, plus legend and callout",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "extractive_zoom",
           "narrationText": "Now contrast that with extractive ranges — pure chain-of-thought. Look at the field names — they're instructions. {#copy-tag}'Selected turn opening tag raw copy from input' forces the model to copy the exact turn tag. Then {#parse-tag}'speaker name' and 'turn id' are parsed from that copy. Same pattern below: first {#copy-row}copy the raw pipe-delimited row, then {#parse-ids}parse the utterance IDs. The schema guides the model through copy then parse — which we'll see in detail next.",
-          "visualDescription": "JSON code block showing extractive ranges[0] with amber-highlighted copy fields and legend",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "insight",
           "narrationText": "So here's the key takeaway. The output schema isn't just a data format — it's a chain-of-thought scaffold and a prompt engineering tool. Five fields guide the model's reasoning, one field captures the deliverable. {#pill-names}Field names become execution steps, {#pill-structure}nested structure enforces constraints, and {#pill-validation}self-checks close the validation loop. When you design an LLM's output schema, you're designing the reasoning path.",
-          "visualDescription": "Callout card with teal accent + three pills: 'Field names = instructions', 'Structure = constraints', 'Chain-of-thought → deliverable'",
+          "visualDescription": "",
           "notes": ""
         }
       ]
@@ -460,19 +454,19 @@
         {
           "id": "title",
           "narrationText": "The third innovation: copy then parse. The idea is to break the model's work into two subtasks — a simple one that almost always succeeds, followed by a harder one that benefits from having the first result in context.",
-          "visualDescription": "Title: 'Copy-then-Parse: Chain-of-Thought Grounding'",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "copy",
           "narrationText": "Step one: copy raw strings verbatim from the input — the turn opening tag, the pipe-delimited row. This is deliberately easy. The model just echoes what it sees. And now those exact strings sit at the bottom of the output, right where the model looks when generating its next tokens.",
-          "visualDescription": "CodeBlock Step 1: model copies raw strings from input",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "parse",
           "narrationText": "Step two: parse structured values from those copies. Speaker name from the turn tag, turn ID by stripping the t prefix, utterance ID by stripping the u. Because the raw strings are right there in context — just tokens back — the model is far more likely to parse correctly than if it had to retrieve values from the original input thousands of tokens above.",
-          "visualDescription": "CodeBlock Step 2: model parses from copies with arrows showing derivation",
+          "visualDescription": "",
           "notes": ""
         }
       ]
@@ -485,13 +479,13 @@
         {
           "id": "title",
           "narrationText": "The V2 prompt includes a self-checks section — ten boolean validators the model runs against its own output. But they're not just for catching errors. By spelling out what 'correct' looks like inside the prompt itself, the checks reinforce the target format — the model is more likely to produce conforming output in the first place. In production, they double as telemetry, showing you which constraints fail most often.",
-          "visualDescription": "Title: 'Self-Checks: Model Validates Its Own Output'",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "grid",
           "narrationText": "Ten checks covering structural correctness — topic boundaries, ID uniqueness, extractive constraints, narrative alignment, and more. Each one is both an instruction to the model and a runtime gate. Any failure triggers an automatic retry.",
-          "visualDescription": "Grid of 10 boolean check cards with cascade animation",
+          "visualDescription": "",
           "notes": ""
         }
       ]
@@ -504,19 +498,19 @@
         {
           "id": "title",
           "narrationText": "With the prompt built, we needed a way to validate that changes actually improved output quality. The biggest challenge was getting the model to output correct turn and utterance combinations.",
-          "visualDescription": "Title: 'Validating Turn-Utterance Output'",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "checks",
           "narrationText": "We added two automated verifications. First, {#range-check}output range validation — every turn and utterance combination in the output must actually exist in the input transcript. Second, a {#threshold-check}max utterance threshold check — the beginning utterance of an extractive clip must not exceed the max end utterance ID from the transcript table. These checks caught errors that would otherwise produce invalid video edits.",
-          "visualDescription": "Two verification cards: range validation + threshold check",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "challenge",
           "narrationText": "Getting the model to output correct turn-utterance combinations was by far the hardest challenge. We tracked error statistics — the rate of invalid combinations — as our primary stability metric across prompt iterations. This is where copy then parse, which we covered earlier, proved essential. By forcing the model to first copy the raw turn tag and pipe-delimited row, then parse the IDs from those copies, the error rate dropped dramatically.",
-          "visualDescription": "Emphasis callout linking back to copy then parse technique",
+          "visualDescription": "",
           "notes": ""
         }
       ]
@@ -529,19 +523,19 @@
         {
           "id": "title",
           "narrationText": "To iterate quickly, we built a local evaluation tool that ran the full flow on downloaded transcripts and recordings — no cloud deployment needed.",
-          "visualDescription": "Title: 'Local Evaluation Tool'",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "pipeline",
           "narrationText": "The tool takes a {#input}transcript and recording as input, runs the prompt {#runner}locally, and produces two outputs. A {#json-output}highlights JSON file for automated validation — checking structural correctness and turn-utterance accuracy. And a {#video-output}highlights video for subjective quality review — letting us see and hear exactly what the model selected.",
-          "visualDescription": "Pipeline diagram: Transcript + Recording → Local Runner → JSON + Video, with two output cards",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "metrics",
           "narrationText": "The real power of the local tool was the iteration speed. We could change a line in the prompt, run it across test transcripts, and within minutes see both the automated validation results and the generated video. That tight feedback loop meant we could test dozens of prompt revisions in a single day — something that would have been impossible with a cloud deployment cycle. Each change got an immediate, dual-signal verdict: did the structural checks pass, and did the video actually look right?",
-          "visualDescription": "Rapid iteration feedback loop callout",
+          "visualDescription": "",
           "notes": ""
         }
       ]
@@ -550,31 +544,29 @@
       "chapter": 9,
       "slide": 1,
       "title": "Results Metrics",
-      "instruct": "Speak with energy and pride, celebrating the achievement.",
       "segments": [
         {
           "id": "title",
           "narrationText": "So what were the results?",
-          "visualDescription": "Title: 'Results' with gradient text",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "calls",
           "narrationText": "Seventy-five percent call reduction — four down to one.",
-          "visualDescription": "Metric card: 75% LLM Call Reduction (4 → 1)",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "tokens",
           "narrationText": "Sixty percent token reduction from the compact format and unified prompt.",
-          "visualDescription": "Metric card: 60% Token Reduction",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "gpus",
-          "instruct": "Speak with triumph, this is the headline number.",
           "narrationText": "And roughly seventy percent GPU reduction — six hundred A100s down to about one hundred eighty. The capacity blocker was gone.",
-          "visualDescription": "Metric card: ~70% GPU Reduction (~600 → ~180 A100s)",
+          "visualDescription": "",
           "notes": ""
         }
       ]
@@ -587,20 +579,19 @@
         {
           "id": "quality",
           "narrationText": "Quality held strong. {#grounding}No grounding regression. {#coverage}Seventy-five to eighty percent coverage. And in blind A-B tests, {#reviewers}reviewers preferred V2.",
-          "visualDescription": "Three quality tiles: Grounding, Coverage, Reviewers",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "roadmap",
           "narrationText": "This {#cost-step}cost reduction directly unblocked the product roadmap. The feature entered {#preview-step}private preview and is now on track for {#ga-step}GA rollout.",
-          "visualDescription": "Roadmap arrow: Cost Reduction → Private Preview → GA Rollout",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "quote",
-          "instruct": "Speak as if quoting someone admiringly, slightly slower and more measured.",
           "narrationText": "In the words of our engineering manager: V2 is a compact prompt with only one LLM request that combines abstractive and extractive highlights generation into a single unified pipeline.",
-          "visualDescription": "Eli Lekhtser quote card",
+          "visualDescription": "",
           "notes": ""
         }
       ]
@@ -609,48 +600,47 @@
       "chapter": 10,
       "slide": 1,
       "title": "Six Lessons",
-      "instruct": "Speak in a thoughtful, advisory tone, like sharing hard-won wisdom.",
       "segments": [
         {
           "id": "title",
           "narrationText": "Let me close with six lessons you can apply to your next LLM pipeline.",
-          "visualDescription": "Title: 'Six Lessons for Your Next LLM Pipeline'",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "lesson1",
           "narrationText": "Lesson one: challenge the multi-call assumption. Multiple steps don't require multiple calls.",
-          "visualDescription": "Card 1: Challenge the multi-call assumption",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "lesson2",
           "narrationText": "Lesson two: input format is a cost lever. The compact table cut tokens before we changed a single instruction.",
-          "visualDescription": "Card 2: Input format is a cost lever",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "lesson3",
           "narrationText": "Lesson three: play to your model's strengths. GPT-4o is trained heavily on code, so pseudocode was a natural fit — it gave the model unambiguous, executable instructions. With a different model, the best format might be different.",
-          "visualDescription": "Card 3: Pseudocode beats prose",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "lesson4",
           "narrationText": "Lesson four: force the model to ground itself. Copy first, parse second — it creates a verifiable chain.",
-          "visualDescription": "Card 4: Force the model to ground itself",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "lesson5",
           "narrationText": "And lesson five: self-checks are both a safety net and a diagnostic signal. They catch failures at generation time and show you which constraints break most in production.",
-          "visualDescription": "Card 5: Self-checks enable automation",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "lesson6",
           "narrationText": "And lesson six: build a local evaluation loop. Run your prompt on real data, measure error rates quantitatively, and review output quality visually. This dual signal — automated validation plus human review — tells you whether each prompt change is actually working.",
-          "visualDescription": "Card 6: Build a local evaluation loop",
+          "visualDescription": "",
           "notes": ""
         }
       ]
@@ -659,18 +649,17 @@
       "chapter": 10,
       "slide": 2,
       "title": "Closing",
-      "instruct": "Speak warmly and inspirationally.",
       "segments": [
         {
           "id": "thankyou",
           "narrationText": "Thank you for your time.",
-          "visualDescription": "Large 'Thank You' with gradient animation",
+          "visualDescription": "",
           "notes": ""
         },
         {
           "id": "cta",
           "narrationText": "Try these techniques in your own pipelines. Prompt engineering scales — and the ROI can be measured in hundreds of GPUs.",
-          "visualDescription": "CTA badge: 'Try the techniques — prompt engineering scales'",
+          "visualDescription": "",
           "notes": ""
         }
       ]
