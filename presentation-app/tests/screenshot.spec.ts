@@ -15,7 +15,7 @@
  * Assumes the Vite dev server is already running on localhost:5173.
  */
 import { test, type Page } from '@playwright/test';
-import { existsSync, mkdirSync, rmSync } from 'fs';
+import { existsSync, mkdirSync, rmSync, readFileSync } from 'fs';
 import { join } from 'path';
 
 // ---------------------------------------------------------------------------
@@ -40,6 +40,49 @@ function getSlideRange(): { start: number; end: number } | null {
 
 const DEMO_ID = getDemoId();
 const SLIDE_RANGE = getSlideRange();
+
+// Parse --markers filter
+function getMarkerFilter(): 'all' | string[] | null {
+  const raw = process.env.MARKER_FILTER;
+  if (!raw) return null;
+  if (raw === 'all') return 'all';
+  return raw.split(',').map(s => s.trim()).filter(Boolean);
+}
+const MARKER_FILTER = getMarkerFilter();
+
+// Load alignment.json for marker screenshots
+interface ResolvedMarker { id: string; time: number; anchor: string; wordIndex: number; }
+interface SegmentAlignment { segmentId: string; markers: ResolvedMarker[]; }
+interface SlideAlignment { chapter: number; slide: number; segments: SegmentAlignment[]; }
+interface DemoAlignmentFile { demoId: string; slides: Record<string, SlideAlignment>; }
+
+let alignmentData: DemoAlignmentFile | null = null;
+if (MARKER_FILTER) {
+  const alignmentPath = join(process.cwd(), 'public', 'audio', DEMO_ID, 'alignment.json');
+  if (existsSync(alignmentPath)) {
+    alignmentData = JSON.parse(readFileSync(alignmentPath, 'utf-8'));
+  } else {
+    console.warn(`[markers] alignment.json not found at ${alignmentPath} — marker screenshots will be skipped`);
+  }
+}
+
+/** Get markers for a segment that match the filter. */
+function getMarkersForSegment(
+  alignment: DemoAlignmentFile | null,
+  chapter: number,
+  slide: number,
+  segmentId: string,
+  filter: 'all' | string[] | null
+): ResolvedMarker[] {
+  if (!alignment || !filter) return [];
+  const coordKey = `c${chapter}_s${slide}`;
+  const slideData = alignment.slides[coordKey];
+  if (!slideData) return [];
+  const segData = slideData.segments.find(s => s.segmentId === segmentId);
+  if (!segData) return [];
+  if (filter === 'all') return segData.markers;
+  return segData.markers.filter(m => filter.includes(m.id));
+}
 
 // ---------------------------------------------------------------------------
 // CSS to hide UI chrome for clean screenshots.
@@ -182,6 +225,17 @@ test(`screenshot: ${DEMO_ID}`, async ({ page }) => {
         await takeCleanScreenshot(page, join(outDir, filename));
         screenshotCount++;
         console.log(`  [${info.current}/${info.total}] ${filename}  "${title}"`);
+
+        // Marker screenshots for this segment
+        const segMarkers = getMarkersForSegment(alignmentData, info.chapter, info.slide, segId, MARKER_FILTER);
+        for (const marker of segMarkers) {
+          await page.evaluate((t: number) => (window as any).__seekToTime?.(t), marker.time);
+          await waitForAnimations(page, 500);
+          const markerFilename = `${slideLabel}_seg${pad(s)}_${segId}_marker_${marker.id}.png`;
+          await takeCleanScreenshot(page, join(outDir, markerFilename));
+          screenshotCount++;
+          console.log(`  [${info.current}/${info.total}] ${markerFilename}  "${title}" (marker: ${marker.id})`);
+        }
       }
     } else {
       const filename = `${slideLabel}_seg00_default.png`;
@@ -190,12 +244,12 @@ test(`screenshot: ${DEMO_ID}`, async ({ page }) => {
       console.log(`  [${info.current}/${info.total}] ${filename}  "${title}"`);
     }
 
-    // Advance to next slide
+    // Advance to next slide — use goToSlide() instead of ArrowRight to avoid
+    // the capture-phase marker navigation handler intercepting the keypress.
     if (info.current >= info.total) {
       done = true;
     } else {
-      await page.keyboard.press('ArrowRight');
-      await waitForAnimations(page, 1000);
+      await goToSlide(page, info.current + 1);
     }
   }
 

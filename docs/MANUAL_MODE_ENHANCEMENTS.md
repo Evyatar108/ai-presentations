@@ -549,6 +549,63 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
 
 ---
 
+## Feature 3: Marker Navigation
+
+### Overview
+
+Inline markers (`{#id}`) within a segment are now navigable in manual mode via keyboard and a clickable marker dots UI. This completes the navigation hierarchy: **markers → segments → slides**.
+
+### Unified Arrow-Key Navigation
+
+ArrowRight/ArrowLeft step through markers within a segment before advancing to the next segment/slide:
+
+1. If the current segment has markers and there are more markers ahead → jump to next marker
+2. If at the last marker (or no markers) → advance to the next segment (or slide)
+3. Similarly for ArrowLeft in reverse
+
+This is implemented via a **capture-phase** keyboard listener in `NarratedController` that fires before `SlidePlayer`'s bubble-phase listener. When a marker is found, the event is stopped; otherwise, it propagates to `SlidePlayer` for normal navigation.
+
+### Marker Dots UI
+
+A navigation row appears above the segment dots when markers are present (order top-to-bottom: markers → segments → slides):
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│       ◀  Markers: ◆ ◆ ◆ ◆ ◆  ▶                            │
+│    ◀  Segment: ● ● ● ● ●  ▶  2/5                          │
+│  ← Slide: ● ● ●●● ● ● ● ● ● ● ● ● ●●● ● →  5 / 14     │
+└─────────────────────────────────────────────────────────────┘
+```
+
+- `◀`/`▶` arrow buttons to step through markers (matching slide and segment rows)
+- Diamond-shaped dots (6x6, rotated 45deg)
+- Click any dot to seek to that marker's timestamp
+- Current marker highlighted with primary color, passed markers semi-transparent, future markers muted
+- All three rows use a three-column flex layout so dots are vertically aligned on the same center axis
+- `data-testid="marker-nav"` for Playwright targeting
+- Regenerate TTS button lives in the top ProgressBar (not the bottom nav)
+
+### Interaction with Auto-Advance
+
+Marker navigation is independent of the auto-advance checkbox. Toggling auto-advance no longer restarts audio mid-playback (fixed via `autoAdvanceRef`).
+
+### Muted Mode Support
+
+Marker dots and keyboard navigation work even with audio muted. A separate effect initializes alignment data for the current segment when `!audioEnabled`, ensuring markers are available without audio playback.
+
+### AudioTimeContext Seek API
+
+Two new methods on `AudioTimeContext`:
+
+- `seekToTime(t: number)` — seeks to a time within the segment (updates UI + audio)
+- `registerSeekHandler(fn)` — `NarratedController` registers its audio-seeking callback
+
+### Playwright Integration
+
+`window.__seekToTime(t)` is exposed in dev mode for Playwright tests. The `test:screenshot` command supports `--markers all|id1,id2,...` to capture visual state at marker positions.
+
+---
+
 ## Future Enhancements
 
 1. **Import Narration** - Load exported JSON to restore edits

@@ -226,3 +226,48 @@ Markers are transparent to the TTS cache. Both the narration cache (`narration-c
 | `npm run tts:align -- --demo {id}` | Generate alignment + resolve markers |
 | `npm run tts:align -- --demo {id} --force` | Regenerate alignment (ignore cache) |
 | `npm run tts:align -- --demo {id} --segments ch1:s2:explain` | Align specific segments only |
+
+## Navigating Markers in Manual Mode
+
+In **manual mode**, markers are navigable via keyboard and a clickable marker dots UI. This makes it possible to preview marker-driven animations without listening to the audio.
+
+### Arrow key navigation
+
+Arrow keys step through markers within a segment before advancing to the next segment/slide:
+
+1. **ArrowRight** — jumps to the next marker in the current segment. If at the last marker (or no markers), advances to the next segment/slide as usual.
+2. **ArrowLeft** — jumps to the previous marker. If before the first marker, goes back to the previous segment/slide.
+
+This works in both audio-enabled and muted manual modes.
+
+### Marker dots UI
+
+When a segment has resolved markers, a navigation row appears above the segment dots (order top-to-bottom: markers → segments → slides):
+
+- `◀`/`▶` arrow buttons to step through markers
+- Diamond-shaped dots (one per marker), labeled "Markers:"
+- **Click** any dot to seek to that marker's timestamp
+- Current marker is highlighted with the primary theme color; passed markers are semi-transparent; future markers are muted
+- Hover/aria-labels show the marker ID
+
+### AudioTimeContext seek API
+
+`AudioTimeContext` exposes `seekToTime(t)` for programmatic navigation:
+
+```tsx
+const audioTimeCtx = useAudioTimeContext();
+audioTimeCtx.seekToTime(markerTime); // updates UI + audio position
+```
+
+The `registerSeekHandler(fn)` method lets `NarratedController` connect its `<audio>` element to the seek API.
+
+### Screenshot captures at marker positions
+
+Use `--markers` with `test:screenshot` to capture the visual state at marker positions:
+
+```bash
+npm run test:screenshot -- --demo my-demo --markers all
+npm run test:screenshot -- --demo my-demo --markers pipeline,stage1
+```
+
+Screenshots are named `c{ch}_s{slide}_seg{idx}_{segId}_marker_{markerId}.png`.

@@ -30,6 +30,11 @@ export interface AudioTimeContextValue {
   initializeSegmentAlignment(markers: ResolvedMarker[], words: AlignedWord[]): void;
   /** Called on segment/slide change to reset time */
   reset(): void;
+
+  /** Seek to a specific time within the current segment (updates UI + audio) */
+  seekToTime(t: number): void;
+  /** NarratedController registers its audio-seeking callback; returns unsubscribe */
+  registerSeekHandler(fn: (t: number) => void): () => void;
 }
 
 const AudioTimeContext = createContext<AudioTimeContextValue | null>(null);
@@ -74,6 +79,21 @@ export const AudioTimeProvider: React.FC<AudioTimeProviderProps> = ({ children }
     setWords([]);
   }, []);
 
+  // Seek support: NarratedController registers a handler that seeks the <audio> element
+  const seekHandlerRef = useRef<((t: number) => void) | null>(null);
+
+  const seekToTime = useCallback((t: number) => {
+    setCurrentTimeState(t);
+    seekHandlerRef.current?.(t);
+  }, []);
+
+  const registerSeekHandler = useCallback((fn: (t: number) => void) => {
+    seekHandlerRef.current = fn;
+    return () => {
+      if (seekHandlerRef.current === fn) seekHandlerRef.current = null;
+    };
+  }, []);
+
   const value: AudioTimeContextValue = {
     currentTime,
     duration,
@@ -84,6 +104,8 @@ export const AudioTimeProvider: React.FC<AudioTimeProviderProps> = ({ children }
     setDuration,
     initializeSegmentAlignment,
     reset,
+    seekToTime,
+    registerSeekHandler,
   };
 
   return (

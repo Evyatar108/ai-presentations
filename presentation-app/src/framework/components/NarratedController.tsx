@@ -17,6 +17,7 @@ import { useNotifications } from '../hooks/useNotifications';
 import { useRuntimeTimer } from '../hooks/useRuntimeTimer';
 import { useApiHealth } from '../hooks/useApiHealth';
 import { useNarrationEditor } from '../hooks/useNarrationEditor';
+import { useTtsRegeneration } from '../hooks/useTtsRegeneration';
 import { useTheme } from '../theme/ThemeContext';
 
 // Fallback audio file for missing segments
@@ -91,6 +92,11 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const currentIndexRef = useRef(currentIndex);
 
+  // Ref so the manual-mode audio effect can read the latest value without
+  // re-running (which would stop and replay the audio from scratch).
+  const autoAdvanceRef = useRef(autoAdvanceOnAudioEnd);
+  useEffect(() => { autoAdvanceRef.current = autoAdvanceOnAudioEnd; }, [autoAdvanceOnAudioEnd]);
+
   // Segment context for multi-segment slides
   const segmentContext = useSegmentContext();
 
@@ -119,10 +125,113 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     loadAudioWithFallback,
   });
 
+  // TTS regeneration (for top bar button)
+  const currentSlideMetadata = currentIndex < allSlides.length ? allSlides[currentIndex].metadata : undefined;
+  const { regeneratingSegment, handleRegenerateSegment } = useTtsRegeneration({
+    demoId: demoMetadata.id,
+    currentSlideMetadata,
+    currentSegmentIndex: segmentContext.currentSegmentIndex,
+    onSegmentRefresh: () => segmentContext.setCurrentSegment(segmentContext.currentSegmentIndex),
+  });
+
   // Keep ref in sync with state
   useEffect(() => {
     currentIndexRef.current = currentIndex;
   }, [currentIndex]);
+
+  // Register audio seek handler so AudioTimeContext.seekToTime() can control the <audio> element
+  useEffect(() => {
+    if (!audioTimeCtx) return;
+    return audioTimeCtx.registerSeekHandler((time: number) => {
+      if (audioRef.current) {
+        audioRef.current.currentTime = time;
+        // When paused/ended, rAF polling isn't updating — push the time manually
+        if (audioRef.current.paused || audioRef.current.ended) {
+          audioTimeCtx.setCurrentTime(time);
+        }
+      }
+    });
+  }, [audioTimeCtx]);
+
+  // Expose __seekToTime on window for Playwright tests (dev only)
+  useEffect(() => {
+    if (!import.meta.env.DEV || !audioTimeCtx) return;
+    (window as any).__seekToTime = (time: number) => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = time;
+      }
+      audioTimeCtx.setCurrentTime(time);
+    };
+    return () => { delete (window as any).__seekToTime; };
+  }, [audioTimeCtx]);
+
+  // Capture-phase keyboard handler for marker navigation in manual mode.
+  // Fires before SlidePlayer's bubble-phase listener so markers are stepped
+  // through first; if no more markers in that direction, the event propagates
+  // to SlidePlayer for segment/slide navigation.
+  useEffect(() => {
+    if (!isManualMode || !audioTimeCtx) return;
+
+    // Use refs to avoid stale closures — the handler stays stable while
+    // markers and currentTime change on every frame.
+    const markersRef = { current: audioTimeCtx.markers };
+    const timeRef = { current: audioTimeCtx.currentTime };
+    // Keep refs fresh via the closure (they update every render)
+    markersRef.current = audioTimeCtx.markers;
+    timeRef.current = audioTimeCtx.currentTime;
+
+    const handler = (e: KeyboardEvent) => {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      const markers = markersRef.current;
+      if (!markers || markers.length === 0) return;
+
+      const t = timeRef.current;
+      const EPS = 0.05;
+
+      if (e.key === 'ArrowRight') {
+        const next = markers.find(m => m.time > t + EPS);
+        if (next) {
+          e.preventDefault();
+          e.stopPropagation();
+          audioTimeCtx.seekToTime(next.time);
+        }
+        // else: let the event propagate to SlidePlayer for segment/slide nav
+      } else {
+        // ArrowLeft — find last marker before current position
+        const prev = [...markers].reverse().find(m => m.time < t - EPS);
+        if (prev) {
+          e.preventDefault();
+          e.stopPropagation();
+          audioTimeCtx.seekToTime(prev.time);
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handler, true); // capture phase
+    return () => window.removeEventListener('keydown', handler, true);
+  }, [isManualMode, audioTimeCtx, audioTimeCtx?.markers, audioTimeCtx?.currentTime]);
+
+  // Initialize markers in muted manual mode (audio effect skips when !audioEnabled,
+  // but we still want marker dots and keyboard nav to work)
+  useEffect(() => {
+    if (!isManualMode || audioEnabled || !audioTimeCtx) return;
+    if (currentIndex >= allSlides.length) return;
+    const slide = allSlides[currentIndex].metadata;
+    const segments = slide.audioSegments;
+    if (!segments || segments.length === 0) return;
+    const segment = segments[segmentContext.currentSegmentIndex];
+    if (!segment) return;
+
+    audioTimeCtx.reset();
+    const coordKey = `c${slide.chapter}_s${slide.slide}`;
+    const segAlignment = alignmentData?.slides[coordKey]
+      ?.segments.find(s => s.segmentId === segment.id);
+    audioTimeCtx.initializeSegmentAlignment(
+      segAlignment?.markers ?? [],
+      segAlignment?.words ?? []
+    );
+  }, [isManualMode, audioEnabled, currentIndex, segmentContext.currentSegmentIndex]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Advance to next slide (narrated mode)
   const advanceSlide = useCallback(() => {
@@ -335,14 +444,15 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     onSlideChange(allSlides[0].metadata.chapter, allSlides[0].metadata.slide);
   };
 
-  // Initialize segments when slide changes in manual mode with audio
+  // Initialize segments when slide changes in manual mode (audio or muted).
+  // totalSegments in deps ensures re-init after HMR resets the context.
   useEffect(() => {
-    if (!isManualMode || !audioEnabled || currentIndex >= allSlides.length) return;
+    if (!isManualMode || currentIndex >= allSlides.length) return;
     const slide = allSlides[currentIndex].metadata;
     const slideKey = `Ch${slide.chapter}:S${slide.slide}`;
     if (!hasAudioSegments(slide) || slide.audioSegments.length === 0) return;
     segmentContext.initializeSegments(slideKey, slide.audioSegments);
-  }, [currentIndex, isManualMode, audioEnabled]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [currentIndex, isManualMode, segmentContext.totalSegments]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Play audio for current segment in manual mode
   useEffect(() => {
@@ -388,7 +498,8 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
 
       audio.onended = () => {
         setError(null);
-        if (autoAdvanceOnAudioEnd) {
+        // Read from ref so toggling the checkbox doesn't restart the effect
+        if (autoAdvanceRef.current) {
           const timing = resolveTimingConfig(demoTiming, slide.timing, segment.timing);
           if (currentSegmentIdx < segments.length - 1) {
             setTimeout(() => segmentContext.nextSegment(), timing.betweenSegments);
@@ -421,7 +532,9 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
         audioRef.current = null;
       }
     };
-  }, [currentIndex, isManualMode, audioEnabled, autoAdvanceOnAudioEnd, onSlideChange, segmentContext.currentSegmentIndex]); // eslint-disable-line react-hooks/exhaustive-deps
+    // autoAdvanceOnAudioEnd intentionally omitted — read via autoAdvanceRef
+    // to avoid restarting audio when the checkbox is toggled mid-playback.
+  }, [currentIndex, isManualMode, audioEnabled, onSlideChange, segmentContext.currentSegmentIndex]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Consume external manual slide changes
   // Only react to actual manualSlideChange events (from user navigation in SlidePlayer),
@@ -508,6 +621,13 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
           onAutoAdvanceToggle={setAutoAdvanceOnAudioEnd}
           showEditButton={isManualMode && currentIndex < allSlides.length && hasAudioSegments(allSlides[currentIndex].metadata)}
           onEdit={editor.handleEditNarration}
+          showRegenerateButton={isManualMode && currentIndex < allSlides.length && hasAudioSegments(allSlides[currentIndex].metadata)}
+          regenerating={regeneratingSegment}
+          onRegenerate={() => {
+            if (window.confirm('Regenerate audio for this segment?')) {
+              handleRegenerateSegment(false);
+            }
+          }}
           onRestart={handleRestart}
         />
       )}

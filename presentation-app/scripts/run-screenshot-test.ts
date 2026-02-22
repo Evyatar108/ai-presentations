@@ -18,7 +18,7 @@ function getArg(name: string): string | undefined {
 
 const demoId = getArg('--demo');
 if (!demoId) {
-  console.error('Usage: npm run test:screenshot -- --demo <demo-id> [--viewport WxH] [--slides N-M]');
+  console.error('Usage: npm run test:screenshot -- --demo <demo-id> [--viewport WxH] [--slides N-M] [--markers all|id1,id2,...]');
   process.exit(1);
 }
 
@@ -40,10 +40,16 @@ if (slides) {
   env.SLIDE_RANGE = slides;
 }
 
+const markersArg = getArg('--markers');
+if (markersArg) {
+  env.MARKER_FILTER = markersArg;
+}
+
 const parts = [
   `demo: ${demoId}`,
   viewport ? `viewport: ${viewport}` : null,
   slides ? `slides: ${slides}` : null,
+  markersArg ? `markers: ${markersArg}` : null,
 ].filter(Boolean).join(', ');
 console.log(`Taking screenshots (${parts})\n`);
 

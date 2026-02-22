@@ -20,9 +20,12 @@ export interface ProgressBarProps {
   onAudioToggle: () => void;
   autoAdvanceOnAudioEnd: boolean;
   onAutoAdvanceToggle: (value: boolean) => void;
-  // Edit / restart
+  // Edit / regenerate / restart
   showEditButton: boolean;
   onEdit: () => void;
+  showRegenerateButton: boolean;
+  regenerating: boolean;
+  onRegenerate: () => void;
   onRestart: () => void;
 }
 
@@ -41,6 +44,9 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   onAutoAdvanceToggle,
   showEditButton,
   onEdit,
+  showRegenerateButton,
+  regenerating,
+  onRegenerate,
   onRestart,
 }) => {
   const theme = useTheme();
@@ -165,6 +171,29 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
           }}
         >
           <span aria-hidden="true">✏️</span> Edit
+        </button>
+      )}
+
+      {/* Regenerate TTS button (only in manual mode with segments) */}
+      {showRegenerateButton && (
+        <button
+          onClick={onRegenerate}
+          disabled={regenerating}
+          aria-label="Regenerate audio"
+          title="Regenerate audio for this segment"
+          style={{
+            background: 'transparent',
+            border: `1px solid ${theme.colors.borderSubtle}`,
+            color: regenerating ? theme.colors.textSecondary : theme.colors.primary,
+            borderRadius: 6,
+            padding: '0.25rem 0.75rem',
+            fontSize: 11,
+            cursor: regenerating ? 'wait' : 'pointer',
+            opacity: regenerating ? 0.6 : 1,
+            transition: 'all 0.2s ease',
+          }}
+        >
+          <span aria-hidden="true">{regenerating ? '⏳' : '🔄'}</span> {regenerating ? 'Regenerating...' : 'Regen TTS'}
         </button>
       )}
 

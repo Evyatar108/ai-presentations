@@ -29,6 +29,8 @@ npm run test:overflow -- --demo {id}  # Playwright (static): detect viewport ove
 npm run test:overflow -- --demo {id} --viewport 1920x1019  # Same, at a custom viewport size
 npm run test:screenshot -- --demo {id}  # Playwright (static): screenshot every slide/segment
 npm run test:screenshot -- --demo {id} --slides 3-5  # Screenshot only slides 3 through 5
+npm run test:screenshot -- --demo {id} --markers all  # Also capture screenshots at each marker position
+npm run test:screenshot -- --demo {id} --markers id1,id2  # Capture only specific markers
 npm run test:record -- --demo {id}  # Playwright (record): record narrated playback as .mp4 video (requires ffmpeg)
 npm run test:record -- --demo {id} --fps 60  # Same, at 60fps
 ```
@@ -60,6 +62,8 @@ Each demo lives in `src/demos/{demo-id}/` with:
 Slides are objects with `metadata` (chapter, slide number, title, audio segments) and a `component` React function receiving `{ segment }`. Progressive reveals use `segment >= N` conditionals. Audio segments define `narrationText`, and optional `timing` and `instruct` overrides. `audioFilePath` is **auto-derived** at runtime from slide coordinates (via `resolveAudioFilePath` in `DemoPlayer`) — do not hardcode it. The pattern is `/audio/{demoId}/c{chapter}/s{slide}_segment_{paddedIndex}_{segmentId}.wav`. To override, set `audioFilePath` explicitly on the segment.
 
 **Inline markers** enable sub-segment animations synchronized to the narrator's speech. Embed `{#id}` (forward anchor — start of next word) or `{id#}` (backward anchor — end of previous word) tokens in `narrationText`. These are stripped before TTS and resolved to word-level timestamps via WhisperX forced alignment (`tts:align`). Use `<RevealAtMarker at="id">` for progressive reveals or `<RevealAtMarker from="a" until="b">` for bounded ranges. See `docs/MARKERS_GUIDE.md` for details.
+
+In **manual mode**, arrow keys step through markers within a segment before advancing to the next segment/slide. Diamond-shaped marker dots with `◀`/`▶` arrows appear above the segment dots (order top-to-bottom: markers → segments → slides) for click-to-seek navigation.
 
 ### Viewport Overflow Detection
 `SlideContainer` has a `viewportFraction` prop (default `0.75`) that controls dev-mode overflow detection. When content exceeds `window.innerHeight * viewportFraction`, a red outline + badge appears and a `data-overflow` attribute is set (used by the Playwright `test:overflow` command). The console.warn includes the slide heading for identification. Fix overflows with `<RevealSequence>` + `until={N}` to swap content instead of accumulating it. Note: Playwright's headless Chromium renders text ~15-20px shorter than real browsers due to font fallbacks, so always test at a viewport slightly shorter than target (e.g., `--viewport 1920x1019` for 1080p monitors).
@@ -111,7 +115,7 @@ Alignment data: `public/audio/{demo-id}/alignment.json` — word-level timestamp
 | `src/framework/config.ts` | Centralized framework config |
 | `src/project.config.ts` | Project-level overrides |
 | `src/framework/index.ts` | Barrel export (explicit named exports, no wildcards) |
-| `src/framework/hooks/useTtsRegeneration.ts` | TTS audio regeneration hook (used by SlidePlayer) |
+| `src/framework/hooks/useTtsRegeneration.ts` | TTS audio regeneration hook (used by NarratedController and useNarrationEditor) |
 | `src/framework/hooks/useNotifications.ts` | Toast notification state management |
 | `src/framework/hooks/useRuntimeTimer.ts` | Runtime timer with delta calculations |
 | `src/framework/hooks/useApiHealth.ts` | Backend API health check |
