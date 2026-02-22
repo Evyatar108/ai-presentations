@@ -412,8 +412,26 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
           }}
         />
 
-        <div style={{ color: theme.colors.textSecondary, fontSize: 12, marginTop: '0.5rem' }}>
-          Character count: {text.length}
+        <div style={{ color: theme.colors.textSecondary, fontSize: 12, marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <span>Character count: {text.length}</span>
+          {text !== currentText && (
+            <button
+              onClick={() => setText(currentText)}
+              disabled={isBusy}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: theme.colors.primary,
+                fontSize: 12,
+                cursor: isBusy ? 'not-allowed' : 'pointer',
+                padding: 0,
+                textDecoration: 'underline',
+                opacity: isBusy ? 0.5 : 1,
+              }}
+            >
+              Reset to current
+            </button>
+          )}
         </div>
 
         {/* API warning banner (only shown when unavailable) */}
