@@ -70,6 +70,27 @@ npm run record:obs -- --demo highlights-deep-dive --password mypass --dev-port 5
 8. Waits for the app to send a completion signal to `http://localhost:PORT/complete` (safety timeout: 1.5x estimated duration)
 9. Stops recording after a 2-second buffer for the final slide
 10. Renames the output file to `{demo-id}.{ext}` (retries if file is still locked by OBS)
+11. Generates a `.vtt` subtitle file and `-timing.json` from segment events received during playback
+
+### Subtitles (VTT)
+
+The recording script automatically generates a WebVTT subtitle file (`.vtt`) alongside the video. The VTT contains per-word timestamps for karaoke-style highlighting, derived from:
+
+1. **Segment timing events** — captured live during recording via the signal server
+2. **WhisperX alignment data** — word-level timestamps from `alignment.json`
+
+**Prerequisites:**
+- Run `npm run tts:align -- --demo <demo-id>` before recording to generate word-level alignment data
+- Without alignment data, subtitles fall back to one cue per segment (no per-word timestamps)
+
+**Output files:**
+- `{demo-id}.vtt` — WebVTT subtitle file (next to the video)
+- `{demo-id}-timing.json` — Raw segment timing data for debugging
+
+**Using subtitles:**
+- **VLC**: Open video, then Subtitle > Add Subtitle File > select the `.vtt`
+- **Web**: Use `<track kind="subtitles" src="file.vtt">` in a `<video>` element
+- **YouTube/Vimeo**: Upload the `.vtt` as a subtitle track
 
 ### Troubleshooting
 

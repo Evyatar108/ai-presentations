@@ -120,6 +120,10 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
   const autoAdvanceRef = useRef(autoAdvanceOnAudioEnd);
   useEffect(() => { autoAdvanceRef.current = autoAdvanceOnAudioEnd; }, [autoAdvanceOnAudioEnd]);
 
+  // Ref so playSlideSegments can read autoplay without adding it to callback deps
+  const autoplayRef = useRef(autoplay);
+  useEffect(() => { autoplayRef.current = autoplay; }, [autoplay]);
+
   // Segment context for multi-segment slides
   const segmentContext = useSegmentContext();
 
@@ -464,6 +468,17 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
         audio.onplay = () => {
           setError(null);
           setIsLoading(false);
+          // Signal segment start to the recording script for VTT subtitle generation
+          const ap = autoplayRef.current;
+          if (ap?.signalPort) {
+            const params = new URLSearchParams({
+              chapter: String(slideMetadata.chapter),
+              slide: String(slideMetadata.slide),
+              segmentIndex: String(segmentIndex),
+              segmentId: segment.id,
+            });
+            fetch(`http://localhost:${ap.signalPort}/segment-start?${params}`, { mode: 'no-cors' }).catch(() => {});
+          }
         };
 
         audio.oncanplaythrough = () => setIsLoading(false);

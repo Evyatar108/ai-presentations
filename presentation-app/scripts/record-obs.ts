@@ -15,6 +15,7 @@ import http from 'http';
 import path from 'path';
 import fs from 'fs';
 import { pathToFileURL } from 'url';
+import { generateVtt, SegmentEvent } from './utils/vtt-generator';
 
 // ---------------------------------------------------------------------------
 // CLI argument parsing
@@ -97,16 +98,40 @@ function sleep(ms: number): Promise<void> {
 }
 
 // ---------------------------------------------------------------------------
-// Signal server — listens for /complete from the app
+// Signal server — listens for /complete and /segment-start from the app
 // ---------------------------------------------------------------------------
-async function startSignalServer(): Promise<{ port: number; waitForSignal: (maxMs: number) => Promise<'signal' | 'timeout'>; close: () => void }> {
+interface SignalServer {
+  port: number;
+  segmentEvents: SegmentEvent[];
+  recordingStartTime: number;
+  setRecordingStartTime: (time: number) => void;
+  waitForSignal: (maxMs: number) => Promise<'signal' | 'timeout'>;
+  close: () => void;
+}
+
+async function startSignalServer(): Promise<SignalServer> {
   let resolveSignal: ((reason: 'signal' | 'timeout') => void) | null = null;
+  const segmentEvents: SegmentEvent[] = [];
+  let recordingStartTime = 0;
 
   const server = http.createServer((req, res) => {
     if (req.url === '/complete') {
       res.writeHead(200, { 'Access-Control-Allow-Origin': '*' });
       res.end('ok');
       resolveSignal?.('signal');
+    } else if (req.url?.startsWith('/segment-start')) {
+      const params = new URL(req.url, 'http://localhost').searchParams;
+      const event: SegmentEvent = {
+        chapter: Number(params.get('chapter')),
+        slide: Number(params.get('slide')),
+        segmentIndex: Number(params.get('segmentIndex')),
+        segmentId: params.get('segmentId') ?? '',
+        videoTime: (Date.now() - recordingStartTime) / 1000,
+      };
+      segmentEvents.push(event);
+      console.log(`  [segment] c${event.chapter}:s${event.slide}:${event.segmentId} @ ${formatTime(event.videoTime)}`);
+      res.writeHead(200, { 'Access-Control-Allow-Origin': '*' });
+      res.end('ok');
     } else {
       res.writeHead(404);
       res.end();
@@ -119,6 +144,9 @@ async function startSignalServer(): Promise<{ port: number; waitForSignal: (maxM
 
   return {
     port: addr.port,
+    segmentEvents,
+    recordingStartTime,
+    setRecordingStartTime(time: number) { recordingStartTime = time; },
     waitForSignal(maxMs: number) {
       return new Promise<'signal' | 'timeout'>(resolve => {
         resolveSignal = resolve;
@@ -245,6 +273,7 @@ async function main() {
     await sleep(3000);
 
     // 6. Start recording
+    signal.setRecordingStartTime(Date.now());
     await obs.call('StartRecord');
     console.log('  Recording started (waiting for completion signal...)');
     const stopProgress = startProgressTimer(totalDuration);
@@ -272,6 +301,7 @@ async function main() {
     }
 
     // 9. Rename output file (retry to handle EBUSY when OBS still holds the file)
+    let finalVideoPath = outputPath;
     if (outputPath && !skipRename) {
       const ext = path.extname(outputPath);
       const dir = path.dirname(outputPath);
@@ -285,6 +315,7 @@ async function main() {
             : newPath;
           fs.renameSync(outputPath, target);
           console.log(`  Saved: ${target}`);
+          finalVideoPath = target;
           renamed = true;
           break;
         } catch (err: any) {
@@ -302,6 +333,31 @@ async function main() {
       }
     } else if (outputPath) {
       console.log(`  Saved: ${outputPath}`);
+    }
+
+    // 10. Generate VTT subtitles from segment timing events
+    if (signal.segmentEvents.length > 0) {
+      try {
+        const vttContent = await generateVtt(demoId, signal.segmentEvents);
+        // Place VTT next to the final video file (or fallback to cwd)
+        const videoFile = finalVideoPath ?? '';
+        const vttPath = videoFile
+          ? videoFile.replace(/\.[^.]+$/, '.vtt')
+          : path.join(process.cwd(), `${demoId}.vtt`);
+        fs.writeFileSync(vttPath, vttContent, 'utf-8');
+        console.log(`  Subtitles: ${vttPath} (${signal.segmentEvents.length} segments)`);
+
+        // Also write segment timing JSON for debugging
+        const timingPath = videoFile
+          ? videoFile.replace(/\.[^.]+$/, '-timing.json')
+          : path.join(process.cwd(), `${demoId}-timing.json`);
+        fs.writeFileSync(timingPath, JSON.stringify(signal.segmentEvents, null, 2), 'utf-8');
+        console.log(`  Timing:    ${timingPath}`);
+      } catch (err: any) {
+        console.warn(`  VTT generation failed: ${err.message ?? err}`);
+      }
+    } else {
+      console.log('  No segment events received — skipping VTT generation');
     }
 
     console.log('\nDone!');
