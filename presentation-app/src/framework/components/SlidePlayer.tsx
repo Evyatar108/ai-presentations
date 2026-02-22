@@ -395,9 +395,9 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
                   ▶
                 </button>
                 <div style={{ fontSize: 11, fontFamily: theme.fontFamily, whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: 4 }}>
-                  {currentMarkerIndex >= 0 && (
-                    <span style={{ color: theme.colors.primary }}>{markers[currentMarkerIndex].id}</span>
-                  )}
+                  <span style={{ color: currentMarkerIndex >= 0 ? theme.colors.primary : theme.colors.textMuted }}>
+                    {currentMarkerIndex >= 0 ? markers[currentMarkerIndex].id : '\u2205'}
+                  </span>
                   {currentMarkerIndex < markers.length - 1 && (
                     <>
                       <span style={{ color: theme.colors.textMuted, opacity: 0.4 }}>&rarr;</span>
