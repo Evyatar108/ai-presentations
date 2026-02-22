@@ -20,9 +20,6 @@ export interface ProgressBarProps {
   onAudioToggle: () => void;
   autoAdvanceOnAudioEnd: boolean;
   onAutoAdvanceToggle: (value: boolean) => void;
-  // Marker info
-  currentMarkerLabel?: string | null;
-  nextMarkerLabel?: string | null;
   // Chapter mode
   chapterModeEnabled: boolean;
   onChapterModeToggle: (value: boolean) => void;
@@ -49,8 +46,6 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   onAudioToggle,
   autoAdvanceOnAudioEnd,
   onAutoAdvanceToggle,
-  currentMarkerLabel,
-  nextMarkerLabel,
   chapterModeEnabled,
   onChapterModeToggle,
   hasMultipleChapters,
@@ -89,18 +84,6 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
         Slide {currentIndex} of {totalSlides} (Ch{currentSlideMetadata.chapter}:S{currentSlideMetadata.slide})
       </span>
 
-      {/* Current / next marker labels (manual mode with markers) */}
-      {currentMarkerLabel != null && (
-        <span style={{ fontSize: 11, color: theme.colors.textSecondary, display: 'flex', alignItems: 'center', gap: 4 }}>
-          <span style={{ color: theme.colors.primary }}>{currentMarkerLabel}</span>
-          {nextMarkerLabel != null && (
-            <>
-              <span style={{ opacity: 0.4 }}>&rarr;</span>
-              <span style={{ opacity: 0.6 }}>{nextMarkerLabel}</span>
-            </>
-          )}
-        </span>
-      )}
 
       {/* Runtime timer (only in narrated mode & enabled) */}
       {isPlaying && showRuntimeTimer && (
@@ -244,7 +227,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
             transition: 'all 0.2s ease',
           }}
         >
-          <span aria-hidden="true">{regenerating ? '⏳' : '🔄'}</span> {regenerating ? 'Regenerating...' : 'Regen TTS'}
+          <span aria-hidden="true">{regenerating ? '⏳' : '🔄'}</span> {regenerating ? 'Regenerating...' : 'Regen Segment TTS'}
         </button>
       )}
 

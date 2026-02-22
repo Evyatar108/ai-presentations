@@ -394,8 +394,18 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
                 >
                   ▶
                 </button>
-                <div style={{ color: theme.colors.textSecondary, fontSize: 12, fontFamily: theme.fontFamily, whiteSpace: 'nowrap' }}>
-                  {currentMarkerIndex >= 0 ? `${currentMarkerIndex} / ${markers.length - 1}` : ''}
+                <div style={{ fontSize: 11, fontFamily: theme.fontFamily, whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: 4 }}>
+                  {currentMarkerIndex >= 0 && (
+                    <span style={{ color: theme.colors.primary }}>{markers[currentMarkerIndex].id}</span>
+                  )}
+                  {currentMarkerIndex < markers.length - 1 && (
+                    <>
+                      <span style={{ color: theme.colors.textMuted, opacity: 0.4 }}>&rarr;</span>
+                      <span style={{ color: theme.colors.textSecondary, opacity: 0.6 }}>
+                        {markers[currentMarkerIndex >= 0 ? currentMarkerIndex + 1 : 0].id}
+                      </span>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
