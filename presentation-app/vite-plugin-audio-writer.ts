@@ -449,6 +449,66 @@ export function audioWriterPlugin(): Plugin {
         }
       });
 
+      // ─── GET /api/subtitle-corrections ───────────────────────────────
+      server.middlewares.use('/api/subtitle-corrections', (req, res, next) => {
+        if (req.method !== 'GET') { next(); return; }
+
+        try {
+          const q = parseQuery(req.url || '');
+          if (!q.demoId) {
+            throw new Error('Missing query param: demoId');
+          }
+
+          // Security: reject path traversal
+          if (/[/\\.]\./.test(q.demoId) || q.demoId.includes('..')) {
+            throw new Error('Invalid demoId');
+          }
+
+          const filePath = path.join(projectRoot, 'public', 'audio', q.demoId, 'subtitle-corrections.json');
+          if (!fs.existsSync(filePath)) {
+            sendJson(res, 200, { corrections: {} });
+            return;
+          }
+
+          const corrections = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+          sendJson(res, 200, { corrections });
+        } catch (error: any) {
+          console.error('[subtitle-corrections] Read error:', error);
+          sendJson(res, 500, { success: false, error: error.message });
+        }
+      });
+
+      // ─── POST /api/subtitle-corrections/save ───────────────────────
+      server.middlewares.use('/api/subtitle-corrections/save', async (req, res, next) => {
+        if (req.method !== 'POST') { next(); return; }
+
+        try {
+          const data = await readJsonBody<{ demoId: string; corrections: Record<string, string> }>(req);
+          if (!data.demoId || !data.corrections) {
+            throw new Error('Missing required fields: demoId, corrections');
+          }
+
+          // Security: reject path traversal
+          if (/[/\\.]\./.test(data.demoId) || data.demoId.includes('..')) {
+            throw new Error('Invalid demoId');
+          }
+
+          const audioDir = path.join(projectRoot, 'public', 'audio', data.demoId);
+          if (!fs.existsSync(audioDir)) {
+            fs.mkdirSync(audioDir, { recursive: true });
+          }
+
+          const filePath = path.join(audioDir, 'subtitle-corrections.json');
+          fs.writeFileSync(filePath, JSON.stringify(data.corrections, null, 2) + '\n');
+
+          console.log(`[subtitle-corrections] Saved ${Object.keys(data.corrections).length} corrections for ${data.demoId}`);
+          sendJson(res, 200, { success: true });
+        } catch (error: any) {
+          console.error('[subtitle-corrections] Save error:', error);
+          sendJson(res, 500, { success: false, error: error.message });
+        }
+      });
+
       // ─── POST /api/narration/clear-previews ────────────────────────
       server.middlewares.use('/api/narration/clear-previews', async (req, res, next) => {
         if (req.method !== 'POST') { next(); return; }

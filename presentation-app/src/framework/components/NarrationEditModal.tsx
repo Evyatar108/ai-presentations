@@ -70,6 +70,12 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
   const [savingText, setSavingText] = useState(false);
   const [realigning, setRealigning] = useState(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const [corrections, setCorrections] = useState<Record<string, string>>({});
+  const [correctionsChanged, setCorrectionsChanged] = useState(false);
+  const [savingCorrections, setSavingCorrections] = useState(false);
+  const [correctionsOpen, setCorrectionsOpen] = useState(false);
+  const [newCorrKey, setNewCorrKey] = useState('');
+  const [newCorrVal, setNewCorrVal] = useState('');
   const audioElRef = useRef<HTMLAudioElement | null>(null);
   const modalRef = useRef<HTMLDivElement>(null);
   useFocusTrap(modalRef, true);
@@ -139,6 +145,16 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
         setPreviews(restored);
       })
       .catch(() => { /* ignore */ });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Load subtitle corrections on mount
+  useEffect(() => {
+    fetch(`/api/subtitle-corrections?demoId=${encodeURIComponent(demoId)}`)
+      .then(r => r.json())
+      .then(data => {
+        if (data.corrections) setCorrections(data.corrections);
+      })
+      .catch(() => { /* ignore — corrections section will just show empty */ });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Stop playback
@@ -319,6 +335,51 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
       setRealigning(false);
     }
   }, [demoId, chapter, slide, segmentId, segmentIndex, stopPlayback, buildNarrationData, onAcceptAudio, onTextSaved, onCancel]);
+
+  // Save subtitle corrections
+  const handleSaveCorrections = useCallback(async () => {
+    setSavingCorrections(true);
+    try {
+      const resp = await fetch('/api/subtitle-corrections/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ demoId, corrections }),
+      });
+      const data = await resp.json();
+      if (!data.success) throw new Error(data.error || 'Save failed');
+      setCorrectionsChanged(false);
+      setStatusMessage('Subtitle corrections saved');
+    } catch (error: any) {
+      setStatusMessage(`Corrections save failed: ${error.message}`);
+    } finally {
+      setSavingCorrections(false);
+    }
+  }, [demoId, corrections]);
+
+  // Add a subtitle correction
+  const handleAddCorrection = useCallback(() => {
+    const key = newCorrKey.trim().toLowerCase();
+    const val = newCorrVal.trim();
+    if (!key || !val) return;
+    if (corrections[key] !== undefined) {
+      setStatusMessage(`Correction for "${key}" already exists`);
+      return;
+    }
+    setCorrections(prev => ({ ...prev, [key]: val }));
+    setCorrectionsChanged(true);
+    setNewCorrKey('');
+    setNewCorrVal('');
+  }, [newCorrKey, newCorrVal, corrections]);
+
+  // Delete a subtitle correction
+  const handleDeleteCorrection = useCallback((key: string) => {
+    setCorrections(prev => {
+      const next = { ...prev };
+      delete next[key];
+      return next;
+    });
+    setCorrectionsChanged(true);
+  }, []);
 
   // Spinner keyframes
   const spinnerCSS = `
@@ -634,6 +695,198 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
             <span>Realigning markers...</span>
           </div>
         )}
+
+        {/* Subtitle Corrections (collapsible) */}
+        <div style={{ marginTop: '1.25rem' }}>
+          <button
+            onClick={() => setCorrectionsOpen(o => !o)}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: theme.colors.textSecondary,
+              fontSize: 13,
+              fontWeight: 600,
+              cursor: 'pointer',
+              padding: '0.25rem 0',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+            }}
+          >
+            <span style={{
+              display: 'inline-block',
+              transition: 'transform 0.15s',
+              transform: correctionsOpen ? 'rotate(90deg)' : 'rotate(0deg)',
+              fontSize: 10,
+            }}>
+              {'\u25B6'}
+            </span>
+            Subtitle Corrections ({Object.keys(corrections).length})
+          </button>
+
+          {correctionsOpen && (
+            <div style={{
+              marginTop: '0.5rem',
+              padding: '0.75rem',
+              background: 'rgba(148, 163, 184, 0.05)',
+              borderRadius: 8,
+              border: '1px solid rgba(148, 163, 184, 0.1)',
+            }}>
+              {/* Existing corrections */}
+              {Object.entries(corrections).map(([key, val]) => (
+                <div
+                  key={key}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    marginBottom: '0.35rem',
+                    fontSize: 13,
+                  }}
+                >
+                  <span style={{
+                    color: theme.colors.textSecondary,
+                    flex: 1,
+                    fontFamily: 'monospace',
+                    fontSize: 12,
+                  }}>
+                    {key}
+                  </span>
+                  <span style={{ color: theme.colors.textMuted, fontSize: 12 }}>{'\u2192'}</span>
+                  <span style={{
+                    color: theme.colors.textPrimary,
+                    flex: 1,
+                    fontFamily: 'monospace',
+                    fontSize: 12,
+                  }}>
+                    {val}
+                  </span>
+                  {apiAvailable && (
+                    <HoverButton
+                      onClick={() => handleDeleteCorrection(key)}
+                      disabled={savingCorrections}
+                      title={`Remove correction for "${key}"`}
+                      style={{
+                        background: 'transparent',
+                        border: 'none',
+                        color: theme.colors.textMuted,
+                        padding: '0.15rem 0.35rem',
+                        borderRadius: 4,
+                        fontSize: 13,
+                        cursor: savingCorrections ? 'not-allowed' : 'pointer',
+                        opacity: savingCorrections ? 0.5 : 0.6,
+                        flexShrink: 0,
+                      }}
+                      hoverStyle={{ color: theme.colors.error, opacity: 1 }}
+                    >
+                      {'\u2715'}
+                    </HoverButton>
+                  )}
+                </div>
+              ))}
+
+              {Object.keys(corrections).length === 0 && (
+                <div style={{ color: theme.colors.textMuted, fontSize: 12, marginBottom: '0.5rem' }}>
+                  No corrections defined yet.
+                </div>
+              )}
+
+              {/* Add new correction */}
+              {apiAvailable && (
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  marginTop: '0.5rem',
+                  paddingTop: '0.5rem',
+                  borderTop: '1px solid rgba(148, 163, 184, 0.1)',
+                }}>
+                  <input
+                    type="text"
+                    placeholder="TTS form"
+                    value={newCorrKey}
+                    onChange={e => setNewCorrKey(e.target.value)}
+                    onKeyDown={e => { if (e.key === 'Enter') handleAddCorrection(); }}
+                    disabled={savingCorrections}
+                    style={{
+                      flex: 1,
+                      padding: '0.35rem 0.5rem',
+                      background: theme.colors.bgDeep,
+                      color: theme.colors.textPrimary,
+                      border: '1px solid rgba(148, 163, 184, 0.2)',
+                      borderRadius: 5,
+                      fontSize: 12,
+                      fontFamily: 'monospace',
+                      outline: 'none',
+                    }}
+                  />
+                  <span style={{ color: theme.colors.textMuted, fontSize: 12 }}>{'\u2192'}</span>
+                  <input
+                    type="text"
+                    placeholder="Display form"
+                    value={newCorrVal}
+                    onChange={e => setNewCorrVal(e.target.value)}
+                    onKeyDown={e => { if (e.key === 'Enter') handleAddCorrection(); }}
+                    disabled={savingCorrections}
+                    style={{
+                      flex: 1,
+                      padding: '0.35rem 0.5rem',
+                      background: theme.colors.bgDeep,
+                      color: theme.colors.textPrimary,
+                      border: '1px solid rgba(148, 163, 184, 0.2)',
+                      borderRadius: 5,
+                      fontSize: 12,
+                      fontFamily: 'monospace',
+                      outline: 'none',
+                    }}
+                  />
+                  <HoverButton
+                    onClick={handleAddCorrection}
+                    disabled={savingCorrections || !newCorrKey.trim() || !newCorrVal.trim()}
+                    style={{
+                      background: 'transparent',
+                      border: `1px solid ${theme.colors.primary}`,
+                      color: theme.colors.primary,
+                      padding: '0.3rem 0.6rem',
+                      borderRadius: 5,
+                      fontSize: 12,
+                      cursor: (savingCorrections || !newCorrKey.trim() || !newCorrVal.trim()) ? 'not-allowed' : 'pointer',
+                      opacity: (savingCorrections || !newCorrKey.trim() || !newCorrVal.trim()) ? 0.5 : 1,
+                      flexShrink: 0,
+                    }}
+                    hoverStyle={{ background: 'rgba(0, 183, 195, 0.1)' }}
+                  >
+                    Add
+                  </HoverButton>
+                </div>
+              )}
+
+              {/* Save corrections button */}
+              {apiAvailable && correctionsChanged && (
+                <div style={{ marginTop: '0.5rem', display: 'flex', justifyContent: 'flex-end' }}>
+                  <HoverButton
+                    onClick={handleSaveCorrections}
+                    disabled={savingCorrections}
+                    style={{
+                      background: 'transparent',
+                      border: `1px solid ${theme.colors.primary}`,
+                      color: theme.colors.primary,
+                      padding: '0.35rem 0.75rem',
+                      borderRadius: 6,
+                      fontSize: 12,
+                      fontWeight: 500,
+                      cursor: savingCorrections ? 'not-allowed' : 'pointer',
+                      opacity: savingCorrections ? 0.5 : 1,
+                    }}
+                    hoverStyle={{ background: 'rgba(0, 183, 195, 0.1)' }}
+                  >
+                    {savingCorrections ? 'Saving...' : 'Save Corrections'}
+                  </HoverButton>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
 
         {/* Action buttons */}
         <div style={{

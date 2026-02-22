@@ -86,7 +86,10 @@ The recording script automatically generates a WebVTT subtitle file (`.vtt`) alo
 - `{demo-id}.vtt` — WebVTT subtitle file with per-word timestamps (next to the video)
 - `{demo-id}-words.json` — Word-level timing data in video time; can be used to regenerate VTT without re-recording
 
-**Subtitle corrections:** TTS narration uses phonetic spellings for better pronunciation (e.g., "Kwen" for "Qwen", "EvYatar" for "Evyatar"). To display correct spellings in subtitles, create a `subtitle-corrections.json` in the demo's audio directory:
+**Subtitle corrections:** TTS narration uses phonetic spellings for better pronunciation (e.g., "Kwen" for "Qwen", "EvYatar" for "Evyatar"). You can manage corrections in two ways:
+
+1. **Via UI**: In manual mode, click Edit on any segment — the NarrationEditModal has a collapsible "Subtitle Corrections" section where you can add, delete, and save corrections.
+2. **Via JSON**: Create or edit `subtitle-corrections.json` in the demo's audio directory:
 
 ```
 public/audio/{demo-id}/subtitle-corrections.json
