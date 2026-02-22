@@ -1,14 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import type { SlideMetadata } from '../../slides/SlideMetadata';
 import type { DemoMetadata } from '../../demos/types';
 import { useTheme } from '../../theme/ThemeContext';
 import { formatMMSS, deltaColor } from '../../utils/formatTime';
 
 export interface ProgressBarProps {
-  currentIndex: number;
-  totalSlides: number;
-  currentSlideMetadata: SlideMetadata;
   demoMetadata: DemoMetadata;
   isPlaying: boolean;
   isManualMode: boolean;
@@ -34,9 +30,6 @@ export interface ProgressBarProps {
 }
 
 export const ProgressBar: React.FC<ProgressBarProps> = ({
-  currentIndex,
-  totalSlides,
-  currentSlideMetadata,
   demoMetadata,
   isPlaying,
   isManualMode,
@@ -80,11 +73,6 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
         alignItems: 'center',
       }}
     >
-      <span>
-        Slide {currentIndex} of {totalSlides} (Ch{currentSlideMetadata.chapter}:S{currentSlideMetadata.slide})
-      </span>
-
-
       {/* Runtime timer (only in narrated mode & enabled) */}
       {isPlaying && showRuntimeTimer && (
         <span style={{ fontFamily: 'monospace', fontSize: 12, background: 'rgba(255,255,255,0.05)', padding: '0.25rem 0.5rem', borderRadius: 4, display: 'flex', alignItems: 'center', gap: 4 }}>

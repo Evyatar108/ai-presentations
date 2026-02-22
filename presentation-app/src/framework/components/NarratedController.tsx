@@ -625,9 +625,6 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
 
       {(isPlaying || isManualMode) && !hideInterface && currentIndex < allSlides.length && (
         <ProgressBar
-          currentIndex={currentIndex}
-          totalSlides={allSlides.length}
-          currentSlideMetadata={allSlides[currentIndex].metadata}
           demoMetadata={demoMetadata}
           isPlaying={isPlaying}
           isManualMode={isManualMode}
