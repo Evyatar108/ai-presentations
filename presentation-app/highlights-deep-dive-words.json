@@ -1,0 +1,1151 @@
+{
+  "demoId": "highlights-deep-dive",
+  "recordedAt": "2026-02-22T21:04:49.030Z",
+  "segments": [
+    {
+      "chapter": 0,
+      "slide": 1,
+      "segmentIndex": 0,
+      "segmentId": "intro",
+      "videoTime": 1.127,
+      "words": [
+        {
+          "word": "Hello,",
+          "start": 1.127,
+          "end": 1.51
+        },
+        {
+          "word": "I'm",
+          "start": 1.55,
+          "end": 2.215
+        },
+        {
+          "word": "Qwen",
+          "start": 2.316,
+          "end": 2.6180000000000003,
+          "ttsWord": "Kwen"
+        },
+        {
+          "word": "TTS,",
+          "start": 2.638,
+          "end": 3.263
+        },
+        {
+          "word": "and",
+          "start": 3.646,
+          "end": 3.7270000000000003
+        },
+        {
+          "word": "I'll",
+          "start": 3.747,
+          "end": 3.888
+        },
+        {
+          "word": "be",
+          "start": 3.928,
+          "end": 4.009
+        },
+        {
+          "word": "narrating",
+          "start": 4.069,
+          "end": 4.492
+        },
+        {
+          "word": "this",
+          "start": 4.553,
+          "end": 4.674
+        },
+        {
+          "word": "presentation",
+          "start": 4.754,
+          "end": 5.46
+        },
+        {
+          "word": "for",
+          "start": 5.5,
+          "end": 5.702
+        },
+        {
+          "word": "Evyatar.",
+          "start": 5.8229999999999995,
+          "end": 6.427,
+          "ttsWord": "EvYatar."
+        }
+      ]
+    },
+    {
+      "chapter": 0,
+      "slide": 1,
+      "segmentIndex": 1,
+      "segmentId": "main",
+      "videoTime": 7.688,
+      "words": [
+        {
+          "word": "We'll",
+          "start": 7.688,
+          "end": 7.949
+        },
+        {
+          "word": "cover",
+          "start": 7.989,
+          "end": 8.23
+        },
+        {
+          "word": "how",
+          "start": 8.27,
+          "end": 8.37
+        },
+        {
+          "word": "the",
+          "start": 8.431,
+          "end": 8.491
+        },
+        {
+          "word": "Meeting",
+          "start": 8.551,
+          "end": 8.831999999999999
+        },
+        {
+          "word": "Highlights",
+          "start": 8.872,
+          "end": 9.294
+        },
+        {
+          "word": "prompt",
+          "start": 9.373999999999999,
+          "end": 9.715
+        },
+        {
+          "word": "was",
+          "start": 9.754999999999999,
+          "end": 9.876
+        },
+        {
+          "word": "redesigned",
+          "start": 9.936,
+          "end": 10.578
+        },
+        {
+          "word": "—",
+          "start": 10.597999999999999,
+          "end": 11
+        },
+        {
+          "word": "from",
+          "start": 11.02,
+          "end": 11.14
+        },
+        {
+          "word": "a",
+          "start": 11.2,
+          "end": 11.219999999999999
+        },
+        {
+          "word": "four-call",
+          "start": 11.301,
+          "end": 11.943
+        },
+        {
+          "word": "GPT-4",
+          "start": 12.003,
+          "end": 12.766
+        },
+        {
+          "word": "pipeline",
+          "start": 12.826,
+          "end": 13.347999999999999
+        },
+        {
+          "word": "down",
+          "start": 13.789,
+          "end": 13.969999999999999
+        },
+        {
+          "word": "to",
+          "start": 14.03,
+          "end": 14.131
+        },
+        {
+          "word": "a",
+          "start": 14.190999999999999,
+          "end": 14.210999999999999
+        },
+        {
+          "word": "single",
+          "start": 14.311,
+          "end": 14.652000000000001
+        },
+        {
+          "word": "unified",
+          "start": 14.812999999999999,
+          "end": 15.254
+        },
+        {
+          "word": "prompt",
+          "start": 15.315,
+          "end": 15.676
+        },
+        {
+          "word": "—",
+          "start": 15.695999999999998,
+          "end": 16.358
+        },
+        {
+          "word": "cutting",
+          "start": 16.378,
+          "end": 16.659
+        },
+        {
+          "word": "GPU",
+          "start": 16.74,
+          "end": 17.221
+        },
+        {
+          "word": "costs",
+          "start": 17.302,
+          "end": 17.643
+        },
+        {
+          "word": "by",
+          "start": 17.723,
+          "end": 17.844
+        },
+        {
+          "word": "roughly",
+          "start": 17.884,
+          "end": 18.265
+        },
+        {
+          "word": "seventy",
+          "start": 18.345,
+          "end": 18.686
+        },
+        {
+          "word": "percent.",
+          "start": 18.727,
+          "end": 19.148
+        }
+      ]
+    },
+    {
+      "chapter": 1,
+      "slide": 1,
+      "segmentIndex": 0,
+      "segmentId": "title",
+      "videoTime": 21.56,
+      "words": [
+        {
+          "word": "Let's",
+          "start": 21.56,
+          "end": 21.904
+        },
+        {
+          "word": "start",
+          "start": 21.965,
+          "end": 22.288
+        },
+        {
+          "word": "with",
+          "start": 22.389999999999997,
+          "end": 22.592
+        },
+        {
+          "word": "what",
+          "start": 22.692999999999998,
+          "end": 22.854999999999997
+        },
+        {
+          "word": "Meeting",
+          "start": 22.936,
+          "end": 23.198999999999998
+        },
+        {
+          "word": "Highlights",
+          "start": 23.218999999999998,
+          "end": 23.685
+        },
+        {
+          "word": "actually",
+          "start": 23.968,
+          "end": 24.291999999999998
+        },
+        {
+          "word": "produces.",
+          "start": 24.351999999999997,
+          "end": 25.02
+        }
+      ]
+    },
+    {
+      "chapter": 1,
+      "slide": 1,
+      "segmentIndex": 1,
+      "segmentId": "pipeline",
+      "videoTime": 26.303,
+      "words": [
+        {
+          "word": "It's",
+          "start": 26.303,
+          "end": 26.523
+        },
+        {
+          "word": "a",
+          "start": 26.583000000000002,
+          "end": 26.603
+        },
+        {
+          "word": "four-stage",
+          "start": 26.644000000000002,
+          "end": 27.144000000000002
+        },
+        {
+          "word": "pipeline.",
+          "start": 27.184,
+          "end": 27.685000000000002
+        },
+        {
+          "word": "A",
+          "start": 28.146,
+          "end": 28.186
+        },
+        {
+          "word": "meeting",
+          "start": 28.226,
+          "end": 28.486
+        },
+        {
+          "word": "transcript",
+          "start": 28.546,
+          "end": 29.067
+        },
+        {
+          "word": "goes",
+          "start": 29.127000000000002,
+          "end": 29.348
+        },
+        {
+          "word": "into",
+          "start": 29.408,
+          "end": 29.588
+        },
+        {
+          "word": "an",
+          "start": 29.648,
+          "end": 29.688000000000002
+        },
+        {
+          "word": "LLM,",
+          "start": 29.888,
+          "end": 30.309
+        },
+        {
+          "word": "which",
+          "start": 30.569000000000003,
+          "end": 30.71
+        },
+        {
+          "word": "produces",
+          "start": 30.77,
+          "end": 31.19
+        },
+        {
+          "word": "structured",
+          "start": 31.271,
+          "end": 31.711000000000002
+        },
+        {
+          "word": "metadata",
+          "start": 31.771,
+          "end": 32.252
+        },
+        {
+          "word": "—",
+          "start": 32.272,
+          "end": 32.793
+        },
+        {
+          "word": "timestamps,",
+          "start": 32.813,
+          "end": 33.454
+        },
+        {
+          "word": "topic",
+          "start": 33.814,
+          "end": 34.135
+        },
+        {
+          "word": "boundaries,",
+          "start": 34.175,
+          "end": 34.676
+        },
+        {
+          "word": "and",
+          "start": 34.756,
+          "end": 34.836
+        },
+        {
+          "word": "narration",
+          "start": 34.876000000000005,
+          "end": 35.397
+        },
+        {
+          "word": "text.",
+          "start": 35.437,
+          "end": 35.737
+        },
+        {
+          "word": "That",
+          "start": 36.438,
+          "end": 36.579
+        },
+        {
+          "word": "metadata",
+          "start": 36.699,
+          "end": 37.22
+        },
+        {
+          "word": "is",
+          "start": 37.34,
+          "end": 37.4
+        },
+        {
+          "word": "used",
+          "start": 37.58,
+          "end": 37.74
+        },
+        {
+          "word": "to",
+          "start": 37.78,
+          "end": 37.861000000000004
+        },
+        {
+          "word": "generate",
+          "start": 37.941,
+          "end": 38.321
+        },
+        {
+          "word": "TTS",
+          "start": 38.381,
+          "end": 38.882000000000005
+        },
+        {
+          "word": "audio",
+          "start": 39.042,
+          "end": 39.363
+        },
+        {
+          "word": "for",
+          "start": 39.423,
+          "end": 39.523
+        },
+        {
+          "word": "the",
+          "start": 39.543,
+          "end": 39.603
+        },
+        {
+          "word": "narration.",
+          "start": 39.663,
+          "end": 40.104
+        },
+        {
+          "word": "Then",
+          "start": 40.605000000000004,
+          "end": 40.725
+        },
+        {
+          "word": "the",
+          "start": 40.765,
+          "end": 40.845
+        },
+        {
+          "word": "highlights",
+          "start": 40.885000000000005,
+          "end": 41.286
+        },
+        {
+          "word": "video",
+          "start": 41.326,
+          "end": 41.626000000000005
+        },
+        {
+          "word": "is",
+          "start": 41.706,
+          "end": 41.766
+        },
+        {
+          "word": "streamed",
+          "start": 41.786,
+          "end": 42.147
+        },
+        {
+          "word": "on",
+          "start": 42.227000000000004,
+          "end": 42.307
+        },
+        {
+          "word": "demand",
+          "start": 42.367000000000004,
+          "end": 42.768
+        },
+        {
+          "word": "by",
+          "start": 43.209,
+          "end": 43.349000000000004
+        },
+        {
+          "word": "seeking",
+          "start": 43.449,
+          "end": 43.789
+        },
+        {
+          "word": "into",
+          "start": 43.81,
+          "end": 44.07
+        },
+        {
+          "word": "the",
+          "start": 44.11,
+          "end": 44.17
+        },
+        {
+          "word": "original",
+          "start": 44.230000000000004,
+          "end": 44.631
+        },
+        {
+          "word": "recording",
+          "start": 44.711,
+          "end": 45.172
+        },
+        {
+          "word": "at",
+          "start": 45.312,
+          "end": 45.372
+        },
+        {
+          "word": "those",
+          "start": 45.391999999999996,
+          "end": 45.572
+        },
+        {
+          "word": "timestamps.",
+          "start": 45.632000000000005,
+          "end": 46.253
+        },
+        {
+          "word": "There's",
+          "start": 46.774,
+          "end": 46.954
+        },
+        {
+          "word": "no",
+          "start": 46.974000000000004,
+          "end": 47.095
+        },
+        {
+          "word": "video",
+          "start": 47.175,
+          "end": 47.495000000000005
+        },
+        {
+          "word": "rendering",
+          "start": 47.555,
+          "end": 47.956
+        },
+        {
+          "word": "step",
+          "start": 48.036,
+          "end": 48.316
+        },
+        {
+          "word": "—",
+          "start": 48.817,
+          "end": 48.837
+        },
+        {
+          "word": "the",
+          "start": 48.857,
+          "end": 48.937
+        },
+        {
+          "word": "model",
+          "start": 48.977000000000004,
+          "end": 49.218
+        },
+        {
+          "word": "produces",
+          "start": 49.278000000000006,
+          "end": 49.698
+        },
+        {
+          "word": "editing",
+          "start": 49.739000000000004,
+          "end": 50.099000000000004
+        },
+        {
+          "word": "instructions,",
+          "start": 50.179,
+          "end": 50.82
+        },
+        {
+          "word": "and",
+          "start": 51.260999999999996,
+          "end": 51.341
+        },
+        {
+          "word": "playback",
+          "start": 51.421,
+          "end": 51.882000000000005
+        },
+        {
+          "word": "happens",
+          "start": 51.922,
+          "end": 52.302
+        },
+        {
+          "word": "live.",
+          "start": 52.403000000000006,
+          "end": 52.723
+        }
+      ]
+    },
+    {
+      "chapter": 1,
+      "slide": 1,
+      "segmentIndex": 2,
+      "segmentId": "types",
+      "videoTime": 54.31,
+      "words": [
+        {
+          "word": "The",
+          "start": 54.31,
+          "end": 54.511
+        },
+        {
+          "word": "LLM",
+          "start": 54.671,
+          "end": 55.032000000000004
+        },
+        {
+          "word": "produces",
+          "start": 55.092,
+          "end": 55.553000000000004
+        },
+        {
+          "word": "two",
+          "start": 55.593,
+          "end": 55.834
+        },
+        {
+          "word": "types",
+          "start": 55.894000000000005,
+          "end": 56.135000000000005
+        },
+        {
+          "word": "of",
+          "start": 56.175000000000004,
+          "end": 56.215
+        },
+        {
+          "word": "content.",
+          "start": 56.295,
+          "end": 56.796
+        },
+        {
+          "word": "Abstractive",
+          "start": 57.358000000000004,
+          "end": 58.06
+        },
+        {
+          "word": "narration",
+          "start": 58.120000000000005,
+          "end": 58.641000000000005
+        },
+        {
+          "word": "—",
+          "start": 58.661,
+          "end": 58.681000000000004
+        },
+        {
+          "word": "AI-written",
+          "start": 59.463,
+          "end": 60.025000000000006
+        },
+        {
+          "word": "topic",
+          "start": 60.085,
+          "end": 60.406000000000006
+        },
+        {
+          "word": "summaries",
+          "start": 60.446000000000005,
+          "end": 60.907000000000004
+        },
+        {
+          "word": "spoken",
+          "start": 61.027,
+          "end": 61.388000000000005
+        },
+        {
+          "word": "over",
+          "start": 61.489000000000004,
+          "end": 61.669000000000004
+        },
+        {
+          "word": "muted",
+          "start": 61.709,
+          "end": 62.17
+        },
+        {
+          "word": "meeting",
+          "start": 62.211,
+          "end": 62.471000000000004
+        },
+        {
+          "word": "video.",
+          "start": 62.511,
+          "end": 62.932
+        },
+        {
+          "word": "And",
+          "start": 63.434000000000005,
+          "end": 63.574
+        },
+        {
+          "word": "extractive",
+          "start": 63.694,
+          "end": 64.21600000000001
+        },
+        {
+          "word": "clips",
+          "start": 64.296,
+          "end": 64.617
+        },
+        {
+          "word": "—",
+          "start": 65.098,
+          "end": 65.118
+        },
+        {
+          "word": "the",
+          "start": 65.138,
+          "end": 65.218
+        },
+        {
+          "word": "actual",
+          "start": 65.299,
+          "end": 65.64
+        },
+        {
+          "word": "best",
+          "start": 65.74000000000001,
+          "end": 66.041
+        },
+        {
+          "word": "moments",
+          "start": 66.101,
+          "end": 66.401
+        },
+        {
+          "word": "from",
+          "start": 66.44200000000001,
+          "end": 66.58200000000001
+        },
+        {
+          "word": "the",
+          "start": 66.602,
+          "end": 66.702
+        },
+        {
+          "word": "meeting,",
+          "start": 66.742,
+          "end": 67.043
+        },
+        {
+          "word": "with",
+          "start": 67.504,
+          "end": 67.625
+        },
+        {
+          "word": "original",
+          "start": 67.665,
+          "end": 68.126
+        },
+        {
+          "word": "audio",
+          "start": 68.266,
+          "end": 68.607
+        },
+        {
+          "word": "and",
+          "start": 68.768,
+          "end": 68.868
+        },
+        {
+          "word": "video",
+          "start": 68.888,
+          "end": 69.209
+        },
+        {
+          "word": "preserved.",
+          "start": 69.269,
+          "end": 69.69
+        }
+      ]
+    },
+    {
+      "chapter": 1,
+      "slide": 2,
+      "segmentIndex": 0,
+      "segmentId": "metrics",
+      "videoTime": 72.085,
+      "words": [
+        {
+          "word": "Here's",
+          "start": 72.085,
+          "end": 72.40599999999999
+        },
+        {
+          "word": "the",
+          "start": 72.446,
+          "end": 72.526
+        },
+        {
+          "word": "problem",
+          "start": 72.54599999999999,
+          "end": 72.887
+        },
+        {
+          "word": "I",
+          "start": 72.967,
+          "end": 73.02699999999999
+        },
+        {
+          "word": "faced.",
+          "start": 73.08699999999999,
+          "end": 73.38799999999999
+        },
+        {
+          "word": "The",
+          "start": 73.869,
+          "end": 73.969
+        },
+        {
+          "word": "V1",
+          "start": 74.009,
+          "end": 74.41
+        },
+        {
+          "word": "implementation",
+          "start": 74.50999999999999,
+          "end": 75.211
+        },
+        {
+          "word": "used",
+          "start": 75.372,
+          "end": 75.57199999999999
+        },
+        {
+          "word": "four",
+          "start": 75.71199999999999,
+          "end": 75.973
+        },
+        {
+          "word": "sequential",
+          "start": 76.03299999999999,
+          "end": 76.634
+        },
+        {
+          "word": "LLM",
+          "start": 76.91499999999999,
+          "end": 77.336
+        },
+        {
+          "word": "calls",
+          "start": 77.43599999999999,
+          "end": 77.737
+        },
+        {
+          "word": "per",
+          "start": 77.83699999999999,
+          "end": 77.997
+        },
+        {
+          "word": "meeting.",
+          "start": 78.03699999999999,
+          "end": 78.318
+        },
+        {
+          "word": "At",
+          "start": 78.899,
+          "end": 78.939
+        },
+        {
+          "word": "projected",
+          "start": 78.979,
+          "end": 79.47999999999999
+        },
+        {
+          "word": "GA",
+          "start": 79.53999999999999,
+          "end": 79.901
+        },
+        {
+          "word": "scale,",
+          "start": 79.961,
+          "end": 80.362
+        },
+        {
+          "word": "that",
+          "start": 80.823,
+          "end": 80.943
+        },
+        {
+          "word": "would",
+          "start": 80.98299999999999,
+          "end": 81.12299999999999
+        },
+        {
+          "word": "require",
+          "start": 81.184,
+          "end": 81.58399999999999
+        },
+        {
+          "word": "roughly",
+          "start": 81.705,
+          "end": 82.065
+        },
+        {
+          "word": "six",
+          "start": 82.20599999999999,
+          "end": 82.446
+        },
+        {
+          "word": "hundred",
+          "start": 82.526,
+          "end": 82.80699999999999
+        },
+        {
+          "word": "A100",
+          "start": 82.987,
+          "end": 83.40799999999999
+        },
+        {
+          "word": "GPUs",
+          "start": 83.84899999999999,
+          "end": 84.591
+        },
+        {
+          "word": "—",
+          "start": 84.61099999999999,
+          "end": 85.332
+        },
+        {
+          "word": "far",
+          "start": 85.35199999999999,
+          "end": 85.633
+        },
+        {
+          "word": "exceeding",
+          "start": 85.65299999999999,
+          "end": 86.13399999999999
+        },
+        {
+          "word": "approved",
+          "start": 86.19399999999999,
+          "end": 86.53399999999999
+        },
+        {
+          "word": "quotas.",
+          "start": 86.615,
+          "end": 86.975
+        },
+        {
+          "word": "This",
+          "start": 87.577,
+          "end": 87.737
+        },
+        {
+          "word": "made",
+          "start": 87.857,
+          "end": 88.05799999999999
+        },
+        {
+          "word": "Meeting",
+          "start": 88.13799999999999,
+          "end": 88.37799999999999
+        },
+        {
+          "word": "Highlights",
+          "start": 88.43799999999999,
+          "end": 88.859
+        },
+        {
+          "word": "a",
+          "start": 88.899,
+          "end": 88.919
+        },
+        {
+          "word": "capacity",
+          "start": 88.95899999999999,
+          "end": 89.481
+        },
+        {
+          "word": "blocker,",
+          "start": 89.52099999999999,
+          "end": 89.881
+        },
+        {
+          "word": "preventing",
+          "start": 90.362,
+          "end": 90.723
+        },
+        {
+          "word": "the",
+          "start": 90.78299999999999,
+          "end": 90.84299999999999
+        },
+        {
+          "word": "GA",
+          "start": 90.90299999999999,
+          "end": 91.204
+        },
+        {
+          "word": "rollout.",
+          "start": 91.28399999999999,
+          "end": 91.705
+        }
+      ]
+    },
+    {
+      "chapter": 1,
+      "slide": 2,
+      "segmentIndex": 1,
+      "segmentId": "quote",
+      "videoTime": 92.978,
+      "words": [
+        {
+          "word": "As",
+          "start": 92.978,
+          "end": 93.15899999999999
+        },
+        {
+          "word": "my",
+          "start": 93.219,
+          "end": 93.32
+        },
+        {
+          "word": "engineering",
+          "start": 93.33999999999999,
+          "end": 93.842
+        },
+        {
+          "word": "manager",
+          "start": 93.883,
+          "end": 94.244
+        },
+        {
+          "word": "put",
+          "start": 94.32499999999999,
+          "end": 94.48599999999999
+        },
+        {
+          "word": "it",
+          "start": 94.54599999999999,
+          "end": 94.586
+        },
+        {
+          "word": "—",
+          "start": 94.606,
+          "end": 95.189
+        },
+        {
+          "word": "I",
+          "start": 95.20899999999999,
+          "end": 95.249
+        },
+        {
+          "word": "needed",
+          "start": 95.30999999999999,
+          "end": 95.55099999999999
+        },
+        {
+          "word": "a",
+          "start": 95.591,
+          "end": 95.651
+        },
+        {
+          "word": "fundamentally",
+          "start": 95.85199999999999,
+          "end": 96.59599999999999
+        },
+        {
+          "word": "different",
+          "start": 96.75699999999999,
+          "end": 97.09899999999999
+        },
+        {
+          "word": "strategy.",
+          "start": 97.15899999999999,
+          "end": 97.661
+        },
+        {
+          "word": "This",
+          "start": 98.204,
+          "end": 98.365
+        },
+        {
+          "word": "wasn't",
+          "start": 98.46499999999999,
+          "end": 98.707
+        },
+        {
+          "word": "a",
+          "start": 98.767,
+          "end": 98.78699999999999
+        },
+        {
+          "word": "problem",
+          "start": 98.847,
+          "end": 99.169
+        },
+        {
+          "word": "we",
+          "start": 99.20899999999999,
+          "end": 99.28999999999999
+        },
+        {
+          "word": "could",
+          "start": 99.33,
+          "end": 99.47
+        },
+        {
+          "word": "solve",
+          "start": 99.53099999999999,
+          "end": 99.832
+        },
+        {
+          "word": "by",
+          "start": 99.893,
+          "end": 99.993
+        },
+        {
+          "word": "adding",
+          "start": 100.073,
+          "end": 100.274
+        },
+        {
+          "word": "more",
+          "start": 100.335,
+          "end": 100.496
+        },
+        {
+          "word": "hardware.",
+          "start": 100.536,
+          "end": 100.99799999999999
+        }
+      ]
+    }
+  ]
+}
