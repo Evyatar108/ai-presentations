@@ -400,26 +400,24 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
           Character count: {text.length}
         </div>
 
-        {/* API status banner */}
-        <div style={{
-          background: apiAvailable ? 'rgba(34, 197, 94, 0.1)' : 'rgba(251, 146, 60, 0.1)',
-          border: `1px solid ${apiAvailable ? 'rgba(34, 197, 94, 0.3)' : 'rgba(251, 146, 60, 0.3)'}`,
-          borderRadius: 6,
-          padding: '0.5rem 0.75rem',
-          marginTop: '0.75rem',
-          color: apiAvailable ? '#22c55e' : theme.colors.warning,
-          fontSize: 12,
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.5rem'
-        }}>
-          <span>{apiAvailable ? '\u2713' : '\u26A0'}</span>
-          <span>
-            {apiAvailable
-              ? 'Edits will be saved to narration.json (persistent)'
-              : 'API unavailable \u2014 edits are session-only'}
-          </span>
-        </div>
+        {/* API warning banner (only shown when unavailable) */}
+        {!apiAvailable && (
+          <div style={{
+            background: 'rgba(251, 146, 60, 0.1)',
+            border: '1px solid rgba(251, 146, 60, 0.3)',
+            borderRadius: 6,
+            padding: '0.5rem 0.75rem',
+            marginTop: '0.75rem',
+            color: theme.colors.warning,
+            fontSize: 12,
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem'
+          }}>
+            <span>{'\u26A0'}</span>
+            <span>API unavailable {'\u2014'} edits are session-only</span>
+          </div>
+        )}
 
         {/* Marker validation error */}
         {hasMarkerError && (
