@@ -233,7 +233,7 @@ In **manual mode**, markers are navigable via keyboard and a clickable marker do
 
 ### Arrow key navigation
 
-Arrow keys step through markers within a segment before advancing to the next segment/slide:
+Arrow keys step through markers within a segment before advancing to the next segment/slide. The full navigation hierarchy is: markers → segments → slides → chapters (when chapter mode is enabled via `DemoConfig.chapters`). Use `PageUp`/`PageDown` to jump between chapters.
 
 1. **ArrowRight** — jumps to the next marker in the current segment. If at the last marker (or no markers), advances to the next segment/slide as usual.
 2. **ArrowLeft** — jumps to the previous marker. If before the first marker, goes back to the previous segment/slide.
@@ -242,7 +242,7 @@ This works in both audio-enabled and muted manual modes.
 
 ### Marker dots UI
 
-When a segment has resolved markers, a navigation row appears above the segment dots (order top-to-bottom: markers → segments → slides):
+When a segment has resolved markers, a navigation row appears above the segment dots (order top-to-bottom: markers → segments → slides → chapters when enabled):
 
 - `◀`/`▶` arrow buttons to step through markers
 - Diamond-shaped dots (one per marker), labeled "Markers:"

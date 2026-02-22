@@ -35,6 +35,7 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideIn
   const [manualSlideChange, setManualSlideChange] = useState<{ chapter: number; slide: number } | null>(null);
   const [hideInterface, setHideInterface] = useState(false);
   const [zoomEnabled, setZoomEnabled] = useState(false);
+  const [chapterModeEnabled, setChapterModeEnabled] = useState(false);
 
   const handleHideInterfaceChange = useCallback((hidden: boolean) => {
     setHideInterface(hidden);
@@ -382,6 +383,9 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideIn
           startTransition={demoConfig.startTransition}
           slides={slidesWithResolvedPaths}
           alignmentData={alignmentData}
+          chapters={demoConfig.chapters}
+          chapterModeEnabled={chapterModeEnabled}
+          onChapterModeToggle={setChapterModeEnabled}
           onSlideChange={handleSlideChange}
           onPlaybackStart={handlePlaybackStart}
           onPlaybackEnd={handlePlaybackEnd}
@@ -408,6 +412,8 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideIn
             externalSlide={currentSlide}
             onSlideChange={handleManualSlideChange}
             disableManualNav={isNarratedMode}
+            chaptersConfig={demoConfig.chapters}
+            chapterModeEnabled={chapterModeEnabled}
           />
         </div>
       </div>

@@ -23,6 +23,10 @@ export interface ProgressBarProps {
   // Marker info
   currentMarkerLabel?: string | null;
   nextMarkerLabel?: string | null;
+  // Chapter mode
+  chapterModeEnabled: boolean;
+  onChapterModeToggle: (value: boolean) => void;
+  hasMultipleChapters: boolean;
   // Edit / regenerate / restart
   showEditButton: boolean;
   onEdit: () => void;
@@ -47,6 +51,9 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   onAutoAdvanceToggle,
   currentMarkerLabel,
   nextMarkerLabel,
+  chapterModeEnabled,
+  onChapterModeToggle,
+  hasMultipleChapters,
   showEditButton,
   onEdit,
   showRegenerateButton,
@@ -161,6 +168,32 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
             }}
           />
           Auto-advance
+        </label>
+      )}
+
+      {/* Chapter mode toggle (only in manual mode with multiple chapters) */}
+      {isManualMode && hasMultipleChapters && (
+        <label
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            cursor: 'pointer',
+            fontSize: 11,
+            color: theme.colors.textSecondary,
+          }}
+        >
+          <input
+            type="checkbox"
+            checked={chapterModeEnabled}
+            onChange={(e) => onChapterModeToggle(e.target.checked)}
+            style={{
+              width: 14,
+              height: 14,
+              cursor: 'pointer',
+            }}
+          />
+          Chapters
         </label>
       )}
 

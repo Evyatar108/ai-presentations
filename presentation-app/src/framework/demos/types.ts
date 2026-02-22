@@ -128,6 +128,16 @@ export interface DemoConfig {
    * instruct: "speak slowly and clearly with a professional tone"
    */
   instruct?: string;
+
+  /**
+   * Optional chapter metadata map. Keys are chapter numbers.
+   * When provided with multiple chapters, enables chapter navigation mode
+   * in the bottom nav bar (toggle in manual mode).
+   *
+   * @example
+   * chapters: { 0: { title: 'Introduction' }, 1: { title: 'Problem Context' } }
+   */
+  chapters?: Record<number, { title: string }>;
 }
 
 /**

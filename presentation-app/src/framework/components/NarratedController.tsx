@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { hasAudioSegments, SlideComponentWithMetadata } from '../slides/SlideMetadata';
 import { useSegmentContext } from '../contexts/SegmentContext';
@@ -51,6 +51,9 @@ export interface NarratedControllerProps {
   startTransition?: StartTransition;
   slides: SlideComponentWithMetadata[];
   alignmentData?: DemoAlignment | null;
+  chapters?: Record<number, { title: string }>;
+  chapterModeEnabled: boolean;
+  onChapterModeToggle: (value: boolean) => void;
   onSlideChange: (chapter: number, slide: number) => void;
   onPlaybackStart?: () => void;
   onPlaybackEnd?: () => void;
@@ -67,6 +70,9 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
   startTransition,
   slides,
   alignmentData,
+  chapters: _chaptersConfig,
+  chapterModeEnabled,
+  onChapterModeToggle: setChapterModeEnabled,
   onSlideChange,
   onPlaybackStart,
   onPlaybackEnd,
@@ -79,6 +85,12 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
   // Use provided slides or empty array if not loaded yet
   const allSlides = slides || [];
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  // Derive whether there are multiple chapters
+  const hasMultipleChapters = useMemo(() => {
+    const chapterNums = new Set(allSlides.map(s => s.metadata.chapter));
+    return chapterNums.size > 1;
+  }, [allSlides]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [_isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -636,6 +648,9 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
             const next = m.find(marker => marker.time > t + 0.05);
             return next?.id ?? null;
           })()}
+          chapterModeEnabled={chapterModeEnabled}
+          onChapterModeToggle={setChapterModeEnabled}
+          hasMultipleChapters={hasMultipleChapters}
           showEditButton={isManualMode && currentIndex < allSlides.length && hasAudioSegments(allSlides[currentIndex].metadata)}
           onEdit={editor.handleEditNarration}
           showRegenerateButton={isManualMode && currentIndex < allSlides.length && hasAudioSegments(allSlides[currentIndex].metadata)}

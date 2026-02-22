@@ -162,7 +162,34 @@ Generate audio for your demo (see [TTS Guide](TTS_GUIDE.md)):
 npm run tts:generate -- --demo your-demo-name
 ```
 
-### Step 10: Configure Timing (Optional)
+### Step 10: Define Chapter Metadata (Optional)
+
+If your demo has multiple chapters and you want chapter-level navigation in manual mode, define a `chapters` map on `DemoConfig`:
+
+```typescript
+import type { DemoConfig } from '@framework';
+import { metadata } from './metadata';
+
+const demoConfig: DemoConfig = {
+  metadata,
+  chapters: {
+    0: { title: 'Introduction' },
+    1: { title: 'Core Concepts' },
+    2: { title: 'Deep Dive' },
+    3: { title: 'Summary' },
+  },
+  getSlides: async () => {
+    const { allSlides } = await import('./slides/SlidesRegistry');
+    return allSlides;
+  },
+};
+
+export default demoConfig;
+```
+
+When `chapters` is provided, manual mode shows a chapter toggle in the progress bar. When enabled, rounded-square chapter dots appear below slide dots, slide dots filter to the current chapter, and `PageUp`/`PageDown` keys jump between chapters.
+
+### Step 11: Configure Timing (Optional)
 
 Customize presentation timing delays if defaults aren't suitable.
 
@@ -211,7 +238,7 @@ const demoConfig: DemoConfig = {
 
 See [TIMING_SYSTEM.md](TIMING_SYSTEM.md#start-transition-starttransition) for more examples.
 
-### Step 11: Configure TTS Instruct (Optional)
+### Step 12: Configure TTS Instruct (Optional)
 
 Set a TTS voice style instruction for Qwen3-TTS. Like timing, `instruct` supports a three-level hierarchy: demo → slide → segment (most specific wins).
 
@@ -263,7 +290,7 @@ The registry performs development-time validation when demos are registered:
 - **Missing title**: Warns if `metadata.title` is empty
 - **Invalid loadConfig**: Rejects entries where `loadConfig` is not a function
 
-### Step 12: Test Your Demo
+### Step 13: Test Your Demo
 
 ```bash
 npm run dev

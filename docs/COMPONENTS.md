@@ -46,6 +46,7 @@ Renders individual slides with segment management.
 - Dynamic segment rendering
 - Component isolation
 - Segment state management
+- Chapter navigation (when `chapters` is defined on `DemoConfig`, a toggle enables chapter-level dots and `PageUp`/`PageDown` keyboard shortcuts)
 
 ### NarratedController
 
@@ -233,6 +234,7 @@ interface DemoConfig {
   getSlides: () => Promise<SlideComponentWithMetadata[]>;
   timing?: TimingConfig;
   startTransition?: StartTransition;
+  chapters?: Record<number, { title: string }>;
 }
 
 interface StartTransition {

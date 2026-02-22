@@ -75,6 +75,11 @@ Demos load on-demand to optimize initial bundle size:
 export const demo: DemoConfig = {
   metadata,
   defaultMode: 'narrated',
+  chapters: {
+    0: { title: 'Introduction' },
+    1: { title: 'Main Content' },
+    2: { title: 'Conclusion' },
+  },
   getSlides: async () => {
     // Lazy import - only loads when demo is selected
     const { allSlides } = await import('./slides/SlidesRegistry');
@@ -83,7 +88,7 @@ export const demo: DemoConfig = {
 };
 ```
 
-Note: `DemoConfig` no longer has an `id` field — the ID comes exclusively from `metadata.id`.
+Note: `DemoConfig` no longer has an `id` field — the ID comes exclusively from `metadata.id`. The optional `chapters` field maps chapter numbers to `{ title }` objects; when provided, chapter data flows through to the navigation UI, enabling chapter-level dots and `PageUp`/`PageDown` keyboard navigation in manual mode.
 
 ## Alignment System (Sub-Segment Timing)
 

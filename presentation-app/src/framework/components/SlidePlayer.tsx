@@ -22,6 +22,8 @@ export interface SlidePlayerProps {
   externalSlide?: { chapter: number; slide: number };
   onSlideChange?: (chapter: number, slide: number) => void
   disableManualNav?: boolean;
+  chaptersConfig?: Record<number, { title: string }>;
+  chapterModeEnabled?: boolean;
 }
 
 export const SlidePlayer: React.FC<SlidePlayerProps> = ({
@@ -32,7 +34,9 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
   autoAdvanceDelay = 8000,
   externalSlide,
   onSlideChange,
-  disableManualNav = false
+  disableManualNav = false,
+  chaptersConfig,
+  chapterModeEnabled = false,
 }) => {
   const theme = useTheme();
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -168,9 +172,56 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
     return last;
   }, [markers, currentTime]);
 
+  // Chapter navigation data
+  const chapters = useMemo(() => {
+    const map = new Map<number, { chapterNum: number; firstSlideIndex: number; slideCount: number }>();
+    slides.forEach((slide, idx) => {
+      if (!map.has(slide.chapter)) {
+        map.set(slide.chapter, { chapterNum: slide.chapter, firstSlideIndex: idx, slideCount: 0 });
+      }
+      map.get(slide.chapter)!.slideCount++;
+    });
+    return Array.from(map.values()).sort((a, b) => a.chapterNum - b.chapterNum);
+  }, [slides]);
+
+  const hasMultipleChapters = chapters.length > 1;
+  const currentChapterNum = slides[currentIndex]?.chapter;
+  const currentChapterIndex = chapters.findIndex(c => c.chapterNum === currentChapterNum);
+
+  // Slides visible in the current chapter (used when chapter mode ON)
+  const chapterSlides = useMemo(() => {
+    if (!chapterModeEnabled) return null;
+    return slides
+      .map((slide, globalIdx) => ({ slide, globalIdx }))
+      .filter(({ slide }) => slide.chapter === currentChapterNum);
+  }, [chapterModeEnabled, slides, currentChapterNum]);
+
+  const goToChapter = useCallback((chapterArrayIndex: number) => {
+    if (disableManualNav) return;
+    if (chapterArrayIndex >= 0 && chapterArrayIndex < chapters.length) {
+      goToSlide(chapters[chapterArrayIndex].firstSlideIndex);
+    }
+  }, [disableManualNav, chapters, goToSlide]);
+
   // Keyboard navigation — ArrowRight/Space advances segment first, then slide
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // PageDown/PageUp for chapter navigation
+      if (e.key === 'PageDown') {
+        e.preventDefault();
+        if (hasMultipleChapters && currentChapterIndex < chapters.length - 1) {
+          goToChapter(currentChapterIndex + 1);
+        }
+        return;
+      }
+      if (e.key === 'PageUp') {
+        e.preventDefault();
+        if (hasMultipleChapters && currentChapterIndex > 0) {
+          goToChapter(currentChapterIndex - 1);
+        }
+        return;
+      }
+
       if (e.key === 'ArrowRight' || e.key === ' ') {
         e.preventDefault();
         if (hasMultipleSegments && segmentContext.currentSegmentIndex < segments.length - 1) {
@@ -195,7 +246,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [goToNext, goToPrev, goToNextSegment, goToPrevSegment, goToSlide, slides.length, hasMultipleSegments, segments.length, segmentContext.currentSegmentIndex]);
+  }, [goToNext, goToPrev, goToNextSegment, goToPrevSegment, goToSlide, goToChapter, slides.length, hasMultipleSegments, segments.length, segmentContext.currentSegmentIndex, hasMultipleChapters, currentChapterIndex, chapters.length]);
 
   const variants = {
     enter: {
@@ -246,7 +297,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
         </motion.div>
       </AnimatePresence>
 
-      {/* Combined Navigation Container (Slide nav on top, Segment nav below) */}
+      {/* Navigation pill — CSS grid so all rows share column tracks */}
       {!disableManualNav && (
         <nav
           data-testid="slide-nav"
@@ -256,26 +307,178 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
             bottom: 12,
             left: '50%',
             transform: 'translateX(-50%)',
-            display: 'flex',
-            flexDirection: 'column-reverse',
+            display: 'grid',
+            gridTemplateColumns: '1fr auto 1fr',
             alignItems: 'center',
-            gap: hasMultipleSegments ? '2px' : '0px',
-            zIndex: 1000
+            zIndex: 1000,
+            background: `${theme.colors.bgDeep}e6`,
+            borderRadius: 50,
+            backdropFilter: 'blur(10px)',
+            padding: '0 1rem',
           }}
         >
-          {/* Slide navigation (always present) — three-column layout centers dots */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              background: `${theme.colors.bgDeep}e6`,
-              padding: '0rem 1rem',
-              borderRadius: 50,
-              backdropFilter: 'blur(10px)'
-            }}
-          >
-            {/* Left wing */}
-            <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '0.3rem' }}>
+          {/* --- Marker row --- */}
+          {markers.length > 0 && (
+            <div data-testid="marker-nav" style={{ display: 'contents' }}>
+              {/* Left */}
+              <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '0.3rem' }}>
+                <div style={{ color: theme.colors.textSecondary, fontSize: 11, fontFamily: theme.fontFamily }}>
+                  Markers:
+                </div>
+                <button
+                  onClick={() => {
+                    const prev = [...markers].reverse().find(m => m.time < currentTime - 0.05);
+                    if (prev) audioTimeCtx?.seekToTime(prev.time);
+                  }}
+                  disabled={currentMarkerIndex <= 0}
+                  aria-label="Previous marker"
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: currentMarkerIndex <= 0 ? theme.colors.textMuted : theme.colors.textPrimary,
+                    cursor: currentMarkerIndex <= 0 ? 'not-allowed' : 'pointer',
+                    fontSize: 20,
+                    padding: '0.25rem 0.4rem',
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}
+                >
+                  ◀
+                </button>
+              </div>
+              {/* Center */}
+              <div style={{ display: 'flex', gap: '0.4rem', justifyContent: 'center', margin: '0 0.6rem' }}>
+                {markers.map((marker, idx) => (
+                  <button
+                    key={marker.id}
+                    onClick={() => audioTimeCtx?.seekToTime(marker.time)}
+                    aria-label={`Go to marker ${idx}: ${marker.id}`}
+                    title={marker.id}
+                    style={{
+                      width: 6,
+                      height: 6,
+                      borderRadius: 1,
+                      transform: 'rotate(45deg)',
+                      background: idx === currentMarkerIndex
+                        ? theme.colors.primary
+                        : idx < currentMarkerIndex
+                        ? `${theme.colors.primary}80`
+                        : theme.colors.textMuted,
+                      border: 'none',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                      padding: 0
+                    }}
+                  />
+                ))}
+              </div>
+              {/* Right */}
+              <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: '0.3rem' }}>
+                <button
+                  onClick={() => {
+                    const next = markers.find(m => m.time > currentTime + 0.05);
+                    if (next) audioTimeCtx?.seekToTime(next.time);
+                  }}
+                  disabled={currentMarkerIndex >= markers.length - 1}
+                  aria-label="Next marker"
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: currentMarkerIndex >= markers.length - 1 ? theme.colors.textMuted : theme.colors.textPrimary,
+                    cursor: currentMarkerIndex >= markers.length - 1 ? 'not-allowed' : 'pointer',
+                    fontSize: 20,
+                    padding: '0.25rem 0.4rem',
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}
+                >
+                  ▶
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* --- Segment row --- */}
+          {hasMultipleSegments && (
+            <div style={{ display: 'contents' }}>
+              {/* Left */}
+              <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '0.3rem' }}>
+                <div style={{ color: theme.colors.textSecondary, fontSize: 11, fontFamily: theme.fontFamily }}>
+                  Segment:
+                </div>
+                <button
+                  onClick={goToPrevSegment}
+                  disabled={segmentContext.currentSegmentIndex === 0}
+                  aria-label="Previous segment"
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: segmentContext.currentSegmentIndex === 0 ? theme.colors.textMuted : theme.colors.textPrimary,
+                    cursor: segmentContext.currentSegmentIndex === 0 ? 'not-allowed' : 'pointer',
+                    fontSize: 20,
+                    padding: '0.25rem 0.4rem',
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}
+                >
+                  ◀
+                </button>
+              </div>
+              {/* Center */}
+              <div style={{ display: 'flex', gap: '0.4rem', justifyContent: 'center', margin: '0 0.6rem' }}>
+                {segments.map((segment, idx) => (
+                  <button
+                    key={segment.id}
+                    onClick={() => goToSegment(idx)}
+                    aria-label={`Go to segment ${idx}: ${segment.id}`}
+                    aria-current={idx === segmentContext.currentSegmentIndex ? 'true' : 'false'}
+                    title={segment.id}
+                    style={{
+                      width: idx === segmentContext.currentSegmentIndex ? 20 : 8,
+                      height: 8,
+                      borderRadius: 4,
+                      background: idx === segmentContext.currentSegmentIndex ? theme.colors.primary : theme.colors.textMuted,
+                      border: 'none',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s ease',
+                      padding: 0
+                    }}
+                  />
+                ))}
+              </div>
+              {/* Right */}
+              <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: '0.3rem' }}>
+                <button
+                  onClick={goToNextSegment}
+                  disabled={segmentContext.currentSegmentIndex === segments.length - 1}
+                  aria-label="Next segment"
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: segmentContext.currentSegmentIndex === segments.length - 1 ? theme.colors.textMuted : theme.colors.textPrimary,
+                    cursor: segmentContext.currentSegmentIndex === segments.length - 1 ? 'not-allowed' : 'pointer',
+                    fontSize: 20,
+                    padding: '0.25rem 0.4rem',
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}
+                >
+                  ▶
+                </button>
+                <div style={{ color: theme.colors.textSecondary, fontSize: 12, fontFamily: theme.fontFamily, whiteSpace: 'nowrap' }}>
+                  {segmentContext.currentSegmentIndex} / {segments.length - 1}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* --- Slide row (always present) --- */}
+          <div style={{ display: 'contents' }}>
+            {/* Left */}
+            <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '0.3rem' }}>
+              <div style={{ color: theme.colors.textSecondary, fontSize: 11, fontFamily: theme.fontFamily }}>
+                Slide:
+              </div>
               <button
                 onClick={goToPrev}
                 disabled={currentIndex === 0}
@@ -293,30 +496,20 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
               >
                 ←
               </button>
-              <div
-                style={{
-                  color: theme.colors.textSecondary,
-                  fontSize: 11,
-                  fontFamily: theme.fontFamily,
-                }}
-              >
-                Slide:
-              </div>
             </div>
-
-            {/* Center: dots */}
-            <div style={{ display: 'flex', gap: '0.4rem', margin: '0 0.6rem' }}>
-              {slides.map((slide, idx) => (
+            {/* Center */}
+            <div style={{ display: 'flex', gap: '0.4rem', justifyContent: 'center', margin: '0 0.6rem' }}>
+              {(chapterModeEnabled && chapterSlides ? chapterSlides : slides.map((slide, globalIdx) => ({ slide, globalIdx }))).map(({ slide, globalIdx }) => (
                 <button
                   key={`${slide.chapter}-${slide.slide}`}
-                  onClick={() => goToSlide(idx)}
-                  aria-label={`Go to slide ${idx + 1}: ${slide.title}`}
-                  aria-current={idx === currentIndex ? 'true' : 'false'}
+                  onClick={() => goToSlide(globalIdx)}
+                  aria-label={`Go to slide ${globalIdx + 1}: ${slide.title}`}
+                  aria-current={globalIdx === currentIndex ? 'true' : 'false'}
                   style={{
-                    width: idx === currentIndex ? 20 : 8,
+                    width: globalIdx === currentIndex ? 20 : 8,
                     height: 8,
                     borderRadius: 4,
-                    background: idx === currentIndex ? theme.colors.primary : theme.colors.textMuted,
+                    background: globalIdx === currentIndex ? theme.colors.primary : theme.colors.textMuted,
                     border: 'none',
                     cursor: 'pointer',
                     transition: 'all 0.3s ease',
@@ -325,9 +518,8 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
                 />
               ))}
             </div>
-
-            {/* Right wing */}
-            <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: '0.3rem' }}>
+            {/* Right */}
+            <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: '0.3rem' }}>
               <button
                 onClick={goToNext}
                 disabled={currentIndex === slides.length - 1}
@@ -345,227 +537,90 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
               >
                 →
               </button>
-              <div
-                style={{
-                  color: theme.colors.textSecondary,
-                  fontSize: 12,
-                  fontFamily: theme.fontFamily,
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {currentIndex} / {slides.length - 1}
+              <div style={{ color: theme.colors.textSecondary, fontSize: 12, fontFamily: theme.fontFamily, whiteSpace: 'nowrap' }}>
+                {chapterModeEnabled && chapterSlides
+                  ? `${chapterSlides.findIndex(cs => cs.globalIdx === currentIndex)} / ${chapterSlides.length - 1}`
+                  : `${currentIndex} / ${slides.length - 1}`
+                }
               </div>
             </div>
           </div>
 
-          {/* Segment + marker navigation (shown when multiple segments or markers exist) */}
-          {(hasMultipleSegments || markers.length > 0) && (
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column-reverse',
-                alignItems: 'center',
-                alignSelf: 'stretch',
-                background: `${theme.colors.bgDeep}e6`,
-                borderRadius: 50,
-                backdropFilter: 'blur(10px)',
-                marginBottom: '-12px'
-              }}
-            >
-              {/* Segment dots row — three-column layout keeps dots centered */}
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  width: '100%',
-                  padding: '0rem 1rem',
-                }}
-              >
-                {hasMultipleSegments ? (
-                  <>
-                    {/* Left wing: ◀ + label — hugs the dots from the left */}
-                    <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '0.3rem' }}>
-                      <button
-                        onClick={goToPrevSegment}
-                        disabled={segmentContext.currentSegmentIndex === 0}
-                        aria-label="Previous segment"
-                        style={{
-                          background: 'none',
-                          border: 'none',
-                          color: segmentContext.currentSegmentIndex === 0 ? theme.colors.textMuted : theme.colors.textPrimary,
-                          cursor: segmentContext.currentSegmentIndex === 0 ? 'not-allowed' : 'pointer',
-                          fontSize: 20,
-                          padding: '0.25rem 0.4rem',
-                          display: 'flex',
-                          alignItems: 'center'
-                        }}
-                      >
-                        ◀
-                      </button>
-                      <div
-                        style={{
-                          color: theme.colors.textSecondary,
-                          fontSize: 11,
-                          fontFamily: theme.fontFamily,
-                        }}
-                      >
-                        Segment:
-                      </div>
-                    </div>
-
-                    {/* Center: dots — true center anchor */}
-                    <div style={{ display: 'flex', gap: '0.4rem', margin: '0 0.6rem' }}>
-                      {segments.map((segment, idx) => (
-                        <button
-                          key={segment.id}
-                          onClick={() => goToSegment(idx)}
-                          aria-label={`Go to segment ${idx}: ${segment.id}`}
-                          aria-current={idx === segmentContext.currentSegmentIndex ? 'true' : 'false'}
-                          title={segment.id}
-                          style={{
-                            width: idx === segmentContext.currentSegmentIndex ? 20 : 8,
-                            height: 8,
-                            borderRadius: 4,
-                            background: idx === segmentContext.currentSegmentIndex ? theme.colors.primary : theme.colors.textMuted,
-                            border: 'none',
-                            cursor: 'pointer',
-                            transition: 'all 0.3s ease',
-                            padding: 0
-                          }}
-                        />
-                      ))}
-                    </div>
-
-                    {/* Right wing: ▶ + counter — hugs dots from right */}
-                    <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: '0.3rem' }}>
-                      <button
-                        onClick={goToNextSegment}
-                        disabled={segmentContext.currentSegmentIndex === segments.length - 1}
-                        aria-label="Next segment"
-                        style={{
-                          background: 'none',
-                          border: 'none',
-                          color: segmentContext.currentSegmentIndex === segments.length - 1 ? theme.colors.textMuted : theme.colors.textPrimary,
-                          cursor: segmentContext.currentSegmentIndex === segments.length - 1 ? 'not-allowed' : 'pointer',
-                          fontSize: 20,
-                          padding: '0.25rem 0.4rem',
-                          display: 'flex',
-                          alignItems: 'center'
-                        }}
-                      >
-                        ▶
-                      </button>
-                      <div
-                        style={{
-                          color: theme.colors.textSecondary,
-                          fontSize: 12,
-                          fontFamily: theme.fontFamily,
-                          whiteSpace: 'nowrap',
-                        }}
-                      >
-                        {segmentContext.currentSegmentIndex} / {segments.length - 1}
-                      </div>
-                    </div>
-                  </>
-                ) : null}
-              </div>
-
-              {/* Marker dots row (inside segment pill, centered) */}
-              {markers.length > 0 && (
-                <div
-                  data-testid="marker-nav"
+          {/* --- Chapter row --- */}
+          {chapterModeEnabled && hasMultipleChapters && (
+            <div style={{ display: 'contents' }}>
+              {/* Left */}
+              <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '0.3rem' }}>
+                <div style={{ color: theme.colors.textSecondary, fontSize: 11, fontFamily: theme.fontFamily }}>
+                  Chapter:
+                </div>
+                <button
+                  onClick={() => goToChapter(currentChapterIndex - 1)}
+                  disabled={currentChapterIndex === 0}
+                  aria-label="Previous chapter"
                   style={{
+                    background: 'none',
+                    border: 'none',
+                    color: currentChapterIndex === 0 ? theme.colors.textMuted : theme.colors.textPrimary,
+                    cursor: currentChapterIndex === 0 ? 'not-allowed' : 'pointer',
+                    fontSize: 20,
+                    padding: '0.25rem 0.4rem',
                     display: 'flex',
-                    alignItems: 'center',
-                    width: '100%',
-                    padding: '0.15rem 1rem 0',
+                    alignItems: 'center'
                   }}
                 >
-                  {/* Left wing */}
-                  <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '0.3rem' }}>
-                    <button
-                      onClick={() => {
-                        const prev = [...markers].reverse().find(m => m.time < currentTime - 0.05);
-                        if (prev) audioTimeCtx?.seekToTime(prev.time);
-                      }}
-                      disabled={currentMarkerIndex <= 0}
-                      aria-label="Previous marker"
-                      style={{
-                        background: 'none',
-                        border: 'none',
-                        color: currentMarkerIndex <= 0 ? theme.colors.textMuted : theme.colors.textPrimary,
-                        cursor: currentMarkerIndex <= 0 ? 'not-allowed' : 'pointer',
-                        fontSize: 16,
-                        padding: '0.15rem 0.3rem',
-                        display: 'flex',
-                        alignItems: 'center'
-                      }}
-                    >
-                      ◀
-                    </button>
-                    <div
-                      style={{
-                        color: theme.colors.textSecondary,
-                        fontSize: 11,
-                        fontFamily: theme.fontFamily,
-                      }}
-                    >
-                      Markers:
-                    </div>
-                  </div>
-
-                  {/* Center: dots */}
-                  <div style={{ display: 'flex', gap: '0.4rem', margin: '0 0.6rem' }}>
-                    {markers.map((marker, idx) => (
-                      <button
-                        key={marker.id}
-                        onClick={() => audioTimeCtx?.seekToTime(marker.time)}
-                        aria-label={`Go to marker ${idx}: ${marker.id}`}
-                        title={marker.id}
-                        style={{
-                          width: 6,
-                          height: 6,
-                          borderRadius: 1,
-                          transform: 'rotate(45deg)',
-                          background: idx === currentMarkerIndex
-                            ? theme.colors.primary
-                            : idx < currentMarkerIndex
-                            ? `${theme.colors.primary}80`
-                            : theme.colors.textMuted,
-                          border: 'none',
-                          cursor: 'pointer',
-                          transition: 'all 0.2s ease',
-                          padding: 0
-                        }}
-                      />
-                    ))}
-                  </div>
-
-                  {/* Right wing */}
-                  <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: '0.3rem' }}>
-                    <button
-                      onClick={() => {
-                        const next = markers.find(m => m.time > currentTime + 0.05);
-                        if (next) audioTimeCtx?.seekToTime(next.time);
-                      }}
-                      disabled={currentMarkerIndex >= markers.length - 1}
-                      aria-label="Next marker"
-                      style={{
-                        background: 'none',
-                        border: 'none',
-                        color: currentMarkerIndex >= markers.length - 1 ? theme.colors.textMuted : theme.colors.textPrimary,
-                        cursor: currentMarkerIndex >= markers.length - 1 ? 'not-allowed' : 'pointer',
-                        fontSize: 16,
-                        padding: '0.15rem 0.3rem',
-                        display: 'flex',
-                        alignItems: 'center'
-                      }}
-                    >
-                      ▶
-                    </button>
-                  </div>
+                  ←
+                </button>
+              </div>
+              {/* Center */}
+              <div style={{ display: 'flex', gap: '0.4rem', justifyContent: 'center', margin: '0 0.6rem' }}>
+                {chapters.map((ch, idx) => (
+                  <button
+                    key={ch.chapterNum}
+                    onClick={() => goToChapter(idx)}
+                    aria-label={`Go to chapter ${ch.chapterNum}: ${chaptersConfig?.[ch.chapterNum]?.title ?? `Ch ${ch.chapterNum}`}`}
+                    aria-current={idx === currentChapterIndex ? 'true' : 'false'}
+                    title={chaptersConfig?.[ch.chapterNum]?.title ?? `Ch ${ch.chapterNum}`}
+                    style={{
+                      width: idx === currentChapterIndex ? 16 : 8,
+                      height: 8,
+                      borderRadius: 2,
+                      background: idx === currentChapterIndex
+                        ? theme.colors.primary
+                        : idx < currentChapterIndex
+                        ? `${theme.colors.primary}80`
+                        : theme.colors.textMuted,
+                      border: 'none',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s ease',
+                      padding: 0
+                    }}
+                  />
+                ))}
+              </div>
+              {/* Right */}
+              <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: '0.3rem' }}>
+                <button
+                  onClick={() => goToChapter(currentChapterIndex + 1)}
+                  disabled={currentChapterIndex === chapters.length - 1}
+                  aria-label="Next chapter"
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: currentChapterIndex === chapters.length - 1 ? theme.colors.textMuted : theme.colors.textPrimary,
+                    cursor: currentChapterIndex === chapters.length - 1 ? 'not-allowed' : 'pointer',
+                    fontSize: 20,
+                    padding: '0.25rem 0.4rem',
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}
+                >
+                  →
+                </button>
+                <div style={{ color: theme.colors.textSecondary, fontSize: 12, fontFamily: theme.fontFamily, whiteSpace: 'nowrap' }}>
+                  {currentChapterIndex} / {chapters.length - 1}
                 </div>
-              )}
+              </div>
             </div>
           )}
         </nav>
