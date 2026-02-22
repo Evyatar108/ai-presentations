@@ -394,6 +394,9 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
                 >
                   ▶
                 </button>
+                <div style={{ color: theme.colors.textSecondary, fontSize: 12, fontFamily: theme.fontFamily, whiteSpace: 'nowrap' }}>
+                  {currentMarkerIndex >= 0 ? `${currentMarkerIndex} / ${markers.length - 1}` : ''}
+                </div>
               </div>
             </div>
           )}
