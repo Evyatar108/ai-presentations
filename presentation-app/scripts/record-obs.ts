@@ -8,6 +8,7 @@
  *   npm run record:obs -- --demo highlights-deep-dive
  *   npm run record:obs -- --demo highlights-deep-dive --resolution 2560x1440
  *   npm run record:obs -- --demo highlights-deep-dive --source "My Browser" --buffer 15
+ *   npm run record:obs -- --demo highlights-deep-dive --scene "My Scene"
  */
 
 import OBSWebSocket from 'obs-websocket-js';
@@ -35,7 +36,7 @@ function hasFlag(name: string): boolean {
 const demoIdArg = getArg('--demo');
 if (!demoIdArg) {
   console.error(
-    'Usage: npm run record:obs -- --demo <demo-id> [--resolution WxH] [--source name] [--buffer seconds] [--port N] [--password pw] [--no-rename]',
+    'Usage: npm run record:obs -- --demo <demo-id> [--resolution WxH] [--source name] [--scene name] [--buffer seconds] [--port N] [--password pw] [--no-rename]',
   );
   process.exit(1);
 }
@@ -49,11 +50,38 @@ if (!resW || !resH) {
 }
 
 const sourceName = getArg('--source') ?? 'Presentation';
+const DEFAULT_SCENE_NAME = 'AI-Presentations';
+const sceneName = getArg('--scene') ?? DEFAULT_SCENE_NAME;
 const bufferSeconds = Number(getArg('--buffer') ?? '10');
 const port = Number(getArg('--port') ?? '4455');
 const devPort = Number(getArg('--dev-port') ?? '5173');
-const password = getArg('--password') ?? process.env.OBS_WEBSOCKET_PASSWORD ?? '';
 const skipRename = hasFlag('--no-rename');
+
+// ---------------------------------------------------------------------------
+// Load .env.local for OBS_WEBSOCKET_PASSWORD
+// ---------------------------------------------------------------------------
+const envPath = path.resolve(process.cwd(), '.env.local');
+if (fs.existsSync(envPath)) {
+  const envContent = fs.readFileSync(envPath, 'utf-8');
+  for (const line of envContent.split('\n')) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) continue;
+    const eqIdx = trimmed.indexOf('=');
+    if (eqIdx === -1) continue;
+    const key = trimmed.slice(0, eqIdx).trim();
+    const value = trimmed.slice(eqIdx + 1).trim();
+    if (!process.env[key]) process.env[key] = value;
+  }
+} else if (!getArg('--password')) {
+  console.error(`Missing .env.local at ${envPath}`);
+  console.error('Create it with your OBS WebSocket password:\n');
+  console.error('  OBS_WEBSOCKET_PASSWORD=<your-password>\n');
+  console.error('Find the password in OBS: Tools > WebSocket Server Settings > Show Connect Info');
+  console.error('Alternatively, pass --password <pw> on the command line.');
+  process.exit(1);
+}
+
+const password = getArg('--password') ?? process.env.OBS_WEBSOCKET_PASSWORD ?? '';
 
 // ---------------------------------------------------------------------------
 // Load demo metadata to get duration
@@ -189,7 +217,9 @@ async function main() {
 
   console.log(`\nOBS Recording: ${demoId}`);
   console.log(`  Duration:   ~${formatTime(totalDuration)} (max wait: ${formatTime(maxWaitSeconds)})`);
+  console.log(`  Scene:      "${sceneName}"`);
   console.log(`  Source:     "${sourceName}" @ ${resW}x${resH}`);
+  console.log(`  Audio:      Browser-only (global inputs muted during recording)`);
   console.log(`  Signal:     http://127.0.0.1:${signal.port}/complete`);
   console.log(`  OBS:        ws://127.0.0.1:${port}\n`);
 
@@ -205,18 +235,41 @@ async function main() {
   }
   console.log('  Connected to OBS WebSocket');
 
+  // Track state for cleanup
+  let originalSceneName: string | undefined;
+  const savedMuteStates: { inputName: string; muted: boolean }[] = [];
+
   try {
-    // 2. Build autoplay URL
+    // 2. Save original scene and set up dedicated scene
+    const { currentProgramSceneName } = await obs.call('GetCurrentProgramScene') as any;
+    originalSceneName = currentProgramSceneName;
+
+    try {
+      await obs.call('CreateScene', { sceneName });
+      console.log(`  Created scene "${sceneName}"`);
+    } catch {
+      // Scene already exists — reuse it
+      console.log(`  Using existing scene "${sceneName}"`);
+    }
+    await obs.call('SetCurrentProgramScene', { sceneName });
+
+    // 3. Build autoplay URL
     const url = `http://localhost:${devPort}?demo=${encodeURIComponent(demoId)}&autoplay=narrated&hideUI&zoom&signal=${signal.port}`;
 
-    // 3. Ensure Browser source exists, create if missing
-    const { currentProgramSceneName: sceneName } = await obs.call('GetCurrentProgramScene') as any;
+    // 4. Ensure Browser source exists, create if missing
     let currentSettings: any = null;
     try {
       const result = await obs.call('GetInputSettings', { inputName: sourceName }) as any;
       currentSettings = result.inputSettings;
+      // Source exists globally — make sure it's in our scene
+      try {
+        await obs.call('GetSceneItemId', { sceneName, sourceName });
+      } catch {
+        // Not in this scene — add it
+        await obs.call('CreateSceneItem', { sceneName, sourceName });
+      }
     } catch {
-      // Source doesn't exist — create it in the current scene
+      // Source doesn't exist — create it in the dedicated scene
       console.log(`  Browser source "${sourceName}" not found, creating...`);
       await obs.call('CreateInput', {
         sceneName,
@@ -227,12 +280,13 @@ async function main() {
           width: resW,
           height: resH,
           shutdown: true,
+          reroute_audio: true,
         },
       });
       console.log(`  Created Browser source "${sourceName}" in scene "${sceneName}"`);
     }
 
-    // 3b. Re-enable the scene item in case it was disabled from a previous run
+    // 4b. Re-enable the scene item in case it was disabled from a previous run
     try {
       const { sceneItemId } = await obs.call('GetSceneItemId', {
         sceneName,
@@ -245,18 +299,69 @@ async function main() {
       });
     } catch { /* source may not be in scene yet */ }
 
-    // 4. Update Browser source settings
+    // 4c. Reset Browser source transform to fill the canvas
+    try {
+      const { sceneItemId } = await obs.call('GetSceneItemId', {
+        sceneName,
+        sourceName,
+      }) as any;
+      await obs.call('SetSceneItemTransform', {
+        sceneName,
+        sceneItemId,
+        sceneItemTransform: {
+          positionX: 0,
+          positionY: 0,
+          boundsType: 'OBS_BOUNDS_STRETCH',
+          boundsWidth: resW,
+          boundsHeight: resH,
+        },
+      });
+      // Move to top of layer stack
+      const { sceneItems } = await obs.call('GetSceneItemList', { sceneName }) as any;
+      if (sceneItems.length > 0) {
+        const topIndex = sceneItems.length - 1;
+        await obs.call('SetSceneItemIndex', { sceneName, sceneItemId, sceneItemIndex: topIndex });
+      }
+    } catch (err: any) {
+      console.warn(`  Could not reset Browser source transform: ${err.message ?? err}`);
+    }
+
+    // 5. Mute global audio inputs for audio isolation
+    try {
+      const specialInputs = await obs.call('GetSpecialInputs') as any;
+      const inputNames = [
+        specialInputs.desktop1, specialInputs.desktop2,
+        specialInputs.mic1, specialInputs.mic2,
+        specialInputs.mic3, specialInputs.mic4,
+      ].filter(Boolean) as string[];
+      for (const inputName of inputNames) {
+        try {
+          const { inputMuted } = await obs.call('GetInputMute', { inputName }) as any;
+          savedMuteStates.push({ inputName, muted: inputMuted });
+          if (!inputMuted) {
+            await obs.call('SetInputMute', { inputName, inputMuted: true });
+            console.log(`  Muted "${inputName}"`);
+          }
+        } catch { /* input may not exist on this system */ }
+      }
+    } catch (err: any) {
+      console.warn(`  Could not mute global audio inputs: ${err.message ?? err}`);
+    }
+
+    // 6. Update Browser source settings (reroute_audio gives the source its own
+    //    audio channel so muting Desktop Audio doesn't kill browser audio)
     await obs.call('SetInputSettings', {
       inputName: sourceName,
       inputSettings: {
         url,
         width: resW,
         height: resH,
+        reroute_audio: true,
       },
     });
     console.log(`  Browser source URL: ${url}`);
 
-    // 5. Force page reload by toggling shutdown_on_inactive
+    // 7. Force page reload by toggling shutdown_on_inactive
     //    (OBS Browser source reloads when shutdown is toggled)
     const wasShutdown = currentSettings?.shutdown;
     if (wasShutdown) {
@@ -281,17 +386,17 @@ async function main() {
       // Not all OBS versions support this — the shutdown toggle above is the fallback
     }
 
-    // 5. Wait for page load + audio preloading
+    // 8. Wait for page load + audio preloading
     console.log('  Waiting for page load...');
     await sleep(3000);
 
-    // 6. Start recording
+    // 9. Start recording
     signal.setRecordingStartTime(Date.now());
     await obs.call('StartRecord');
     console.log('  Recording started (waiting for completion signal...)');
     const stopProgress = startProgressTimer(totalDuration);
 
-    // 7. Wait for completion signal from the app (or max timeout)
+    // 10. Wait for completion signal from the app (or max timeout)
     const reason = await signal.waitForSignal(maxWaitSeconds * 1000);
     const elapsed = stopProgress();
 
@@ -303,7 +408,7 @@ async function main() {
       console.log(`  Max wait reached (${formatTime(maxWaitSeconds)}), stopping`);
     }
 
-    // 8. Stop recording
+    // 11. Stop recording
     let outputPath: string | undefined;
     try {
       const stopResult = await obs.call('StopRecord') as any;
@@ -313,7 +418,7 @@ async function main() {
       console.warn(`  StopRecord failed (may already be stopped): ${err.message ?? err}`);
     }
 
-    // 8b. Disable Browser source so OBS shuts down its internal browser
+    // 11b. Disable Browser source so OBS shuts down its internal browser
     try {
       const { sceneItemId } = await obs.call('GetSceneItemId', {
         sceneName,
@@ -329,7 +434,7 @@ async function main() {
       console.warn(`  Could not disable browser source: ${err.message ?? err}`);
     }
 
-    // 9. Rename output file (retry to handle EBUSY when OBS still holds the file)
+    // 12. Rename output file (retry to handle EBUSY when OBS still holds the file)
     let finalVideoPath = outputPath;
     if (outputPath && !skipRename) {
       const ext = path.extname(outputPath);
@@ -364,7 +469,7 @@ async function main() {
       console.log(`  Saved: ${outputPath}`);
     }
 
-    // 10. Generate VTT subtitles + words data from segment timing events
+    // 13. Generate VTT subtitles + words data from segment timing events
     if (signal.segmentEvents.length > 0) {
       try {
         const { wordsData, vttContent } = generateVtt(demoId, signal.segmentEvents);
@@ -391,6 +496,24 @@ async function main() {
 
     console.log('\nDone!');
   } finally {
+    // Restore muted audio inputs
+    for (const { inputName, muted } of savedMuteStates) {
+      if (!muted) {
+        try {
+          await obs.call('SetInputMute', { inputName, inputMuted: false });
+          console.log(`  Restored "${inputName}" (unmuted)`);
+        } catch { /* best-effort */ }
+      }
+    }
+
+    // Switch back to original scene (skip if it was already the dedicated scene)
+    if (originalSceneName && originalSceneName !== sceneName) {
+      try {
+        await obs.call('SetCurrentProgramScene', { sceneName: originalSceneName });
+        console.log(`  Restored original scene "${originalSceneName}"`);
+      } catch { /* best-effort */ }
+    }
+
     signal.close();
     obs.disconnect();
   }
