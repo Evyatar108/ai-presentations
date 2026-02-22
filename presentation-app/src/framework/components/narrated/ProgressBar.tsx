@@ -74,7 +74,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
       }}
     >
       <span>
-        Slide {currentIndex + 1} of {totalSlides} (Ch{currentSlideMetadata.chapter}:S{currentSlideMetadata.slide})
+        Slide {currentIndex} of {totalSlides} (Ch{currentSlideMetadata.chapter}:S{currentSlideMetadata.slide})
       </span>
 
       {/* Runtime timer (only in narrated mode & enabled) */}

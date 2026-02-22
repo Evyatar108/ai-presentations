@@ -1,5 +1,4 @@
 import React, { useState, useCallback } from 'react';
-import { ReducedMotionToggle } from './framework/accessibility/ReducedMotion';
 import { WelcomeScreen } from './framework/components/WelcomeScreen';
 import { DemoPlayer } from './framework/components/DemoPlayer';
 
@@ -18,10 +17,6 @@ export const App: React.FC = () => {
 
   return (
     <div style={{ position: 'relative' }}>
-      {/* Reduced Motion Toggle (global) */}
-      {!hideInterface && <ReducedMotionToggle />}
-
-      {/* Show WelcomeScreen or DemoPlayer based on selection */}
       {!selectedDemoId ? (
         <WelcomeScreen onSelectDemo={handleSelectDemo} />
       ) : (
