@@ -181,7 +181,7 @@ Markers are **preserved as-is** in narration files and in slide component `narra
 
 - Editing narration via the browser UI or JSON files should keep markers in place
 - The `check-narration` change detection includes marker tokens in its hashes
-- If you add, move, or rename markers, re-run `npm run tts:align` to update alignment timestamps
+- If you add, move, or rename markers, re-run `npm run tts:align` to update alignment timestamps (or use the staleness overlay's **Regenerate** button in the browser, which runs both `tts:generate` and `tts:align` automatically)
 
 See [MARKERS_GUIDE.md](../presentation-app/docs/MARKERS_GUIDE.md) for marker syntax details.
 

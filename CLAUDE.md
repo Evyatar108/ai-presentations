@@ -127,6 +127,8 @@ Subtitle corrections: `public/audio/{demo-id}/subtitle-corrections.json` — map
 | `src/framework/hooks/useApiHealth.ts` | Backend API health check |
 | `src/framework/hooks/useNarrationEditor.ts` | Narration editing workflow |
 | `src/framework/hooks/useFocusTrap.ts` | Keyboard focus trap for modals |
+| `src/framework/hooks/useStalenessCheck.ts` | Dev-mode staleness detection + one-click regeneration |
+| `src/framework/components/StalenessWarning.tsx` | Dev-mode staleness overlay (portal, shown in manual mode) |
 | `src/framework/alignment/types.ts` | AlignedWord, ResolvedMarker, DemoAlignment types |
 | `src/framework/contexts/AudioTimeContext.tsx` | Continuous audio time tracking context (sub-segment markers) |
 | `src/framework/utils/alignmentLoader.ts` | Lazy-load alignment.json per demo |
@@ -139,7 +141,7 @@ Subtitle corrections: `public/audio/{demo-id}/subtitle-corrections.json` — map
 | `tts/server_whisperx.py` | WhisperX server (transcription + forced alignment) |
 | `src/framework/utils/audioPath.ts` | Audio file path derivation (buildAudioFilePath, resolveAudioFilePath) |
 | `src/framework/utils/formatTime.ts` | Time formatting utilities (mm:ss, delta colors) |
-| `vite-plugin-audio-writer.ts` | Custom Vite plugin for /api/save-audio |
+| `vite-plugin-audio-writer.ts` | Custom Vite plugin for /api/save-audio, /api/staleness-check, /api/narration/* endpoints |
 | `scripts/record-obs.ts` | OBS automated recording via WebSocket (signal-based completion + VTT subtitle generation) |
 | `scripts/utils/vtt-generator.ts` | VTT subtitle generation from segment timing events + alignment data |
 | `tests/overflow.spec.ts` | Playwright test: viewport overflow detection for all slides/segments |

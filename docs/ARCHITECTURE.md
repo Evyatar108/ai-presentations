@@ -132,6 +132,8 @@ Segments and markers operate at different granularities and compose naturally:
 
 When `alignment.json` is missing, `<RevealAtMarker>` degrades gracefully by rendering children immediately.
 
+In dev mode, a **staleness overlay** (`StalenessWarning`) appears when the demo has unresolved markers or changed narration segments. It checks `/api/staleness-check` on mount and offers a one-click **Regenerate** button that runs `tts:generate` + `tts:align` via `/api/narration/regenerate-demo`, then reloads alignment data. The `npm run dev` startup script also auto-chains `tts:align` after `tts:generate` when you accept regeneration.
+
 ## Benefits
 
 ### Scalability

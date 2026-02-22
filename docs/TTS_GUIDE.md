@@ -101,7 +101,9 @@ Found 3 changed narration texts in meeting-highlights:
 Do you want to regenerate these files? (y/n)
 ```
 
-Answer `y` to regenerate automatically, or `n` to skip.
+Answer `y` to regenerate automatically (this also auto-chains `tts:align` for demos with unresolved markers or changed audio), or `n` to skip.
+
+If you skip, a **staleness overlay** appears in the browser when you open a demo in manual mode, showing unresolved markers and changed segments with a one-click **Regenerate** button.
 
 ### Skip Cache Check
 
@@ -369,11 +371,12 @@ npm run tts:generate -- --demo {demo-id}
 
 ## Development Workflow
 
-1. Edit slide narration text in components
+1. Edit slide narration text in components or `narration.json`
 2. Run `npm run dev`
-3. Pre-flight check detects changes
-4. Answer `y` to regenerate
-5. Server starts with updated audio
+3. Pre-flight check detects changes (narration text, missing audio, unresolved markers)
+4. Answer `y` to regenerate — auto-runs `tts:generate` then `tts:align` for affected demos
+5. Server starts with updated audio and alignment
+6. If you skip step 4, a staleness overlay in the browser lets you regenerate on demand
 
 ## Verification (Whisper Transcription)
 
