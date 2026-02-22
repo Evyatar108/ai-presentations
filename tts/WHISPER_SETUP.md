@@ -1,8 +1,12 @@
-# Whisper Transcription Server Setup Guide
+# WhisperX Server Setup Guide
 
 ## Overview
 
-The Whisper server transcribes TTS-generated audio back to text using [faster-whisper](https://github.com/SYSTRAN/faster-whisper) (CTranslate2 backend). This enables verification of TTS output quality by comparing the original narration text against what Whisper hears.
+The WhisperX server provides two capabilities:
+- **Transcription** — transcribes TTS-generated audio back to text for quality verification (`tts:verify`)
+- **Forced alignment** — produces word-level timestamps for inline marker resolution (`tts:align`)
+
+It uses [WhisperX](https://github.com/m-bain/whisperX) which wraps faster-whisper with phoneme-level alignment.
 
 ## Prerequisites
 
@@ -14,12 +18,12 @@ The Whisper server transcribes TTS-generated audio back to text using [faster-wh
 
 ### 1. Copy files
 
-Copy `server_whisper.py` and `requirements_whisper.txt` to the `tts/` folder on the remote PC.
+Copy `server_whisperx.py` and `requirements_whisper.txt` to the `tts/` folder on the remote PC.
 
 ### 2. Open firewall port 5001
 
 ```powershell
-New-NetFirewallRule -DisplayName "Whisper Server" -Direction Inbound -LocalPort 5001 -Protocol TCP -Action Allow
+New-NetFirewallRule -DisplayName "WhisperX Server" -Direction Inbound -LocalPort 5001 -Protocol TCP -Action Allow
 ```
 
 ### 3. Create a separate venv
@@ -34,14 +38,15 @@ venv_whisper\Scripts\activate
 
 ```bash
 pip install -r requirements_whisper.txt
+pip install whisperx librosa
 ```
 
-The first run will download the Whisper model (~3 GB for `large-v3`).
+The first run will download the Whisper model (~3 GB for `large-v3`) and alignment model.
 
 ### 5. Start the server
 
 ```bash
-python server_whisper.py --model large-v3 --port 5001
+python server_whisperx.py --model large-v3 --port 5001
 ```
 
 This runs alongside the Qwen3-TTS server (port 5000) without conflict.
@@ -54,7 +59,7 @@ Open a browser on the remote PC and navigate to `http://localhost:5001/health`. 
 {
   "status": "ok",
   "model_loaded": true,
-  "engine": "faster-whisper",
+  "engine": "whisperx",
   "model_size": "large-v3",
   "gpu_name": "NVIDIA GeForce RTX ..."
 }
@@ -77,9 +82,16 @@ cd presentation-app
 npm run tts:verify -- --demo highlights-deep-dive
 ```
 
-### 9. Review output
+### 9. Generate word-level alignment
 
-Check the console for a side-by-side comparison table. The full report is saved to `verification-report-{demoId}.json`.
+```bash
+npm run tts:align -- --demo highlights-deep-dive
+```
+
+### 10. Review output
+
+- Verification: console shows side-by-side comparison table; full report saved to `verification-report-{demoId}.json`
+- Alignment: word timestamps + resolved markers saved to `public/audio/{demoId}/alignment.json`
 
 ## Model Options
 
@@ -94,13 +106,13 @@ Check the console for a side-by-side comparison table. The full report is saved 
 
 ```bash
 # Default (recommended)
-python server_whisper.py --model large-v3 --port 5001
+python server_whisperx.py --model large-v3 --port 5001
 
 # Faster, less accurate
-python server_whisper.py --model medium --port 5001
+python server_whisperx.py --model medium --port 5001
 
 # CPU-only (no GPU required, much slower)
-python server_whisper.py --model large-v3 --device cpu --compute-type int8 --port 5001
+python server_whisperx.py --model large-v3 --device cpu --compute-type int8 --port 5001
 ```
 
 ## Compute Type Options

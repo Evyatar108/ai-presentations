@@ -303,7 +303,7 @@ This sends each audio file plus its clean text to a WhisperX server for forced a
 
 ### WhisperX Server Setup
 
-The alignment system uses WhisperX (not standard Whisper) for word-level forced alignment. The server script is `tts/server_whisperx.py`, which replaces `server_whisper.py` and runs on the same default port (5001):
+The WhisperX server handles both transcription verification and word-level forced alignment. The server script is `tts/server_whisperx.py` (port 5001):
 
 ```bash
 cd tts
@@ -381,10 +381,10 @@ After generating TTS audio, you can verify what the TTS actually said by transcr
 
 ### Setup
 
-Start the Whisper server on the remote GPU machine (see `tts/WHISPER_SETUP.md`):
+Start the WhisperX server on the remote GPU machine (see `tts/WHISPER_SETUP.md`):
 
 ```bash
-python server_whisper.py --model large-v3 --port 5001
+python server_whisperx.py --model large-v3 --port 5001
 ```
 
 ### Verify Audio

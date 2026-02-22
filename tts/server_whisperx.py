@@ -1,16 +1,16 @@
 """
 WhisperX Server — Transcription + Forced Alignment
 
-Drop-in replacement for server_whisper.py with additional /align and /align_batch
-endpoints for word-level timestamp extraction via WhisperX forced alignment.
+Provides transcription (for TTS verification) and forced alignment
+(for word-level timestamps used by inline markers).
 
 Usage:
     python server_whisperx.py --model large-v3 --port 5001
 
 Endpoints:
     GET  /health           — Health check (engine: whisperx)
-    POST /transcribe       — Single audio → text (backward-compatible)
-    POST /transcribe_batch — Batch audio → text (backward-compatible)
+    POST /transcribe       — Single audio → text
+    POST /transcribe_batch — Batch audio → text
     POST /align            — Single audio + reference text → word timestamps
     POST /align_batch      — Batch audio + reference texts → word timestamps
 """
@@ -168,7 +168,7 @@ def health():
 @app.route("/transcribe", methods=["POST"])
 def transcribe():
     """
-    Transcribe audio to text (backward-compatible with server_whisper.py).
+    Transcribe audio to text.
     Expects JSON: {"audio": base64_wav, "language": "en"}
     Returns JSON: {"text": "transcribed text", "success": true}
     """
@@ -198,7 +198,7 @@ def transcribe():
 @app.route("/transcribe_batch", methods=["POST"])
 def transcribe_batch():
     """
-    Transcribe multiple audio files (backward-compatible with server_whisper.py).
+    Transcribe multiple audio files.
     Expects JSON: {"audios": [b64_1, b64_2, ...], "language": "en"}
     Returns JSON: {"transcriptions": [{"text": "..."}, ...], "count": N, "success": true}
     """

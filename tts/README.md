@@ -1,10 +1,10 @@
 # Text-to-Speech Generator
 
-This project provides multiple ways to generate audio files from transcript text. Two TTS engines are supported, plus a Whisper-based verification server:
+This project provides multiple ways to generate audio files from transcript text. Two TTS engines are supported, plus a WhisperX server for verification and alignment:
 
 - **VibeVoice** (`server.py`) — requires a voice sample WAV file for cloning
 - **Qwen3-TTS** (`server_qwen.py`) — uses premium preset speaker timbres (no voice sample needed)
-- **Whisper** (`server_whisper.py`) — transcribes generated audio back to text for quality verification
+- **WhisperX** (`server_whisperx.py`) — transcription for quality verification + forced alignment for word-level timestamps
 
 Both TTS servers expose the same HTTP API, so the TypeScript scripts and browser client work unchanged regardless of which engine is running.
 
@@ -54,22 +54,27 @@ npm run tts:duration -- --demo my-demo
 
 Or trigger regeneration from the browser via `npm run dev:full`.
 
-### Whisper verification server
+### WhisperX server (verification + alignment)
 
 ```bash
 # Install dependencies (separate venv recommended)
 pip install -r requirements_whisper.txt
+pip install whisperx librosa
 
 # Start server (runs alongside TTS on a different port)
-python server_whisper.py --model large-v3 --port 5001
+python server_whisperx.py --model large-v3 --port 5001
 ```
 
-Then verify TTS output from `presentation-app/`:
+Then from `presentation-app/`:
 
 ```bash
+# Verify TTS output (transcribe and compare)
 npm run tts:verify -- --demo my-demo
 npm run tts:verify -- --demo my-demo --force           # Re-verify all (ignore cache)
-npm run tts:verify -- --demo my-demo --segments ch1:s2:intro  # Verify specific segments
+
+# Generate word-level alignment + resolve {#markers}
+npm run tts:align -- --demo my-demo
+npm run tts:align -- --demo my-demo --force            # Re-align all (ignore cache)
 ```
 
 See [`WHISPER_SETUP.md`](WHISPER_SETUP.md:1) for detailed setup.
@@ -143,7 +148,7 @@ python client.py
 - **[`server.py`](server.py:1)** - Flask-based HTTP server running the VibeVoice model
 - **[`server_qwen.py`](server_qwen.py:1)** - Flask-based HTTP server running Qwen3-TTS (same API)
 - **[`client.py`](client.py:1)** - Client script that sends requests to the server
-- **[`server_whisper.py`](server_whisper.py:1)** - Flask-based HTTP server running faster-whisper for transcription verification
+- **[`server_whisperx.py`](server_whisperx.py:1)** - Flask-based HTTP server running WhisperX for transcription verification and forced alignment
 - **[`requirements.txt`](requirements.txt:1)** - Python dependencies for VibeVoice
 - **[`requirements_qwen.txt`](requirements_qwen.txt:1)** - Python dependencies for Qwen3-TTS
 - **[`requirements_whisper.txt`](requirements_whisper.txt:1)** - Python dependencies for Whisper server
