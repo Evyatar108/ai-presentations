@@ -199,24 +199,30 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
       if (!markers || markers.length === 0) return;
 
       const t = timeRef.current;
-      const EPS = 0.05;
+      const EPS = 0.02;
+
+      // Compute current marker index (last marker at or before current time)
+      let currentIdx = -1;
+      for (let i = 0; i < markers.length; i++) {
+        if (markers[i].time <= t + EPS) currentIdx = i;
+      }
 
       if (e.key === 'ArrowRight') {
-        const next = markers.find(m => m.time > t + EPS);
-        if (next) {
+        const nextIdx = currentIdx + 1;
+        if (nextIdx < markers.length) {
           e.preventDefault();
           e.stopPropagation();
-          audioTimeCtx.seekToTime(next.time);
+          audioTimeCtx.seekToTime(markers[nextIdx].time);
         }
         // else: let the event propagate to SlidePlayer for segment/slide nav
       } else {
-        // ArrowLeft — find last marker before current position
-        const prev = [...markers].reverse().find(m => m.time < t - EPS);
-        if (prev) {
+        // ArrowLeft — go to previous marker by index, or to segment start (time 0)
+        if (currentIdx >= 0) {
           e.preventDefault();
           e.stopPropagation();
-          audioTimeCtx.seekToTime(prev.time);
+          audioTimeCtx.seekToTime(currentIdx > 0 ? markers[currentIdx - 1].time : 0);
         }
+        // else: before any marker, let event propagate
       }
     };
 
