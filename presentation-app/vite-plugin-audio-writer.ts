@@ -601,7 +601,8 @@ export function audioWriterPlugin(): Plugin {
               const paddedIdx = String(segIdx + 1).padStart(2, '0');
               const relPath = `c${slide.chapter}/s${slide.slide}_segment_${paddedIdx}_${segment.id}.wav`;
 
-              const cached = demoCache[relPath];
+              // Cache may use backslashes (Windows) — check both separators
+              const cached = demoCache[relPath] || demoCache[relPath.replace(/\//g, '\\')];
               if (!cached) {
                 // No cache entry — segment is new or was never generated
                 changedSegments.push(segKey);
