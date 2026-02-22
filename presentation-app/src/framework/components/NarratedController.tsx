@@ -45,6 +45,12 @@ const loadAudioWithFallback = async (primaryPath: string, segmentId: string): Pr
   });
 };
 
+export interface AutoplayConfig {
+  mode: 'narrated';
+  hideInterface: boolean;
+  zoom: boolean;
+}
+
 export interface NarratedControllerProps {
   demoMetadata: DemoMetadata;
   demoTiming?: TimingConfig;
@@ -63,6 +69,7 @@ export interface NarratedControllerProps {
   onHideInterfaceChange: (hidden: boolean) => void;
   zoomEnabled: boolean;
   onZoomEnabledChange: (enabled: boolean) => void;
+  autoplay?: AutoplayConfig;
 }
 
 export const NarratedController: React.FC<NarratedControllerProps> = ({
@@ -82,7 +89,8 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
   hideInterface,
   onHideInterfaceChange,
   zoomEnabled,
-  onZoomEnabledChange
+  onZoomEnabledChange,
+  autoplay
 }) => {
   // Use provided slides or empty array if not loaded yet
   const allSlides = slides || [];
@@ -245,6 +253,39 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     );
   }, [isManualMode, audioEnabled, currentIndex, segmentContext.currentSegmentIndex]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Autoplay: auto-start narrated playback once slides are loaded.
+  // Browsers block audio.play() without a user gesture; OBS Browser source allows it.
+  // If autoplay is blocked, show a minimal click-to-start overlay.
+  const [autoplayBlocked, setAutoplayBlocked] = useState(false);
+  const autoplayFiredRef = useRef(false);
+  useEffect(() => {
+    if (!autoplay || autoplay.mode !== 'narrated') return;
+    if (allSlides.length === 0) return;
+    if (autoplayFiredRef.current) return;
+
+    const timer = setTimeout(async () => {
+      // Probe whether audio autoplay is allowed
+      try {
+        const probe = new Audio(getFallbackAudio());
+        await probe.play();
+        probe.pause();
+        // Autoplay allowed (OBS Browser source, or user already interacted)
+        autoplayFiredRef.current = true;
+        handleStart();
+      } catch {
+        // Browser blocked autoplay — show click-to-start overlay
+        setAutoplayBlocked(true);
+      }
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [allSlides.length]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleAutoplayClick = () => {
+    setAutoplayBlocked(false);
+    autoplayFiredRef.current = true;
+    handleStart();
+  };
+
   // Advance to next slide (narrated mode)
   const advanceSlide = useCallback(() => {
     const currentIdx = currentIndexRef.current;
@@ -282,13 +323,14 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
         }
 
         setShowStartOverlay(true);
+        document.title = `[COMPLETE] ${demoMetadata.title}`;
         onPlaybackEnd?.();
       }, timing.afterFinalSlide);
       return;
     }
 
     setCurrentIndex(nextIndex);
-  }, [onPlaybackEnd, demoMetadata.durationInfo?.total, showRuntimeTimerOption, runtimeStart, demoTiming, allSlides, demoMetadata.id, setFinalElapsedSeconds]);
+  }, [onPlaybackEnd, demoMetadata.durationInfo?.total, demoMetadata.title, showRuntimeTimerOption, runtimeStart, demoTiming, allSlides, demoMetadata.id, setFinalElapsedSeconds]);
 
   // Play audio for current slide in narrated mode
   useEffect(() => {
@@ -441,6 +483,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     setIsPlaying(true);
     setIsManualMode(false);
     setCurrentIndex(0);
+    document.title = `[PLAYING] ${demoMetadata.title}`;
     onPlaybackStart?.();
   };
 
@@ -579,11 +622,35 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     setError(null);
     setFinalElapsedSeconds(null);
     setShowStartOverlay(true);
+    document.title = demoMetadata.title;
     onPlaybackEnd?.();
   };
 
   return (
     <>
+      {/* Autoplay blocked by browser — minimal click-to-start overlay */}
+      {autoplayBlocked && (
+        <div
+          onClick={handleAutoplayClick}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 9999,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: theme.colors.bgDeep,
+            cursor: 'pointer',
+            fontFamily: theme.fontFamily,
+          }}
+        >
+          <div style={{ textAlign: 'center', color: theme.colors.textSecondary }}>
+            <div style={{ fontSize: 48, marginBottom: '1rem' }}>Click anywhere to start</div>
+            <div style={{ fontSize: 18 }}>{demoMetadata.title}</div>
+          </div>
+        </div>
+      )}
+
       <StartOverlay
         demoMetadata={demoMetadata}
         slideCount={allSlides.length}
@@ -593,7 +660,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
         showRuntimeTimerOption={showRuntimeTimerOption}
         onShowRuntimeTimerOptionChange={setShowRuntimeTimerOption}
         finalElapsedSeconds={finalElapsedSeconds}
-        visible={showStartOverlay}
+        visible={showStartOverlay && !autoplayBlocked}
         onStartNarrated={handleStart}
         onStartManual={handleManualMode}
         zoomEnabled={zoomEnabled}

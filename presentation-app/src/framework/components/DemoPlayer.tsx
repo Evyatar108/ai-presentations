@@ -16,13 +16,20 @@ import { useTheme } from '../theme/ThemeContext';
 import { DemoPlayerBoundary } from './DemoPlayerBoundary';
 import type { DemoAlignment } from '../alignment/types';
 
+export interface AutoplayConfig {
+  mode: 'narrated';
+  hideInterface: boolean;
+  zoom: boolean;
+}
+
 export interface DemoPlayerProps {
   demoId: string;
   onBack: () => void;
   onHideInterfaceChange?: (hidden: boolean) => void;
+  autoplay?: AutoplayConfig;
 }
 
-export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideInterfaceChange }) => {
+export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideInterfaceChange, autoplay }) => {
   const theme = useTheme();
   const [demoConfig, setDemoConfig] = useState<DemoConfig | null>(null);
   const [loadedSlides, setLoadedSlides] = useState<SlideComponentWithMetadata[]>([]);
@@ -33,8 +40,8 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideIn
   const [currentSlide, setCurrentSlide] = useState<{ chapter: number; slide: number } | undefined>(undefined);
   const [isNarratedMode, setIsNarratedMode] = useState(false);
   const [manualSlideChange, setManualSlideChange] = useState<{ chapter: number; slide: number } | null>(null);
-  const [hideInterface, setHideInterface] = useState(false);
-  const [zoomEnabled, setZoomEnabled] = useState(false);
+  const [hideInterface, setHideInterface] = useState(autoplay?.hideInterface ?? false);
+  const [zoomEnabled, setZoomEnabled] = useState(autoplay?.zoom ?? false);
   const [chapterModeEnabled, setChapterModeEnabled] = useState(false);
 
   const handleHideInterfaceChange = useCallback((hidden: boolean) => {
@@ -395,6 +402,7 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideIn
           onHideInterfaceChange={handleHideInterfaceChange}
           zoomEnabled={zoomEnabled}
           onZoomEnabledChange={setZoomEnabled}
+          autoplay={autoplay}
         />
         {/* Slide Player */}
         <div
