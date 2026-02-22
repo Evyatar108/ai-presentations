@@ -20,6 +20,7 @@ export interface AutoplayConfig {
   mode: 'narrated';
   hideInterface: boolean;
   zoom: boolean;
+  signalPort?: number;
 }
 
 export interface DemoPlayerProps {

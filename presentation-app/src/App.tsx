@@ -11,12 +11,15 @@ function parseAutoplayParams(): { demoId: string | null; autoplay: AutoplayConfi
   const mode = params.get('autoplay');
   if (mode !== 'narrated') return { demoId, autoplay: undefined };
 
+  const signalPort = params.get('signal') ? Number(params.get('signal')) : undefined;
+
   return {
     demoId,
     autoplay: {
       mode: 'narrated',
       hideInterface: params.has('hideUI'),
       zoom: params.has('zoom'),
+      signalPort,
     },
   };
 }

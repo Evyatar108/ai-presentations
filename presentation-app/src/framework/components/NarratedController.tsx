@@ -49,6 +49,7 @@ export interface AutoplayConfig {
   mode: 'narrated';
   hideInterface: boolean;
   zoom: boolean;
+  signalPort?: number;
 }
 
 export interface NarratedControllerProps {
@@ -324,6 +325,10 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
 
         setShowStartOverlay(true);
         document.title = `[COMPLETE] ${demoMetadata.title}`;
+        // Signal the recording script that playback is done
+        if (autoplay?.signalPort) {
+          fetch(`http://localhost:${autoplay.signalPort}/complete`, { mode: 'no-cors' }).catch(() => {});
+        }
         onPlaybackEnd?.();
       }, timing.afterFinalSlide);
       return;

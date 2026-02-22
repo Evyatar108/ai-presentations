@@ -11,8 +11,10 @@
  */
 
 import OBSWebSocket from 'obs-websocket-js';
+import http from 'http';
 import path from 'path';
 import fs from 'fs';
+import { pathToFileURL } from 'url';
 
 // ---------------------------------------------------------------------------
 // CLI argument parsing
@@ -48,6 +50,7 @@ if (!resW || !resH) {
 const sourceName = getArg('--source') ?? 'Presentation';
 const bufferSeconds = Number(getArg('--buffer') ?? '10');
 const port = Number(getArg('--port') ?? '4455');
+const devPort = Number(getArg('--dev-port') ?? '5173');
 const password = getArg('--password') ?? process.env.OBS_WEBSOCKET_PASSWORD ?? '';
 const skipRename = hasFlag('--no-rename');
 
@@ -65,7 +68,7 @@ async function loadDemoDuration(): Promise<number> {
     process.exit(1);
   }
 
-  const mod = await import(metadataPath);
+  const mod = await import(pathToFileURL(metadataPath).href);
   const metadata = mod.metadata ?? mod.default;
   const total = metadata?.durationInfo?.total;
   if (typeof total !== 'number') {
@@ -94,20 +97,55 @@ function sleep(ms: number): Promise<void> {
 }
 
 // ---------------------------------------------------------------------------
+// Signal server — listens for /complete from the app
+// ---------------------------------------------------------------------------
+async function startSignalServer(): Promise<{ port: number; waitForSignal: (maxMs: number) => Promise<'signal' | 'timeout'>; close: () => void }> {
+  let resolveSignal: ((reason: 'signal' | 'timeout') => void) | null = null;
+
+  const server = http.createServer((req, res) => {
+    if (req.url === '/complete') {
+      res.writeHead(200, { 'Access-Control-Allow-Origin': '*' });
+      res.end('ok');
+      resolveSignal?.('signal');
+    } else {
+      res.writeHead(404);
+      res.end();
+    }
+  });
+
+  // Listen on random available port, wait for it to be ready
+  await new Promise<void>(resolve => server.listen(0, '127.0.0.1', resolve));
+  const addr = server.address() as { port: number };
+
+  return {
+    port: addr.port,
+    waitForSignal(maxMs: number) {
+      return new Promise<'signal' | 'timeout'>(resolve => {
+        resolveSignal = resolve;
+        setTimeout(() => resolve('timeout'), maxMs);
+      });
+    },
+    close() { server.close(); },
+  };
+}
+
+// ---------------------------------------------------------------------------
 // Progress timer
 // ---------------------------------------------------------------------------
-function startProgressTimer(totalSeconds: number): () => void {
+function startProgressTimer(expectedSeconds: number): () => number {
   const start = Date.now();
   const interval = setInterval(() => {
     const elapsed = (Date.now() - start) / 1000;
-    const remaining = Math.max(0, totalSeconds - elapsed);
+    const remaining = Math.max(0, expectedSeconds - elapsed);
     process.stdout.write(
-      `\r  Recording... ${formatTime(elapsed)} / ${formatTime(totalSeconds)} (${formatTime(remaining)} remaining)  `,
+      `\r  Recording... ${formatTime(elapsed)} / ~${formatTime(expectedSeconds)} (${formatTime(remaining)} remaining)  `,
     );
   }, 1000);
   return () => {
     clearInterval(interval);
+    const elapsed = (Date.now() - start) / 1000;
     process.stdout.write('\n');
+    return elapsed;
   };
 }
 
@@ -116,11 +154,15 @@ function startProgressTimer(totalSeconds: number): () => void {
 // ---------------------------------------------------------------------------
 async function main() {
   const totalDuration = await loadDemoDuration();
-  const waitSeconds = totalDuration + bufferSeconds;
+  const maxWaitSeconds = Math.ceil(totalDuration * 1.5);
+
+  // Start signal server before connecting to OBS
+  const signal = await startSignalServer();
 
   console.log(`\nOBS Recording: ${demoId}`);
-  console.log(`  Duration:   ${formatTime(totalDuration)} + ${bufferSeconds}s buffer = ${formatTime(waitSeconds)}`);
+  console.log(`  Duration:   ~${formatTime(totalDuration)} (max wait: ${formatTime(maxWaitSeconds)})`);
   console.log(`  Source:     "${sourceName}" @ ${resW}x${resH}`);
+  console.log(`  Signal:     http://127.0.0.1:${signal.port}/complete`);
   console.log(`  OBS:        ws://127.0.0.1:${port}\n`);
 
   // 1. Connect to OBS
@@ -137,10 +179,32 @@ async function main() {
 
   try {
     // 2. Build autoplay URL
-    const url = `http://localhost:5173?demo=${encodeURIComponent(demoId)}&autoplay=narrated&hideUI&zoom`;
+    const url = `http://localhost:${devPort}?demo=${encodeURIComponent(demoId)}&autoplay=narrated&hideUI&zoom&signal=${signal.port}`;
 
-    // 3. Update Browser source settings
-    const { inputSettings: currentSettings } = await obs.call('GetInputSettings', { inputName: sourceName }) as any;
+    // 3. Ensure Browser source exists, create if missing
+    let currentSettings: any = null;
+    try {
+      const result = await obs.call('GetInputSettings', { inputName: sourceName }) as any;
+      currentSettings = result.inputSettings;
+    } catch {
+      // Source doesn't exist — find the current scene and create it
+      console.log(`  Browser source "${sourceName}" not found, creating...`);
+      const { currentProgramSceneName } = await obs.call('GetCurrentProgramScene') as any;
+      await obs.call('CreateInput', {
+        sceneName: currentProgramSceneName,
+        inputName: sourceName,
+        inputKind: 'browser_source',
+        inputSettings: {
+          url,
+          width: resW,
+          height: resH,
+          shutdown: true,
+        },
+      });
+      console.log(`  Created Browser source "${sourceName}" in scene "${currentProgramSceneName}"`);
+    }
+
+    // 4. Update Browser source settings
     await obs.call('SetInputSettings', {
       inputName: sourceName,
       inputSettings: {
@@ -151,7 +215,7 @@ async function main() {
     });
     console.log(`  Browser source URL: ${url}`);
 
-    // 4. Force page reload by toggling shutdown_on_inactive
+    // 5. Force page reload by toggling shutdown_on_inactive
     //    (OBS Browser source reloads when shutdown is toggled)
     const wasShutdown = currentSettings?.shutdown;
     if (wasShutdown) {
@@ -182,36 +246,59 @@ async function main() {
 
     // 6. Start recording
     await obs.call('StartRecord');
-    console.log('  Recording started');
-    const stopProgress = startProgressTimer(waitSeconds);
+    console.log('  Recording started (waiting for completion signal...)');
+    const stopProgress = startProgressTimer(totalDuration);
 
-    // 7. Wait for demo duration + buffer
-    await sleep(waitSeconds * 1000);
-    stopProgress();
+    // 7. Wait for completion signal from the app (or max timeout)
+    const reason = await signal.waitForSignal(maxWaitSeconds * 1000);
+    const elapsed = stopProgress();
+
+    if (reason === 'signal') {
+      console.log(`  Completion signal received after ${formatTime(elapsed)}`);
+      // Brief delay so the final slide fully renders before we stop
+      await sleep(2000);
+    } else {
+      console.log(`  Max wait reached (${formatTime(maxWaitSeconds)}), stopping`);
+    }
 
     // 8. Stop recording
-    const stopResult = await obs.call('StopRecord') as any;
-    const outputPath = stopResult?.outputPath;
-    console.log(`  Recording stopped`);
+    let outputPath: string | undefined;
+    try {
+      const stopResult = await obs.call('StopRecord') as any;
+      outputPath = stopResult?.outputPath;
+      console.log(`  Recording stopped`);
+    } catch (err: any) {
+      console.warn(`  StopRecord failed (may already be stopped): ${err.message ?? err}`);
+    }
 
-    // 9. Rename output file
+    // 9. Rename output file (retry to handle EBUSY when OBS still holds the file)
     if (outputPath && !skipRename) {
       const ext = path.extname(outputPath);
       const dir = path.dirname(outputPath);
       const newPath = path.join(dir, `${demoId}${ext}`);
-      try {
-        if (fs.existsSync(newPath)) {
-          // Add timestamp to avoid overwriting
-          const ts = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
-          const tsPath = path.join(dir, `${demoId}_${ts}${ext}`);
-          fs.renameSync(outputPath, tsPath);
-          console.log(`  Saved: ${tsPath}`);
-        } else {
-          fs.renameSync(outputPath, newPath);
-          console.log(`  Saved: ${newPath}`);
+      const maxRetries = 5;
+      let renamed = false;
+      for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+          const target = fs.existsSync(newPath)
+            ? path.join(dir, `${demoId}_${new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)}${ext}`)
+            : newPath;
+          fs.renameSync(outputPath, target);
+          console.log(`  Saved: ${target}`);
+          renamed = true;
+          break;
+        } catch (err: any) {
+          if (err.code === 'EBUSY' && attempt < maxRetries) {
+            console.log(`  File locked by OBS, retrying rename (${attempt}/${maxRetries})...`);
+            await sleep(2000);
+          } else {
+            console.warn(`  Could not rename: ${err.message}. File at: ${outputPath}`);
+            break;
+          }
         }
-      } catch (err: any) {
-        console.warn(`  Could not rename: ${err.message}. File at: ${outputPath}`);
+      }
+      if (!renamed) {
+        console.log(`  Original file: ${outputPath}`);
       }
     } else if (outputPath) {
       console.log(`  Saved: ${outputPath}`);
@@ -219,6 +306,7 @@ async function main() {
 
     console.log('\nDone!');
   } finally {
+    signal.close();
     obs.disconnect();
   }
 }

@@ -31,6 +31,8 @@ npm run test:screenshot -- --demo {id}  # Playwright (static): screenshot every 
 npm run test:screenshot -- --demo {id} --slides 3-5  # Screenshot only slides 3 through 5
 npm run test:screenshot -- --demo {id} --markers all  # Also capture screenshots at each marker position
 npm run test:screenshot -- --demo {id} --markers id1,id2  # Capture only specific markers
+npm run record:obs -- --demo {id}  # Automate OBS recording (requires OBS running + WebSocket enabled)
+npm run record:obs -- --demo {id} --password <pw> --resolution 1920x1080  # With auth + custom resolution
 npm run test:record -- --demo {id}  # Playwright (record): record narrated playback as .mp4 video (requires ffmpeg)
 npm run test:record -- --demo {id} --fps 60  # Same, at 60fps
 ```
@@ -136,6 +138,7 @@ Alignment data: `public/audio/{demo-id}/alignment.json` — word-level timestamp
 | `src/framework/utils/audioPath.ts` | Audio file path derivation (buildAudioFilePath, resolveAudioFilePath) |
 | `src/framework/utils/formatTime.ts` | Time formatting utilities (mm:ss, delta colors) |
 | `vite-plugin-audio-writer.ts` | Custom Vite plugin for /api/save-audio |
+| `scripts/record-obs.ts` | OBS automated recording via WebSocket (signal-based completion) |
 | `tests/overflow.spec.ts` | Playwright test: viewport overflow detection for all slides/segments |
 | `tests/screenshot.spec.ts` | Playwright test: screenshot every slide/segment for visual review |
 | `tests/record.spec.ts` | Playwright test: CDP screencast → ffmpeg recording of narrated playback |
