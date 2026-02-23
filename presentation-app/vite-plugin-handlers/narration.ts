@@ -27,6 +27,15 @@ import {
   parseQuery,
   type HandlerContext,
 } from './types';
+import {
+  getPreviewDir,
+  getTakeFilePath,
+  buildServeUrl,
+  loadPreviewMeta,
+  savePreviewMeta,
+  nextTakeNumber,
+  removePreviewDir,
+} from './preview-store';
 
 /** Route descriptor returned to the main plugin for registration. */
 export interface NarrationRoute {
@@ -167,31 +176,14 @@ export function createNarrationHandlers(ctx: HandlerContext): NarrationRoute[] {
         throw new Error('Missing required fields');
       }
 
-      const previewDir = path.join(
-        projectRoot, 'public', 'audio', data.demoId,
-        '.previews', `ch${data.chapter}_s${data.slide}_${data.segmentId}`
-      );
-      if (!fs.existsSync(previewDir)) {
-        fs.mkdirSync(previewDir, { recursive: true });
-      }
-
-      // Read or create previews.json (narrationText + instruct stored per-take)
-      const metaFile = path.join(previewDir, 'previews.json');
-      let meta: { takes: { takeNumber: number; narrationText: string; instruct?: string; generatedAt: string }[] } = {
-        takes: []
-      };
-      if (fs.existsSync(metaFile)) {
-        try { meta = JSON.parse(fs.readFileSync(metaFile, 'utf-8')); }
-        catch { /* use default */ }
-      }
-
-      const takeNumber = meta.takes.length > 0
-        ? Math.max(...meta.takes.map(t => t.takeNumber)) + 1
-        : 1;
+      const audioDir = path.join(projectRoot, 'public', 'audio');
+      const previewDir = getPreviewDir(audioDir, data.demoId, data.chapter, data.slide, data.segmentId);
+      const meta = loadPreviewMeta(previewDir);
+      const takeNumber = nextTakeNumber(meta);
 
       // Write audio file
-      const takeFile = path.join(previewDir, `take_${takeNumber}.wav`);
-      fs.writeFileSync(takeFile, Buffer.from(data.audioBase64, 'base64'));
+      fs.mkdirSync(previewDir, { recursive: true });
+      fs.writeFileSync(getTakeFilePath(previewDir, takeNumber), Buffer.from(data.audioBase64, 'base64'));
 
       meta.takes.push({
         takeNumber,
@@ -199,9 +191,9 @@ export function createNarrationHandlers(ctx: HandlerContext): NarrationRoute[] {
         ...(data.instruct ? { instruct: data.instruct } : {}),
         generatedAt: new Date().toISOString(),
       });
-      fs.writeFileSync(metaFile, JSON.stringify(meta, null, 2));
+      savePreviewMeta(previewDir, meta);
 
-      const servePath = `/audio/${data.demoId}/.previews/ch${data.chapter}_s${data.slide}_${data.segmentId}/take_${takeNumber}.wav`;
+      const servePath = buildServeUrl(data.demoId, data.chapter, data.slide, data.segmentId, takeNumber);
       console.log(`[narration] Saved preview take ${takeNumber}: ${servePath}`);
 
       sendJson(res, 200, { success: true, takeNumber, servePath });
@@ -221,22 +213,19 @@ export function createNarrationHandlers(ctx: HandlerContext): NarrationRoute[] {
         throw new Error('Missing query params: demoId, chapter, slide, segmentId');
       }
 
-      const previewDir = path.join(
-        projectRoot, 'public', 'audio', q.demoId,
-        '.previews', `ch${q.chapter}_s${q.slide}_${q.segmentId}`
-      );
+      const audioDir = path.join(projectRoot, 'public', 'audio');
+      const previewDir = getPreviewDir(audioDir, q.demoId, Number(q.chapter), Number(q.slide), q.segmentId);
+      const meta = loadPreviewMeta(previewDir);
 
-      const metaFile = path.join(previewDir, 'previews.json');
-      if (!fs.existsSync(metaFile)) {
+      if (meta.takes.length === 0) {
         sendJson(res, 200, { narrationText: null, previews: [] });
         return;
       }
 
-      const meta = JSON.parse(fs.readFileSync(metaFile, 'utf-8'));
-      const previews = (meta.takes || []).map((t: any) => ({
+      const previews = meta.takes.map(t => ({
         takeNumber: t.takeNumber,
-        narrationText: t.narrationText ?? meta.narrationText ?? '',
-        servePath: `/audio/${q.demoId}/.previews/ch${q.chapter}_s${q.slide}_${q.segmentId}/take_${t.takeNumber}.wav`,
+        narrationText: t.narrationText ?? '',
+        servePath: buildServeUrl(q.demoId, Number(q.chapter), Number(q.slide), q.segmentId, t.takeNumber),
         generatedAt: t.generatedAt
       }));
 
@@ -260,11 +249,9 @@ export function createNarrationHandlers(ctx: HandlerContext): NarrationRoute[] {
         throw new Error('Missing required fields');
       }
 
-      const previewDir = path.join(
-        projectRoot, 'public', 'audio', data.demoId,
-        '.previews', `ch${data.chapter}_s${data.slide}_${data.segmentId}`
-      );
-      const takeFile = path.join(previewDir, `take_${data.takeNumber}.wav`);
+      const audioDir = path.join(projectRoot, 'public', 'audio');
+      const previewDir = getPreviewDir(audioDir, data.demoId, data.chapter, data.slide, data.segmentId);
+      const takeFile = getTakeFilePath(previewDir, data.takeNumber);
 
       if (!fs.existsSync(takeFile)) {
         throw new Error(`Take file not found: take_${data.takeNumber}.wav`);
@@ -273,7 +260,7 @@ export function createNarrationHandlers(ctx: HandlerContext): NarrationRoute[] {
       // Build the real audio destination path
       const segRelPath = TtsCacheStore.buildKey(data.chapter, data.slide, data.segmentIndex ?? 0, data.segmentId);
       const destRelative = `${data.demoId}/${segRelPath}`;
-      const destFull = path.join(projectRoot, 'public', 'audio', destRelative);
+      const destFull = path.join(audioDir, destRelative);
 
       const destDir = path.dirname(destFull);
       if (!fs.existsSync(destDir)) {
@@ -281,19 +268,10 @@ export function createNarrationHandlers(ctx: HandlerContext): NarrationRoute[] {
       }
 
       // Read take metadata from previews.json before deleting
-      const metaFile = path.join(previewDir, 'previews.json');
-      let takeNarrationText = '';
-      let takeInstruct: string | undefined;
-      if (fs.existsSync(metaFile)) {
-        try {
-          const meta = JSON.parse(fs.readFileSync(metaFile, 'utf-8'));
-          const take = meta.takes?.find((t: any) => t.takeNumber === data.takeNumber);
-          if (take) {
-            takeNarrationText = take.narrationText || '';
-            takeInstruct = take.instruct;
-          }
-        } catch { /* use defaults */ }
-      }
+      const meta = loadPreviewMeta(previewDir);
+      const take = meta.takes.find(t => t.takeNumber === data.takeNumber);
+      const takeNarrationText = take?.narrationText || '';
+      const takeInstruct = take?.instruct;
 
       // Copy take to real audio path
       fs.copyFileSync(takeFile, destFull);
@@ -307,7 +285,7 @@ export function createNarrationHandlers(ctx: HandlerContext): NarrationRoute[] {
       console.log(`[narration] Updated TTS cache: ${data.demoId}/${cacheRelPath}`);
 
       // Delete entire preview dir
-      fs.rmSync(previewDir, { recursive: true, force: true });
+      removePreviewDir(previewDir);
       console.log(`[narration] Cleaned up preview dir`);
 
       sendJson(res, 200, {
@@ -334,28 +312,20 @@ export function createNarrationHandlers(ctx: HandlerContext): NarrationRoute[] {
         throw new Error('Missing required fields');
       }
 
-      const previewDir = path.join(
-        projectRoot, 'public', 'audio', data.demoId,
-        '.previews', `ch${data.chapter}_s${data.slide}_${data.segmentId}`
-      );
+      const audioDir = path.join(projectRoot, 'public', 'audio');
+      const previewDir = getPreviewDir(audioDir, data.demoId, data.chapter, data.slide, data.segmentId);
 
       // Delete the .wav file
-      const takeFile = path.join(previewDir, `take_${data.takeNumber}.wav`);
+      const takeFile = getTakeFilePath(previewDir, data.takeNumber);
       if (fs.existsSync(takeFile)) fs.unlinkSync(takeFile);
 
       // Update previews.json
-      const metaFile = path.join(previewDir, 'previews.json');
-      if (fs.existsSync(metaFile)) {
-        try {
-          const meta = JSON.parse(fs.readFileSync(metaFile, 'utf-8'));
-          meta.takes = (meta.takes || []).filter((t: any) => t.takeNumber !== data.takeNumber);
-          if (meta.takes.length === 0) {
-            // No takes left — remove the whole preview dir
-            fs.rmSync(previewDir, { recursive: true, force: true });
-          } else {
-            fs.writeFileSync(metaFile, JSON.stringify(meta, null, 2));
-          }
-        } catch { /* ignore parse errors */ }
+      const meta = loadPreviewMeta(previewDir);
+      meta.takes = meta.takes.filter(t => t.takeNumber !== data.takeNumber);
+      if (meta.takes.length === 0) {
+        removePreviewDir(previewDir);
+      } else {
+        savePreviewMeta(previewDir, meta);
       }
 
       console.log(`[narration] Deleted preview take ${data.takeNumber}`);
@@ -426,15 +396,10 @@ export function createNarrationHandlers(ctx: HandlerContext): NarrationRoute[] {
         throw new Error('Missing required fields');
       }
 
-      const previewDir = path.join(
-        projectRoot, 'public', 'audio', data.demoId,
-        '.previews', `ch${data.chapter}_s${data.slide}_${data.segmentId}`
-      );
-
-      if (fs.existsSync(previewDir)) {
-        fs.rmSync(previewDir, { recursive: true, force: true });
-        console.log(`[narration] Cleared previews for ch${data.chapter}_s${data.slide}_${data.segmentId}`);
-      }
+      const audioDir = path.join(projectRoot, 'public', 'audio');
+      const previewDir = getPreviewDir(audioDir, data.demoId, data.chapter, data.slide, data.segmentId);
+      removePreviewDir(previewDir);
+      console.log(`[narration] Cleared previews for ch${data.chapter}_s${data.slide}_${data.segmentId}`);
 
       sendJson(res, 200, { success: true });
     } catch (error: any) {

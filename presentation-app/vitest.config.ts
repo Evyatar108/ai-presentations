@@ -15,6 +15,6 @@ export default defineConfig({
       ['src/**/*.tsx', 'jsdom']
     ],
     setupFiles: ['./src/test/setup.ts'],
-    include: ['src/**/*.test.{ts,tsx}', 'scripts/**/*.test.ts']
+    include: ['src/**/*.test.{ts,tsx}', 'scripts/**/*.test.ts', 'vite-plugin-handlers/**/*.test.ts']
   }
 });

@@ -145,6 +145,7 @@ Subtitle corrections: `public/audio/{demo-id}/subtitle-corrections.json` — map
 | `tts/server_whisperx.py` | WhisperX server (transcription + forced alignment) |
 | `src/framework/utils/audioPath.ts` | Audio file path derivation (buildAudioFilePath, resolveAudioFilePath) |
 | `src/framework/utils/formatTime.ts` | Time formatting utilities (mm:ss, delta colors) |
+| `vite-plugin-handlers/preview-store.ts` | Preview take directory + `previews.json` I/O for TTS preview workflow |
 | `vite-plugin-audio-writer.ts` | Custom Vite plugin for /api/save-audio, /api/staleness-check, /api/narration/* endpoints |
 | `scripts/record-obs.ts` | OBS automated recording via WebSocket (signal-based completion + VTT subtitle generation) |
 | `scripts/utils/vtt-generator.ts` | VTT subtitle generation from segment timing events + alignment data |
