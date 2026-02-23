@@ -472,7 +472,7 @@ async function main() {
     // 13. Generate VTT subtitles + words data from segment timing events
     if (signal.segmentEvents.length > 0) {
       try {
-        const { wordsData, vttContent } = generateVtt(demoId, signal.segmentEvents);
+        const { wordsData, vttContent, cleanVttContent } = generateVtt(demoId, signal.segmentEvents);
         const videoFile = finalVideoPath ?? '';
         const basePath = videoFile
           ? videoFile.replace(/\.[^.]+$/, '')
@@ -483,10 +483,15 @@ async function main() {
         fs.writeFileSync(wordsPath, JSON.stringify(wordsData, null, 2), 'utf-8');
         console.log(`  Words:     ${wordsPath}`);
 
-        // Write VTT subtitle file
+        // Write VTT subtitle file (per-word timestamps for karaoke highlighting)
         const vttPath = `${basePath}.vtt`;
         fs.writeFileSync(vttPath, vttContent, 'utf-8');
         console.log(`  Subtitles: ${vttPath}`);
+
+        // Write clean VTT (plain text, no per-word timestamps)
+        const cleanVttPath = `${basePath}-clean.vtt`;
+        fs.writeFileSync(cleanVttPath, cleanVttContent, 'utf-8');
+        console.log(`  Clean VTT: ${cleanVttPath}`);
       } catch (err: any) {
         console.warn(`  VTT generation failed: ${err.message ?? err}`);
       }

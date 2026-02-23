@@ -211,8 +211,15 @@ function groupWordsIntoCues(words: VideoWord[]): VttCue[] {
 /**
  * Generate VTT content from a VideoWordsData structure.
  * Can be called with freshly built data or loaded from a `-words.json` file.
+ *
+ * @param wordTimestamps — When true (default), each word is prefixed with its
+ *   start time (`<00:00:01.234>word`) for karaoke-style highlighting.
+ *   When false, cues contain plain text only.
  */
-export function generateVttFromWordsData(data: VideoWordsData): string {
+export function generateVttFromWordsData(
+  data: VideoWordsData,
+  wordTimestamps: boolean = true,
+): string {
   const allCues: VttCue[] = [];
 
   for (const segment of data.segments) {
@@ -224,9 +231,9 @@ export function generateVttFromWordsData(data: VideoWordsData): string {
 
   for (const cue of allCues) {
     lines.push(`${formatVttTime(cue.start)} --> ${formatVttTime(cue.end)}`);
-    const wordLine = cue.words
-      .map(w => `<${formatVttTime(w.start)}>${w.word}`)
-      .join(' ');
+    const wordLine = wordTimestamps
+      ? cue.words.map(w => `<${formatVttTime(w.start)}>${w.word}`).join(' ')
+      : cue.words.map(w => w.word).join(' ');
     lines.push(wordLine);
     lines.push('');
   }
@@ -236,15 +243,16 @@ export function generateVttFromWordsData(data: VideoWordsData): string {
 
 /**
  * Build words data from segment events + alignment, then generate VTT.
- * Returns both the words data (for saving) and the VTT content.
+ * Returns the words data (for saving), per-word VTT, and clean (plain-text) VTT.
  */
 export function generateVtt(
   demoId: string,
   segmentEvents: SegmentEvent[],
-): { wordsData: VideoWordsData; vttContent: string } {
+): { wordsData: VideoWordsData; vttContent: string; cleanVttContent: string } {
   const wordsData = buildVideoWordsData(demoId, segmentEvents);
   const vttContent = generateVttFromWordsData(wordsData);
-  return { wordsData, vttContent };
+  const cleanVttContent = generateVttFromWordsData(wordsData, false);
+  return { wordsData, vttContent, cleanVttContent };
 }
 
 /**
