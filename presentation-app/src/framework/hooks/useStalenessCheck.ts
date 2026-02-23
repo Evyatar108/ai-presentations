@@ -26,7 +26,7 @@ export interface UseStalenessCheckResult {
   dismissed: boolean;
   regenerate: () => Promise<void>;
   dismiss: () => void;
-  refetch: () => Promise<void>;
+  refetch: () => Promise<StalenessResult | null>;
 }
 
 const isDev = import.meta.env?.DEV;
@@ -44,9 +44,9 @@ export function useStalenessCheck(demoId: string): UseStalenessCheckResult {
     };
   }, []);
 
-  // Reusable fetch logic
-  const fetchStaleness = useCallback(async () => {
-    if (!isDev) return;
+  // Reusable fetch logic — returns the fetched data so callers can inspect it
+  const fetchStaleness = useCallback(async (): Promise<StalenessResult | null> => {
+    if (!isDev) return null;
 
     const controller = new AbortController();
     abortRef.current = controller;
@@ -57,7 +57,7 @@ export function useStalenessCheck(demoId: string): UseStalenessCheckResult {
       });
       if (!r.ok) throw new Error(`Staleness check failed: ${r.status}`);
       const data: StalenessResult = await r.json();
-      if (controller.signal.aborted) return;
+      if (controller.signal.aborted) return null;
       setStaleness(data);
       if (data.stale) {
         const parts: string[] = [];
@@ -66,9 +66,11 @@ export function useStalenessCheck(demoId: string): UseStalenessCheckResult {
         if (data.alignmentMissing) parts.push('alignment.json missing');
         console.warn(`[staleness] ${demoId}: ${parts.join(', ')}`);
       }
+      return data;
     } catch (err) {
-      if (err instanceof DOMException && err.name === 'AbortError') return;
+      if (err instanceof DOMException && err.name === 'AbortError') return null;
       // API not available — ignore silently in dev
+      return null;
     }
   }, [demoId]);
 

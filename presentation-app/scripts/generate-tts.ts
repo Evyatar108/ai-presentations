@@ -138,7 +138,7 @@ function cleanupUnusedAudio(
       const chapterDir = path.join(demoOutputDir, `c${chapter}`);
       const filepath = path.join(chapterDir, filename);
       const relativeFilepath = path.relative(demoOutputDir, filepath);
-      expectedFiles.add(relativeFilepath.replace(/\\/g, '/'));
+      expectedFiles.add(normalizeCachePath(relativeFilepath));
     }
   }
 
@@ -155,8 +155,8 @@ function cleanupUnusedAudio(
       if (!file.endsWith('.wav')) continue;
       
       const filepath = path.join(chapterPath, file);
-      const relativeFilepath = path.relative(demoOutputDir, filepath).replace(/\\/g, '/');
-      
+      const relativeFilepath = normalizeCachePath(path.relative(demoOutputDir, filepath));
+
       if (!expectedFiles.has(relativeFilepath)) {
         result.orphanedFiles.push(relativeFilepath);
       }
@@ -166,7 +166,7 @@ function cleanupUnusedAudio(
   // Check cache for orphaned entries
   const demoCache = cache[demoId] || {};
   for (const cacheKey of Object.keys(demoCache)) {
-    const normalizedKey = cacheKey.replace(/\\/g, '/');
+    const normalizedKey = normalizeCachePath(cacheKey);
     if (!expectedFiles.has(normalizedKey)) {
       result.orphanedCacheKeys.push(cacheKey);
     }
@@ -350,7 +350,7 @@ function handleOrphanedFiles(
     const orphansByHash = new Map<string, { relativePath: string; cacheKey: string | undefined }>();
     for (const orphanRelPath of cleanup.orphanedFiles) {
       // Find matching cache entry for this orphan
-      const normalizedPath = orphanRelPath.replace(/\\/g, '/');
+      const normalizedPath = normalizeCachePath(orphanRelPath);
       const cacheEntry = cache[demoId][normalizedPath] || cache[demoId][orphanRelPath];
       if (cacheEntry?.narrationText) {
         const hash = crypto.createHash('sha256')
@@ -389,7 +389,7 @@ function handleOrphanedFiles(
           fs.mkdirSync(path.dirname(seg.filepath), { recursive: true });
           fs.renameSync(oldFullPath, seg.filepath);
 
-          const newRelativePath = path.relative(demoOutputDir, seg.filepath).replace(/\\/g, '/');
+          const newRelativePath = normalizeCachePath(path.relative(demoOutputDir, seg.filepath));
 
           // Update cache: copy entry under new key, remove old key
           if (orphan.cacheKey && cache[demoId][orphan.cacheKey]) {
@@ -728,7 +728,7 @@ async function generateTTS(config: TTSConfig) {
         // Generate filename
         const filename = `s${slideNum}_segment_${String(i + 1).padStart(2, '0')}_${segment.id}.wav`;
         const filepath = path.join(chapterDir, filename);
-        const relativeFilepath = path.relative(demoOutputDir, filepath).replace(/\\/g, '/');
+        const relativeFilepath = normalizeCachePath(path.relative(demoOutputDir, filepath));
 
         // Resolve instruct: segment → slide → narrationJSON → CLI
         const resolvedInstruct =

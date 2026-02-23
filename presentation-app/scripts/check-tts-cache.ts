@@ -9,7 +9,7 @@ import { execSync } from 'child_process';
 import * as crypto from 'crypto';
 import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
 import { stripMarkers } from './utils/marker-parser';
-import { loadTtsCache, type TtsCache } from './utils/tts-cache';
+import { loadTtsCache, normalizeCachePath, type TtsCache } from './utils/tts-cache';
 import { getAllDemoIds, loadDemoSlides } from './utils/demo-discovery';
 import { loadNarrationJson, type NarrationData } from './utils/narration-loader';
 
@@ -226,7 +226,7 @@ function detectOrphanedAudio(
       const filename = `s${slideNum}_segment_${String(i + 1).padStart(2, '0')}_${segment.id}.wav`;
       const chapterDir = path.join(demoOutputDir, `c${chapter}`);
       const filepath = path.join(chapterDir, filename);
-      const relativeFilepath = path.relative(demoOutputDir, filepath).replace(/\\/g, '/');
+      const relativeFilepath = normalizeCachePath(path.relative(demoOutputDir, filepath));
       expectedFiles.add(relativeFilepath);
     }
   }
@@ -247,7 +247,7 @@ function detectOrphanedAudio(
         if (!file.endsWith('.wav')) continue;
         
         const filepath = path.join(chapterPath, file);
-        const relativeFilepath = path.relative(demoOutputDir, filepath).replace(/\\/g, '/');
+        const relativeFilepath = normalizeCachePath(path.relative(demoOutputDir, filepath));
         
         if (!expectedFiles.has(relativeFilepath)) {
           result.orphanedFiles.push({ filepath: relativeFilepath });
@@ -258,7 +258,7 @@ function detectOrphanedAudio(
 
   // Check cache for orphaned entries
   for (const cacheKey of Object.keys(demoCache)) {
-    const normalizedKey = cacheKey.replace(/\\/g, '/');
+    const normalizedKey = normalizeCachePath(cacheKey);
     if (!expectedFiles.has(normalizedKey)) {
       result.orphanedCacheKeys.push(cacheKey);
     }
@@ -362,7 +362,7 @@ function detectRenameableFiles(
   // Build lookup: hash(narrationText + instruct) → orphan filepath
   const orphansByHash = new Map<string, string>();
   for (const orphan of orphanedFiles) {
-    const normalizedPath = orphan.filepath.replace(/\\/g, '/');
+    const normalizedPath = normalizeCachePath(orphan.filepath);
     const cacheEntry = demoCache[normalizedPath] || demoCache[orphan.filepath];
     if (cacheEntry?.narrationText) {
       const instruct = (cacheEntry as any).instruct ?? '';
@@ -396,7 +396,7 @@ function detectRenameableFiles(
 
     const orphanPath = orphansByHash.get(hash);
     if (orphanPath && !matchedOrphans.has(orphanPath)) {
-      renameables.push({ from: orphanPath, to: missing.filepath.replace(/\\/g, '/') });
+      renameables.push({ from: orphanPath, to: normalizeCachePath(missing.filepath) });
       matchedOrphans.add(orphanPath);
     }
   }
@@ -637,7 +637,7 @@ async function checkTTSCache(): Promise<void> {
 
       // Report remaining orphans (excluding those that are renameable)
       const renameableFromPaths = new Set(renameables.map(r => r.from));
-      const trueOrphans = orphaned.orphanedFiles.filter(f => !renameableFromPaths.has(f.filepath.replace(/\\/g, '/')));
+      const trueOrphans = orphaned.orphanedFiles.filter(f => !renameableFromPaths.has(normalizeCachePath(f.filepath)));
       if (trueOrphans.length > 0) {
         console.log(`\n⚠️  Orphaned audio files: ${trueOrphans.length}`);
         trueOrphans.slice(0, 3).forEach(item => {
@@ -650,7 +650,7 @@ async function checkTTSCache(): Promise<void> {
 
       // Report missing files (excluding those that are renameable)
       const renameableToPaths = new Set(renameables.map(r => r.to));
-      const trueMissing = changes.missingFiles.filter(f => !renameableToPaths.has(f.filepath.replace(/\\/g, '/')));
+      const trueMissing = changes.missingFiles.filter(f => !renameableToPaths.has(normalizeCachePath(f.filepath)));
       if (trueMissing.length > 0) {
         console.log(`\n📁 Missing audio files: ${trueMissing.length}`);
         trueMissing.slice(0, 3).forEach(item => {

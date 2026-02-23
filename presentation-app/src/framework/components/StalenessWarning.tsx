@@ -61,6 +61,11 @@ export const StalenessWarning: React.FC<StalenessWarningProps> = ({
   const isBulkRunning = bulkProgress !== null;
   const [batchMode, setBatchMode] = useState(true);
 
+  // Persistent feedback states that survive bulkProgress clear
+  const [alignmentError, setAlignmentError] = useState<string | null>(null);
+  const [partialFixMessage, setPartialFixMessage] = useState<string | null>(null);
+  const [realigning, setRealigning] = useState(false);
+
   // Hidden during narrated playback or when dismissed or not stale
   if (isNarratedMode || dismissed || !staleness?.stale) {
     return null;
@@ -78,13 +83,26 @@ export const StalenessWarning: React.FC<StalenessWarningProps> = ({
   }
 
   const handleRegenerateAll = async () => {
+    // Clear previous feedback
+    setAlignmentError(null);
+    setPartialFixMessage(null);
+
+    // Snapshot old counts for partial-success comparison
+    const oldChangedCount = staleness.changedSegments.length;
+
     const segments = staleness.changedSegments;
     if (segments.length === 0) {
       // No changed segments — fall back to bulk (handles markers/alignment only)
-      await regenerate();
-      clearAlignmentCache(demoId);
-      const newAlignment = await loadAlignment(demoId);
-      onAlignmentFixed?.(newAlignment);
+      try {
+        await regenerate();
+        clearAlignmentCache(demoId);
+        const newAlignment = await loadAlignment(demoId);
+        onAlignmentFixed?.(newAlignment);
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : 'Alignment failed';
+        setAlignmentError(msg);
+      }
+      await refetch();
       return;
     }
 
@@ -96,25 +114,85 @@ export const StalenessWarning: React.FC<StalenessWarningProps> = ({
     for (const seg of segments) initial[seg.key] = 'pending';
     setBulkProgress(initial);
 
+    let alignFailed = false;
     if (batchMode) {
-      await handleRegenerateAllBatch(segments);
+      alignFailed = await handleRegenerateAllBatch(segments);
     } else {
-      await handleRegenerateAllSequential(segments);
+      alignFailed = await handleRegenerateAllSequential(segments);
+    }
+
+    if (alignFailed) {
+      setAlignmentError('Alignment failed. Is WhisperX running?');
     }
 
     // Finalize: refresh alignment + staleness
     setBulkPhase('Finalizing...');
+
     clearAlignmentCache(demoId);
     const newAlignment = await loadAlignment(demoId);
     onAlignmentFixed?.(newAlignment);
-    await refetch();
+    const newStaleness = await refetch();
+
+    // Compute partial-success feedback using returned data
+    if (newStaleness) {
+      const newChangedCount = newStaleness.changedSegments.length;
+      const newMarkerCount = newStaleness.missingMarkers.length;
+      const segmentsFixed = oldChangedCount - newChangedCount;
+      if (segmentsFixed > 0 && (newMarkerCount > 0 || newChangedCount > 0)) {
+        const parts: string[] = [];
+        parts.push(`Fixed ${segmentsFixed} segment${segmentsFixed !== 1 ? 's' : ''}`);
+        if (newMarkerCount > 0) {
+          parts.push(`${newMarkerCount} marker${newMarkerCount !== 1 ? 's' : ''} still unresolved`);
+        }
+        if (newChangedCount > 0) {
+          parts.push(`${newChangedCount} segment${newChangedCount !== 1 ? 's' : ''} still changed`);
+        }
+        setPartialFixMessage(parts.join('. '));
+      } else if (segmentsFixed === 0 && oldChangedCount > 0) {
+        setPartialFixMessage('No segments were fixed. Check TTS server connection.');
+      }
+
+      // Clear segmentErrors for keys no longer in changedSegments (item C)
+      const remainingKeys = new Set(newStaleness.changedSegments.map(s => s.key));
+      setSegmentErrors(prev => {
+        const next: Record<string, string> = {};
+        for (const [k, v] of Object.entries(prev)) {
+          if (remainingKeys.has(k)) next[k] = v;
+        }
+        return next;
+      });
+    }
 
     setBulkProgress(null);
     setBulkPhase(null);
   };
 
-  /** Batch mode: generate all TTS audio in one call, save sequentially, then align all at once. */
-  const handleRegenerateAllBatch = async (segments: ChangedSegmentDetail[]) => {
+  /** Realign only — re-run alignment without regenerating TTS audio. */
+  const handleRealignOnly = async () => {
+    setRealigning(true);
+    setAlignmentError(null);
+    setPartialFixMessage(null);
+
+    try {
+      const result = await realignSegments({ demoId });
+      if (!result.success) {
+        setAlignmentError(result.error || 'Alignment failed. Is WhisperX running?');
+      }
+
+      clearAlignmentCache(demoId);
+      const newAlignment = await loadAlignment(demoId);
+      onAlignmentFixed?.(newAlignment);
+      await refetch();
+    } catch (err: unknown) {
+      setAlignmentError(err instanceof Error ? err.message : 'Alignment failed');
+    } finally {
+      setRealigning(false);
+    }
+  };
+
+  /** Batch mode: generate all TTS audio in one call, save sequentially, then align all at once.
+   *  Returns true if alignment failed. */
+  const handleRegenerateAllBatch = async (segments: ChangedSegmentDetail[]): Promise<boolean> => {
     // Phase 1: batch TTS generation
     setBulkPhase(`Generating TTS for ${segments.length} segments (batch)...`);
     for (const seg of segments) {
@@ -136,7 +214,7 @@ export const StalenessWarning: React.FC<StalenessWarningProps> = ({
         setBulkProgress(prev => prev ? { ...prev, [seg.key]: 'error' } : prev);
         setSegmentErrors(prev => ({ ...prev, [seg.key]: msg }));
       }
-      return;
+      return false;
     }
 
     // Phase 2: save each audio to disk
@@ -194,12 +272,18 @@ export const StalenessWarning: React.FC<StalenessWarningProps> = ({
           setSegmentErrors(prev => ({ ...prev, [seg.key]: alignResult.error || 'Alignment failed' }));
         }
       }
+
+      return !alignResult.success;
     }
+
+    return false;
   };
 
-  /** Sequential mode: generate + save + align one segment at a time. */
-  const handleRegenerateAllSequential = async (segments: ChangedSegmentDetail[]) => {
+  /** Sequential mode: generate + save + align one segment at a time.
+   *  Returns true if any alignment step failed. */
+  const handleRegenerateAllSequential = async (segments: ChangedSegmentDetail[]): Promise<boolean> => {
     let completedCount = 0;
+    let anyAlignFailed = false;
 
     for (const seg of segments) {
       if (bulkAbortRef.current) break;
@@ -241,15 +325,21 @@ export const StalenessWarning: React.FC<StalenessWarningProps> = ({
         setBulkPhase(`Aligning ${completedCount + 1}/${segments.length}: ${seg.key}`);
         setBulkProgress(prev => prev ? { ...prev, [seg.key]: 'aligning' } : prev);
 
-        await realignSegment({ demoId, chapter: seg.chapter, slide: seg.slide, segmentId: seg.segmentId });
+        const alignResult = await realignSegment({ demoId, chapter: seg.chapter, slide: seg.slide, segmentId: seg.segmentId });
+        if (!alignResult.success) {
+          anyAlignFailed = true;
+        }
 
         setBulkProgress(prev => prev ? { ...prev, [seg.key]: 'done' } : prev);
         completedCount++;
       } catch (err: unknown) {
         setBulkProgress(prev => prev ? { ...prev, [seg.key]: 'error' } : prev);
         setSegmentErrors(prev => ({ ...prev, [seg.key]: err instanceof Error ? err.message : 'Error' }));
+        anyAlignFailed = true;
       }
     }
+
+    return anyAlignFailed;
   };
 
   // ── Per-segment actions ──────────────────────────────────────────
@@ -486,7 +576,7 @@ export const StalenessWarning: React.FC<StalenessWarningProps> = ({
                 const isRegenerating = regeneratingKey === seg.key;
                 const errMsg = segmentErrors[seg.key];
                 const bulkStatus = bulkProgress?.[seg.key];
-                const isBusy = fixing || !!regeneratingKey || isBulkRunning;
+                const isBusy = fixing || !!regeneratingKey || isBulkRunning || realigning;
 
                 // During bulk regen, show progress badge instead of NEW/CHANGED
                 const statusBadge = bulkStatus === 'generating' ? (
@@ -741,6 +831,94 @@ export const StalenessWarning: React.FC<StalenessWarningProps> = ({
             </div>
           )}
 
+          {/* Missing Markers section */}
+          {staleness.missingMarkers.length > 0 && (
+            <div style={{
+              marginBottom: '16px',
+              borderTop: '1px solid #333',
+              paddingTop: '12px',
+              flexShrink: 0,
+            }}>
+              <div style={{
+                color: '#999',
+                fontSize: '12px',
+                fontWeight: 600,
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px',
+                marginBottom: '8px',
+              }}>
+                Missing Markers ({staleness.missingMarkers.length})
+              </div>
+              <div style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '4px',
+              }}>
+                {staleness.missingMarkers.map(m => (
+                  <span
+                    key={`${m.segment}:${m.markerId}`}
+                    style={{
+                      background: 'rgba(168, 85, 247, 0.12)',
+                      color: '#c084fc',
+                      fontSize: '11px',
+                      fontFamily: 'monospace',
+                      padding: '3px 8px',
+                      borderRadius: 4,
+                      border: '1px solid rgba(168, 85, 247, 0.25)',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {m.segment} <span style={{ color: '#a855f7' }}>#{m.markerId}</span>
+                  </span>
+                ))}
+              </div>
+              <div style={{
+                color: '#888',
+                fontSize: '11px',
+                marginTop: '6px',
+                lineHeight: 1.3,
+              }}>
+                Run alignment to resolve markers, or check that WhisperX is running.
+              </div>
+            </div>
+          )}
+
+          {/* Partial-success feedback */}
+          {partialFixMessage && (
+            <div style={{
+              background: 'rgba(34, 197, 94, 0.1)',
+              border: '1px solid rgba(34, 197, 94, 0.3)',
+              borderRadius: 8,
+              padding: '8px 12px',
+              marginBottom: '10px',
+              color: '#86efac',
+              fontSize: '12px',
+              lineHeight: 1.4,
+              textAlign: 'center',
+              flexShrink: 0,
+            }}>
+              {partialFixMessage}
+            </div>
+          )}
+
+          {/* Alignment error feedback */}
+          {alignmentError && (
+            <div style={{
+              background: 'rgba(239, 68, 68, 0.1)',
+              border: '1px solid rgba(239, 68, 68, 0.3)',
+              borderRadius: 8,
+              padding: '8px 12px',
+              marginBottom: '10px',
+              color: '#fca5a5',
+              fontSize: '12px',
+              lineHeight: 1.4,
+              textAlign: 'center',
+              flexShrink: 0,
+            }}>
+              {alignmentError}
+            </div>
+          )}
+
           {/* Batch mode checkbox */}
           {!isBulkRunning && staleness.changedSegments.length > 1 && (
             <label style={{
@@ -795,31 +973,86 @@ export const StalenessWarning: React.FC<StalenessWarningProps> = ({
             display: 'flex',
             gap: '10px',
             justifyContent: 'center',
+            flexWrap: 'wrap',
             flexShrink: 0,
           }}>
-            <button
-              onClick={handleRegenerateAll}
-              disabled={isBulkRunning || fixing || !!regeneratingKey}
-              style={{
-                background: (isBulkRunning || fixing) ? '#444' : '#e6a700',
-                color: (isBulkRunning || fixing) ? '#999' : '#111',
-                border: 'none',
-                borderRadius: 8,
-                padding: '8px 20px',
-                fontSize: '14px',
-                fontWeight: 600,
-                cursor: (isBulkRunning || fixing) ? 'wait' : 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-              }}
-            >
-              {isBulkRunning ? 'Fixing...' : 'Fix All'}
-            </button>
+            {staleness.changedSegments.length > 0 && (
+              <button
+                onClick={handleRegenerateAll}
+                disabled={isBulkRunning || fixing || realigning || !!regeneratingKey}
+                style={{
+                  background: (isBulkRunning || fixing) ? '#444' : '#e6a700',
+                  color: (isBulkRunning || fixing) ? '#999' : '#111',
+                  border: 'none',
+                  borderRadius: 8,
+                  padding: '8px 20px',
+                  fontSize: '14px',
+                  fontWeight: 600,
+                  cursor: (isBulkRunning || fixing) ? 'wait' : 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                }}
+              >
+                {isBulkRunning ? 'Regenerating...' : 'Regenerate All'}
+              </button>
+            )}
+
+            {(staleness.missingMarkers.length > 0 || staleness.alignmentMissing) && (
+              <button
+                onClick={handleRealignOnly}
+                disabled={isBulkRunning || fixing || realigning || !!regeneratingKey}
+                style={{
+                  background: realigning ? '#444' : 'transparent',
+                  color: realigning ? '#999' : '#00b7c3',
+                  border: `1px solid ${realigning ? '#555' : '#00b7c3'}`,
+                  borderRadius: 8,
+                  padding: '8px 20px',
+                  fontSize: '14px',
+                  fontWeight: 600,
+                  cursor: realigning ? 'wait' : 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                }}
+              >
+                {realigning && (
+                  <span style={{
+                    display: 'inline-block',
+                    width: 12,
+                    height: 12,
+                    border: '2px solid rgba(0, 183, 195, 0.3)',
+                    borderTop: '2px solid #00b7c3',
+                    borderRadius: '50%',
+                    animation: 'staleness-spin 0.8s linear infinite',
+                  }} />
+                )}
+                {realigning ? 'Aligning...' : 'Realign'}
+              </button>
+            )}
+
+            {staleness.changedSegments.length === 0 && staleness.missingMarkers.length === 0 && staleness.alignmentMissing && (
+              <button
+                onClick={handleRegenerateAll}
+                disabled={isBulkRunning || fixing || realigning || !!regeneratingKey}
+                style={{
+                  background: fixing ? '#444' : '#e6a700',
+                  color: fixing ? '#999' : '#111',
+                  border: 'none',
+                  borderRadius: 8,
+                  padding: '8px 20px',
+                  fontSize: '14px',
+                  fontWeight: 600,
+                  cursor: fixing ? 'wait' : 'pointer',
+                }}
+              >
+                {fixing ? 'Fixing...' : 'Fix All'}
+              </button>
+            )}
 
             <button
               onClick={dismiss}
-              disabled={isBulkRunning}
+              disabled={isBulkRunning || realigning}
               style={{
                 background: 'transparent',
                 color: '#999',
@@ -827,8 +1060,8 @@ export const StalenessWarning: React.FC<StalenessWarningProps> = ({
                 borderRadius: 8,
                 padding: '8px 20px',
                 fontSize: '14px',
-                cursor: isBulkRunning ? 'not-allowed' : 'pointer',
-                opacity: isBulkRunning ? 0.5 : 1,
+                cursor: (isBulkRunning || realigning) ? 'not-allowed' : 'pointer',
+                opacity: (isBulkRunning || realigning) ? 0.5 : 1,
               }}
             >
               Dismiss
