@@ -50,11 +50,11 @@ export const Ch2_S1_FourCalls = defineSlide({
     slide: 1,
     title: 'Four-Call Pipeline',
     audioSegments: [
-      { id: 'title' },
-      { id: 'call1' },
-      { id: 'call2' },
-      { id: 'call3' },
-      { id: 'call4' }
+      { id: 0 },
+      { id: 1 },
+      { id: 2 },
+      { id: 3 },
+      { id: 4 }
     ]
   },
   component: Ch2_S1_FourCallsComponent

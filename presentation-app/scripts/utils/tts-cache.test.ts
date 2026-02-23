@@ -140,15 +140,15 @@ describe('TtsCacheStore', () => {
 
   describe('buildKey', () => {
     it('produces correct segment path (0-based index)', () => {
-      expect(TtsCacheStore.buildKey(1, 2, 0, 'intro')).toBe('c1/s2_segment_01_intro.wav');
+      expect(TtsCacheStore.buildKey(1, 2, 0)).toBe('c1/s2_segment_00.wav');
     });
 
     it('pads index to 2 digits', () => {
-      expect(TtsCacheStore.buildKey(3, 1, 8, 'summary')).toBe('c3/s1_segment_09_summary.wav');
+      expect(TtsCacheStore.buildKey(3, 1, 8)).toBe('c3/s1_segment_08.wav');
     });
 
     it('handles double-digit indices', () => {
-      expect(TtsCacheStore.buildKey(2, 4, 11, 'detail')).toBe('c2/s4_segment_12_detail.wav');
+      expect(TtsCacheStore.buildKey(2, 4, 11)).toBe('c2/s4_segment_11.wav');
     });
   });
 

@@ -151,9 +151,9 @@ export const Ch1_S1_ProductContext = defineSlide({
     slide: 1,
     title: 'Product Context',
     audioSegments: [
-      { id: 'title' },
-      { id: 'pipeline' },
-      { id: 'types' }
+      { id: 0 },
+      { id: 1 },
+      { id: 2 }
     ]
   },
   component: Ch1_S1_ProductContextComponent
@@ -201,9 +201,9 @@ export const Ch1_S2_COGSProblem = defineSlide({
     slide: 2,
     title: 'COGS Problem',
     audioSegments: [
-      { id: 'metrics' },
-      { id: 'quote' },
-      { id: 'emphasis' }
+      { id: 0 },
+      { id: 1 },
+      { id: 2 }
     ]
   },
   component: Ch1_S2_COGSProblemComponent

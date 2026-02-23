@@ -44,7 +44,7 @@ interface SegmentToAlign {
   chapter: number;
   slide: number;
   segmentIndex: number;
-  segmentId: string;
+  segmentId: number;
   narrationText: string;     // original text with markers
   cleanText: string;         // stripped text for alignment
   markers: ReturnType<typeof parseMarkers>['markers'];
@@ -199,7 +199,7 @@ export async function generateAlignment(config: AlignConfig) {
       }
 
       // Build file paths
-      const filename = `s${slideNum}_segment_${String(i + 1).padStart(2, '0')}_${segment.id}.wav`;
+      const filename = `s${slideNum}_segment_${String(i).padStart(2, '0')}.wav`;
       const filepath = `c${chapter}/${filename}`;
       const fullPath = path.join(demoAudioDir, filepath);
 

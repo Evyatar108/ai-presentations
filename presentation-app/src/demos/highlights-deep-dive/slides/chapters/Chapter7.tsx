@@ -96,9 +96,9 @@ export const Ch7_S1_CopyThenParse = defineSlide({
     slide: 1,
     title: 'Copy-then-Parse',
     audioSegments: [
-      { id: 'title' },
-      { id: 'copy' },
-      { id: 'parse' }
+      { id: 0 },
+      { id: 1 },
+      { id: 2 }
     ]
   },
   component: Ch7_S1_CopyThenParseComponent
@@ -185,8 +185,8 @@ export const Ch7_S2_SelfChecks = defineSlide({
     slide: 2,
     title: 'Self-Checks',
     audioSegments: [
-      { id: 'title' },
-      { id: 'grid' }
+      { id: 0 },
+      { id: 1 }
     ]
   },
   component: Ch7_S2_SelfChecksComponent

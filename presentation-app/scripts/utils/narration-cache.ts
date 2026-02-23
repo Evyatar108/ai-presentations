@@ -40,7 +40,7 @@ export interface NarrationCache {
 // ── Key building ───────────────────────────────────────────────────
 
 /** Build a narration cache key: `"ch{N}:s{N}:{segmentId}"`. */
-export function buildNarrationCacheKey(chapter: number, slide: number, segmentId: string): string {
+export function buildNarrationCacheKey(chapter: number, slide: number, segmentId: number): string {
   return `ch${chapter}:s${slide}:${segmentId}`;
 }
 

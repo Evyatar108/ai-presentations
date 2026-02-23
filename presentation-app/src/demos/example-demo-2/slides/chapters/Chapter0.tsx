@@ -56,7 +56,7 @@ export const Ex2_S1_Title = defineSlide({
     title: 'Title Slide',
     audioSegments: [
       {
-        id: 'title',
+        id: 0,
       }
     ]
   },
@@ -114,7 +114,7 @@ const BenefitsComponent: React.FC = () => {
               title={b.title}
               description={b.desc}
               detail={b.detail}
-              isVisible={isSegmentVisibleById(b.id)}
+              isVisible={isSegmentVisibleById(i)}
               isHighlighted={isOnSegment(i)}
               reduced={reduced}
             />
@@ -132,13 +132,13 @@ export const Ex2_S2_Benefits = defineSlide({
     title: 'System Benefits',
     audioSegments: [
       {
-        id: 'flexible',
+        id: 0,
       },
       {
-        id: 'scalable',
+        id: 1,
       },
       {
-        id: 'organized',
+        id: 2,
       },
     ]
   },
@@ -181,12 +181,12 @@ const ImpactComponent: React.FC = () => {
           alignItems: 'center',
         }}
       >
-        {isSegmentVisibleById('speed') && (
+        {isSegmentVisibleById(0) && (
           <motion.div variants={fadeRight(reduced)}>
             <MetricDisplay value="3x" label="Faster Development" reduced={reduced} emphasis />
           </motion.div>
         )}
-        {isSegmentVisibleById('typed') && (
+        {isSegmentVisibleById(1) && (
           <motion.div variants={fadeRight(reduced, 0.2)}>
             <MetricDisplay value="100%" label="Type-Safe" reduced={reduced} />
           </motion.div>
@@ -203,10 +203,10 @@ export const Ex2_S3_Impact = defineSlide({
     title: 'Framework Impact',
     audioSegments: [
       {
-        id: 'speed',
+        id: 0,
       },
       {
-        id: 'typed',
+        id: 1,
       },
     ]
   },

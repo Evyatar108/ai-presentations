@@ -122,7 +122,7 @@ export const Ch6_S1_UnifiedConvergence = defineSlide({
     slide: 1,
     title: "Unified Convergence",
     audioSegments: [{
-      id: "main",
+      id: 0,
     }]
   },
   component: Ch6_S1_UnifiedConvergenceComponent
@@ -167,7 +167,7 @@ export const Ch6_S4_TokenOptimization = defineSlide({
     slide: 4,
     title: "Token Optimization",
     audioSegments: [{
-      id: "main",
+      id: 0,
     }]
   },
   component: Ch6_S4_TokenOptimizationComponent

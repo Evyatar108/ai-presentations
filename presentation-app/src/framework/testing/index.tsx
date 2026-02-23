@@ -30,8 +30,8 @@ export const TestSlideWrapper: React.FC<{ children: React.ReactNode }> = ({ chil
  */
 export function createTestSegment(overrides?: Partial<AudioSegment>): AudioSegment {
   return {
-    id: 'test-segment',
-    audioFilePath: '/audio/test/c0/s0_segment_01_test.wav',
+    id: 0,
+    audioFilePath: '/audio/test/c0/s0_segment_00.wav',
     ...overrides,
   };
 }

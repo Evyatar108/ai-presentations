@@ -163,7 +163,7 @@ export interface SegmentedAnimationAPI {
   /** True if `segmentIndex === currentSegmentIndex` (exact match). */
   isOnSegment: (segmentIndex: number) => boolean;
   /** True if the segment with the given `id` is visible (progressive reveal). */
-  isSegmentVisibleById: (id: string) => boolean;
+  isSegmentVisibleById: (id: number) => boolean;
   nextSegment: () => void;
   previousSegment: () => void;
   resetSegments: () => void;
@@ -187,7 +187,7 @@ export function useSegmentedAnimation(): SegmentedAnimationAPI {
   }, [context.currentSegmentIndex]);
 
   // Helper: check if a segment with the given id is visible
-  const isSegmentVisibleById = useCallback((id: string): boolean => {
+  const isSegmentVisibleById = useCallback((id: number): boolean => {
     const idx = context.segments.findIndex(seg => seg.id === id);
     if (idx === -1) {
       if (import.meta.env.DEV) {

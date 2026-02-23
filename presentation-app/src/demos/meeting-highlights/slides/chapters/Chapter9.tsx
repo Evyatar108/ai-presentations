@@ -287,19 +287,19 @@ export const Ch9_S1_Testimonials = defineSlide({
     title: "Testimonials",
     audioSegments: [
       {
-        id: "intro",
+        id: 0,
       },
       {
-        id: "kevin",
+        id: 1,
       },
       {
-        id: "ryan1",
+        id: 2,
       },
       {
-        id: "ryan2",
+        id: 3,
       },
       {
-        id: "anonymous",
+        id: 4,
       }
     ]
   },
@@ -685,16 +685,16 @@ export const Ch9_S2_ClosingThanks = defineSlide({
     title: "Thank You",
     audioSegments: [
       {
-        id: "intro",
+        id: 0,
       },
       {
-        id: "value",
+        id: 1,
       },
       {
-        id: "feedback",
+        id: 2,
       },
       {
-        id: "cta",
+        id: 3,
       }
     ]
   },

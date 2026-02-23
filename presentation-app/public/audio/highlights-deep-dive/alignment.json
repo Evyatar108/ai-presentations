@@ -7,7 +7,7 @@
       "slide": 1,
       "segments": [
         {
-          "segmentId": "intro",
+          "segmentId": 0,
           "audioHash": "b374d0872c88063e7dd78562e24777b5b349a90d04b7e974ca992c26220156dd",
           "narrationHash": "e570959dd4c9e8ed95c779672f931f42052b93150d87d2391aa7e313d6bfa543",
           "words": [
@@ -87,7 +87,7 @@
           "markers": []
         },
         {
-          "segmentId": "main",
+          "segmentId": 1,
           "audioHash": "f08183a234ecfa1061639184c1f77f11af04aab6f05c7b5dfcd7d5e91325bb3c",
           "narrationHash": "4520c500f0effcc86e51a0320271dc7bc8c97f13e371485744ba3ae8d815b404",
           "words": [
@@ -275,7 +275,7 @@
       "slide": 1,
       "segments": [
         {
-          "segmentId": "title",
+          "segmentId": 0,
           "audioHash": "a8784c28591b9972d2205e763f9f29efa83c3769dce5afa44bad153054c346b0",
           "narrationHash": "c36d71bb8da743e2cd2c3d6062cc672cc667e78656301d57554143341ae7c6c0",
           "words": [
@@ -331,7 +331,7 @@
           "markers": []
         },
         {
-          "segmentId": "pipeline",
+          "segmentId": 1,
           "audioHash": "6ff7dd1600a8ed0933dddc991f09d6c7ea27e60ec82f566eb0638df07291e593",
           "narrationHash": "d53b07f3c5cc5b422ddb0951558fb38aaf0f763c69f6c9da5dda83527849a16a",
           "words": [
@@ -760,7 +760,7 @@
           ]
         },
         {
-          "segmentId": "types",
+          "segmentId": 2,
           "audioHash": "c7159a6432c6eb6de5e059dcde8fb68e0fd84d119a9c9df8558c5be06db5fe98",
           "narrationHash": "79896f699e5b50ac62cdc67459d975ef20b8aed41ce487fa209366790d93252b",
           "words": [
@@ -997,7 +997,7 @@
       "slide": 2,
       "segments": [
         {
-          "segmentId": "metrics",
+          "segmentId": 0,
           "audioHash": "d57c01e4260dff5ee93dedd9ab69a803b2a55f89899ea60e4c46f01eaa8ea285",
           "narrationHash": "e85a6229106d7b7109193cd1375024d116c0fc816082acba364295b37fb8be6e",
           "words": [
@@ -1263,7 +1263,7 @@
           "markers": []
         },
         {
-          "segmentId": "quote",
+          "segmentId": 1,
           "audioHash": "653352478d0f18a73fa717b502bfe0a43b837e8e820530e278cdb0bc094699c1",
           "narrationHash": "7f45f740110d619d9f2269c3ec37a6ca9fdedb9abcc82eb84b19ac2bee4a38ac",
           "words": [
@@ -1415,7 +1415,7 @@
           "markers": []
         },
         {
-          "segmentId": "emphasis",
+          "segmentId": 2,
           "audioHash": "9ddf4751bfe14fc250a79d97460d006ae150cd27fcdbff2dba3202247e1aa196",
           "narrationHash": "520ec3354ad6a4240c569c7cb3f7635e78e31280bebe1bbd14306461ed8264ac",
           "words": [
@@ -1531,7 +1531,7 @@
       "slide": 1,
       "segments": [
         {
-          "segmentId": "title",
+          "segmentId": 0,
           "audioHash": "9a8f19ce1a452ac7f5a4aa5a79b74b8e297398d134cd504269a16663b0001a5f",
           "narrationHash": "4c445e13a837e3841c0b7a091eb46aedc5baf43e2c9de868203409190204bb84",
           "words": [
@@ -1599,7 +1599,7 @@
           "markers": []
         },
         {
-          "segmentId": "call1",
+          "segmentId": 1,
           "audioHash": "00ce4be90cf927cd4c499ed8559f528cdeed796cacc5339c4ea9d11e45e25369",
           "narrationHash": "e96d3e2131be2d7b8c19748c27cc5315b66d5e5ecc715f807c37454d65f90b26",
           "words": [
@@ -1709,7 +1709,7 @@
           "markers": []
         },
         {
-          "segmentId": "call2",
+          "segmentId": 2,
           "audioHash": "75e1a34bc1773222dc82f63a576b6bda59d57e858f1f50918eda3b55c975fdc4",
           "narrationHash": "91579eb73ab4a5df45f3e92d758c640e3b781aeffc2957b0368f7400a6310ea2",
           "words": [
@@ -1909,7 +1909,7 @@
           "markers": []
         },
         {
-          "segmentId": "call3",
+          "segmentId": 3,
           "audioHash": "fb28cffde051c83d9590adf4fdfaf169191ca43b084d1313d46762ff2f70dc50",
           "narrationHash": "a0684b4fa5bcc6a3a9760bea5f19e0f1dee68b7630d15b14a9d3a064314db99e",
           "words": [
@@ -2019,7 +2019,7 @@
           "markers": []
         },
         {
-          "segmentId": "call4",
+          "segmentId": 4,
           "audioHash": "97e763fbdb19b47dd5a6e12615871b91d45e772c01a8927b9419c0ec1a9594ea",
           "narrationHash": "c702d119437e0437a2bd101e54828bba5c281f031fd54186bdcacb2a5919af55",
           "words": [
@@ -2153,7 +2153,7 @@
       "slide": 1,
       "segments": [
         {
-          "segmentId": "title",
+          "segmentId": 0,
           "audioHash": "75a1cb5524ed09fe2dea557dda7f3d1ad9d7d62a14dd4e8a526729be3d85aaca",
           "narrationHash": "aab233d4cef1b1c9575fed9cac97d221b962b21b32cde5d74816a0d1057ebe5c",
           "words": [
@@ -2233,7 +2233,7 @@
           "markers": []
         },
         {
-          "segmentId": "driver1",
+          "segmentId": 1,
           "audioHash": "ca0f060a84f453ccfa7176ad47d122f8fc0883548656e1229d5a64300ddc8de3",
           "narrationHash": "82796c515b841a814827a92ac4f7c7ff4ad7c00ee6f6b2469c172d8f42c9b9e2",
           "words": [
@@ -2349,7 +2349,7 @@
           "markers": []
         },
         {
-          "segmentId": "driver2",
+          "segmentId": 2,
           "audioHash": "192bbc002af5fdda2682c4fa76c3c62ff63b46afcad5bb83acf28cfdd0c15dde",
           "narrationHash": "0a07316ccb94e63de928a4cec9070633c17205ee9de205a77f0e508fc2be1b5a",
           "words": [
@@ -2549,7 +2549,7 @@
           "markers": []
         },
         {
-          "segmentId": "driver3",
+          "segmentId": 3,
           "audioHash": "330a2da5d30252300ba5ea93f360b85d08badf29cefe3f8d63dbc8b27249983b",
           "narrationHash": "cff2afe1feef49a337c3138aed8b7d19823c5500e7d8d0af27d7cff7882e1b61",
           "words": [
@@ -2641,7 +2641,7 @@
           "markers": []
         },
         {
-          "segmentId": "driver4",
+          "segmentId": 4,
           "audioHash": "0a11f4bf5f025eb25542afb1bf198eefb37e1711cb619252d0103950a870a82b",
           "narrationHash": "d6b235ae9ffbf34a99e91e4b6d88cafe1b7b8c166fe644c4dd946de1e098d108",
           "words": [
@@ -2859,7 +2859,7 @@
       "slide": 2,
       "segments": [
         {
-          "segmentId": "comparison",
+          "segmentId": 0,
           "audioHash": "e20869e560a5c57d611dd84cff907bc172d0cef19dd1c9bd62a304e9acdcf949",
           "narrationHash": "c4853cab0ea37f0b854a83ec72bdf05c413267a7a1dde372a4427c939baf3bb1",
           "words": [
@@ -3084,7 +3084,7 @@
           ]
         },
         {
-          "segmentId": "caption",
+          "segmentId": 1,
           "audioHash": "74ce603637787c4124cfde2f07b993309c8ab0a01dd5ddbb4e8a28a9fba54839",
           "narrationHash": "2263674d38e687469d61d5ce751424a05f4dbda4897dfcdbf43797b99d78ff7b",
           "words": [
@@ -3140,7 +3140,7 @@
       "slide": 1,
       "segments": [
         {
-          "segmentId": "title",
+          "segmentId": 0,
           "audioHash": "9a164d0b2a4898410c5da9a6dce4e5a1f2fb296cc78af84f187cbf2e684a0749",
           "narrationHash": "6b0cc5f77a5efff18a74dc3f9d76f63cba34b71aabf041d4b018a47d1941c7ba",
           "words": [
@@ -3340,7 +3340,7 @@
           "markers": []
         },
         {
-          "segmentId": "code",
+          "segmentId": 1,
           "audioHash": "17dfe32fc8dbc83de46ba35f05b01f5e396f6c0505de1f45a5ab9b380395a8d9",
           "narrationHash": "4c970025362b28ca01628d8514106a6048ff04cf7323d35641e034d1f12c68db",
           "words": [
@@ -3517,7 +3517,7 @@
           ]
         },
         {
-          "segmentId": "annotation",
+          "segmentId": 2,
           "audioHash": "c2ff9912514fcbd77f006527123bb1085a67de5fffafd501b4d292f3001e55f9",
           "narrationHash": "9de0d3f50b4abdd3aa6938c261e7b05dbc111d675f14c7293781dafff58234db",
           "words": [
@@ -3651,7 +3651,7 @@
       "slide": 2,
       "segments": [
         {
-          "segmentId": "title",
+          "segmentId": 0,
           "audioHash": "613945039fa501164697537f87787d4e5c1c030baf940da27a6636e5fbbe6b3d",
           "narrationHash": "5e858e38869291caea1fd97b2ce290aa3fab361040b9257184f76e7920600c62",
           "words": [
@@ -3827,7 +3827,7 @@
           "markers": []
         },
         {
-          "segmentId": "rows",
+          "segmentId": 1,
           "audioHash": "2652c328d57074c0477b457cd21e1499689a2c84fb65dbeb4711621e30dabeb4",
           "narrationHash": "462d016ea14f1bd02154569482bc4574f0a8eebd196a4a2358a44dd1590d1c25",
           "words": [
@@ -4087,7 +4087,7 @@
           "markers": []
         },
         {
-          "segmentId": "waste",
+          "segmentId": 2,
           "audioHash": "805d27e8b4b3a9d63acd401fb8b507b19b9ce4d0a964700c6896b84207b546ad",
           "narrationHash": "c1445b358f4f8fe3014844145aef86c44401764e9c5b7a265d9fa05a18281ee0",
           "words": [
@@ -4299,7 +4299,7 @@
       "slide": 3,
       "segments": [
         {
-          "segmentId": "grid",
+          "segmentId": 0,
           "audioHash": "9961b4098f6c69de3fe4e6ad842e2532768926e934aaf4fc16cef2c4b7a8fd8b",
           "narrationHash": "b5f2bfe4bd40d65e85f0297ce26c3dd3aa85e23796a285d20a78e7effc0dfe44",
           "words": [
@@ -4379,7 +4379,7 @@
           "markers": []
         },
         {
-          "segmentId": "math",
+          "segmentId": 1,
           "audioHash": "117f1014a44e15b78acc50aa38f495a68c7a586205f589c0ec3dcdf6e8230b5a",
           "narrationHash": "d03d97e0e009e582ed81daa497686cca069ac3ea676ce86daf595ce9de42d389",
           "words": [
@@ -4640,7 +4640,7 @@
           ]
         },
         {
-          "segmentId": "context_window",
+          "segmentId": 2,
           "audioHash": "c62534cab9f2bb5f9084bd5c6cb1c60113bcc97f8b90925c9231daee2f62dfaa",
           "narrationHash": "fb2cf4e7b526958c13be5012a5bf90c47c3a0412a2b6cb2bfbaa835209191de2",
           "words": [
@@ -5074,7 +5074,7 @@
       "slide": 4,
       "segments": [
         {
-          "segmentId": "input_example",
+          "segmentId": 0,
           "audioHash": "3eaa33bdfdaa22c5e1d443e74c5381494ce3efd2f6a1b03dda9018a67c0032b0",
           "narrationHash": "9e52d297fff18511b166c816255c0385ce10ab1c115602d23867603c5d9e1024",
           "words": [
@@ -5604,7 +5604,7 @@
           "markers": []
         },
         {
-          "segmentId": "input_output",
+          "segmentId": 1,
           "audioHash": "fc5640a913e2fb584aec028220bfa84b5619d4afe62ce1ffb3860c38ae67532f",
           "narrationHash": "dfad734535613733010f1319957a508275e6cec6a4137794008667040b89b342",
           "words": [
@@ -6062,7 +6062,7 @@
           "markers": []
         },
         {
-          "segmentId": "rationale",
+          "segmentId": 2,
           "audioHash": "7915ee977f6e65edeba7095f4d5063e68b0e318c25cecadb49a7ad41cfcc800e",
           "narrationHash": "948e460836a2d9d5b1167bcc24552660086e8b331d81fc328f2342d7db1dcdae",
           "words": [
@@ -6484,7 +6484,7 @@
           "markers": []
         },
         {
-          "segmentId": "tradeoff",
+          "segmentId": 3,
           "audioHash": "d8b87790fabd8c83128ffa6039c9d89497fa9cf90bc32252d241739e85a94f42",
           "narrationHash": "a201f0c57d1d9e0f5f9590ec4f8996377a261e7b1ca6db9441ea434442b177fa",
           "words": [
@@ -6864,7 +6864,7 @@
       "slide": 1,
       "segments": [
         {
-          "segmentId": "title",
+          "segmentId": 0,
           "audioHash": "8f020865f908f62e116c7363e6e3c23b107d9fdbdf769a5f0dcce8fb9c286ebe",
           "narrationHash": "39ab1dddc21df2fad89c05304483cb2c0e13cfb29c7a160eb10a5ece90d81581",
           "words": [
@@ -6968,7 +6968,7 @@
           "markers": []
         },
         {
-          "segmentId": "table",
+          "segmentId": 2,
           "audioHash": "d6e02b4b068b61bc463fbe0c4618584963b0e8a28e2e8a2d7005fce7973de7ac",
           "narrationHash": "b13afdcfca3009a98c338c050de9b3fea49905ab285197ee69e4789ccf9adf5f",
           "words": [
@@ -7156,7 +7156,7 @@
           "markers": []
         },
         {
-          "segmentId": "split",
+          "segmentId": 1,
           "audioHash": "f985e75f2517002b9d759871fd342dbe3fdfb588780eab478d70e750e042cff2",
           "narrationHash": "8ff2de2d147f1d7a4a7e7f5bfefcd3d54cf57d5e3fec0d365dc9cb63ff60aff2",
           "words": [
@@ -7339,7 +7339,7 @@
       "slide": 2,
       "segments": [
         {
-          "segmentId": "row",
+          "segmentId": 0,
           "audioHash": "b9641595805c552dc4b9e38abb115775308db008ff9c62038727c36bce72e919",
           "narrationHash": "f991d938a191a0a7793b40c55503af60e6f8d6fa0d2f4499f5f27126971fb69b",
           "words": [
@@ -7869,7 +7869,7 @@
           "markers": []
         },
         {
-          "segmentId": "visual",
+          "segmentId": 1,
           "audioHash": "94c042f5c0dcdbcac607daa85afb3a8aac79b1a7ec5804325260894302156e50",
           "narrationHash": "a5f4ca91e66a7f7384e2dee4c02a6c66076669304124e0c01c5156dc249ad08a",
           "words": [
@@ -8015,7 +8015,7 @@
           "markers": []
         },
         {
-          "segmentId": "comparison",
+          "segmentId": 2,
           "audioHash": "5976f7231f99a17ec442895f2a4bc232d4344d8728fc4df27b5d6ae7a02ca443",
           "narrationHash": "ecdbc8ffb33964e7c3e8de748e43c81da3837aaf5bc36f0b7f86f5439478dd3f",
           "words": [
@@ -8137,7 +8137,7 @@
       "slide": 3,
       "segments": [
         {
-          "segmentId": "title",
+          "segmentId": 0,
           "audioHash": "74def7245496bdd2aefaa8edba0a8012df1db773cf7a2ad90ad544b0c66f037b",
           "narrationHash": "ac3655960b835496afec392f5e3daff8f4336bf4d5bb35ae1b86589bc48c393d",
           "words": [
@@ -8283,7 +8283,7 @@
           "markers": []
         },
         {
-          "segmentId": "concept",
+          "segmentId": 1,
           "audioHash": "b2c1d19a4cd493fe816b9cb808466b611533ae51e38d3cd9397f20cfb88b5e83",
           "narrationHash": "7ac861e6ca2b97e87bec132dcc0ef3725356b8f0fbf429bc51b4228f2ccc4598",
           "words": [
@@ -8687,7 +8687,7 @@
           "markers": []
         },
         {
-          "segmentId": "constraint",
+          "segmentId": 2,
           "audioHash": "387c2d4d5541b307738c4619fa9266bede98022cf00cf16d279330bf680c14ac",
           "narrationHash": "0d9ce0cf704ea743129e2b3a6546b0860032acfec4c13a3644dbf9dcbd5e9dce",
           "words": [
@@ -9091,7 +9091,7 @@
       "slide": 1,
       "segments": [
         {
-          "segmentId": "title",
+          "segmentId": 0,
           "audioHash": "f58b8e0bcbc4b66e38289645ebd85b2b9579bcbf342c913eff1ee5e9b40756cb",
           "narrationHash": "e1a1bb6b686098456fee33c29fd0927c67141745652628cf43a7d98fb301f209",
           "words": [
@@ -9279,7 +9279,7 @@
           "markers": []
         },
         {
-          "segmentId": "sections",
+          "segmentId": 1,
           "audioHash": "8713b4e0051692c61811438c4cd9a5783865e62f46249d09e1f40eafbaa543aa",
           "narrationHash": "8d67bcf26d3ddf07313ff3c74949e3ebf907f2fca63349db28c614def9790f62",
           "words": [
@@ -9762,7 +9762,7 @@
           ]
         },
         {
-          "segmentId": "insight",
+          "segmentId": 2,
           "audioHash": "7e9f771328c87f1f6b1c5c9fc7408833484baf31cd368c7a92ad75875f8d13cf",
           "narrationHash": "3ff1dd526fcbfc168ab51d34dfadb072662e579f5b669015c3bdc54f6872ecc6",
           "words": [
@@ -10004,7 +10004,7 @@
       "slide": 2,
       "segments": [
         {
-          "segmentId": "title",
+          "segmentId": 0,
           "audioHash": "37e2038cf898fdd4a4adcf08cd4a378c6876b48b36c8a101acd0fa6445912c47",
           "narrationHash": "caf47e3bb47a303339c2afd6856696606819da25d62bda8aec0ce8a20709d173",
           "words": [
@@ -10252,7 +10252,7 @@
           "markers": []
         },
         {
-          "segmentId": "code",
+          "segmentId": 1,
           "audioHash": "4b97dc943ac36a2c4bed63780e68206718684c50f499ff4475c5a9facd2463c8",
           "narrationHash": "50cefc96995bd86ace8b075ae1452b648c48ae5bd463107790b8f30ae5d394b1",
           "words": [
@@ -10525,7 +10525,7 @@
           ]
         },
         {
-          "segmentId": "outputs",
+          "segmentId": 2,
           "audioHash": "d603e6084d7575afabcaeab056f91ed359c7059bb53824ee3c048719cf5bc946",
           "narrationHash": "4bfe932605fb52e5239da6ef01280fad41dc76345ae8a4e859fb48808f53acf8",
           "words": [
@@ -10666,7 +10666,7 @@
       "slide": 3,
       "segments": [
         {
-          "segmentId": "comparison",
+          "segmentId": 0,
           "audioHash": "274671e90c8dfd3f37f28cdf390fa7667209781c0ae056b4762eb146b914d627",
           "narrationHash": "f26d05b55ccaa1e089d9ef1ecc907eefed4f90a3039ebd66e7ab16be43732826",
           "words": [
@@ -10843,7 +10843,7 @@
           ]
         },
         {
-          "segmentId": "benefits",
+          "segmentId": 1,
           "audioHash": "4f344da48053ced96838eb49314288076ba6003b39cb5a55848374d05df4914e",
           "narrationHash": "37daecb457e7ec9f436579655ac8d3280b5b0f20c831f709aba5ab395ed9b660",
           "words": [
@@ -11062,7 +11062,7 @@
       "slide": 4,
       "segments": [
         {
-          "segmentId": "skeleton",
+          "segmentId": 0,
           "audioHash": "bb032d95ea62765b8a194bd0948b7f8be03d65ddf8ae0653e659ab276834daaf",
           "narrationHash": "bc8fa0b056d1dd2e0f448ccd6da95ae1183cd783b5db0a4ee63582f81a486edb",
           "words": [
@@ -11545,7 +11545,7 @@
           ]
         },
         {
-          "segmentId": "deliverable_zoom",
+          "segmentId": 1,
           "audioHash": "638c5b528cecaacff41433369527074d452a81983fd0a11da4c98201db06ff57",
           "narrationHash": "aa5130ce4ad73debc31022c0511f607bf70f4fbd3e8d4c8a591f186af76cac27",
           "words": [
@@ -12022,7 +12022,7 @@
           ]
         },
         {
-          "segmentId": "extractive_zoom",
+          "segmentId": 2,
           "audioHash": "38063a7d624455bd0c39a8ac362b09bacbbe57501c7169855bd3d595358770bb",
           "narrationHash": "0eccf73bd034ec11a3cb303e88af16b3410672dfa50e376683ce547db9139670",
           "words": [
@@ -12505,7 +12505,7 @@
           ]
         },
         {
-          "segmentId": "insight",
+          "segmentId": 3,
           "audioHash": "b8a73f558325118b8d9f0525ecb5d14d490d4c6d0f08bd969eec7d9898830865",
           "narrationHash": "90435fb70f3e780d8aad2d673c52896de7d731dc3cb2ab5587fd1e786c5c4923",
           "words": [
@@ -12904,7 +12904,7 @@
       "slide": 1,
       "segments": [
         {
-          "segmentId": "title",
+          "segmentId": 0,
           "audioHash": "7b3525f6a2a9b55117fce1d3ab8fc0e4e1e10a3e882de52613778d8339f9c47c",
           "narrationHash": "439bc62c9711b4a35fabf832c7272e10d6f59168018df337e333c4242aa2baa7",
           "words": [
@@ -13146,7 +13146,7 @@
           "markers": []
         },
         {
-          "segmentId": "copy",
+          "segmentId": 1,
           "audioHash": "064bbcfe43d88c44edfee8c9c2d2c359d098e6273c6310118daf61c8692491e6",
           "narrationHash": "20de1fa71b58dc13ae8723515fb3261bdc4a51758c111267db218ede2d958194",
           "words": [
@@ -13467,7 +13467,7 @@
           ]
         },
         {
-          "segmentId": "parse",
+          "segmentId": 2,
           "audioHash": "dd85c5b0a54b28d736b7b4663813ecbd252848456d662cdc234e54ad1ec706a0",
           "narrationHash": "12b4fa156b05dce0eff9d6e7f3b8e9ddf4f2cbaca3a79e489afb1e76bb399490",
           "words": [
@@ -13890,7 +13890,7 @@
       "slide": 2,
       "segments": [
         {
-          "segmentId": "title",
+          "segmentId": 0,
           "audioHash": "d89b42154ec3602acf77d8a0f9cf6639ad9693008d49d4967408d62aeef8b71d",
           "narrationHash": "2fa9312b14d9ea6a2b2f35329ee2c28a99818a959c1a60440aa26646eb15ac10",
           "words": [
@@ -14312,7 +14312,7 @@
           "markers": []
         },
         {
-          "segmentId": "grid",
+          "segmentId": 1,
           "audioHash": "974d3d0fe560b5d17e7995a7e249ed2627b07f2e7ada1d30b338e779f4fd7b38",
           "narrationHash": "cd32fdd8ce9ec73e35ac03f1f93bac9c3e7fca07a0f473f0af89bfeb10fe1d01",
           "words": [
@@ -14561,7 +14561,7 @@
       "slide": 1,
       "segments": [
         {
-          "segmentId": "title",
+          "segmentId": 0,
           "audioHash": "857d01efff2de19e15abaafffac5ccd0ef9e6c90fbf84317929a2cef937ab023",
           "narrationHash": "2c7cfe636ba5e3aae17cfd93e5640bf8ea98d46464e1fca15015fa4d0358c653",
           "words": [
@@ -14749,7 +14749,7 @@
           "markers": []
         },
         {
-          "segmentId": "checks",
+          "segmentId": 1,
           "audioHash": "1d7f4a4b9b91afc08e080753f266ef87c03a1b9df9b0384de5cd7e21b009d685",
           "narrationHash": "3f765b93479b9a633ff11c7d42642184b332650f0d01ba06c8a9e483da7a3a36",
           "words": [
@@ -15142,7 +15142,7 @@
           ]
         },
         {
-          "segmentId": "challenge",
+          "segmentId": 2,
           "audioHash": "520ac9312129b5e3274f78d67d641df9245f8417a55af10da36e063fd126b394",
           "narrationHash": "2744cb56fda6db2cd04616917e0642c78801203dd9a38548831c463c8a528bae",
           "words": [
@@ -15582,7 +15582,7 @@
       "slide": 2,
       "segments": [
         {
-          "segmentId": "title",
+          "segmentId": 0,
           "audioHash": "962403ab215917af1cb96a125d43bb8194983ede559e4de0059d660cb8114502",
           "narrationHash": "d81ea62d49511509266e7ed1705f350e44a212ac172ff1f1f8f0c3b39ca1d611",
           "words": [
@@ -15734,7 +15734,7 @@
           "markers": []
         },
         {
-          "segmentId": "pipeline",
+          "segmentId": 1,
           "audioHash": "e10064dde570b7b86aae45db92f05864b39a9c4e9c239f674c34ebc28e3480b1",
           "narrationHash": "352750da5e5d7609ae79e7d758deeb780ae41e6a5e7dc0882382fc53e3730768",
           "words": [
@@ -16067,7 +16067,7 @@
           ]
         },
         {
-          "segmentId": "metrics",
+          "segmentId": 2,
           "audioHash": "362d07b4bdf3f3b59b97323cc7a089f64ad6414cdba05699415441502b5bea5b",
           "narrationHash": "760c92ad217387dea2955fd41769a224b76f7ebeb84e7549884b4e33a0ca879f",
           "words": [
@@ -16585,7 +16585,7 @@
       "slide": 1,
       "segments": [
         {
-          "segmentId": "title",
+          "segmentId": 0,
           "audioHash": "4445cb2d6999860337ae6a899912df62055c52b1728c6f38b56cd4a158a18033",
           "narrationHash": "501758d9ef84a5970cf264692f4872bb58312c3ba6f7355fd4a0865bf85a47bc",
           "words": [
@@ -16623,7 +16623,7 @@
           "markers": []
         },
         {
-          "segmentId": "calls",
+          "segmentId": 1,
           "audioHash": "612320ef5e9a9b722f2855bf2e19c1a527b10f5582c0b3732c06a028955a06b1",
           "narrationHash": "97fb8d4fe9040c1843d9827c8407e619a400190053452447d20c10b158115d4c",
           "words": [
@@ -16685,7 +16685,7 @@
           "markers": []
         },
         {
-          "segmentId": "tokens",
+          "segmentId": 2,
           "audioHash": "1239ab9b33ad014c97547d32a728b6590edf3f13c0fe61265dd0d92b9cd00f41",
           "narrationHash": "cbd1aff433953c6a87f98ac21aee58769b23a41b89dc03db2827119c7a62c4a7",
           "words": [
@@ -16759,7 +16759,7 @@
           "markers": []
         },
         {
-          "segmentId": "gpus",
+          "segmentId": 3,
           "audioHash": "cf683a3a7eba3b379342e44b5fcad016c6d5f437e6fad52b7c50a4ae9d05c4ca",
           "narrationHash": "aeaa8884885e35c5f3132019b041512909c5758cd7ed3c5b52d072b020661e49",
           "words": [
@@ -16899,7 +16899,7 @@
       "slide": 2,
       "segments": [
         {
-          "segmentId": "quality",
+          "segmentId": 0,
           "audioHash": "09a0e4174f0c058174547c1943da55f7ac9f67efad4f484e71984a636c6db49d",
           "narrationHash": "3a8796fe67c8a729ad9c3872b79febf38de19b17772ad53cb9718c67653973fe",
           "words": [
@@ -17040,7 +17040,7 @@
           ]
         },
         {
-          "segmentId": "roadmap",
+          "segmentId": 1,
           "audioHash": "8dfd3a6fa3c82f655ecbeab2db98023fea43ff88af1c312488ffdbdeab08308b",
           "narrationHash": "95ac95c0355ca06cf5c24033ba3bb0ebec0292ba2f30dcdc67edbb6b3d887bb3",
           "words": [
@@ -17181,7 +17181,7 @@
           ]
         },
         {
-          "segmentId": "quote",
+          "segmentId": 2,
           "audioHash": "1894b91bad9de23fc79ec5ffdb788b26745b4c50c84d4c05b32d710137c05425",
           "narrationHash": "a022d31b8610c3d0104cd8852b9e241254dcba8e2244f5e0e206301edf5d4c71",
           "words": [
@@ -17303,7 +17303,7 @@
       "slide": 1,
       "segments": [
         {
-          "segmentId": "title",
+          "segmentId": 0,
           "audioHash": "645661b1608db6934d9242d9bc7baa993605036bf3b072def3ab8d8c466cd8bc",
           "narrationHash": "1076be4ba0a6eba9e17d7f9ce8dd7dd22b29b7b87b1b77af6c2321b24267d502",
           "words": [
@@ -17395,7 +17395,7 @@
           "markers": []
         },
         {
-          "segmentId": "lesson1",
+          "segmentId": 1,
           "audioHash": "8bf47a81d623ccc04f17a32e1359a7e844665dc38d4025dd11fd73949ee5729c",
           "narrationHash": "7e294ff8f6287ff039a4057da22966538770d1a2bba765044fc0f78e2efcccaa",
           "words": [
@@ -17475,7 +17475,7 @@
           "markers": []
         },
         {
-          "segmentId": "lesson2",
+          "segmentId": 2,
           "audioHash": "da54d27d3b912d58e00ab7e4dbaa707ab5f0d3e1fad9b3a6663d10056ef4500f",
           "narrationHash": "131ae787450a66109e267d882d76f4d5da3c6ae1f763a191adc1e338730c1585",
           "words": [
@@ -17597,7 +17597,7 @@
           "markers": []
         },
         {
-          "segmentId": "lesson3",
+          "segmentId": 3,
           "audioHash": "8688250c870bff42f9f5ac8135f00b48905e7d4c0dc99ceef32b90e665f41932",
           "narrationHash": "fb91b3755ed8ccf5c8db9a28683da5cae3baf923b156e7777ef539b3a6aabc0c",
           "words": [
@@ -17827,7 +17827,7 @@
           "markers": []
         },
         {
-          "segmentId": "lesson4",
+          "segmentId": 4,
           "audioHash": "ac2305d7228db3fb63cbfe95c43e78f1b44cd56dcb0e78c2f0a390c080578ad9",
           "narrationHash": "443e5bb41235396f48e455bca52fbf7103c5ec61e5cca815da838c29bd004416",
           "words": [
@@ -17943,7 +17943,7 @@
           "markers": []
         },
         {
-          "segmentId": "lesson5",
+          "segmentId": 5,
           "audioHash": "f78e5282d5685afd2b21e7c427908a9604684c555996a7aae302fdd2dc680110",
           "narrationHash": "c26d7d59deff2accc86763a8829152c096881490def374916ac1e65fbc4aa576",
           "words": [
@@ -18119,7 +18119,7 @@
           "markers": []
         },
         {
-          "segmentId": "lesson6",
+          "segmentId": 6,
           "audioHash": "df215f87bc332b4f002fca65dfdc5c06ef176fa3587021f77983b0bbf6ff646a",
           "narrationHash": "ee846890755b74d7c02f8d0289495dda6828143c2149729dc8701c6074e1e414",
           "words": [
@@ -18385,7 +18385,7 @@
       "slide": 2,
       "segments": [
         {
-          "segmentId": "thankyou",
+          "segmentId": 0,
           "audioHash": "78d72727a8b37bcc937856e0c1d1d8a79f27bce7670d87ccb661f8411a9129e8",
           "narrationHash": "33cee73ed28155651a8cd65a405a96c5f09ca2ea1927be9f26f7c4f6aff540d1",
           "words": [
@@ -18423,7 +18423,7 @@
           "markers": []
         },
         {
-          "segmentId": "cta",
+          "segmentId": 1,
           "audioHash": "5e0238c511254fe1c89b91027bff2773be793ee23d11e20941ab4baad55e833c",
           "narrationHash": "20555bf65deed5537d88564dd92844afc17b32a6852b8a76a3a5985834f0f614",
           "words": [

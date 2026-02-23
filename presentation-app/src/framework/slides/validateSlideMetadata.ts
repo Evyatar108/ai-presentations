@@ -51,15 +51,15 @@ export function validateSlideMetadata(
       message: 'audioSegments must be an array',
     });
   } else {
-    const seenIds = new Set<string>();
+    const seenIds = new Set<number>();
     for (let i = 0; i < metadata.audioSegments.length; i++) {
       const seg = metadata.audioSegments[i];
 
-      if (!seg.id || seg.id.trim().length === 0) {
+      if (typeof seg.id !== 'number' || seg.id < 0 || !Number.isInteger(seg.id)) {
         errors.push({
           slideIndex,
           field: `audioSegments[${i}].id`,
-          message: 'segment id must be a non-empty string',
+          message: `segment id must be a non-negative integer, got ${seg.id}`,
         });
       } else if (seenIds.has(seg.id)) {
         errors.push({

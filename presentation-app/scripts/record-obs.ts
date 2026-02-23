@@ -153,7 +153,7 @@ async function startSignalServer(): Promise<SignalServer> {
         chapter: Number(params.get('chapter')),
         slide: Number(params.get('slide')),
         segmentIndex: Number(params.get('segmentIndex')),
-        segmentId: params.get('segmentId') ?? '',
+        segmentId: Number(params.get('segmentId')),
         videoTime: (Date.now() - recordingStartTime) / 1000,
       };
       segmentEvents.push(event);

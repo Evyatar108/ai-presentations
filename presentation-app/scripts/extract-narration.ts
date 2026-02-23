@@ -22,7 +22,7 @@ interface ExtractionConfig {
 
 // Narration JSON structure
 interface NarrationSegment {
-  id: string;
+  id: number;
   narrationText: string;
   visualDescription?: string;
   notes?: string;

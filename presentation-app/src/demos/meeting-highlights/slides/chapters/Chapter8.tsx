@@ -303,16 +303,16 @@ export const Ch8_S1_UserSatisfaction = defineSlide({
     title: "User Satisfaction",
     audioSegments: [
       {
-        id: "intro",
+        id: 0,
       },
       {
-        id: "useful",
+        id: 1,
       },
       {
-        id: "likely",
+        id: 2,
       },
       {
-        id: "fit",
+        id: 3,
       }
     ]
   },

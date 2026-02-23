@@ -674,31 +674,31 @@ export const Ch2_TeamCollaboration = defineSlide({
     srtFilePath: 'highlights_demo/chapters/c2/s1_team_collaboration.srt',
     audioSegments: [
       {
-        id: 'intro',
+        id: 0,
       },
       {
-        id: 'odsp',
+        id: 1,
       },
       {
-        id: 'msai',
+        id: 2,
       },
       {
-        id: 'bizchat',
+        id: 3,
       },
       {
-        id: 'sharepoint',
+        id: 4,
       },
       {
-        id: 'teams',
+        id: 5,
       },
       {
-        id: 'loop_storage',
+        id: 6,
       },
       {
-        id: 'clipchamp',
+        id: 7,
       },
       {
-        id: 'conclusion',
+        id: 8,
       }
     ]
   },

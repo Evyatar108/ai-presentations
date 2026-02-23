@@ -4,10 +4,10 @@ import { defineSlide } from './defineSlide';
 import type { SlideMetadata } from './SlideMetadata';
 
 const validMetadata: SlideMetadata = {
-  chapter: 1,
-  slide: 1,
+  chapter: 0,
+  slide: 0,
   title: 'Test Slide',
-  audioSegments: [{ id: 'intro', audioFilePath: '/audio/test/c1/s1.wav' }],
+  audioSegments: [{ id: 0, audioFilePath: '/audio/test/c0/s0_segment_00.wav' }],
 };
 
 describe('defineSlide', () => {

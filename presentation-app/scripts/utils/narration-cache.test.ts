@@ -24,8 +24,8 @@ afterEach(() => {
 
 describe('buildNarrationCacheKey', () => {
   it('produces "ch{N}:s{N}:{id}" format', () => {
-    expect(buildNarrationCacheKey(1, 2, 'intro')).toBe('ch1:s2:intro');
-    expect(buildNarrationCacheKey(3, 10, 'summary')).toBe('ch3:s10:summary');
+    expect(buildNarrationCacheKey(1, 1, 0)).toBe('ch1:s1:0');
+    expect(buildNarrationCacheKey(3, 9, 2)).toBe('ch3:s9:2');
   });
 });
 

@@ -9,7 +9,7 @@
  * Represents a single narration segment within a slide
  */
 export interface NarrationSegment {
-  id: string;
+  id: number;
   narrationText: string;
   visualDescription?: string;
   notes?: string;
@@ -107,14 +107,14 @@ export async function loadNarration(
  * @param narrationData - The loaded narration data (or null)
  * @param chapter - Chapter number
  * @param slide - Slide number within chapter
- * @param segmentId - Unique segment identifier
+ * @param segmentId - 0-based segment index
  * @returns The complete segment data or null if not found
  */
 export function getNarrationSegment(
   narrationData: NarrationData | null,
   chapter: number,
   slide: number,
-  segmentId: string
+  segmentId: number
 ): NarrationSegment | null {
   if (!narrationData) {
     return null;

@@ -100,7 +100,7 @@ export function createStalenessHandlers(ctx: HandlerContext): StalenessRoute[] {
         key: string;
         chapter: number;
         slide: number;
-        segmentId: string;
+        segmentId: number;
         segmentIndex: number;
         currentText: string;
         cachedText?: string;
@@ -111,17 +111,17 @@ export function createStalenessHandlers(ctx: HandlerContext): StalenessRoute[] {
       const changedSegments: ChangedSegmentDetail[] = [];
 
       const store = TtsCacheStore.fromProjectRoot(projectRoot);
-      const audioDir = path.join(projectRoot, 'public', 'audio', q.demoId);
+      const demoAudioDir = path.join(projectRoot, 'public', 'audio', q.demoId);
 
       for (const slide of narration.slides) {
         for (const segment of slide.segments) {
           const segKey = `ch${slide.chapter}:s${slide.slide}:${segment.id}`;
           // Build expected audio file path to check cache
           const segIdx = slide.segments.indexOf(segment);
-          const relPath = TtsCacheStore.buildKey(slide.chapter, slide.slide, segIdx, segment.id);
+          const relPath = TtsCacheStore.buildKey(slide.chapter, slide.slide, segIdx);
 
           const cached = store.getEntry(q.demoId, relPath);
-          const audioFile = path.join(audioDir, relPath);
+          const audioFile = path.join(demoAudioDir, relPath);
           const audioExists = fs.existsSync(audioFile);
 
           if (!cached) {

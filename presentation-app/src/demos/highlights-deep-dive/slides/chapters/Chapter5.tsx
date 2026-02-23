@@ -112,9 +112,9 @@ export const Ch5_S1_FormatComparison = defineSlide({
     slide: 1,
     title: 'Format Comparison',
     audioSegments: [
-      { id: 'title' },
-      { id: 'split' },
-      { id: 'table' }
+      { id: 0 },
+      { id: 1 },
+      { id: 2 }
     ]
   },
   component: Ch5_S1_FormatComparisonComponent
@@ -231,9 +231,9 @@ export const Ch5_S2_MaxEndId = defineSlide({
     slide: 2,
     title: 'max_end_utterance_id',
     audioSegments: [
-      { id: 'row' },
-      { id: 'visual' },
-      { id: 'comparison' }
+      { id: 0 },
+      { id: 1 },
+      { id: 2 }
     ]
   },
   component: Ch5_S2_MaxEndIdComponent
@@ -396,9 +396,9 @@ export const Ch5_S3_TurnUtteranceConcept = defineSlide({
     slide: 3,
     title: 'Turn/Utterance Concept',
     audioSegments: [
-      { id: 'title' },
-      { id: 'concept' },
-      { id: 'constraint' }
+      { id: 0 },
+      { id: 1 },
+      { id: 2 }
     ]
   },
   component: Ch5_S3_TurnUtteranceConceptComponent

@@ -19,7 +19,7 @@ export interface SegmentEvent {
   chapter: number;
   slide: number;
   segmentIndex: number;
-  segmentId: string;
+  segmentId: number;
   videoTime: number; // seconds since recording started
 }
 
@@ -53,7 +53,7 @@ export interface VideoSegment {
   chapter: number;
   slide: number;
   segmentIndex: number;
-  segmentId: string;
+  segmentId: number;
   videoTime: number;
   words: VideoWord[];
 }

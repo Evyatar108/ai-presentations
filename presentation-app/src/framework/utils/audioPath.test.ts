@@ -9,53 +9,53 @@ import type { AudioSegment } from '../slides/SlideMetadata';
 
 describe('buildAudioFileName', () => {
   it('pads single-digit segment index', () => {
-    expect(buildAudioFileName(1, 0, 'intro')).toBe('s1_segment_01_intro.wav');
+    expect(buildAudioFileName(0, 0)).toBe('s0_segment_00.wav');
   });
 
   it('pads double-digit segment index', () => {
-    expect(buildAudioFileName(3, 9, 'closing')).toBe('s3_segment_10_closing.wav');
+    expect(buildAudioFileName(2, 9)).toBe('s2_segment_09.wav');
   });
 
   it('handles slide number 0', () => {
-    expect(buildAudioFileName(0, 0, 'test')).toBe('s0_segment_01_test.wav');
+    expect(buildAudioFileName(0, 1)).toBe('s0_segment_01.wav');
   });
 });
 
 describe('buildAudioOutputPath', () => {
   it('prefixes with chapter directory', () => {
-    expect(buildAudioOutputPath(2, 1, 0, 'intro')).toBe('c2/s1_segment_01_intro.wav');
+    expect(buildAudioOutputPath(2, 0, 0)).toBe('c2/s0_segment_00.wav');
   });
 });
 
 describe('buildAudioFilePath', () => {
   it('builds full public path', () => {
-    expect(buildAudioFilePath('my-demo', 1, 1, 0, 'intro'))
-      .toBe('/audio/my-demo/c1/s1_segment_01_intro.wav');
+    expect(buildAudioFilePath('my-demo', 1, 0, 0))
+      .toBe('/audio/my-demo/c1/s0_segment_00.wav');
   });
 
   it('handles multi-word demo IDs', () => {
-    expect(buildAudioFilePath('meeting-highlights', 4, 2, 3, 'summary'))
-      .toBe('/audio/meeting-highlights/c4/s2_segment_04_summary.wav');
+    expect(buildAudioFilePath('meeting-highlights', 4, 1, 3))
+      .toBe('/audio/meeting-highlights/c4/s1_segment_03.wav');
   });
 });
 
 describe('resolveAudioFilePath', () => {
-  const baseSegment: AudioSegment = { id: 'intro' };
+  const baseSegment: AudioSegment = { id: 0 };
 
   it('auto-derives when audioFilePath is undefined', () => {
-    expect(resolveAudioFilePath(baseSegment, 'demo', 1, 1, 0))
-      .toBe('/audio/demo/c1/s1_segment_01_intro.wav');
+    expect(resolveAudioFilePath(baseSegment, 'demo', 1, 0, 0))
+      .toBe('/audio/demo/c1/s0_segment_00.wav');
   });
 
   it('uses explicit override when audioFilePath is set', () => {
-    const segment: AudioSegment = { id: 'intro', audioFilePath: '/custom/path.wav' };
-    expect(resolveAudioFilePath(segment, 'demo', 1, 1, 0))
+    const segment: AudioSegment = { id: 0, audioFilePath: '/custom/path.wav' };
+    expect(resolveAudioFilePath(segment, 'demo', 1, 0, 0))
       .toBe('/custom/path.wav');
   });
 
   it('auto-derives when audioFilePath is empty string', () => {
-    const segment: AudioSegment = { id: 'intro', audioFilePath: '' };
-    expect(resolveAudioFilePath(segment, 'demo', 1, 1, 0))
-      .toBe('/audio/demo/c1/s1_segment_01_intro.wav');
+    const segment: AudioSegment = { id: 0, audioFilePath: '' };
+    expect(resolveAudioFilePath(segment, 'demo', 1, 0, 0))
+      .toBe('/audio/demo/c1/s0_segment_00.wav');
   });
 });

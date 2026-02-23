@@ -31,7 +31,6 @@ interface SingleSegmentConfig {
   chapter: number;
   slide: number;
   segmentIndex: number;
-  segmentId: string;
   narrationText: string;
   serverUrl: string;
   instruct?: string;
@@ -42,7 +41,7 @@ async function generateSingleSegment(config: SingleSegmentConfig): Promise<void>
   console.log('🎙️  Single Segment TTS Generation');
   console.log('═'.repeat(50));
   console.log(`Demo:         ${config.demoId}`);
-  console.log(`Location:     Ch${config.chapter}/S${config.slide}/${config.segmentId} (index ${config.segmentIndex})`);
+  console.log(`Location:     Ch${config.chapter}/S${config.slide}/Seg${config.segmentIndex}`);
   console.log(`Text:         "${config.narrationText.substring(0, 50)}..."`);
   if (config.instruct) {
     console.log(`Instruct:     "${config.instruct}"`);
@@ -68,7 +67,7 @@ async function generateSingleSegment(config: SingleSegmentConfig): Promise<void>
   const outputDir = path.join(__dirname, '../public/audio', config.demoId, `c${config.chapter}`);
   fs.mkdirSync(outputDir, { recursive: true });
 
-  const cacheRelPath = TtsCacheStore.buildKey(config.chapter, config.slide, config.segmentIndex, config.segmentId);
+  const cacheRelPath = TtsCacheStore.buildKey(config.chapter, config.slide, config.segmentIndex);
   const filename = path.basename(cacheRelPath);
   const filepath = path.join(outputDir, filename);
 
@@ -107,7 +106,7 @@ async function generateSingleSegment(config: SingleSegmentConfig): Promise<void>
         narrationCache = createEmptyCache();
       }
 
-      const key = buildNarrationCacheKey(config.chapter, config.slide, config.segmentId);
+      const key = buildNarrationCacheKey(config.chapter, config.slide, config.segmentIndex);
       const hash = hashNarrationSegment(config.narrationText, config.instruct);
       updateSegmentEntry(narrationCache, key, hash);
       saveNarrationCache(config.demoId, narrationCache);
@@ -146,10 +145,6 @@ function parseCLIArgs(): Partial<SingleSegmentConfig> {
         config.slide = parseInt(value, 10);
         i++;
         break;
-      case '--segment':
-        config.segmentId = value;
-        i++;
-        break;
       case '--segment-index':
         config.segmentIndex = parseInt(value, 10);
         i++;
@@ -176,7 +171,7 @@ if (
   !cliArgs.demoId ||
   cliArgs.chapter === undefined ||
   cliArgs.slide === undefined ||
-  !cliArgs.segmentId ||
+  cliArgs.segmentIndex === undefined ||
   !cliArgs.narrationText
 ) {
   console.error('❌ Missing required arguments\n');
@@ -186,16 +181,14 @@ if (
   console.log('    --chapter <number> \\');
   console.log('    --slide <number> \\');
   console.log('    --segment-index <0-based index> \\');
-  console.log('    --segment <segment-id> \\');
   console.log('    --text "<narration text>" \\');
   console.log('    [--instruct "<style instruction>"]\n');
   console.log('Example:');
   console.log('  tsx scripts/generate-single-tts.ts \\');
   console.log('    --demo meeting-highlights \\');
   console.log('    --chapter 1 \\');
-  console.log('    --slide 2 \\');
+  console.log('    --slide 1 \\');
   console.log('    --segment-index 0 \\');
-  console.log('    --segment intro \\');
   console.log('    --text "Welcome to the presentation" \\');
   console.log('    --instruct "speak slowly and clearly"\n');
   process.exit(1);
@@ -205,8 +198,7 @@ const config: SingleSegmentConfig = {
   demoId: cliArgs.demoId!,
   chapter: cliArgs.chapter!,
   slide: cliArgs.slide!,
-  segmentIndex: cliArgs.segmentIndex ?? 0,
-  segmentId: cliArgs.segmentId!,
+  segmentIndex: cliArgs.segmentIndex!,
   narrationText: cliArgs.narrationText!,
   serverUrl: process.env.TTS_SERVER_URL || loadTtsServerUrl(),
   instruct: cliArgs.instruct

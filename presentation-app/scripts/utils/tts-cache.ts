@@ -111,17 +111,16 @@ export class TtsCacheStore {
    *
    * Mirrors `buildAudioOutputPath` from `src/framework/utils/audioPath.ts`.
    *
-   * @param segmentIndex 0-based segment index (padded to 2 digits as `index + 1`)
-   * @example TtsCacheStore.buildKey(1, 2, 0, 'intro') → "c1/s2_segment_01_intro.wav"
+   * @param segmentIndex 0-based segment index (padded to 2 digits)
+   * @example TtsCacheStore.buildKey(1, 2, 0) → "c1/s2_segment_00.wav"
    */
   static buildKey(
     chapter: number,
     slide: number,
     segmentIndex: number,
-    segmentId: string
   ): string {
-    const paddedIndex = String(segmentIndex + 1).padStart(2, '0');
-    return `c${chapter}/s${slide}_segment_${paddedIndex}_${segmentId}.wav`;
+    const paddedIndex = String(segmentIndex).padStart(2, '0');
+    return `c${chapter}/s${slide}_segment_${paddedIndex}.wav`;
   }
 
   // ── Read operations ──────────────────────────────────────────────────

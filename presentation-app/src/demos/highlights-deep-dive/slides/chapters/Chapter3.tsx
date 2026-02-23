@@ -70,11 +70,11 @@ export const Ch3_S1_CostDrivers = defineSlide({
     slide: 1,
     title: 'Four Cost Drivers',
     audioSegments: [
-      { id: 'title' },
-      { id: 'driver1' },
-      { id: 'driver2' },
-      { id: 'driver3' },
-      { id: 'driver4' }
+      { id: 0 },
+      { id: 1 },
+      { id: 2 },
+      { id: 3 },
+      { id: 4 }
     ]
   },
   component: Ch3_S1_CostDriversComponent
@@ -153,8 +153,8 @@ export const Ch3_S2_VerboseJSON = defineSlide({
     slide: 2,
     title: 'Verbose JSON',
     audioSegments: [
-      { id: 'comparison' },
-      { id: 'caption' }
+      { id: 0 },
+      { id: 1 }
     ]
   },
   component: Ch3_S2_VerboseJSONComponent

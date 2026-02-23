@@ -449,7 +449,7 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
                     onClick={() => goToSegment(idx)}
                     aria-label={`Go to segment ${idx}: ${segment.id}`}
                     aria-current={idx === segmentContext.currentSegmentIndex ? 'true' : 'false'}
-                    title={segment.id}
+                    title={String(segment.id)}
                     style={{
                       width: idx === segmentContext.currentSegmentIndex ? 20 : 12,
                       height: 5,

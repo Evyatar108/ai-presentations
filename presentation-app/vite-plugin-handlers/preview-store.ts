@@ -32,7 +32,7 @@ export function getPreviewDir(
   demoId: string,
   chapter: number,
   slide: number,
-  segmentId: string,
+  segmentId: number,
 ): string {
   return path.join(audioDir, demoId, '.previews', `ch${chapter}_s${slide}_${segmentId}`);
 }
@@ -47,7 +47,7 @@ export function buildServeUrl(
   demoId: string,
   chapter: number,
   slide: number,
-  segmentId: string,
+  segmentId: number,
   takeNumber: number,
 ): string {
   return `/audio/${demoId}/.previews/ch${chapter}_s${slide}_${segmentId}/take_${takeNumber}.wav`;

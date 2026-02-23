@@ -151,7 +151,7 @@ export const Ch7_S2_GPUReduction = defineSlide({
     slide: 2,
     title: "GPU Optimization",
     audioSegments: [{
-      id: "main",
+      id: 0,
     }]
   },
   component: Ch7_S2_GPUReductionComponent
@@ -295,7 +295,7 @@ export const Ch7_S4_QualityComparison = defineSlide({
     slide: 4,
     title: "Quality Improvement",
     audioSegments: [{
-      id: "main",
+      id: 0,
     }]
   },
   component: Ch7_S4_QualityComparisonComponent
@@ -458,7 +458,7 @@ export const Ch7_S5_PathToGA = defineSlide({
     slide: 5,
     title: "Path to GA",
     audioSegments: [{
-      id: "main",
+      id: 0,
     }]
   },
   component: Ch7_S5_PathToGAComponent

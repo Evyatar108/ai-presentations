@@ -13,7 +13,7 @@ interface RegenerateSegmentParams {
   chapter: number;
   slide: number;
   segmentIndex: number;
-  segmentId: string;
+  segmentId: number;
   narrationText: string;
   addPauses?: boolean; // Optional flag to add " Amazing." or ". Amazing." at the end
   instruct?: string;   // Optional tone/style instruction (e.g. "speak slowly and clearly")
@@ -48,7 +48,7 @@ export interface SaveGeneratedAudioParams {
   chapter: number;
   slide: number;
   segmentIndex: number;
-  segmentId: string;
+  segmentId: number;
   narrationText: string;
   audioBase64: string;
   instruct?: string;
@@ -249,7 +249,7 @@ export async function saveGeneratedAudio(
 ): Promise<SaveGeneratedAudioResult> {
   const config = await loadConfig();
   const { buildAudioOutputPath } = await import('./audioPath');
-  const outputPath = `${params.demoId}/${buildAudioOutputPath(params.chapter, params.slide, params.segmentIndex, params.segmentId)}`;
+  const outputPath = `${params.demoId}/${buildAudioOutputPath(params.chapter, params.slide, params.segmentIndex)}`;
 
   const saveResponse = await fetch(config.localSaveEndpoint, {
     method: 'POST',

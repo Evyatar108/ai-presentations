@@ -18,7 +18,7 @@ export type RevealAnimation =
 export type RevealVisibilityProps =
   | { from: number; until?: number; on?: never; id?: never }
   | { on: number; from?: never; until?: never; id?: never }
-  | { id: string; from?: never; until?: never; on?: never };
+  | { id: number; from?: never; until?: never; on?: never };
 
 /**
  * Common props shared by Reveal and RevealGroup.

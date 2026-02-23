@@ -203,7 +203,7 @@ export async function updateNarrationCache(
  */
 export async function realignSegments(params: {
   demoId: string;
-  segments?: Array<{ chapter: number; slide: number; segmentId: string }>;
+  segments?: Array<{ chapter: number; slide: number; segmentId: number }>;
 }): Promise<{ success: boolean; error?: string }> {
   try {
     if (params.segments && params.segments.length > 0) {
@@ -248,7 +248,7 @@ export async function realignSegments(params: {
 }
 
 export async function realignSegment(params: {
-  demoId: string; chapter: number; slide: number; segmentId: string;
+  demoId: string; chapter: number; slide: number; segmentId: number;
 }): Promise<{ success: boolean; error?: string }> {
   try {
     console.log('[NarrationAPI] Realigning segment:', `ch${params.chapter}:s${params.slide}:${params.segmentId}`);

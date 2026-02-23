@@ -115,8 +115,8 @@ export function createNarrationHandlers(ctx: HandlerContext): NarrationRoute[] {
 
     try {
       const data = await readJsonBody<{
-        demoId: string; chapter: number; slide: number; segmentId: string;
-        segments?: Array<{ chapter: number; slide: number; segmentId: string }>;
+        demoId: string; chapter: number; slide: number; segmentId: number;
+        segments?: Array<{ chapter: number; slide: number; segmentId: number }>;
         fullDemo?: boolean;
       }>(req);
       if (!data.demoId) {
@@ -169,7 +169,7 @@ export function createNarrationHandlers(ctx: HandlerContext): NarrationRoute[] {
     try {
       const data = await readJsonBody<{
         demoId: string; chapter: number; slide: number;
-        segmentId: string; audioBase64: string; narrationText: string;
+        segmentId: number; audioBase64: string; narrationText: string;
         instruct?: string;
       }>(req);
       if (!data.demoId || !data.segmentId || !data.audioBase64) {
@@ -214,7 +214,7 @@ export function createNarrationHandlers(ctx: HandlerContext): NarrationRoute[] {
       }
 
       const audioDir = path.join(projectRoot, 'public', 'audio');
-      const previewDir = getPreviewDir(audioDir, q.demoId, Number(q.chapter), Number(q.slide), q.segmentId);
+      const previewDir = getPreviewDir(audioDir, q.demoId, Number(q.chapter), Number(q.slide), Number(q.segmentId));
       const meta = loadPreviewMeta(previewDir);
 
       if (meta.takes.length === 0) {
@@ -225,7 +225,7 @@ export function createNarrationHandlers(ctx: HandlerContext): NarrationRoute[] {
       const previews = meta.takes.map(t => ({
         takeNumber: t.takeNumber,
         narrationText: t.narrationText ?? '',
-        servePath: buildServeUrl(q.demoId, Number(q.chapter), Number(q.slide), q.segmentId, t.takeNumber),
+        servePath: buildServeUrl(q.demoId, Number(q.chapter), Number(q.slide), Number(q.segmentId), t.takeNumber),
         generatedAt: t.generatedAt
       }));
 
@@ -243,7 +243,7 @@ export function createNarrationHandlers(ctx: HandlerContext): NarrationRoute[] {
     try {
       const data = await readJsonBody<{
         demoId: string; chapter: number; slide: number;
-        segmentId: string; segmentIndex: number; takeNumber: number;
+        segmentId: number; segmentIndex: number; takeNumber: number;
       }>(req);
       if (!data.demoId || !data.segmentId || !data.takeNumber) {
         throw new Error('Missing required fields');
@@ -258,7 +258,7 @@ export function createNarrationHandlers(ctx: HandlerContext): NarrationRoute[] {
       }
 
       // Build the real audio destination path
-      const segRelPath = TtsCacheStore.buildKey(data.chapter, data.slide, data.segmentIndex ?? 0, data.segmentId);
+      const segRelPath = TtsCacheStore.buildKey(data.chapter, data.slide, data.segmentIndex ?? 0);
       const destRelative = `${data.demoId}/${segRelPath}`;
       const destFull = path.join(audioDir, destRelative);
 
@@ -279,7 +279,7 @@ export function createNarrationHandlers(ctx: HandlerContext): NarrationRoute[] {
 
       // Update TTS narration cache
       const store = TtsCacheStore.fromProjectRoot(projectRoot);
-      const cacheRelPath = TtsCacheStore.buildKey(data.chapter, data.slide, data.segmentIndex ?? 0, data.segmentId);
+      const cacheRelPath = TtsCacheStore.buildKey(data.chapter, data.slide, data.segmentIndex ?? 0);
       store.setEntry(data.demoId, cacheRelPath, takeNarrationText, takeInstruct);
       store.save();
       console.log(`[narration] Updated TTS cache: ${data.demoId}/${cacheRelPath}`);
@@ -306,7 +306,7 @@ export function createNarrationHandlers(ctx: HandlerContext): NarrationRoute[] {
     try {
       const data = await readJsonBody<{
         demoId: string; chapter: number; slide: number;
-        segmentId: string; takeNumber: number;
+        segmentId: number; takeNumber: number;
       }>(req);
       if (!data.demoId || !data.segmentId || !data.takeNumber) {
         throw new Error('Missing required fields');
@@ -390,7 +390,7 @@ export function createNarrationHandlers(ctx: HandlerContext): NarrationRoute[] {
 
     try {
       const data = await readJsonBody<{
-        demoId: string; chapter: number; slide: number; segmentId: string;
+        demoId: string; chapter: number; slide: number; segmentId: number;
       }>(req);
       if (!data.demoId || !data.segmentId) {
         throw new Error('Missing required fields');

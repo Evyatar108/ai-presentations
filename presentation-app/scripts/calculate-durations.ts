@@ -74,7 +74,7 @@ async function populateAudioDurations(
       const segment = audioSegments[i];
       
       // Construct expected filepath
-      const filename = `s${slideNum}_segment_${String(i + 1).padStart(2, '0')}_${segment.id}.wav`;
+      const filename = `s${slideNum}_segment_${String(i).padStart(2, '0')}.wav`;
       const filepath = path.join(demoAudioDir, `c${chapter}`, filename);
       
       if (fs.existsSync(filepath)) {

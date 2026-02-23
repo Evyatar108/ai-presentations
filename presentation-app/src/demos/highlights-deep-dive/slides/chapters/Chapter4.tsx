@@ -117,9 +117,9 @@ export const Ch4_S1_NestedLoop = defineSlide({
     slide: 1,
     title: 'Nested Loop',
     audioSegments: [
-      { id: 'title' },
-      { id: 'code' },
-      { id: 'annotation' }
+      { id: 0 },
+      { id: 1 },
+      { id: 2 }
     ]
   },
   component: Ch4_S1_NestedLoopComponent
@@ -286,9 +286,9 @@ export const Ch4_S2_CandidateRows = defineSlide({
     slide: 2,
     title: 'Candidate Rows',
     audioSegments: [
-      { id: 'title' },
-      { id: 'rows' },
-      { id: 'waste' },
+      { id: 0 },
+      { id: 1 },
+      { id: 2 },
     ]
   },
   component: Ch4_S2_CandidateRowsComponent
@@ -375,9 +375,9 @@ export const Ch4_S3_Visualized = defineSlide({
     slide: 3,
     title: 'O(n^2) Visualized',
     audioSegments: [
-      { id: 'grid' },
-      { id: 'math' },
-      { id: 'context_window' }
+      { id: 0 },
+      { id: 1 },
+      { id: 2 }
     ]
   },
   component: Ch4_S3_VisualizedComponent
@@ -716,10 +716,10 @@ export const Ch4_S4_OutputSafety = defineSlide({
     slide: 4,
     title: 'Output Safety',
     audioSegments: [
-      { id: 'input_example' },
-      { id: 'input_output' },
-      { id: 'rationale' },
-      { id: 'tradeoff' }
+      { id: 0 },
+      { id: 1 },
+      { id: 2 },
+      { id: 3 }
     ]
   },
   component: Ch4_S4_OutputSafetyComponent

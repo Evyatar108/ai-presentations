@@ -17,10 +17,10 @@ export interface DefineSlideOptions {
  * @example
  * export const MySlide = defineSlide({
  *   metadata: {
- *     chapter: 1,
- *     slide: 1,
+ *     chapter: 0,
+ *     slide: 0,
  *     title: 'My Slide',
- *     audioSegments: [{ id: 'intro' }]
+ *     audioSegments: [{ id: 0 }]
  *   },
  *   component: () => <div>Hello</div>
  * });

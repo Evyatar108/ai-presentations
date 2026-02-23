@@ -151,7 +151,7 @@ export const Ch5_S1_ChallengeFraming = defineSlide({
     slide: 1,
     title: "Challenge Framing",
     audioSegments: [{
-      id: "main",
+      id: 0,
     }]
   },
   component: Ch5_S1_ChallengeFramingComponent

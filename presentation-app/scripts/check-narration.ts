@@ -35,7 +35,7 @@ interface NarrationChange {
   demoId: string;
   chapter: number;
   slide: number;
-  segmentId: string;
+  segmentId: number;
   key: string; // "ch{chapter}:s{slide}:{segmentId}"
   changeType: 'modified' | 'new' | 'deleted';
   currentHash?: string;
@@ -152,7 +152,7 @@ function detectChanges(
           demoId,
           chapter: parseInt(match[1]),
           slide: parseInt(match[2]),
-          segmentId: match[3],
+          segmentId: parseInt(match[3]),
           key: cacheKey,
           changeType: 'deleted',
           cachedHash: cache.segments[cacheKey].hash

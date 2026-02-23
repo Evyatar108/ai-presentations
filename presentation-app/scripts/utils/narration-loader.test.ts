@@ -16,20 +16,20 @@ const VALID_NARRATION: NarrationData = {
   slides: [
     {
       chapter: 1,
-      slide: 1,
+      slide: 0,
       title: 'Slide One',
       instruct: 'slide-level instruct',
       segments: [
-        { id: 'intro', narrationText: 'Hello world', instruct: 'segment-level instruct' },
-        { id: 'body', narrationText: 'Body text' },
+        { id: 0, narrationText: 'Hello world', instruct: 'segment-level instruct' },
+        { id: 1, narrationText: 'Body text' },
       ],
     },
     {
       chapter: 1,
-      slide: 2,
+      slide: 1,
       title: 'Slide Two',
       segments: [
-        { id: 'summary', narrationText: 'Summary text' },
+        { id: 0, narrationText: 'Summary text' },
       ],
     },
   ],
@@ -102,49 +102,49 @@ describe('loadNarrationJson', () => {
 
 describe('getNarrationText', () => {
   it('returns narrationText for matching segment', () => {
-    expect(getNarrationText(VALID_NARRATION, 1, 1, 'intro')).toBe('Hello world');
+    expect(getNarrationText(VALID_NARRATION, 1, 0, 0)).toBe('Hello world');
   });
 
   it('returns null when narrationData is null', () => {
-    expect(getNarrationText(null, 1, 1, 'intro')).toBeNull();
+    expect(getNarrationText(null, 1, 0, 0)).toBeNull();
   });
 
   it('returns null when slide not found', () => {
-    expect(getNarrationText(VALID_NARRATION, 9, 9, 'intro')).toBeNull();
+    expect(getNarrationText(VALID_NARRATION, 9, 9, 0)).toBeNull();
   });
 
   it('returns null when segment not found', () => {
-    expect(getNarrationText(VALID_NARRATION, 1, 1, 'nonexistent')).toBeNull();
+    expect(getNarrationText(VALID_NARRATION, 1, 0, 99)).toBeNull();
   });
 });
 
 describe('getNarrationInstruct', () => {
   it('returns segment instruct when all three levels defined', () => {
-    expect(getNarrationInstruct(VALID_NARRATION, 1, 1, 'intro')).toBe('segment-level instruct');
+    expect(getNarrationInstruct(VALID_NARRATION, 1, 0, 0)).toBe('segment-level instruct');
   });
 
   it('returns slide instruct when segment has none', () => {
-    expect(getNarrationInstruct(VALID_NARRATION, 1, 1, 'body')).toBe('slide-level instruct');
+    expect(getNarrationInstruct(VALID_NARRATION, 1, 0, 1)).toBe('slide-level instruct');
   });
 
   it('returns demo instruct when slide and segment have none', () => {
-    expect(getNarrationInstruct(VALID_NARRATION, 1, 2, 'summary')).toBe('demo-level instruct');
+    expect(getNarrationInstruct(VALID_NARRATION, 1, 1, 0)).toBe('demo-level instruct');
   });
 
   it('returns undefined when no instruct at any level', () => {
     const noInstruct: NarrationData = {
       demoId: 'x', version: '1', lastModified: '', slides: [
-        { chapter: 1, slide: 1, title: 't', segments: [{ id: 's', narrationText: 'text' }] },
+        { chapter: 1, slide: 0, title: 't', segments: [{ id: 0, narrationText: 'text' }] },
       ],
     };
-    expect(getNarrationInstruct(noInstruct, 1, 1, 's')).toBeUndefined();
+    expect(getNarrationInstruct(noInstruct, 1, 0, 0)).toBeUndefined();
   });
 
   it('returns demo instruct when slide not found', () => {
-    expect(getNarrationInstruct(VALID_NARRATION, 9, 9, 'any')).toBe('demo-level instruct');
+    expect(getNarrationInstruct(VALID_NARRATION, 9, 9, 0)).toBe('demo-level instruct');
   });
 
   it('returns undefined when narrationData is null', () => {
-    expect(getNarrationInstruct(null, 1, 1, 'intro')).toBeUndefined();
+    expect(getNarrationInstruct(null, 1, 0, 0)).toBeUndefined();
   });
 });

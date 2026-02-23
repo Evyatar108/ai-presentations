@@ -107,7 +107,7 @@ function cleanupUnusedAudio(
       const segment = audioSegments[i];
       if (!segment.narrationText) continue;
 
-      expectedFiles.add(TtsCacheStore.buildKey(chapter, slideNum, i, segment.id));
+      expectedFiles.add(TtsCacheStore.buildKey(chapter, slideNum, i));
     }
   }
 
@@ -680,7 +680,7 @@ async function generateTTS(config: TTSConfig) {
         }
 
         // Generate filename
-        const relativeFilepath = TtsCacheStore.buildKey(chapter, slideNum, i, segment.id);
+        const relativeFilepath = TtsCacheStore.buildKey(chapter, slideNum, i);
         const filename = path.basename(relativeFilepath);
         const filepath = path.join(chapterDir, filename);
 

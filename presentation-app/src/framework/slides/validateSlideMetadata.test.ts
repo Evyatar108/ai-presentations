@@ -9,10 +9,10 @@ function makeSlide(meta: SlideMetadata): SlideComponentWithMetadata {
 }
 
 const validMeta: SlideMetadata = {
-  chapter: 1,
-  slide: 1,
+  chapter: 0,
+  slide: 0,
   title: 'Test',
-  audioSegments: [{ id: 'intro', audioFilePath: '/audio/test.wav' }],
+  audioSegments: [{ id: 0, audioFilePath: '/audio/test.wav' }],
 };
 
 describe('validateSlideMetadata', () => {
@@ -50,9 +50,17 @@ describe('validateSlideMetadata', () => {
     expect(errors[0].field).toBe('title');
   });
 
-  it('reports empty segment id', () => {
+  it('reports negative segment id', () => {
     const errors = validateSlideMetadata(
-      { ...validMeta, audioSegments: [{ id: '', audioFilePath: '/a.wav' }] },
+      { ...validMeta, audioSegments: [{ id: -1 as any, audioFilePath: '/a.wav' }] },
+      0
+    );
+    expect(errors.some(e => e.field.includes('.id'))).toBe(true);
+  });
+
+  it('reports non-integer segment id', () => {
+    const errors = validateSlideMetadata(
+      { ...validMeta, audioSegments: [{ id: 1.5 as any, audioFilePath: '/a.wav' }] },
       0
     );
     expect(errors.some(e => e.field.includes('.id'))).toBe(true);
@@ -63,8 +71,8 @@ describe('validateSlideMetadata', () => {
       {
         ...validMeta,
         audioSegments: [
-          { id: 'same', audioFilePath: '/a.wav' },
-          { id: 'same', audioFilePath: '/b.wav' },
+          { id: 0, audioFilePath: '/a.wav' },
+          { id: 0, audioFilePath: '/b.wav' },
         ],
       },
       0
@@ -74,7 +82,7 @@ describe('validateSlideMetadata', () => {
 
   it('reports empty-string audioFilePath', () => {
     const errors = validateSlideMetadata(
-      { ...validMeta, audioSegments: [{ id: 'x', audioFilePath: '' }] },
+      { ...validMeta, audioSegments: [{ id: 0, audioFilePath: '' }] },
       0
     );
     expect(errors.some(e => e.field.includes('.audioFilePath'))).toBe(true);
@@ -82,7 +90,7 @@ describe('validateSlideMetadata', () => {
 
   it('accepts undefined audioFilePath (auto-derived at runtime)', () => {
     const errors = validateSlideMetadata(
-      { ...validMeta, audioSegments: [{ id: 'x' }] },
+      { ...validMeta, audioSegments: [{ id: 0 }] },
       0
     );
     expect(errors.some(e => e.field.includes('.audioFilePath'))).toBe(false);
@@ -92,7 +100,7 @@ describe('validateSlideMetadata', () => {
     const errors = validateSlideMetadata(
       {
         ...validMeta,
-        audioSegments: [{ id: 'x', audioFilePath: '/a.wav', duration: -1 }],
+        audioSegments: [{ id: 0, audioFilePath: '/a.wav', duration: -1 }],
       },
       0
     );
@@ -130,7 +138,7 @@ describe('validateDemoSlides', () => {
   it('detects duplicate chapter+slide across slides', () => {
     const slides = [
       makeSlide(validMeta),
-      makeSlide(validMeta), // duplicate ch1:s1
+      makeSlide(validMeta), // duplicate ch0:s0
     ];
     const errors = validateDemoSlides(slides);
     expect(errors.some(e => e.field === 'chapter+slide')).toBe(true);

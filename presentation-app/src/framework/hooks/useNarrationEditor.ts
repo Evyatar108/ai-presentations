@@ -3,7 +3,7 @@ import type { SlideComponentWithMetadata } from '../slides/SlideMetadata';
 import { hasAudioSegments } from '../slides/SlideMetadata';
 interface EditingSegment {
   slideKey: string;
-  segmentId: string;
+  segmentId: number;
   segmentIndex: number;
   chapter: number;
   slide: number;

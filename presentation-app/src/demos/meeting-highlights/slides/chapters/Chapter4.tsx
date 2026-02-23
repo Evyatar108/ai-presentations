@@ -122,27 +122,27 @@ export const Ch4_S1_HighlightTypes = defineSlide({
     srtFilePath: "highlights_demo/chapters/c4/s1_highlight_types.srt",
     audioSegments: [
       {
-        id: "intro",
+        id: 0,
         srtSegmentNumber: 1,
         visualDescription: "Title \"Two Types of Highlights\""
       },
       {
-        id: "abstractive",
+        id: 1,
         srtSegmentNumber: 2,
         visualDescription: "Left card appears - Abstractive Highlights with summary icon"
       },
       {
-        id: "key_moments",
+        id: 2,
         srtSegmentNumber: 3,
         visualDescription: "Right card appears - Key Moments with video clip icon"
       },
       {
-        id: "timestamps",
+        id: 3,
         srtSegmentNumber: 4,
         visualDescription: "Detail callout showing 20-30 second segments"
       },
       {
-        id: "narrative",
+        id: 4,
         srtSegmentNumber: 5,
         visualDescription: "Narrative storytelling icon connecting highlights"
       }

@@ -144,17 +144,17 @@ export const Ch1_S1_WhatIsMeetingHighlights = defineSlide({
     srtFilePath: "highlights_demo/chapters/c1/s1_what_is_meeting_highlights.srt",
     audioSegments: [
       {
-        id: "intro",
+        id: 0,
         srtSegmentNumber: 1,
         visualDescription: "Title slide \"Meeting Highlights\""
       },
       {
-        id: "combination",
+        id: 1,
         srtSegmentNumber: 2,
         visualDescription: "Split screen showing AI summaries + authentic video clips"
       },
       {
-        id: "problem",
+        id: 2,
         srtSegmentNumber: 3,
         visualDescription: "Value prop highlight box appears"
       }
@@ -253,32 +253,32 @@ export const Ch1_S2_HowToAccess = defineSlide({
     srtFilePath: "highlights_demo/chapters/c1/s2_how_to_access.srt",
     audioSegments: [
       {
-        id: "intro",
+        id: 0,
         srtSegmentNumber: 1,
         visualDescription: "BizChat interface screenshot"
       },
       {
-        id: "bizchat",
+        id: 1,
         srtSegmentNumber: 2,
         visualDescription: "Embedded MP4 demo video showing BizChat interaction"
       },
       {
-        id: "ciq",
+        id: 2,
         srtSegmentNumber: 3,
         visualDescription: "Demo continues - showing \"/\" menu for CIQ"
       },
       {
-        id: "select",
+        id: 3,
         srtSegmentNumber: 4,
         visualDescription: "Demo shows meeting selection from menu"
       },
       {
-        id: "player",
+        id: 4,
         srtSegmentNumber: 5,
         visualDescription: "Demo shows BizChat response with video player at bottom"
       },
       {
-        id: "note",
+        id: 5,
         srtSegmentNumber: 6,
         visualDescription: "Note callout appears with info icon"
       }
@@ -366,27 +366,27 @@ export const Ch1_S3_HowToAccessSharePoint = defineSlide({
     srtFilePath: "highlights_demo/chapters/c1/s3_how_to_access_sharepoint.srt",
     audioSegments: [
       {
-        id: "intro",
+        id: 0,
         srtSegmentNumber: 1,
         visualDescription: "SharePoint interface screenshot"
       },
       {
-        id: "video",
+        id: 1,
         srtSegmentNumber: 2,
         visualDescription: "Video player appears showing SharePoint demo"
       },
       {
-        id: "sharepoint",
+        id: 2,
         srtSegmentNumber: 3,
         visualDescription: "First instruction card appears"
       },
       {
-        id: "browser",
+        id: 3,
         srtSegmentNumber: 4,
         visualDescription: "Demo shows 'Watch in browser' button"
       },
       {
-        id: "play",
+        id: 4,
         srtSegmentNumber: 5,
         visualDescription: "Demo shows 'Play highlights' button"
       }

@@ -4,8 +4,8 @@ import { TimingConfig } from '../demos/timing/types';
  * Represents a single audio segment within a multi-segment slide
  */
 export interface AudioSegment {
-  /** Unique identifier (e.g., "intro", "team_odsp") */
-  id: string;
+  /** 0-based segment index (must match position in audioSegments array) */
+  id: number;
   /** Path to audio file for this segment (auto-derived from slide coordinates if omitted) */
   audioFilePath?: string;
   /** Optional pre-computed duration in seconds (for scrubbing) */

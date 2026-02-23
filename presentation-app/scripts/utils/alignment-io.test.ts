@@ -61,7 +61,7 @@ describe('loadAlignmentData', () => {
           chapter: 1,
           slide: 1,
           segments: [{
-            segmentId: 'intro',
+            segmentId: 0,
             audioHash: 'abc',
             narrationHash: 'def',
             words: [{ word: 'Hello', start: 0, end: 0.5, score: 0.9 }],
@@ -90,7 +90,7 @@ describe('saveAlignmentData + loadAlignmentData', () => {
           chapter: 2,
           slide: 3,
           segments: [{
-            segmentId: 'summary',
+            segmentId: 0,
             audioHash: '123',
             narrationHash: '456',
             words: [],

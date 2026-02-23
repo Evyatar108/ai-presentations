@@ -30,6 +30,6 @@ export const DEV_SERVER_PORT = 5173;
 export const MARKER_REGEX = /\{#(\w+)\}|\{(\w+)#\}/g;
 
 /** Build the expected audio filename for a segment. */
-export function buildAudioFilename(slideNum: number, segmentIndex: number, segmentId: string): string {
-  return `s${slideNum}_segment_${String(segmentIndex + 1).padStart(2, '0')}_${segmentId}.wav`;
+export function buildAudioFilename(slideNum: number, segmentIndex: number): string {
+  return `s${slideNum}_segment_${String(segmentIndex).padStart(2, '0')}.wav`;
 }

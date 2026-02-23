@@ -16,7 +16,7 @@ export interface ResolvedMarker {
 
 /** Alignment data for a single audio segment */
 export interface SegmentAlignment {
-  segmentId: string;
+  segmentId: number;
   audioHash: string;
   /** Hash of narrationText including markers — detects marker changes even when audio is unchanged */
   narrationHash: string;

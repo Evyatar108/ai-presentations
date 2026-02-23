@@ -8,7 +8,7 @@ export interface SaveAudioRequest {
   narrationText: string;
   chapter: number;
   slide: number;
-  segmentId: string;
+  segmentId: number;
   instruct?: string;       // TTS style/tone instruction
 }
 

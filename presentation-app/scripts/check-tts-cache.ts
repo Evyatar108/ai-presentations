@@ -25,13 +25,13 @@ interface ChangeDetectionResult {
       changedSegments: Array<{
         chapter: number;
         slide: number;
-        segmentId: string;
+        segmentId: number;
         reason: string;
       }>;
       missingFiles: Array<{
         chapter: number;
         slide: number;
-        segmentId: string;
+        segmentId: number;
         filepath: string;
       }>;
       newSegments: number;
@@ -203,7 +203,7 @@ function detectOrphanedAudio(
       const segment = audioSegments[i];
       if (!segment.narrationText) continue;
 
-      expectedFiles.add(TtsCacheStore.buildKey(chapter, slideNum, i, segment.id));
+      expectedFiles.add(TtsCacheStore.buildKey(chapter, slideNum, i));
     }
   }
 
@@ -275,7 +275,7 @@ function detectChanges(
       if (!segment.narrationText) continue;
 
       // Generate expected filepath
-      const relativeFilepath = TtsCacheStore.buildKey(chapter, slideNum, i, segment.id);
+      const relativeFilepath = TtsCacheStore.buildKey(chapter, slideNum, i);
       const filepath = path.join(chapterDir, path.basename(relativeFilepath));
 
       // Check if file exists
@@ -322,7 +322,7 @@ function detectRenameableFiles(
   demoId: string,
   store: TtsCacheStore,
   orphanedFiles: Array<{ filepath: string }>,
-  missingFiles: Array<{ chapter: number; slide: number; segmentId: string; filepath: string }>,
+  missingFiles: Array<{ chapter: number; slide: number; segmentId: number; filepath: string }>,
   allSlides: SlideComponentWithMetadata[]
 ): Array<{ from: string; to: string }> {
   if (orphanedFiles.length === 0 || missingFiles.length === 0) return [];
@@ -430,7 +430,7 @@ function checkMarkerAlignment(demoId: string): {
 
   // Collect all expected markers from narration text
   const narration: NarrationData = JSON.parse(fs.readFileSync(narrationFile, 'utf-8'));
-  const expectedMarkers: Array<{ slideKey: string; segmentId: string; markerId: string }> = [];
+  const expectedMarkers: Array<{ slideKey: string; segmentId: number; markerId: string }> = [];
 
   for (const slide of narration.slides) {
     const slideKey = `c${slide.chapter}_s${slide.slide}`;

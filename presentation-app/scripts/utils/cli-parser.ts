@@ -25,7 +25,7 @@ export function parseSegmentFilter(raw: string): string[] {
 }
 
 /** Build a standardized segment key from chapter, slide, and segment ID. */
-export function buildSegmentKey(chapter: number, slide: number, segmentId: string): string {
+export function buildSegmentKey(chapter: number, slide: number, segmentId: number): string {
   return `ch${chapter}:s${slide}:${segmentId}`;
 }
 

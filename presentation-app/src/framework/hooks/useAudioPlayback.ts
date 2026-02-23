@@ -21,7 +21,7 @@ import { NO_AUDIO_ADVANCE_DELAY_MS, PLAYBACK_ERROR_ADVANCE_DELAY_MS } from '../c
 const getFallbackAudio = () => getConfig().fallbackAudioPath;
 
 // Helper to load audio with fallback
-const loadAudioWithFallback = async (primaryPath: string, segmentId: string): Promise<HTMLAudioElement> => {
+const loadAudioWithFallback = async (primaryPath: string, segmentId: number): Promise<HTMLAudioElement> => {
   const audio = new Audio(primaryPath);
 
   return new Promise((resolve) => {
@@ -67,7 +67,7 @@ function initAlignmentForSegment(
   alignmentData: DemoAlignment | null | undefined,
   chapter: number,
   slide: number,
-  segmentId: string,
+  segmentId: number,
   logMarkers?: boolean,
 ) {
   audioTimeCtx.reset();
@@ -290,7 +290,7 @@ export function useAudioPlayback({
               chapter: String(slideMetadata.chapter),
               slide: String(slideMetadata.slide),
               segmentIndex: String(segmentIndex),
-              segmentId: segment.id,
+              segmentId: String(segment.id),
             });
             fetch(`http://localhost:${port}/segment-start?${params}`, { mode: 'no-cors' }).catch(() => {});
           }

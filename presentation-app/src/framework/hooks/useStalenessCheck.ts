@@ -4,7 +4,7 @@ export interface ChangedSegmentDetail {
   key: string;           // "ch1:s2:intro"
   chapter: number;
   slide: number;
-  segmentId: string;
+  segmentId: number;
   segmentIndex: number;
   currentText: string;   // Text from narration.json
   cachedText?: string;   // Text TTS was generated from (undefined if never generated)

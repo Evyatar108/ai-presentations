@@ -39,7 +39,7 @@ interface VerificationCache {
 interface VerificationReportSegment {
   chapter: number;
   slide: number;
-  segmentId: string;
+  segmentId: number;
   filepath: string;
   original: string;
   transcribed: string;
@@ -55,9 +55,9 @@ interface SegmentToVerify {
   chapter: number;
   slide: number;
   segmentIndex: number;
-  segmentId: string;
+  segmentId: number;
   narrationText: string;
-  filepath: string;       // relative to demo audio dir, e.g. "c1/s2_segment_01_intro.wav"
+  filepath: string;       // relative to demo audio dir, e.g. "c1/s2_segment_00.wav"
   fullPath: string;       // absolute path to WAV file
 }
 
@@ -167,7 +167,7 @@ async function verifyTTS(config: VerifyConfig) {
       }
 
       // Build file paths
-      const filename = `s${slideNum}_segment_${String(i + 1).padStart(2, '0')}_${segment.id}.wav`;
+      const filename = `s${slideNum}_segment_${String(i).padStart(2, '0')}.wav`;
       const filepath = `c${chapter}/${filename}`;
       const fullPath = path.join(demoAudioDir, filepath);
 
@@ -299,7 +299,7 @@ async function verifyTTS(config: VerifyConfig) {
         continue;
       }
 
-      const filename = `s${slideNum}_segment_${String(i + 1).padStart(2, '0')}_${segment.id}.wav`;
+      const filename = `s${slideNum}_segment_${String(i).padStart(2, '0')}.wav`;
       const filepath = `c${chapter}/${filename}`;
 
       // Skip if already in results (just verified)
@@ -322,7 +322,7 @@ async function verifyTTS(config: VerifyConfig) {
 
   // Sort results by chapter, slide, segment
   results.sort((a, b) =>
-    a.chapter - b.chapter || a.slide - b.slide || a.segmentId.localeCompare(b.segmentId)
+    a.chapter - b.chapter || a.slide - b.slide || a.segmentId - b.segmentId
   );
 
   // Save report
@@ -364,7 +364,7 @@ function buildReportFromCache(
       const segmentKey = buildSegmentKey(chapter, slideNum, segment.id);
       if (segmentFilter && !segmentFilter.includes(segmentKey)) continue;
 
-      const filename = `s${slideNum}_segment_${String(i + 1).padStart(2, '0')}_${segment.id}.wav`;
+      const filename = `s${slideNum}_segment_${String(i).padStart(2, '0')}.wav`;
       const filepath = `c${chapter}/${filename}`;
 
       const cached = demoCache[filepath];
@@ -382,7 +382,7 @@ function buildReportFromCache(
   }
 
   results.sort((a, b) =>
-    a.chapter - b.chapter || a.slide - b.slide || a.segmentId.localeCompare(b.segmentId)
+    a.chapter - b.chapter || a.slide - b.slide || a.segmentId - b.segmentId
   );
 
   const report: VerificationReport = {

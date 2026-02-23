@@ -66,7 +66,7 @@ export const Ex1_S1_Title = defineSlide({
     title: 'Title Slide',
     audioSegments: [
       {
-        id: 'title',
+        id: 0,
       }
     ]
   },
@@ -149,16 +149,16 @@ export const Ex1_S2_Content1 = defineSlide({
     title: 'Key Features',
     audioSegments: [
       {
-        id: 'theme',
+        id: 0,
       },
       {
-        id: 'a11y',
+        id: 1,
       },
       {
-        id: 'segments',
+        id: 2,
       },
       {
-        id: 'layouts',
+        id: 3,
       },
     ]
   },
@@ -229,7 +229,7 @@ export const Ex1_S3_Conclusion = defineSlide({
     title: 'Conclusion',
     audioSegments: [
       {
-        id: 'conclusion',
+        id: 0,
       }
     ]
   },

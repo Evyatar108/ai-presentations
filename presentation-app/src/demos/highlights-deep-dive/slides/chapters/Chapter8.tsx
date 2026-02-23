@@ -134,9 +134,9 @@ export const Ch8_S1_ValidationChallenges = defineSlide({
     slide: 1,
     title: 'Validation Challenges',
     audioSegments: [
-      { id: 'title' },
-      { id: 'checks' },
-      { id: 'challenge' }
+      { id: 0 },
+      { id: 1 },
+      { id: 2 }
     ]
   },
   component: Ch8_S1_ValidationChallengesComponent
@@ -296,9 +296,9 @@ export const Ch8_S2_EvalTool = defineSlide({
     slide: 2,
     title: 'Eval Tool',
     audioSegments: [
-      { id: 'title' },
-      { id: 'pipeline' },
-      { id: 'metrics' }
+      { id: 0 },
+      { id: 1 },
+      { id: 2 }
     ]
   },
   component: Ch8_S2_EvalToolComponent

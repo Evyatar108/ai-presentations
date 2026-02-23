@@ -52,7 +52,7 @@ const MARKER_FILTER = getMarkerFilter();
 
 // Load alignment.json for marker screenshots
 interface ResolvedMarker { id: string; time: number; anchor: string; wordIndex: number; }
-interface SegmentAlignment { segmentId: string; markers: ResolvedMarker[]; }
+interface SegmentAlignment { segmentId: number; markers: ResolvedMarker[]; }
 interface SlideAlignment { chapter: number; slide: number; segments: SegmentAlignment[]; }
 interface DemoAlignmentFile { demoId: string; slides: Record<string, SlideAlignment>; }
 
@@ -71,7 +71,7 @@ function getMarkersForSegment(
   alignment: DemoAlignmentFile | null,
   chapter: number,
   slide: number,
-  segmentId: string,
+  segmentId: number,
   filter: 'all' | string[] | null
 ): ResolvedMarker[] {
   if (!alignment || !filter) return [];

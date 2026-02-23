@@ -24,7 +24,7 @@ function resolveInstruct(
   allSlides: SlideComponentWithMetadata[],
   chapter: number,
   slide: number,
-  segmentId: string,
+  segmentId: number,
   demoInstruct?: string,
 ): string | undefined {
   const slideComp = allSlides.find(

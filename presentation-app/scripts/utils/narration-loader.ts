@@ -15,7 +15,7 @@ const __dirname = dirname(__filename);
 
 /** A single narration segment within a slide. */
 export interface NarrationSegment {
-  id: string;
+  id: number;
   narrationText: string;
   visualDescription?: string;
   notes?: string;
@@ -74,7 +74,7 @@ export function getNarrationText(
   narrationData: NarrationData | null,
   chapter: number,
   slide: number,
-  segmentId: string
+  segmentId: number
 ): string | null {
   if (!narrationData) return null;
 
@@ -92,7 +92,7 @@ export function getNarrationInstruct(
   narrationData: NarrationData | null,
   chapter: number,
   slide: number,
-  segmentId: string
+  segmentId: number
 ): string | undefined {
   if (!narrationData) return undefined;
 

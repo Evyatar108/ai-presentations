@@ -70,13 +70,13 @@ export const Ch10_S1_Lessons = defineSlide({
     slide: 1,
     title: 'Six Lessons',
     audioSegments: [
-      { id: 'title' },
-      { id: 'lesson1' },
-      { id: 'lesson2' },
-      { id: 'lesson3' },
-      { id: 'lesson4' },
-      { id: 'lesson5' },
-      { id: 'lesson6' }
+      { id: 0 },
+      { id: 1 },
+      { id: 2 },
+      { id: 3 },
+      { id: 4 },
+      { id: 5 },
+      { id: 6 }
     ]
   },
   component: Ch10_S1_LessonsComponent
@@ -123,8 +123,8 @@ export const Ch10_S2_Closing = defineSlide({
     slide: 2,
     title: 'Closing',
     audioSegments: [
-      { id: 'thankyou' },
-      { id: 'cta' }
+      { id: 0 },
+      { id: 1 }
     ]
   },
   component: Ch10_S2_ClosingComponent

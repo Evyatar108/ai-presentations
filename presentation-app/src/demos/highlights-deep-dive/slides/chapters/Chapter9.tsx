@@ -65,10 +65,10 @@ export const Ch9_S1_Metrics = defineSlide({
     slide: 1,
     title: 'Results Metrics',
     audioSegments: [
-      { id: 'title' },
-      { id: 'calls' },
-      { id: 'tokens' },
-      { id: 'gpus' }
+      { id: 0 },
+      { id: 1 },
+      { id: 2 },
+      { id: 3 }
     ]
   },
   component: Ch9_S1_MetricsComponent
@@ -158,9 +158,9 @@ export const Ch9_S2_QualityAndImpact = defineSlide({
     slide: 2,
     title: 'Quality and Impact',
     audioSegments: [
-      { id: 'quality' },
-      { id: 'roadmap' },
-      { id: 'quote' }
+      { id: 0 },
+      { id: 1 },
+      { id: 2 }
     ]
   },
   component: Ch9_S2_QualityAndImpactComponent

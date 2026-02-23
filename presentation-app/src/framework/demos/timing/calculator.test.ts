@@ -5,7 +5,7 @@ import type { SlideMetadata } from '../../slides/SlideMetadata';
 function makeSlide(overrides: Partial<SlideMetadata> = {}): SlideMetadata {
   return {
     chapter: 0,
-    slide: 1,
+    slide: 0,
     title: 'Test Slide',
     audioSegments: [],
     ...overrides
@@ -24,7 +24,7 @@ describe('calculateSlideDuration', () => {
 
   it('calculates duration for a single segment on a non-final slide', () => {
     const slide = makeSlide({
-      audioSegments: [{ id: 'seg1', audioFilePath: '/test.wav', duration: 5 }]
+      audioSegments: [{ id: 0, audioFilePath: '/test.wav', duration: 5 }]
     });
     const result = calculateSlideDuration(slide, false);
     // Single segment on non-final slide: audio + betweenSlides delay (1000ms = 1s)
@@ -35,7 +35,7 @@ describe('calculateSlideDuration', () => {
 
   it('calculates duration for a single segment on the final slide', () => {
     const slide = makeSlide({
-      audioSegments: [{ id: 'seg1', audioFilePath: '/test.wav', duration: 5 }]
+      audioSegments: [{ id: 0, audioFilePath: '/test.wav', duration: 5 }]
     });
     const result = calculateSlideDuration(slide, true);
     // Single segment on final slide: audio + afterFinalSlide delay (2000ms = 2s)
@@ -47,9 +47,9 @@ describe('calculateSlideDuration', () => {
   it('calculates duration for multiple segments', () => {
     const slide = makeSlide({
       audioSegments: [
-        { id: 'seg1', audioFilePath: '/s1.wav', duration: 3 },
-        { id: 'seg2', audioFilePath: '/s2.wav', duration: 4 },
-        { id: 'seg3', audioFilePath: '/s3.wav', duration: 2 }
+        { id: 0, audioFilePath: '/s1.wav', duration: 3 },
+        { id: 1, audioFilePath: '/s2.wav', duration: 4 },
+        { id: 2, audioFilePath: '/s3.wav', duration: 2 }
       ]
     });
     const result = calculateSlideDuration(slide, false);
@@ -63,7 +63,7 @@ describe('calculateSlideDuration', () => {
 
   it('respects custom demo timing', () => {
     const slide = makeSlide({
-      audioSegments: [{ id: 'seg1', audioFilePath: '/test.wav', duration: 5 }]
+      audioSegments: [{ id: 0, audioFilePath: '/test.wav', duration: 5 }]
     });
     const result = calculateSlideDuration(slide, false, { betweenSlides: 2000 });
     expect(result.delaysDuration).toBe(2); // 2000ms
@@ -72,7 +72,7 @@ describe('calculateSlideDuration', () => {
 
   it('treats missing duration as 0', () => {
     const slide = makeSlide({
-      audioSegments: [{ id: 'seg1', audioFilePath: '/test.wav' }]
+      audioSegments: [{ id: 0, audioFilePath: '/test.wav' }]
     });
     const result = calculateSlideDuration(slide, false);
     expect(result.audioDuration).toBe(0);
@@ -93,7 +93,7 @@ describe('calculatePresentationDuration', () => {
   it('calculates duration for a single slide presentation', () => {
     const slides = [
       makeSlide({
-        audioSegments: [{ id: 'seg1', audioFilePath: '/test.wav', duration: 10 }]
+        audioSegments: [{ id: 0, audioFilePath: '/test.wav', duration: 10 }]
       })
     ];
     const result = calculatePresentationDuration(slides, { beforeFirstSlide: 0 });
@@ -108,15 +108,15 @@ describe('calculatePresentationDuration', () => {
   it('calculates duration for multi-slide presentation', () => {
     const slides = [
       makeSlide({
-        slide: 1,
+        slide: 0,
         audioSegments: [
-          { id: 'a', audioFilePath: '/a.wav', duration: 3 },
-          { id: 'b', audioFilePath: '/b.wav', duration: 4 }
+          { id: 0, audioFilePath: '/a.wav', duration: 3 },
+          { id: 1, audioFilePath: '/b.wav', duration: 4 }
         ]
       }),
       makeSlide({
-        slide: 2,
-        audioSegments: [{ id: 'c', audioFilePath: '/c.wav', duration: 5 }]
+        slide: 1,
+        audioSegments: [{ id: 0, audioFilePath: '/c.wav', duration: 5 }]
       })
     ];
     const result = calculatePresentationDuration(slides, { beforeFirstSlide: 0 });
@@ -133,7 +133,7 @@ describe('calculatePresentationDuration', () => {
   it('respects custom timing config', () => {
     const slides = [
       makeSlide({
-        audioSegments: [{ id: 'seg1', audioFilePath: '/test.wav', duration: 5 }]
+        audioSegments: [{ id: 0, audioFilePath: '/test.wav', duration: 5 }]
       })
     ];
     const timing = { betweenSegments: 200, betweenSlides: 500, afterFinalSlide: 3000, beforeFirstSlide: 0 };
@@ -146,7 +146,7 @@ describe('calculatePresentationDuration', () => {
   it('includes default start silence in total duration', () => {
     const slides = [
       makeSlide({
-        audioSegments: [{ id: 'seg1', audioFilePath: '/test.wav', duration: 10 }]
+        audioSegments: [{ id: 0, audioFilePath: '/test.wav', duration: 10 }]
       })
     ];
     const result = calculatePresentationDuration(slides);
@@ -158,7 +158,7 @@ describe('calculatePresentationDuration', () => {
   it('excludes start silence when beforeFirstSlide is 0', () => {
     const slides = [
       makeSlide({
-        audioSegments: [{ id: 'seg1', audioFilePath: '/test.wav', duration: 10 }]
+        audioSegments: [{ id: 0, audioFilePath: '/test.wav', duration: 10 }]
       })
     ];
     const result = calculatePresentationDuration(slides, { beforeFirstSlide: 0 });

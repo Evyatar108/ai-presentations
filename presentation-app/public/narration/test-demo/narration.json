@@ -9,7 +9,7 @@
       "title": "Test Slide",
       "segments": [
         {
-          "id": "test",
+          "id": 0,
           "narrationText": "Hello world, this is a test",
           "visualDescription": "Test visual",
           "notes": ""

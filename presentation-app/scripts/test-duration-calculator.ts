@@ -14,10 +14,10 @@ function assert(name: string, condition: boolean, details?: string) {
   results.push({ name, passed: condition, details: condition ? undefined : details });
 }
 
-function makeSegment(id: string, duration?: number, timing?: TimingConfig): AudioSegment {
+function makeSegment(id: number, duration?: number, timing?: TimingConfig): AudioSegment {
   return {
     id,
-    audioFilePath: `/dev/null/${id}.wav`,
+    audioFilePath: `/dev/null/seg${id}.wav`,
     duration,
     timing
   };
@@ -64,8 +64,8 @@ function nearlyEqual(a: number, b: number, epsilon = 1e-6) {
 //
 {
   const slide = makeSlide(0, 1, 'Undefined Durations', [
-    makeSegment('a'),      // undefined duration
-    makeSegment('b')       // undefined duration
+    makeSegment(0),      // undefined duration
+    makeSegment(1)       // undefined duration
   ]);
   const breakdown = calculateSlideDuration(slide, false);
   // Expected: audio 0, delays: 0.5 (between segments) + 1 (between slides) = 1.5
@@ -81,8 +81,8 @@ function nearlyEqual(a: number, b: number, epsilon = 1e-6) {
   const demoTiming: TimingConfig = { betweenSegments: 1000, betweenSlides: 1000, afterFinalSlide: 3000 };
   const slideTiming: TimingConfig = { betweenSegments: 600 }; // overrides demo betweenSegments
   // Segment-level override (first segment)
-  const seg0 = makeSegment('seg0', 2, { betweenSegments: 400 });
-  const seg1 = makeSegment('seg1', 2); // inherits slide timing for betweenSegments not used (last segment uses betweenSlides)
+  const seg0 = makeSegment(0, 2, { betweenSegments: 400 });
+  const seg1 = makeSegment(1, 2); // inherits slide timing for betweenSegments not used (last segment uses betweenSlides)
   const slide = makeSlide(0, 2, 'Hierarchy Slide', [seg0, seg1], slideTiming);
   const breakdown = calculateSlideDuration(slide, false, demoTiming);
   // Expected delays: after seg0 = 0.4s (segment-level), after seg1 (between slides) = 1s (demo-level betweenSlides)
@@ -97,9 +97,9 @@ function nearlyEqual(a: number, b: number, epsilon = 1e-6) {
 //
 {
   // Slide A: 2 segments (1s + 1s) -> segment delay 0.5s, slide delay 1s
-  const slideA = makeSlide(1, 0, 'Slide A', [makeSegment('a1', 1), makeSegment('a2', 1)]);
+  const slideA = makeSlide(1, 0, 'Slide A', [makeSegment(0, 1), makeSegment(1, 1)]);
   // Slide B: 1 segment (2s) -> final delay 2s
-  const slideB = makeSlide(1, 1, 'Slide B', [makeSegment('b1', 2)]);
+  const slideB = makeSlide(1, 1, 'Slide B', [makeSegment(0, 2)]);
   const report = calculatePresentationDuration([slideA, slideB]);
   // Expected audio: 4s
   // Segment delays: 0.5
@@ -118,7 +118,7 @@ function nearlyEqual(a: number, b: number, epsilon = 1e-6) {
 //
 {
   const finalDemoTiming: TimingConfig = { afterFinalSlide: 5000 }; // 5s
-  const finalSlide = makeSlide(2, 0, 'Final Multi', [makeSegment('f1', 1), makeSegment('f2', 1)]);
+  const finalSlide = makeSlide(2, 0, 'Final Multi', [makeSegment(0, 1), makeSegment(1, 1)]);
   const breakdown = calculateSlideDuration(finalSlide, true, finalDemoTiming);
   // Expected delays: between segments 0.5, after final segment 5
   const seg0Delay = breakdown.segments[0].delayAfter;
@@ -134,7 +134,7 @@ function nearlyEqual(a: number, b: number, epsilon = 1e-6) {
 {
   const demoTiming: TimingConfig = { betweenSlides: 1000, betweenSegments: 500, afterFinalSlide: 2000 };
   const slideTiming: TimingConfig = { betweenSlides: 1500 }; // override only betweenSlides
-  const slide = makeSlide(3, 0, 'Slide Override', [makeSegment('a', 1), makeSegment('b', 1)], slideTiming);
+  const slide = makeSlide(3, 0, 'Slide Override', [makeSegment(0, 1), makeSegment(1, 1)], slideTiming);
   const breakdown = calculateSlideDuration(slide, false, demoTiming);
   const lastDelay = breakdown.segments[1].delayAfter;
   assert('Slide-level betweenSlides override (1.5s)', nearlyEqual(lastDelay, 1.5), `Got ${lastDelay}`);
@@ -146,8 +146,8 @@ function nearlyEqual(a: number, b: number, epsilon = 1e-6) {
 {
   const demoTiming: TimingConfig = { betweenSegments: 500, betweenSlides: 1000, afterFinalSlide: 4000 };
   // Last segment overrides afterFinalSlide via its own timing config
-  const seg0 = makeSegment('first', 1); // normal betweenSegments 0.5
-  const seg1 = makeSegment('last', 2, { afterFinalSlide: 6000 }); // override final delay to 6s
+  const seg0 = makeSegment(0, 1); // normal betweenSegments 0.5
+  const seg1 = makeSegment(1, 2, { afterFinalSlide: 6000 }); // override final delay to 6s
   const slide = makeSlide(4, 0, 'Final Override', [seg0, seg1]);
   const breakdown = calculateSlideDuration(slide, true, demoTiming);
   const firstDelay = breakdown.segments[0].delayAfter;

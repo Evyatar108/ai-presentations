@@ -29,13 +29,13 @@ beforeAll(() => {
 describe('createTestSegment', () => {
   it('returns a segment with defaults', () => {
     const seg = createTestSegment();
-    expect(seg.id).toBe('test-segment');
+    expect(seg.id).toBe(0);
     expect(seg.audioFilePath).toBeTruthy();
   });
 
   it('allows overriding fields', () => {
-    const seg = createTestSegment({ id: 'custom', duration: 5 });
-    expect(seg.id).toBe('custom');
+    const seg = createTestSegment({ id: 1, duration: 5 });
+    expect(seg.id).toBe(1);
     expect(seg.duration).toBe(5);
   });
 });

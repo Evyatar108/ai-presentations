@@ -92,9 +92,9 @@ export const Ch6_S1_PromptOverview = defineSlide({
     slide: 1,
     title: 'Prompt Overview',
     audioSegments: [
-      { id: 'title' },
-      { id: 'sections' },
-      { id: 'insight' }
+      { id: 0 },
+      { id: 1 },
+      { id: 2 }
     ]
   },
   component: Ch6_S1_PromptOverviewComponent
@@ -233,9 +233,9 @@ export const Ch6_S2_Pseudocode = defineSlide({
     slide: 2,
     title: 'Pseudocode Algorithm',
     audioSegments: [
-      { id: 'title' },
-      { id: 'code' },
-      { id: 'outputs' }
+      { id: 0 },
+      { id: 1 },
+      { id: 2 }
     ]
   },
   component: Ch6_S2_PseudocodeComponent
@@ -348,8 +348,8 @@ export const Ch6_S3_ProseVsPseudocode = defineSlide({
     slide: 3,
     title: 'Prose vs Pseudocode',
     audioSegments: [
-      { id: 'comparison' },
-      { id: 'benefits' }
+      { id: 0 },
+      { id: 1 }
     ]
   },
   component: Ch6_S3_ProseVsPseudocodeComponent
@@ -705,10 +705,10 @@ export const Ch6_S4_OutputSchema = defineSlide({
     slide: 4,
     title: 'Output Schema',
     audioSegments: [
-      { id: 'skeleton' },
-      { id: 'deliverable_zoom' },
-      { id: 'extractive_zoom' },
-      { id: 'insight' }
+      { id: 0 },
+      { id: 1 },
+      { id: 2 },
+      { id: 3 }
     ]
   },
   component: Ch6_S4_OutputSchemaComponent
