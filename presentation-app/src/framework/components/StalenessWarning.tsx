@@ -370,7 +370,7 @@ export const StalenessWarning: React.FC<StalenessWarningProps> = ({
         chapter={editingSegment.chapter}
         slide={editingSegment.slide}
         segmentIndex={editingSegment.segmentIndex}
-        instruct={resolveInstruct(allSlides, editingSegment.chapter, editingSegment.slide, editingSegment.segmentId, demoInstruct)}
+        instruct={resolveInstruct(allSlides, editingSegment.chapter, editingSegment.slide, editingSegment.segmentId, demoInstruct) ?? editingSegment.cachedInstruct}
         allSlides={allSlides}
         onAcceptAudio={(filePath, timestamp) => {
           const slideComp = allSlides.find(

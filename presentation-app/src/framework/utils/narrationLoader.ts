@@ -101,49 +101,6 @@ export async function loadNarration(
 }
 
 /**
- * Get narration text for a specific segment.
- * Returns null if not found in the narration data.
- * 
- * @param narrationData - The loaded narration data (or null)
- * @param chapter - Chapter number
- * @param slide - Slide number within chapter
- * @param segmentId - Unique segment identifier
- * @returns The narration text or null if not found
- * 
- * @example
- * const text = getNarrationText(narration, 1, 2, 'intro');
- * if (text) {
- *   console.log('Found narration:', text);
- * } else {
- *   console.log('Segment not found, using fallback');
- * }
- */
-export function getNarrationText(
-  narrationData: NarrationData | null,
-  chapter: number,
-  slide: number,
-  segmentId: string
-): string | null {
-  if (!narrationData) {
-    return null;
-  }
-  
-  // Find the slide matching chapter and slide number
-  const slideData = narrationData.slides.find(
-    s => s.chapter === chapter && s.slide === slide
-  );
-  
-  if (!slideData) {
-    return null;
-  }
-  
-  // Find the segment by ID
-  const segment = slideData.segments.find(seg => seg.id === segmentId);
-  
-  return segment?.narrationText ?? null;
-}
-
-/**
  * Get complete segment data (including visual description and notes).
  * Returns null if not found.
  * 
@@ -174,43 +131,6 @@ export function getNarrationSegment(
   const segment = slideData.segments.find(seg => seg.id === segmentId);
   
   return segment ?? null;
-}
-
-/**
- * Resolve the TTS instruct for a specific segment using the three-level hierarchy:
- * segment.instruct → slide.instruct → narrationData.instruct → undefined
- *
- * @param narrationData - The loaded narration data (or null)
- * @param chapter - Chapter number
- * @param slide - Slide number within chapter
- * @param segmentId - Unique segment identifier
- * @returns The resolved instruct string or undefined if none set at any level
- */
-export function getNarrationInstruct(
-  narrationData: NarrationData | null,
-  chapter: number,
-  slide: number,
-  segmentId: string
-): string | undefined {
-  if (!narrationData) {
-    return undefined;
-  }
-
-  const slideData = narrationData.slides.find(
-    s => s.chapter === chapter && s.slide === slide
-  );
-
-  if (slideData) {
-    const segment = slideData.segments.find(seg => seg.id === segmentId);
-    if (segment?.instruct) {
-      return segment.instruct;
-    }
-    if (slideData.instruct) {
-      return slideData.instruct;
-    }
-  }
-
-  return narrationData.instruct;
 }
 
 /**

@@ -8,6 +8,7 @@ export interface ChangedSegmentDetail {
   segmentIndex: number;
   currentText: string;   // Text from narration.json
   cachedText?: string;   // Text TTS was generated from (undefined if never generated)
+  cachedInstruct?: string; // Instruct TTS was generated with (from cache)
   audioRelPath: string;  // "c1/s2_segment_01_intro.wav"
   audioExists: boolean;  // Whether .wav exists on disk
 }

@@ -67,6 +67,23 @@ export const NarrationEditModal: React.FC<NarrationEditModalProps> = ({
   const [text, setText] = useState(currentText);
   const [instructText, setInstructText] = useState(instruct ?? '');
   const [instructOpen, setInstructOpen] = useState(false);
+
+  // Fetch cached instruct from TTS cache when prop is empty (dev-mode only)
+  useEffect(() => {
+    if (instruct || !import.meta.env.DEV) return;
+    const paddedIdx = String(segmentIndex + 1).padStart(2, '0');
+    const audioRelPath = `c${chapter}/s${slide}_segment_${paddedIdx}_${segmentId}.wav`;
+    const url = `/api/cached-instruct?demoId=${encodeURIComponent(demoId)}&audioRelPath=${encodeURIComponent(audioRelPath)}`;
+    fetch(url)
+      .then(r => r.ok ? r.json() : null)
+      .then(data => {
+        if (data?.instruct) {
+          setInstructText(data.instruct);
+          setInstructOpen(true);
+        }
+      })
+      .catch(() => { /* silently ignore */ });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const [previews, setPreviews] = useState<AudioPreview[]>([]);
   const [playingId, setPlayingId] = useState<string | null>(null);
   const [generatingPreview, setGeneratingPreview] = useState(false);

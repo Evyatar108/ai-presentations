@@ -104,6 +104,7 @@ export function createStalenessHandlers(ctx: HandlerContext): StalenessRoute[] {
         segmentIndex: number;
         currentText: string;
         cachedText?: string;
+        cachedInstruct?: string;
         audioRelPath: string;
         audioExists: boolean;
       }
@@ -149,6 +150,7 @@ export function createStalenessHandlers(ctx: HandlerContext): StalenessRoute[] {
                 segmentIndex: segIdx,
                 currentText: segment.narrationText,
                 cachedText: cached.narrationText,
+                cachedInstruct: cached.instruct,
                 audioRelPath: relPath,
                 audioExists,
               });
@@ -165,7 +167,33 @@ export function createStalenessHandlers(ctx: HandlerContext): StalenessRoute[] {
     }
   };
 
+  // ─── GET /api/cached-instruct ────────────────────────────────────
+  const cachedInstruct: Connect.NextHandleFunction = (req, res, next) => {
+    if (req.method !== 'GET') { next(); return; }
+
+    try {
+      const q = parseQuery(req.url || '');
+      if (!q.demoId || !q.audioRelPath) {
+        throw new Error('Missing query params: demoId, audioRelPath');
+      }
+      if (/[/\\.]\./.test(q.demoId) || q.demoId.includes('..')) {
+        throw new Error('Invalid demoId');
+      }
+
+      const cacheFile = path.join(projectRoot, '.tts-narration-cache.json');
+      const ttsCache = loadTtsCache(cacheFile);
+      const demoCache = ttsCache[q.demoId] || {};
+      const cached = demoCache[q.audioRelPath];
+
+      sendJson(res, 200, { instruct: cached?.instruct ?? null });
+    } catch (error: any) {
+      console.error('[cached-instruct] Error:', error);
+      sendJson(res, 500, { instruct: null, error: error.message });
+    }
+  };
+
   return [
     { path: '/api/staleness-check', handler: stalenessCheck },
+    { path: '/api/cached-instruct', handler: cachedInstruct },
   ];
 }

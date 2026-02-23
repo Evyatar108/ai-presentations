@@ -138,7 +138,7 @@ export type { SlideDurationBreakdown, PresentationDurationReport, SegmentDuratio
 export type { AlignedWord, ResolvedMarker, SegmentAlignment, DemoAlignment } from './alignment/types';
 
 // Utils
-export { loadNarration, getNarrationText } from './utils/narrationLoader';
+export { loadNarration, getNarrationSegment } from './utils/narrationLoader';
 export { checkApiHealth, saveNarrationToFile, realignSegment } from './utils/narrationApiClient';
 export { debug } from './utils/debug';
 export { buildAudioFileName, buildAudioOutputPath, buildAudioFilePath, resolveAudioFilePath } from './utils/audioPath';

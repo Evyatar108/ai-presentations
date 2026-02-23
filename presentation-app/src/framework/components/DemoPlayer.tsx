@@ -9,7 +9,7 @@ import { SlidePlayer, Slide } from './SlidePlayer';
 import { SegmentProvider } from '../contexts/SegmentContext';
 import { AudioTimeProvider } from '../contexts/AudioTimeContext';
 import { HideInterfaceProvider } from '../contexts/HideInterfaceContext';
-import { loadNarration, getNarrationText, type NarrationData } from '../utils/narrationLoader';
+import { loadNarration, getNarrationSegment, type NarrationData } from '../utils/narrationLoader';
 import { loadAlignment } from '../utils/alignmentLoader';
 import { resolveAudioFilePath } from '../utils/audioPath';
 import { useTheme } from '../theme/ThemeContext';
@@ -123,29 +123,28 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideIn
     return loadedSlides.map(slideComponent => {
       const fallbackMode = demoConfig?.metadata.narrationFallback || 'inline';
       
-      // Update each segment's narration text
+      const chapter = slideComponent.metadata.chapter;
+      const slide = slideComponent.metadata.slide;
+
+      // Update each segment with narration fields from JSON
       const updatedSegments = slideComponent.metadata.audioSegments.map(segment => {
-        const externalNarration = getNarrationText(
-          narrationData,
-          slideComponent.metadata.chapter,
-          slideComponent.metadata.slide,
-          segment.id
-        );
-        
+        const narrationSeg = getNarrationSegment(narrationData, chapter, slide, segment.id);
+
         // Hybrid fallback: JSON → inline → error/silent
-        if (externalNarration !== null) {
-          // Use external narration from JSON
-          return { ...segment, narrationText: externalNarration };
+        if (narrationSeg) {
+          // Spread all narration fields (narrationText, instruct, visualDescription, etc.)
+          const { id: _, ...narrationOverrides } = narrationSeg;
+          return { ...segment, ...narrationOverrides };
         } else if (segment.narrationText) {
           // Fall back to inline narration
           if (fallbackMode === 'inline') {
             console.warn(
-              `[DemoPlayer] Using inline narration for ch${slideComponent.metadata.chapter}:s${slideComponent.metadata.slide}:${segment.id} ` +
+              `[DemoPlayer] Using inline narration for ch${chapter}:s${slide}:${segment.id} ` +
               `(not found in narration.json)`
             );
           } else if (fallbackMode === 'error') {
             console.error(
-              `[DemoPlayer] Missing narration in JSON for ch${slideComponent.metadata.chapter}:s${slideComponent.metadata.slide}:${segment.id}, ` +
+              `[DemoPlayer] Missing narration in JSON for ch${chapter}:s${slide}:${segment.id}, ` +
               `falling back to inline`
             );
           }
@@ -155,7 +154,7 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideIn
           // No narration available at all
           if (fallbackMode !== 'silent') {
             console.error(
-              `[DemoPlayer] No narration available for ch${slideComponent.metadata.chapter}:s${slideComponent.metadata.slide}:${segment.id} ` +
+              `[DemoPlayer] No narration available for ch${chapter}:s${slide}:${segment.id} ` +
               `(missing in both JSON and inline)`
             );
           }
@@ -163,13 +162,19 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideIn
         }
       });
       
+      // Also merge slide-level instruct from narration.json
+      const narrationSlide = narrationData.slides.find(
+        s => s.chapter === chapter && s.slide === slide
+      );
+
       // Create a new component wrapper with updated metadata (avoids mutating the original)
       const updatedComponent: SlideComponentWithMetadata = Object.assign(
         (props: Record<string, never>) => slideComponent(props),
         {
           metadata: {
             ...slideComponent.metadata,
-            audioSegments: updatedSegments
+            audioSegments: updatedSegments,
+            ...(narrationSlide?.instruct !== undefined ? { instruct: narrationSlide.instruct } : {}),
           }
         }
       );
@@ -354,7 +359,7 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideIn
             demoId={demoId}
             isNarratedMode={isNarratedMode}
             allSlides={slidesWithResolvedPaths}
-            demoInstruct={demoConfig?.instruct}
+            demoInstruct={demoConfig?.instruct ?? narrationData?.instruct}
             onAlignmentFixed={(newAlignment) => {
               setAlignmentData(newAlignment);
             }}
@@ -402,7 +407,7 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideIn
         <NarratedController
           demoMetadata={demoConfig.metadata}
           demoTiming={demoConfig.timing}
-          demoInstruct={demoConfig.instruct}
+          demoInstruct={demoConfig.instruct ?? narrationData?.instruct}
           startTransition={demoConfig.startTransition}
           slides={slidesWithResolvedPaths}
           alignmentData={alignmentData}

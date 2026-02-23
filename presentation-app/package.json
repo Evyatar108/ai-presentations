@@ -25,7 +25,8 @@
     "test:overflow": "tsx scripts/run-overflow-test.ts",
     "test:screenshot": "tsx scripts/run-screenshot-test.ts",
     "test:record": "tsx scripts/run-record-test.ts",
-    "record:obs": "tsx scripts/record-obs.ts"
+    "record:obs": "tsx scripts/record-obs.ts",
+    "dead-code": "knip --include exports"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -52,6 +53,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "get-audio-duration": "^4.0.1",
     "jsdom": "^28.1.0",
+    "knip": "^5.85.0",
     "obs-websocket-js": "^5.0.7",
     "prettier": "^3.1.0",
     "tsx": "^4.20.6",

@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import {
-  getNarrationText,
   getNarrationSegment,
   getSlideSegments,
   getNarrationStats,
@@ -42,28 +41,6 @@ const sampleData: NarrationData = {
     },
   ],
 };
-
-describe('getNarrationText', () => {
-  it('returns narration text for a valid segment', () => {
-    expect(getNarrationText(sampleData, 1, 1, 'intro')).toBe('Welcome to the demo.');
-  });
-
-  it('returns null when narrationData is null', () => {
-    expect(getNarrationText(null, 1, 1, 'intro')).toBeNull();
-  });
-
-  it('returns null for non-existent chapter/slide', () => {
-    expect(getNarrationText(sampleData, 99, 1, 'intro')).toBeNull();
-  });
-
-  it('returns null for non-existent segment ID', () => {
-    expect(getNarrationText(sampleData, 1, 1, 'nonexistent')).toBeNull();
-  });
-
-  it('returns text from different chapters', () => {
-    expect(getNarrationText(sampleData, 2, 1, 'opener')).toBe('Chapter two begins.');
-  });
-});
 
 describe('getNarrationSegment', () => {
   it('returns full segment object', () => {

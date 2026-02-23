@@ -133,7 +133,7 @@ The framework barrel uses explicit named exports (no wildcard `export *`) for Sl
 Additional exports available from the barrel:
 - **Slide factory**: `defineSlide()` — creates slides with metadata and component in a single call
 - **Types**: `DurationInfo`, `NarrationFallback`, `DemoDefaultMode`, `SlideDurationBreakdown`, `PresentationDurationReport`, `SegmentDurationInfo`
-- **Narration helpers**: `getNarrationInstruct()` — resolves instruct from narration JSON (segment → slide → data-level)
+- **Narration helpers**: `getNarrationSegment()` — returns full narration segment data from narration JSON
 - **Component props**: `DemoPlayerProps`, `SlidePlayerProps`, `NarratedControllerProps`, plus all layout props (`SlideContainerProps`, `ContentCardProps`, etc.)
 - **Calculator functions**: `calculateSlideDuration`, `calculatePresentationDuration`
 
