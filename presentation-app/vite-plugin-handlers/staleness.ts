@@ -5,7 +5,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import type { Connect } from 'vite';
-import { loadTtsCache } from '../scripts/utils/tts-cache';
+import { TtsCacheStore } from '../scripts/utils/tts-cache';
 import {
   sendJson,
   parseQuery,
@@ -39,7 +39,6 @@ export function createStalenessHandlers(ctx: HandlerContext): StalenessRoute[] {
 
       const narrationFile = path.join(projectRoot, 'public', 'narration', q.demoId, 'narration.json');
       const alignmentFile = path.join(projectRoot, 'public', 'audio', q.demoId, 'alignment.json');
-      const cacheFile = path.join(projectRoot, '.tts-narration-cache.json');
 
       // If no narration.json, nothing is stale
       if (!fs.existsSync(narrationFile)) {
@@ -110,8 +109,7 @@ export function createStalenessHandlers(ctx: HandlerContext): StalenessRoute[] {
       }
       const changedSegments: ChangedSegmentDetail[] = [];
 
-      const ttsCache = loadTtsCache(cacheFile);
-      const demoCache = ttsCache[q.demoId] || {};
+      const store = TtsCacheStore.fromProjectRoot(projectRoot);
       const audioDir = path.join(projectRoot, 'public', 'audio', q.demoId);
 
       for (const slide of narration.slides) {
@@ -119,10 +117,9 @@ export function createStalenessHandlers(ctx: HandlerContext): StalenessRoute[] {
           const segKey = `ch${slide.chapter}:s${slide.slide}:${segment.id}`;
           // Build expected audio file path to check cache
           const segIdx = slide.segments.indexOf(segment);
-          const paddedIdx = String(segIdx + 1).padStart(2, '0');
-          const relPath = `c${slide.chapter}/s${slide.slide}_segment_${paddedIdx}_${segment.id}.wav`;
+          const relPath = TtsCacheStore.buildKey(slide.chapter, slide.slide, segIdx, segment.id);
 
-          const cached = demoCache[relPath];
+          const cached = store.getEntry(q.demoId, relPath);
           const audioFile = path.join(audioDir, relPath);
           const audioExists = fs.existsSync(audioFile);
 
@@ -180,10 +177,8 @@ export function createStalenessHandlers(ctx: HandlerContext): StalenessRoute[] {
         throw new Error('Invalid demoId');
       }
 
-      const cacheFile = path.join(projectRoot, '.tts-narration-cache.json');
-      const ttsCache = loadTtsCache(cacheFile);
-      const demoCache = ttsCache[q.demoId] || {};
-      const cached = demoCache[q.audioRelPath];
+      const store = TtsCacheStore.fromProjectRoot(projectRoot);
+      const cached = store.getEntry(q.demoId, q.audioRelPath);
 
       sendJson(res, 200, { instruct: cached?.instruct ?? null });
     } catch (error: any) {

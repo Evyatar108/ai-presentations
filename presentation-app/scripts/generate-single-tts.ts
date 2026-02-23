@@ -3,14 +3,14 @@
  * Used by backend API for on-demand regeneration
  * 
  * Usage:
- *   tsx scripts/generate-single-tts.ts --demo <demo-id> --chapter <num> --slide <num> --segment <id> --text "<narration>"
+ *   tsx scripts/generate-single-tts.ts --demo <demo-id> --chapter <num> --slide <num> --segment-index <0-based> --segment <id> --text "<narration>"
  */
 
 import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import { loadTtsCache, saveTtsCache, normalizeCachePath } from './utils/tts-cache';
+import { TtsCacheStore } from './utils/tts-cache';
 import axios from 'axios';
 import * as crypto from 'crypto';
 
@@ -21,6 +21,7 @@ interface SingleSegmentConfig {
   demoId: string;
   chapter: number;
   slide: number;
+  segmentIndex: number;
   segmentId: string;
   narrationText: string;
   serverUrl: string;
@@ -49,7 +50,7 @@ async function generateSingleSegment(config: SingleSegmentConfig): Promise<void>
   console.log('🎙️  Single Segment TTS Generation');
   console.log('═'.repeat(50));
   console.log(`Demo:         ${config.demoId}`);
-  console.log(`Location:     Ch${config.chapter}/S${config.slide}/${config.segmentId}`);
+  console.log(`Location:     Ch${config.chapter}/S${config.slide}/${config.segmentId} (index ${config.segmentIndex})`);
   console.log(`Text:         "${config.narrationText.substring(0, 50)}..."`);
   if (config.instruct) {
     console.log(`Instruct:     "${config.instruct}"`);
@@ -75,7 +76,8 @@ async function generateSingleSegment(config: SingleSegmentConfig): Promise<void>
   const outputDir = path.join(__dirname, '../public/audio', config.demoId, `c${config.chapter}`);
   fs.mkdirSync(outputDir, { recursive: true });
 
-  const filename = `s${config.slide}_segment_${config.segmentId}.wav`;
+  const cacheRelPath = TtsCacheStore.buildKey(config.chapter, config.slide, config.segmentIndex, config.segmentId);
+  const filename = path.basename(cacheRelPath);
   const filepath = path.join(outputDir, filename);
 
   try {
@@ -102,24 +104,9 @@ async function generateSingleSegment(config: SingleSegmentConfig): Promise<void>
       console.log(`✅ Saved audio: ${path.relative(path.join(__dirname, '..'), filepath)}`);
 
       // Update TTS cache
-      const cacheFile = path.join(__dirname, '../.tts-narration-cache.json');
-      const cache = loadTtsCache(cacheFile);
-
-      if (!cache[config.demoId]) {
-        cache[config.demoId] = {};
-      }
-
-      const relativeFilepath = normalizeCachePath(path.relative(
-        path.join(__dirname, '../public/audio', config.demoId),
-        filepath
-      ));
-
-      cache[config.demoId][relativeFilepath] = {
-        narrationText: config.narrationText,
-        generatedAt: new Date().toISOString()
-      };
-
-      saveTtsCache(cacheFile, cache);
+      const store = TtsCacheStore.fromProjectRoot(path.join(__dirname, '..'));
+      store.setEntry(config.demoId, cacheRelPath, config.narrationText, config.instruct);
+      store.save();
       console.log('✅ Updated TTS cache');
 
       // Update narration cache
@@ -195,6 +182,10 @@ function parseCLIArgs(): Partial<SingleSegmentConfig> {
         config.segmentId = value;
         i++;
         break;
+      case '--segment-index':
+        config.segmentIndex = parseInt(value, 10);
+        i++;
+        break;
       case '--text':
         config.narrationText = value;
         i++;
@@ -226,6 +217,7 @@ if (
   console.log('    --demo <demo-id> \\');
   console.log('    --chapter <number> \\');
   console.log('    --slide <number> \\');
+  console.log('    --segment-index <0-based index> \\');
   console.log('    --segment <segment-id> \\');
   console.log('    --text "<narration text>" \\');
   console.log('    [--instruct "<style instruction>"]\n');
@@ -234,6 +226,7 @@ if (
   console.log('    --demo meeting-highlights \\');
   console.log('    --chapter 1 \\');
   console.log('    --slide 2 \\');
+  console.log('    --segment-index 0 \\');
   console.log('    --segment intro \\');
   console.log('    --text "Welcome to the presentation" \\');
   console.log('    --instruct "speak slowly and clearly"\n');
@@ -244,6 +237,7 @@ const config: SingleSegmentConfig = {
   demoId: cliArgs.demoId!,
   chapter: cliArgs.chapter!,
   slide: cliArgs.slide!,
+  segmentIndex: cliArgs.segmentIndex ?? 0,
   segmentId: cliArgs.segmentId!,
   narrationText: cliArgs.narrationText!,
   serverUrl: process.env.TTS_SERVER_URL || loadServerConfig(),

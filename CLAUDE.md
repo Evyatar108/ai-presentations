@@ -136,6 +136,7 @@ Subtitle corrections: `public/audio/{demo-id}/subtitle-corrections.json` — map
 | `src/framework/hooks/useMarker.ts` | useMarker() and useMarkerRange() hooks |
 | `src/framework/hooks/useAudioTime.ts` | Raw useAudioTime() hook |
 | `src/framework/hooks/useWordHighlight.ts` | Karaoke word-level highlight hook |
+| `scripts/utils/tts-cache.ts` | TTS cache I/O — `TtsCacheStore` is the primary API for all cache operations |
 | `scripts/utils/marker-parser.ts` | Shared parseMarkers() / stripMarkers() utilities |
 | `scripts/generate-alignment.ts` | Alignment generation + marker resolution script |
 | `tts/server_whisperx.py` | WhisperX server (transcription + forced alignment) |

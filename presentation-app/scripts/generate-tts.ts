@@ -8,7 +8,7 @@ import { AudioSegment, SlideComponentWithMetadata } from '@framework/slides/Slid
 import { runDurationCalculation } from './calculate-durations';
 import { generateAlignment, loadWhisperUrl } from './generate-alignment';
 import { stripMarkers } from './utils/marker-parser';
-import { loadTtsCache, saveTtsCache, normalizeCachePath, type TtsCache } from './utils/tts-cache';
+import { TtsCacheStore, normalizeCachePath } from './utils/tts-cache';
 import { getArg, hasFlag, parseSegmentFilter, buildSegmentKey, chunkArray } from './utils/cli-parser';
 import { getAllDemoIds, loadDemoSlides } from './utils/demo-discovery';
 import { loadNarrationJson, getNarrationText, getNarrationInstruct } from './utils/narration-loader';
@@ -29,8 +29,6 @@ interface TTSConfig {
   fromJson?: boolean;         // NEW: Use JSON exclusively
   instruct?: string;          // CLI-level default instruct (lowest priority)
 }
-
-type NarrationCache = TtsCache;
 
 interface SegmentToGenerate {
   demoId: string;
@@ -100,15 +98,11 @@ function updateNarrationCache(
   console.log(`✅ Updated narration cache: ${path.relative(path.join(__dirname, '..'), cacheFile)}`);
 }
 
-// Re-export shared cache functions under local names for minimal diff
-const loadCache = loadTtsCache;
-const saveCache = saveTtsCache;
-
 // Scan for orphaned audio files and cache entries for a specific demo
 function cleanupUnusedAudio(
   demoId: string,
   outputDir: string,
-  cache: NarrationCache,
+  store: TtsCacheStore,
   allSlides: SlideComponentWithMetadata[]
 ): {
   orphanedFiles: string[];
@@ -134,11 +128,7 @@ function cleanupUnusedAudio(
       const segment = audioSegments[i];
       if (!segment.narrationText) continue;
 
-      const filename = `s${slideNum}_segment_${String(i + 1).padStart(2, '0')}_${segment.id}.wav`;
-      const chapterDir = path.join(demoOutputDir, `c${chapter}`);
-      const filepath = path.join(chapterDir, filename);
-      const relativeFilepath = path.relative(demoOutputDir, filepath);
-      expectedFiles.add(normalizeCachePath(relativeFilepath));
+      expectedFiles.add(TtsCacheStore.buildKey(chapter, slideNum, i, segment.id));
     }
   }
 
@@ -150,10 +140,10 @@ function cleanupUnusedAudio(
   for (const chapterDir of chapterDirs) {
     const chapterPath = path.join(demoOutputDir, chapterDir);
     const files = fs.readdirSync(chapterPath);
-    
+
     for (const file of files) {
       if (!file.endsWith('.wav')) continue;
-      
+
       const filepath = path.join(chapterPath, file);
       const relativeFilepath = normalizeCachePath(path.relative(demoOutputDir, filepath));
 
@@ -164,10 +154,8 @@ function cleanupUnusedAudio(
   }
 
   // Check cache for orphaned entries
-  const demoCache = cache[demoId] || {};
-  for (const cacheKey of Object.keys(demoCache)) {
-    const normalizedKey = normalizeCachePath(cacheKey);
-    if (!expectedFiles.has(normalizedKey)) {
+  for (const cacheKey of store.getKeys(demoId)) {
+    if (!expectedFiles.has(cacheKey)) {
       result.orphanedCacheKeys.push(cacheKey);
     }
   }
@@ -306,7 +294,7 @@ function handleOrphanedFiles(
   demoId: string,
   allSlides: SlideComponentWithMetadata[],
   config: TTSConfig,
-  cache: NarrationCache,
+  store: TtsCacheStore,
   segmentsToGenerate: SegmentToGenerate[]
 ): OrphanResult {
   const result: OrphanResult = { renamedCount: 0, deletedFileCount: 0, deletedCacheKeyCount: 0 };
@@ -319,7 +307,7 @@ function handleOrphanedFiles(
 
   // Step 1: Detect orphaned audio files (don't delete yet — we may rename them)
   console.log('🔍 Scanning for unused audio files...\n');
-  const cleanup = cleanupUnusedAudio(demoId, config.outputDir, cache, allSlides);
+  const cleanup = cleanupUnusedAudio(demoId, config.outputDir, store, allSlides);
 
   if (cleanup.orphanedFiles.length > 0) {
     console.log(`📁 Orphaned audio files: ${cleanup.orphanedFiles.length}`);
@@ -351,7 +339,7 @@ function handleOrphanedFiles(
     for (const orphanRelPath of cleanup.orphanedFiles) {
       // Find matching cache entry for this orphan
       const normalizedPath = normalizeCachePath(orphanRelPath);
-      const cacheEntry = cache[demoId][normalizedPath] || cache[demoId][orphanRelPath];
+      const cacheEntry = store.getEntry(demoId, normalizedPath) || store.getEntry(demoId, orphanRelPath);
       if (cacheEntry?.narrationText) {
         const hash = crypto.createHash('sha256')
           .update(stripMarkers(cacheEntry.narrationText).trim() + '\0' + (cacheEntry.instruct ?? ''))
@@ -391,13 +379,9 @@ function handleOrphanedFiles(
 
           const newRelativePath = normalizeCachePath(path.relative(demoOutputDir, seg.filepath));
 
-          // Update cache: copy entry under new key, remove old key
-          if (orphan.cacheKey && cache[demoId][orphan.cacheKey]) {
-            cache[demoId][newRelativePath] = {
-              ...cache[demoId][orphan.cacheKey],
-              generatedAt: new Date().toISOString()
-            };
-            delete cache[demoId][orphan.cacheKey];
+          // Update cache: rename key from old path to new path
+          if (orphan.cacheKey) {
+            store.renameKey(demoId, orphan.cacheKey, newRelativePath);
           }
 
           console.log(`  🔄 Renamed: ${orphan.relativePath} → ${newRelativePath}`);
@@ -424,7 +408,7 @@ function handleOrphanedFiles(
 
     if (result.renamedCount > 0) {
       console.log(`\n  ✅ Renamed ${result.renamedCount} files (avoided regeneration)\n`);
-      saveCache(config.cacheFile, cache);
+      store.save();
     } else {
       console.log('  No renameable matches found\n');
     }
@@ -443,12 +427,12 @@ function handleOrphanedFiles(
     }
 
     for (const key of cleanup.orphanedCacheKeys) {
-      delete cache[demoId][key];
+      store.removeEntry(demoId, key);
     }
 
     if (cleanup.orphanedFiles.length > 0 || cleanup.orphanedCacheKeys.length > 0) {
       console.log(`\n💾 Cleaned up ${cleanup.orphanedFiles.length} files and ${cleanup.orphanedCacheKeys.length} cache entries\n`);
-      saveCache(config.cacheFile, cache);
+      store.save();
     }
   }
 
@@ -470,7 +454,7 @@ interface BatchResult {
 async function generateBatches(
   segmentsToGenerate: SegmentToGenerate[],
   config: TTSConfig,
-  cache: NarrationCache
+  store: TtsCacheStore
 ): Promise<BatchResult> {
   let generatedCount = 0;
   let errorCount = 0;
@@ -542,12 +526,8 @@ async function generateBatches(
           generatedCount++;
 
           // Update cache
-          const relativeFilepath = path.relative(path.join(config.outputDir, item.demoId), item.filepath);
-          cache[item.demoId][relativeFilepath] = {
-            narrationText: stripMarkers(item.segment.narrationText!),
-            ...(item.instruct ? { instruct: item.instruct } : {}),
-            generatedAt: new Date().toISOString()
-          };
+          const relativeFilepath = normalizeCachePath(path.relative(path.join(config.outputDir, item.demoId), item.filepath));
+          store.setEntry(item.demoId, relativeFilepath, stripMarkers(item.segment.narrationText!), item.instruct);
         }
 
       } else {
@@ -578,13 +558,13 @@ async function generateBatches(
  */
 async function saveResults(
   config: TTSConfig,
-  cache: NarrationCache,
+  store: TtsCacheStore,
   demosToProcess: string[],
   totals: { totalGenerated: number; totalDeleted: number; totalRenamed: number }
 ): Promise<void> {
   // Save updated cache
   if (totals.totalGenerated > 0) {
-    saveCache(config.cacheFile, cache);
+    store.save();
     console.log(`💾 TTS cache updated with ${totals.totalGenerated} new entries`);
 
     // Update narration cache for all processed demos
@@ -630,7 +610,7 @@ async function generateTTS(config: TTSConfig) {
   console.log('🎙️  Starting TTS Batch Generation (Multi-Demo Support)...\n');
 
   // Load cache
-  const cache = loadCache(config.cacheFile);
+  const store = new TtsCacheStore(config.cacheFile);
 
   // Get demos to process
   const allDemoIds = await getAllDemoIds();
@@ -682,11 +662,6 @@ async function generateTTS(config: TTSConfig) {
     if (!loadResult) continue;
     const { allSlides } = loadResult;
 
-    // Ensure demo cache exists
-    if (!cache[demoId]) {
-      cache[demoId] = {};
-    }
-
     // Step 2: Collect all segments that need generation
     const segmentsToGenerate: SegmentToGenerate[] = [];
     let totalSegments = 0;
@@ -726,9 +701,9 @@ async function generateTTS(config: TTSConfig) {
         }
 
         // Generate filename
-        const filename = `s${slideNum}_segment_${String(i + 1).padStart(2, '0')}_${segment.id}.wav`;
+        const relativeFilepath = TtsCacheStore.buildKey(chapter, slideNum, i, segment.id);
+        const filename = path.basename(relativeFilepath);
         const filepath = path.join(chapterDir, filename);
-        const relativeFilepath = normalizeCachePath(path.relative(demoOutputDir, filepath));
 
         // Resolve instruct: segment → slide → narrationJSON → CLI
         const resolvedInstruct =
@@ -741,7 +716,7 @@ async function generateTTS(config: TTSConfig) {
 
         if (!config.segmentFilter && config.skipExisting && fs.existsSync(filepath)) {
           // File exists - check if narration or instruct has changed
-          const cachedEntry = cache[demoId][relativeFilepath];
+          const cachedEntry = store.getEntry(demoId, relativeFilepath);
           if (
             cachedEntry &&
             stripMarkers(cachedEntry.narrationText) === stripMarkers(segment.narrationText) &&
@@ -788,7 +763,7 @@ async function generateTTS(config: TTSConfig) {
     }
 
     // Step 3: Handle orphaned files (detect, smart-rename, delete remaining)
-    const orphanResult = handleOrphanedFiles(demoId, allSlides, config, cache, segmentsToGenerate);
+    const orphanResult = handleOrphanedFiles(demoId, allSlides, config, store, segmentsToGenerate);
 
     // Step 4: Generate remaining unmatched segments
     console.log(`Found ${segmentsToGenerate.length} segments to generate (${skippedCount} skipped, ${orphanResult.renamedCount} renamed)\n`);
@@ -802,7 +777,7 @@ async function generateTTS(config: TTSConfig) {
       continue;
     }
 
-    const { generatedCount, errorCount } = await generateBatches(segmentsToGenerate, config, cache);
+    const { generatedCount, errorCount } = await generateBatches(segmentsToGenerate, config, store);
 
     // Demo summary
     console.log('\n' + '-'.repeat(60));
@@ -830,7 +805,7 @@ async function generateTTS(config: TTSConfig) {
   console.log('═'.repeat(70) + '\n');
 
   // Save cache, update narration caches, and auto-chain downstream tools
-  await saveResults(config, cache, demosToProcess, { totalGenerated, totalDeleted, totalRenamed });
+  await saveResults(config, store, demosToProcess, { totalGenerated, totalDeleted, totalRenamed });
 }
 
 // Load server config from JSON file

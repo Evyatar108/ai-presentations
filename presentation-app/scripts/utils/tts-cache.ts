@@ -75,3 +75,108 @@ export function saveTtsCache(cacheFile: string, cache: TtsCache): void {
   }
   fs.writeFileSync(cacheFile, JSON.stringify(normalized, null, 2));
 }
+
+// ---------------------------------------------------------------------------
+// TtsCacheStore — high-level class wrapping the raw cache functions
+// ---------------------------------------------------------------------------
+
+import * as path from 'path';
+
+/** Default cache filename relative to project root. */
+export const DEFAULT_CACHE_FILENAME = '.tts-narration-cache.json';
+
+/**
+ * High-level wrapper around the TTS narration cache.
+ *
+ * Centralises demo-bucket creation, entry construction (auto `generatedAt`),
+ * and the segment-path pattern so that all consumers share the same logic.
+ */
+export class TtsCacheStore {
+  private cache: TtsCache;
+  private readonly filePath: string;
+
+  constructor(filePath: string) {
+    this.filePath = filePath;
+    this.cache = loadTtsCache(filePath);
+  }
+
+  /** Convenience constructor: `path.join(root, DEFAULT_CACHE_FILENAME)`. */
+  static fromProjectRoot(root: string): TtsCacheStore {
+    return new TtsCacheStore(path.join(root, DEFAULT_CACHE_FILENAME));
+  }
+
+  /**
+   * Build the chapter-relative cache key for a segment.
+   *
+   * Mirrors `buildAudioOutputPath` from `src/framework/utils/audioPath.ts`.
+   *
+   * @param segmentIndex 0-based segment index (padded to 2 digits as `index + 1`)
+   * @example TtsCacheStore.buildKey(1, 2, 0, 'intro') → "c1/s2_segment_01_intro.wav"
+   */
+  static buildKey(
+    chapter: number,
+    slide: number,
+    segmentIndex: number,
+    segmentId: string
+  ): string {
+    const paddedIndex = String(segmentIndex + 1).padStart(2, '0');
+    return `c${chapter}/s${slide}_segment_${paddedIndex}_${segmentId}.wav`;
+  }
+
+  // ── Read operations ──────────────────────────────────────────────────
+
+  getEntry(demoId: string, relPath: string): TtsCacheEntry | undefined {
+    return this.cache[demoId]?.[relPath];
+  }
+
+  getKeys(demoId: string): string[] {
+    return Object.keys(this.cache[demoId] || {});
+  }
+
+  getDemoCache(demoId: string): Readonly<TtsDemoCache> | undefined {
+    return this.cache[demoId];
+  }
+
+  // ── Write operations ─────────────────────────────────────────────────
+
+  /**
+   * Set (or overwrite) a cache entry.
+   *
+   * Automatically creates the demo bucket if missing and stamps
+   * `generatedAt` with the current ISO timestamp.
+   */
+  setEntry(
+    demoId: string,
+    relPath: string,
+    narrationText: string,
+    instruct?: string
+  ): void {
+    if (!this.cache[demoId]) {
+      this.cache[demoId] = {};
+    }
+    this.cache[demoId][relPath] = {
+      narrationText,
+      ...(instruct ? { instruct } : {}),
+      generatedAt: new Date().toISOString(),
+    };
+  }
+
+  removeEntry(demoId: string, relPath: string): void {
+    if (this.cache[demoId]) {
+      delete this.cache[demoId][relPath];
+    }
+  }
+
+  renameKey(demoId: string, oldPath: string, newPath: string): void {
+    const entry = this.cache[demoId]?.[oldPath];
+    if (!entry) return;
+    this.cache[demoId][newPath] = entry;
+    delete this.cache[demoId][oldPath];
+  }
+
+  // ── Persistence ──────────────────────────────────────────────────────
+
+  save(): void {
+    saveTtsCache(this.filePath, this.cache);
+  }
+}

@@ -9,15 +9,13 @@ import { execSync } from 'child_process';
 import * as crypto from 'crypto';
 import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
 import { stripMarkers } from './utils/marker-parser';
-import { loadTtsCache, normalizeCachePath, type TtsCache } from './utils/tts-cache';
+import { TtsCacheStore, normalizeCachePath } from './utils/tts-cache';
 import { getAllDemoIds, loadDemoSlides } from './utils/demo-discovery';
 import { loadNarrationJson, type NarrationData } from './utils/narration-loader';
 
 // ES module __dirname equivalent
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
-type TTSNarrationCache = TtsCache;
 
 interface ChangeDetectionResult {
   hasChanges: boolean;
@@ -192,27 +190,23 @@ async function loadDemoSlidesWithNarration(demoId: string): Promise<SlideCompone
   return slides;
 }
 
-const loadCache = loadTtsCache;
-
 // Scan for orphaned audio files and cache entries for a specific demo
 function detectOrphanedAudio(
   demoId: string,
   outputDir: string,
-  cacheFile: string,
+  store: TtsCacheStore,
   allSlides: SlideComponentWithMetadata[]
 ): {
   orphanedFiles: Array<{ filepath: string }>;
   orphanedCacheKeys: string[];
 } {
-  const cache = loadCache(cacheFile);
-  const demoCache = cache[demoId] || {};
   const result = {
     orphanedFiles: [] as Array<{ filepath: string }>,
     orphanedCacheKeys: [] as string[]
   };
 
   const demoOutputDir = path.join(outputDir, demoId);
-  
+
   // Build set of expected filepaths from all slides
   const expectedFiles = new Set<string>();
   for (const slide of allSlides) {
@@ -223,11 +217,7 @@ function detectOrphanedAudio(
       const segment = audioSegments[i];
       if (!segment.narrationText) continue;
 
-      const filename = `s${slideNum}_segment_${String(i + 1).padStart(2, '0')}_${segment.id}.wav`;
-      const chapterDir = path.join(demoOutputDir, `c${chapter}`);
-      const filepath = path.join(chapterDir, filename);
-      const relativeFilepath = normalizeCachePath(path.relative(demoOutputDir, filepath));
-      expectedFiles.add(relativeFilepath);
+      expectedFiles.add(TtsCacheStore.buildKey(chapter, slideNum, i, segment.id));
     }
   }
 
@@ -240,15 +230,15 @@ function detectOrphanedAudio(
     for (const chapterDir of chapterDirs) {
       const chapterPath = path.join(demoOutputDir, chapterDir);
       if (!fs.existsSync(chapterPath)) continue;
-      
+
       const files = fs.readdirSync(chapterPath);
-      
+
       for (const file of files) {
         if (!file.endsWith('.wav')) continue;
-        
+
         const filepath = path.join(chapterPath, file);
         const relativeFilepath = normalizeCachePath(path.relative(demoOutputDir, filepath));
-        
+
         if (!expectedFiles.has(relativeFilepath)) {
           result.orphanedFiles.push({ filepath: relativeFilepath });
         }
@@ -257,9 +247,8 @@ function detectOrphanedAudio(
   }
 
   // Check cache for orphaned entries
-  for (const cacheKey of Object.keys(demoCache)) {
-    const normalizedKey = normalizeCachePath(cacheKey);
-    if (!expectedFiles.has(normalizedKey)) {
+  for (const cacheKey of store.getKeys(demoId)) {
+    if (!expectedFiles.has(cacheKey)) {
       result.orphanedCacheKeys.push(cacheKey);
     }
   }
@@ -271,15 +260,13 @@ function detectOrphanedAudio(
 function detectChanges(
   demoId: string,
   outputDir: string,
-  cacheFile: string,
+  store: TtsCacheStore,
   allSlides: SlideComponentWithMetadata[]
 ): {
   changedSegments: any[];
   missingFiles: any[];
   newSegments: number;
 } {
-  const cache = loadCache(cacheFile);
-  const demoCache = cache[demoId] || {};
   const result = {
     changedSegments: [] as any[],
     missingFiles: [] as any[],
@@ -290,22 +277,21 @@ function detectChanges(
 
   for (const slide of allSlides) {
     const { chapter, slide: slideNum, audioSegments } = slide.metadata;
-    
+
     if (!audioSegments || audioSegments.length === 0) continue;
-    
+
     const chapterDir = path.join(demoOutputDir, `c${chapter}`);
-    
+
     for (let i = 0; i < audioSegments.length; i++) {
       const segment = audioSegments[i];
-      
+
       // Skip if no narration text
       if (!segment.narrationText) continue;
-      
+
       // Generate expected filepath
-      const filename = `s${slideNum}_segment_${String(i + 1).padStart(2, '0')}_${segment.id}.wav`;
-      const filepath = path.join(chapterDir, filename);
-      const relativeFilepath = path.relative(demoOutputDir, filepath);
-      
+      const relativeFilepath = TtsCacheStore.buildKey(chapter, slideNum, i, segment.id);
+      const filepath = path.join(chapterDir, path.basename(relativeFilepath));
+
       // Check if file exists
       if (!fs.existsSync(filepath)) {
         result.missingFiles.push({
@@ -316,9 +302,10 @@ function detectChanges(
         });
         continue;
       }
-      
+
       // Check if this segment is in cache
-      if (!demoCache[relativeFilepath]) {
+      const cached = store.getEntry(demoId, relativeFilepath);
+      if (!cached) {
         result.newSegments++;
         result.changedSegments.push({
           chapter,
@@ -328,9 +315,9 @@ function detectChanges(
         });
         continue;
       }
-      
+
       // Check if narration changed (strip markers — they don't affect TTS audio)
-      if (stripMarkers(demoCache[relativeFilepath].narrationText) !== stripMarkers(segment.narrationText)) {
+      if (stripMarkers(cached.narrationText) !== stripMarkers(segment.narrationText)) {
         result.changedSegments.push({
           chapter,
           slide: slideNum,
@@ -340,32 +327,27 @@ function detectChanges(
       }
     }
   }
-  
+
   return result;
 }
 
 // Detect renameable orphans: orphaned files whose cached content matches a missing segment
 function detectRenameableFiles(
   demoId: string,
-  outputDir: string,
-  cacheFile: string,
+  store: TtsCacheStore,
   orphanedFiles: Array<{ filepath: string }>,
   missingFiles: Array<{ chapter: number; slide: number; segmentId: string; filepath: string }>,
   allSlides: SlideComponentWithMetadata[]
 ): Array<{ from: string; to: string }> {
   if (orphanedFiles.length === 0 || missingFiles.length === 0) return [];
 
-  const cache = loadCache(cacheFile);
-  const demoCache = cache[demoId] || {};
-  const demoOutputDir = path.join(outputDir, demoId);
-
   // Build lookup: hash(narrationText + instruct) → orphan filepath
   const orphansByHash = new Map<string, string>();
   for (const orphan of orphanedFiles) {
     const normalizedPath = normalizeCachePath(orphan.filepath);
-    const cacheEntry = demoCache[normalizedPath] || demoCache[orphan.filepath];
+    const cacheEntry = store.getEntry(demoId, normalizedPath) || store.getEntry(demoId, orphan.filepath);
     if (cacheEntry?.narrationText) {
-      const instruct = (cacheEntry as any).instruct ?? '';
+      const instruct = cacheEntry.instruct ?? '';
       const hash = crypto.createHash('sha256')
         .update(stripMarkers(cacheEntry.narrationText).trim() + '\0' + instruct)
         .digest('hex');
@@ -523,7 +505,7 @@ function checkMarkerAlignment(demoId: string): {
 // Main check function
 async function checkTTSCache(): Promise<void> {
   const outputDir = path.join(__dirname, '../public/audio');
-  const cacheFile = path.join(__dirname, '../.tts-narration-cache.json');
+  const store = TtsCacheStore.fromProjectRoot(path.join(__dirname, '..'));
   
   console.log('═'.repeat(70));
   console.log('🔍 TTS Cache & Narration Validation (Multi-Demo)');
@@ -596,10 +578,10 @@ async function checkTTSCache(): Promise<void> {
     }
     
     // Check for orphaned files
-    const orphaned = detectOrphanedAudio(demoId, outputDir, cacheFile, allSlides);
-    
+    const orphaned = detectOrphanedAudio(demoId, outputDir, store, allSlides);
+
     // Check for changes
-    const changes = detectChanges(demoId, outputDir, cacheFile, allSlides);
+    const changes = detectChanges(demoId, outputDir, store, allSlides);
     
     const demoHasChanges = 
       orphaned.orphanedFiles.length > 0 ||
@@ -609,7 +591,7 @@ async function checkTTSCache(): Promise<void> {
     
     // Detect renameable files (orphans that match missing segments by content hash)
     const renameables = detectRenameableFiles(
-      demoId, outputDir, cacheFile,
+      demoId, store,
       orphaned.orphanedFiles, changes.missingFiles, allSlides
     );
 

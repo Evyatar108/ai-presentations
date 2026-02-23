@@ -14,7 +14,7 @@ import {
   type HandlerContext,
   type SaveAudioRequest,
 } from './types';
-import { loadTtsCache, saveTtsCache } from '../scripts/utils/tts-cache';
+import { TtsCacheStore } from '../scripts/utils/tts-cache';
 
 /** Route descriptor returned to the main plugin for registration. */
 export interface AudioRoute {
@@ -66,8 +66,7 @@ export function createAudioHandlers(ctx: HandlerContext): AudioRoute[] {
       console.log(`[audio-writer] Saved audio file: ${data.outputPath} (${audioBuffer.length} bytes)`);
 
       // Update cache file
-      const cacheFile = path.join(projectRoot, '.tts-narration-cache.json');
-      const cache = loadTtsCache(cacheFile);
+      const store = TtsCacheStore.fromProjectRoot(projectRoot);
 
       // Split outputPath into demoId and relative path for nested cache format
       const normalizedPath = data.outputPath.replace(/\\/g, '/');
@@ -75,13 +74,8 @@ export function createAudioHandlers(ctx: HandlerContext): AudioRoute[] {
       const cacheDemoId = firstSlash > 0 ? normalizedPath.substring(0, firstSlash) : normalizedPath;
       const cacheRelPath = firstSlash > 0 ? normalizedPath.substring(firstSlash + 1) : normalizedPath;
 
-      if (!cache[cacheDemoId]) cache[cacheDemoId] = {};
-      cache[cacheDemoId][cacheRelPath] = {
-        narrationText: data.narrationText,
-        ...(data.instruct ? { instruct: data.instruct } : {}),
-        generatedAt: new Date().toISOString()
-      };
-      saveTtsCache(cacheFile, cache);
+      store.setEntry(cacheDemoId, cacheRelPath, data.narrationText, data.instruct);
+      store.save();
 
       console.log(`[audio-writer] Updated cache entry: ${cacheDemoId}/${cacheRelPath}`);
 

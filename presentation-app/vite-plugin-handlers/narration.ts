@@ -14,7 +14,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { execSync } from 'child_process';
 import type { Connect } from 'vite';
-import { loadTtsCache, saveTtsCache } from '../scripts/utils/tts-cache';
+import { TtsCacheStore } from '../scripts/utils/tts-cache';
 import {
   readJsonBody,
   sendJson,
@@ -274,8 +274,8 @@ export function createNarrationHandlers(ctx: HandlerContext): NarrationRoute[] {
       }
 
       // Build the real audio destination path
-      const paddedIndex = String((data.segmentIndex ?? 0) + 1).padStart(2, '0');
-      const destRelative = `${data.demoId}/c${data.chapter}/s${data.slide}_segment_${paddedIndex}_${data.segmentId}.wav`;
+      const segRelPath = TtsCacheStore.buildKey(data.chapter, data.slide, data.segmentIndex ?? 0, data.segmentId);
+      const destRelative = `${data.demoId}/${segRelPath}`;
       const destFull = path.join(projectRoot, 'public', 'audio', destRelative);
 
       const destDir = path.dirname(destFull);
@@ -303,16 +303,10 @@ export function createNarrationHandlers(ctx: HandlerContext): NarrationRoute[] {
       console.log(`[narration] Accepted take ${data.takeNumber} → ${destRelative}`);
 
       // Update TTS narration cache
-      const cacheFile = path.join(projectRoot, '.tts-narration-cache.json');
-      const cache = loadTtsCache(cacheFile);
-      if (!cache[data.demoId]) cache[data.demoId] = {};
-      const cacheRelPath = `c${data.chapter}/s${data.slide}_segment_${paddedIndex}_${data.segmentId}.wav`;
-      cache[data.demoId][cacheRelPath] = {
-        narrationText: takeNarrationText,
-        ...(takeInstruct ? { instruct: takeInstruct } : {}),
-        generatedAt: new Date().toISOString(),
-      };
-      saveTtsCache(cacheFile, cache);
+      const store = TtsCacheStore.fromProjectRoot(projectRoot);
+      const cacheRelPath = TtsCacheStore.buildKey(data.chapter, data.slide, data.segmentIndex ?? 0, data.segmentId);
+      store.setEntry(data.demoId, cacheRelPath, takeNarrationText, takeInstruct);
+      store.save();
       console.log(`[narration] Updated TTS cache: ${data.demoId}/${cacheRelPath}`);
 
       // Delete entire preview dir
