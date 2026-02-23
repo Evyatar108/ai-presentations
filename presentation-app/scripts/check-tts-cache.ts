@@ -6,12 +6,13 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import * as readline from 'readline';
 import { execSync } from 'child_process';
-import * as crypto from 'crypto';
 import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
 import { stripMarkers } from './utils/marker-parser';
 import { TtsCacheStore, normalizeCachePath } from './utils/tts-cache';
 import { getAllDemoIds, loadDemoSlides } from './utils/demo-discovery';
 import { loadNarrationJson, type NarrationData } from './utils/narration-loader';
+import { hashNarrationSegment, type NarrationCache as NarrationJsonCache, type NarrationCacheEntry as NarrationCacheSegment } from './utils/narration-cache';
+import { loadAlignmentData } from './utils/alignment-io';
 
 // ES module __dirname equivalent
 const __filename = fileURLToPath(import.meta.url);
@@ -44,18 +45,6 @@ interface ChangeDetectionResult {
       }>;
     };
   };
-}
-
-// Narration JSON cache structure (different from TTS cache)
-interface NarrationCacheSegment {
-  hash: string;
-  lastChecked: string;
-}
-
-interface NarrationJsonCache {
-  version: string;
-  generatedAt: string;
-  segments: Record<string, NarrationCacheSegment>;
 }
 
 // Check narration JSON changes for a demo
@@ -98,11 +87,8 @@ function checkNarrationChanges(demoId: string): {
       for (const segment of slide.segments) {
         const key = `ch${slide.chapter}:s${slide.slide}:${segment.id}`;
         // Include resolved instruct in hash so instruct changes trigger regeneration
-        // Strip markers before hashing — markers don't affect TTS audio
         const resolvedInstruct = segment.instruct ?? slide.instruct ?? narrationData.instruct ?? '';
-        const currentHash = crypto.createHash('sha256')
-          .update(stripMarkers(segment.narrationText).trim() + '\0' + resolvedInstruct)
-          .digest('hex');
+        const currentHash = hashNarrationSegment(segment.narrationText, resolvedInstruct);
         
         if (!cache || !cache.segments[key]) {
           result.hasChanges = true;
@@ -347,10 +333,7 @@ function detectRenameableFiles(
     const normalizedPath = normalizeCachePath(orphan.filepath);
     const cacheEntry = store.getEntry(demoId, normalizedPath) || store.getEntry(demoId, orphan.filepath);
     if (cacheEntry?.narrationText) {
-      const instruct = cacheEntry.instruct ?? '';
-      const hash = crypto.createHash('sha256')
-        .update(stripMarkers(cacheEntry.narrationText).trim() + '\0' + instruct)
-        .digest('hex');
+      const hash = hashNarrationSegment(cacheEntry.narrationText, cacheEntry.instruct ?? '');
       if (!orphansByHash.has(hash)) {
         orphansByHash.set(hash, normalizedPath);
       }
@@ -372,9 +355,7 @@ function detectRenameableFiles(
     if (!segment?.narrationText) continue;
 
     const resolvedInstruct = segment.instruct ?? slide.metadata.instruct ?? '';
-    const hash = crypto.createHash('sha256')
-      .update(stripMarkers(segment.narrationText).trim() + '\0' + resolvedInstruct)
-      .digest('hex');
+    const hash = hashNarrationSegment(segment.narrationText, resolvedInstruct);
 
     const orphanPath = orphansByHash.get(hash);
     if (orphanPath && !matchedOrphans.has(orphanPath)) {
@@ -444,7 +425,6 @@ function checkMarkerAlignment(demoId: string): {
   };
 
   const narrationFile = path.join(__dirname, `../public/narration/${demoId}/narration.json`);
-  const alignmentFile = path.join(__dirname, `../public/audio/${demoId}/alignment.json`);
 
   if (!fs.existsSync(narrationFile)) return result;
 
@@ -466,7 +446,8 @@ function checkMarkerAlignment(demoId: string): {
   if (expectedMarkers.length === 0) return result;
 
   // Load alignment data
-  if (!fs.existsSync(alignmentFile)) {
+  const alignment = loadAlignmentData(demoId) as AlignmentData | null;
+  if (!alignment) {
     result.noAlignmentFile = true;
     result.missingMarkers = expectedMarkers.map(m => ({
       segment: `${m.slideKey}:${m.segmentId}`,
@@ -474,8 +455,6 @@ function checkMarkerAlignment(demoId: string): {
     }));
     return result;
   }
-
-  const alignment: AlignmentData = JSON.parse(fs.readFileSync(alignmentFile, 'utf-8'));
 
   // Build a set of resolved marker IDs per segment
   const resolvedMarkers = new Map<string, Set<string>>();

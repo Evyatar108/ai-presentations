@@ -8,6 +8,7 @@ import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
 import { getArg, hasFlag, parseSegmentFilter, buildSegmentKey, chunkArray } from './utils/cli-parser.js';
 import { loadDemoSlides } from './utils/demo-discovery.js';
 import { loadNarrationJson, getNarrationText } from './utils/narration-loader.js';
+import { loadWhisperUrl } from './utils/server-config';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -86,23 +87,6 @@ function hashFile(filePath: string): string {
 function truncate(text: string, maxLen: number): string {
   if (text.length <= maxLen) return text;
   return text.substring(0, maxLen - 3) + '...';
-}
-
-// Load whisper server URL from server_config.json
-function loadWhisperUrl(): string {
-  const configPath = path.join(__dirname, '../../tts/server_config.json');
-  try {
-    if (fs.existsSync(configPath)) {
-      const configData = fs.readFileSync(configPath, 'utf-8');
-      const config = JSON.parse(configData);
-      if (config.whisper_url) {
-        return config.whisper_url;
-      }
-    }
-  } catch (error: any) {
-    console.warn(`Warning: Could not load server config: ${error.message}`);
-  }
-  return 'http://localhost:5001';
 }
 
 // ── Main ───────────────────────────────────────────────────────────

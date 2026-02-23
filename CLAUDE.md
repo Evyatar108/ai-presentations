@@ -137,6 +137,9 @@ Subtitle corrections: `public/audio/{demo-id}/subtitle-corrections.json` — map
 | `src/framework/hooks/useAudioTime.ts` | Raw useAudioTime() hook |
 | `src/framework/hooks/useWordHighlight.ts` | Karaoke word-level highlight hook |
 | `scripts/utils/tts-cache.ts` | TTS cache I/O — `TtsCacheStore` is the primary API for all cache operations |
+| `scripts/utils/server-config.ts` | TTS + WhisperX server URL loading from `tts/server_config.json` |
+| `scripts/utils/narration-cache.ts` | Per-demo narration cache (`narration-cache.json`) load/save/hash utilities |
+| `scripts/utils/alignment-io.ts` | Server-side alignment.json + subtitle-corrections.json I/O |
 | `scripts/utils/marker-parser.ts` | Shared parseMarkers() / stripMarkers() utilities |
 | `scripts/generate-alignment.ts` | Alignment generation + marker resolution script |
 | `tts/server_whisperx.py` | WhisperX server (transcription + forced alignment) |

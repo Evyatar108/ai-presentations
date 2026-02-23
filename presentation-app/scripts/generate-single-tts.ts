@@ -12,7 +12,15 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { TtsCacheStore } from './utils/tts-cache';
 import axios from 'axios';
-import * as crypto from 'crypto';
+import { loadTtsServerUrl } from './utils/server-config';
+import {
+  loadNarrationCache,
+  saveNarrationCache,
+  createEmptyCache,
+  hashNarrationSegment,
+  buildNarrationCacheKey,
+  updateSegmentEntry,
+} from './utils/narration-cache';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -26,23 +34,6 @@ interface SingleSegmentConfig {
   narrationText: string;
   serverUrl: string;
   instruct?: string;
-}
-
-// Load server config from JSON file
-function loadServerConfig(): string {
-  const configPath = path.join(__dirname, '../../tts/server_config.json');
-  try {
-    if (fs.existsSync(configPath)) {
-      const configData = fs.readFileSync(configPath, 'utf-8');
-      const config = JSON.parse(configData);
-      if (config.server_url) {
-        return config.server_url;
-      }
-    }
-  } catch (error: any) {
-    console.warn(`Warning: Could not load server config: ${error.message}`);
-  }
-  return 'http://localhost:5000';
 }
 
 // Generate TTS for a single segment
@@ -110,40 +101,16 @@ async function generateSingleSegment(config: SingleSegmentConfig): Promise<void>
       console.log('✅ Updated TTS cache');
 
       // Update narration cache
-      const narrationCacheFile = path.join(
-        __dirname,
-        '../public/narration',
-        config.demoId,
-        'narration-cache.json'
-      );
-
-      if (fs.existsSync(path.dirname(narrationCacheFile))) {
-        let narrationCache: any = {
-          version: '1.0',
-          generatedAt: new Date().toISOString(),
-          segments: {}
-        };
-
-        if (fs.existsSync(narrationCacheFile)) {
-          try {
-            narrationCache = JSON.parse(fs.readFileSync(narrationCacheFile, 'utf-8'));
-          } catch (error) {
-            console.warn('⚠️  Could not load narration cache, creating new entry');
-          }
-        }
-
-        const key = `ch${config.chapter}:s${config.slide}:${config.segmentId}`;
-        const hash = crypto.createHash('sha256').update(config.narrationText.trim()).digest('hex');
-
-        narrationCache.segments[key] = {
-          hash,
-          lastChecked: new Date().toISOString()
-        };
-        narrationCache.generatedAt = new Date().toISOString();
-
-        fs.writeFileSync(narrationCacheFile, JSON.stringify(narrationCache, null, 2));
-        console.log('✅ Updated narration cache');
+      let narrationCache = loadNarrationCache(config.demoId);
+      if (!narrationCache) {
+        narrationCache = createEmptyCache();
       }
+
+      const key = buildNarrationCacheKey(config.chapter, config.slide, config.segmentId);
+      const hash = hashNarrationSegment(config.narrationText, config.instruct);
+      updateSegmentEntry(narrationCache, key, hash);
+      saveNarrationCache(config.demoId, narrationCache);
+      console.log('✅ Updated narration cache');
 
       console.log('\n✅ Single segment TTS generation complete!\n');
     } else {
@@ -240,7 +207,7 @@ const config: SingleSegmentConfig = {
   segmentIndex: cliArgs.segmentIndex ?? 0,
   segmentId: cliArgs.segmentId!,
   narrationText: cliArgs.narrationText!,
-  serverUrl: process.env.TTS_SERVER_URL || loadServerConfig(),
+  serverUrl: process.env.TTS_SERVER_URL || loadTtsServerUrl(),
   instruct: cliArgs.instruct
 };
 

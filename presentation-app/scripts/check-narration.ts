@@ -11,9 +11,7 @@
  *   npm run check-narration -- --auto-regenerate  # Auto-regenerate without prompt
  */
 
-import * as fs from 'fs';
 import * as path from 'path';
-import * as crypto from 'crypto';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import * as readline from 'readline';
@@ -21,24 +19,16 @@ import { getArg, hasFlag } from './utils/cli-parser';
 import { getNarrationDemoIds } from './utils/demo-discovery';
 import { loadNarrationJson } from './utils/narration-loader';
 import type { NarrationData } from './utils/narration-loader';
+import {
+  loadNarrationCache,
+  hashNarrationSegment,
+  type NarrationCache,
+  type NarrationCacheEntry,
+} from './utils/narration-cache';
 
 // ES module __dirname equivalent
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-
-// Cache structure
-interface NarrationCacheEntry {
-  hash: string;
-  lastChecked: string;
-}
-
-interface NarrationCache {
-  version: string;
-  generatedAt: string;
-  segments: {
-    [key: string]: NarrationCacheEntry;
-  };
-}
 
 // Change detection types
 interface NarrationChange {
@@ -64,32 +54,6 @@ interface ChangeDetectionResult {
 }
 
 /**
- * Generate SHA-256 hash for narration text
- */
-function hashNarrationText(text: string): string {
-  return crypto.createHash('sha256').update(text.trim()).digest('hex');
-}
-
-/**
- * Load narration-cache.json for a demo
- */
-function loadNarrationCache(demoId: string, narrationDir: string): NarrationCache | null {
-  const cachePath = path.join(narrationDir, demoId, 'narration-cache.json');
-  
-  if (!fs.existsSync(cachePath)) {
-    return null;
-  }
-  
-  try {
-    const content = fs.readFileSync(cachePath, 'utf-8');
-    return JSON.parse(content) as NarrationCache;
-  } catch (error: any) {
-    console.error(`  ⚠️  Failed to parse cache for "${demoId}": ${error.message}`);
-    return null;
-  }
-}
-
-/**
  * Compare narration.json with cache and detect changes
  */
 function detectChanges(
@@ -110,6 +74,7 @@ function detectChanges(
     for (const slide of narrationData.slides) {
       for (const segment of slide.segments) {
         const key = `ch${slide.chapter}:s${slide.slide}:${segment.id}`;
+        const resolvedInstruct = segment.instruct ?? slide.instruct ?? narrationData.instruct;
         changes.push({
           demoId,
           chapter: slide.chapter,
@@ -117,7 +82,7 @@ function detectChanges(
           segmentId: segment.id,
           key,
           changeType: 'new',
-          currentHash: hashNarrationText(segment.narrationText),
+          currentHash: hashNarrationSegment(segment.narrationText, resolvedInstruct),
           narrationText: segment.narrationText
         });
         processedKeys.add(key);
@@ -125,12 +90,13 @@ function detectChanges(
     }
     return { changes, unchangedCount: 0 };
   }
-  
+
   // Check each segment in narration.json
   for (const slide of narrationData.slides) {
     for (const segment of slide.segments) {
       const key = `ch${slide.chapter}:s${slide.slide}:${segment.id}`;
-      const currentHash = hashNarrationText(segment.narrationText);
+      const resolvedInstruct = segment.instruct ?? slide.instruct ?? narrationData.instruct;
+      const currentHash = hashNarrationSegment(segment.narrationText, resolvedInstruct);
       const cachedEntry = cache.segments[key];
       
       processedKeys.add(key);

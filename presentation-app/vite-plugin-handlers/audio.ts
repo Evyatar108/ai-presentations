@@ -15,6 +15,7 @@ import {
   type SaveAudioRequest,
 } from './types';
 import { TtsCacheStore } from '../scripts/utils/tts-cache';
+import { loadSubtitleCorrections, saveSubtitleCorrections } from '../scripts/utils/alignment-io';
 
 /** Route descriptor returned to the main plugin for registration. */
 export interface AudioRoute {
@@ -105,13 +106,8 @@ export function createAudioHandlers(ctx: HandlerContext): AudioRoute[] {
         throw new Error('Invalid demoId');
       }
 
-      const filePath = path.join(projectRoot, 'public', 'audio', q.demoId, 'subtitle-corrections.json');
-      if (!fs.existsSync(filePath)) {
-        sendJson(res, 200, { corrections: {} });
-        return;
-      }
-
-      const corrections = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+      const audioDir = path.join(projectRoot, 'public', 'audio');
+      const corrections = loadSubtitleCorrections(q.demoId, audioDir);
       sendJson(res, 200, { corrections });
     } catch (error: any) {
       console.error('[subtitle-corrections] Read error:', error);
@@ -134,13 +130,8 @@ export function createAudioHandlers(ctx: HandlerContext): AudioRoute[] {
         throw new Error('Invalid demoId');
       }
 
-      const audioDir = path.join(projectRoot, 'public', 'audio', data.demoId);
-      if (!fs.existsSync(audioDir)) {
-        fs.mkdirSync(audioDir, { recursive: true });
-      }
-
-      const filePath = path.join(audioDir, 'subtitle-corrections.json');
-      fs.writeFileSync(filePath, JSON.stringify(data.corrections, null, 2) + '\n');
+      const audioDir = path.join(projectRoot, 'public', 'audio');
+      saveSubtitleCorrections(data.demoId, data.corrections, audioDir);
 
       console.log(`[subtitle-corrections] Saved ${Object.keys(data.corrections).length} corrections for ${data.demoId}`);
       sendJson(res, 200, { success: true });

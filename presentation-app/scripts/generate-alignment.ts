@@ -20,6 +20,11 @@ import type { AlignedWord, ResolvedMarker, SegmentAlignment, DemoAlignment } fro
 import { getArg, hasFlag, parseSegmentFilter, buildSegmentKey, chunkArray } from './utils/cli-parser';
 import { loadDemoSlides } from './utils/demo-discovery';
 import { loadNarrationJson, getNarrationText } from './utils/narration-loader';
+import { loadWhisperUrl } from './utils/server-config';
+import { getAlignmentPath, loadAlignmentData, saveAlignmentData } from './utils/alignment-io';
+
+// Re-export for external importers (e.g., generate-tts.ts previously imported from here)
+export { loadWhisperUrl } from './utils/server-config';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -54,20 +59,6 @@ interface SegmentToAlign {
 function hashFile(filePath: string): string {
   const content = fs.readFileSync(filePath);
   return crypto.createHash('sha256').update(content).digest('hex');
-}
-
-export function loadWhisperUrl(): string {
-  const configPath = path.join(__dirname, '../../tts/server_config.json');
-  try {
-    if (fs.existsSync(configPath)) {
-      const configData = fs.readFileSync(configPath, 'utf-8');
-      const config = JSON.parse(configData);
-      if (config.whisper_url) return config.whisper_url;
-    }
-  } catch (error: any) {
-    console.warn(`Warning: Could not load server config: ${error.message}`);
-  }
-  return 'http://localhost:5001';
 }
 
 function buildSlideKey(chapter: number, slide: number): string {
@@ -156,14 +147,10 @@ export async function generateAlignment(config: AlignConfig) {
   console.log();
 
   // Load existing alignment data (for cache checking)
-  const alignmentPath = path.join(config.audioDir, config.demoFilter, 'alignment.json');
+  const alignmentPath = getAlignmentPath(config.demoFilter, config.audioDir);
   let existingAlignment: DemoAlignment | null = null;
-  if (fs.existsSync(alignmentPath) && !config.force) {
-    try {
-      existingAlignment = JSON.parse(fs.readFileSync(alignmentPath, 'utf-8'));
-    } catch {
-      existingAlignment = null;
-    }
+  if (!config.force) {
+    existingAlignment = loadAlignmentData(config.demoFilter, config.audioDir);
   }
 
   // Collect segments to align
@@ -285,7 +272,7 @@ export async function generateAlignment(config: AlignConfig) {
 
   if (segmentsToAlign.length === 0 && skippedCount > 0) {
     // Write alignment file (preserves cached data)
-    fs.writeFileSync(alignmentPath, JSON.stringify(alignment, null, 2));
+    saveAlignmentData(config.demoFilter, alignment, config.audioDir);
     console.log(`\u2705 All segments already aligned (use --force to re-align)\n`);
     console.log(`\ud83d\udcbe Alignment saved: ${path.relative(path.join(__dirname, '..'), alignmentPath)}`);
     return;
@@ -385,9 +372,7 @@ export async function generateAlignment(config: AlignConfig) {
   }
 
   // Write alignment file
-  const alignDir = path.dirname(alignmentPath);
-  fs.mkdirSync(alignDir, { recursive: true });
-  fs.writeFileSync(alignmentPath, JSON.stringify(alignment, null, 2));
+  saveAlignmentData(config.demoFilter, alignment, config.audioDir);
 
   console.log('\n' + '\u2550'.repeat(60));
   console.log('\ud83d\udcca Alignment Summary');

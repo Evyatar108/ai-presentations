@@ -1,9 +1,14 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import * as crypto from 'crypto';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
+import {
+  hashNarrationSegment,
+  buildNarrationCacheKey,
+  type NarrationCache,
+  type NarrationCacheEntry,
+} from './utils/narration-cache';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -37,20 +42,6 @@ interface NarrationJSON {
   slides: NarrationSlide[];
 }
 
-// Cache structure
-interface NarrationCacheEntry {
-  hash: string;
-  lastChecked: string;
-}
-
-interface NarrationCache {
-  version: string;
-  generatedAt: string;
-  segments: {
-    [key: string]: NarrationCacheEntry;
-  };
-}
-
 // Get all demo IDs by scanning the demos directory
 async function getAllDemoIds(demosDir: string): Promise<string[]> {
   const entries = fs.readdirSync(demosDir, { withFileTypes: true });
@@ -75,11 +66,6 @@ async function loadDemoSlides(demoId: string, demosDir: string): Promise<SlideCo
     console.warn(`⚠️  Could not load slides for demo '${demoId}': ${error.message}`);
     return [];
   }
-}
-
-// Generate SHA-256 hash for text
-function generateHash(text: string): string {
-  return crypto.createHash('sha256').update(text).digest('hex');
 }
 
 // Extract narration from slides
@@ -139,9 +125,9 @@ async function extractNarration(demoId: string, demosDir: string): Promise<{
       
       narrationSlide.segments.push(narrationSegment);
       
-      // Generate cache entry
-      const cacheKey = `ch${chapter}:s${slide}:${segment.id}`;
-      const hash = generateHash(segment.narrationText);
+      // Generate cache entry (inline demos — instruct lives in metadata.ts, not narration.json)
+      const cacheKey = buildNarrationCacheKey(chapter, slide, segment.id);
+      const hash = hashNarrationSegment(segment.narrationText);
       
       cacheSegments[cacheKey] = {
         hash,

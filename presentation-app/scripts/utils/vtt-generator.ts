@@ -11,13 +11,7 @@
  */
 
 import * as fs from 'fs';
-import * as path from 'path';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-import type { DemoAlignment } from '../../src/framework/alignment/types';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import { loadAlignmentData, loadSubtitleCorrections } from './alignment-io';
 
 // ── Types ──────────────────────────────────────────────────────────
 
@@ -35,27 +29,6 @@ export interface VideoWord {
   ttsWord?: string;  // TTS form (only present when different from display)
   start: number;     // video time (seconds)
   end: number;       // video time (seconds)
-}
-
-/**
- * Load per-demo subtitle corrections from public/audio/{demoId}/subtitle-corrections.json.
- * The file maps TTS pronunciation spellings (lowercase keys) to correct display forms.
- *
- * Example file:
- * {
- *   "kwen": "Qwen",
- *   "evyatar": "Evyatar",
- *   "l-l-m": "LLM"
- * }
- */
-function loadSubtitleCorrections(demoId: string): Record<string, string> {
-  const filePath = path.join(__dirname, `../../public/audio/${demoId}/subtitle-corrections.json`);
-  if (!fs.existsSync(filePath)) return {};
-  try {
-    return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-  } catch {
-    return {};
-  }
 }
 
 /**
@@ -105,16 +78,6 @@ function formatVttTime(seconds: number): string {
   const m = Math.floor((seconds % 3600) / 60);
   const s = seconds % 60;
   return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toFixed(3).padStart(6, '0')}`;
-}
-
-function loadAlignmentData(demoId: string): DemoAlignment | null {
-  const alignmentPath = path.join(__dirname, `../../public/audio/${demoId}/alignment.json`);
-  if (!fs.existsSync(alignmentPath)) return null;
-  try {
-    return JSON.parse(fs.readFileSync(alignmentPath, 'utf-8'));
-  } catch {
-    return null;
-  }
 }
 
 // ── Words data generation ──────────────────────────────────────────

@@ -6,9 +6,18 @@ import axios from 'axios';
 import * as crypto from 'crypto';
 import { AudioSegment, SlideComponentWithMetadata } from '@framework/slides/SlideMetadata';
 import { runDurationCalculation } from './calculate-durations';
-import { generateAlignment, loadWhisperUrl } from './generate-alignment';
+import { generateAlignment } from './generate-alignment';
+import { loadTtsServerUrl, loadWhisperUrl } from './utils/server-config';
 import { stripMarkers } from './utils/marker-parser';
 import { TtsCacheStore, normalizeCachePath } from './utils/tts-cache';
+import {
+  loadNarrationCache,
+  saveNarrationCache,
+  createEmptyCache,
+  hashNarrationSegment,
+  buildNarrationCacheKey,
+  updateSegmentEntry,
+} from './utils/narration-cache';
 import { getArg, hasFlag, parseSegmentFilter, buildSegmentKey, chunkArray } from './utils/cli-parser';
 import { getAllDemoIds, loadDemoSlides } from './utils/demo-discovery';
 import { loadNarrationJson, getNarrationText, getNarrationInstruct } from './utils/narration-loader';
@@ -44,58 +53,28 @@ interface SegmentToGenerate {
 
 
 // Update narration cache after successful TTS generation
-function updateNarrationCache(
+function updateNarrationCacheForDemo(
   demoId: string,
   slides: SlideComponentWithMetadata[]
 ): void {
-  const cacheFile = path.join(__dirname, `../public/narration/${demoId}/narration-cache.json`);
-  const cacheDir = path.dirname(cacheFile);
-  
-  // Ensure directory exists
-  if (!fs.existsSync(cacheDir)) {
-    fs.mkdirSync(cacheDir, { recursive: true });
+  let cache = loadNarrationCache(demoId);
+  if (!cache) {
+    cache = createEmptyCache();
   }
-  
-  let cache = {
-    version: '1.0',
-    generatedAt: new Date().toISOString(),
-    segments: {} as Record<string, { hash: string; lastChecked: string }>
-  };
-  
-  // Load existing cache if present
-  if (fs.existsSync(cacheFile)) {
-    try {
-      const content = fs.readFileSync(cacheFile, 'utf-8');
-      cache = JSON.parse(content);
-    } catch (error) {
-      console.warn(`⚠️  Could not parse existing narration cache, creating new one`);
-    }
-  }
-  
-  // Update with new hashes from slides (include instruct in hash)
-  // Strip markers before hashing — markers don't affect TTS audio
+
   for (const slide of slides) {
     for (const segment of slide.metadata.audioSegments) {
       if (!segment.narrationText) continue;
 
-      const key = `ch${slide.metadata.chapter}:s${slide.metadata.slide}:${segment.id}`;
+      const key = buildNarrationCacheKey(slide.metadata.chapter, slide.metadata.slide, segment.id);
       const resolvedInstruct = segment.instruct ?? slide.metadata.instruct ?? '';
-      const hash = crypto.createHash('sha256')
-        .update(stripMarkers(segment.narrationText).trim() + '\0' + resolvedInstruct)
-        .digest('hex');
-
-      cache.segments[key] = {
-        hash,
-        lastChecked: new Date().toISOString()
-      };
+      const hash = hashNarrationSegment(segment.narrationText, resolvedInstruct);
+      updateSegmentEntry(cache, key, hash);
     }
   }
-  
-  cache.generatedAt = new Date().toISOString();
-  
-  // Write to file
-  fs.writeFileSync(cacheFile, JSON.stringify(cache, null, 2), 'utf-8');
-  console.log(`✅ Updated narration cache: ${path.relative(path.join(__dirname, '..'), cacheFile)}`);
+
+  saveNarrationCache(demoId, cache);
+  console.log(`✅ Updated narration cache: public/narration/${demoId}/narration-cache.json`);
 }
 
 // Scan for orphaned audio files and cache entries for a specific demo
@@ -571,7 +550,7 @@ async function saveResults(
     for (const demoId of demosToProcess) {
       const allSlides = await loadDemoSlides(demoId);
       if (allSlides.length > 0) {
-        updateNarrationCache(demoId, allSlides);
+        updateNarrationCacheForDemo(demoId, allSlides);
       }
     }
     console.log();
@@ -808,23 +787,6 @@ async function generateTTS(config: TTSConfig) {
   await saveResults(config, store, demosToProcess, { totalGenerated, totalDeleted, totalRenamed });
 }
 
-// Load server config from JSON file
-function loadServerConfig(): string {
-  const configPath = path.join(__dirname, '../../tts/server_config.json');
-  try {
-    if (fs.existsSync(configPath)) {
-      const configData = fs.readFileSync(configPath, 'utf-8');
-      const config = JSON.parse(configData);
-      if (config.server_url) {
-        return config.server_url;
-      }
-    }
-  } catch (error: any) {
-    console.warn(`Warning: Could not load server config: ${error.message}`);
-  }
-  return 'http://localhost:5000';
-}
-
 // CLI execution
 const cliArgs = (() => {
   const demoFilter = getArg('demo');
@@ -850,7 +812,7 @@ const cliArgs = (() => {
   };
 })();
 const config: TTSConfig = {
-  serverUrl: process.env.TTS_SERVER_URL || loadServerConfig(),
+  serverUrl: process.env.TTS_SERVER_URL || loadTtsServerUrl(),
   outputDir: path.join(__dirname, '../public/audio'),
   skipExisting: cliArgs.skipExisting,
   batchSize: parseInt(process.env.BATCH_SIZE || '10', 10),

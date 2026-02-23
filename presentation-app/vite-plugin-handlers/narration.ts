@@ -16,6 +16,12 @@ import { execSync } from 'child_process';
 import type { Connect } from 'vite';
 import { TtsCacheStore } from '../scripts/utils/tts-cache';
 import {
+  loadNarrationCache,
+  saveNarrationCache,
+  createEmptyCache,
+  updateSegmentEntry,
+} from '../scripts/utils/narration-cache';
+import {
   readJsonBody,
   sendJson,
   parseQuery,
@@ -77,23 +83,14 @@ export function createNarrationHandlers(ctx: HandlerContext): NarrationRoute[] {
         throw new Error('Missing required fields: demoId, segment');
       }
 
-      const narrationDir = path.join(projectRoot, 'public', 'narration', data.demoId);
-      if (!fs.existsSync(narrationDir)) {
-        fs.mkdirSync(narrationDir, { recursive: true });
+      const narrationDir = path.join(projectRoot, 'public', 'narration');
+      let cache = loadNarrationCache(data.demoId, narrationDir);
+      if (!cache) {
+        cache = createEmptyCache();
       }
 
-      const cacheFile = path.join(narrationDir, 'narration-cache.json');
-      let cache: Record<string, any> = {};
-      if (fs.existsSync(cacheFile)) {
-        try { cache = JSON.parse(fs.readFileSync(cacheFile, 'utf-8')); }
-        catch { cache = {}; }
-      }
-
-      cache[data.segment.key] = {
-        hash: data.segment.hash,
-        timestamp: data.segment.timestamp
-      };
-      fs.writeFileSync(cacheFile, JSON.stringify(cache, null, 2));
+      updateSegmentEntry(cache, data.segment.key, data.segment.hash);
+      saveNarrationCache(data.demoId, cache, narrationDir);
 
       console.log(`[narration] Updated cache for ${data.segment.key}`);
       sendJson(res, 200, { success: true });

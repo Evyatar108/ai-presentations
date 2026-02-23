@@ -6,6 +6,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import type { Connect } from 'vite';
 import { TtsCacheStore } from '../scripts/utils/tts-cache';
+import { loadAlignmentData, getAlignmentPath } from '../scripts/utils/alignment-io';
 import {
   sendJson,
   parseQuery,
@@ -38,7 +39,7 @@ export function createStalenessHandlers(ctx: HandlerContext): StalenessRoute[] {
       }
 
       const narrationFile = path.join(projectRoot, 'public', 'narration', q.demoId, 'narration.json');
-      const alignmentFile = path.join(projectRoot, 'public', 'audio', q.demoId, 'alignment.json');
+      const audioDir = path.join(projectRoot, 'public', 'audio');
 
       // If no narration.json, nothing is stale
       if (!fs.existsSync(narrationFile)) {
@@ -70,13 +71,13 @@ export function createStalenessHandlers(ctx: HandlerContext): StalenessRoute[] {
       const missingMarkers: Array<{ segment: string; markerId: string }> = [];
 
       if (expectedMarkers.length > 0) {
-        if (!fs.existsSync(alignmentFile)) {
+        const alignment = loadAlignmentData(q.demoId, audioDir);
+        if (!alignment) {
           alignmentMissing = true;
           for (const em of expectedMarkers) {
             missingMarkers.push({ segment: `${em.slideKey}:${em.segmentId}`, markerId: em.markerId });
           }
         } else {
-          const alignment = JSON.parse(fs.readFileSync(alignmentFile, 'utf-8'));
           const resolvedMarkers = new Map<string, Set<string>>();
           for (const [slideKey, slideData] of Object.entries(alignment.slides as Record<string, any>)) {
             for (const seg of slideData.segments) {
