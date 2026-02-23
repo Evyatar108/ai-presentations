@@ -12,6 +12,10 @@
 
 | Component | Category | Source | Summary |
 |-----------|----------|--------|---------|
+| Callout | Layout Cards | `framework/components/Callout.tsx` | Left-bordered callout box (info/tip/warning/error/success) |
+| NumberedStepCard | Layout Cards | `framework/components/NumberedStepCard.tsx` | Numbered step with circle badge + active state |
+| ComparisonTable | Comparison | `framework/components/ComparisonTable.tsx` | Color-coded comparison table |
+| FieldCard | Layout Cards | `framework/components/FieldCard.tsx` | Left-accent card with monospace name + badge |
 | CodeBlock | Data Display | `framework/components/CodeBlock.tsx` | Syntax-highlighted code with line numbers |
 | MetricTile | Data Display | `framework/components/MetricTile.tsx` | Before/after metric comparison tile |
 | MetricDisplay | Data Display | `framework/slides/SlideLayouts.tsx` | Single animated metric value |
@@ -174,7 +178,127 @@ import { BeforeAfterSplit, CodeBlock } from '@framework';
 
 ---
 
+### ComparisonTable
+
+Theme-aware table with styled headers and color-coded columns. The first column is treated as the label column (uses `textPrimary` regardless of color). Remaining columns use their respective `color` from the column definition.
+
+**Source:** `src/framework/components/ComparisonTable.tsx`
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `columns` | `ComparisonColumn[]` | *required* | Column definitions with header + optional color |
+| `rows` | `string[][]` | *required* | Row data (array of string arrays) |
+| `fontSize` | `number` | `13` | Font size in pixels |
+| `style` | `CSSProperties` | — | Style overrides for the table element |
+
+```tsx
+import { ComparisonTable, useTheme } from '@framework';
+
+const theme = useTheme();
+<ComparisonTable
+  columns={[
+    { header: 'Aspect' },
+    { header: 'V1', color: theme.colors.warning },
+    { header: 'V2', color: theme.colors.primary },
+  ]}
+  rows={[
+    ['Speaker', 'Per-utterance key', 'Once per turn'],
+    ['Timestamps', 'Start + End per row', 'Omitted'],
+  ]}
+/>
+```
+
+**Tips:** Uses monospace font by default. Pair with `BeforeAfterSplit` above and a `ComparisonTable` below for a full comparison slide.
+
+---
+
 ## Layout Cards
+
+### Callout
+
+Left-bordered, tinted-background box for tips, warnings, and insights. Theme-aware via `useTheme()`. Not animated — compose with `<Reveal>` externally.
+
+**Source:** `src/framework/components/Callout.tsx`
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `'info' \| 'tip' \| 'warning' \| 'error' \| 'success'` | `'info'` | Color variant |
+| `icon` | `string` | per-variant | Emoji/text icon; pass `""` to suppress |
+| `children` | `ReactNode` | *required* | Callout content |
+| `style` | `CSSProperties` | — | Style overrides |
+
+```tsx
+import { Callout } from '@framework';
+
+<Callout variant="info">Key insight here</Callout>
+<Callout variant="warning" icon="">No icon callout</Callout>
+```
+
+**Tips:** Use `icon=""` to suppress the default icon for text-heavy callouts. A matching `calloutStyle(variant)` function is available for inline use without the component.
+
+---
+
+### NumberedStepCard
+
+Numbered step card with a circle badge, title, and optional description. Supports active highlighting and an error variant.
+
+**Source:** `src/framework/components/NumberedStepCard.tsx`
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `number` | `number` | *required* | Number shown in the badge |
+| `title` | `string` | *required* | Step title |
+| `description` | `string` | — | Detail text below title |
+| `isActive` | `boolean` | `false` | Primary gradient highlight when active |
+| `variant` | `'default' \| 'error'` | `'default'` | Error variant uses red badge gradient |
+| `style` | `CSSProperties` | — | Style overrides |
+
+```tsx
+import { NumberedStepCard, useSegmentedAnimation } from '@framework';
+
+const { currentSegmentIndex } = useSegmentedAnimation();
+<NumberedStepCard
+  number={1}
+  title="Parse input"
+  description="Extract tokens from raw text"
+  isActive={currentSegmentIndex === 1}
+/>
+```
+
+**Tips:** Uses `useTheme()` and `useReducedMotion()` internally. When `variant='error'` and `isActive=true`, the card background/border/glow use error colors instead of primary.
+
+---
+
+### FieldCard
+
+Left-accent-bordered card with a monospace name, optional badge, and description. Generalized version of the demo-specific `MarkerFieldCard`.
+
+**Source:** `src/framework/components/FieldCard.tsx`
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `name` | `string` | *required* | Field name (rendered monospace) |
+| `description` | `string` | — | Description text |
+| `badge` | `{ text: string; color?: string; bg?: string }` | — | Optional badge label |
+| `accentColor` | `string` | `theme.colors.primary` | Left border accent color |
+| `dimmed` | `boolean` | `false` | Reduces opacity to 0.15 |
+| `compact` | `boolean` | `false` | Tighter padding and smaller font |
+| `style` | `CSSProperties` | — | Style overrides |
+
+```tsx
+import { FieldCard } from '@framework';
+
+<FieldCard
+  name="abstractive_topics"
+  description="1-7 topics with narration"
+  badge={{ text: 'V1: Call 1', color: '#fbbf24', bg: 'rgba(251,191,36,0.15)' }}
+  accentColor="#fbbf24"
+/>
+```
+
+**Tips:** Marker integration stays external — wrap with `useMarker()` logic in a demo-specific component (see `MarkerFieldCard` in highlights-deep-dive for an example).
+
+---
 
 ### ContentCard
 
@@ -408,6 +532,41 @@ import { ArrowRight } from '../slides/SlideIcons';
 
 - **CodeBlock** is a good template for data-display components (theme colors, reduced motion, animation entrance)
 - **PipelineDiagram** is a good template for visualization components (progressive reveal, active/past states, arrow connectors)
+
+---
+
+## Style Utilities
+
+Beyond components, the framework provides style factories and design tokens for common patterns. Import from `@framework`.
+
+### Style Factories (`SlideStyles.ts`)
+
+| Function | Returns | Description |
+|----------|---------|-------------|
+| `cardStyle(variant?)` | `CSSProperties` | Card with variant-colored background/border (`'default'`, `'primary'`, `'error'`, `'warning'`, `'success'`) |
+| `calloutStyle(variant?)` | `CSSProperties` | Left-bordered box (`'info'`, `'tip'`, `'warning'`, `'error'`, `'success'`) |
+| `badgeStyle(options?)` | `CSSProperties` | Compact tag/label (`{ color?, bg? }`) |
+| `circularBadge(size?)` | `CSSProperties` | Numbered circle badge |
+| `layouts.flexRow(gap?)` | `CSSProperties` | Centered flex row |
+| `layouts.flexCol(gap?)` | `CSSProperties` | Flex column |
+| `layouts.grid2Col(gap?)` | `CSSProperties` | 2-column grid |
+| `layouts.grid3Col(gap?)` | `CSSProperties` | 3-column grid |
+
+Theme-aware counterparts: `createCard(theme, variant)`, `createCallout(theme, variant)`.
+
+### Design Tokens (`tokens.ts`)
+
+Structural constants independent of the color theme:
+
+```ts
+import { spacing, spacingPx, radii, shadows, fontSizes } from '@framework';
+
+spacing.lg    // '1rem'
+spacingPx.lg  // 16
+radii.xl      // 12
+shadows.md    // '0 0 20px'
+fontSizes.lg  // 14
+```
 
 ---
 
