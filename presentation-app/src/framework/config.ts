@@ -11,7 +11,7 @@ export interface FrameworkConfig {
 }
 
 export const defaultConfig: FrameworkConfig = {
-  narrationApiBaseUrl: '',
+  narrationApiBaseUrl: 'http://localhost:3001',
   fallbackAudioPath: '/audio/silence-1s.wav',
 };
 
