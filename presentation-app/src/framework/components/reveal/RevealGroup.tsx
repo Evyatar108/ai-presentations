@@ -148,6 +148,17 @@ export const RevealGroup: React.FC<RevealGroupProps> = ({
     };
   }, [sequence, containerVariants]);
 
+  // When stagger is enabled, apply a default flex-column + gap layout
+  // so children are spaced naturally. Callers can override via `style`.
+  const staggerStyle = stagger
+    ? {
+        display: 'flex' as const,
+        flexDirection: 'column' as const,
+        gap: '0.75rem',
+        ...style,
+      }
+    : style;
+
   const childContent = stagger
     ? React.Children.map(children, (child) =>
         child != null ? (
@@ -178,7 +189,7 @@ export const RevealGroup: React.FC<RevealGroupProps> = ({
           }
         }}
         className={className}
-        style={style}
+        style={staggerStyle}
       >
         {childContent}
       </MotionElement>
@@ -197,7 +208,7 @@ export const RevealGroup: React.FC<RevealGroupProps> = ({
           animate="visible"
           exit={exitVariant}
           className={className}
-          style={style}
+          style={staggerStyle}
         >
           {childContent}
         </MotionElement>
