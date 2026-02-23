@@ -10,7 +10,7 @@ import type { PartialTheme } from './framework/theme/types';
 
 // ---- Framework config overrides (uncomment to customize) ----
 // setProjectConfig({
-//   narrationApiBaseUrl: 'http://localhost:3001',
+//   narrationApiBaseUrl: 'http://localhost:3001',  // only needed if using standalone Express server
 //   fallbackAudioPath: '/audio/silence-1s.mp3',
 // });
 

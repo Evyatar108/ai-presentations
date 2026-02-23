@@ -20,7 +20,7 @@ describe('config', () => {
 
   describe('defaultConfig', () => {
     it('has expected default values', () => {
-      expect(defaultConfig.narrationApiBaseUrl).toBe('http://localhost:3001');
+      expect(defaultConfig.narrationApiBaseUrl).toBe('');
       expect(defaultConfig.fallbackAudioPath).toBe('/audio/silence-1s.wav');
     });
   });
@@ -41,7 +41,7 @@ describe('config', () => {
     it('overrides fallbackAudioPath', () => {
       setProjectConfig({ fallbackAudioPath: '/custom/silence.mp3' });
       expect(getConfig().fallbackAudioPath).toBe('/custom/silence.mp3');
-      expect(getConfig().narrationApiBaseUrl).toBe('http://localhost:3001');
+      expect(getConfig().narrationApiBaseUrl).toBe('');
     });
 
     it('overrides all fields', () => {

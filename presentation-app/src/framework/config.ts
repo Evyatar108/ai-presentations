@@ -4,14 +4,14 @@
  */
 
 export interface FrameworkConfig {
-  /** Base URL for the narration API server (default: 'http://localhost:3001') */
+  /** Base URL for the narration API server (default: '' for same-origin Vite plugin) */
   narrationApiBaseUrl: string;
   /** Path to fallback silence audio file (default: '/audio/silence-1s.wav') */
   fallbackAudioPath: string;
 }
 
 export const defaultConfig: FrameworkConfig = {
-  narrationApiBaseUrl: 'http://localhost:3001',
+  narrationApiBaseUrl: '',
   fallbackAudioPath: '/audio/silence-1s.wav',
 };
 
