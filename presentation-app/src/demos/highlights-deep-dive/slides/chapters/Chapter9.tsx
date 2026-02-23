@@ -6,6 +6,7 @@ import {
   SlideContainer,
   SlideTitle,
   MetricDisplay,
+  AnimatedCounter,
   Callout,
   Reveal,
   RevealContext,
@@ -23,9 +24,9 @@ import {
 // ---------- Slide 1: Metrics ----------
 
 const METRICS = [
-  { value: '75%', label: 'LLM Call Reduction', detail: '4 calls \u2192 1 call', emphasis: true },
-  { value: '60%', label: 'Token Reduction', detail: 'Compact table + unified prompt' },
-  { value: '~70%', label: 'GPU Reduction', detail: '~600 \u2192 ~180 A100s' }
+  { value: <AnimatedCounter to={75} suffix="%" />, label: 'LLM Call Reduction', detail: '4 calls \u2192 1 call', emphasis: true },
+  { value: <AnimatedCounter to={60} suffix="%" />, label: 'Token Reduction', detail: 'Compact table + unified prompt' },
+  { value: <AnimatedCounter to={70} suffix="%" prefix="~" />, label: 'GPU Reduction', detail: '~600 \u2192 ~180 A100s' }
 ];
 
 const Ch9_S1_MetricsComponent: React.FC = () => {

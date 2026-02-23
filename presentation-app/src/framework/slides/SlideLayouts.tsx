@@ -183,7 +183,7 @@ export const SlideTitle: React.FC<SlideTitleProps> = ({
 );
 
 export interface MetricDisplayProps {
-  value: string | number;
+  value: React.ReactNode;
   label: string;
   reduced: boolean;
   emphasis?: boolean;
