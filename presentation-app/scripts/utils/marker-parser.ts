@@ -156,5 +156,6 @@ export function parseMarkers(text: string): ParseMarkersResult {
  * Check if narration text contains any markers.
  */
 export function hasMarkers(text: string): boolean {
+  ANY_MARKER_RE.lastIndex = 0;
   return ANY_MARKER_RE.test(text);
 }
