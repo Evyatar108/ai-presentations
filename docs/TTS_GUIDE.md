@@ -103,7 +103,7 @@ Do you want to regenerate these files? (y/n)
 
 Answer `y` to regenerate automatically (this also auto-chains `tts:align` for demos with unresolved markers or changed audio), or `n` to skip.
 
-If you skip, a **staleness overlay** appears in the browser when you open a demo in manual mode, showing unresolved markers and changed segments with a one-click **Regenerate** button.
+If you skip, a **staleness review panel** appears in the browser when you open a demo in manual mode, listing each changed segment with per-segment **Play**, **Regen**, and **Edit** buttons plus a **Fix All** button for batch TTS + alignment.
 
 ### Skip Cache Check
 

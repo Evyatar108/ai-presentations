@@ -132,7 +132,7 @@ Segments and markers operate at different granularities and compose naturally:
 
 When `alignment.json` is missing, `<RevealAtMarker>` degrades gracefully by rendering children immediately.
 
-In dev mode, a **staleness overlay** (`StalenessWarning`) appears when the demo has unresolved markers or changed narration segments. It checks `/api/staleness-check` on mount and offers a one-click **Regenerate** button that runs `tts:generate` + `tts:align` via `/api/narration/regenerate-demo`, then reloads alignment data. The `npm run dev` startup script also auto-chains `tts:align` after `tts:generate` when you accept regeneration.
+In dev mode, a **staleness review panel** (`StalenessWarning`) appears when the demo has unresolved markers or changed narration segments. It checks `/api/staleness-check` on mount and lists each changed segment with per-segment **Play**, **Regen**, and **Edit** actions. **Fix All** regenerates all stale segments (via batch TTS when the "Batch TTS" checkbox is enabled) and runs full-demo alignment, then reloads alignment data. The **Edit** button opens `NarrationEditModal` (which also supports editing the TTS `instruct` string). The `npm run dev` startup script also auto-chains `tts:align` after `tts:generate` when you accept regeneration.
 
 ## Benefits
 

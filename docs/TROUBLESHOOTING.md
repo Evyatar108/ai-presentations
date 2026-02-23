@@ -71,15 +71,16 @@
 **What it means**: The narration text or markers have changed but the TTS audio or alignment data hasn't been regenerated yet. This can happen when you edit `narration.json` and skip the `npm run dev` regeneration prompt.
 
 **Solutions**:
-1. Click **Regenerate** on the banner — runs TTS generation + alignment automatically
-2. Click **Dismiss** to hide the banner for the current session (reappears on page refresh)
-3. Or run manually:
+1. Use the per-segment actions: **Play** existing audio, **Regen** a single segment, or **Edit** to open the full narration editor
+2. Click **Fix All** to regenerate all stale segments + run full-demo alignment (enable "Batch TTS" checkbox for faster GPU-batched generation)
+3. Click **Dismiss** to hide the panel for the current session (reappears on page refresh)
+4. Or run manually:
    ```bash
    npm run tts:generate -- --demo {demo-id}
    npm run tts:align -- --demo {demo-id} --force
    ```
 
-**Notes**: The banner only appears in dev mode and only in manual mode (hidden during narrated playback). The `npm run dev` startup check also auto-chains `tts:align` after `tts:generate` when you accept regeneration.
+**Notes**: The panel only appears in dev mode and only in manual mode (hidden during narrated playback). The `npm run dev` startup check also auto-chains `tts:align` after `tts:generate` when you accept regeneration.
 
 ## Demo Issues
 

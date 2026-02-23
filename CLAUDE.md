@@ -127,8 +127,8 @@ Subtitle corrections: `public/audio/{demo-id}/subtitle-corrections.json` — map
 | `src/framework/hooks/useApiHealth.ts` | Backend API health check |
 | `src/framework/hooks/useNarrationEditor.ts` | Narration editing workflow |
 | `src/framework/hooks/useFocusTrap.ts` | Keyboard focus trap for modals |
-| `src/framework/hooks/useStalenessCheck.ts` | Dev-mode staleness detection + one-click regeneration |
-| `src/framework/components/StalenessWarning.tsx` | Dev-mode staleness overlay (portal, shown in manual mode) |
+| `src/framework/hooks/useStalenessCheck.ts` | Dev-mode staleness detection with enriched per-segment details + refetch |
+| `src/framework/components/StalenessWarning.tsx` | Dev-mode staleness review panel with per-segment play/regen/edit, batch TTS, and NarrationEditModal integration |
 | `src/framework/alignment/types.ts` | AlignedWord, ResolvedMarker, DemoAlignment types |
 | `src/framework/contexts/AudioTimeContext.tsx` | Continuous audio time tracking context (sub-segment markers) |
 | `src/framework/utils/alignmentLoader.ts` | Lazy-load alignment.json per demo |
