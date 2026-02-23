@@ -7,7 +7,10 @@ import {
   SlideContainer,
   SlideTitle,
   Reveal,
+  RevealContext,
+  RevealGroup,
   NumberedStepCard,
+  GradientHighlightBox,
   fadeUp,
 } from '@framework';
 
@@ -32,29 +35,31 @@ const Ch10_S1_LessonsComponent: React.FC = () => {
 
   return (
     <SlideContainer maxWidth={800}>
-      <Reveal from={0}>
-        <SlideTitle reduced={reduced}>
-          Six Lessons for Your Next LLM Pipeline
-        </SlideTitle>
-      </Reveal>
+      <RevealContext animation={fadeUp}>
+        <Reveal from={0}>
+          <SlideTitle reduced={reduced}>
+            Six Lessons for Your Next LLM Pipeline
+          </SlideTitle>
+        </Reveal>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
-        {LESSONS.map((lesson, i) => {
-          const segIdx = i + 1;
-          const isActive = currentSegmentIndex === segIdx;
+        <RevealGroup from={1} stagger staggerDelay={0} childAnimation={fadeUp}>
+          {LESSONS.map((lesson, i) => {
+            const segIdx = i + 1;
+            const isActive = currentSegmentIndex === segIdx;
 
-          return (
-            <Reveal key={lesson.num} from={segIdx} animation={fadeUp}>
-              <NumberedStepCard
-                number={lesson.num}
-                title={lesson.title}
-                description={lesson.desc}
-                isActive={isActive}
-              />
-            </Reveal>
-          );
-        })}
-      </div>
+            return (
+              <Reveal key={lesson.num} from={segIdx}>
+                <NumberedStepCard
+                  number={lesson.num}
+                  title={lesson.title}
+                  description={lesson.desc}
+                  isActive={isActive}
+                />
+              </Reveal>
+            );
+          })}
+        </RevealGroup>
+      </RevealContext>
     </SlideContainer>
   );
 };
@@ -80,6 +85,7 @@ export const Ch10_S1_Lessons = defineSlide({
 // ---------- Slide 2: Closing ----------
 
 const Ch10_S2_ClosingComponent: React.FC = () => {
+  const { reduced } = useReducedMotion();
   const theme = useTheme();
 
   return (
@@ -101,18 +107,11 @@ const Ch10_S2_ClosingComponent: React.FC = () => {
       </Reveal>
 
       <Reveal from={1} animation={fadeUp} style={{ textAlign: 'center' }}>
-        <div style={{
-          display: 'inline-block',
-          background: `linear-gradient(135deg, rgba(0, 183, 195, 0.15), rgba(0, 120, 212, 0.15))`,
-          border: `1px solid ${theme.colors.primary}`,
-          borderRadius: 10,
-          padding: '0.75rem 2rem',
-          fontSize: 16,
-          color: theme.colors.primary,
-          fontWeight: 600
-        }}>
-          Try the techniques — prompt engineering scales
-        </div>
+        <GradientHighlightBox reduced={reduced}>
+          <span style={{ fontSize: 16, fontWeight: 600 }}>
+            Try the techniques — prompt engineering scales
+          </span>
+        </GradientHighlightBox>
       </Reveal>
     </SlideContainer>
   );

@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import {
   useReducedMotion,
   useTheme,
-  useMarker,
   defineSlide,
   SlideContainer,
   SlideTitle,
@@ -11,6 +10,9 @@ import {
   RevealSequence,
   CodeBlock,
   CandidateGrid,
+  MarkerCodeBlock,
+  MarkerDim,
+  GradientHighlightBox,
   cardStyle,
   typography,
   fadeUp,
@@ -46,24 +48,6 @@ const NESTED_LOOP_CODE = `def extract_highlights_candidates_from_transcript(
 
 // ---------- Slide 1: Nested Loop ----------
 
-const Ch4_S1_NestedLoopCode: React.FC = () => {
-  const { reached: outerReached } = useMarker('outer-loop');
-  const { reached: innerReached } = useMarker('inner-loop');
-  const lines: number[] = [];
-  if (outerReached) lines.push(11);
-  if (innerReached) lines.push(12);
-
-  return (
-    <CodeBlock
-      code={NESTED_LOOP_CODE}
-      language="python"
-      title="highlights_utils.py  --  lines 199-234"
-      highlightLines={lines.length > 0 ? lines : undefined}
-      fontSize={12}
-    />
-  );
-};
-
 const Ch4_S1_NestedLoopComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
   const theme = useTheme();
@@ -77,7 +61,16 @@ const Ch4_S1_NestedLoopComponent: React.FC = () => {
       </Reveal>
 
       <Reveal from={1}>
-        <Ch4_S1_NestedLoopCode />
+        <MarkerCodeBlock
+          code={NESTED_LOOP_CODE}
+          language="python"
+          title="highlights_utils.py  --  lines 199-234"
+          fontSize={12}
+          markerLines={{
+            'outer-loop': [11],
+            'inner-loop': [12],
+          }}
+        />
       </Reveal>
 
       <Reveal from={2} animation={fadeUp} style={{
@@ -303,24 +296,6 @@ export const Ch4_S2_CandidateRows = defineSlide({
 
 // ---------- Slide 3: Visualized ----------
 
-const MathLine: React.FC<{
-  marker: string;
-  children: React.ReactNode;
-}> = ({ marker, children }) => {
-  const { reached } = useMarker(marker);
-  return (
-    <p style={{
-      ...typography.body,
-      fontSize: 18,
-      margin: '0.25rem 0 0',
-      opacity: reached ? 1 : 0.15,
-      transition: 'opacity 0.4s ease',
-    }}>
-      {children}
-    </p>
-  );
-};
-
 const Ch4_S3_VisualizedComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
   const theme = useTheme();
@@ -332,14 +307,22 @@ const Ch4_S3_VisualizedComponent: React.FC = () => {
       </Reveal>
 
       <Reveal from={1} animation={fadeUp} style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-        <MathLine marker="ten-utterances">
+        <MarkerDim at="ten-utterances" as="p" style={{
+          ...typography.body,
+          fontSize: 18,
+          margin: '0.25rem 0 0',
+        }}>
           In this example: 10 utterances &#215; 3 topics {'  '}<span style={{ color: theme.colors.warning }}>&#8594;</span>{'  '}
           <span style={{ color: theme.colors.warning, fontWeight: 700 }}>135 candidates</span>
-        </MathLine>
-        <MathLine marker="copies">
+        </MarkerDim>
+        <MarkerDim at="copies" as="p" style={{
+          ...typography.body,
+          fontSize: 18,
+          margin: '0.25rem 0 0',
+        }}>
           Each candidate &#8776; 5 utterances long {'  '}<span style={{ color: theme.colors.error }}>&#8594;</span>{'  '}
           <span style={{ color: theme.colors.error, fontWeight: 700 }}>~630 duplicated utterance copies</span>
-        </MathLine>
+        </MarkerDim>
       </Reveal>
 
       <Reveal from={2} animation={fadeUp} style={{ textAlign: 'center' }}>
@@ -703,14 +686,9 @@ const Ch4_S4_OutputSafetyComponent: React.FC = () => {
           </div>
         </div>
 
-        {/* V2 forward-looking callout */}
-        <div style={{
-          ...cardStyle('primary'),
-          borderRadius: 10,
-          padding: '0.85rem 1.5rem',
-          textAlign: 'center',
-        }}>
-          <p style={{ ...typography.body, fontSize: 14, margin: 0 }}>
+        {/* V2 forward-looking callout — upgraded to GradientHighlightBox */}
+        <GradientHighlightBox reduced={reduced}>
+          <p style={{ ...typography.body, fontSize: 14, margin: 0, textAlign: 'center' }}>
             <span style={{ color: theme.colors.primary, fontWeight: 700 }}>V2</span>
             <span style={{ color: theme.colors.textSecondary }}>
               {' achieves the same safety with '}
@@ -726,7 +704,7 @@ const Ch4_S4_OutputSafetyComponent: React.FC = () => {
               {' — an inline constraint at linear cost'}
             </span>
           </p>
-        </div>
+        </GradientHighlightBox>
       </Reveal>
     </SlideContainer>
   );

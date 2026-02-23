@@ -29,6 +29,10 @@
 | CandidateGrid | Data Visualization | `framework/components/CandidateGrid.tsx` | Animated upper-triangle matrix grid |
 | VideoPlayer | Media | `framework/components/VideoPlayer.tsx` | Controlled video with play/pause/end |
 | RevealAtMarker | Animation | `framework/components/reveal/RevealAtMarker.tsx` | Time-based reveal driven by inline markers |
+| MarkerDim | Animation | `framework/components/reveal/MarkerDim.tsx` | Declarative marker-driven opacity dimming |
+| MarkerCodeBlock | Data Display | `framework/components/MarkerCodeBlock.tsx` | CodeBlock with marker-driven line highlighting |
+| AnimatedCounter | Data Display | `framework/components/AnimatedCounter.tsx` | Counting-up number animation |
+| ProgressSteps | Data Visualization | `framework/components/ProgressSteps.tsx` | Horizontal step indicator with states |
 
 ---
 
@@ -71,6 +75,48 @@ import { RevealAtMarker, fadeUp } from '@framework';
 
 ---
 
+### MarkerDim
+
+Declarative marker-driven dimming wrapper. Unlike `RevealAtMarker` (binary show/hide), `MarkerDim` keeps content always visible but toggles between full and dimmed opacity based on marker state.
+
+**Source:** `src/framework/components/reveal/MarkerDim.tsx`
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `at` | `string` | — | Marker ID; content is dimmed until this marker is reached |
+| `until` | `string` | — | Marker ID; content dims after this marker is reached |
+| `notAt` | `string` | — | Inverse of `at`; content dims when this marker IS reached |
+| `dimOpacity` | `number` | `0.15` | Opacity when dimmed |
+| `duration` | `number` | `0.4` | Transition duration in seconds |
+| `as` | `ElementType` | `'div'` | HTML element type |
+| `style` | `CSSProperties` | — | Additional inline styles |
+| `className` | `string` | — | CSS class |
+
+```tsx
+import { MarkerDim } from '@framework';
+
+// Progressive: dimmed until marker reached
+<MarkerDim at="pipeline">
+  <PipelineBox />
+</MarkerDim>
+
+// Inverse: full opacity until marker reached, then dims
+<MarkerDim until="next-section">
+  <PreviousContent />
+</MarkerDim>
+
+// Focus pattern: dim when another marker IS reached
+<MarkerDim notAt="other-item">
+  <ThisItem />
+</MarkerDim>
+```
+
+**Graceful degradation:** When alignment data is missing, content renders at full opacity (markers default to `reached: true`).
+
+**Tips:** This is the #1 replacement for the common `useMarker()` + `opacity` boilerplate. Use `at` for progressive "light-up" reveals. Use `notAt` on BeforeAfterSplit sides to dim one side when the other is focused. Nest inside `<Reveal>` for combined segment + marker control.
+
+---
+
 ## Data Display
 
 ### CodeBlock
@@ -100,6 +146,66 @@ import { CodeBlock } from '@framework';
 ```
 
 **Tips:** Use `fontSize={11}` or `fontSize={12}` for code that needs to fit alongside other content. The title bar is great for showing file paths.
+
+---
+
+### MarkerCodeBlock
+
+CodeBlock wrapper with built-in marker-driven line highlighting. Instead of manually wiring `useMarker()` hooks and building `highlightLines` arrays, pass a `markerLines` mapping.
+
+**Source:** `src/framework/components/MarkerCodeBlock.tsx`
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `code` | `string` | *required* | Source code to display |
+| `language` | `'python' \| 'json' \| 'markdown'` | `'python'` | Syntax highlighting language |
+| `markerLines` | `Record<string, number[]>` | *required* | Map of marker IDs to line numbers |
+| `title` | `string` | — | Title bar text |
+| `fontSize` | `number` | `13` | Font size in pixels |
+
+```tsx
+import { MarkerCodeBlock } from '@framework';
+
+<MarkerCodeBlock
+  code={PYTHON_CODE}
+  language="python"
+  title="utils.py"
+  fontSize={12}
+  markerLines={{
+    'outer-loop': [11],
+    'inner-loop': [12],
+    'return': [15, 16],
+  }}
+/>
+```
+
+**Tips:** The number of entries in `markerLines` must be stable across renders (React hooks constraint). Lines from all reached markers are accumulated — earlier markers stay highlighted as later ones are reached.
+
+---
+
+### AnimatedCounter
+
+Counting-up number animation using Framer Motion's `useMotionValue` and `animate`. In reduced-motion mode, shows the final value immediately.
+
+**Source:** `src/framework/components/AnimatedCounter.tsx`
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `from` | `number` | `0` | Start value |
+| `to` | `number` | *required* | Target value |
+| `suffix` | `string` | `''` | Suffix (e.g. `"%"`) |
+| `prefix` | `string` | `''` | Prefix (e.g. `"~"`) |
+| `duration` | `number` | `1.5` | Animation duration in seconds |
+| `decimals` | `number` | `0` | Decimal places |
+
+```tsx
+import { AnimatedCounter } from '@framework';
+
+<AnimatedCounter to={75} suffix="%" duration={1.5} />
+<AnimatedCounter from={0} to={600} prefix="~" />
+```
+
+**Tips:** Can be composed inside `MetricDisplay` by passing it as the `value` prop. Uses `useReducedMotion()` internally — no need to pass `reduced` manually.
 
 ---
 
@@ -296,7 +402,7 @@ import { FieldCard } from '@framework';
 />
 ```
 
-**Tips:** Marker integration stays external — wrap with `useMarker()` logic in a demo-specific component (see `MarkerFieldCard` in highlights-deep-dive for an example).
+**Tips:** For marker-driven dimming, wrap with `<MarkerDim at="marker-id">` instead of manual `useMarker()` + opacity boilerplate. The `dimmed` prop can also be driven by marker state when you need the dimming applied to the card itself.
 
 ---
 
@@ -449,6 +555,34 @@ import { CandidateGrid } from '@framework';
 ```
 
 **Tips:** Cell size auto-scales based on `n`. For large grids (n > 20), the animation batches cells for performance.
+
+---
+
+### ProgressSteps
+
+Horizontal step indicator with completed/active/pending states and configurable connectors. Active step gets gradient border + glow, completed steps show a checkmark overlay.
+
+**Source:** `src/framework/components/ProgressSteps.tsx`
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `steps` | `ProgressStep[]` | *required* | Array of `{ label, icon?, status }` |
+| `connectorStyle` | `'arrow' \| 'line' \| 'dashed'` | `'arrow'` | Connector between steps |
+
+```tsx
+import { ProgressSteps } from '@framework';
+
+<ProgressSteps
+  steps={[
+    { label: 'Cost Reduction', status: 'completed' },
+    { label: 'Private Preview', status: 'active' },
+    { label: 'GA Rollout', icon: '🚀', status: 'pending' },
+  ]}
+  connectorStyle="arrow"
+/>
+```
+
+**Tips:** Uses `useReducedMotion()` internally for staggered entrance. Pending steps are dimmed to 40% opacity, completed steps to 70%.
 
 ---
 

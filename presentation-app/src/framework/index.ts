@@ -43,6 +43,12 @@ export { ComparisonTable } from './components/ComparisonTable';
 export type { ComparisonTableProps, ComparisonColumn } from './components/ComparisonTable';
 export { FieldCard } from './components/FieldCard';
 export type { FieldCardProps } from './components/FieldCard';
+export { AnimatedCounter } from './components/AnimatedCounter';
+export type { AnimatedCounterProps } from './components/AnimatedCounter';
+export { MarkerCodeBlock } from './components/MarkerCodeBlock';
+export type { MarkerCodeBlockProps } from './components/MarkerCodeBlock';
+export { ProgressSteps } from './components/ProgressSteps';
+export type { ProgressStepsProps, ProgressStep } from './components/ProgressSteps';
 export { BeforeAfterSplit } from './components/BeforeAfterSplit';
 export type { BeforeAfterSplitProps } from './components/BeforeAfterSplit';
 export { PipelineDiagram } from './components/PipelineDiagram';
@@ -51,8 +57,8 @@ export { CandidateGrid } from './components/CandidateGrid';
 export type { CandidateGridProps } from './components/CandidateGrid';
 
 // Reveal components
-export { Reveal, RevealAtMarker, RevealGroup, RevealContext, RevealSequence } from './components/reveal';
-export type { RevealProps, RevealGroupProps, RevealContextProps, RevealAnimation, RevealVisibilityProps } from './components/reveal';
+export { Reveal, RevealAtMarker, RevealGroup, RevealContext, RevealSequence, MarkerDim } from './components/reveal';
+export type { RevealProps, RevealGroupProps, RevealContextProps, RevealAnimation, RevealVisibilityProps, MarkerDimProps } from './components/reveal';
 
 // Contexts
 export { SegmentProvider, useSegmentContext, useSegmentedAnimation } from './contexts/SegmentContext';

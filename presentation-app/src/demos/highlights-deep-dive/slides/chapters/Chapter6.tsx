@@ -8,9 +8,12 @@ import {
   SlideTitle,
   Reveal,
   RevealSequence,
-  CodeBlock,
   BeforeAfterSplit,
   Callout,
+  CodeBlock,
+  FieldCard,
+  MarkerDim,
+  MarkerCodeBlock,
   useMarker,
   typography,
   layouts,
@@ -18,7 +21,6 @@ import {
   Checkmark,
 } from '@framework';
 import { PromptSectionCard } from '../../components/PromptSectionCard';
-import { MarkerFieldCard } from '../../components/MarkerFieldCard';
 
 /**
  * Chapter 6: Prompt Overview + Pseudocode Algorithm (4 slides)
@@ -127,37 +129,6 @@ const PSEUDOCODE = `def generate_highlights(transcript_markdown):
 
 // ---------- Slide 2: Pseudocode ----------
 
-const PseudocodeBlock: React.FC = () => {
-  const { reached: rParse } = useMarker('parse');
-  const { reached: rSkip } = useMarker('skip');
-  const { reached: rSegment } = useMarker('segment');
-  const { reached: rNarrate } = useMarker('narrate');
-  const { reached: rEnum } = useMarker('enumerate');
-  const { reached: rFilter } = useMarker('filter');
-  const { reached: rRank } = useMarker('rank');
-  const { reached: rBuild } = useMarker('build');
-
-  const lines: number[] = [];
-  if (rParse) lines.push(3);
-  if (rSkip) lines.push(5, 6);
-  if (rSegment) lines.push(7);
-  if (rNarrate) lines.push(9);
-  if (rEnum) lines.push(16);
-  if (rFilter) lines.push(17);
-  if (rRank) lines.push(21);
-  if (rBuild) lines.push(22);
-
-  return (
-    <CodeBlock
-      code={PSEUDOCODE}
-      language="python"
-      title="prompt.md  --  generate_highlights()"
-      fontSize={11}
-      highlightLines={lines.length > 0 ? lines : undefined}
-    />
-  );
-};
-
 const OUTPUT_PILL_MARKERS = [
   { field: 'abstractive_topics', marker: 'pill-topics' },
   { field: 'topic_order', marker: 'pill-order' },
@@ -171,24 +142,23 @@ const OutputPill: React.FC<{
   field: string; marker: string;
   theme: ReturnType<typeof useTheme>;
 }> = ({ field, marker, theme }) => {
-  const { reached } = useMarker(marker);
   return (
-    <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      gap: '0.4rem',
-      background: theme.colors.bgSurface,
-      border: `1px solid ${theme.colors.bgBorder}`,
-      borderRadius: 8,
-      padding: '0.35rem 0.75rem',
-      fontSize: 13,
-      fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
-      opacity: reached ? 1 : 0.15,
-      transition: 'opacity 0.4s ease',
-    }}>
-      <span style={{ color: theme.colors.success }}><Checkmark /></span>
-      <span style={{ color: theme.colors.textPrimary }}>{field}</span>
-    </div>
+    <MarkerDim at={marker}>
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.4rem',
+        background: theme.colors.bgSurface,
+        border: `1px solid ${theme.colors.bgBorder}`,
+        borderRadius: 8,
+        padding: '0.35rem 0.75rem',
+        fontSize: 13,
+        fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+      }}>
+        <span style={{ color: theme.colors.success }}><Checkmark /></span>
+        <span style={{ color: theme.colors.textPrimary }}>{field}</span>
+      </div>
+    </MarkerDim>
   );
 };
 
@@ -219,7 +189,22 @@ const Ch6_S2_PseudocodeComponent: React.FC = () => {
       </Reveal>
 
       <Reveal from={1}>
-        <PseudocodeBlock />
+        <MarkerCodeBlock
+          code={PSEUDOCODE}
+          language="python"
+          title="prompt.md  --  generate_highlights()"
+          fontSize={11}
+          markerLines={{
+            'parse': [3],
+            'skip': [5, 6],
+            'segment': [7],
+            'narrate': [9],
+            'enumerate': [16],
+            'filter': [17],
+            'rank': [21],
+            'build': [22],
+          }}
+        />
       </Reveal>
 
       <Reveal from={2} animation={fadeUp} style={{
@@ -288,24 +273,23 @@ const BenefitCard: React.FC<{
   label: string; marker: string;
   theme: ReturnType<typeof useTheme>;
 }> = ({ label, marker, theme }) => {
-  const { reached } = useMarker(marker);
   return (
-    <div style={{
-      background: theme.colors.bgSurface,
-      border: `1px solid ${theme.colors.bgBorder}`,
-      borderRadius: 10,
-      padding: '0.75rem',
-      textAlign: 'center',
-      opacity: reached ? 1 : 0.15,
-      transition: 'opacity 0.4s ease',
-    }}>
-      <div style={{ color: theme.colors.success, fontSize: 20, marginBottom: '0.3rem' }}>
-        <Checkmark />
+    <MarkerDim at={marker}>
+      <div style={{
+        background: theme.colors.bgSurface,
+        border: `1px solid ${theme.colors.bgBorder}`,
+        borderRadius: 10,
+        padding: '0.75rem',
+        textAlign: 'center',
+      }}>
+        <div style={{ color: theme.colors.success, fontSize: 20, marginBottom: '0.3rem' }}>
+          <Checkmark />
+        </div>
+        <div style={{ ...typography.body, fontSize: 13, fontWeight: 600 }}>
+          {label}
+        </div>
       </div>
-      <div style={{ ...typography.body, fontSize: 13, fontWeight: 600 }}>
-        {label}
-      </div>
-    </div>
+    </MarkerDim>
   );
 };
 
@@ -428,43 +412,42 @@ const CATEGORY_STYLES = {
   validation:  { accent: '#10b981', label: 'Validation',                  bg: 'rgba(16, 185, 129, 0.08)' },
 } as const;
 
-const DeliverableZoomCode: React.FC = () => {
-  const { reached: rPlayback } = useMarker('playback');
-  const { reached: rExtObj } = useMarker('extractive-obj');
-  const lines: number[] = [];
-  if (rPlayback) lines.push(6, 7, 8);
-  if (rExtObj) lines.push(10, 11, 12);
+/** Marker-driven FieldCard: global dim + individual highlight */
+const SchemaFieldCard: React.FC<{
+  field: typeof SCHEMA_FIELDS[number];
+  index: number;
+  accent: string;
+  bg: string;
+  compact?: boolean;
+}> = ({ field, index, accent, bg, compact }) => {
+  const { reduced } = useReducedMotion();
+  const theme = useTheme();
+  const { reached: dimmed } = useMarker('dim-all');
+  const { reached: highlighted } = useMarker(field.marker);
+  const lit = !dimmed || highlighted;
+
+  const badge = field.call
+    ? { text: `V1: ${field.call}`, color: '#fbbf24', bg: 'rgba(251, 191, 36, 0.15)' }
+    : { text: 'New', color: theme.colors.success, bg: `${theme.colors.success}20` };
 
   return (
-    <CodeBlock
-      code={FINAL_NARRATIVE_SAMPLE}
-      language="json"
-      title="final_narrative[0]  —  the product deliverable"
-      fontSize={11}
-      highlightLines={lines.length > 0 ? lines : undefined}
-    />
-  );
-};
-
-const ExtractiveZoomCode: React.FC = () => {
-  const { reached: rCopyTag } = useMarker('copy-tag');
-  const { reached: rParseTag } = useMarker('parse-tag');
-  const { reached: rCopyRow } = useMarker('copy-row');
-  const { reached: rParseIds } = useMarker('parse-ids');
-  const lines: number[] = [];
-  if (rCopyTag) lines.push(2);
-  if (rParseTag) lines.push(3, 4);
-  if (rCopyRow) lines.push(6);
-  if (rParseIds) lines.push(7);
-
-  return (
-    <CodeBlock
-      code={EXTRACTIVE_SAMPLE}
-      language="json"
-      title="extractive_ranges[0]  —  field names as instructions"
-      fontSize={11}
-      highlightLines={lines.length > 0 ? lines : undefined}
-    />
+    <motion.div
+      initial={{ opacity: 0, y: reduced ? 0 : 12 }}
+      animate={{ opacity: lit ? 1 : 0.15, y: 0 }}
+      transition={{
+        duration: reduced ? 0.1 : 0.3,
+        delay: reduced ? 0 : index * 0.06,
+      }}
+    >
+      <FieldCard
+        name={field.name}
+        description={field.desc}
+        badge={badge}
+        accentColor={accent}
+        compact={compact}
+        style={{ background: bg }}
+      />
+    </motion.div>
   );
 };
 
@@ -472,22 +455,21 @@ const InsightPill: React.FC<{
   label: string; marker: string;
   theme: ReturnType<typeof useTheme>;
 }> = ({ label, marker, theme }) => {
-  const { reached } = useMarker(marker);
   return (
-    <div style={{
-      background: theme.colors.bgSurface,
-      border: `1px solid ${theme.colors.bgBorder}`,
-      borderRadius: 8,
-      padding: '0.3rem 0.7rem',
-      fontSize: 12,
-      fontWeight: 600,
-      color: theme.colors.primary,
-      fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
-      opacity: reached ? 1 : 0.15,
-      transition: 'opacity 0.4s ease',
-    }}>
-      {label}
-    </div>
+    <MarkerDim at={marker}>
+      <div style={{
+        background: theme.colors.bgSurface,
+        border: `1px solid ${theme.colors.bgBorder}`,
+        borderRadius: 8,
+        padding: '0.3rem 0.7rem',
+        fontSize: 12,
+        fontWeight: 600,
+        color: theme.colors.primary,
+        fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+      }}>
+        {label}
+      </div>
+    </MarkerDim>
   );
 };
 
@@ -534,7 +516,7 @@ const Ch6_S4_OutputSchemaComponent: React.FC = () => {
               gap: '0.5rem',
             }}>
               {COT_FIELDS.map((field, i) =>
-                <MarkerFieldCard key={field.name} field={field} index={i} accent={CATEGORY_STYLES.cot.accent} bg={CATEGORY_STYLES.cot.bg} compact />
+                <SchemaFieldCard key={field.name} field={field} index={i} accent={CATEGORY_STYLES.cot.accent} bg={CATEGORY_STYLES.cot.bg} compact />
               )}
             </div>
           </motion.div>
@@ -563,7 +545,7 @@ const Ch6_S4_OutputSchemaComponent: React.FC = () => {
               }}>
                 {CATEGORY_STYLES.deliverable.label}
               </div>
-              <MarkerFieldCard field={DELIVERABLE_FIELD} index={4} accent={CATEGORY_STYLES.deliverable.accent} bg={CATEGORY_STYLES.deliverable.bg} />
+              <SchemaFieldCard field={DELIVERABLE_FIELD} index={4} accent={CATEGORY_STYLES.deliverable.accent} bg={CATEGORY_STYLES.deliverable.bg} />
             </div>
             <div>
               <div style={{
@@ -577,14 +559,23 @@ const Ch6_S4_OutputSchemaComponent: React.FC = () => {
               }}>
                 {CATEGORY_STYLES.validation.label}
               </div>
-              <MarkerFieldCard field={VALIDATION_FIELD} index={5} accent={CATEGORY_STYLES.validation.accent} bg={CATEGORY_STYLES.validation.bg} />
+              <SchemaFieldCard field={VALIDATION_FIELD} index={5} accent={CATEGORY_STYLES.validation.accent} bg={CATEGORY_STYLES.validation.bg} />
             </div>
           </motion.div>
         </Reveal>
 
         {/* Segment 1: final_narrative zoom — exits when extractive enters */}
         <Reveal from={1} until={1} animation={fadeUp} style={{ marginTop: '1rem' }}>
-          <DeliverableZoomCode />
+          <MarkerCodeBlock
+            code={FINAL_NARRATIVE_SAMPLE}
+            language="json"
+            title="final_narrative[0]  —  the product deliverable"
+            fontSize={11}
+            markerLines={{
+              'playback': [6, 7, 8],
+              'extractive-obj': [10, 11, 12],
+            }}
+          />
           <div style={{
             display: 'flex',
             gap: '1.5rem',
@@ -631,7 +622,18 @@ const Ch6_S4_OutputSchemaComponent: React.FC = () => {
 
         {/* Segment 2: extractive_ranges zoom — exits when insight enters */}
         <Reveal from={2} until={2} animation={fadeUp} style={{ marginTop: '1rem' }}>
-          <ExtractiveZoomCode />
+          <MarkerCodeBlock
+            code={EXTRACTIVE_SAMPLE}
+            language="json"
+            title="extractive_ranges[0]  —  field names as instructions"
+            fontSize={11}
+            markerLines={{
+              'copy-tag': [2],
+              'parse-tag': [3, 4],
+              'copy-row': [6],
+              'parse-ids': [7],
+            }}
+          />
           <div style={{
             display: 'flex',
             gap: '1.5rem',

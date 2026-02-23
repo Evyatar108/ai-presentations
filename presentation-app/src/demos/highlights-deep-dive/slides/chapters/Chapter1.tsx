@@ -2,13 +2,13 @@ import React from 'react';
 import {
   useReducedMotion,
   useTheme,
-  useMarker,
   defineSlide,
   SlideContainer,
   SlideTitle,
   MetricTile,
   TestimonialCard,
   Reveal,
+  MarkerDim,
   typography,
   layouts,
   cardStyle,
@@ -30,45 +30,40 @@ const PIPELINE_ITEMS = [
 
 const PipelineBox: React.FC<{
   label: string; marker: string; index: number;
-  dimmed: boolean; theme: ReturnType<typeof useTheme>;
-}> = ({ label, marker, index, dimmed, theme }) => {
-  const { reached } = useMarker(marker);
-  const lit = !dimmed || reached;
+  theme: ReturnType<typeof useTheme>;
+}> = ({ label, marker, index, theme }) => {
   return (
-    <div style={{
-      padding: '0.75rem 1.25rem',
-      borderRadius: 12,
-      background: index === 1
-        ? `linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))`
-        : theme.colors.bgSurface,
-      border: index === 1
-        ? `2px solid ${theme.colors.primary}`
-        : `1px solid ${theme.colors.bgBorder}`,
-      color: theme.colors.textPrimary,
-      fontWeight: 600,
-      fontSize: 14,
-      opacity: lit ? 1 : 0.15,
-      transition: 'opacity 0.4s ease',
-    }}>
-      {label}
-    </div>
+    <MarkerDim at={marker}>
+      <div style={{
+        padding: '0.75rem 1.25rem',
+        borderRadius: 12,
+        background: index === 1
+          ? `linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))`
+          : theme.colors.bgSurface,
+        border: index === 1
+          ? `2px solid ${theme.colors.primary}`
+          : `1px solid ${theme.colors.bgBorder}`,
+        color: theme.colors.textPrimary,
+        fontWeight: 600,
+        fontSize: 14,
+      }}>
+        {label}
+      </div>
+    </MarkerDim>
   );
 };
 
 const PipelineArrow: React.FC<{
-  prevMarker: string; marker: string; dimmed: boolean;
+  marker: string;
   theme: ReturnType<typeof useTheme>;
-}> = ({ prevMarker, marker, dimmed, theme }) => {
-  const { reached: prevReached } = useMarker(prevMarker);
-  const { reached: curReached } = useMarker(marker);
-  const lit = !dimmed || (prevReached && curReached);
+}> = ({ marker, theme }) => {
   return (
-    <span style={{
-      fontSize: 20,
-      color: theme.colors.primary,
-      opacity: lit ? 1 : 0.15,
-      transition: 'opacity 0.4s ease',
-    }}>&#8594;</span>
+    <MarkerDim at={marker}>
+      <span style={{
+        fontSize: 20,
+        color: theme.colors.primary,
+      }}>&#8594;</span>
+    </MarkerDim>
   );
 };
 
@@ -76,28 +71,26 @@ const TypeCard: React.FC<{
   marker: string; emoji: string; title: string; desc: string;
   theme: ReturnType<typeof useTheme>;
 }> = ({ marker, emoji, title, desc, theme }) => {
-  const { reached } = useMarker(marker);
   return (
-    <div style={{
-      background: theme.colors.bgSurface,
-      borderRadius: 16,
-      padding: '1.5rem',
-      border: `1px solid ${theme.colors.bgBorder}`,
-      textAlign: 'center',
-      opacity: reached ? 1 : 0.15,
-      transition: 'opacity 0.4s ease',
-    }}>
-      <div style={{ fontSize: 36, marginBottom: '0.75rem' }}>{emoji}</div>
-      <h3 style={{ ...typography.h2 }}>{title}</h3>
-      <p style={{ ...typography.caption, fontSize: 14 }}>{desc}</p>
-    </div>
+    <MarkerDim at={marker}>
+      <div style={{
+        background: theme.colors.bgSurface,
+        borderRadius: 16,
+        padding: '1.5rem',
+        border: `1px solid ${theme.colors.bgBorder}`,
+        textAlign: 'center',
+      }}>
+        <div style={{ fontSize: 36, marginBottom: '0.75rem' }}>{emoji}</div>
+        <h3 style={{ ...typography.h2 }}>{title}</h3>
+        <p style={{ ...typography.caption, fontSize: 14 }}>{desc}</p>
+      </div>
+    </MarkerDim>
   );
 };
 
 const Ch1_S1_ProductContextComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
   const theme = useTheme();
-  const { reached: dimmed } = useMarker('dim-pipeline');
 
   return (
     <SlideContainer maxWidth={1000}>
@@ -118,9 +111,7 @@ const Ch1_S1_ProductContextComponent: React.FC = () => {
           <React.Fragment key={item.label}>
             {i > 0 && (
               <PipelineArrow
-                prevMarker={PIPELINE_ITEMS[i - 1].marker}
                 marker={item.marker}
-                dimmed={dimmed}
                 theme={theme}
               />
             )}
@@ -128,7 +119,6 @@ const Ch1_S1_ProductContextComponent: React.FC = () => {
               label={item.label}
               marker={item.marker}
               index={i}
-              dimmed={dimmed}
               theme={theme}
             />
           </React.Fragment>

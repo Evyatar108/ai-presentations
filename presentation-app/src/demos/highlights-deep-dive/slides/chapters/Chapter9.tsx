@@ -2,17 +2,18 @@ import React from 'react';
 import {
   useReducedMotion,
   useTheme,
-  useMarker,
   defineSlide,
   SlideContainer,
   SlideTitle,
   MetricDisplay,
   Callout,
   Reveal,
+  RevealContext,
+  MarkerDim,
+  ProgressSteps,
   typography,
   layouts,
   fadeUp,
-  ArrowRight,
 } from '@framework';
 
 /**
@@ -32,25 +33,27 @@ const Ch9_S1_MetricsComponent: React.FC = () => {
 
   return (
     <SlideContainer maxWidth={1000}>
-      <Reveal from={0}>
-        <SlideTitle reduced={reduced}>
-          Results
-        </SlideTitle>
-      </Reveal>
+      <RevealContext animation={fadeUp}>
+        <Reveal from={0}>
+          <SlideTitle reduced={reduced}>
+            Results
+          </SlideTitle>
+        </Reveal>
 
-      <div style={{ ...layouts.grid3Col('2rem') }}>
-        {METRICS.map((metric, i) => (
-          <Reveal key={metric.label} from={i + 1}>
-            <MetricDisplay
-              value={metric.value}
-              label={metric.label}
-              reduced={reduced}
-              emphasis={metric.emphasis}
-              delay={reduced ? 0 : 0.1}
-            />
-          </Reveal>
-        ))}
-      </div>
+        <div style={{ ...layouts.grid3Col('2rem') }}>
+          {METRICS.map((metric, i) => (
+            <Reveal key={metric.label} from={i + 1}>
+              <MetricDisplay
+                value={metric.value}
+                label={metric.label}
+                reduced={reduced}
+                emphasis={metric.emphasis}
+                delay={reduced ? 0 : 0.1}
+              />
+            </Reveal>
+          ))}
+        </div>
+      </RevealContext>
     </SlideContainer>
   );
 };
@@ -82,73 +85,23 @@ const QualityTile: React.FC<{
   tile: typeof QUALITY_TILES[number];
   theme: ReturnType<typeof useTheme>;
 }> = ({ tile, theme }) => {
-  const { reached } = useMarker(tile.marker);
   return (
-    <div style={{
-      background: theme.colors.bgSurface,
-      border: `1px solid ${theme.colors.bgBorder}`,
-      borderRadius: 12,
-      padding: '1rem',
-      textAlign: 'center',
-      opacity: reached ? 1 : 0.15,
-      transition: 'opacity 0.4s ease',
-    }}>
-      <div style={{ ...typography.caption, fontSize: 12, letterSpacing: 1, textTransform: 'uppercase', marginBottom: '0.3rem' }}>
-        {tile.label}
+    <MarkerDim at={tile.marker}>
+      <div style={{
+        background: theme.colors.bgSurface,
+        border: `1px solid ${theme.colors.bgBorder}`,
+        borderRadius: 12,
+        padding: '1rem',
+        textAlign: 'center',
+      }}>
+        <div style={{ ...typography.caption, fontSize: 12, letterSpacing: 1, textTransform: 'uppercase', marginBottom: '0.3rem' }}>
+          {tile.label}
+        </div>
+        <div style={{ fontSize: 20, fontWeight: 700, color: theme.colors[tile.colorKey] }}>
+          {tile.value}
+        </div>
       </div>
-      <div style={{ fontSize: 20, fontWeight: 700, color: theme.colors[tile.colorKey] }}>
-        {tile.value}
-      </div>
-    </div>
-  );
-};
-
-const ROADMAP_STEPS = [
-  { label: 'Cost Reduction', marker: 'cost-step' },
-  { label: 'Private Preview', marker: 'preview-step' },
-  { label: 'GA Rollout', marker: 'ga-step' },
-];
-
-const RoadmapStep: React.FC<{
-  step: typeof ROADMAP_STEPS[number];
-  index: number;
-  theme: ReturnType<typeof useTheme>;
-}> = ({ step, index, theme }) => {
-  const { reached } = useMarker(step.marker);
-  return (
-    <div style={{
-      padding: '0.6rem 1.25rem',
-      borderRadius: 8,
-      background: index === 2
-        ? `linear-gradient(135deg, rgba(0, 183, 195, 0.2), rgba(0, 120, 212, 0.2))`
-        : theme.colors.bgSurface,
-      border: index === 2
-        ? `2px solid ${theme.colors.primary}`
-        : `1px solid ${theme.colors.bgBorder}`,
-      fontSize: 14,
-      fontWeight: 600,
-      color: theme.colors.textPrimary,
-      opacity: reached ? 1 : 0.15,
-      transition: 'opacity 0.4s ease',
-    }}>
-      {step.label}
-    </div>
-  );
-};
-
-const RoadmapArrow: React.FC<{
-  marker: string;
-  theme: ReturnType<typeof useTheme>;
-}> = ({ marker, theme }) => {
-  const { reached } = useMarker(marker);
-  return (
-    <span style={{
-      color: theme.colors.primary,
-      opacity: reached ? 1 : 0.15,
-      transition: 'opacity 0.4s ease',
-    }}>
-      <ArrowRight />
-    </span>
+    </MarkerDim>
   );
 };
 
@@ -166,19 +119,15 @@ const Ch9_S2_QualityAndImpactComponent: React.FC = () => {
         ))}
       </Reveal>
 
-      <Reveal from={1} animation={fadeUp} style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '1rem',
-        marginBottom: '2rem'
-      }}>
-        {ROADMAP_STEPS.map((step, i) => (
-          <React.Fragment key={step.label}>
-            {i > 0 && <RoadmapArrow marker={step.marker} theme={theme} />}
-            <RoadmapStep step={step} index={i} theme={theme} />
-          </React.Fragment>
-        ))}
+      <Reveal from={1} animation={fadeUp} style={{ marginBottom: '2rem' }}>
+        <ProgressSteps
+          steps={[
+            { label: 'Cost Reduction', status: 'completed' },
+            { label: 'Private Preview', status: 'completed' },
+            { label: 'GA Rollout', status: 'active' },
+          ]}
+          connectorStyle="arrow"
+        />
       </Reveal>
 
       <Reveal from={2} animation={fadeUp}>

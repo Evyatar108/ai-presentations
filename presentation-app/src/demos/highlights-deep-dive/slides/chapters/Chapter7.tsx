@@ -2,12 +2,12 @@ import React from 'react';
 import {
   useReducedMotion,
   useTheme,
-  useMarker,
   defineSlide,
   SlideContainer,
   SlideTitle,
   Reveal,
-  CodeBlock,
+  MarkerCodeBlock,
+  MarkerDim,
   typography,
   fadeUp,
   ArrowDown,
@@ -40,44 +40,6 @@ const SELF_CHECKS: { name: string; marker: string }[] = [
 
 // ---------- Slide 1: Copy-then-Parse ----------
 
-const CopyCodeBlock: React.FC = () => {
-  const { reached: turnTag } = useMarker('turn-tag');
-  const { reached: pipeRow } = useMarker('pipe-row');
-  const lines: number[] = [];
-  if (turnTag) lines.push(1);
-  if (pipeRow) lines.push(2);
-
-  return (
-    <CodeBlock
-      code={COPY_CODE}
-      language="python"
-      title="Step 1: Copy raw strings verbatim"
-      highlightLines={lines.length > 0 ? lines : undefined}
-      fontSize={13}
-    />
-  );
-};
-
-const ParseCodeBlock: React.FC = () => {
-  const { reached: speaker } = useMarker('speaker');
-  const { reached: turnId } = useMarker('turn-id');
-  const { reached: uttId } = useMarker('utt-id');
-  const lines: number[] = [];
-  if (speaker) lines.push(1);
-  if (turnId) lines.push(2);
-  if (uttId) lines.push(3, 4);
-
-  return (
-    <CodeBlock
-      code={PARSE_CODE}
-      language="python"
-      title="Step 2: Parse structured values from copied text"
-      highlightLines={lines.length > 0 ? lines : undefined}
-      fontSize={13}
-    />
-  );
-};
-
 const Ch7_S1_CopyThenParseComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
   const theme = useTheme();
@@ -91,7 +53,16 @@ const Ch7_S1_CopyThenParseComponent: React.FC = () => {
       </Reveal>
 
       <Reveal from={1} animation={fadeUp} style={{ marginBottom: '0.75rem' }}>
-        <CopyCodeBlock />
+        <MarkerCodeBlock
+          code={COPY_CODE}
+          language="python"
+          title="Step 1: Copy raw strings verbatim"
+          fontSize={13}
+          markerLines={{
+            'turn-tag': [1],
+            'pipe-row': [2],
+          }}
+        />
       </Reveal>
 
       {/* Arrow connector */}
@@ -103,7 +74,17 @@ const Ch7_S1_CopyThenParseComponent: React.FC = () => {
       </Reveal>
 
       <Reveal from={2} animation={fadeUp}>
-        <ParseCodeBlock />
+        <MarkerCodeBlock
+          code={PARSE_CODE}
+          language="python"
+          title="Step 2: Parse structured values from copied text"
+          fontSize={13}
+          markerLines={{
+            'speaker': [1],
+            'turn-id': [2],
+            'utt-id': [3, 4],
+          }}
+        />
       </Reveal>
     </SlideContainer>
   );
@@ -128,54 +109,49 @@ export const Ch7_S1_CopyThenParse = defineSlide({
 const SelfCheckCard: React.FC<{
   name: string;
   marker: string;
-  dimmed: boolean;
   theme: ReturnType<typeof useTheme>;
-}> = ({ name, marker, dimmed, theme }) => {
-  const { reached } = useMarker(marker);
-  const lit = !dimmed || reached;
-
+}> = ({ name, marker, theme }) => {
   return (
-    <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      gap: '0.6rem',
-      background: theme.colors.bgSurface,
-      border: `1px solid ${theme.colors.bgBorder}`,
-      borderRadius: 8,
-      padding: '0.6rem 0.85rem',
-      opacity: lit ? 1 : 0.15,
-      transition: 'opacity 0.4s ease'
-    }}>
+    <MarkerDim at={marker}>
       <div style={{
-        width: 22,
-        height: 22,
-        borderRadius: 6,
-        background: `linear-gradient(135deg, ${theme.colors.success}, #059669)`,
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center',
-        fontSize: 12,
-        color: '#fff',
-        fontWeight: 700,
-        flexShrink: 0
+        gap: '0.6rem',
+        background: theme.colors.bgSurface,
+        border: `1px solid ${theme.colors.bgBorder}`,
+        borderRadius: 8,
+        padding: '0.6rem 0.85rem',
       }}>
-        &#10003;
+        <div style={{
+          width: 22,
+          height: 22,
+          borderRadius: 6,
+          background: `linear-gradient(135deg, ${theme.colors.success}, #059669)`,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: 12,
+          color: '#fff',
+          fontWeight: 700,
+          flexShrink: 0
+        }}>
+          &#10003;
+        </div>
+        <span style={{
+          fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+          fontSize: 12,
+          color: theme.colors.textPrimary
+        }}>
+          {name}
+        </span>
       </div>
-      <span style={{
-        fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
-        fontSize: 12,
-        color: theme.colors.textPrimary
-      }}>
-        {name}
-      </span>
-    </div>
+    </MarkerDim>
   );
 };
 
 const Ch7_S2_SelfChecksComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
   const theme = useTheme();
-  const { reached: dimmed } = useMarker('topic-checks');
 
   return (
     <SlideContainer maxWidth={900}>
@@ -195,7 +171,6 @@ const Ch7_S2_SelfChecksComponent: React.FC = () => {
             key={check.name}
             name={check.name}
             marker={check.marker}
-            dimmed={dimmed}
             theme={theme}
           />
         ))}

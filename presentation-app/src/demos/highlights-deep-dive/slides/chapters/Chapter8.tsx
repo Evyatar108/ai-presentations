@@ -2,12 +2,13 @@ import React from 'react';
 import {
   useReducedMotion,
   useTheme,
-  useMarker,
   defineSlide,
   SlideContainer,
   SlideTitle,
   Reveal,
   Callout,
+  MarkerDim,
+  GradientHighlightBox,
   cardStyle,
   typography,
   fadeUp,
@@ -39,48 +40,47 @@ const CheckCard: React.FC<{
   check: typeof CHECKS[number];
   theme: ReturnType<typeof useTheme>;
 }> = ({ check, theme }) => {
-  const { reached } = useMarker(check.marker);
   return (
-    <div style={{
-      ...cardStyle(),
-      padding: '1.25rem',
-      opacity: reached ? 1 : 0.15,
-      transition: 'opacity 0.4s ease',
-    }}>
+    <MarkerDim at={check.marker}>
       <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '0.6rem',
-        marginBottom: '0.5rem'
+        ...cardStyle(),
+        padding: '1.25rem',
       }}>
         <div style={{
-          width: 26,
-          height: 26,
-          borderRadius: 7,
-          background: `linear-gradient(135deg, ${theme.colors.success}, #059669)`,
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: 13,
-          color: '#fff',
-          fontWeight: 700,
-          flexShrink: 0
+          gap: '0.6rem',
+          marginBottom: '0.5rem'
         }}>
-          {check.icon}
+          <div style={{
+            width: 26,
+            height: 26,
+            borderRadius: 7,
+            background: `linear-gradient(135deg, ${theme.colors.success}, #059669)`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: 13,
+            color: '#fff',
+            fontWeight: 700,
+            flexShrink: 0
+          }}>
+            {check.icon}
+          </div>
+          <div style={{
+            ...typography.body,
+            fontSize: 15,
+            fontWeight: 600,
+            color: theme.colors.textPrimary
+          }}>
+            {check.title}
+          </div>
         </div>
-        <div style={{
-          ...typography.body,
-          fontSize: 15,
-          fontWeight: 600,
-          color: theme.colors.textPrimary
-        }}>
-          {check.title}
+        <div style={{ ...typography.caption, fontSize: 13, lineHeight: 1.5 }}>
+          {check.desc}
         </div>
       </div>
-      <div style={{ ...typography.caption, fontSize: 13, lineHeight: 1.5 }}>
-        {check.desc}
-      </div>
-    </div>
+    </MarkerDim>
   );
 };
 
@@ -155,22 +155,21 @@ const EvalPipelineStep: React.FC<{
   theme: ReturnType<typeof useTheme>;
   colorMap: Record<string, string>;
 }> = ({ step, theme, colorMap }) => {
-  const { reached } = useMarker(step.marker);
   return (
-    <div style={{
-      padding: '0.8rem 1.5rem',
-      borderRadius: 10,
-      background: theme.colors.bgSurface,
-      border: `2px solid ${colorMap[step.color]}`,
-      fontSize: 14,
-      fontWeight: 600,
-      color: theme.colors.textPrimary,
-      textAlign: 'center',
-      opacity: reached ? 1 : 0.15,
-      transition: 'opacity 0.4s ease',
-    }}>
-      {step.label}
-    </div>
+    <MarkerDim at={step.marker}>
+      <div style={{
+        padding: '0.8rem 1.5rem',
+        borderRadius: 10,
+        background: theme.colors.bgSurface,
+        border: `2px solid ${colorMap[step.color]}`,
+        fontSize: 14,
+        fontWeight: 600,
+        color: theme.colors.textPrimary,
+        textAlign: 'center',
+      }}>
+        {step.label}
+      </div>
+    </MarkerDim>
   );
 };
 
@@ -178,23 +177,18 @@ const EvalPipelineArrow: React.FC<{
   marker: string;
   theme: ReturnType<typeof useTheme>;
 }> = ({ marker, theme }) => {
-  const { reached } = useMarker(marker);
   return (
-    <span style={{
-      color: theme.colors.primary,
-      opacity: reached ? 1 : 0.15,
-      transition: 'opacity 0.4s ease',
-    }}>
-      <ArrowRight />
-    </span>
+    <MarkerDim at={marker}>
+      <span style={{ color: theme.colors.primary }}>
+        <ArrowRight />
+      </span>
+    </MarkerDim>
   );
 };
 
 const Ch8_S2_EvalToolComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
   const theme = useTheme();
-  const { reached: jsonReached } = useMarker('json-output');
-  const { reached: videoReached } = useMarker('video-output');
 
   const colorMap = {
     warning: theme.colors.warning,
@@ -231,64 +225,66 @@ const Ch8_S2_EvalToolComponent: React.FC = () => {
         gap: '1rem',
         marginBottom: '2rem'
       }}>
-        <div style={{
-          ...cardStyle(),
-          borderRadius: 10,
-          opacity: jsonReached ? 1 : 0.15,
-          transition: 'opacity 0.4s ease',
-        }}>
+        <MarkerDim at="json-output">
           <div style={{
-            ...typography.caption,
-            fontSize: 11,
-            color: theme.colors.primary,
-            letterSpacing: 1,
-            textTransform: 'uppercase',
-            marginBottom: '0.4rem'
+            ...cardStyle(),
+            borderRadius: 10,
           }}>
-            Automated Validation
+            <div style={{
+              ...typography.caption,
+              fontSize: 11,
+              color: theme.colors.primary,
+              letterSpacing: 1,
+              textTransform: 'uppercase',
+              marginBottom: '0.4rem'
+            }}>
+              Automated Validation
+            </div>
+            <div style={{ ...typography.body, fontSize: 13 }}>
+              Highlights JSON checked for structural correctness and turn-utterance accuracy
+            </div>
           </div>
-          <div style={{ ...typography.body, fontSize: 13 }}>
-            Highlights JSON checked for structural correctness and turn-utterance accuracy
-          </div>
-        </div>
-        <div style={{
-          ...cardStyle(),
-          borderRadius: 10,
-          opacity: videoReached ? 1 : 0.15,
-          transition: 'opacity 0.4s ease',
-        }}>
+        </MarkerDim>
+        <MarkerDim at="video-output">
           <div style={{
-            ...typography.caption,
-            fontSize: 11,
-            color: theme.colors.success,
-            letterSpacing: 1,
-            textTransform: 'uppercase',
-            marginBottom: '0.4rem'
+            ...cardStyle(),
+            borderRadius: 10,
           }}>
-            Subjective Review
+            <div style={{
+              ...typography.caption,
+              fontSize: 11,
+              color: theme.colors.success,
+              letterSpacing: 1,
+              textTransform: 'uppercase',
+              marginBottom: '0.4rem'
+            }}>
+              Subjective Review
+            </div>
+            <div style={{ ...typography.body, fontSize: 13 }}>
+              Highlights video lets you see and hear exactly what the model selected
+            </div>
           </div>
-          <div style={{ ...typography.body, fontSize: 13 }}>
-            Highlights video lets you see and hear exactly what the model selected
-          </div>
-        </div>
+        </MarkerDim>
       </Reveal>
 
       <Reveal from={2} animation={fadeUp}>
-        <Callout variant="info" icon="" style={{ textAlign: 'center' }}>
-          <div style={{
-            ...typography.body,
-            fontSize: 14,
-            fontWeight: 600,
-            color: theme.colors.primary,
-            marginBottom: '0.3rem'
-          }}>
-            Rapid Iteration Through Dual Feedback
+        <GradientHighlightBox reduced={reduced}>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{
+              ...typography.body,
+              fontSize: 14,
+              fontWeight: 600,
+              color: theme.colors.primary,
+              marginBottom: '0.3rem'
+            }}>
+              Rapid Iteration Through Dual Feedback
+            </div>
+            <div style={{ ...typography.caption, fontSize: 13, lineHeight: 1.5 }}>
+              Change a prompt, run locally, check both signals in minutes — not hours.
+              This tight feedback loop made it practical to test dozens of prompt revisions per day.
+            </div>
           </div>
-          <div style={{ ...typography.caption, fontSize: 13, lineHeight: 1.5 }}>
-            Change a prompt, run locally, check both signals in minutes — not hours.
-            This tight feedback loop made it practical to test dozens of prompt revisions per day.
-          </div>
-        </Callout>
+        </GradientHighlightBox>
       </Reveal>
     </SlideContainer>
   );

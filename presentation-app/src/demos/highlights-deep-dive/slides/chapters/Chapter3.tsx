@@ -2,12 +2,13 @@ import React from 'react';
 import {
   useReducedMotion,
   useSegmentedAnimation,
-  useMarker,
   useTheme,
+  useMarker,
   defineSlide,
   SlideContainer,
   SlideTitle,
   Reveal,
+  RevealGroup,
   CodeBlock,
   BeforeAfterSplit,
   NumberedStepCard,
@@ -40,14 +41,14 @@ const Ch3_S1_CostDriversComponent: React.FC = () => {
         </SlideTitle>
       </Reveal>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+      <RevealGroup from={1} stagger staggerDelay={0} childAnimation={fadeUp}>
         {COST_DRIVERS.map((driver, i) => {
           const segIdx = i + 1;
           const isLast = i === COST_DRIVERS.length - 1;
           const isActive = isLast && currentSegmentIndex >= segIdx;
 
           return (
-            <Reveal key={driver.num} from={segIdx} animation={fadeUp}>
+            <Reveal key={driver.num} from={segIdx}>
               <NumberedStepCard
                 number={driver.num}
                 title={driver.title}
@@ -58,7 +59,7 @@ const Ch3_S1_CostDriversComponent: React.FC = () => {
             </Reveal>
           );
         })}
-      </div>
+      </RevealGroup>
     </SlideContainer>
   );
 };
