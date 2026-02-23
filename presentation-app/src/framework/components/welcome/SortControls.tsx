@@ -8,11 +8,11 @@ interface SortControlsProps {
   onSetSort: (sort: SortMode) => void;
 }
 
-const SORT_OPTIONS: { value: SortMode; label: string; reversible: boolean }[] = [
-  { value: 'default', label: 'Default', reversible: false },
-  { value: 'alpha', label: 'A\u2013Z', reversible: true },
-  { value: 'duration', label: 'Duration', reversible: true },
-  { value: 'category', label: 'Category', reversible: false },
+const SORT_OPTIONS: { value: SortMode; label: string; hint: string; reversible: boolean }[] = [
+  { value: 'default', label: 'Default', hint: 'Original registration order', reversible: false },
+  { value: 'alpha', label: 'A\u2013Z', hint: 'Sort alphabetically by title', reversible: true },
+  { value: 'duration', label: 'Duration', hint: 'Sort by presentation length', reversible: true },
+  { value: 'category', label: 'Category', hint: 'Group by first tag', reversible: false },
 ];
 
 export const SortControls: React.FC<SortControlsProps> = ({ sort, sortDirection, onSetSort }) => {
@@ -42,7 +42,9 @@ export const SortControls: React.FC<SortControlsProps> = ({ sort, sortDirection,
             key={opt.value}
             onClick={() => onSetSort(opt.value)}
             aria-pressed={active}
-            title={active && opt.reversible ? `Click to reverse (currently ${sortDirection === 'asc' ? 'ascending' : 'descending'})` : undefined}
+            title={active && opt.reversible
+              ? `Click to reverse (currently ${sortDirection === 'asc' ? 'ascending' : 'descending'})`
+              : active ? opt.hint : `${opt.hint} — click to activate`}
             style={{
               fontSize: 11,
               fontWeight: active ? 600 : 400,

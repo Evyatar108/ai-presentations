@@ -32,6 +32,7 @@ export const TagFilter: React.FC<TagFilterProps> = ({
             key={tag}
             onClick={() => onToggleTag(tag)}
             aria-pressed={active}
+            title={active ? `Remove "${tag}" filter` : `Show only "${tag}" demos`}
             style={{
               fontSize: 11,
               fontWeight: 600,
@@ -53,6 +54,7 @@ export const TagFilter: React.FC<TagFilterProps> = ({
       {selectedTags.length > 0 && (
         <button
           onClick={onClearTags}
+          title="Remove all tag filters"
           style={{
             fontSize: 11,
             fontWeight: 500,

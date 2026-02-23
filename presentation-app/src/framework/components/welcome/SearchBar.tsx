@@ -40,6 +40,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ value, onChange }) => {
         onChange={handleChange}
         placeholder="Search demos..."
         aria-label="Search demos"
+        title="Search by title, description, or tags"
         style={{
           width: '100%',
           padding: '0.6rem 2.2rem 0.6rem 2.4rem',
@@ -76,6 +77,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ value, onChange }) => {
         <button
           onClick={handleClear}
           aria-label="Clear search"
+          title="Clear search"
           style={{
             position: 'absolute',
             right: 8,

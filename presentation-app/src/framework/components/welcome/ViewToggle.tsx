@@ -39,6 +39,7 @@ export const ViewToggle: React.FC<ViewToggleProps> = ({ view, onSetView }) => {
         onClick={() => onSetView('grid')}
         aria-pressed={view === 'grid'}
         aria-label="Grid view"
+        title="Grid view — show demo cards in a grid"
         style={btnStyle(view === 'grid')}
       >
         {/* Grid icon - 4 squares */}
@@ -53,6 +54,7 @@ export const ViewToggle: React.FC<ViewToggleProps> = ({ view, onSetView }) => {
         onClick={() => onSetView('list')}
         aria-pressed={view === 'list'}
         aria-label="List view"
+        title="List view — show demos as compact rows"
         style={btnStyle(view === 'list')}
       >
         {/* List icon - 3 horizontal bars */}
