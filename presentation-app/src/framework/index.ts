@@ -171,7 +171,7 @@ export { useIntersectionObserver } from './hooks/useIntersectionObserver';
 export { getParam, getParamList, setParams, pushDemo, pushWelcome } from './hooks/useUrlParams';
 
 // Welcome screen types
-export type { SortMode, ViewMode } from './components/welcome/types';
+export type { SortMode, SortDirection, ViewMode } from './components/welcome/types';
 
 // Accessibility
 export { ReducedMotionProvider, WithReducedMotionProvider, ReducedMotionToggle, useReducedMotion } from './accessibility/ReducedMotion';

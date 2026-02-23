@@ -1,20 +1,21 @@
 import React from 'react';
 import { useTheme } from '../../theme/ThemeContext';
-import type { SortMode } from './types';
+import type { SortMode, SortDirection } from './types';
 
 interface SortControlsProps {
   sort: SortMode;
+  sortDirection: SortDirection;
   onSetSort: (sort: SortMode) => void;
 }
 
-const SORT_OPTIONS: { value: SortMode; label: string }[] = [
-  { value: 'default', label: 'Default' },
-  { value: 'alpha', label: 'A\u2013Z' },
-  { value: 'duration', label: 'Duration' },
-  { value: 'category', label: 'Category' },
+const SORT_OPTIONS: { value: SortMode; label: string; reversible: boolean }[] = [
+  { value: 'default', label: 'Default', reversible: false },
+  { value: 'alpha', label: 'A\u2013Z', reversible: true },
+  { value: 'duration', label: 'Duration', reversible: true },
+  { value: 'category', label: 'Category', reversible: false },
 ];
 
-export const SortControls: React.FC<SortControlsProps> = ({ sort, onSetSort }) => {
+export const SortControls: React.FC<SortControlsProps> = ({ sort, sortDirection, onSetSort }) => {
   const theme = useTheme();
 
   return (
@@ -33,11 +34,15 @@ export const SortControls: React.FC<SortControlsProps> = ({ sort, onSetSort }) =
       </span>
       {SORT_OPTIONS.map(opt => {
         const active = sort === opt.value;
+        const arrow = active && opt.reversible
+          ? (sortDirection === 'asc' ? ' \u25B2' : ' \u25BC')
+          : '';
         return (
           <button
             key={opt.value}
             onClick={() => onSetSort(opt.value)}
             aria-pressed={active}
+            title={active && opt.reversible ? `Click to reverse (currently ${sortDirection === 'asc' ? 'ascending' : 'descending'})` : undefined}
             style={{
               fontSize: 11,
               fontWeight: active ? 600 : 400,
@@ -50,7 +55,7 @@ export const SortControls: React.FC<SortControlsProps> = ({ sort, onSetSort }) =
               transition: 'all 0.2s ease',
             }}
           >
-            {opt.label}
+            {opt.label}{arrow}
           </button>
         );
       })}

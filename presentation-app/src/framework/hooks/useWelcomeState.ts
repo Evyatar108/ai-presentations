@@ -1,6 +1,6 @@
 import { useReducer, useMemo } from 'react';
 import type { DemoMetadata } from '../demos/types';
-import type { WelcomeState, WelcomeAction, SortMode } from '../components/welcome/types';
+import type { WelcomeState, WelcomeAction, SortMode, SortDirection } from '../components/welcome/types';
 
 function getInitialState(): WelcomeState {
   let view: WelcomeState['view'] = 'grid';
@@ -14,6 +14,7 @@ function getInitialState(): WelcomeState {
     search: '',
     selectedTags: [],
     sort: 'default',
+    sortDirection: 'asc',
     view,
     hoveredId: null,
     showBreakdown: null,
@@ -34,7 +35,13 @@ function reducer(state: WelcomeState, action: WelcomeAction): WelcomeState {
     case 'CLEAR_TAGS':
       return { ...state, selectedTags: [] };
     case 'SET_SORT':
-      return { ...state, sort: action.payload };
+      // Clicking the same sort mode toggles direction; switching modes resets to asc
+      if (action.payload === state.sort) {
+        return { ...state, sortDirection: state.sortDirection === 'asc' ? 'desc' : 'asc' };
+      }
+      return { ...state, sort: action.payload, sortDirection: 'asc' };
+    case 'TOGGLE_SORT_DIRECTION':
+      return { ...state, sortDirection: state.sortDirection === 'asc' ? 'desc' : 'asc' };
     case 'SET_VIEW':
       try { localStorage.setItem('welcome:viewMode', action.payload); } catch { /* noop */ }
       return { ...state, view: action.payload };
@@ -48,6 +55,7 @@ function reducer(state: WelcomeState, action: WelcomeAction): WelcomeState {
         ...(action.payload.search !== undefined && { search: action.payload.search }),
         ...(action.payload.selectedTags !== undefined && { selectedTags: action.payload.selectedTags }),
         ...(action.payload.sort !== undefined && { sort: action.payload.sort }),
+        ...(action.payload.sortDirection !== undefined && { sortDirection: action.payload.sortDirection }),
         ...(action.payload.view !== undefined && { view: action.payload.view }),
       };
     default:
@@ -63,16 +71,17 @@ function matchesSearch(demo: DemoMetadata, query: string): boolean {
   return false;
 }
 
-function sortDemos(demos: DemoMetadata[], mode: SortMode): DemoMetadata[] {
-  if (mode === 'default') return demos;
+function sortDemos(demos: DemoMetadata[], mode: SortMode, direction: SortDirection): DemoMetadata[] {
+  if (mode === 'default' || mode === 'category') return demos;
   const sorted = [...demos];
+  const dir = direction === 'asc' ? 1 : -1;
   if (mode === 'alpha') {
-    sorted.sort((a, b) => a.title.localeCompare(b.title));
+    sorted.sort((a, b) => dir * a.title.localeCompare(b.title));
   } else if (mode === 'duration') {
     sorted.sort((a, b) => {
       const aDur = a.durationInfo?.total ?? Infinity;
       const bDur = b.durationInfo?.total ?? Infinity;
-      return aDur - bDur;
+      return dir * (aDur - bDur);
     });
   }
   return sorted;
@@ -107,10 +116,10 @@ export function useWelcomeState(allDemos: DemoMetadata[]) {
     }
 
     // Sort
-    result = sortDemos(result, state.sort);
+    result = sortDemos(result, state.sort, state.sortDirection);
 
     return result;
-  }, [allDemos, state.search, state.selectedTags, state.sort]);
+  }, [allDemos, state.search, state.selectedTags, state.sort, state.sortDirection]);
 
   // Group demos by first tag for category view
   const groupedDemos = useMemo(() => {

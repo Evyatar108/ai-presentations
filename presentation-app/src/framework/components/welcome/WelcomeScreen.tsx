@@ -13,7 +13,7 @@ import { DurationBreakdownModal } from './DurationBreakdownModal';
 import { FavoritesSection } from './FavoritesSection';
 import { RecentlyViewedSection } from './RecentlyViewedSection';
 import { CategorySection } from './CategorySection';
-import type { SortMode, ViewMode } from './types';
+import type { SortMode, SortDirection, ViewMode } from './types';
 
 interface WelcomeScreenProps {
   onSelectDemo: (demoId: string) => void;
@@ -66,12 +66,14 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
     const q = getParam('q');
     const tags = getParamList('tags');
     const sortParam = getParam('sort') as SortMode | null;
+    const dirParam = getParam('dir') as SortDirection | null;
     const viewParam = getParam('view') as ViewMode | null;
 
     const payload: Record<string, unknown> = {};
     if (q) payload.search = q;
     if (tags.length > 0) payload.selectedTags = tags;
     if (sortParam && VALID_SORTS.includes(sortParam)) payload.sort = sortParam;
+    if (dirParam === 'asc' || dirParam === 'desc') payload.sortDirection = dirParam;
     if (viewParam && VALID_VIEWS.includes(viewParam)) payload.view = viewParam;
 
     if (Object.keys(payload).length > 0) {
@@ -86,9 +88,10 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
       q: state.search.trim() || null,
       tags: state.selectedTags.length > 0 ? state.selectedTags.join(',') : null,
       sort: state.sort !== 'default' ? state.sort : null,
+      dir: state.sortDirection !== 'asc' ? state.sortDirection : null,
       view: state.view !== 'grid' ? state.view : null,
     });
-  }, [state.search, state.selectedTags, state.sort, state.view]);
+  }, [state.search, state.selectedTags, state.sort, state.sortDirection, state.view]);
 
   // Load persisted actual runtimes and validate against current planned totals
   useEffect(() => {
@@ -153,6 +156,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onSelectDemo }) =>
         selectedTags={state.selectedTags}
         allTags={allTags}
         sort={state.sort}
+        sortDirection={state.sortDirection}
         view={state.view}
         onSearchChange={(v) => dispatch({ type: 'SET_SEARCH', payload: v })}
         onToggleTag={(t) => dispatch({ type: 'TOGGLE_TAG', payload: t })}

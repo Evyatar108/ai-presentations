@@ -11,13 +11,14 @@ import { SearchBar } from './SearchBar';
 import { TagFilter } from './TagFilter';
 import { SortControls } from './SortControls';
 import { ViewToggle } from './ViewToggle';
-import type { SortMode, ViewMode } from './types';
+import type { SortMode, SortDirection, ViewMode } from './types';
 
 interface ToolbarRowProps {
   search: string;
   selectedTags: string[];
   allTags: string[];
   sort: SortMode;
+  sortDirection: SortDirection;
   view: ViewMode;
   onSearchChange: (value: string) => void;
   onToggleTag: (tag: string) => void;
@@ -33,6 +34,7 @@ export const ToolbarRow: React.FC<ToolbarRowProps> = ({
   selectedTags,
   allTags,
   sort,
+  sortDirection,
   view,
   onSearchChange,
   onToggleTag,
@@ -72,7 +74,7 @@ export const ToolbarRow: React.FC<ToolbarRowProps> = ({
         flexWrap: 'wrap',
       }}>
         <SearchBar value={search} onChange={onSearchChange} />
-        <SortControls sort={sort} onSetSort={onSetSort} />
+        <SortControls sort={sort} sortDirection={sortDirection} onSetSort={onSetSort} />
         <ViewToggle view={view} onSetView={onSetView} />
       </div>
 
