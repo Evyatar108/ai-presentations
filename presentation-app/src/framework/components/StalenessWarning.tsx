@@ -173,16 +173,31 @@ export const StalenessWarning: React.FC<StalenessWarningProps> = ({
     setAlignmentError(null);
     setPartialFixMessage(null);
 
+    const oldMarkerCount = staleness.missingMarkers.length;
+
     try {
       const result = await realignSegments({ demoId });
       if (!result.success) {
         setAlignmentError(result.error || 'Alignment failed. Is WhisperX running?');
+        return;
       }
 
       clearAlignmentCache(demoId);
       const newAlignment = await loadAlignment(demoId);
       onAlignmentFixed?.(newAlignment);
-      await refetch();
+      const newStaleness = await refetch();
+
+      // Feedback: alignment succeeded but markers may still remain
+      if (newStaleness) {
+        const newMarkerCount = newStaleness.missingMarkers.length;
+        const resolved = oldMarkerCount - newMarkerCount;
+        if (newMarkerCount > 0 && resolved > 0) {
+          setPartialFixMessage(`Resolved ${resolved} marker${resolved !== 1 ? 's' : ''}. ${newMarkerCount} still unresolved — these markers may not match words in the audio.`);
+        } else if (newMarkerCount > 0 && resolved === 0) {
+          setAlignmentError(`Alignment ran successfully but could not resolve ${newMarkerCount} marker${newMarkerCount !== 1 ? 's' : ''}. The marker IDs may not match any words in the narration audio.`);
+        }
+        // If newMarkerCount === 0, staleness.stale may become false and the panel closes naturally
+      }
     } catch (err: unknown) {
       setAlignmentError(err instanceof Error ? err.message : 'Alignment failed');
     } finally {

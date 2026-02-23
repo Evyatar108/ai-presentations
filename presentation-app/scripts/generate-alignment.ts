@@ -431,4 +431,7 @@ const config: AlignConfig = {
   batchSize: parseInt(process.env.BATCH_SIZE || '10', 10),
 };
 
-generateAlignment(config).catch(console.error);
+generateAlignment(config).catch((err) => {
+  console.error(err);
+  process.exit(1);
+});
