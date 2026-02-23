@@ -81,7 +81,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
       ) : (
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 500px), 1fr))',
+          gridTemplateColumns: 'repeat(2, 1fr)',
           gap: '2rem',
         }}>
           {demos.map((demo, index) => (

@@ -56,7 +56,7 @@ export const DemoGrid: React.FC<DemoGridProps> = ({
   return (
     <main style={{
       display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 500px), 1fr))',
+      gridTemplateColumns: 'repeat(2, 1fr)',
       gap: '2rem',
       maxWidth: 1200,
       margin: '0 auto'
