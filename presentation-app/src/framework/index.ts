@@ -165,6 +165,13 @@ export { useMarker, useMarkerRange } from './hooks/useMarker';
 export type { MarkerState, MarkerRangeState } from './hooks/useMarker';
 export { useWordHighlight } from './hooks/useWordHighlight';
 export type { WordHighlightState } from './hooks/useWordHighlight';
+export { useLocalStorage } from './hooks/useLocalStorage';
+export { useFavorites } from './hooks/useFavorites';
+export { useIntersectionObserver } from './hooks/useIntersectionObserver';
+export { getParam, getParamList, setParams, pushDemo, pushWelcome } from './hooks/useUrlParams';
+
+// Welcome screen types
+export type { SortMode, ViewMode } from './components/welcome/types';
 
 // Accessibility
 export { ReducedMotionProvider, WithReducedMotionProvider, ReducedMotionToggle, useReducedMotion } from './accessibility/ReducedMotion';

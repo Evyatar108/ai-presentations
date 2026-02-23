@@ -155,3 +155,22 @@ In dev mode, a **staleness review panel** (`StalenessWarning`) appears when the 
 - Work on demos independently
 - No merge conflicts between demos
 - Clear separation of concerns
+
+## Welcome Screen
+
+The welcome screen (`src/framework/components/welcome/`) is a decomposed component tree for demo discovery and navigation.
+
+### Component Tree
+`WelcomeScreen` (orchestrator) renders: `WelcomeHeader` → `ToolbarRow` (sticky, SearchBar + TagFilter + SortControls + ViewToggle) → `FavoritesSection` → `RecentlyViewedSection` → `DemoGrid` (or `CategorySection` groups) → `DurationBreakdownModal` → `WelcomeFooter`.
+
+### State Management
+Central `useWelcomeState` reducer hook manages search, selectedTags, sort, view, hoveredId, and showBreakdown. Derived data (`filteredDemos`, `groupedDemos`, `allTags`) computed via `useMemo`.
+
+### URL Navigation
+Filter state syncs to URL query params (`q`, `tags`, `sort`, `view`) via `replaceState` (no back-button pollution). Demo selection uses `pushState` so the browser back button returns to the welcome screen. `App.tsx` listens for `popstate` events.
+
+### localStorage Persistence
+- `welcome:viewMode` — grid or list preference
+- `welcome:favorites` — favorited demo IDs
+- `welcome:recentlyViewed` — recently viewed demo IDs (max 10, most recent first)
+- `demoRuntime:{id}` — actual runtime data per demo (pre-existing)

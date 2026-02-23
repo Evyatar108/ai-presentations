@@ -4,14 +4,39 @@
 
 ### WelcomeScreen
 
-Demo selection interface with card-based layout.
+Demo selection interface with search, filtering, sorting, and multiple view modes.
 
-**Location**: `src/framework/components/WelcomeScreen.tsx`
+**Location**: `src/framework/components/welcome/` (re-exported from `WelcomeScreen.tsx`)
+
+**Sub-components**:
+- `WelcomeHeader` — Title and subtitle
+- `DemoCard` — Grid card with thumbnail, title, description, tags, duration, favorite toggle, IO-driven entrance animations
+- `DemoListItem` — Compact single-row list view item
+- `DemoGrid` — Renders cards or list items based on view mode
+- `DurationBreakdownModal` — Per-slide timing detail modal with focus trap
+- `ToolbarRow` — Sticky toolbar composing SearchBar + TagFilter + SortControls + ViewToggle
+- `SearchBar` — Debounced search input (200ms, no external libs)
+- `TagFilter` — Clickable tag pills with OR filtering and "Clear all"
+- `SortControls` — Default / A-Z / Duration / Category sort modes
+- `ViewToggle` — Grid/list view toggle with SVG icons
+- `FavoritesSection` — Horizontal scrollable row of favorited demos
+- `RecentlyViewedSection` — Horizontal scrollable row of recently played demos
+- `CategorySection` — Grouped view with section heading per tag category
+- `WelcomeFooter` — Footer message
 
 **Features**:
-- Displays all registered demos
+- Displays all registered (non-hidden) demos
 - Shows thumbnail, title, description, tags, duration
-- Click to select and load demo
+- Search across title, description, and tags (case-insensitive)
+- Filter by tags (OR among selected, AND with search)
+- Sort: default (insertion order), alphabetical, duration, or grouped by category
+- Grid/list view toggle (persisted to localStorage)
+- Favorites with heart toggle (persisted to localStorage)
+- Recently viewed demos (up to 10, persisted to localStorage)
+- URL navigation: `?q=`, `?tags=`, `?sort=`, `?view=` params via replaceState
+- Demo selection via pushState (browser back button returns to welcome)
+- Sticky toolbar with backdrop blur on scroll
+- Intersection Observer entrance animations (respects `prefers-reduced-motion`)
 - Responsive grid layout
 
 ### DemoPlayer

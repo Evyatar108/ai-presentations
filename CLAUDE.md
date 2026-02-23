@@ -109,6 +109,12 @@ Subtitle corrections: `public/audio/{demo-id}/subtitle-corrections.json` — map
 | `src/framework/components/narrated/ProgressBar.tsx` | Playback progress indicator with controls |
 | `src/framework/components/narrated/NotificationStack.tsx` | Toast notification display |
 | `src/framework/components/narrated/ErrorToast.tsx` | Playback error display |
+| `src/framework/components/welcome/` | WelcomeScreen decomposed: WelcomeScreen, DemoCard, DemoGrid, ToolbarRow, SearchBar, TagFilter, SortControls, ViewToggle, DemoListItem, FavoritesSection, RecentlyViewedSection, CategorySection, DurationBreakdownModal |
+| `src/framework/hooks/useWelcomeState.ts` | Central reducer for welcome screen state (search, filter, sort, view) |
+| `src/framework/hooks/useUrlParams.ts` | URL param helpers (getParam, setParams, pushDemo, pushWelcome) |
+| `src/framework/hooks/useFavorites.ts` | Favorites + recently viewed (localStorage) |
+| `src/framework/hooks/useLocalStorage.ts` | Generic useLocalStorage<T> hook |
+| `src/framework/hooks/useIntersectionObserver.ts` | IO hook for scroll-triggered entrance animations |
 | `src/framework/components/DemoPlayer.tsx` | Demo container with loading/error states |
 | `src/framework/components/SlideErrorBoundary.tsx` | Error boundary for individual slides |
 | `src/framework/components/DemoPlayerBoundary.tsx` | Top-level error boundary for DemoPlayer |
