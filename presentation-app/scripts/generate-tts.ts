@@ -506,7 +506,7 @@ async function generateBatches(
 
           // Update cache
           const relativeFilepath = normalizeCachePath(path.relative(path.join(config.outputDir, item.demoId), item.filepath));
-          store.setEntry(item.demoId, relativeFilepath, stripMarkers(item.segment.narrationText!), item.instruct);
+          store.setEntry(item.demoId, relativeFilepath, item.segment.narrationText!, item.instruct);
         }
 
       } else {

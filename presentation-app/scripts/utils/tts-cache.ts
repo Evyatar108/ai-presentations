@@ -81,6 +81,7 @@ export function saveTtsCache(cacheFile: string, cache: TtsCache): void {
 // ---------------------------------------------------------------------------
 
 import * as path from 'path';
+import { stripMarkers } from './marker-parser';
 
 /** Default cache filename relative to project root. */
 export const DEFAULT_CACHE_FILENAME = '.tts-narration-cache.json';
@@ -155,7 +156,7 @@ export class TtsCacheStore {
       this.cache[demoId] = {};
     }
     this.cache[demoId][relPath] = {
-      narrationText,
+      narrationText: stripMarkers(narrationText),
       ...(instruct ? { instruct } : {}),
       generatedAt: new Date().toISOString(),
     };

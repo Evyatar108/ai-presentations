@@ -315,8 +315,8 @@
       "generatedAt": "2026-02-20T19:36:37.394Z"
     },
     "c5/s1_segment_02_split.wav": {
-      "narrationText": "On the left, {#v1-format}V1's verbose JSON — five keys per utterance. On the right, {#v2-format}V2's compact turn-grouped table — speaker name appears once, utterances are pipe-delimited.",
-      "generatedAt": "2026-02-22T23:48:55.407Z"
+      "narrationText": "On the left, V1's verbose JSON — five keys per utterance. On the right, V2's compact turn-grouped table — speaker name appears once, utterances are pipe-delimited.",
+      "generatedAt": "2026-02-23T04:02:31.412Z"
     },
     "c5/s1_segment_03_table.wav": {
       "narrationText": "Speaker info appears once per turn — in the turn tag. Timestamps are omitted entirely. And the third column, max end utterance ID, encodes topic boundaries directly in the data.",
@@ -393,9 +393,8 @@
       "generatedAt": "2026-02-20T20:25:58.856Z"
     },
     "c9/s2_segment_02_roadmap.wav": {
-      "narrationText": "This cost reduction directly unblocked the product roadmap. The feature entered private preview and is now on track for GA rollout.",
-      "instruct": "Speak in a clear, confident, professional tone at a moderate pace, suitable for a technical presentation to software engineers.",
-      "generatedAt": "2026-02-20T20:25:58.858Z"
+      "narrationText": "This cost reduction directly unblocked the product roadmap. The feature moved through private preview and shipped to general availability.",
+      "generatedAt": "2026-02-23T03:54:44.091Z"
     },
     "c9/s1_segment_04_gpus.wav": {
       "narrationText": "And roughly seventy percent GPU reduction — six hundred A100s down to about one hundred eighty. The capacity blocker was gone.",
@@ -403,9 +402,8 @@
       "generatedAt": "2026-02-20T20:36:08.224Z"
     },
     "c9/s2_segment_03_quote.wav": {
-      "narrationText": "In the words of our engineering manager: V2 is a compact prompt with only one LLM request that combines abstractive and extractive highlights generation into a single unified pipeline.",
-      "instruct": "Speak as if quoting someone admiringly, slightly slower and more measured.",
-      "generatedAt": "2026-02-20T20:37:28.119Z"
+      "narrationText": "Quality held steady while cost dropped enough to clear the capacity gate — Meeting Highlights shipped to GA.",
+      "generatedAt": "2026-02-23T03:54:44.093Z"
     },
     "c10/s1_segment_01_title.wav": {
       "narrationText": "Let me close with six lessons you can apply to your next LLM pipeline.",

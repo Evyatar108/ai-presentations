@@ -584,13 +584,13 @@
         },
         {
           "id": "roadmap",
-          "narrationText": "This {#cost-step}cost reduction directly unblocked the product roadmap. The feature entered {#preview-step}private preview and is now on track for {#ga-step}GA rollout.",
+          "narrationText": "This {#cost-step}cost reduction directly unblocked the product roadmap. The feature moved through {#preview-step}private preview and {#ga-step}shipped to general availability.",
           "visualDescription": "",
           "notes": ""
         },
         {
           "id": "quote",
-          "narrationText": "In the words of our engineering manager: V2 is a compact prompt with only one LLM request that combines abstractive and extractive highlights generation into a single unified pipeline.",
+          "narrationText": "Quality held steady while cost dropped enough to clear the capacity gate — Meeting Highlights shipped to GA.",
           "visualDescription": "",
           "notes": ""
         }

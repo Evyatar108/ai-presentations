@@ -13,6 +13,7 @@ import { dirname } from 'path';
 import { TtsCacheStore } from './utils/tts-cache';
 import axios from 'axios';
 import { loadTtsServerUrl } from './utils/server-config';
+import { stripMarkers } from './utils/marker-parser';
 import {
   loadNarrationCache,
   saveNarrationCache,
@@ -78,7 +79,7 @@ async function generateSingleSegment(config: SingleSegmentConfig): Promise<void>
     const response = await axios.post(
       `${config.serverUrl}/generate`,
       {
-        text: `Speaker 0: ${config.narrationText}`,
+        text: `Speaker 0: ${stripMarkers(config.narrationText)}`,
         ...(config.instruct ? { instruct: config.instruct } : {})
       },
       {

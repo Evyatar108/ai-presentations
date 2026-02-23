@@ -1,12 +1,12 @@
 {
   "highlights-deep-dive": {
     "demoId": "highlights-deep-dive",
-    "audioOnlyDuration": 1196.56,
+    "audioOnlyDuration": 1214.2399999999998,
     "segmentDelays": 84,
     "slideDelays": 84,
     "finalDelay": 5,
     "startSilence": 3,
-    "totalDuration": 1372.56,
+    "totalDuration": 1390.2399999999998,
     "slideBreakdowns": [
       {
         "slideIndex": 1,
@@ -222,8 +222,8 @@
         "slideIndex": 3,
         "slideTitle": "O(n^2) Visualized",
         "chapterIndex": 4,
-        "totalDuration": 43.14,
-        "audioDuration": 36.64,
+        "totalDuration": 56.82,
+        "audioDuration": 50.32,
         "delaysDuration": 6.5,
         "segments": [
           {
@@ -238,7 +238,7 @@
           },
           {
             "segmentIndex": 2,
-            "audioDuration": 16.08,
+            "audioDuration": 29.76,
             "delayAfter": 3.5
           }
         ]
@@ -277,8 +277,8 @@
         "slideIndex": 1,
         "slideTitle": "Format Comparison",
         "chapterIndex": 5,
-        "totalDuration": 39.78,
-        "audioDuration": 33.28,
+        "totalDuration": 38.98,
+        "audioDuration": 32.48,
         "delaysDuration": 6.5,
         "segments": [
           {
@@ -288,7 +288,7 @@
           },
           {
             "segmentIndex": 1,
-            "audioDuration": 14.24,
+            "audioDuration": 13.44,
             "delayAfter": 1.5
           },
           {
@@ -352,8 +352,8 @@
         "slideIndex": 1,
         "slideTitle": "Prompt Overview",
         "chapterIndex": 6,
-        "totalDuration": 68.58,
-        "audioDuration": 62.08,
+        "totalDuration": 76.58000000000001,
+        "audioDuration": 70.08000000000001,
         "delaysDuration": 6.5,
         "segments": [
           {
@@ -363,7 +363,7 @@
           },
           {
             "segmentIndex": 1,
-            "audioDuration": 31.2,
+            "audioDuration": 39.2,
             "delayAfter": 1.5
           },
           {
@@ -377,13 +377,13 @@
         "slideIndex": 2,
         "slideTitle": "Pseudocode Algorithm",
         "chapterIndex": 6,
-        "totalDuration": 48.17999999999999,
-        "audioDuration": 41.67999999999999,
+        "totalDuration": 48.739999999999995,
+        "audioDuration": 42.239999999999995,
         "delaysDuration": 6.5,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 16.64,
+            "audioDuration": 17.2,
             "delayAfter": 1.5
           },
           {
@@ -497,23 +497,23 @@
         "slideIndex": 1,
         "slideTitle": "Validation Challenges",
         "chapterIndex": 8,
-        "totalDuration": 73.86,
-        "audioDuration": 67.36,
+        "totalDuration": 76.02,
+        "audioDuration": 69.52,
         "delaysDuration": 6.5,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 11.68,
+            "audioDuration": 10.24,
             "delayAfter": 1.5
           },
           {
             "segmentIndex": 1,
-            "audioDuration": 26.32,
+            "audioDuration": 29.84,
             "delayAfter": 1.5
           },
           {
             "segmentIndex": 2,
-            "audioDuration": 29.36,
+            "audioDuration": 29.44,
             "delayAfter": 3.5
           }
         ]
@@ -522,23 +522,23 @@
         "slideIndex": 2,
         "slideTitle": "Eval Tool",
         "chapterIndex": 8,
-        "totalDuration": 68.02,
-        "audioDuration": 61.519999999999996,
+        "totalDuration": 69.62,
+        "audioDuration": 63.120000000000005,
         "delaysDuration": 6.5,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 9.68,
+            "audioDuration": 8.24,
             "delayAfter": 1.5
           },
           {
             "segmentIndex": 1,
-            "audioDuration": 20.8,
+            "audioDuration": 25.6,
             "delayAfter": 1.5
           },
           {
             "segmentIndex": 2,
-            "audioDuration": 31.04,
+            "audioDuration": 29.28,
             "delayAfter": 3.5
           }
         ]
@@ -577,8 +577,8 @@
         "slideIndex": 2,
         "slideTitle": "Quality and Impact",
         "chapterIndex": 9,
-        "totalDuration": 37.22,
-        "audioDuration": 30.72,
+        "totalDuration": 29.7,
+        "audioDuration": 23.2,
         "delaysDuration": 6.5,
         "segments": [
           {
@@ -588,12 +588,12 @@
           },
           {
             "segmentIndex": 1,
-            "audioDuration": 8.24,
+            "audioDuration": 8.08,
             "delayAfter": 1.5
           },
           {
             "segmentIndex": 2,
-            "audioDuration": 13.04,
+            "audioDuration": 5.68,
             "delayAfter": 3.5
           }
         ]
@@ -665,8 +665,8 @@
       }
     ],
     "formattedDurations": {
-      "audioOnly": "19:56",
-      "total": "22:52"
+      "audioOnly": "20:14",
+      "total": "23:10"
     }
   }
 }

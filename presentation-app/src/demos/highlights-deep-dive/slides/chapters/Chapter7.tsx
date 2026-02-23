@@ -17,12 +17,10 @@ import {
  * Chapter 7: Copy-then-Parse + Self-Checks (2 slides)
  */
 
-const COPY_CODE = `# Step 1: Copy raw strings from input
-selected_turn_opening_tag_raw_copy: "<t5 Sarah>"
+const COPY_CODE = `selected_turn_opening_tag_raw_copy: "<t5 Sarah>"
 raw_pipe_delimited_table_row:       "u2|Across all key engagement metrics|u4"`;
 
-const PARSE_CODE = `# Step 2: Parse from the copied strings
-speaker_name:    "Sarah"      # from "<t5 Sarah>"
+const PARSE_CODE = `speaker_name:    "Sarah"      # from "<t5 Sarah>"
 turn_id:         5             # strip 't' from "t5"
 start_utt_id:   2             # strip 'u' from "u2"
 max_end_utt_id: 4             # strip 'u' from "u4"`;
@@ -46,8 +44,8 @@ const CopyCodeBlock: React.FC = () => {
   const { reached: turnTag } = useMarker('turn-tag');
   const { reached: pipeRow } = useMarker('pipe-row');
   const lines: number[] = [];
-  if (turnTag) lines.push(2);
-  if (pipeRow) lines.push(3);
+  if (turnTag) lines.push(1);
+  if (pipeRow) lines.push(2);
 
   return (
     <CodeBlock
@@ -65,9 +63,9 @@ const ParseCodeBlock: React.FC = () => {
   const { reached: turnId } = useMarker('turn-id');
   const { reached: uttId } = useMarker('utt-id');
   const lines: number[] = [];
-  if (speaker) lines.push(2);
-  if (turnId) lines.push(3);
-  if (uttId) lines.push(4, 5);
+  if (speaker) lines.push(1);
+  if (turnId) lines.push(2);
+  if (uttId) lines.push(3, 4);
 
   return (
     <CodeBlock

@@ -7,7 +7,7 @@ import {
   SlideContainer,
   SlideTitle,
   MetricDisplay,
-  TestimonialCard,
+  Callout,
   Reveal,
   typography,
   layouts,
@@ -153,7 +153,6 @@ const RoadmapArrow: React.FC<{
 };
 
 const Ch9_S2_QualityAndImpactComponent: React.FC = () => {
-  const { reduced } = useReducedMotion();
   const theme = useTheme();
 
   return (
@@ -182,12 +181,22 @@ const Ch9_S2_QualityAndImpactComponent: React.FC = () => {
         ))}
       </Reveal>
 
-      <Reveal from={2}>
-        <TestimonialCard
-          quote="V2 is a compact prompt with only one LLM request that combines abstractive and extractive highlights generation into a single unified pipeline."
-          author="Eli Lekhtser, Engineering Manager"
-          reduced={reduced}
-        />
+      <Reveal from={2} animation={fadeUp}>
+        <Callout variant="success" icon="" style={{ textAlign: 'center' }}>
+          <div style={{
+            ...typography.body,
+            fontSize: 15,
+            fontWeight: 600,
+            color: theme.colors.success,
+            marginBottom: '0.4rem'
+          }}>
+            Shipped to GA
+          </div>
+          <div style={{ ...typography.caption, fontSize: 13, lineHeight: 1.5 }}>
+            Quality held steady while cost dropped enough to clear the capacity gate —
+            Meeting Highlights shipped to general availability.
+          </div>
+        </Callout>
       </Reveal>
     </SlideContainer>
   );

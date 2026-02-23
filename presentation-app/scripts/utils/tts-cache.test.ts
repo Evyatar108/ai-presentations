@@ -179,6 +179,13 @@ describe('TtsCacheStore', () => {
 
       expect(store.getEntry('demo-1', 'c1/s1_segment_01_intro.wav')!.narrationText).toBe('Second');
     });
+
+    it('strips inline markers from narrationText', () => {
+      const store = new TtsCacheStore(cacheFile);
+      store.setEntry('demo-1', 'c1/s1_segment_01_intro.wav', 'The {#cost-step}cost reduction {ga#}shipped.');
+
+      expect(store.getEntry('demo-1', 'c1/s1_segment_01_intro.wav')!.narrationText).toBe('The cost reduction shipped.');
+    });
   });
 
   describe('getEntry / getKeys / getDemoCache', () => {
