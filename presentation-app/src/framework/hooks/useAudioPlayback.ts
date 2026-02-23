@@ -431,5 +431,34 @@ export function useAudioPlayback({
     // to avoid restarting audio when the checkbox is toggled mid-playback.
   }, [currentIndex, isManualMode, audioEnabled, onSlideChange, segmentContext.currentSegmentIndex]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // --- Manual mode: retroactive auto-advance when toggled ON after audio ended ---
+  useEffect(() => {
+    if (!isManualMode || !audioEnabled || !autoAdvanceOnAudioEnd) return;
+    if (currentIndex >= allSlides.length) return;
+    const audio = audioRef.current;
+    if (!audio || !audio.ended) return;
+
+    // Audio already finished — trigger the same advance logic as onended
+    const slide = allSlides[currentIndex].metadata;
+    const currentSegmentIdx = segmentContext.currentSegmentIndex;
+    const segments = slide.audioSegments;
+    if (!segments || segments.length === 0) return;
+    const segment = segments[currentSegmentIdx];
+    if (!segment) return;
+
+    const timing = resolveTimingConfig(demoTiming, slide.timing, segment.timing);
+    if (currentSegmentIdx < segments.length - 1) {
+      setTimeout(() => segmentContext.nextSegment(), timing.betweenSegments);
+    } else {
+      const nextIndex = currentIndex + 1;
+      if (nextIndex < allSlides.length) {
+        setTimeout(() => {
+          setCurrentIndex(nextIndex);
+          onSlideChange(allSlides[nextIndex].metadata.chapter, allSlides[nextIndex].metadata.slide);
+        }, timing.betweenSlides);
+      }
+    }
+  }, [autoAdvanceOnAudioEnd, isManualMode, audioEnabled, currentIndex, segmentContext.currentSegmentIndex]); // eslint-disable-line react-hooks/exhaustive-deps
+
   return { audioRef, currentIndexRef };
 }
