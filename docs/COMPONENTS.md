@@ -17,7 +17,7 @@ Demo selection interface with search, filtering, sorting, and multiple view mode
 - `ToolbarRow` — Sticky toolbar composing SearchBar + TagFilter + SortControls + ViewToggle
 - `SearchBar` — Debounced search input (200ms, no external libs)
 - `TagFilter` — Clickable tag pills with OR filtering and "Clear all"
-- `SortControls` — Default / A-Z / Duration / Category sort modes
+- `SortControls` — Default / A-Z / Duration / Category sort modes with ascending/descending toggle
 - `ViewToggle` — Grid/list view toggle with SVG icons
 - `FavoritesSection` — Horizontal scrollable row of favorited demos
 - `RecentlyViewedSection` — Horizontal scrollable row of recently played demos
@@ -29,15 +29,19 @@ Demo selection interface with search, filtering, sorting, and multiple view mode
 - Shows thumbnail, title, description, tags, duration
 - Search across title, description, and tags (case-insensitive)
 - Filter by tags (OR among selected, AND with search)
-- Sort: default (insertion order), alphabetical, duration, or grouped by category
+- Sort: default (insertion order), alphabetical, duration, or grouped by category; click active sort to reverse direction (▲/▼)
 - Grid/list view toggle (persisted to localStorage)
 - Favorites with heart toggle (persisted to localStorage)
 - Recently viewed demos (up to 10, persisted to localStorage)
-- URL navigation: `?q=`, `?tags=`, `?sort=`, `?view=` params via replaceState
+- URL navigation: `?q=`, `?tags=`, `?sort=`, `?dir=`, `?view=` params via replaceState
 - Demo selection via pushState (browser back button returns to welcome)
 - Sticky toolbar with backdrop blur on scroll
 - Intersection Observer entrance animations (respects `prefers-reduced-motion`)
-- Responsive grid layout
+- 2-column grid layout (`repeat(2, 1fr)`)
+- Hover tooltips on all toolbar controls
+- Duration breakdown modal with focus trap
+
+See `docs/WELCOME_SCREEN.md` for the full guide.
 
 ### DemoPlayer
 

@@ -164,13 +164,15 @@ The welcome screen (`src/framework/components/welcome/`) is a decomposed compone
 `WelcomeScreen` (orchestrator) renders: `WelcomeHeader` → `ToolbarRow` (sticky, SearchBar + TagFilter + SortControls + ViewToggle) → `FavoritesSection` → `RecentlyViewedSection` → `DemoGrid` (or `CategorySection` groups) → `DurationBreakdownModal` → `WelcomeFooter`.
 
 ### State Management
-Central `useWelcomeState` reducer hook manages search, selectedTags, sort, view, hoveredId, and showBreakdown. Derived data (`filteredDemos`, `groupedDemos`, `allTags`) computed via `useMemo`.
+Central `useWelcomeState` reducer hook manages search, selectedTags, sort, sortDirection, view, hoveredId, and showBreakdown. Derived data (`filteredDemos`, `groupedDemos`, `allTags`) computed via `useMemo`. Sort supports ascending/descending toggle — clicking the already-active sort button flips direction.
 
 ### URL Navigation
-Filter state syncs to URL query params (`q`, `tags`, `sort`, `view`) via `replaceState` (no back-button pollution). Demo selection uses `pushState` so the browser back button returns to the welcome screen. `App.tsx` listens for `popstate` events.
+Filter state syncs to URL query params (`q`, `tags`, `sort`, `dir`, `view`) via `replaceState` (no back-button pollution). Demo selection uses `pushState` so the browser back button returns to the welcome screen. `App.tsx` listens for `popstate` events.
 
 ### localStorage Persistence
 - `welcome:viewMode` — grid or list preference
 - `welcome:favorites` — favorited demo IDs
 - `welcome:recentlyViewed` — recently viewed demo IDs (max 10, most recent first)
 - `demoRuntime:{id}` — actual runtime data per demo (pre-existing)
+
+See `docs/WELCOME_SCREEN.md` for the full guide including all features, state shape, and styling conventions.
