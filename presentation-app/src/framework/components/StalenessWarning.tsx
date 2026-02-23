@@ -814,7 +814,7 @@ export const StalenessWarning: React.FC<StalenessWarningProps> = ({
                 gap: '8px',
               }}
             >
-              {isBulkRunning ? 'Regenerating...' : 'Regenerate All'}
+              {isBulkRunning ? 'Fixing...' : 'Fix All'}
             </button>
 
             <button
