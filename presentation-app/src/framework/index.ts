@@ -35,6 +35,14 @@ export { HoverButton } from './components/HoverButton';
 export type { HoverButtonProps } from './components/HoverButton';
 export { CodeBlock } from './components/CodeBlock';
 export type { CodeBlockProps } from './components/CodeBlock';
+export { Callout } from './components/Callout';
+export type { CalloutProps } from './components/Callout';
+export { NumberedStepCard } from './components/NumberedStepCard';
+export type { NumberedStepCardProps } from './components/NumberedStepCard';
+export { ComparisonTable } from './components/ComparisonTable';
+export type { ComparisonTableProps, ComparisonColumn } from './components/ComparisonTable';
+export { FieldCard } from './components/FieldCard';
+export type { FieldCardProps } from './components/FieldCard';
 export { BeforeAfterSplit } from './components/BeforeAfterSplit';
 export type { BeforeAfterSplitProps } from './components/BeforeAfterSplit';
 export { PipelineDiagram } from './components/PipelineDiagram';
@@ -90,9 +98,13 @@ export {
   createFixedButton,
   createModalBackdrop,
   cardStyle,
-  createCard
+  createCard,
+  calloutStyle,
+  createCallout,
+  badgeStyle
 } from './slides/SlideStyles';
-export type { CardVariant } from './slides/SlideStyles';
+export type { CardVariant, CalloutVariant, BadgeOptions } from './slides/SlideStyles';
+export { spacing, spacingPx, radii, shadows, fontSizes } from './slides/tokens';
 export {
   fadeIn,
   fadeUp,

@@ -7,7 +7,7 @@ import {
   SlideContainer,
   SlideTitle,
   Reveal,
-  typography,
+  NumberedStepCard,
   fadeUp,
 } from '@framework';
 
@@ -29,7 +29,6 @@ const LESSONS = [
 const Ch10_S1_LessonsComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
   const { currentSegmentIndex } = useSegmentedAnimation();
-  const theme = useTheme();
 
   return (
     <SlideContainer maxWidth={800}>
@@ -45,54 +44,13 @@ const Ch10_S1_LessonsComponent: React.FC = () => {
           const isActive = currentSegmentIndex === segIdx;
 
           return (
-            <Reveal key={lesson.num} from={segIdx} animation={fadeUp} style={{
-              display: 'flex',
-              alignItems: 'flex-start',
-              gap: '1rem',
-              padding: '0.85rem 1.25rem',
-              borderRadius: 12,
-              background: isActive
-                ? `linear-gradient(135deg, rgba(0, 183, 195, 0.1), rgba(0, 120, 212, 0.1))`
-                : theme.colors.bgSurface,
-              border: isActive
-                ? `2px solid ${theme.colors.primary}`
-                : `1px solid ${theme.colors.bgBorder}`,
-              boxShadow: isActive && !reduced
-                ? `0 0 15px rgba(0, 183, 195, 0.15)`
-                : 'none',
-              transition: 'all 0.3s ease'
-            }}>
-              <div style={{
-                width: 30,
-                height: 30,
-                borderRadius: '50%',
-                background: isActive
-                  ? `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`
-                  : theme.colors.bgBorder,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: 14,
-                fontWeight: 700,
-                color: '#fff',
-                flexShrink: 0,
-                marginTop: 2
-              }}>
-                {lesson.num}
-              </div>
-              <div style={{ textAlign: 'left' }}>
-                <div style={{
-                  ...typography.body,
-                  fontSize: 16,
-                  fontWeight: 600,
-                  color: isActive ? theme.colors.primary : theme.colors.textPrimary
-                }}>
-                  {lesson.title}
-                </div>
-                <div style={{ ...typography.caption, fontSize: 13, marginTop: 2 }}>
-                  {lesson.desc}
-                </div>
-              </div>
+            <Reveal key={lesson.num} from={segIdx} animation={fadeUp}>
+              <NumberedStepCard
+                number={lesson.num}
+                title={lesson.title}
+                description={lesson.desc}
+                isActive={isActive}
+              />
             </Reveal>
           );
         })}

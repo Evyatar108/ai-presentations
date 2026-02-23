@@ -11,6 +11,7 @@ import {
   Reveal,
   typography,
   layouts,
+  cardStyle,
   fadeUp,
 } from '@framework';
 
@@ -192,10 +193,7 @@ const Ch1_S2_COGSProblemComponent: React.FC = () => {
 
       <Reveal from={2} animation={fadeUp}>
         <div style={{
-          background: 'rgba(239, 68, 68, 0.1)',
-          border: '2px solid rgba(239, 68, 68, 0.4)',
-          borderRadius: 12,
-          padding: '1.25rem',
+          ...cardStyle('error'),
           textAlign: 'center'
         }}>
           <p style={{ ...typography.body, margin: 0, fontWeight: 600, color: theme.colors.error }}>

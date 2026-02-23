@@ -7,6 +7,8 @@ import {
   SlideContainer,
   SlideTitle,
   Reveal,
+  Callout,
+  cardStyle,
   typography,
   fadeUp,
   ArrowRight,
@@ -40,9 +42,7 @@ const CheckCard: React.FC<{
   const { reached } = useMarker(check.marker);
   return (
     <div style={{
-      background: theme.colors.bgSurface,
-      border: `1px solid ${theme.colors.bgBorder}`,
-      borderRadius: 12,
+      ...cardStyle(),
       padding: '1.25rem',
       opacity: reached ? 1 : 0.15,
       transition: 'opacity 0.4s ease',
@@ -107,26 +107,22 @@ const Ch8_S1_ValidationChallengesComponent: React.FC = () => {
         ))}
       </Reveal>
 
-      <Reveal from={2} animation={fadeUp} style={{
-        background: `linear-gradient(135deg, rgba(0, 183, 195, 0.08), rgba(0, 120, 212, 0.08))`,
-        border: `2px solid ${theme.colors.primary}`,
-        borderRadius: 12,
-        padding: '1.25rem 1.5rem',
-        textAlign: 'center' as const
-      }}>
-        <div style={{
-          ...typography.body,
-          fontSize: 15,
-          fontWeight: 600,
-          color: theme.colors.primary,
-          marginBottom: '0.4rem'
-        }}>
-          Copy-then-Parse Was the Key Mitigation
-        </div>
-        <div style={{ ...typography.caption, fontSize: 13, lineHeight: 1.5 }}>
-          Error rate of invalid turn-utterance combinations dropped dramatically
-          once the model was forced to copy raw strings before parsing IDs.
-        </div>
+      <Reveal from={2} animation={fadeUp}>
+        <Callout variant="info" icon="" style={{ textAlign: 'center' }}>
+          <div style={{
+            ...typography.body,
+            fontSize: 15,
+            fontWeight: 600,
+            color: theme.colors.primary,
+            marginBottom: '0.4rem'
+          }}>
+            Copy-then-Parse Was the Key Mitigation
+          </div>
+          <div style={{ ...typography.caption, fontSize: 13, lineHeight: 1.5 }}>
+            Error rate of invalid turn-utterance combinations dropped dramatically
+            once the model was forced to copy raw strings before parsing IDs.
+          </div>
+        </Callout>
       </Reveal>
     </SlideContainer>
   );
@@ -236,10 +232,8 @@ const Ch8_S2_EvalToolComponent: React.FC = () => {
         marginBottom: '2rem'
       }}>
         <div style={{
-          background: theme.colors.bgSurface,
-          border: `1px solid ${theme.colors.bgBorder}`,
+          ...cardStyle(),
           borderRadius: 10,
-          padding: '1rem 1.25rem',
           opacity: jsonReached ? 1 : 0.15,
           transition: 'opacity 0.4s ease',
         }}>
@@ -258,10 +252,8 @@ const Ch8_S2_EvalToolComponent: React.FC = () => {
           </div>
         </div>
         <div style={{
-          background: theme.colors.bgSurface,
-          border: `1px solid ${theme.colors.bgBorder}`,
+          ...cardStyle(),
           borderRadius: 10,
-          padding: '1rem 1.25rem',
           opacity: videoReached ? 1 : 0.15,
           transition: 'opacity 0.4s ease',
         }}>
@@ -281,26 +273,22 @@ const Ch8_S2_EvalToolComponent: React.FC = () => {
         </div>
       </Reveal>
 
-      <Reveal from={2} animation={fadeUp} style={{
-        background: `linear-gradient(135deg, rgba(0, 183, 195, 0.08), rgba(0, 120, 212, 0.08))`,
-        border: `1px solid ${theme.colors.primary}`,
-        borderRadius: 10,
-        padding: '1rem 1.5rem',
-        textAlign: 'center' as const
-      }}>
-        <div style={{
-          ...typography.body,
-          fontSize: 14,
-          fontWeight: 600,
-          color: theme.colors.primary,
-          marginBottom: '0.3rem'
-        }}>
-          Rapid Iteration Through Dual Feedback
-        </div>
-        <div style={{ ...typography.caption, fontSize: 13, lineHeight: 1.5 }}>
-          Change a prompt, run locally, check both signals in minutes — not hours.
-          This tight feedback loop made it practical to test dozens of prompt revisions per day.
-        </div>
+      <Reveal from={2} animation={fadeUp}>
+        <Callout variant="info" icon="" style={{ textAlign: 'center' }}>
+          <div style={{
+            ...typography.body,
+            fontSize: 14,
+            fontWeight: 600,
+            color: theme.colors.primary,
+            marginBottom: '0.3rem'
+          }}>
+            Rapid Iteration Through Dual Feedback
+          </div>
+          <div style={{ ...typography.caption, fontSize: 13, lineHeight: 1.5 }}>
+            Change a prompt, run locally, check both signals in minutes — not hours.
+            This tight feedback loop made it practical to test dozens of prompt revisions per day.
+          </div>
+        </Callout>
       </Reveal>
     </SlideContainer>
   );

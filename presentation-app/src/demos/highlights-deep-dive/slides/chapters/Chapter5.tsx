@@ -9,6 +9,8 @@ import {
   Reveal,
   CodeBlock,
   BeforeAfterSplit,
+  ComparisonTable,
+  cardStyle,
   typography,
   fadeUp,
 } from '@framework';
@@ -75,41 +77,20 @@ const Ch5_S1_FormatComparisonComponent: React.FC = () => {
       </Reveal>
 
       <Reveal from={2} animation={fadeUp} style={{ marginTop: '1.5rem' }}>
-        <table style={{
-          width: '100%',
-          borderCollapse: 'collapse',
-          fontSize: 13,
-          fontFamily: "'JetBrains Mono', 'Fira Code', monospace"
-        }}>
-          <thead>
-            <tr>
-              {['Aspect', 'V1', 'V2'].map(h => (
-                <th key={h} style={{
-                  padding: '0.5rem 1rem',
-                  borderBottom: `1px solid ${theme.colors.bgBorder}`,
-                  color: theme.colors.textSecondary,
-                  fontWeight: 600,
-                  textAlign: 'left'
-                }}>{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {[
-              ['Speaker', 'Per-utterance key', 'Once per turn'],
-              ['Timestamps', 'Start + End per row', 'Omitted'],
-              ['Keys', '5 keys x N rows', '3 columns, once'],
-              ['IDs', 'Global sequential', 'Local per-turn (u0, u1...)'],
-              ['Boundaries', 'Not encoded', 'max_end_utterance_id column']
-            ].map(([aspect, v1, v2]) => (
-              <tr key={aspect}>
-                <td style={{ padding: '0.4rem 1rem', color: theme.colors.textPrimary }}>{aspect}</td>
-                <td style={{ padding: '0.4rem 1rem', color: theme.colors.warning }}>{v1}</td>
-                <td style={{ padding: '0.4rem 1rem', color: theme.colors.primary }}>{v2}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <ComparisonTable
+          columns={[
+            { header: 'Aspect' },
+            { header: 'V1', color: theme.colors.warning },
+            { header: 'V2', color: theme.colors.primary },
+          ]}
+          rows={[
+            ['Speaker', 'Per-utterance key', 'Once per turn'],
+            ['Timestamps', 'Start + End per row', 'Omitted'],
+            ['Keys', '5 keys x N rows', '3 columns, once'],
+            ['IDs', 'Global sequential', 'Local per-turn (u0, u1...)'],
+            ['Boundaries', 'Not encoded', 'max_end_utterance_id column'],
+          ]}
+        />
         <div style={{
           ...typography.caption,
           fontSize: 12,
@@ -184,9 +165,7 @@ const Ch5_S2_MaxEndIdComponent: React.FC = () => {
         marginBottom: '1.5rem'
       }}>
         <div style={{
-          background: 'rgba(251, 191, 36, 0.06)',
-          border: '1px solid rgba(251, 191, 36, 0.3)',
-          borderRadius: 12,
+          ...cardStyle('warning'),
           padding: '1.25rem',
           textAlign: 'center'
         }}>
@@ -207,9 +186,7 @@ const Ch5_S2_MaxEndIdComponent: React.FC = () => {
           <div style={{ ...typography.caption, fontSize: 12, marginTop: '0.5rem' }}>Fanning out from each start</div>
         </div>
         <div style={{
-          background: 'rgba(0, 183, 195, 0.06)',
-          border: '1px solid rgba(0, 183, 195, 0.3)',
-          borderRadius: 12,
+          ...cardStyle('primary'),
           padding: '1.25rem',
           textAlign: 'center'
         }}>
@@ -229,38 +206,19 @@ const Ch5_S2_MaxEndIdComponent: React.FC = () => {
       </Reveal>
 
       <Reveal from={2} animation={fadeUp}>
-        <table style={{
-          width: '100%',
-          borderCollapse: 'collapse',
-          fontSize: 14,
-          textAlign: 'center' as const
-        }}>
-          <thead>
-            <tr>
-              {['', 'V1', 'V2'].map(h => (
-                <th key={h} style={{
-                  padding: '0.5rem 1rem',
-                  borderBottom: `1px solid ${theme.colors.bgBorder}`,
-                  color: theme.colors.textSecondary,
-                  fontWeight: 600
-                }}>{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {[
-              ['Representation', 'O(n\u00B2) candidate rows', 'O(n) rows + max_end_id'],
-              ['Token budget', 'Fills 128K context', '~5-10K tokens'],
-              ['Complexity', 'Quadratic', 'Linear']
-            ].map(([label, v1, v2]) => (
-              <tr key={label}>
-                <td style={{ padding: '0.5rem 1rem', color: theme.colors.textPrimary, fontWeight: 600 }}>{label}</td>
-                <td style={{ padding: '0.5rem 1rem', color: theme.colors.warning }}>{v1}</td>
-                <td style={{ padding: '0.5rem 1rem', color: theme.colors.primary }}>{v2}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <ComparisonTable
+          columns={[
+            { header: '' },
+            { header: 'V1', color: theme.colors.warning },
+            { header: 'V2', color: theme.colors.primary },
+          ]}
+          rows={[
+            ['Representation', 'O(n\u00B2) candidate rows', 'O(n) rows + max_end_id'],
+            ['Token budget', 'Fills 128K context', '~5-10K tokens'],
+            ['Complexity', 'Quadratic', 'Linear'],
+          ]}
+          fontSize={14}
+        />
       </Reveal>
     </SlideContainer>
   );
@@ -315,10 +273,7 @@ const Ch5_S3_TurnUtteranceConceptComponent: React.FC = () => {
       }}>
         {/* V1 flat list */}
         <div style={{
-          background: 'rgba(251, 191, 36, 0.06)',
-          border: '1px solid rgba(251, 191, 36, 0.3)',
-          borderRadius: 12,
-          padding: '1rem 1.25rem'
+          ...cardStyle('warning'),
         }}>
           <div style={{ ...typography.caption, fontSize: 11, color: theme.colors.warning, letterSpacing: 1, textTransform: 'uppercase', marginBottom: '0.6rem' }}>
             V1: Flat List
@@ -340,10 +295,7 @@ const Ch5_S3_TurnUtteranceConceptComponent: React.FC = () => {
 
         {/* V2 turn-grouped */}
         <div style={{
-          background: 'rgba(0, 183, 195, 0.06)',
-          border: '1px solid rgba(0, 183, 195, 0.3)',
-          borderRadius: 12,
-          padding: '1rem 1.25rem'
+          ...cardStyle('primary'),
         }}>
           <div style={{ ...typography.caption, fontSize: 11, color: theme.colors.primary, letterSpacing: 1, textTransform: 'uppercase', marginBottom: '0.6rem' }}>
             V2: Turn-Grouped
@@ -389,8 +341,7 @@ const Ch5_S3_TurnUtteranceConceptComponent: React.FC = () => {
         gap: '1rem'
       }}>
         <div style={{
-          background: 'rgba(16, 185, 129, 0.06)',
-          border: `1px solid ${theme.colors.success}`,
+          ...cardStyle('success'),
           borderRadius: 10,
           padding: '0.85rem 1.25rem',
           textAlign: 'center'
@@ -410,9 +361,9 @@ const Ch5_S3_TurnUtteranceConceptComponent: React.FC = () => {
           </div>
         </div>
         <div style={{
-          background: 'rgba(239, 68, 68, 0.06)',
-          border: `1px solid ${theme.colors.error}`,
+          ...cardStyle('error'),
           borderRadius: 10,
+          border: `1px solid ${theme.colors.error}`,
           padding: '0.85rem 1.25rem',
           textAlign: 'center'
         }}>

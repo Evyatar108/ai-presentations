@@ -10,6 +10,7 @@ import {
   RevealSequence,
   CodeBlock,
   BeforeAfterSplit,
+  Callout,
   useMarker,
   typography,
   layouts,
@@ -66,22 +67,18 @@ const Ch6_S1_PromptOverviewComponent: React.FC = () => {
         ))}
       </Reveal>
 
-      <Reveal from={2} animation={fadeUp} style={{
-        marginTop: '1.25rem',
-        padding: '0.85rem 1.25rem',
-        borderRadius: 10,
-        background: `linear-gradient(135deg, ${theme.colors.primary}15, ${theme.colors.secondary}15)`,
-        borderLeft: `3px solid ${theme.colors.primary}`,
-      }}>
-        <p style={{
-          ...typography.body,
-          fontSize: 14,
-          color: theme.colors.textPrimary,
-          margin: 0,
-          fontStyle: 'italic'
-        }}>
-          Rules & constraints up front, then a precise algorithm, then quality & safety guidelines, and finally self-validation — all processed in a single pass.
-        </p>
+      <Reveal from={2} animation={fadeUp} style={{ marginTop: '1.25rem' }}>
+        <Callout variant="info" icon="">
+          <p style={{
+            ...typography.body,
+            fontSize: 14,
+            color: theme.colors.textPrimary,
+            margin: 0,
+            fontStyle: 'italic'
+          }}>
+            Rules & constraints up front, then a precise algorithm, then quality & safety guidelines, and finally self-validation — all processed in a single pass.
+          </p>
+        </Callout>
       </Reveal>
     </SlideContainer>
   );
@@ -615,12 +612,10 @@ const Ch6_S4_OutputSchemaComponent: React.FC = () => {
               </span>
             </div>
           </div>
-          <div style={{
+          <Callout variant="info" icon="" style={{
             marginTop: '0.5rem',
             padding: '0.5rem 0.85rem',
             borderRadius: 8,
-            background: `${CATEGORY_STYLES.deliverable.accent}10`,
-            borderLeft: `3px solid ${CATEGORY_STYLES.deliverable.accent}`,
             textAlign: 'center',
           }}>
             <span style={{
@@ -631,7 +626,7 @@ const Ch6_S4_OutputSchemaComponent: React.FC = () => {
             }}>
               This is what the video player actually uses. Everything else in the schema is reasoning scaffolding.
             </span>
-          </div>
+          </Callout>
         </Reveal>
 
         {/* Segment 2: extractive_ranges zoom — exits when insight enters */}
@@ -668,12 +663,7 @@ const Ch6_S4_OutputSchemaComponent: React.FC = () => {
 
         {/* Segment 3: Insight callout + pills */}
         <Reveal from={3} animation={fadeUp} style={{ marginTop: '0.75rem' }}>
-          <div style={{
-            padding: '0.7rem 1.1rem',
-            borderRadius: 10,
-            background: `linear-gradient(135deg, ${theme.colors.primary}15, ${theme.colors.secondary}15)`,
-            borderLeft: `3px solid ${theme.colors.primary}`,
-          }}>
+          <Callout variant="info" icon="" style={{ padding: '0.7rem 1.1rem' }}>
             <p style={{
               ...typography.body,
               fontSize: 13,
@@ -685,7 +675,7 @@ const Ch6_S4_OutputSchemaComponent: React.FC = () => {
               Five fields guide the model's reasoning, one field captures the deliverable.
               Field names become execution steps, and self_checks closes the validation loop.
             </p>
-          </div>
+          </Callout>
           <div style={{
             display: 'flex',
             gap: '0.6rem',

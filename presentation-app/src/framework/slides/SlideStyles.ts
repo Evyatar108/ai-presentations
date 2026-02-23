@@ -15,6 +15,7 @@
 
 import { CSSProperties } from 'react';
 import type { PresentationTheme } from '../theme/types';
+import { defaultTheme } from '../theme/defaultTheme';
 
 /**
  * Common slide container style - dark background with centered content
@@ -155,6 +156,12 @@ export const layouts = {
     gap,
     justifyContent: 'center',
     alignItems: 'center'
+  }),
+
+  flexCol: (gap: string = '0.75rem'): CSSProperties => ({
+    display: 'flex',
+    flexDirection: 'column',
+    gap,
   }),
   
   grid2Col: (gap: string = '2rem'): CSSProperties => ({
@@ -315,3 +322,89 @@ export function createModalBackdrop(theme: PresentationTheme): CSSProperties {
     zIndex: 1000,
   };
 }
+
+// ============================================================================
+// Callout variants
+// ============================================================================
+
+/**
+ * Callout variant type for calloutStyle() / createCallout()
+ */
+export type CalloutVariant = 'info' | 'tip' | 'warning' | 'error' | 'success';
+
+const CALLOUT_COLORS: Record<CalloutVariant, { border: string; bg: string }> = {
+  info:    { border: defaultTheme.colors.primary, bg: `rgba(0, 183, 195, 0.08)` },
+  tip:     { border: defaultTheme.colors.primary, bg: `rgba(0, 183, 195, 0.08)` },
+  warning: { border: defaultTheme.colors.warning, bg: `rgba(251, 191, 36, 0.08)` },
+  error:   { border: defaultTheme.colors.error,   bg: `rgba(239, 68, 68, 0.08)` },
+  success: { border: defaultTheme.colors.success, bg: `rgba(16, 185, 129, 0.08)` },
+};
+
+/**
+ * Callout style — left-bordered box with tinted background.
+ * Replaces 5+ ad-hoc `borderLeft: 3px solid` + tinted-bg callout patterns.
+ *
+ * @example
+ * ```tsx
+ * <div style={calloutStyle('info')}>Key insight here</div>
+ * ```
+ */
+export const calloutStyle = (variant: CalloutVariant = 'info'): CSSProperties => {
+  const { border, bg } = CALLOUT_COLORS[variant];
+  return {
+    background: bg,
+    borderLeft: `3px solid ${border}`,
+    borderRadius: 10,
+    padding: '0.85rem 1.25rem',
+  };
+};
+
+/**
+ * Theme-aware callout factory. Use in framework components that call useTheme().
+ */
+export function createCallout(theme: PresentationTheme, variant: CalloutVariant = 'info'): CSSProperties {
+  const colorMap: Record<CalloutVariant, { border: string; bg: string }> = {
+    info:    { border: theme.colors.primary, bg: `linear-gradient(135deg, ${theme.colors.primary}15, ${theme.colors.secondary}15)` },
+    tip:     { border: theme.colors.primary, bg: `linear-gradient(135deg, ${theme.colors.primary}15, ${theme.colors.secondary}15)` },
+    warning: { border: theme.colors.warning, bg: `rgba(251, 191, 36, 0.08)` },
+    error:   { border: theme.colors.error,   bg: `rgba(239, 68, 68, 0.08)` },
+    success: { border: theme.colors.success, bg: `rgba(16, 185, 129, 0.08)` },
+  };
+  const { border, bg } = colorMap[variant];
+  return {
+    background: bg,
+    borderLeft: `3px solid ${border}`,
+    borderRadius: 10,
+    padding: '0.85rem 1.25rem',
+  };
+}
+
+// ============================================================================
+// Badge style
+// ============================================================================
+
+export interface BadgeOptions {
+  color?: string;
+  bg?: string;
+}
+
+/**
+ * Badge/tag style — compact label used for status, category, or version indicators.
+ *
+ * @example
+ * ```tsx
+ * <span style={badgeStyle({ color: '#fbbf24', bg: 'rgba(251,191,36,0.15)' })}>V1: Call 1</span>
+ * ```
+ */
+export const badgeStyle = (options: BadgeOptions = {}): CSSProperties => {
+  const { color = defaultTheme.colors.primary, bg = `${defaultTheme.colors.primary}20` } = options;
+  return {
+    fontSize: 9,
+    fontWeight: 700,
+    color,
+    background: bg,
+    borderRadius: 5,
+    padding: '0.15rem 0.4rem',
+    whiteSpace: 'nowrap',
+  };
+};

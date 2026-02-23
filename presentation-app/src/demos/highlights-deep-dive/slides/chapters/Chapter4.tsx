@@ -11,6 +11,7 @@ import {
   RevealSequence,
   CodeBlock,
   CandidateGrid,
+  cardStyle,
   typography,
   fadeUp,
   expandWidth,
@@ -86,8 +87,7 @@ const Ch4_S1_NestedLoopComponent: React.FC = () => {
         justifyContent: 'center'
       }}>
         <div style={{
-          background: 'rgba(251, 191, 36, 0.1)',
-          border: '1px solid rgba(251, 191, 36, 0.3)',
+          ...cardStyle('warning'),
           borderRadius: 10,
           padding: '0.75rem 1.25rem',
           flex: 1,
@@ -102,9 +102,9 @@ const Ch4_S1_NestedLoopComponent: React.FC = () => {
           </p>
         </div>
         <div style={{
-          background: 'rgba(239, 68, 68, 0.1)',
-          border: '1px solid rgba(239, 68, 68, 0.3)',
+          ...cardStyle('error'),
           borderRadius: 10,
+          border: '1px solid rgba(239, 68, 68, 0.3)',
           padding: '0.75rem 1.25rem',
           flex: 1,
           textAlign: 'center'
@@ -269,9 +269,9 @@ const Ch4_S2_CandidateRowsComponent: React.FC = () => {
 
       <Reveal from={2} animation={fadeUp} style={{ marginTop: '1.25rem', textAlign: 'center' }}>
         <div style={{
-          background: 'rgba(239, 68, 68, 0.1)',
-          border: '1px solid rgba(239, 68, 68, 0.3)',
+          ...cardStyle('error'),
           borderRadius: 10,
+          border: '1px solid rgba(239, 68, 68, 0.3)',
           padding: '0.75rem 1.5rem',
           display: 'inline-block',
         }}>
@@ -473,10 +473,7 @@ const Ch4_S4_OutputSafetyComponent: React.FC = () => {
             }}>
               {/* Input box */}
               <div style={{
-                background: 'rgba(251, 191, 36, 0.08)',
-                border: '1px solid rgba(251, 191, 36, 0.3)',
-                borderRadius: 12,
-                padding: '1rem 1.5rem',
+                ...cardStyle('warning'),
                 textAlign: 'center',
                 flex: 1,
                 maxWidth: 260,
@@ -708,8 +705,7 @@ const Ch4_S4_OutputSafetyComponent: React.FC = () => {
 
         {/* V2 forward-looking callout */}
         <div style={{
-          background: 'rgba(0, 183, 195, 0.08)',
-          border: `1px solid rgba(0, 183, 195, 0.3)`,
+          ...cardStyle('primary'),
           borderRadius: 10,
           padding: '0.85rem 1.5rem',
           textAlign: 'center',

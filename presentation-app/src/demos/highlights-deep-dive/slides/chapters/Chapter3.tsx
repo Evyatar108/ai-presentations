@@ -2,14 +2,15 @@ import React from 'react';
 import {
   useReducedMotion,
   useSegmentedAnimation,
-  useTheme,
   useMarker,
+  useTheme,
   defineSlide,
   SlideContainer,
   SlideTitle,
   Reveal,
   CodeBlock,
   BeforeAfterSplit,
+  NumberedStepCard,
   typography,
   fadeUp,
 } from '@framework';
@@ -30,7 +31,6 @@ const COST_DRIVERS = [
 const Ch3_S1_CostDriversComponent: React.FC = () => {
   const { reduced } = useReducedMotion();
   const { currentSegmentIndex } = useSegmentedAnimation();
-  const theme = useTheme();
 
   return (
     <SlideContainer maxWidth={800}>
@@ -44,55 +44,17 @@ const Ch3_S1_CostDriversComponent: React.FC = () => {
         {COST_DRIVERS.map((driver, i) => {
           const segIdx = i + 1;
           const isLast = i === COST_DRIVERS.length - 1;
+          const isActive = isLast && currentSegmentIndex >= segIdx;
 
           return (
-            <Reveal key={driver.num} from={segIdx} animation={fadeUp} style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '1rem',
-              padding: '1rem 1.25rem',
-              borderRadius: 12,
-              background: isLast && currentSegmentIndex >= segIdx
-                ? 'rgba(239, 68, 68, 0.1)'
-                : theme.colors.bgSurface,
-              border: isLast && currentSegmentIndex >= segIdx
-                ? '2px solid rgba(239, 68, 68, 0.4)'
-                : `1px solid ${theme.colors.bgBorder}`,
-              boxShadow: isLast && currentSegmentIndex >= segIdx && !reduced
-                ? '0 0 20px rgba(239, 68, 68, 0.15)'
-                : 'none',
-              transition: 'all 0.3s ease'
-            }}>
-              <div style={{
-                width: 32,
-                height: 32,
-                borderRadius: '50%',
-                background: isLast
-                  ? `linear-gradient(135deg, ${theme.colors.error}, #dc2626)`
-                  : `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: 14,
-                fontWeight: 700,
-                color: '#fff',
-                flexShrink: 0
-              }}>
-                {driver.num}
-              </div>
-              <div style={{ textAlign: 'left' }}>
-                <div style={{
-                  ...typography.body,
-                  fontSize: 16,
-                  fontWeight: 600,
-                  color: isLast ? theme.colors.error : theme.colors.textPrimary
-                }}>
-                  {driver.title}
-                </div>
-                <div style={{ ...typography.caption, fontSize: 13 }}>
-                  {driver.desc}
-                </div>
-              </div>
+            <Reveal key={driver.num} from={segIdx} animation={fadeUp}>
+              <NumberedStepCard
+                number={driver.num}
+                title={driver.title}
+                description={driver.desc}
+                isActive={isActive}
+                variant={isLast ? 'error' : 'default'}
+              />
             </Reveal>
           );
         })}
