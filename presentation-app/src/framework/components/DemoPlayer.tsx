@@ -8,6 +8,7 @@ import { NarratedController } from './NarratedController';
 import { SlidePlayer, Slide } from './SlidePlayer';
 import { SegmentProvider } from '../contexts/SegmentContext';
 import { AudioTimeProvider } from '../contexts/AudioTimeContext';
+import { VideoSyncProvider } from '../contexts/VideoSyncContext';
 import { HideInterfaceProvider } from '../contexts/HideInterfaceContext';
 import { loadNarration, getNarrationSegment, type NarrationData } from '../utils/narrationLoader';
 import { loadAlignment } from '../utils/alignmentLoader';
@@ -16,6 +17,7 @@ import { useTheme } from '../theme/ThemeContext';
 import { DemoPlayerBoundary } from './DemoPlayerBoundary';
 import { StalenessWarning } from './StalenessWarning';
 import type { DemoAlignment } from '../alignment/types';
+import type { VideoBookmarksFile } from '../types/videoBookmarks';
 
 export interface AutoplayConfig {
   mode: 'narrated';
@@ -37,6 +39,7 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideIn
   const [loadedSlides, setLoadedSlides] = useState<SlideComponentWithMetadata[]>([]);
   const [narrationData, setNarrationData] = useState<NarrationData | null>(null);
   const [alignmentData, setAlignmentData] = useState<DemoAlignment | null>(null);
+  const [bookmarksData, setBookmarksData] = useState<VideoBookmarksFile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentSlide, setCurrentSlide] = useState<{ chapter: number; slide: number } | undefined>(undefined);
@@ -91,6 +94,17 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideIn
         const alignment = await loadAlignment(demoId);
         if (!mounted) return;
         setAlignmentData(alignment);
+
+        // Load video bookmarks (null on 404 — graceful degradation)
+        try {
+          const bmResponse = await fetch(`/videos/${demoId}/bookmarks.json`);
+          if (bmResponse.ok) {
+            const bmData: VideoBookmarksFile = await bmResponse.json();
+            if (mounted) setBookmarksData(bmData);
+          }
+        } catch {
+          // No bookmarks file — fine, video seeks just won't fire
+        }
 
         // Dev-only validation of slide metadata
         if (import.meta.env.DEV) {
@@ -352,6 +366,7 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideIn
     <HideInterfaceProvider value={hideInterface}>
     <SegmentProvider>
     <AudioTimeProvider alignment={alignmentData}>
+    <VideoSyncProvider>
       <div style={{ position: 'relative', overflow: 'hidden' }}>
         {/* Dev-mode staleness warning */}
         {import.meta.env.DEV && (
@@ -405,6 +420,7 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideIn
 
         {/* Narrated Controller */}
         <NarratedController
+          bookmarksData={bookmarksData}
           demoMetadata={demoConfig.metadata}
           demoTiming={demoConfig.timing}
           demoInstruct={demoConfig.instruct ?? narrationData?.instruct}
@@ -446,6 +462,7 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideIn
           />
         </div>
       </div>
+    </VideoSyncProvider>
     </AudioTimeProvider>
     </SegmentProvider>
     </HideInterfaceProvider>

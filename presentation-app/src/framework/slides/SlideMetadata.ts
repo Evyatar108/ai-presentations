@@ -1,6 +1,27 @@
 import { TimingConfig } from '../demos/timing/types';
 
 /**
+ * Defines a video seek to fire when a TTS marker is reached.
+ */
+export interface VideoSeekTrigger {
+  videoId: string;          // Key in bookmarks.json videos map
+  bookmarkId: string;       // ID of the bookmark to seek to
+  atMarker: string;         // TTS marker ID ({#id} system) that fires the seek
+  pauseNarration?: boolean; // If true: pause TTS, play clip start→end, resume when clip ends
+}
+
+/**
+ * Defines a point at which TTS should wait for a video clip to finish before continuing.
+ * Used for Pattern 3 (TTS leads, then waits): TTS narrates alongside the clip, but at a
+ * later marker it pauses and waits for the clip to finish — only if still playing.
+ */
+export interface VideoWaitTrigger {
+  videoId: string;    // Key in bookmarks.json videos map
+  bookmarkId: string; // Which clip (bookmark) to wait for
+  atMarker: string;   // TTS marker at which to check / wait
+}
+
+/**
  * Represents a single audio segment within a multi-segment slide
  */
 export interface AudioSegment {
@@ -37,6 +58,29 @@ export interface AudioSegment {
    * timing: { betweenSegments: 1000 } // 1 second delay after this segment
    */
   timing?: TimingConfig;
+
+  /**
+   * Video seeks to fire when TTS markers are reached during narrated playback.
+   * Each trigger maps a marker ID to a bookmarked timestamp in a video.
+   * Set pauseNarration: true to pause TTS, play the clip, then resume.
+   *
+   * @example
+   * videoSeeks: [{ videoId: 'my-vid', bookmarkId: 'clip1', atMarker: 'clip1', pauseNarration: true }]
+   */
+  videoSeeks?: VideoSeekTrigger[];
+
+  /**
+   * Wait points where TTS checks if a previously-started video clip is still playing.
+   * If the clip is still active at the marker, TTS pauses until the clip finishes.
+   * If the clip already finished, TTS continues uninterrupted.
+   *
+   * Used for Pattern 3 (TTS leads, then waits): start a clip without pauseNarration,
+   * narrate alongside it, and then wait for it at a specific later word.
+   *
+   * @example
+   * videoWaits: [{ videoId: 'demo-vid', bookmarkId: 'clip1', atMarker: 'after-clip' }]
+   */
+  videoWaits?: VideoWaitTrigger[];
 }
 
 /**

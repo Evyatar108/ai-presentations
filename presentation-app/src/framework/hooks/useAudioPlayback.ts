@@ -14,6 +14,7 @@ import type { DemoAlignment } from '../alignment/types';
 import { resolveTimingConfig, type TimingConfig } from '../demos/timing/types';
 import type { SegmentContextValue } from '../contexts/SegmentContext';
 import type { AudioTimeContextValue } from '../contexts/AudioTimeContext';
+import type { VideoSyncContextValue } from '../contexts/VideoSyncContext';
 import { getConfig } from '../config';
 import { NO_AUDIO_ADVANCE_DELAY_MS, PLAYBACK_ERROR_ADVANCE_DELAY_MS } from '../constants';
 
@@ -47,11 +48,15 @@ function attachRafPolling(
   audio: HTMLAudioElement,
   audioRef: React.MutableRefObject<HTMLAudioElement | null>,
   audioTimeCtx: AudioTimeContextValue,
+  videoSyncCtx?: VideoSyncContextValue | null,
 ) {
   let rafId: number;
   const pollTime = () => {
     if (audioRef.current === audio && !audio.paused) {
-      audioTimeCtx.setCurrentTime(audio.currentTime);
+      const t = audio.currentTime;
+      audioTimeCtx.setCurrentTime(t);
+      videoSyncCtx?.checkAndFireSeeks(t, audioTimeCtx.getMarkerTime);
+      videoSyncCtx?.checkAndWaitForClips(t, audioTimeCtx.getMarkerTime);
     }
     rafId = requestAnimationFrame(pollTime);
   };
@@ -99,6 +104,7 @@ export interface UseAudioPlaybackOptions {
   alignmentData?: DemoAlignment | null;
   segmentContext: SegmentContextValue;
   audioTimeCtx: AudioTimeContextValue | null;
+  videoSyncCtx?: VideoSyncContextValue | null;
   autoplaySignalPort?: number;
   setError: (error: string | null) => void;
   setIsLoading: (loading: boolean) => void;
@@ -134,6 +140,7 @@ export function useAudioPlayback({
   alignmentData,
   segmentContext,
   audioTimeCtx,
+  videoSyncCtx,
   autoplaySignalPort,
   setError,
   setIsLoading,
@@ -168,6 +175,16 @@ export function useAudioPlayback({
       }
     });
   }, [audioTimeCtx]);
+
+  // Register narration pause/resume callbacks with VideoSyncContext so
+  // marker-driven video clips can pause/resume TTS (Patterns 1 & 3).
+  useEffect(() => {
+    if (!videoSyncCtx) return;
+    return videoSyncCtx.registerNarrationControl(
+      () => audioRef.current?.pause(),
+      () => { if (audioRef.current?.paused) audioRef.current.play().catch(() => {}); },
+    );
+  }, [videoSyncCtx]);
 
   // Expose __seekToTime on window for Playwright tests (dev only)
   useEffect(() => {
@@ -255,7 +272,7 @@ export function useAudioPlayback({
         audioRef.current = audio;
 
         if (audioTimeCtx) {
-          attachRafPolling(audio, audioRef, audioTimeCtx);
+          attachRafPolling(audio, audioRef, audioTimeCtx, videoSyncCtx);
         }
 
         audio.onended = () => {
@@ -307,7 +324,7 @@ export function useAudioPlayback({
     };
 
     playSegment(0);
-  }, [advanceSlide, segmentContext, demoTiming, audioTimeCtx, alignmentData, setError, setIsLoading]);
+  }, [advanceSlide, segmentContext, demoTiming, audioTimeCtx, videoSyncCtx, alignmentData, setError, setIsLoading]);
 
   // --- Narrated mode: play audio for current slide ---
   useEffect(() => {

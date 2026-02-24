@@ -143,6 +143,14 @@ export type { SlideDurationBreakdown, PresentationDurationReport, SegmentDuratio
 // Alignment types
 export type { AlignedWord, ResolvedMarker, SegmentAlignment, DemoAlignment } from './alignment/types';
 
+// Video bookmark types
+export type { VideoBookmark, VideoBookmarkSet, VideoBookmarksFile } from './types/videoBookmarks';
+export type { VideoSeekTrigger, VideoWaitTrigger } from './slides/SlideMetadata';
+
+// Video sync context
+export { VideoSyncProvider, useVideoSyncContext, useVideoSyncContextOptional } from './contexts/VideoSyncContext';
+export type { VideoSyncContextValue } from './contexts/VideoSyncContext';
+
 // Utils
 export { loadNarration, getNarrationSegment } from './utils/narrationLoader';
 export { checkApiHealth, saveNarrationToFile, realignSegment } from './utils/narrationApiClient';

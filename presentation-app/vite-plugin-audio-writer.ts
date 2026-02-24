@@ -5,6 +5,7 @@ import { sendJson } from './vite-plugin-handlers/types';
 import { createAudioHandlers } from './vite-plugin-handlers/audio';
 import { createNarrationHandlers } from './vite-plugin-handlers/narration';
 import { createStalenessHandlers } from './vite-plugin-handlers/staleness';
+import { createVideoBookmarkHandlers } from './vite-plugin-handlers/videoBookmarks';
 
 /**
  * Vite plugin that adds local file-writing endpoints for TTS audio files
@@ -48,6 +49,7 @@ export function audioWriterPlugin(): Plugin {
         ...createAudioHandlers(ctx),
         ...createNarrationHandlers(ctx),
         ...createStalenessHandlers(ctx),
+        ...createVideoBookmarkHandlers(ctx),
       ];
 
       for (const route of allRoutes) {

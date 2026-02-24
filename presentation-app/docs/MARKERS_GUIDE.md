@@ -210,6 +210,177 @@ npm run tts:align -- --demo my-demo
 
 Open in browser — content appears synchronized to the narrator's speech.
 
+## Marker-Driven Video Seeks
+
+Markers can do more than reveal UI — they can also **seek a video to a specific timestamp** when the narrator reaches a word. This mirrors the `<RevealAtMarker>` pattern but fires a video seek instead of a visibility change.
+
+### How it works
+
+| Step | What happens |
+|------|--------------|
+| `{#id}` in narrationText | Marks the trigger word in audio |
+| `videoSeeks` on `AudioSegment` | Declares which video + bookmark to seek to |
+| `bookmarks.json` | Maps bookmark IDs to video timestamps (`public/videos/{demoId}/bookmarks.json`) |
+| `VideoSyncContext` | Routes the seek to the registered `<VideoPlayer>` at 60fps via the RAF loop |
+
+### Author workflow
+
+1. Put your MP4 at `public/videos/{demo-id}/demo.mp4`
+2. Add `<VideoPlayer videoPath="..." videoId="demo-vid" isPlaying={segment >= 0} />` to your slide
+3. In dev mode, open the 📹 **Videos** button in the ProgressBar toolbar
+4. Select the video, scrub to a key moment, click **📌 Add Bookmark at current time**, set an ID (e.g., `scene2`), save
+5. Add `{#scene2}` to the relevant `narrationText` and run `npm run tts:align -- --demo {id}`
+6. Add `videoSeeks` to the segment in the slide metadata:
+
+```tsx
+audioSegments: [
+  {
+    id: 0,
+    narrationText: 'And here we can see {#scene2}the second scene in action.',
+    videoSeeks: [
+      { videoId: 'demo-vid', bookmarkId: 'scene2', atMarker: 'scene2' }
+    ],
+  },
+],
+```
+
+7. Play in narrated mode — the video seeks to the bookmarked timestamp the moment the narrator says "scene2".
+
+### `VideoSeekTrigger` fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `videoId` | `string` | Key in `bookmarks.json` videos map; must match the `videoId` prop on `<VideoPlayer>` |
+| `bookmarkId` | `string` | ID of the bookmark to seek to |
+| `atMarker` | `string` | TTS marker ID (`{#id}` system) that fires the seek |
+| `pauseNarration` | `boolean?` | If `true`: pause TTS, play clip start→end, resume when clip ends (Pattern 1) |
+
+### `VideoBookmark` fields (in bookmarks.json)
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | `string` | Bookmark identifier, referenced by `VideoSeekTrigger.bookmarkId` |
+| `time` | `number` | Clip start timestamp (seconds) — seek target |
+| `endTime` | `number?` | Clip end timestamp (seconds); plays to `video.onended` if absent |
+| `label` | `string?` | Human-readable description (editor only) |
+| `autoPlay` | `boolean` | `true` = seek + play; `false` = seek + pause (freeze frame) |
+
+### Setting clip end time in the editor
+
+In the 📹 Videos editor, each bookmark now has an **End time** field:
+
+1. Scrub video to the desired clip end position
+2. Check **"Clip ends at specific time"** → bookmark is stamped with current time as `endTime`
+3. Click **📌 Set to mm:ss.sss** to update `endTime` to the current position
+4. Save — `bookmarks.json` now contains both `time` and `endTime` for this bookmark
+
+### Narration-Pausing Video Clips (Three Patterns)
+
+When a bookmark has `endTime` set, you can control how TTS and the video clip interact.
+
+---
+
+#### Pattern 1 — TTS yields to clip (`pauseNarration: true`)
+
+TTS pauses at the marker, clip plays `start→end`, TTS resumes from where it was paused.
+
+```
+Timeline:
+TTS:  ──────────────── PAUSE ─── (clip plays) ───────────────────────►
+Video:                 ├──── clip.time → clip.endTime ────┤ (frozen)
+                       ↑ {#demo-clip} fires               ↑ TTS resumes
+```
+
+```tsx
+// narrationText
+"Let me show you the full workflow. {#demo-clip}
+ Now that you've seen it, let's break down each step."
+
+// AudioSegment
+videoSeeks: [
+  { videoId: 'demo', bookmarkId: 'clip1', atMarker: 'demo-clip', pauseNarration: true }
+]
+```
+
+---
+
+#### Pattern 2 — Clip overlays TTS (no pause)
+
+Clip starts at the marker, TTS keeps narrating in parallel. When the clip reaches `endTime`, the video freezes on the last frame — TTS continues to completion.
+
+```
+Timeline:
+TTS:  ──────────────────────────────────────────────────────────────►
+Video:              ├── clip plays ──┤ (frozen at endTime)
+                    ↑ {#side-clip}
+```
+
+```tsx
+// narrationText
+"While I walk through the architecture {#side-clip}
+ you can see the system processing requests on the right.
+ Notice the latency stays under 100ms throughout."
+
+// AudioSegment
+videoSeeks: [
+  { videoId: 'demo', bookmarkId: 'clip-overlay', atMarker: 'side-clip', pauseNarration: false }
+]
+```
+
+No `videoWaits` needed. When the clip reaches `endTime`, it auto-pauses and freezes. TTS finishes naturally.
+
+---
+
+#### Pattern 3 — TTS leads, then waits (`videoWaits`)
+
+TTS narrates alongside the clip, but at a *later* marker it pauses and waits for the clip to finish. If the clip already finished, TTS continues uninterrupted.
+
+```
+Timeline (clip still active at {#after-clip}):
+TTS:  ───────────────── (narrating) ───── PAUSE ─── RESUME ►
+Video:        ├── clip plays ───────────────┤ (frozen)
+              ↑ {#start-clip}  ↑ {#after-clip} → clip active → TTS waits
+                                             ↑ clip ends → TTS resumes
+
+Timeline (clip already done before {#after-clip}):
+TTS:  ──────────────────────────────────────────────────────────────►
+Video:        ├── clip plays ──┤ (frozen)
+              ↑ {#start-clip}              ↑ {#after-clip} → clip done → TTS continues
+```
+
+```tsx
+// narrationText
+"Watch the three phases carefully. {#start-clip}
+ In phase one the data is ingested, in phase two it is transformed,
+ and in phase three {#after-clip} results are published."
+
+// AudioSegment
+videoSeeks: [
+  { videoId: 'demo', bookmarkId: 'clip1', atMarker: 'start-clip', pauseNarration: false }
+],
+videoWaits: [
+  { videoId: 'demo', bookmarkId: 'clip1', atMarker: 'after-clip' }
+]
+```
+
+### `VideoWaitTrigger` fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `videoId` | `string` | Key in `bookmarks.json` videos map |
+| `bookmarkId` | `string` | Which clip (bookmark) to wait for |
+| `atMarker` | `string` | TTS marker at which to check/wait |
+
+### Graceful degradation
+
+- A demo without `bookmarks.json` plays normally — `VideoSyncContext` has no triggers to fire
+- A `<VideoPlayer>` without `videoId` works unchanged (no registration)
+- A `VideoSeekTrigger` whose marker hasn't been aligned yet simply never fires
+- `endTime` absent → clip plays until `video.onended`, then the `onDone` callback fires
+- Segment change mid-clip → stale callbacks do not fire (generation counter guard)
+
+---
+
 ## Cache Behavior
 
 Markers are transparent to the TTS cache. Both the narration cache (`narration-cache.json`) and the TTS cache (`.tts-narration-cache.json`) strip markers before hashing and comparison. This means:

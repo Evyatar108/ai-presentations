@@ -27,6 +27,9 @@ export interface ProgressBarProps {
   regenerating: boolean;
   onRegenerate: () => void;
   onRestart: () => void;
+  // Video bookmarks editor
+  showVideosButton?: boolean;
+  onVideos?: () => void;
 }
 
 export const ProgressBar: React.FC<ProgressBarProps> = ({
@@ -48,6 +51,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   regenerating,
   onRegenerate,
   onRestart,
+  showVideosButton,
+  onVideos,
 }) => {
   const theme = useTheme();
   const plannedTotal = demoMetadata.durationInfo?.total;
@@ -216,6 +221,34 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
           }}
         >
           <span aria-hidden="true">{regenerating ? '⏳' : '🔄'}</span> {regenerating ? 'Regenerating...' : 'Regen Segment TTS'}
+        </button>
+      )}
+
+      {/* Video bookmarks editor button (dev mode only, gated by parent) */}
+      {showVideosButton && (
+        <button
+          onClick={onVideos}
+          aria-label="Open video bookmark editor"
+          style={{
+            background: 'transparent',
+            border: `1px solid ${theme.colors.borderSubtle}`,
+            color: theme.colors.textPrimary,
+            borderRadius: 6,
+            padding: '0.25rem 0.75rem',
+            fontSize: 11,
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.borderColor = theme.colors.primary;
+            e.currentTarget.style.color = theme.colors.primary;
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderColor = theme.colors.borderSubtle;
+            e.currentTarget.style.color = theme.colors.textPrimary;
+          }}
+        >
+          <span aria-hidden="true">📹</span> Videos
         </button>
       )}
 

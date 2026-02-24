@@ -590,7 +590,7 @@ import { ProgressSteps } from '@framework';
 
 ### VideoPlayer
 
-Controlled video element with play/pause tied to segment state, optional freeze-on-end, and captions support.
+Controlled video element with play/pause tied to segment state, optional freeze-on-end, and captions support. Supports marker-driven seeks via the `videoId` prop + `VideoSyncContext`.
 
 **Source:** `src/framework/components/VideoPlayer.tsx`
 
@@ -602,16 +602,27 @@ Controlled video element with play/pause tied to segment state, optional freeze-
 | `freezeOnEnd` | `boolean` | `true` | Keep final frame visible |
 | `ariaLabel` | `string` | — | Accessibility label |
 | `captionsSrc` | `string` | — | Path to WebVTT captions file |
+| `videoId` | `string` | — | Registers this player with `VideoSyncContext` for marker-driven seeks |
 
 ```tsx
 import { VideoPlayer } from '@framework';
 
+// Basic usage
 <VideoPlayer
   videoPath="/videos/my-demo/intro.mp4"
   isPlaying={segment >= 1}
   onEnded={() => console.log('done')}
 />
+
+// With marker-driven seeks (videoId required)
+<VideoPlayer
+  videoPath="/videos/my-demo/demo.mp4"
+  videoId="demo-vid"
+  isPlaying={segment >= 0}
+/>
 ```
+
+**Marker-driven seeks:** When `videoId` is provided, the player registers a seek function with `VideoSyncContext`. When a TTS marker fires (via `videoSeeks` on the segment), the video automatically seeks to the bookmarked timestamp and plays or pauses based on `autoPlay`. Use the 📹 Videos button in the dev-mode ProgressBar to create bookmarks interactively. See `MARKERS_GUIDE.md` for the full workflow.
 
 ---
 

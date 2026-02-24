@@ -3,11 +3,14 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { hasAudioSegments, SlideComponentWithMetadata } from '../slides/SlideMetadata';
 import { useSegmentContext } from '../contexts/SegmentContext';
 import { useAudioTimeContextOptional } from '../contexts/AudioTimeContext';
+import { useVideoSyncContextOptional } from '../contexts/VideoSyncContext';
 import type { DemoMetadata } from '../demos/types';
 import type { DemoAlignment } from '../alignment/types';
+import type { VideoBookmarksFile } from '../types/videoBookmarks';
 import { TimingConfig, DEFAULT_START_TRANSITION } from '../demos/timing/types';
 import type { StartTransition } from '../demos/timing/types';
 import { NarrationEditModal } from './NarrationEditModal';
+import { VideoBookmarkEditorModal } from './VideoBookmarkEditorModal';
 import { getConfig } from '../config';
 import { MARKER_TIME_EPSILON, AUTOPLAY_PROBE_DELAY_MS } from '../constants';
 import { StartOverlay } from './narrated/StartOverlay';
@@ -33,6 +36,7 @@ export interface AutoplayConfig {
 }
 
 export interface NarratedControllerProps {
+  bookmarksData?: VideoBookmarksFile | null;
   demoMetadata: DemoMetadata;
   demoTiming?: TimingConfig;
   demoInstruct?: string;
@@ -54,6 +58,7 @@ export interface NarratedControllerProps {
 }
 
 export const NarratedController: React.FC<NarratedControllerProps> = ({
+  bookmarksData,
   demoMetadata,
   demoTiming,
   demoInstruct,
@@ -98,10 +103,15 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
   // Audio time context for sub-segment marker tracking
   const audioTimeCtx = useAudioTimeContextOptional();
 
+  // Video sync context for marker-driven video seeks
+  const videoSyncCtx = useVideoSyncContextOptional();
+
   // Theme for overlay
   const theme = useTheme();
 
   // Extracted hooks
+  const [showVideoBookmarkEditor, setShowVideoBookmarkEditor] = useState(false);
+
   const { notifications, showSuccess } = useNotifications();
   const timer = useRuntimeTimer({ isPlaying, enabled: true });
   const { showRuntimeTimerOption, setShowRuntimeTimerOption, elapsedMs, finalElapsedSeconds, setFinalElapsedSeconds, runtimeStart } = timer;
@@ -137,6 +147,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     alignmentData,
     segmentContext,
     audioTimeCtx,
+    videoSyncCtx,
     autoplaySignalPort: autoplay?.signalPort,
     setError,
     setIsLoading,
@@ -174,6 +185,14 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     demoId: demoMetadata.id,
     demoTitle: demoMetadata.title,
   });
+
+  // Notify VideoSyncContext when segment changes so it can arm the seek + wait triggers
+  useEffect(() => {
+    if (!videoSyncCtx) return;
+    const slide = currentIndex < allSlides.length ? allSlides[currentIndex].metadata : undefined;
+    const segment = slide?.audioSegments[segmentContext.currentSegmentIndex];
+    videoSyncCtx.setActiveSeeks(segment?.videoSeeks, segment?.videoWaits, bookmarksData ?? null);
+  }, [currentIndex, segmentContext.currentSegmentIndex]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Stable refs for marker keyboard handler — avoids re-registering
   // the capture-phase listener on every frame when currentTime changes.
@@ -401,6 +420,8 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
             }
           }}
           onRestart={handleRestart}
+          showVideosButton={import.meta.env.DEV}
+          onVideos={() => setShowVideoBookmarkEditor(true)}
         />
       )}
 
@@ -450,6 +471,16 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
       </AnimatePresence>
 
       <NotificationStack notifications={notifications} />
+
+      <AnimatePresence>
+        {showVideoBookmarkEditor && (
+          <VideoBookmarkEditorModal
+            demoId={demoMetadata.id}
+            initialData={bookmarksData}
+            onClose={() => setShowVideoBookmarkEditor(false)}
+          />
+        )}
+      </AnimatePresence>
     </>
   );
 };
