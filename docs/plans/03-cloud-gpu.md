@@ -167,8 +167,8 @@ Audio files are base64-encoded in HTTP responses. For batch generation of an ent
 
 - **Blocks nothing** — this is a pure infrastructure change
 - **No code changes required** for basic usage (just config URLs)
-- **Benefits from Config Unification (01)**: `api_key` field follows the established pattern
-- **Optional dependency on Azure Deployment (03)**: If the SPA is deployed publicly, browser-side TTS needs the proxy approach mentioned above
+- **Benefits from Config Unification (02)**: `api_key` field follows the established pattern
+- **Optional dependency on Azure Deployment (04)**: If the SPA is deployed publicly, browser-side TTS needs the proxy approach mentioned above
 
 ## Effort Estimate
 

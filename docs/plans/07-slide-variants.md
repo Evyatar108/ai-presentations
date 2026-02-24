@@ -269,8 +269,8 @@ This is a stretch goal — the core variant switching mechanism must be solid fi
 ## Dependencies
 
 - **No blocking dependencies** — self-contained within the framework
-- **Should be finalized before Repo Split (06)** — changes the framework's public API surface (`defineSlideVariants` export, extended types)
-- **Interacts with Cloud GPU (02)** only in that TTS generation is needed for variant audio — no architectural dependency
+- **Should be finalized before Repo Split (08)** — changes the framework's public API surface (`defineSlideVariants` export, extended types)
+- **Interacts with Cloud GPU (03)** only in that TTS generation is needed for variant audio — no architectural dependency
 
 ## Reversibility
 

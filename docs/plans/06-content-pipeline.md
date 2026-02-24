@@ -28,8 +28,8 @@ This workflow is error-prone (steps get skipped, alignment gets stale) and creat
 | Cache-based change detection | Working | `scripts/utils/tts-cache.ts` — tracks narration text hashes |
 | Staleness detection | Working | `vite-plugin-handlers/staleness.ts` — compares text vs. cache |
 | Audio format: WAV | Default | `audioPath.ts` — `.wav` extension hardcoded |
-| Cloud GPU | Planned (doc 02) | Remote TTS/WhisperX servers |
-| Azure Blob Storage | Planned (doc 03) | CDN for audio assets |
+| Cloud GPU | Planned (doc 03) | Remote TTS/WhisperX servers |
+| Azure Blob Storage | Planned (doc 04) | CDN for audio assets |
 
 ### What's Missing
 
@@ -210,9 +210,9 @@ The `paths` trigger in the workflow uses `Chapter*.tsx` and `metadata.ts` patter
 
 ## Dependencies
 
-- **Requires Cloud GPU (02)**: Needs remote TTS/WhisperX servers accessible from GitHub Actions runners
-- **Requires Azure Deployment Phase 2 (03)**: Needs blob storage for audio upload
-- **Benefits from Config Unification (01)**: Server URLs and API keys read from consistent env var pattern
+- **Requires Cloud GPU (03)**: Needs remote TTS/WhisperX servers accessible from GitHub Actions runners
+- **Requires Azure Deployment Phase 2 (04)**: Needs blob storage for audio upload
+- **Benefits from Config Unification (02)**: Server URLs and API keys read from consistent env var pattern
 - **Benefits from Audio Format Conversion (03, Phase 3)**: WAV→MP3 step
 
 ## Effort Estimate

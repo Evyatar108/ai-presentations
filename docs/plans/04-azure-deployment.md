@@ -73,7 +73,7 @@ The app uses `?demo={id}` query parameters (not path-based routing) via `useUrlP
    }
    ```
 
-3. **Environment config**: Use `VITE_` env vars (from Config Unification, doc 01) for build-time configuration:
+3. **Environment config**: Use `VITE_` env vars (from Config Unification, doc 02) for build-time configuration:
    - `VITE_TTS_ENABLED=false` — Disable TTS regeneration UI in production
    - `VITE_ASSET_BASE_URL` — CDN URL for audio/media (Phase 2)
 
@@ -185,7 +185,7 @@ Implementation:
 3. Keep WAV for local dev (editing, alignment, regeneration) and MP3 for deployed CDN
 4. **Alignment timestamp impact**: Word-level timestamps in `alignment.json` reference WAV. MP3 encoding may introduce slight timing shifts (~10-50ms). Verify alignment accuracy with MP3 — if drift is noticeable, alignment should always run against WAV originals.
 
-This conversion reduces per-demo audio from ~50-200 MB to ~5-20 MB — a prerequisite for practical CDN delivery and offline/PWA support (see doc 04).
+This conversion reduces per-demo audio from ~50-200 MB to ~5-20 MB — a prerequisite for practical CDN delivery and offline/PWA support (see doc 05).
 
 ## Challenges & Open Questions
 
@@ -231,9 +231,9 @@ Audio files in `public/audio/` bloat git history. Moving to blob storage helps f
 
 ## Dependencies
 
-- **Benefits from Config Unification (01)**: `VITE_*` env var pattern established
-- **Independent of Cloud GPU (02)** for core deployment
-- **Repo Split (06)**: Build pipeline would need adjustment if repo structure changes. Better to finalize repo structure first, or accept that the CI/CD workflow will be updated.
+- **Benefits from Config Unification (02)**: `VITE_*` env var pattern established
+- **Independent of Cloud GPU (03)** for core deployment
+- **Repo Split (08)**: Build pipeline would need adjustment if repo structure changes. Better to finalize repo structure first, or accept that the CI/CD workflow will be updated.
 
 ## Effort Estimate
 

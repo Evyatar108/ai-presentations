@@ -2,7 +2,7 @@
 
 ## Motivation
 
-Once the SPA is deployed to Azure (doc 03), two production-quality concerns emerge that don't apply to local dev:
+Once the SPA is deployed to Azure (doc 04), two production-quality concerns emerge that don't apply to local dev:
 
 1. **Errors are invisible** — `console.error` with `[ComponentName]` prefixes is useful in dev but goes nowhere in production. The codebase has well-structured error handling that can feed into a reporting service.
 2. **Network drops break playback** — if presentations are shared via URL for meetings, a network hiccup during a live presentation is embarrassing. Pre-caching assets enables offline resilience.
@@ -132,7 +132,7 @@ The existing audio fallback to `silence-1s.wav` already handles missing files gr
 
 ### Prerequisites
 
-- **MP3 audio conversion** (doc 03, Phase 3) — WAV files are 50-200 MB per demo, impractical for service worker caching. MP3 reduces this to 5-20 MB.
+- **MP3 audio conversion** (doc 04, Phase 3) — WAV files are 50-200 MB per demo, impractical for service worker caching. MP3 reduces this to 5-20 MB.
 - Without MP3 conversion, PWA support should be limited to the SPA shell only (no audio caching).
 
 ### Effort Estimate
@@ -155,9 +155,9 @@ The existing audio fallback to `silence-1s.wav` already handles missing files gr
 
 ## Dependencies
 
-- **Requires Azure Deployment (03)** — these are production-only features
-- **Part B requires MP3 conversion** from doc 03, Phase 3 — WAV files are too large for practical caching
-- **Benefits from Config Unification (01)**: `VITE_APPINSIGHTS_CONNECTION` follows the env var pattern
+- **Requires Azure Deployment (04)** — these are production-only features
+- **Part B requires MP3 conversion** from doc 04, Phase 3 — WAV files are too large for practical caching
+- **Benefits from Config Unification (02)**: `VITE_APPINSIGHTS_CONNECTION` follows the env var pattern
 - **Independent of each other** — Part A and Part B can be done in any order
 
 ## Combined Effort

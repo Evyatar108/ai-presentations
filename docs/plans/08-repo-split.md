@@ -190,7 +190,7 @@ Options:
 
 ### 6. Environment Configuration Unification
 
-The codebase currently has **5 separate config patterns** (see doc 01 — Config Unification). The repo split is an opportunity to formalize ownership:
+The codebase currently has **5 separate config patterns** (see doc 02 — Config Unification). The repo split is an opportunity to formalize ownership:
 
 - Framework package owns `FrameworkConfig` (TypeScript runtime config)
 - Demo package owns `.env.*` files for `VITE_*` build-time variables
@@ -246,9 +246,9 @@ Each demo project needs its own `public/audio/`, `public/images/`, etc. This is 
 ## Dependencies
 
 - **Should be done last** — most disruptive, benefits from stable API surface
-- **Depends on Slide Variants (05)** being finalized — variant support changes the framework API
-- **Benefits from Config Unification (01)** — config ownership is clearer
-- **Independent of Cloud GPU (02)** and **Azure Deployment (03)**, though CI/CD pipeline (03) may need rework after split
+- **Depends on Slide Variants (07)** being finalized — variant support changes the framework API
+- **Benefits from Config Unification (02)** — config ownership is clearer
+- **Independent of Cloud GPU (03)** and **Azure Deployment (04)**, though CI/CD pipeline (04) may need rework after split
 
 ## Effort Estimate
 
