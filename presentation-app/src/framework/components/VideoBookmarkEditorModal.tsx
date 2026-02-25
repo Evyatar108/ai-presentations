@@ -154,6 +154,11 @@ export const VideoBookmarkEditorModal: React.FC<VideoBookmarkEditorModalProps> =
     video.addEventListener('ended', handleEnded);
     video.addEventListener('seeked', handleSeeked);
 
+    // If duration is already known (durationchange fired before listener attached), handle it now
+    if (video.duration && video.duration > 0 && isFinite(video.duration)) {
+      handleDurationChange();
+    }
+
     // If already playing when effect mounts, start the loop
     if (!video.paused) {
       rafId = requestAnimationFrame(tick);
