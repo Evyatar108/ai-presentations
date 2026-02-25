@@ -380,6 +380,7 @@ export const VideoBookmarkEditorModal: React.FC<VideoBookmarkEditorModalProps> =
               <button
                 key={id}
                 onClick={() => setSelectedVideoId(id)}
+                title={id}
                 style={{
                   background: id === selectedVideoId ? theme.colors.bgBorder : 'transparent',
                   border: `1px solid ${id === selectedVideoId ? theme.colors.primary : theme.colors.borderSubtle}`,
