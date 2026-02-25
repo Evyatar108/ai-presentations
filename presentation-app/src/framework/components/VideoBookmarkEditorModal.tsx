@@ -1,7 +1,7 @@
 /**
  * VideoBookmarkEditorModal — interactive 3-panel editor for video timestamp bookmarks.
  *
- * Left:   Video list (by videoId) + "Add video" form
+ * Left:   Video list (auto-populated from filesystem)
  * Center: Native <video> with play/pause, nudge, scrubber, "📌 Add Bookmark"
  * Right:  Bookmark list for selected video (editable id/label/time, autoPlay toggle, delete)
  * Footer: Save (POST /api/video-bookmarks/{demoId}) + Close
@@ -23,6 +23,15 @@ function fmtTime(seconds: number): string {
 function cloneBookmarks(data: VideoBookmarksFile | null | undefined): Record<string, VideoBookmarkSet> {
   if (!data?.videos) return {};
   return JSON.parse(JSON.stringify(data.videos));
+}
+
+function deriveVideoId(filePath: string, existing: Record<string, unknown>): string {
+  const basename = filePath.split('/').pop()?.replace(/\.(mp4|webm)$/i, '') ?? 'video';
+  let id = basename.replace(/_/g, '-');
+  if (!existing[id]) return id;
+  let n = 2;
+  while (existing[`${id}-${n}`]) n++;
+  return `${id}-${n}`;
 }
 
 // ─── Props ────────────────────────────────────────────────────────────────────
@@ -56,45 +65,87 @@ export const VideoBookmarkEditorModal: React.FC<VideoBookmarkEditorModalProps> =
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const [saveError, setSaveError] = useState('');
 
-  // Add video form
-  const [showAddVideoForm, setShowAddVideoForm] = useState(false);
-  const [newVideoId, setNewVideoId] = useState('');
-  const [newVideoSrc, setNewVideoSrc] = useState('');
-  const [suggestedFiles, setSuggestedFiles] = useState<string[]>([]);
-
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // ── Fetch suggested video files ─────────────────────────────────────
+  // ── Auto-populate videos from filesystem ──────────────────────────────
   useEffect(() => {
     fetch(`/api/video-bookmarks/${demoId}/list`)
       .then(r => r.ok ? r.json() : { files: [] })
-      .then(data => setSuggestedFiles(data.files ?? []))
+      .then(data => {
+        const files: string[] = data.files ?? [];
+        setVideos(prev => {
+          // Build a map of all filesystem videos, preserving existing bookmarks
+          const srcToExisting = new Map<string, [string, VideoBookmarkSet]>();
+          for (const [id, set] of Object.entries(prev)) {
+            srcToExisting.set(set.src, [id, set]);
+          }
+
+          const next: Record<string, VideoBookmarkSet> = {};
+          for (const filePath of files) {
+            const existing = srcToExisting.get(filePath);
+            if (existing) {
+              // Preserve existing entry (ID + bookmarks)
+              next[existing[0]] = existing[1];
+            } else {
+              // New file — derive videoId from filename
+              const videoId = deriveVideoId(filePath, next);
+              next[videoId] = { src: filePath, bookmarks: [] };
+            }
+          }
+          return next;
+        });
+      })
       .catch(() => {});
   }, [demoId]);
 
-  // ── Video playback sync ─────────────────────────────────────────────
+  // ── Auto-select first video when none selected ────────────────────────
+  useEffect(() => {
+    const ids = Object.keys(videos);
+    if (!selectedVideoId && ids.length > 0) {
+      setSelectedVideoId(ids[0]);
+    }
+  }, [videos, selectedVideoId]);
+
+  // ── Video playback sync (rAF for smooth timestamp updates) ──────────
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    const handleTimeUpdate = () => setCurrentTime(video.currentTime);
-    const handleDurationChange = () => setDuration(video.duration || 0);
-    const handlePlay = () => setIsPlaying(true);
-    const handlePause = () => setIsPlaying(false);
-    const handleEnded = () => setIsPlaying(false);
+    // Reset to the new video's current state
+    setCurrentTime(video.currentTime);
+    setDuration(video.duration || 0);
+    setIsPlaying(!video.paused);
 
-    video.addEventListener('timeupdate', handleTimeUpdate);
+    let rafId = 0;
+    const tick = () => {
+      setCurrentTime(video.currentTime);
+      rafId = requestAnimationFrame(tick);
+    };
+
+    const handleDurationChange = () => setDuration(video.duration || 0);
+    const handlePlay = () => { setIsPlaying(true); rafId = requestAnimationFrame(tick); };
+    const handlePause = () => { setIsPlaying(false); cancelAnimationFrame(rafId); };
+    const handleEnded = () => { setIsPlaying(false); cancelAnimationFrame(rafId); };
+    const handleSeeked = () => setCurrentTime(video.currentTime);
+
     video.addEventListener('durationchange', handleDurationChange);
     video.addEventListener('play', handlePlay);
     video.addEventListener('pause', handlePause);
     video.addEventListener('ended', handleEnded);
+    video.addEventListener('seeked', handleSeeked);
+
+    // If already playing when effect mounts, start the loop
+    if (!video.paused) {
+      rafId = requestAnimationFrame(tick);
+    }
 
     return () => {
-      video.removeEventListener('timeupdate', handleTimeUpdate);
+      cancelAnimationFrame(rafId);
       video.removeEventListener('durationchange', handleDurationChange);
       video.removeEventListener('play', handlePlay);
       video.removeEventListener('pause', handlePause);
       video.removeEventListener('ended', handleEnded);
+      video.removeEventListener('seeked', handleSeeked);
     };
   }, [selectedVideoId]);
 
@@ -167,17 +218,6 @@ export const VideoBookmarkEditorModal: React.FC<VideoBookmarkEditorModalProps> =
       return next;
     });
   }, [selectedVideoId]);
-
-  const addVideo = useCallback(() => {
-    const id = newVideoId.trim();
-    const src = newVideoSrc.trim();
-    if (!id || !src) return;
-    setVideos(prev => ({ ...prev, [id]: { src, bookmarks: [] } }));
-    setSelectedVideoId(id);
-    setNewVideoId('');
-    setNewVideoSrc('');
-    setShowAddVideoForm(false);
-  }, [newVideoId, newVideoSrc]);
 
   const handleSave = useCallback(async () => {
     setSaveStatus('saving');
@@ -333,36 +373,10 @@ export const VideoBookmarkEditorModal: React.FC<VideoBookmarkEditorModalProps> =
                 {id}
               </button>
             ))}
-            {showAddVideoForm ? (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', marginTop: '0.5rem' }}>
-                <input
-                  placeholder="Video ID (e.g. my-vid)"
-                  value={newVideoId}
-                  onChange={e => setNewVideoId(e.target.value)}
-                  style={s.input}
-                />
-                <input
-                  placeholder="Src path"
-                  value={newVideoSrc}
-                  onChange={e => setNewVideoSrc(e.target.value)}
-                  list="video-files-list"
-                  style={s.input}
-                />
-                <datalist id="video-files-list">
-                  {suggestedFiles.map(f => <option key={f} value={f} />)}
-                </datalist>
-                <div style={{ display: 'flex', gap: '0.25rem' }}>
-                  <button style={{ ...s.btn(true), flex: 1 }} onClick={addVideo}>Add</button>
-                  <button style={s.btn()} onClick={() => setShowAddVideoForm(false)}>✕</button>
-                </div>
+            {Object.keys(videos).length === 0 && (
+              <div style={{ color: theme.colors.textMuted, fontSize: 11, marginTop: '0.5rem' }}>
+                No video files found.
               </div>
-            ) : (
-              <button
-                style={{ ...s.btn(), marginTop: '0.5rem', textAlign: 'left' }}
-                onClick={() => setShowAddVideoForm(true)}
-              >
-                + Add video
-              </button>
             )}
           </div>
 
