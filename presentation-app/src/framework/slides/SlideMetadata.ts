@@ -8,6 +8,9 @@ export interface VideoSeekTrigger {
   bookmarkId: string;       // ID of the bookmark to seek to
   atMarker: string;         // TTS marker ID ({#id} system) that fires the seek
   pauseNarration?: boolean; // If true: pause TTS, play clip start→end, resume when clip ends
+  autoPlay?: boolean;       // true = seek+play (default), false = seek+pause (freeze frame)
+  endBookmarkId?: string;   // Bookmark whose time is the clip end; plays to video end if absent
+  playbackRate?: number;    // Playback speed multiplier (default 1); e.g. 3 = 3x fast-forward
 }
 
 /**

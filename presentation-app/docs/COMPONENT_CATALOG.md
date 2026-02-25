@@ -622,7 +622,7 @@ import { VideoPlayer } from '@framework';
 />
 ```
 
-**Marker-driven seeks:** When `videoId` is provided, the player registers a seek function with `VideoSyncContext`. When a TTS marker fires (via `videoSeeks` on the segment), the video automatically seeks to the bookmarked timestamp and plays or pauses based on `autoPlay`. Use the 📹 Videos button in the dev-mode ProgressBar to create bookmarks interactively. See `MARKERS_GUIDE.md` for the full workflow.
+**Marker-driven seeks:** When `videoId` is provided, the player registers a seek function with `VideoSyncContext`. When a TTS marker fires (via `videoSeeks` on the segment), the video automatically seeks to the bookmarked timestamp and plays or pauses based on the trigger's `autoPlay` (defaults to `true`). Use the 📹 Videos button in the dev-mode ProgressBar to create bookmarks interactively. See `MARKERS_GUIDE.md` for the full workflow.
 
 ---
 

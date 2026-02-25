@@ -49,6 +49,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
       if (!monitor || !videoRef.current) return;
       if (videoRef.current.currentTime >= monitor.endTime) {
         videoRef.current.pause();
+        videoRef.current.playbackRate = 1;
         clipMonitorRef.current = null;
         monitor.onDone();
       }
@@ -60,10 +61,11 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   // Register with VideoSyncContext so marker-driven seeks can target this player
   useEffect(() => {
     if (!videoId || !videoSyncCtx) return;
-    const seekFn = (time: number, autoPlay: boolean, endTime?: number, onDone?: () => void) => {
+    const seekFn = (time: number, autoPlay: boolean, endTime?: number, playbackRate?: number, onDone?: () => void) => {
       const video = videoRef.current;
       if (!video) return;
       video.currentTime = time;
+      video.playbackRate = playbackRate ?? 1;
       setHasEnded(false);
       clipMonitorRef.current = (endTime !== undefined && onDone)
         ? { endTime, onDone }
@@ -83,6 +85,10 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     if (monitor) {
       clipMonitorRef.current = null;
       monitor.onDone();
+    }
+    // Reset playback rate to normal
+    if (videoRef.current) {
+      videoRef.current.playbackRate = 1;
     }
     setHasEnded(true);
     if (onEnded) {

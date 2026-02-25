@@ -3,7 +3,7 @@
  *
  * Left:   Video list (auto-populated from filesystem)
  * Center: Native <video> with play/pause, nudge, scrubber, "📌 Add Bookmark"
- * Right:  Bookmark list for selected video (editable id/label/time, autoPlay toggle, delete)
+ * Right:  Bookmark list for selected video (editable id/label/time, delete; start/end are readonly)
  * Footer: Save (POST /api/video-bookmarks/{demoId}) + Close
  */
 import React, { useEffect, useRef, useState, useCallback } from 'react';
@@ -89,7 +89,10 @@ export const VideoBookmarkEditorModal: React.FC<VideoBookmarkEditorModalProps> =
             } else {
               // New file — derive videoId from filename
               const videoId = deriveVideoId(filePath, next);
-              next[videoId] = { src: filePath, bookmarks: [] };
+              next[videoId] = {
+                src: filePath,
+                bookmarks: [{ id: 'start', time: 0, label: 'Start' }],
+              };
             }
           }
           return next;
@@ -122,7 +125,24 @@ export const VideoBookmarkEditorModal: React.FC<VideoBookmarkEditorModalProps> =
       rafId = requestAnimationFrame(tick);
     };
 
-    const handleDurationChange = () => setDuration(video.duration || 0);
+    const handleDurationChange = () => {
+      const dur = video.duration || 0;
+      setDuration(dur);
+      // Auto-add "end" bookmark if none exists yet
+      if (dur > 0 && selectedVideoId) {
+        setVideos(prev => {
+          const entry = prev[selectedVideoId];
+          if (!entry || entry.bookmarks.some(bm => bm.id === 'end')) return prev;
+          return {
+            ...prev,
+            [selectedVideoId]: {
+              ...entry,
+              bookmarks: [...entry.bookmarks, { id: 'end', time: dur, label: 'End' }],
+            },
+          };
+        });
+      }
+    };
     const handlePlay = () => { setIsPlaying(true); rafId = requestAnimationFrame(tick); };
     const handlePause = () => { setIsPlaying(false); cancelAnimationFrame(rafId); };
     const handleEnded = () => { setIsPlaying(false); cancelAnimationFrame(rafId); };
@@ -186,7 +206,7 @@ export const VideoBookmarkEditorModal: React.FC<VideoBookmarkEditorModalProps> =
   const addBookmarkAtCurrentTime = useCallback(() => {
     if (!selectedVideoId) return;
     const id = `bm${Date.now()}`;
-    const newBm: VideoBookmark = { id, time: currentTime, label: '', autoPlay: true };
+    const newBm: VideoBookmark = { id, time: currentTime, label: '' };
     setVideos(prev => {
       const next = { ...prev };
       next[selectedVideoId] = {
@@ -459,7 +479,8 @@ export const VideoBookmarkEditorModal: React.FC<VideoBookmarkEditorModalProps> =
                       <input
                         value={bm.id}
                         onChange={e => updateBookmark(i, { id: e.target.value })}
-                        style={{ ...s.input, fontFamily: 'monospace' }}
+                        disabled={bm.id === 'start' || bm.id === 'end'}
+                        style={{ ...s.input, fontFamily: 'monospace', ...(bm.id === 'start' || bm.id === 'end' ? { opacity: 0.6, cursor: 'not-allowed' } : {}) }}
                         placeholder="bookmark-id"
                       />
                     </div>
@@ -473,72 +494,36 @@ export const VideoBookmarkEditorModal: React.FC<VideoBookmarkEditorModalProps> =
                         placeholder="Optional description"
                       />
                     </div>
-                    {/* Time (start) + seek */}
+                    {/* Time + seek */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                      <span style={{ fontSize: 10, color: theme.colors.textMuted, minWidth: 28 }}>Start</span>
+                      <span style={{ fontSize: 10, color: theme.colors.textMuted, minWidth: 28 }}>Time</span>
                       <button
                         style={{ ...s.btn(), fontFamily: 'monospace', fontSize: 11, flex: 1, textAlign: 'left' }}
                         onClick={() => seekTo(bm.time)}
-                        title="Click to seek to start time"
+                        title="Click to seek to this time"
                       >
                         {fmtTime(bm.time)}
                       </button>
                       <button
                         style={{ ...s.btn(), fontSize: 10 }}
                         onClick={() => updateBookmark(i, { time: currentTime })}
-                        title="Set start to current time"
+                        title="Set to current time"
                       >
                         📌
                       </button>
                     </div>
-                    {/* End time */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', flexWrap: 'wrap' }}>
-                      <span style={{ fontSize: 10, color: theme.colors.textMuted, minWidth: 28 }}>End</span>
-                      <label style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', cursor: 'pointer', fontSize: 11 }}>
-                        <input
-                          type="checkbox"
-                          checked={bm.endTime !== undefined}
-                          onChange={e => updateBookmark(i, { endTime: e.target.checked ? currentTime : undefined })}
-                        />
-                        Clip ends at specific time
-                      </label>
-                      {bm.endTime !== undefined && (
-                        <>
-                          <button
-                            style={{ ...s.btn(), fontFamily: 'monospace', fontSize: 10 }}
-                            onClick={() => seekTo(bm.endTime!)}
-                            title="Click to seek to end time"
-                          >
-                            {fmtTime(bm.endTime)}
-                          </button>
-                          <button
-                            style={{ ...s.btn(), fontSize: 10 }}
-                            onClick={() => updateBookmark(i, { endTime: currentTime })}
-                            title="Set end to current time"
-                          >
-                            📌 Set to {fmtTime(currentTime)}
-                          </button>
-                        </>
-                      )}
-                    </div>
-                    {/* AutoPlay + delete */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <label style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', cursor: 'pointer', fontSize: 11, flex: 1 }}>
-                        <input
-                          type="checkbox"
-                          checked={bm.autoPlay}
-                          onChange={e => updateBookmark(i, { autoPlay: e.target.checked })}
-                        />
-                        Auto-play after seek
-                      </label>
-                      <button
-                        style={s.btn(false, true)}
-                        onClick={() => deleteBookmark(i)}
-                        title="Delete bookmark"
-                      >
-                        🗑
-                      </button>
-                    </div>
+                    {/* Delete (hidden for start/end) */}
+                    {bm.id !== 'start' && bm.id !== 'end' && (
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                        <button
+                          style={s.btn(false, true)}
+                          onClick={() => deleteBookmark(i)}
+                          title="Delete bookmark"
+                        >
+                          🗑
+                        </button>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>

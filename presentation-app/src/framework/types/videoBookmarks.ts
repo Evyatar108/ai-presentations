@@ -6,11 +6,9 @@
  */
 
 export interface VideoBookmark {
-  id: string;        // Referenced by VideoSeekTrigger.bookmarkId
-  time: number;      // Clip start (seek target), seconds in the video
-  endTime?: number;  // Clip end (seconds); plays to video end if absent
-  label?: string;    // Human-readable description (editor only)
-  autoPlay: boolean; // true = seek+play; false = seek+pause (freeze frame)
+  id: string;      // Referenced by VideoSeekTrigger.bookmarkId
+  time: number;    // Seek target, seconds in the video
+  label?: string;  // Human-readable description (editor only)
 }
 
 export interface VideoBookmarkSet {

@@ -15,7 +15,7 @@ import type { VideoBookmarksFile } from '../types/videoBookmarks';
  */
 
 /** seekFn type registered by VideoPlayer — supports optional clip end + done callback */
-type VideoSeekFn = (time: number, autoPlay: boolean, endTime?: number, onDone?: () => void) => void;
+type VideoSeekFn = (time: number, autoPlay: boolean, endTime?: number, playbackRate?: number, onDone?: () => void) => void;
 
 /** Pending resume for Pattern 3: waiting for a specific clip to finish */
 interface PendingResume {
@@ -155,11 +155,18 @@ export const VideoSyncProvider: React.FC<VideoSyncProviderProps> = ({ children }
 
         const clipKey = `${trigger.videoId}:${trigger.bookmarkId}`;
 
+        // Resolve endBookmarkId → endTime
+        const endBookmark = trigger.endBookmarkId
+          ? videoSet?.bookmarks.find(b => b.id === trigger.endBookmarkId)
+          : undefined;
+        const endTime = endBookmark?.time;
+        const rate = trigger.playbackRate ?? 1;
+
         if (trigger.pauseNarration) {
           // Pattern 1: pause TTS, play clip, resume when clip ends
           const gen = ++clipGenerationRef.current;
           pauseNarrationRef.current?.();
-          seekFn(bookmark.time, bookmark.autoPlay, bookmark.endTime, () => {
+          seekFn(bookmark.time, trigger.autoPlay ?? true, endTime, rate, () => {
             if (clipGenerationRef.current === gen) {
               resumeNarrationRef.current?.();
             }
@@ -168,7 +175,7 @@ export const VideoSyncProvider: React.FC<VideoSyncProviderProps> = ({ children }
           // Pattern 2 (and Pattern 3 start): clip overlays TTS concurrently.
           // Track the clip so checkAndWaitForClips knows it's active.
           activeClipsRef.current.add(clipKey);
-          seekFn(bookmark.time, bookmark.autoPlay, bookmark.endTime, () => {
+          seekFn(bookmark.time, trigger.autoPlay ?? true, endTime, rate, () => {
             activeClipsRef.current.delete(clipKey);
             // Pattern 3: if narration is waiting for this clip, resume it now
             const pending = pendingResumeRef.current;

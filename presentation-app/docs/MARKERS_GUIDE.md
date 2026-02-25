@@ -254,40 +254,34 @@ audioSegments: [
 | `bookmarkId` | `string` | ID of the bookmark to seek to |
 | `atMarker` | `string` | TTS marker ID (`{#id}` system) that fires the seek |
 | `pauseNarration` | `boolean?` | If `true`: pause TTS, play clip start→end, resume when clip ends (Pattern 1) |
+| `autoPlay` | `boolean?` | `true` (default) = seek + play; `false` = seek + pause (freeze frame) |
+| `endBookmarkId` | `string?` | Bookmark whose time is the clip end; plays to `video.onended` if absent |
+| `playbackRate` | `number?` | Playback speed multiplier (default `1`); e.g. `3` = 3x fast-forward |
 
 ### `VideoBookmark` fields (in bookmarks.json)
 
 | Field | Type | Description |
 |-------|------|-------------|
 | `id` | `string` | Bookmark identifier, referenced by `VideoSeekTrigger.bookmarkId` |
-| `time` | `number` | Clip start timestamp (seconds) — seek target |
-| `endTime` | `number?` | Clip end timestamp (seconds); plays to `video.onended` if absent |
+| `time` | `number` | Seek target timestamp (seconds) |
 | `label` | `string?` | Human-readable description (editor only) |
-| `autoPlay` | `boolean` | `true` = seek + play; `false` = seek + pause (freeze frame) |
 
-### Setting clip end time in the editor
-
-In the 📹 Videos editor, each bookmark now has an **End time** field:
-
-1. Scrub video to the desired clip end position
-2. Check **"Clip ends at specific time"** → bookmark is stamped with current time as `endTime`
-3. Click **📌 Set to mm:ss.sss** to update `endTime` to the current position
-4. Save — `bookmarks.json` now contains both `time` and `endTime` for this bookmark
+Bookmarks are pure named timestamps. Playback behavior (`autoPlay`, `endTime`) lives on `VideoSeekTrigger` — the same bookmark can be played differently in different contexts.
 
 ### Narration-Pausing Video Clips (Three Patterns)
 
-When a bookmark has `endTime` set, you can control how TTS and the video clip interact.
+When a trigger has `endBookmarkId` set, you can control how TTS and the video clip interact.
 
 ---
 
 #### Pattern 1 — TTS yields to clip (`pauseNarration: true`)
 
-TTS pauses at the marker, clip plays `start→end`, TTS resumes from where it was paused.
+TTS pauses at the marker, clip plays from `bookmarkId` to `endBookmarkId`, TTS resumes from where it was paused.
 
 ```
 Timeline:
 TTS:  ──────────────── PAUSE ─── (clip plays) ───────────────────────►
-Video:                 ├──── clip.time → clip.endTime ────┤ (frozen)
+Video:                 ├──── bookmark → endBookmark ──────┤ (frozen)
                        ↑ {#demo-clip} fires               ↑ TTS resumes
 ```
 
@@ -306,7 +300,7 @@ videoSeeks: [
 
 #### Pattern 2 — Clip overlays TTS (no pause)
 
-Clip starts at the marker, TTS keeps narrating in parallel. When the clip reaches `endTime`, the video freezes on the last frame — TTS continues to completion.
+Clip starts at the marker, TTS keeps narrating in parallel. When the clip reaches `endBookmarkId`'s timestamp, the video freezes on the last frame — TTS continues to completion.
 
 ```
 Timeline:
@@ -327,7 +321,7 @@ videoSeeks: [
 ]
 ```
 
-No `videoWaits` needed. When the clip reaches `endTime`, it auto-pauses and freezes. TTS finishes naturally.
+No `videoWaits` needed. When the clip reaches the end bookmark, it auto-pauses and freezes. TTS finishes naturally.
 
 ---
 
@@ -376,7 +370,7 @@ videoWaits: [
 - A demo without `bookmarks.json` plays normally — `VideoSyncContext` has no triggers to fire
 - A `<VideoPlayer>` without `videoId` works unchanged (no registration)
 - A `VideoSeekTrigger` whose marker hasn't been aligned yet simply never fires
-- `endTime` absent → clip plays until `video.onended`, then the `onDone` callback fires
+- `endBookmarkId` absent → clip plays until `video.onended`, then the `onDone` callback fires
 - Segment change mid-clip → stale callbacks do not fire (generation counter guard)
 
 ---
