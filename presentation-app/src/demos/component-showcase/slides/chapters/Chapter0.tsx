@@ -19,6 +19,7 @@ import {
   MarkerCard,
   RevealCarousel,
   Reveal,
+  AnnotateAtMarker,
   cardStyle,
   monoText,
   gradientBadge,
@@ -1035,4 +1036,139 @@ export const CS_S10_RevealCarousel = defineSlide({
     ],
   },
   component: RevealCarouselComponent,
+});
+
+// ─── Slide 11: AnnotateAtMarker ────────────────────────────────────────────
+
+const ANNOTATION_DEMOS = [
+  { type: 'circle' as const, label: 'Circle', text: '$2.4M', desc: 'Draw attention to key numbers' },
+  { type: 'underline' as const, label: 'Underline', text: 'critical insight', desc: 'Emphasize important phrases' },
+  { type: 'highlight' as const, label: 'Highlight', text: 'highlighted text', desc: 'Marker-pen style background' },
+  { type: 'box' as const, label: 'Box', text: 'boxed element', desc: 'Frame content with a border' },
+] as const;
+
+const AnnotateAtMarkerComponent: React.FC = () => {
+  const theme = useTheme();
+  const { isSegmentVisible } = useSegmentedAnimation();
+
+  const annotationColors = [
+    theme.colors.error,
+    theme.colors.primary,
+    'rgba(255, 220, 100, 0.4)',
+    theme.colors.success,
+  ];
+
+  return (
+    <SlideContainer>
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '2rem',
+        width: '100%',
+        maxWidth: 900,
+        margin: '0 auto',
+      }}>
+        <Reveal from={0}>
+          <h2 style={{
+            fontSize: '2rem',
+            color: theme.colors.textPrimary,
+            fontFamily: theme.fontFamily,
+            margin: 0,
+          }}>
+            AnnotateAtMarker
+          </h2>
+          <p style={{
+            fontSize: '1.1rem',
+            color: theme.colors.textSecondary,
+            fontFamily: theme.fontFamily,
+            textAlign: 'center',
+            margin: '0.5rem 0 0',
+          }}>
+            Hand-drawn annotations synced to narration markers
+          </p>
+        </Reveal>
+
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(2, 1fr)',
+          gap: '1.5rem',
+          width: '100%',
+        }}>
+          {ANNOTATION_DEMOS.map((demo, i) => (
+            <Reveal key={demo.type} from={i + 1}>
+              <div style={{
+                ...cardStyle('default', {
+                  padding: '1.5rem',
+                  textAlign: 'center',
+                  minHeight: 140,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.75rem',
+                }),
+              }}>
+                <span style={{
+                  fontSize: '0.85rem',
+                  fontWeight: 600,
+                  color: theme.colors.textMuted,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                }}>
+                  {demo.label}
+                </span>
+                <span style={{ fontSize: demo.type === 'circle' ? '2rem' : '1.4rem', fontWeight: 700, color: theme.colors.textPrimary }}>
+                  <AnnotateAtMarker
+                    at={demo.type}
+                    type={demo.type}
+                    color={annotationColors[i]}
+                    strokeWidth={demo.type === 'highlight' ? 1 : 2}
+                    animationDuration={800}
+                  >
+                    {demo.text}
+                  </AnnotateAtMarker>
+                </span>
+                <span style={{
+                  fontSize: '0.9rem',
+                  color: theme.colors.textSecondary,
+                }}>
+                  {demo.desc}
+                </span>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+
+        {isSegmentVisible(5) && (
+          <ContentCard>
+            <code style={{
+              fontSize: '0.9rem',
+              color: theme.colors.textSecondary,
+              fontFamily: 'monospace',
+            }}>
+              {'<AnnotateAtMarker at="cost" type="circle" color="#ff6b6b">$2.4M</AnnotateAtMarker>'}
+            </code>
+          </ContentCard>
+        )}
+      </div>
+    </SlideContainer>
+  );
+};
+
+export const CS_S11_AnnotateAtMarker = defineSlide({
+  metadata: {
+    chapter: 0,
+    slide: 11,
+    title: 'AnnotateAtMarker',
+    audioSegments: [
+      { id: 0 },
+      { id: 1 },
+      { id: 2 },
+      { id: 3 },
+      { id: 4 },
+      { id: 5 },
+    ],
+  },
+  component: AnnotateAtMarkerComponent,
 });

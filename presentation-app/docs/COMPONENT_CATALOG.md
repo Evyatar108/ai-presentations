@@ -31,6 +31,7 @@
 | RevealAtMarker | Animation | `framework/components/reveal/RevealAtMarker.tsx` | Time-based reveal driven by inline markers |
 | MarkerDim | Animation | `framework/components/reveal/MarkerDim.tsx` | Declarative marker-driven opacity dimming |
 | MarkerCard | Animation | `framework/components/MarkerCard.tsx` | MarkerDim + themed card wrapper (replaces MarkerDim + cardStyle boilerplate) |
+| AnnotateAtMarker | Animation | `framework/components/reveal/AnnotateAtMarker.tsx` | Hand-drawn annotations (circle, underline, highlight, box) driven by markers |
 | MarkerCodeBlock | Data Display | `framework/components/MarkerCodeBlock.tsx` | CodeBlock with marker-driven line highlighting |
 | AnimatedCounter | Data Display | `framework/components/AnimatedCounter.tsx` | Counting-up number animation |
 | ProgressSteps | Data Visualization | `framework/components/ProgressSteps.tsx` | Horizontal step indicator with states |
@@ -148,6 +149,54 @@ import { MarkerCard } from '@framework';
 ```
 
 **When to use:** Prefer `MarkerCard` over manual `MarkerDim` + `cardStyle()` whenever the content follows the standard card pattern. Use raw `MarkerDim` when you need non-card layouts or custom wrapper elements.
+
+### AnnotateAtMarker
+
+Hand-drawn annotation wrapper using `react-rough-notation`, driven by inline markers. Supports circle, underline, highlight, box, strike-through, crossed-off, and bracket annotation styles.
+
+**Source:** `src/framework/components/reveal/AnnotateAtMarker.tsx`
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `at` | `string` | — | Marker ID; annotation shows when marker reached (progressive) |
+| `from` | `string` | — | Marker ID; annotation shows when range starts |
+| `until` | `string` | — | Marker ID; annotation hides when range ends |
+| `type` | `'underline' \| 'box' \| 'circle' \| 'highlight' \| 'strike-through' \| 'crossed-off' \| 'bracket'` | — | Annotation style (required) |
+| `color` | `string` | `theme.colors.primary` | Stroke/highlight color |
+| `animationDuration` | `number` | `600` | Animation duration in ms (0 when reduced motion) |
+| `strokeWidth` | `number` | `2` | Stroke width in px |
+| `padding` | `number \| number[]` | `5` | Padding around annotated element |
+| `iterations` | `number` | `2` | Number of draw iterations |
+| `multiline` | `boolean` | `true` | Support multiline text |
+| `brackets` | `string \| string[]` | — | Bracket positions (only for `type="bracket"`) |
+| `children` | `ReactNode` | — | Content to annotate |
+| `style` | `CSSProperties` | — | Inline styles on the wrapper span |
+
+```tsx
+import { AnnotateAtMarker } from '@framework';
+
+// Circle a key number when narrator mentions it
+<AnnotateAtMarker at="cost" type="circle" color="#ff6b6b">
+  $2.4M
+</AnnotateAtMarker>
+
+// Highlight text during a bounded range
+<AnnotateAtMarker from="start" until="end" type="highlight" color="rgba(255,220,100,0.4)">
+  important phrase
+</AnnotateAtMarker>
+
+// Bracket annotation
+<AnnotateAtMarker at="section" type="bracket" brackets={['left', 'right']}>
+  <SectionContent />
+</AnnotateAtMarker>
+```
+
+**Pitfalls:**
+- The `type` prop cannot be changed after mount — React will re-mount on key change. Use a `key` prop if you need to swap types.
+- For `type="highlight"`, use a semi-transparent color (e.g. `rgba(255,220,100,0.4)`) — opaque colors will obscure the text.
+- Avoid passing inline array literals to `padding` — define them as constants to prevent unnecessary re-renders.
+
+**When to use:** Use `AnnotateAtMarker` for hand-drawn visual emphasis synced to narration. Use `RevealAtMarker` for show/hide, `MarkerDim` for opacity dimming.
 
 ### RevealCarousel
 

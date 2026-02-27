@@ -307,6 +307,7 @@ After `tts:generate` strips markers and `tts:align` resolves timestamps, `<Revea
 |----------|------|
 | Element show/hide at segment boundaries (~70% of slides) | `<Reveal>` |
 | Sub-segment timing synced to narration | `<RevealAtMarker>` |
+| Hand-drawn annotations synced to narration (circle, underline, highlight) | `<AnnotateAtMarker>` |
 | Staggered lists/grids | `<RevealGroup stagger>` |
 | Exit-before-enter sequencing | `<RevealSequence>` wrapper |
 | Non-visual logic (data, conditional styling, highlighting) | `useSegmentedAnimation()` hook |

@@ -11,6 +11,7 @@ import {
   CS_S8_StyleUtilities,
   CS_S9_MarkerCard,
   CS_S10_RevealCarousel,
+  CS_S11_AnnotateAtMarker,
 } from './chapters/Chapter0';
 
 /**
@@ -27,4 +28,5 @@ export const allSlides: SlideComponentWithMetadata[] = [
   CS_S8_StyleUtilities,
   CS_S9_MarkerCard,
   CS_S10_RevealCarousel,
+  CS_S11_AnnotateAtMarker,
 ];

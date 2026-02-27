@@ -24,8 +24,8 @@ Three Tier 1 packages deliver high value at low risk: `react-rough-notation` add
 
 | # | Task | Effort | Notes |
 |---|------|--------|-------|
-| 1 | Install `react-rough-notation` | XS | `npm install react-rough-notation` |
-| 2 | Build `<AnnotateAtMarker>` wrapper | S | Framework component: `<AnnotateAtMarker marker="id" type="circle">`. Wraps `<RoughNotation>` with `show` driven by `useMarker()`. |
+| 1 | ~~Install `react-rough-notation`~~ | XS | Done |
+| 2 | ~~Build `<AnnotateAtMarker>` wrapper~~ | S | Done — `src/framework/components/reveal/AnnotateAtMarker.tsx` + showcase slide in component-showcase |
 | 3 | Apply annotations to demo slides | S | Ch1_S2_COGSProblem (circle key numbers), Ch6_S1_PromptOverview (highlight sections) |
 | 4 | Install `shiki` | XS | `npm install shiki` |
 | 5 | Rewrite `CodeBlock.tsx` internals | M | Replace regex tokenizer with `shiki.codeToTokens()`. Preserve external API: `code`, `language`, `highlightLines`, `title`, `fontSize`. Lazy-load grammars. Theme: `one-dark-pro` or custom from `ThemeContext`. |

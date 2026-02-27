@@ -69,8 +69,8 @@ export { RevealCarousel } from './components/RevealCarousel';
 export type { RevealCarouselProps } from './components/RevealCarousel';
 
 // Reveal components
-export { Reveal, RevealAtMarker, RevealGroup, RevealContext, RevealSequence, MarkerDim } from './components/reveal';
-export type { RevealProps, RevealGroupProps, RevealContextProps, RevealAnimation, RevealVisibilityProps, MarkerDimProps } from './components/reveal';
+export { Reveal, RevealAtMarker, RevealGroup, RevealContext, RevealSequence, MarkerDim, AnnotateAtMarker } from './components/reveal';
+export type { RevealProps, RevealGroupProps, RevealContextProps, RevealAnimation, RevealVisibilityProps, MarkerDimProps, AnnotateAtMarkerProps } from './components/reveal';
 
 // Contexts
 export { SegmentProvider, useSegmentContext, useSegmentContextOptional, useSegmentedAnimation } from './contexts/SegmentContext';
