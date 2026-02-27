@@ -257,7 +257,9 @@ import { RevealCarousel } from '@framework';
 
 ### CodeBlock
 
-Syntax-highlighted code block with line numbers, optional title bar, and line highlighting. Supports Python, JSON, and Markdown tokenization.
+> **Note:** For new slides, prefer `ShikiCodeBlock` with `colorTheme="framework"` — it provides the same visual style with more accurate tokenization and 200+ language support. `CodeBlock` is retained for existing slides and as a lightweight fallback.
+
+Syntax-highlighted code block with line numbers, optional title bar, and line highlighting. Uses a regex tokenizer supporting Python, JSON, and Markdown.
 
 **Source:** `src/framework/components/CodeBlock.tsx`
 
@@ -325,7 +327,7 @@ import { ShikiCodeBlock } from '@framework';
 - `'one-dark-pro'` — VS Code's One Dark Pro palette with its native dark background (`#282c34`). Best for standalone code displays.
 - `'framework'` — Maps shiki token scopes to `theme.colors` (keywords → secondary, strings → success, functions → primary, etc.). Uses `bgSurface` background to match `CodeBlock`. Best when code blocks should blend with the presentation theme.
 
-**When to use:** Use `ShikiCodeBlock` when you need accurate syntax highlighting or support for languages beyond Python/JSON/Markdown. Use `CodeBlock` for simple snippets where the lighter regex tokenizer suffices. Both are interchangeable API-wise.
+**When to use:** `ShikiCodeBlock` with `colorTheme="framework"` is the **recommended default** for all new code blocks. It provides accurate tokenization, 200+ language support, and matches the framework theme. Use `CodeBlock` only when you need the lighter regex tokenizer (e.g., for performance in slides with many code blocks).
 
 **Tips:** Shiki loads asynchronously — plain text is shown briefly (~50ms) before tokens render. The highlighter is a module-level singleton, so subsequent renders are instant. Languages beyond the preloaded set (python, json, typescript, markdown, bash) are loaded on demand.
 
