@@ -13,6 +13,16 @@ import {
   CS_S10_RevealCarousel,
   CS_S11_AnnotateAtMarker,
   CS_S12_ShikiCodeBlock,
+  CS_S13_LayoutComponents,
+  CS_S14_DataCards,
+  CS_S15_TypeAnimation,
+  CS_S16_VisxChart,
+  CS_S17_LottieAnimation,
+  CS_S18_InfoComponents,
+  CS_S19_ComparisonComponents,
+  CS_S20_DataComponents,
+  CS_S21_PipelineDiagram,
+  CS_S22_BackgroundEffects,
 } from './chapters/Chapter0';
 
 /**
@@ -31,4 +41,14 @@ export const allSlides: SlideComponentWithMetadata[] = [
   CS_S10_RevealCarousel,
   CS_S11_AnnotateAtMarker,
   CS_S12_ShikiCodeBlock,
+  CS_S13_LayoutComponents,
+  CS_S14_DataCards,
+  CS_S15_TypeAnimation,
+  CS_S16_VisxChart,
+  CS_S17_LottieAnimation,
+  CS_S18_InfoComponents,
+  CS_S19_ComparisonComponents,
+  CS_S20_DataComponents,
+  CS_S21_PipelineDiagram,
+  CS_S22_BackgroundEffects,
 ];

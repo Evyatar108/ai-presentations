@@ -67,8 +67,8 @@ src/
 ├── demos/                         ← Project-specific content
 │   ├── registry.ts                ← Auto-discovery registration (import.meta.glob)
 │   ├── meeting-highlights/
-│   ├── example-demo-1/
-│   └── example-demo-2/
+│   ├── component-showcase/
+│   └── highlights-deep-dive/
 ├── App.tsx
 ├── main.tsx
 └── project.config.ts              ← Project-level overrides

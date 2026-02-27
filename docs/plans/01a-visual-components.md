@@ -42,8 +42,8 @@ The `highlights-deep-dive` flagship demo uses effective but visually flat presen
 | File | Change |
 |------|--------|
 | `src/framework/index.ts` | Export all 4 new components + their props types + `ArrowDirection` |
-| `src/demos/example-demo-1/metadata.ts` | Removed `hidden: true` |
-| `src/demos/example-demo-2/metadata.ts` | Removed `hidden: true` |
+| `src/demos/example-demo-1/metadata.ts` | Removed `hidden: true` (demo later deleted in 01d) |
+| `src/demos/example-demo-2/metadata.ts` | Removed `hidden: true` (demo later deleted in 01d) |
 | `docs/ANIMATION_REFERENCE.md` | Documented all new visual components |
 | `docs/TROUBLESHOOTING.md` | Documented WSL2 reduced-motion gotcha |
 | `CLAUDE.md` | Added `pathLength` animation pattern notes + WSL2 gotcha |

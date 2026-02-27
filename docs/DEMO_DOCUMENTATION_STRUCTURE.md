@@ -169,7 +169,7 @@ public/
 ## Naming Conventions
 
 ### Demo IDs
-- Use **lowercase with hyphens** (e.g., `meeting-highlights`, `example-demo-1`)
+- Use **lowercase with hyphens** (e.g., `meeting-highlights`, `component-showcase`)
 - Keep consistent across all locations (docs, src, public)
 - Use descriptive names that reflect content
 

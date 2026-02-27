@@ -62,12 +62,12 @@ Should show `TcpTestSucceeded : True`.
 
 ```bash
 cd presentation-app
-npm run tts:generate -- --demo example-demo-1
+npm run tts:generate -- --demo meeting-highlights
 ```
 
 ### 8. Verify output
 
-Check that WAV files were created in `public/audio/example-demo-1/` and play them to confirm quality.
+Check that WAV files were created in `public/audio/meeting-highlights/` and play them to confirm quality.
 
 ## Speaker Options
 
@@ -94,7 +94,7 @@ Qwen3-TTS supports an `instruct` parameter to control voice style and tone. Pass
 
 ```bash
 # CLI fallback (lowest priority)
-npm run tts:generate -- --demo example-demo-1 --instruct "speak slowly and clearly"
+npm run tts:generate -- --demo meeting-highlights --instruct "speak slowly and clearly"
 ```
 
 The `instruct` string is passed to the `/generate` and `/generate_batch` endpoints. Set it at demo, slide, or segment level in TypeScript or narration JSON for fine-grained control. See `docs/TTS_GUIDE.md` for the full hierarchy.

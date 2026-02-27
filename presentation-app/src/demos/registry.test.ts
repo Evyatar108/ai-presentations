@@ -7,7 +7,7 @@ import type { DemoRegistry as DemoRegistryType } from '@framework/demos/DemoRegi
  * and registers all demos in src/demos/.
  */
 
-const EXPECTED_DEMO_IDS = ['meeting-highlights', 'example-demo-1', 'example-demo-2'];
+const EXPECTED_DEMO_IDS = ['meeting-highlights', 'component-showcase', 'highlights-deep-dive'];
 
 describe('Auto-discovery demo registration', () => {
   let DemoRegistry: typeof DemoRegistryType;

@@ -16,8 +16,7 @@ npm run dev        # http://localhost:5173
 |------|-------------|
 | **meeting-highlights** | Meeting Highlights COGS Reduction — product overview, team collaboration, optimization (4→1 LLM calls), 70%+ cost savings, business impact |
 | **highlights-deep-dive** | Technical deep-dive into collapsing a 4-call GPT-4 pipeline into a single unified prompt |
-| **example-demo-1** | Placeholder demo showcasing the multi-demo architecture |
-| **example-demo-2** | Showcases layout components, named segments, and timing overrides |
+| **component-showcase** | Visual components showcase — layout primitives, animated charts, typewriter effects, Lottie animations |
 
 New demos are auto-discovered — any folder in `src/demos/` with `metadata.ts` and `index.ts` is automatically registered.
 

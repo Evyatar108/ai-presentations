@@ -460,9 +460,9 @@ public/narration/
 ├── meeting-highlights/
 │   ├── narration.json        # Narration data
 │   └── narration-cache.json  # Change tracking
-├── example-demo-1/
+├── component-showcase/
 │   └── narration.json
-└── example-demo-2/
+└── highlights-deep-dive/
     └── narration.json
 ```
 

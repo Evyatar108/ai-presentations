@@ -10,7 +10,7 @@ This document aggregates strategic initiatives for the presentation framework. T
 | 1a | [Visual Components](#1a-visual-components) | [`01a-visual-components.md`](./01a-visual-components.md) | M | **Done** |
 | 1b | [Boilerplate Reduction](#1b-boilerplate-reduction) | [`01b-boilerplate-reduction.md`](./01b-boilerplate-reduction.md) | S-M | **Done** |
 | 1c | [Must-Have Packages](#1c-must-have-packages) | [`01c-must-have-packages.md`](./01c-must-have-packages.md) | M | **Done** |
-| 1d | [Nice-to-Have Packages](#1d-nice-to-have-packages) | [`01d-nice-to-have-packages.md`](./01d-nice-to-have-packages.md) | S-M | Proposed (Deferred) |
+| 1d | [Nice-to-Have Packages](#1d-nice-to-have-packages) | [`01d-nice-to-have-packages.md`](./01d-nice-to-have-packages.md) | S-M | **Done** |
 | 2 | [Config Unification](#2-config-unification) | [`02-config-unification.md`](./02-config-unification.md) | S | **Done** |
 | 3 | [Cloud GPU](#3-cloud-gpu) | [`03-cloud-gpu.md`](./03-cloud-gpu.md) | M | Proposed |
 | 4 | [Azure Deployment](#4-azure-deployment) | [`04-azure-deployment.md`](./04-azure-deployment.md) | M | Proposed |
@@ -47,7 +47,7 @@ Each initiative is scored 1-5 on five dimensions:
 
 *Weighted Score = 0.25 &times; Value + 0.25 &times; Effort + 0.15 &times; Risk + 0.15 &times; Reversibility + 0.20 &times; Independence*
 
-*01d scores well numerically but is deferred — it lacks immediate application and should be installed per-demo when the need arises.*
+*01d was deferred initially but completed alongside the example demo consolidation.*
 
 ## Recommended Implementation Order
 
@@ -116,12 +116,12 @@ Each initiative is scored 1-5 on five dimensions:
 **Timeline**: ~1-1.5 weeks
 **Depends on**: Nothing technically, but benefits from Cloud GPU for faster TTS iteration
 
-### 1d. Nice-to-Have Packages (01d) — Deferred (Per-Demo)
+### 1d. Nice-to-Have Packages (01d) — Done
 
-**Why deferred**: These packages (`@visx/*`, `react-type-animation`, `lottie-react`) are best justified by specific demo needs. Install them when building the demo that needs them, not speculatively.
+**Completed**: Installed all three packages (`@visx/*`, `react-type-animation`, `lottie-react`). Merged `example-demo-1` and `example-demo-2` into `component-showcase` with 5 new slides showcasing layout components, data cards, typewriter effects, visx charts, and Lottie animations.
 
-**Timeline**: ~2-3 sessions per demo
-**Depends on**: Nothing — fully independent, install on demand
+**Timeline**: 1 session
+**Depends on**: Nothing — fully independent
 
 ### 8. Repository Split (08) — Last
 
@@ -269,15 +269,15 @@ Only pursue if a second demo project is created:
 - Create template repository for new demo projects
 - Set up cross-repo CI/CD
 
-### Deferred: Nice-to-Have Packages (01d)
+### Completed: Nice-to-Have Packages (01d)
 
-Install per-demo when the need arises:
+All packages installed and showcased in `component-showcase`:
 
-| Package | Install When |
-|---------|-------------|
-| `@visx/*` | Building a metrics dashboard or chart-heavy demo |
-| `react-type-animation` | Building a terminal/CLI or code generation demo |
-| `lottie-react` | Adding celebration effects or polished icon animations |
+| Package | Showcase Slide |
+|---------|---------------|
+| `@visx/*` | CS_S16_VisxChart — animated bar chart with D3 scales and axes |
+| `react-type-animation` | CS_S15_TypeAnimation — terminal and AI streaming typewriter effects |
+| `lottie-react` | CS_S17_LottieAnimation — confetti burst and success checkmark |
 
 See [01d](./01d-nice-to-have-packages.md) for full details and demo ideas.
 
@@ -306,6 +306,7 @@ See [01d](./01d-nice-to-have-packages.md) for full details and demo ideas.
 | 2026-02-27 | Completed Plan 01b — Boilerplate Reduction | Added `cardStyle()` overrides param, `monoText()`, `gradientBadge()` utilities to SlideStyles.ts. Created `MarkerCard` (MarkerDim + themed card wrapper) and `RevealCarousel` (auto-indexed one-at-a-time carousel) components. Showcased in `component-showcase` demo (slides 8-10). Refactoring of `highlights-deep-dive` deferred to a future pass. |
 | 2026-02-27 | Completed Plan 02 — Config Unification | Established `.env` / `.env.production` / `.env.local.example` convention with `VITE_*` variable naming. Added `assetBaseUrl`, `ttsEnabled`, `audioFormat` to `FrameworkConfig` wired to `import.meta.env`. Added `loadApiKey()` to `server-config.ts`. Applied 01b utilities (`monoText`, `cardStyle` overrides, `MarkerCard`) to `highlights-deep-dive` demo. |
 | 2026-02-27 | Completed Plan 01c — Must-Have Packages | Installed `react-rough-notation`, `shiki`, `@xyflow/react` (replacing `reactflow`). Built `AnnotateAtMarker` with zoom-compatible counter-scale fix. Built `ShikiCodeBlock` with `colorTheme` prop (`one-dark-pro`, `framework`, or any of 65+ bundled themes) — recommended as default code block. Created custom framework shiki theme mapping token scopes to `theme.colors`. Added showcase slide with 44 dark theme gallery. Migrated ReactFlow imports in Chapter2.tsx. Task 8 (integration tests) deferred. |
+| 2026-02-27 | Completed Plan 01d — Nice-to-Have Packages | Installed `@visx/shape`, `@visx/scale`, `@visx/axis`, `@visx/group`, `react-type-animation`, `lottie-react`. Merged `example-demo-1` and `example-demo-2` content into `component-showcase` (slides S13–S17: LayoutComponents, DataCards, TypeAnimation, VisxChart, LottieAnimation). Deleted both placeholder demos. Updated registry test and all docs referencing example demos. |
 | | | |
 
 *Update this table as decisions are made during implementation.*

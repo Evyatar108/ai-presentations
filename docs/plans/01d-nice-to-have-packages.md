@@ -1,7 +1,7 @@
 # 01d: Nice-to-Have Packages (Deferred)
 
 > **Parent**: [`01-packages-research.md`](./01-packages-research.md) — Part 1 Tier 2 & Part 2
-> **Phase**: 3 | **Size**: S-M (~2-3 sessions, per-demo) | **Status**: Proposed (Deferred)
+> **Phase**: 3 | **Size**: S-M (~2-3 sessions, per-demo) | **Status**: **Done**
 
 ## Motivation
 
@@ -60,9 +60,9 @@ None planned — install and build when a specific demo requires it.
 
 Per-package, when installed:
 
-- [ ] Package installed and imported correctly
-- [ ] Demo-specific usage renders correctly
-- [ ] `npm run type-check` passes
-- [ ] `npm run test` passes
-- [ ] `npm run lint` — no new errors
+- [x] Package installed and imported correctly
+- [x] Demo-specific usage renders correctly
+- [x] `npm run type-check` passes
+- [x] `npm run test` passes
+- [x] `npm run lint` — no new errors
 - [ ] Bundle size delta measured and documented

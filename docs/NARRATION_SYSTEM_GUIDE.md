@@ -301,12 +301,12 @@ npm run check-narration
 **Sample Output**:
 ```
 🔍 Checking narration changes...
-✅ Scanning demos: example-demo-1, example-demo-2, meeting-highlights
+✅ Scanning demos: component-showcase, meeting-highlights, qwen-tts-deep-dive
 
 📊 Results for "meeting-highlights": ✅ All 47 segments unchanged
-📊 Results for "example-demo-1": ⚠️ 2 segment(s) modified:
-   - Chapter 1, Slide 1, Segment: intro (Text changed)
-   - Chapter 1, Slide 2, Segment: main (New segment)
+📊 Results for "component-showcase": ⚠️ 2 segment(s) modified:
+   - Chapter 0, Slide 1, Segment: intro (Text changed)
+   - Chapter 0, Slide 2, Segment: main (New segment)
 
 ⚠️ Changes detected. Regenerate audio? (npm run tts:from-json)
 ```

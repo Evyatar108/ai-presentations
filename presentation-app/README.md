@@ -32,8 +32,8 @@ presentation-app/
 │   ├── demos/                      # Demo presentations
 │   │   ├── DemoRegistry.ts         # Central demo registration
 │   │   ├── meeting-highlights/     # Meeting Highlights demo
-│   │   ├── example-demo-1/         # Example demo 1
-│   │   └── example-demo-2/         # Example demo 2
+│   │   ├── component-showcase/     # Visual components showcase
+│   │   └── highlights-deep-dive/  # Highlights deep dive
 │   ├── components/                 # Shared UI components
 │   ├── slides/                     # Shared slide utilities
 │   └── contexts/                   # React contexts

@@ -56,8 +56,8 @@ public/
 │   │   ├── c0/                    # Chapter 0 audio
 │   │   ├── c1/                    # Chapter 1 audio
 │   │   └── ...
-│   ├── example-demo-1/
-│   └── example-demo-2/
+│   ├── component-showcase/
+│   └── highlights-deep-dive/
 ├── images/
 │   ├── meeting-highlights/
 │   │   ├── meeting_highlights_thumbnail.jpeg
