@@ -1,7 +1,7 @@
 # 01c: Must-Have Packages
 
 > **Parent**: [`01-packages-research.md`](./01-packages-research.md) — Part 1 Tier 1 & Part 3 moderate-impact items
-> **Phase**: 2 | **Size**: M (~3-4 sessions) | **Status**: Proposed
+> **Phase**: 2 | **Size**: M (~3-4 sessions) | **Status**: Done (Tasks 1-7), Task 8 remaining
 
 ## Motivation
 
@@ -45,13 +45,16 @@ Three Tier 1 packages deliver high value at low risk: `react-rough-notation` add
 | File | Change |
 |------|--------|
 | `package.json` | Add `react-rough-notation`, `shiki`, `@xyflow/react`; remove `reactflow` |
-| `src/framework/components/CodeBlock.tsx` | Rewrite internals with shiki (same external API) |
-| `src/framework/index.ts` | Export `AnnotateAtMarker` |
-| `src/demos/highlights-deep-dive/slides/chapters/Chapter1.tsx` | Rough-notation circles on Ch1_S2 key numbers |
-| `src/demos/highlights-deep-dive/slides/chapters/Chapter6.tsx` | Rough-notation highlights on Ch6_S1 sections |
-| All files importing from `reactflow` | Update to `@xyflow/react` v12 imports |
-| `docs/ANIMATION_REFERENCE.md` | Document `AnnotateAtMarker` |
-| `docs/COMPONENT_CATALOG.md` | Document `AnnotateAtMarker`, updated `CodeBlock` language support |
+| `src/framework/index.ts` | Export `AnnotateAtMarker`, `ShikiCodeBlock`, `ShikiColorTheme` |
+| `src/demos/highlights-deep-dive/slides/chapters/Chapter1.tsx` | Rough-notation circles on Ch1_S2 key numbers + underline on conclusion |
+| `src/demos/highlights-deep-dive/slides/chapters/Chapter6.tsx` | Rough-notation bracket on Ch6_S1 Callout |
+| `src/demos/meeting-highlights/slides/chapters/Chapter2.tsx` | ReactFlow → @xyflow/react import migration |
+| `src/demos/component-showcase/slides/chapters/Chapter0.tsx` | ShikiCodeBlock showcase slide (CS_S12) with 44 dark theme gallery |
+| `src/demos/component-showcase/slides/SlidesRegistry.ts` | Register CS_S12 |
+| `src/framework/components/DemoPlayer.tsx` | (unchanged — zoom still uses transform: scale) |
+| `vite.config.ts` | Add shiki to `optimizeDeps.include` |
+| `CLAUDE.md` | ShikiCodeBlock(framework) recommended as default code block |
+| `docs/COMPONENT_CATALOG.md` | Document `AnnotateAtMarker` (zoom compat), `ShikiCodeBlock`, `RevealSequence` |
 
 ## Dependencies
 
@@ -63,12 +66,13 @@ Three Tier 1 packages deliver high value at low risk: `react-rough-notation` add
 - [x] `react-rough-notation` annotations render and trigger correctly via markers
 - [x] `<AnnotateAtMarker>` works correctly with zoom (`transform: scale()`) — counter-scale fix in AnnotateAtMarker.tsx
 - [ ] `<AnnotateAtMarker>` has unit tests
-- [ ] `CodeBlock` produces correct highlighting for Python, TypeScript, JSON, YAML, bash, SQL
-- [ ] `MarkerCodeBlock` still works (marker-driven line highlighting)
-- [ ] ReactFlow v12 renders existing flow diagrams without regressions
-- [ ] `npm run type-check` passes
-- [ ] `npm run test` passes
-- [ ] `npm run lint` — no new errors
+- [x] `ShikiCodeBlock` renders correctly with `one-dark-pro`, `framework`, and 65+ bundled themes
+- [x] `CodeBlock` unchanged — still works for Python, JSON, Markdown
+- [x] `MarkerCodeBlock` still works (wraps `CodeBlock`, unaffected)
+- [x] ReactFlow v12 renders existing flow diagrams without regressions
+- [x] `npm run type-check` passes
+- [x] `npm run test` passes (248 tests)
+- [x] `npm run lint` — 0 errors
 - [ ] `npm run test:overflow -- --demo highlights-deep-dive` — no overflow regressions
 - [ ] `npm run test:screenshot -- --demo highlights-deep-dive` — visual comparison
 - [ ] Bundle size delta measured and documented (`npm run build` before/after)
