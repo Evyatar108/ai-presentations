@@ -4,7 +4,7 @@ import { TimingConfig } from '../demos/timing/types';
  * Defines a video seek to fire when a TTS marker is reached.
  */
 export interface VideoSeekTrigger {
-  videoId: string;          // Key in bookmarks.json videos map
+  videoPath: string;        // Video file path (key in bookmarks.json videos map + VideoPlayer's videoPath prop)
   bookmarkId: string;       // ID of the bookmark to seek to
   atMarker: string;         // TTS marker ID ({#id} system) that fires the seek
   pauseNarration?: boolean; // If true: pause TTS, play clip start→end, resume when clip ends
@@ -19,7 +19,7 @@ export interface VideoSeekTrigger {
  * later marker it pauses and waits for the clip to finish — only if still playing.
  */
 export interface VideoWaitTrigger {
-  videoId: string;    // Key in bookmarks.json videos map
+  videoPath: string;  // Video file path (key in bookmarks.json videos map)
   bookmarkId: string; // Which clip (bookmark) to wait for
   atMarker: string;   // TTS marker at which to check / wait
 }
@@ -68,7 +68,7 @@ export interface AudioSegment {
    * Set pauseNarration: true to pause TTS, play the clip, then resume.
    *
    * @example
-   * videoSeeks: [{ videoId: 'my-vid', bookmarkId: 'clip1', atMarker: 'clip1', pauseNarration: true }]
+   * videoSeeks: [{ videoPath: '/videos/my-demo/demo.mp4', bookmarkId: 'clip1', atMarker: 'clip1', pauseNarration: true }]
    */
   videoSeeks?: VideoSeekTrigger[];
 
@@ -81,7 +81,7 @@ export interface AudioSegment {
    * narrate alongside it, and then wait for it at a specific later word.
    *
    * @example
-   * videoWaits: [{ videoId: 'demo-vid', bookmarkId: 'clip1', atMarker: 'after-clip' }]
+   * videoWaits: [{ videoPath: '/videos/my-demo/demo.mp4', bookmarkId: 'clip1', atMarker: 'after-clip' }]
    */
   videoWaits?: VideoWaitTrigger[];
 }

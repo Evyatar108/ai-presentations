@@ -12,11 +12,10 @@ export interface VideoBookmark {
 }
 
 export interface VideoBookmarkSet {
-  src: string;               // e.g. "/videos/{demoId}/my-video.mp4"
   bookmarks: VideoBookmark[];
 }
 
 export interface VideoBookmarksFile {
   demoId: string;
-  videos: Record<string, VideoBookmarkSet>; // keyed by videoId
+  videos: Record<string, VideoBookmarkSet>; // keyed by video file path
 }
