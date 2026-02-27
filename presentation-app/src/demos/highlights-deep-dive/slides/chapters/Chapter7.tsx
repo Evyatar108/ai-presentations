@@ -8,6 +8,7 @@ import {
   Reveal,
   MarkerCodeBlock,
   MarkerDim,
+  monoText,
   typography,
   fadeUp,
   ArrowDown,
@@ -138,8 +139,7 @@ const SelfCheckCard: React.FC<{
           &#10003;
         </div>
         <span style={{
-          fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
-          fontSize: 12,
+          ...monoText(12),
           color: theme.colors.textPrimary
         }}>
           {name}

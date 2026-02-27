@@ -12,6 +12,7 @@ import {
   BeforeAfterSplit,
   ComparisonTable,
   cardStyle,
+  monoText,
   typography,
   fadeUp,
 } from '@framework';
@@ -132,8 +133,7 @@ const Ch5_S2_MaxEndIdComponent: React.FC = () => {
         border: `2px solid ${theme.colors.primary}`,
         borderRadius: 12,
         padding: '1.25rem 2rem',
-        fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
-        fontSize: 18,
+        ...monoText(18),
         color: theme.colors.textPrimary,
         textAlign: 'center',
         marginBottom: '2rem',
@@ -165,11 +165,10 @@ const Ch5_S2_MaxEndIdComponent: React.FC = () => {
         gap: '1.5rem',
         marginBottom: '1.5rem'
       }}>
-        <div style={{
-          ...cardStyle('warning'),
+        <div style={cardStyle('warning', {
           padding: '1.25rem',
-          textAlign: 'center'
-        }}>
+          textAlign: 'center',
+        })}>
           <div style={{ ...typography.caption, fontSize: 11, color: theme.colors.warning, marginBottom: '0.5rem' }}>V1: MANY CANDIDATE ROWS</div>
           <div style={{ fontSize: 32, lineHeight: 1 }}>
             {[...Array(5)].map((_, i) => (
@@ -186,11 +185,10 @@ const Ch5_S2_MaxEndIdComponent: React.FC = () => {
           </div>
           <div style={{ ...typography.caption, fontSize: 12, marginTop: '0.5rem' }}>Fanning out from each start</div>
         </div>
-        <div style={{
-          ...cardStyle('primary'),
+        <div style={cardStyle('primary', {
           padding: '1.25rem',
-          textAlign: 'center'
-        }}>
+          textAlign: 'center',
+        })}>
           <div style={{ ...typography.caption, fontSize: 11, color: theme.colors.primary, marginBottom: '0.5rem' }}>V2: SINGLE ROW + BOUNDARY</div>
           <div style={{ padding: '0.75rem 0' }}>
             <div style={{
@@ -285,8 +283,7 @@ const Ch5_S3_TurnUtteranceConceptComponent: React.FC = () => {
                 display: 'flex',
                 gap: '0.5rem',
                 padding: '0.3rem 0.5rem',
-                fontSize: 13,
-                fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+                ...monoText(13),
                 borderBottom: i < V1_FLAT.length - 1 ? `1px solid rgba(251, 191, 36, 0.15)` : 'none'
               }}>
                 <span style={{ color: theme.colors.warning, fontWeight: 600, minWidth: 40 }}>{row.speaker}</span>
@@ -305,18 +302,15 @@ const Ch5_S3_TurnUtteranceConceptComponent: React.FC = () => {
             {V2_GROUPED.map((turn) => (
               <div key={turn.turn} style={{ marginBottom: '0.5rem' }}>
                 <div style={{
-                  fontSize: 13,
-                  fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+                  ...monoText(13),
                   color: theme.colors.primary,
-                  fontWeight: 600,
                   padding: '0.2rem 0.5rem'
                 }}>
                   &lt;{turn.turn} {turn.speaker}&gt;
                 </div>
                 {turn.utterances.map((utt, j) => (
                   <div key={j} style={{
-                    fontSize: 13,
-                    fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+                    ...monoText(13),
                     color: theme.colors.textSecondary,
                     padding: '0.15rem 0.5rem 0.15rem 1.5rem'
                   }}>
@@ -324,10 +318,8 @@ const Ch5_S3_TurnUtteranceConceptComponent: React.FC = () => {
                   </div>
                 ))}
                 <div style={{
-                  fontSize: 13,
-                  fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+                  ...monoText(13),
                   color: theme.colors.primary,
-                  fontWeight: 600,
                   padding: '0.2rem 0.5rem'
                 }}>
                   &lt;/{turn.turn}&gt;
@@ -342,18 +334,16 @@ const Ch5_S3_TurnUtteranceConceptComponent: React.FC = () => {
           gridTemplateColumns: '1fr 1fr',
           gap: '1rem'
         }}>
-          <div style={{
-            ...cardStyle('success'),
+          <div style={cardStyle('success', {
             borderRadius: 10,
             padding: '0.85rem 1.25rem',
-            textAlign: 'center'
-          }}>
+            textAlign: 'center',
+          })}>
             <div style={{ ...typography.caption, fontSize: 11, color: theme.colors.success, letterSpacing: 1, textTransform: 'uppercase', marginBottom: '0.3rem' }}>
               Valid
             </div>
             <div style={{
-              fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
-              fontSize: 13,
+              ...monoText(13),
               color: theme.colors.textPrimary
             }}>
               t5: u0 &ndash; u2
@@ -362,19 +352,17 @@ const Ch5_S3_TurnUtteranceConceptComponent: React.FC = () => {
               Same turn, same speaker
             </div>
           </div>
-          <div style={{
-            ...cardStyle('error'),
+          <div style={cardStyle('error', {
             borderRadius: 10,
             border: `1px solid ${theme.colors.error}`,
             padding: '0.85rem 1.25rem',
-            textAlign: 'center'
-          }}>
+            textAlign: 'center',
+          })}>
             <div style={{ ...typography.caption, fontSize: 11, color: theme.colors.error, letterSpacing: 1, textTransform: 'uppercase', marginBottom: '0.3rem' }}>
               Invalid
             </div>
             <div style={{
-              fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
-              fontSize: 13,
+              ...monoText(13),
               color: theme.colors.textPrimary,
               textDecoration: 'line-through'
             }}>

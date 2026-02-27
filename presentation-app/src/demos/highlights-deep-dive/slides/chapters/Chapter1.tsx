@@ -182,10 +182,7 @@ const Ch1_S2_COGSProblemComponent: React.FC = () => {
       </Reveal>
 
       <Reveal from={2} animation={fadeUp}>
-        <div style={{
-          ...cardStyle('error'),
-          textAlign: 'center'
-        }}>
+        <div style={cardStyle('error', { textAlign: 'center' })}>
           <p style={{ ...typography.body, margin: 0, fontWeight: 600, color: theme.colors.error }}>
             The fix had to come from prompt engineering
           </p>

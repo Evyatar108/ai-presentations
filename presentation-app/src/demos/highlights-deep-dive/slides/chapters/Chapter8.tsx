@@ -8,6 +8,7 @@ import {
   Reveal,
   Callout,
   MarkerDim,
+  MarkerCard,
   GradientHighlightBox,
   cardStyle,
   typography,
@@ -42,10 +43,7 @@ const CheckCard: React.FC<{
 }> = ({ check, theme }) => {
   return (
     <MarkerDim at={check.marker}>
-      <div style={{
-        ...cardStyle(),
-        padding: '1.25rem',
-      }}>
+      <div style={cardStyle('default', { padding: '1.25rem' })}>
         <div style={{
           display: 'flex',
           alignItems: 'center',
@@ -225,11 +223,7 @@ const Ch8_S2_EvalToolComponent: React.FC = () => {
         gap: '1rem',
         marginBottom: '2rem'
       }}>
-        <MarkerDim at="json-output">
-          <div style={{
-            ...cardStyle(),
-            borderRadius: 10,
-          }}>
+        <MarkerCard marker="json-output" style={{ borderRadius: 10 }}>
             <div style={{
               ...typography.caption,
               fontSize: 11,
@@ -243,13 +237,8 @@ const Ch8_S2_EvalToolComponent: React.FC = () => {
             <div style={{ ...typography.body, fontSize: 13 }}>
               Highlights JSON checked for structural correctness and turn-utterance accuracy
             </div>
-          </div>
-        </MarkerDim>
-        <MarkerDim at="video-output">
-          <div style={{
-            ...cardStyle(),
-            borderRadius: 10,
-          }}>
+        </MarkerCard>
+        <MarkerCard marker="video-output" style={{ borderRadius: 10 }}>
             <div style={{
               ...typography.caption,
               fontSize: 11,
@@ -263,8 +252,7 @@ const Ch8_S2_EvalToolComponent: React.FC = () => {
             <div style={{ ...typography.body, fontSize: 13 }}>
               Highlights video lets you see and hear exactly what the model selected
             </div>
-          </div>
-        </MarkerDim>
+        </MarkerCard>
       </Reveal>
 
       <Reveal from={2} animation={fadeUp}>

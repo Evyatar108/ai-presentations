@@ -14,6 +14,7 @@ import {
   MarkerDim,
   GradientHighlightBox,
   cardStyle,
+  monoText,
   typography,
   fadeUp,
   expandWidth,
@@ -79,13 +80,12 @@ const Ch4_S1_NestedLoopComponent: React.FC = () => {
         marginTop: '1rem',
         justifyContent: 'center'
       }}>
-        <div style={{
-          ...cardStyle('warning'),
+        <div style={cardStyle('warning', {
           borderRadius: 10,
           padding: '0.75rem 1.25rem',
           flex: 1,
-          textAlign: 'center'
-        }}>
+          textAlign: 'center',
+        })}>
           <p style={{ ...typography.body, fontSize: 14, margin: 0 }}>
             <span style={{ color: theme.colors.warning, fontWeight: 700 }}>O(n) starts</span>
             {' \u00D7 '}
@@ -94,14 +94,13 @@ const Ch4_S1_NestedLoopComponent: React.FC = () => {
             <span style={{ color: theme.colors.error, fontWeight: 700 }}>O(n²) candidates</span>
           </p>
         </div>
-        <div style={{
-          ...cardStyle('error'),
+        <div style={cardStyle('error', {
           borderRadius: 10,
           border: '1px solid rgba(239, 68, 68, 0.3)',
           padding: '0.75rem 1.25rem',
           flex: 1,
-          textAlign: 'center'
-        }}>
+          textAlign: 'center',
+        })}>
           <p style={{ ...typography.body, fontSize: 14, margin: 0, color: theme.colors.error }}>
             Full text duplicated per candidate
           </p>
@@ -261,13 +260,12 @@ const Ch4_S2_CandidateRowsComponent: React.FC = () => {
       </Reveal>
 
       <Reveal from={2} animation={fadeUp} style={{ marginTop: '1.25rem', textAlign: 'center' }}>
-        <div style={{
-          ...cardStyle('error'),
+        <div style={cardStyle('error', {
           borderRadius: 10,
           border: '1px solid rgba(239, 68, 68, 0.3)',
           padding: '0.75rem 1.5rem',
           display: 'inline-block',
-        }}>
+        })}>
           <p style={{ ...typography.body, fontSize: 15, margin: 0 }}>
             <span style={{ color: UTTERANCE_COLORS[2], fontWeight: 700 }}>u2</span>
             <span style={{ color: theme.colors.textSecondary }}>{' appears in '}</span>
@@ -455,20 +453,17 @@ const Ch4_S4_OutputSafetyComponent: React.FC = () => {
               gap: '1.5rem',
             }}>
               {/* Input box */}
-              <div style={{
-                ...cardStyle('warning'),
+              <div style={cardStyle('warning', {
                 textAlign: 'center',
                 flex: 1,
                 maxWidth: 260,
-              }}>
+              })}>
                 <div style={{ ...typography.caption, fontSize: 11, color: theme.colors.warning, letterSpacing: 1, textTransform: 'uppercase', marginBottom: '0.4rem' }}>
                   Input
                 </div>
                 <div style={{
-                  fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
-                  fontSize: 15,
+                  ...monoText(15, 700),
                   color: theme.colors.warning,
-                  fontWeight: 700,
                 }}>
                   2,000+ Candidate Rows
                 </div>
@@ -485,8 +480,7 @@ const Ch4_S4_OutputSafetyComponent: React.FC = () => {
                 gap: '0.25rem',
               }}>
                 <div style={{
-                  fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
-                  fontSize: 11,
+                  ...monoText(11),
                   color: theme.colors.textSecondary,
                 }}>
                   Call 2
@@ -508,10 +502,8 @@ const Ch4_S4_OutputSafetyComponent: React.FC = () => {
                   Output
                 </div>
                 <div style={{
-                  fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
-                  fontSize: 11,
+                  ...monoText(11),
                   color: theme.colors.success,
-                  fontWeight: 600,
                   textAlign: 'left',
                   lineHeight: 1.5,
                   whiteSpace: 'pre',
@@ -570,8 +562,7 @@ const Ch4_S4_OutputSafetyComponent: React.FC = () => {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.75rem',
-                fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
-                fontSize: 13,
+                ...monoText(13),
               }}>
                 <span style={{ color: theme.colors.success }}>|[1, 3]|important feedback|</span>
                 <span style={{ color: theme.colors.textMuted }}>&#8594;</span>
@@ -609,8 +600,7 @@ const Ch4_S4_OutputSafetyComponent: React.FC = () => {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.75rem',
-                fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
-                fontSize: 13,
+                ...monoText(13),
               }}>
                 <span style={{ color: theme.colors.error, textDecoration: 'line-through' }}>start: u0, end: u7</span>
                 <span style={{ color: theme.colors.textMuted }}>&#8594;</span>
@@ -694,9 +684,8 @@ const Ch4_S4_OutputSafetyComponent: React.FC = () => {
               {' achieves the same safety with '}
             </span>
             <span style={{
-              fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+              ...monoText(undefined, 700),
               color: theme.colors.primary,
-              fontWeight: 700,
             }}>
               max_end_utterance_id
             </span>

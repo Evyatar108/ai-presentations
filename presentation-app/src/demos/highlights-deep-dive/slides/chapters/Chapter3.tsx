@@ -13,6 +13,7 @@ import {
   BeforeAfterSplit,
   NumberedStepCard,
   typography,
+  monoText,
   fadeUp,
 } from '@framework';
 
@@ -122,8 +123,7 @@ const Ch3_S2_VerboseJSONComponent: React.FC = () => {
           }
           afterContent={
             <div style={{
-              fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
-              fontSize: 14,
+              ...monoText(14),
               color: theme.colors.warning,
               lineHeight: 2,
               padding: '1rem',

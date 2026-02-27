@@ -15,6 +15,7 @@ import {
   MarkerDim,
   MarkerCodeBlock,
   useMarker,
+  monoText,
   typography,
   layouts,
   fadeUp,
@@ -152,8 +153,7 @@ const OutputPill: React.FC<{
         border: `1px solid ${theme.colors.bgBorder}`,
         borderRadius: 8,
         padding: '0.35rem 0.75rem',
-        fontSize: 13,
-        fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+        ...monoText(13),
       }}>
         <span style={{ color: theme.colors.success }}><Checkmark /></span>
         <span style={{ color: theme.colors.textPrimary }}>{field}</span>
@@ -462,10 +462,8 @@ const InsightPill: React.FC<{
         border: `1px solid ${theme.colors.bgBorder}`,
         borderRadius: 8,
         padding: '0.3rem 0.7rem',
-        fontSize: 12,
-        fontWeight: 600,
+        ...monoText(12),
         color: theme.colors.primary,
-        fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
       }}>
         {label}
       </div>
