@@ -60,7 +60,8 @@ Three Tier 1 packages deliver high value at low risk: `react-rough-notation` add
 
 ## Verification
 
-- [ ] `react-rough-notation` annotations render and trigger correctly via markers
+- [x] `react-rough-notation` annotations render and trigger correctly via markers
+- [x] `<AnnotateAtMarker>` works correctly with zoom (`transform: scale()`) — counter-scale fix in AnnotateAtMarker.tsx
 - [ ] `<AnnotateAtMarker>` has unit tests
 - [ ] `CodeBlock` produces correct highlighting for Python, TypeScript, JSON, YAML, bash, SQL
 - [ ] `MarkerCodeBlock` still works (marker-driven line highlighting)

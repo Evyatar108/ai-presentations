@@ -56,7 +56,7 @@ export type { AnimatedArrowProps, ArrowDirection } from './components/AnimatedAr
 export { MarkerCodeBlock } from './components/MarkerCodeBlock';
 export type { MarkerCodeBlockProps } from './components/MarkerCodeBlock';
 export { ShikiCodeBlock } from './components/ShikiCodeBlock';
-export type { ShikiCodeBlockProps } from './components/ShikiCodeBlock';
+export type { ShikiCodeBlockProps, ShikiColorTheme } from './components/ShikiCodeBlock';
 export { ProgressSteps } from './components/ProgressSteps';
 export type { ProgressStepsProps, ProgressStep } from './components/ProgressSteps';
 export { BeforeAfterSplit } from './components/BeforeAfterSplit';

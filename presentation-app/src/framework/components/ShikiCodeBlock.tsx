@@ -2,7 +2,11 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../theme/ThemeContext';
 import { useReducedMotion } from '../accessibility/ReducedMotion';
+import type { ThemeColors } from '../theme/types';
 import type { ThemedToken } from 'shiki';
+
+/** Any bundled shiki theme name, or 'framework' for theme-aware colors. */
+export type ShikiColorTheme = 'framework' | (string & {});
 
 export interface ShikiCodeBlockProps {
   code: string;
@@ -10,6 +14,8 @@ export interface ShikiCodeBlockProps {
   highlightLines?: number[];
   title?: string;
   fontSize?: number;
+  /** Color theme for syntax tokens. Default: 'one-dark-pro' */
+  colorTheme?: ShikiColorTheme;
 }
 
 // Module-level singleton for the shiki highlighter
@@ -17,6 +23,49 @@ type ShikiHighlighter = Awaited<ReturnType<typeof import('shiki')['createHighlig
 let highlighterPromise: Promise<ShikiHighlighter> | null = null;
 
 const PRELOADED_LANGS = ['python', 'json', 'typescript', 'markdown', 'bash'];
+const FRAMEWORK_THEME_NAME = 'framework-custom';
+let frameworkThemeLoaded = false;
+
+/**
+ * Build a VS Code TextMate theme from framework ThemeColors.
+ * Maps token scopes to the same colors that CodeBlock's regex tokenizer uses.
+ */
+function buildFrameworkTheme(colors: ThemeColors) {
+  return {
+    name: FRAMEWORK_THEME_NAME,
+    type: 'dark' as const,
+    colors: {
+      'editor.background': colors.bgSurface,
+      'editor.foreground': colors.textPrimary,
+    },
+    tokenColors: [
+      { scope: ['keyword', 'storage.type', 'storage.modifier', 'constant.language'],
+        settings: { foreground: colors.secondary } },
+      { scope: ['keyword.operator'],
+        settings: { foreground: colors.accent } },
+      { scope: ['string', 'string.quoted'],
+        settings: { foreground: colors.success } },
+      { scope: ['comment', 'punctuation.definition.comment'],
+        settings: { foreground: colors.textMuted } },
+      { scope: ['constant.numeric', 'constant.other'],
+        settings: { foreground: colors.warning } },
+      { scope: ['entity.name.function', 'support.function', 'meta.function-call.generic'],
+        settings: { foreground: colors.primary } },
+      { scope: ['support.type.property-name.json', 'meta.object-literal.key'],
+        settings: { foreground: colors.primary } },
+      { scope: ['variable', 'variable.other'],
+        settings: { foreground: colors.textPrimary } },
+      { scope: ['variable.parameter.function-call'],
+        settings: { foreground: colors.error } },
+      { scope: ['variable.parameter'],
+        settings: { foreground: colors.warning } },
+      { scope: ['entity.name.type', 'entity.name.class', 'support.type'],
+        settings: { foreground: colors.accent } },
+      { scope: ['punctuation'],
+        settings: { foreground: colors.textSecondary } },
+    ],
+  };
+}
 
 function getHighlighter(): Promise<ShikiHighlighter> {
   if (!highlighterPromise) {
@@ -31,12 +80,25 @@ function getHighlighter(): Promise<ShikiHighlighter> {
 }
 
 /**
+ * Ensure the framework custom theme is registered with the highlighter.
+ */
+async function ensureFrameworkTheme(hl: ShikiHighlighter, colors: ThemeColors) {
+  if (!frameworkThemeLoaded || import.meta.hot) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await hl.loadTheme(buildFrameworkTheme(colors) as any);
+    frameworkThemeLoaded = true;
+  }
+}
+
+/**
  * Custom hook that returns shiki-tokenized lines for the given code/language.
  * Returns null while loading (async).
  */
 function useShikiTokens(
   code: string,
-  language: string
+  language: string,
+  colorTheme: ShikiColorTheme,
+  themeColors: ThemeColors
 ): { tokens: ThemedToken[][] | null; bg: string | null } {
   const [tokens, setTokens] = useState<ThemedToken[][] | null>(null);
   const [bg, setBg] = useState<string | null>(null);
@@ -47,6 +109,22 @@ function useShikiTokens(
 
     getHighlighter()
       .then(async (hl) => {
+        // Register framework theme if needed
+        if (colorTheme === 'framework') {
+          await ensureFrameworkTheme(hl, themeColors);
+        }
+
+        // Load theme on-demand if not preloaded
+        const shikiThemeName = colorTheme === 'framework' ? FRAMEWORK_THEME_NAME : colorTheme;
+        if (colorTheme !== 'framework' && !hl.getLoadedThemes().includes(shikiThemeName)) {
+          try {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            await hl.loadTheme(colorTheme as any);
+          } catch {
+            // Unknown theme — fall back to one-dark-pro
+          }
+        }
+
         // Load language on-demand if not preloaded
         const loadedLangs = hl.getLoadedLanguages();
         if (!loadedLangs.includes(language)) {
@@ -64,10 +142,14 @@ function useShikiTokens(
           ? language
           : 'plaintext';
 
+        const effectiveTheme = hl.getLoadedThemes().includes(shikiThemeName)
+          ? shikiThemeName
+          : 'one-dark-pro';
+
         const result = hl.codeToTokens(code, {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           lang: effectiveLang as any,
-          theme: 'one-dark-pro',
+          theme: effectiveTheme,
         });
 
         if (mountedRef.current) {
@@ -82,7 +164,7 @@ function useShikiTokens(
     return () => {
       mountedRef.current = false;
     };
-  }, [code, language]);
+  }, [code, language, colorTheme, themeColors]);
 
   return { tokens, bg };
 }
@@ -93,13 +175,19 @@ export const ShikiCodeBlock: React.FC<ShikiCodeBlockProps> = ({
   highlightLines = [],
   title,
   fontSize = 13,
+  colorTheme = 'one-dark-pro',
 }) => {
   const theme = useTheme();
   const { reduced } = useReducedMotion();
-  const { tokens } = useShikiTokens(code, language);
+  const { tokens, bg } = useShikiTokens(code, language, colorTheme, theme.colors);
 
   const lines = useMemo(() => code.split('\n'), [code]);
   const highlightSet = useMemo(() => new Set(highlightLines), [highlightLines]);
+
+  // framework theme uses bgSurface; all other themes use their native background
+  const codeBg = colorTheme === 'framework'
+    ? theme.colors.bgSurface
+    : (bg ?? theme.colors.bgSurface);
 
   return (
     <motion.div
@@ -107,7 +195,7 @@ export const ShikiCodeBlock: React.FC<ShikiCodeBlockProps> = ({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: reduced ? 0.2 : 0.4 }}
       style={{
-        background: theme.colors.bgSurface,
+        background: codeBg,
         border: `1px solid ${theme.colors.bgBorder}`,
         borderRadius: 12,
         overflow: 'hidden',
@@ -138,7 +226,7 @@ export const ShikiCodeBlock: React.FC<ShikiCodeBlockProps> = ({
           fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
           color: theme.colors.textPrimary,
           overflowX: 'auto',
-          background: theme.colors.bgSurface,
+          background: codeBg,
         }}
       >
         {lines.map((line, i) => {

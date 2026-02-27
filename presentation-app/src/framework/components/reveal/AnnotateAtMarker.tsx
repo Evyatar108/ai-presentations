@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import type { CSSProperties, ReactNode } from 'react';
 import { RoughNotation } from 'react-rough-notation';
 import { useMarker, useMarkerRange } from '../../hooks/useMarker';
@@ -101,8 +101,47 @@ export const AnnotateAtMarker: React.FC<AnnotateAtMarkerProps> = (props) => {
     Array.isArray(brackets) ? brackets.join(',') : brackets,
   ]);
 
+  const wrapperRef = useRef<HTMLSpanElement>(null);
+
+  // Detect ancestor CSS transform scale and apply a counter-scale to
+  // rough-notation's SVG so annotations position correctly under zoom.
+  // rough-notation uses getBoundingClientRect() (which returns scaled coords)
+  // for SVG path coordinates, but the SVG is also visually scaled by the
+  // ancestor transform — causing double-scaling. Counter-scaling the SVG fixes this.
+  const fixAnnotationScale = useCallback(() => {
+    const el = wrapperRef.current;
+    if (!el) return;
+
+    const svg = el.querySelector<SVGSVGElement>('svg.rough-annotation');
+    if (!svg) return;
+
+    // Detect effective visual scale by comparing layout size vs BCR size
+    const scaleX = el.offsetWidth > 0 ? el.getBoundingClientRect().width / el.offsetWidth : 1;
+
+    if (Math.abs(scaleX - 1) > 0.01) {
+      svg.style.transform = `scale(${1 / scaleX})`;
+      svg.style.transformOrigin = '0 0';
+    } else {
+      svg.style.transform = '';
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!visible || !wrapperRef.current) return;
+
+    // rough-notation creates the SVG asynchronously after show=true.
+    // Use a MutationObserver to catch SVG insertion and apply the fix.
+    const observer = new MutationObserver(() => fixAnnotationScale());
+    observer.observe(wrapperRef.current, { childList: true, subtree: true });
+
+    // Also run immediately in case SVG already exists
+    fixAnnotationScale();
+
+    return () => observer.disconnect();
+  }, [visible, fixAnnotationScale]);
+
   return (
-    <span style={style}>
+    <span ref={wrapperRef} style={style}>
       <RoughNotation
         type={type}
         show={visible}

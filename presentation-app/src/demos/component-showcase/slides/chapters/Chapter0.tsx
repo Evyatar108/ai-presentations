@@ -20,6 +20,7 @@ import {
   RevealCarousel,
   Reveal,
   AnnotateAtMarker,
+  RevealSequence,
   CodeBlock,
   ShikiCodeBlock,
   cardStyle,
@@ -1184,6 +1185,65 @@ const SHIKI_SAMPLE = `def generate_highlights(transcript):
         topic.narration = write_narration(topic)
     return build_narrative(topics)`;
 
+const THEME_LABEL_STYLE: React.CSSProperties = {
+  fontSize: '0.75rem',
+  fontWeight: 600,
+  textTransform: 'uppercase',
+  letterSpacing: '0.05em',
+  marginBottom: '0.4rem',
+  textAlign: 'center',
+};
+
+const DARK_THEMES = [
+  // Popular classics
+  'dracula', 'monokai', 'nord', 'night-owl', 'tokyo-night', 'synthwave-84',
+  // GitHub family
+  'github-dark', 'github-dark-default', 'github-dark-dimmed', 'github-dark-high-contrast', 'dark-plus', 'slack-dark',
+  // Catppuccin & Rose Pine
+  'catppuccin-mocha', 'catppuccin-macchiato', 'catppuccin-frappe', 'rose-pine', 'rose-pine-moon', 'everforest-dark',
+  // Material & Ayu
+  'material-theme', 'material-theme-darker', 'material-theme-ocean', 'material-theme-palenight', 'ayu-dark', 'ayu-mirage',
+  // Gruvbox & Solarized
+  'gruvbox-dark-hard', 'gruvbox-dark-medium', 'gruvbox-dark-soft', 'solarized-dark', 'vitesse-dark', 'vitesse-black',
+  // Kanagawa & Retro
+  'kanagawa-dragon', 'kanagawa-wave', 'horizon', 'laserwave', 'dracula-soft', 'houston',
+  // Unique
+  'andromeeda', 'aurora-x', 'poimandres', 'plastic', 'min-dark', 'red',
+  // Last
+  'vesper',
+];
+
+function chunk<T>(arr: T[], size: number): T[][] {
+  const result: T[][] = [];
+  for (let i = 0; i < arr.length; i += size) {
+    result.push(arr.slice(i, i + size));
+  }
+  return result;
+}
+
+const THEME_CHUNKS = chunk(DARK_THEMES, 6);
+
+const ThemeGrid: React.FC<{ themes: string[] }> = ({ themes }) => (
+  <div style={{
+    display: 'grid',
+    gridTemplateColumns: 'repeat(3, 1fr)',
+    gap: '0.75rem',
+    width: '100%',
+  }}>
+    {themes.map((t) => (
+      <div key={t}>
+        <div style={{ ...THEME_LABEL_STYLE, color: '#94a3b8' }}>{t}</div>
+        <ShikiCodeBlock
+          code={SHIKI_SAMPLE}
+          language="python"
+          fontSize={10}
+          colorTheme={t}
+        />
+      </div>
+    ))}
+  </div>
+);
+
 const ShikiCodeBlockComponent: React.FC = () => {
   const theme = useTheme();
 
@@ -1193,83 +1253,97 @@ const ShikiCodeBlockComponent: React.FC = () => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: '1.5rem',
-        maxWidth: 1000,
+        gap: '1rem',
+        maxWidth: 1100,
       }}>
         <AnimatedHeading text="ShikiCodeBlock" as="h2" style={{ fontSize: '2.8rem' }} />
 
-        <p style={{
-          color: theme.colors.textSecondary,
-          fontSize: '1.1rem',
-          textAlign: 'center',
-          maxWidth: 700,
-          lineHeight: 1.6,
-          margin: 0,
-        }}>
-          Side-by-side: regex tokenizer (CodeBlock) vs shiki (ShikiCodeBlock)
-        </p>
-
-        <Reveal from={0}>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: '1rem',
-            width: '100%',
-          }}>
-            <div>
-              <div style={{
-                fontSize: '0.85rem',
-                fontWeight: 600,
-                color: theme.colors.textMuted,
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em',
-                marginBottom: '0.5rem',
-                textAlign: 'center',
-              }}>
-                CodeBlock (regex)
-              </div>
-              <CodeBlock
-                code={SHIKI_SAMPLE}
-                language="python"
-                title="pipeline.py"
-                fontSize={11}
-                highlightLines={[3]}
-              />
-            </div>
-            <div>
-              <div style={{
-                fontSize: '0.85rem',
-                fontWeight: 600,
-                color: theme.colors.textMuted,
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em',
-                marginBottom: '0.5rem',
-                textAlign: 'center',
-              }}>
-                ShikiCodeBlock (shiki)
-              </div>
-              <ShikiCodeBlock
-                code={SHIKI_SAMPLE}
-                language="python"
-                title="pipeline.py"
-                fontSize={11}
-                highlightLines={[3]}
-              />
-            </div>
-          </div>
-        </Reveal>
-
-        <Reveal from={1}>
-          <ContentCard>
-            <code style={{
-              fontSize: '0.9rem',
+        <RevealSequence>
+          <Reveal from={0} until={0}>
+            <p style={{
               color: theme.colors.textSecondary,
-              fontFamily: 'monospace',
+              fontSize: '1rem',
+              textAlign: 'center',
+              maxWidth: 700,
+              lineHeight: 1.6,
+              margin: '0 auto 0.25rem',
             }}>
-              {'<ShikiCodeBlock code={code} language="python" title="file.py" highlightLines={[3]} />'}
-            </code>
-          </ContentCard>
-        </Reveal>
+              Three rendering modes: regex tokenizer, shiki One Dark Pro, and shiki with framework theme colors
+            </p>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr 1fr',
+              gap: '0.75rem',
+              width: '100%',
+            }}>
+              <div>
+                <div style={{ ...THEME_LABEL_STYLE, color: theme.colors.textMuted }}>
+                  CodeBlock (regex)
+                </div>
+                <CodeBlock
+                  code={SHIKI_SAMPLE}
+                  language="python"
+                  title="pipeline.py"
+                  fontSize={10}
+                  highlightLines={[3]}
+                />
+              </div>
+              <div>
+                <div style={{ ...THEME_LABEL_STYLE, color: theme.colors.textMuted }}>
+                  Shiki (one-dark-pro)
+                </div>
+                <ShikiCodeBlock
+                  code={SHIKI_SAMPLE}
+                  language="python"
+                  title="pipeline.py"
+                  fontSize={10}
+                  highlightLines={[3]}
+                />
+              </div>
+              <div>
+                <div style={{ ...THEME_LABEL_STYLE, color: theme.colors.primary }}>
+                  Shiki (framework)
+                </div>
+                <ShikiCodeBlock
+                  code={SHIKI_SAMPLE}
+                  language="python"
+                  title="pipeline.py"
+                  fontSize={10}
+                  highlightLines={[3]}
+                  colorTheme="framework"
+                />
+              </div>
+            </div>
+          </Reveal>
+
+          {THEME_CHUNKS.map((themes, i) => (
+            <Reveal key={i} from={i + 1} until={i + 1}>
+              <p style={{
+                color: theme.colors.textSecondary,
+                fontSize: '1rem',
+                textAlign: 'center',
+                margin: '0 0 0.25rem',
+              }}>
+                {i === 0
+                  ? <>65+ bundled themes — any can be used via <code style={{ color: theme.colors.primary }}>colorTheme</code></>
+                  : `Dark themes (${i + 1}/${THEME_CHUNKS.length})`}
+              </p>
+              <ThemeGrid themes={themes} />
+            </Reveal>
+          ))}
+
+          <Reveal from={THEME_CHUNKS.length + 1}>
+            <ContentCard>
+              <code style={{
+                fontSize: '0.9rem',
+                color: theme.colors.textSecondary,
+                fontFamily: 'monospace',
+              }}>
+                {'<ShikiCodeBlock code={code} language="python" colorTheme="dracula" />'}
+              </code>
+            </ContentCard>
+          </Reveal>
+        </RevealSequence>
       </div>
     </SlideContainer>
   );
@@ -1280,10 +1354,8 @@ export const CS_S12_ShikiCodeBlock = defineSlide({
     chapter: 0,
     slide: 12,
     title: 'ShikiCodeBlock',
-    audioSegments: [
-      { id: 0 },
-      { id: 1 },
-    ],
+    // segment 0: comparison, segments 1-N: theme galleries, segment N+1: usage
+    audioSegments: Array.from({ length: THEME_CHUNKS.length + 2 }, (_, i) => ({ id: i })),
   },
   component: ShikiCodeBlockComponent,
 });

@@ -440,14 +440,16 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideIn
           onZoomEnabledChange={setZoomEnabled}
           autoplay={autoplay}
         />
-        {/* Slide Player */}
+        {/* Slide Player — CSS zoom keeps getBoundingClientRect() and absolute
+             positioning in the same coordinate space, so rough-notation annotations
+             (AnnotateAtMarker) position correctly. Transform zoom is the legacy
+             approach that breaks annotation positioning but has simpler layout. */}
         <div
-          style={{
-            transform: zoomEnabled ? 'scale(1.8)' : undefined,
-            transformOrigin: 'center center',
-            width: '100%',
-            height: '100%',
-          }}
+          style={
+            zoomEnabled
+              ? { transform: 'scale(1.8)', transformOrigin: 'center center', width: '100%', height: '100%' }
+              : { width: '100%', height: '100%' }
+          }
         >
           <SlidePlayer
             demoId={demoId}

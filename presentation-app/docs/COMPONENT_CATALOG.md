@@ -16,7 +16,8 @@
 | NumberedStepCard | Layout Cards | `framework/components/NumberedStepCard.tsx` | Numbered step with circle badge + active state |
 | ComparisonTable | Comparison | `framework/components/ComparisonTable.tsx` | Color-coded comparison table |
 | FieldCard | Layout Cards | `framework/components/FieldCard.tsx` | Left-accent card with monospace name + badge |
-| CodeBlock | Data Display | `framework/components/CodeBlock.tsx` | Syntax-highlighted code with line numbers |
+| CodeBlock | Data Display | `framework/components/CodeBlock.tsx` | Syntax-highlighted code with line numbers (regex tokenizer) |
+| ShikiCodeBlock | Data Display | `framework/components/ShikiCodeBlock.tsx` | Shiki-powered syntax highlighting (200+ languages, two color themes) |
 | MetricTile | Data Display | `framework/components/MetricTile.tsx` | Before/after metric comparison tile |
 | MetricDisplay | Data Display | `framework/slides/SlideLayouts.tsx` | Single animated metric value |
 | BeforeAfterSplit | Comparison | `framework/components/BeforeAfterSplit.tsx` | Side-by-side before/after panels with arrow |
@@ -32,6 +33,7 @@
 | MarkerDim | Animation | `framework/components/reveal/MarkerDim.tsx` | Declarative marker-driven opacity dimming |
 | MarkerCard | Animation | `framework/components/MarkerCard.tsx` | MarkerDim + themed card wrapper (replaces MarkerDim + cardStyle boilerplate) |
 | AnnotateAtMarker | Animation | `framework/components/reveal/AnnotateAtMarker.tsx` | Hand-drawn annotations (circle, underline, highlight, box) driven by markers |
+| RevealSequence | Animation | `framework/components/reveal/RevealSequence.tsx` | Exit-before-enter coordination for swapping Reveal children |
 | MarkerCodeBlock | Data Display | `framework/components/MarkerCodeBlock.tsx` | CodeBlock with marker-driven line highlighting |
 | AnimatedCounter | Data Display | `framework/components/AnimatedCounter.tsx` | Counting-up number animation |
 | ProgressSteps | Data Visualization | `framework/components/ProgressSteps.tsx` | Horizontal step indicator with states |
@@ -196,11 +198,40 @@ import { AnnotateAtMarker } from '@framework';
 - For `type="highlight"`, use a semi-transparent color (e.g. `rgba(255,220,100,0.4)`) — opaque colors will obscure the text.
 - Avoid passing inline array literals to `padding` — define them as constants to prevent unnecessary re-renders.
 
+**Zoom compatibility:** `AnnotateAtMarker` automatically detects ancestor CSS `transform: scale()` (used by the "Enable zoom" feature) and applies a counter-scale to the annotation SVG. This prevents the double-scaling issue where `rough-notation` computes SVG path coordinates from `getBoundingClientRect()` (which returns scaled values), and then the SVG itself is visually scaled again by the ancestor transform.
+
 **When to use:** Use `AnnotateAtMarker` for hand-drawn visual emphasis synced to narration. Use `RevealAtMarker` for show/hide, `MarkerDim` for opacity dimming.
+
+### RevealSequence
+
+Coordinates exit-before-enter sequencing for child `<Reveal>` components. When the segment changes, exiting elements animate out first, then after an optional delay, entering elements mount — preventing layout jumps from simultaneous mount/unmount.
+
+**Source:** `src/framework/components/reveal/RevealSequence.tsx`
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `delay` | `number` | `500` | Delay in ms between exit completing and entrance starting |
+| `children` | `ReactNode` | — | Child `<Reveal>` components with `from`/`until` props |
+
+```tsx
+import { RevealSequence, Reveal } from '@framework';
+
+<RevealSequence delay={200}>
+  <Reveal from={0} until={0}>First panel (exits before next enters)</Reveal>
+  <Reveal from={1} until={1}>Second panel</Reveal>
+  <Reveal from={2}>Third panel (persists — no until)</Reveal>
+</RevealSequence>
+```
+
+**RevealSequence vs RevealCarousel:** `RevealSequence` is the lower-level primitive — you write `from`/`until` manually, giving you full control (e.g., last child can persist with no `until`). `RevealCarousel` (below) is built on top of `RevealSequence` and auto-wires the indices, but assigns `until` to every child including the last.
+
+**When to use:** Use `RevealSequence` when swapping content between segments and you need control over which children persist. Use `RevealCarousel` when every child is truly one-at-a-time with uniform behavior.
+
+---
 
 ### RevealCarousel
 
-Auto-indexed `RevealSequence` children — each child gets sequential `from`/`until` props so only one is visible at a time. Eliminates manual index wiring and off-by-one errors.
+Auto-indexed `RevealSequence` children — each child gets sequential `from`/`until` props so only one is visible at a time. Eliminates manual index wiring and off-by-one errors. Built on top of `RevealSequence`.
 
 **Source:** `src/framework/components/RevealCarousel.tsx`
 
@@ -251,6 +282,52 @@ import { CodeBlock } from '@framework';
 ```
 
 **Tips:** Use `fontSize={11}` or `fontSize={12}` for code that needs to fit alongside other content. The title bar is great for showing file paths.
+
+---
+
+### ShikiCodeBlock
+
+Professional syntax-highlighted code block using [shiki](https://shiki.style/) with support for 200+ languages. Same external API as `CodeBlock`, plus a `colorTheme` prop to choose between VS Code's One Dark Pro palette or framework theme colors.
+
+**Source:** `src/framework/components/ShikiCodeBlock.tsx`
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `code` | `string` | *required* | The source code to display |
+| `language` | `string` | `'python'` | Language for syntax highlighting (200+ languages) |
+| `highlightLines` | `number[]` | `[]` | 1-based line numbers to highlight |
+| `title` | `string` | — | Title bar text (e.g. filename) |
+| `fontSize` | `number` | `13` | Font size in pixels |
+| `colorTheme` | `'one-dark-pro' \| 'framework'` | `'one-dark-pro'` | Color theme for syntax tokens |
+
+```tsx
+import { ShikiCodeBlock } from '@framework';
+
+// VS Code One Dark Pro theme (default) — uses shiki's native background
+<ShikiCodeBlock
+  code={`async function process(data) {\n  return await transform(data);\n}`}
+  language="typescript"
+  title="handler.ts"
+  highlightLines={[2]}
+/>
+
+// Framework theme — maps token scopes to theme.colors, uses bgSurface background
+<ShikiCodeBlock
+  code={PYTHON_CODE}
+  language="python"
+  title="pipeline.py"
+  fontSize={12}
+  colorTheme="framework"
+/>
+```
+
+**Color themes:**
+- `'one-dark-pro'` — VS Code's One Dark Pro palette with its native dark background (`#282c34`). Best for standalone code displays.
+- `'framework'` — Maps shiki token scopes to `theme.colors` (keywords → secondary, strings → success, functions → primary, etc.). Uses `bgSurface` background to match `CodeBlock`. Best when code blocks should blend with the presentation theme.
+
+**When to use:** Use `ShikiCodeBlock` when you need accurate syntax highlighting or support for languages beyond Python/JSON/Markdown. Use `CodeBlock` for simple snippets where the lighter regex tokenizer suffices. Both are interchangeable API-wise.
+
+**Tips:** Shiki loads asynchronously — plain text is shown briefly (~50ms) before tokens render. The highlighter is a module-level singleton, so subsequent renders are instant. Languages beyond the preloaded set (python, json, typescript, markdown, bash) are loaded on demand.
 
 ---
 
