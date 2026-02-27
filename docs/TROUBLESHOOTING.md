@@ -261,6 +261,20 @@
    ```
 3. Check bundle size - demos should load on-demand
 
+### Animations Not Playing (Components Appear Without Animation)
+
+**Symptoms**: Components like `CircularProgress`, `AnimatedHeading`, `AnimatedCheckmark`, `AnimatedArrow` render their final state immediately with no visible animation. Framer Motion `fadeIn`/`fadeUp`/`scaleIn` transitions also appear instant.
+
+**Cause**: The OS has `prefers-reduced-motion: reduce` enabled. All framework animations respect this setting via `useReducedMotion()` and show final states immediately. On **WSL2**, the browser inherits the Windows host accessibility setting — even though the dev server runs on Linux, the browser resolves the media query from Windows.
+
+**Diagnosis**: Open browser DevTools console and run:
+```js
+window.matchMedia('(prefers-reduced-motion: reduce)').matches
+```
+If it returns `true`, animations are being suppressed.
+
+**Fix**: On Windows, go to **Settings → Accessibility → Visual effects → Animation effects → On**. Reload the page. This only affects your development machine — end users' browsers respect their own OS settings independently.
+
 ### Laggy Animations
 
 **Symptoms**: Choppy transitions, dropped frames

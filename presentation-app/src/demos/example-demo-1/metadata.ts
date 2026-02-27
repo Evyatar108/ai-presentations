@@ -6,7 +6,6 @@ export const metadata: DemoMetadata = {
   description: 'A placeholder demo showcasing the multi-demo architecture',
   thumbnail: '/images/example-demo-1/thumbnail.jpeg',
   tags: ['example', 'placeholder', 'demo'],
-  hidden: true,
 
   durationInfo: {
     audioOnly: 0,

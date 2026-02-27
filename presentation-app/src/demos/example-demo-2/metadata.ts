@@ -6,7 +6,6 @@ export const metadata: DemoMetadata = {
   description: 'Showcases layout components, named segments, and timing overrides',
   thumbnail: '/images/example-demo-2/thumbnail.jpeg',
   tags: ['example', 'layout', 'named-segments', 'timing'],
-  hidden: true,
 
   durationInfo: {
     audioOnly: 0,
