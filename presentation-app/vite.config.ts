@@ -18,6 +18,9 @@ export default defineConfig({
     host: true,
     open: false
   },
+  optimizeDeps: {
+    include: ['shiki']
+  },
   build: {
     target: 'es2020',
     outDir: 'dist',

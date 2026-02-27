@@ -20,6 +20,8 @@ import {
   RevealCarousel,
   Reveal,
   AnnotateAtMarker,
+  CodeBlock,
+  ShikiCodeBlock,
   cardStyle,
   monoText,
   gradientBadge,
@@ -1171,4 +1173,117 @@ export const CS_S11_AnnotateAtMarker = defineSlide({
     ],
   },
   component: AnnotateAtMarkerComponent,
+});
+
+// ─── Slide 12: ShikiCodeBlock ───────────────────────────────────────────────
+
+const SHIKI_SAMPLE = `def generate_highlights(transcript):
+    """Main pipeline: segment → narrate → extract."""
+    topics = segment_into_topics(transcript, min=1, max=7)
+    for topic in topics:
+        topic.narration = write_narration(topic)
+    return build_narrative(topics)`;
+
+const ShikiCodeBlockComponent: React.FC = () => {
+  const theme = useTheme();
+
+  return (
+    <SlideContainer>
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '1.5rem',
+        maxWidth: 1000,
+      }}>
+        <AnimatedHeading text="ShikiCodeBlock" as="h2" style={{ fontSize: '2.8rem' }} />
+
+        <p style={{
+          color: theme.colors.textSecondary,
+          fontSize: '1.1rem',
+          textAlign: 'center',
+          maxWidth: 700,
+          lineHeight: 1.6,
+          margin: 0,
+        }}>
+          Side-by-side: regex tokenizer (CodeBlock) vs shiki (ShikiCodeBlock)
+        </p>
+
+        <Reveal from={0}>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: '1rem',
+            width: '100%',
+          }}>
+            <div>
+              <div style={{
+                fontSize: '0.85rem',
+                fontWeight: 600,
+                color: theme.colors.textMuted,
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                marginBottom: '0.5rem',
+                textAlign: 'center',
+              }}>
+                CodeBlock (regex)
+              </div>
+              <CodeBlock
+                code={SHIKI_SAMPLE}
+                language="python"
+                title="pipeline.py"
+                fontSize={11}
+                highlightLines={[3]}
+              />
+            </div>
+            <div>
+              <div style={{
+                fontSize: '0.85rem',
+                fontWeight: 600,
+                color: theme.colors.textMuted,
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                marginBottom: '0.5rem',
+                textAlign: 'center',
+              }}>
+                ShikiCodeBlock (shiki)
+              </div>
+              <ShikiCodeBlock
+                code={SHIKI_SAMPLE}
+                language="python"
+                title="pipeline.py"
+                fontSize={11}
+                highlightLines={[3]}
+              />
+            </div>
+          </div>
+        </Reveal>
+
+        <Reveal from={1}>
+          <ContentCard>
+            <code style={{
+              fontSize: '0.9rem',
+              color: theme.colors.textSecondary,
+              fontFamily: 'monospace',
+            }}>
+              {'<ShikiCodeBlock code={code} language="python" title="file.py" highlightLines={[3]} />'}
+            </code>
+          </ContentCard>
+        </Reveal>
+      </div>
+    </SlideContainer>
+  );
+};
+
+export const CS_S12_ShikiCodeBlock = defineSlide({
+  metadata: {
+    chapter: 0,
+    slide: 12,
+    title: 'ShikiCodeBlock',
+    audioSegments: [
+      { id: 0 },
+      { id: 1 },
+    ],
+  },
+  component: ShikiCodeBlockComponent,
 });

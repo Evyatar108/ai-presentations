@@ -1,17 +1,17 @@
 import React, { useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useReducedMotion, useSegmentedAnimation, useTheme, defineSlide } from '@framework';
-import 'reactflow/dist/style.css';
+import '@xyflow/react/dist/style.css';
 import {
   ReactFlow,
   Background,
   ReactFlowProvider,
   MarkerType,
-  Node as RFNode,
-  Edge as RFEdge,
+  type Node as RFNode,
+  type Edge as RFEdge,
   Handle,
   Position
-} from 'reactflow';
+} from '@xyflow/react';
 
 /**
  * Chapter 2: Team Collaboration

@@ -26,18 +26,19 @@ Three Tier 1 packages deliver high value at low risk: `react-rough-notation` add
 |---|------|--------|-------|
 | 1 | ~~Install `react-rough-notation`~~ | XS | Done |
 | 2 | ~~Build `<AnnotateAtMarker>` wrapper~~ | S | Done — `src/framework/components/reveal/AnnotateAtMarker.tsx` + showcase slide in component-showcase |
-| 3 | Apply annotations to demo slides | S | Ch1_S2_COGSProblem (circle key numbers), Ch6_S1_PromptOverview (highlight sections) |
-| 4 | Install `shiki` | XS | `npm install shiki` |
-| 5 | Rewrite `CodeBlock.tsx` internals | M | Replace regex tokenizer with `shiki.codeToTokens()`. Preserve external API: `code`, `language`, `highlightLines`, `title`, `fontSize`. Lazy-load grammars. Theme: `one-dark-pro` or custom from `ThemeContext`. |
-| 6 | Verify `MarkerCodeBlock` compatibility | S | `MarkerCodeBlock` wraps `CodeBlock` — must still work with marker-driven `highlightLines`. Test Ch4_S1, Ch6_S2, Ch6_S4, Ch7_S1. |
-| 7 | Upgrade `reactflow` → `@xyflow/react` v12 | S-M | Import path migration (`reactflow` → `@xyflow/react`). Some API renames per migration guide. Update existing ReactFlow usage. |
+| 3 | ~~Apply annotations to demo slides~~ | S | Done — Ch1_S2 (circle on LLM Calls + GPUs, underline on conclusion), Ch6_S1 (bracket on Callout) |
+| 4 | ~~Install `shiki`~~ | XS | Done |
+| 5 | ~~Create `ShikiCodeBlock` component~~ | M | Done — New `ShikiCodeBlock.tsx` with async shiki singleton, same API as `CodeBlock`. Kept `CodeBlock` untouched. Showcase slide added (CS_S12). |
+| 6 | ~~Verify `MarkerCodeBlock` compatibility~~ | S | Done — `MarkerCodeBlock` wraps `CodeBlock` (unchanged), still works. |
+| 7 | ~~Upgrade `reactflow` → `@xyflow/react` v12~~ | S-M | Done — Import path + CSS path updated in Chapter2.tsx. All APIs identical. |
 | 8 | Integration tests | S | CodeBlock rendering accuracy, annotation trigger/hide, ReactFlow v12 smoke test |
 
 ## New Files
 
 | File | Purpose |
 |------|---------|
-| `src/framework/components/AnnotateAtMarker.tsx` | Marker-driven `react-rough-notation` wrapper |
+| `src/framework/components/reveal/AnnotateAtMarker.tsx` | Marker-driven `react-rough-notation` wrapper |
+| `src/framework/components/ShikiCodeBlock.tsx` | Shiki-powered code block (same API as CodeBlock) |
 
 ## Modified Files
 

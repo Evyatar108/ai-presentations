@@ -14,6 +14,7 @@ import {
   FieldCard,
   MarkerDim,
   MarkerCodeBlock,
+  AnnotateAtMarker,
   useMarker,
   monoText,
   typography,
@@ -71,17 +72,19 @@ const Ch6_S1_PromptOverviewComponent: React.FC = () => {
       </Reveal>
 
       <Reveal from={2} animation={fadeUp} style={{ marginTop: '1.25rem' }}>
-        <Callout variant="info" icon="">
-          <p style={{
-            ...typography.body,
-            fontSize: 14,
-            color: theme.colors.textPrimary,
-            margin: 0,
-            fontStyle: 'italic'
-          }}>
-            Rules & constraints up front, then a precise algorithm, then quality & safety guidelines, and finally self-validation — all processed in a single pass.
-          </p>
-        </Callout>
+        <AnnotateAtMarker at="single-pass" type="bracket" brackets="left" color={theme.colors.accent}>
+          <Callout variant="info" icon="">
+            <p style={{
+              ...typography.body,
+              fontSize: 14,
+              color: theme.colors.textPrimary,
+              margin: 0,
+              fontStyle: 'italic'
+            }}>
+              Rules & constraints up front, then a precise algorithm, then quality & safety guidelines, and finally self-validation — all processed in a single pass.
+            </p>
+          </Callout>
+        </AnnotateAtMarker>
       </Reveal>
     </SlideContainer>
   );

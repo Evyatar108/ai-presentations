@@ -12,6 +12,7 @@ import {
   CS_S9_MarkerCard,
   CS_S10_RevealCarousel,
   CS_S11_AnnotateAtMarker,
+  CS_S12_ShikiCodeBlock,
 } from './chapters/Chapter0';
 
 /**
@@ -29,4 +30,5 @@ export const allSlides: SlideComponentWithMetadata[] = [
   CS_S9_MarkerCard,
   CS_S10_RevealCarousel,
   CS_S11_AnnotateAtMarker,
+  CS_S12_ShikiCodeBlock,
 ];

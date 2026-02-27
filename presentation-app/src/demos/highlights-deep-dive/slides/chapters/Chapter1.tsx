@@ -9,6 +9,7 @@ import {
   TestimonialCard,
   Reveal,
   MarkerDim,
+  AnnotateAtMarker,
   typography,
   layouts,
   cardStyle,
@@ -168,8 +169,12 @@ const Ch1_S2_COGSProblemComponent: React.FC = () => {
   return (
     <SlideContainer maxWidth={900}>
       <Reveal from={0} animation={fadeUp} style={{ ...layouts.flexRow('1.5rem'), marginBottom: '2rem' }}>
-        <MetricTile label="LLM Calls" after="4" note="Sequential pipeline" />
-        <MetricTile label="Projected GPUs" after="~600" note="A100 GPUs" />
+        <AnnotateAtMarker at="llm-calls" type="circle" color={theme.colors.error}>
+          <MetricTile label="LLM Calls" after="4" note="Sequential pipeline" />
+        </AnnotateAtMarker>
+        <AnnotateAtMarker at="gpu-count" type="circle" color={theme.colors.warning}>
+          <MetricTile label="Projected GPUs" after="~600" note="A100 GPUs" />
+        </AnnotateAtMarker>
         <MetricTile label="Status" after="Capacity Blocker" note="Blocking GA rollout" />
       </Reveal>
 
@@ -184,7 +189,9 @@ const Ch1_S2_COGSProblemComponent: React.FC = () => {
       <Reveal from={2} animation={fadeUp}>
         <div style={cardStyle('error', { textAlign: 'center' })}>
           <p style={{ ...typography.body, margin: 0, fontWeight: 600, color: theme.colors.error }}>
-            The fix had to come from prompt engineering
+            <AnnotateAtMarker at="prompt-fix" type="underline" color={theme.colors.error}>
+              The fix had to come from prompt engineering
+            </AnnotateAtMarker>
           </p>
         </div>
       </Reveal>
