@@ -1004,7 +1004,7 @@ import { ShimmerOverlay } from '@framework';
 
 ### GlowBorder
 
-Wrapper that renders a pulsing gradient halo behind its children. Glow is visible but static when reduced motion is active.
+Wrapper that renders a pulsing gradient halo behind its children. Uses `display: grid` so children stretch to fill the wrapper (works correctly as a flex child). Glow is visible but static when reduced motion is active.
 
 **Source:** `src/framework/components/effects/GlowBorder.tsx`
 

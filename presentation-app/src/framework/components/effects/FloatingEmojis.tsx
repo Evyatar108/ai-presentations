@@ -43,13 +43,11 @@ export const FloatingEmojis: React.FC<FloatingEmojisProps> = ({
         <motion.div
           key={i}
           initial={{
-            x: `${10 + (i * (80 / Math.max(emojis.length - 1, 1)))}%`,
-            y: '110%',
             opacity: 0,
             rotate: 0,
           }}
           animate={{
-            y: '-10%',
+            y: [0, -900],
             opacity: [0, 0.6, 0],
             rotate: 360,
           }}
@@ -61,6 +59,8 @@ export const FloatingEmojis: React.FC<FloatingEmojisProps> = ({
           }}
           style={{
             position: 'absolute',
+            left: `${10 + (i * (80 / Math.max(emojis.length - 1, 1)))}%`,
+            bottom: -50,
             fontSize: size,
             pointerEvents: 'none',
           }}

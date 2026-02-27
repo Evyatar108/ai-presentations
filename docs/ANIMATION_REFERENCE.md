@@ -187,7 +187,7 @@ import { ShimmerOverlay } from '@framework';
 
 ### GlowBorder
 
-Pulsing gradient halo wrapper. Static glow when reduced motion is active.
+Pulsing gradient halo wrapper. Uses `display: grid` so children stretch to fill the wrapper. Static glow when reduced motion is active.
 
 ```tsx
 import { GlowBorder } from '@framework';

@@ -46,13 +46,9 @@ export const FloatingParticles: React.FC<FloatingParticlesProps> = ({
       {[...Array(count)].map((_, i) => (
         <motion.div
           key={i}
-          initial={{
-            x: `${(((i * 37 + 13) % 100))}%`,
-            y: `${(((i * 53 + 7) % 100))}%`,
-            opacity: 0,
-          }}
+          initial={{ opacity: 0 }}
           animate={{
-            y: [`${(((i * 53 + 7) % 100))}%`, `${(((i * 71 + 29) % 100))}%`],
+            y: [0, 100 + ((i * 71 + 29) % 200)],
             opacity: [0, 0.3, 0],
           }}
           transition={{
@@ -63,6 +59,8 @@ export const FloatingParticles: React.FC<FloatingParticlesProps> = ({
           }}
           style={{
             position: 'absolute',
+            left: `${((i * 37 + 13) % 100)}%`,
+            top: `${((i * 53 + 7) % 100)}%`,
             width: size,
             height: size,
             borderRadius: '50%',

@@ -18,9 +18,9 @@ export interface GlowBorderProps {
 /**
  * Wrapper that renders a pulsing gradient halo behind its children.
  *
- * The glow animates opacity between 0.2 and 0.5. Content gets `position: relative; zIndex: 1`
- * to sit above the glow layer. When reduced motion is active, the glow is visible but static
- * at 0.35 opacity.
+ * The glow animates opacity between 0.2 and 0.5. When reduced motion is active, the glow is
+ * visible but static at 0.35 opacity. Uses `display: grid` so children stretch to fill the
+ * wrapper (important when GlowBorder is a flex child).
  *
  * @example
  * ```tsx
@@ -45,7 +45,7 @@ export const GlowBorder: React.FC<GlowBorderProps> = ({
   const gradient = `linear-gradient(135deg, ${palette.join(', ')})`;
 
   return (
-    <div style={{ position: 'relative', ...style }}>
+    <div style={{ position: 'relative', isolation: 'isolate', display: 'grid', ...style }}>
       <motion.div
         animate={reduced ? {} : { opacity: [0.2, 0.5, 0.2] }}
         transition={reduced ? undefined : { duration: 3, repeat: Infinity }}
@@ -55,14 +55,12 @@ export const GlowBorder: React.FC<GlowBorderProps> = ({
           background: gradient,
           borderRadius,
           filter: `blur(${blur}px)`,
-          zIndex: 0,
+          zIndex: -1,
           pointerEvents: 'none',
           opacity: reduced ? 0.35 : undefined,
         }}
       />
-      <div style={{ position: 'relative', zIndex: 1 }}>
-        {children}
-      </div>
+      {children}
     </div>
   );
 };
