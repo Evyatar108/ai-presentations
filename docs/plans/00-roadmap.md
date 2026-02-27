@@ -2,11 +2,15 @@
 
 ## Overview
 
-This document aggregates eight strategic initiatives for the presentation framework. These are distinct from the tactical feature list in [`docs/FUTURE_ENHANCEMENTS.md`](../FUTURE_ENHANCEMENTS.md) — initiative 01 covers package research and visual enhancements; initiatives 02-08 are architectural and infrastructure investments.
+This document aggregates strategic initiatives for the presentation framework. These are distinct from the tactical feature list in [`docs/FUTURE_ENHANCEMENTS.md`](../FUTURE_ENHANCEMENTS.md) — initiatives 01a–01d cover package research and visual enhancements; initiatives 02-08 are architectural and infrastructure investments.
 
 | # | Initiative | Document | Size | Status |
 |---|-----------|----------|------|--------|
-| 1 | [Packages & Enhancements](#1-packages--enhancements) | [`01-packages-and-enhancements.md`](./01-packages-and-enhancements.md) | M-L | Proposed |
+| — | [Packages Research](#packages-research-reference) | [`01-packages-research.md`](./01-packages-research.md) | — | Reference |
+| 1a | [Visual Components](#1a-visual-components) | [`01a-visual-components.md`](./01a-visual-components.md) | M | Proposed |
+| 1b | [Boilerplate Reduction](#1b-boilerplate-reduction) | [`01b-boilerplate-reduction.md`](./01b-boilerplate-reduction.md) | S-M | Proposed |
+| 1c | [Must-Have Packages](#1c-must-have-packages) | [`01c-must-have-packages.md`](./01c-must-have-packages.md) | M | Proposed |
+| 1d | [Nice-to-Have Packages](#1d-nice-to-have-packages) | [`01d-nice-to-have-packages.md`](./01d-nice-to-have-packages.md) | S-M | Proposed (Deferred) |
 | 2 | [Config Unification](#2-config-unification) | [`02-config-unification.md`](./02-config-unification.md) | S | Proposed |
 | 3 | [Cloud GPU](#3-cloud-gpu) | [`03-cloud-gpu.md`](./03-cloud-gpu.md) | M | Proposed |
 | 4 | [Azure Deployment](#4-azure-deployment) | [`04-azure-deployment.md`](./04-azure-deployment.md) | M | Proposed |
@@ -29,26 +33,39 @@ Each initiative is scored 1-5 on five dimensions:
 
 | Initiative | Value | Effort | Risk | Reversibility | Independence | **Weighted Score** |
 |-----------|-------|--------|------|---------------|-------------|-------------------|
-| Packages & Enhancements (01) | 5 | 4 | 5 | 5 | 5 | **4.8** |
+| Visual Components (01a) | 5 | 4 | 5 | 5 | 5 | **4.8** |
+| Boilerplate Reduction (01b) | 4 | 5 | 5 | 5 | 5 | **4.8** |
 | Config Unification (02) | 3 | 5 | 5 | 5 | 5 | **4.5** |
 | Cloud GPU (03) | 4 | 4 | 4 | 5 | 5 | **4.4** |
+| Must-Have Packages (01c) | 4 | 4 | 4 | 5 | 4 | **4.2** |
 | Azure Deployment (04) | 4 | 4 | 4 | 5 | 4 | **4.2** |
 | Azure Production (05) | 3 | 4 | 4 | 5 | 3 | **3.8** |
 | Content Pipeline (06) | 4 | 4 | 3 | 5 | 2 | **3.6** |
 | Slide Variants (07) | 3 | 3 | 3 | 4 | 4 | **3.4** |
+| Nice-to-Have Packages (01d) | 3 | 4 | 4 | 5 | 5 | **4.1** |
 | Repo Split (08) | 4 | 2 | 2 | 2 | 2 | **2.4** |
 
 *Weighted Score = 0.25 &times; Value + 0.25 &times; Effort + 0.15 &times; Risk + 0.15 &times; Reversibility + 0.20 &times; Independence*
 
+*01d scores well numerically but is deferred — it lacks immediate application and should be installed per-demo when the need arises.*
+
 ## Recommended Implementation Order
 
-### 1. Packages & Enhancements (01) — Start Now
+### 1a. Visual Components (01a) — Start Now
 
-**Why first**: Highest weighted score (4.8). Directly improves the flagship demo's visual impact — the thing audiences actually see. Phase 1 requires zero new dependencies (pure Framer Motion + SVG), so there's no risk or bundle cost. New framework components (`CircularProgress`, `AnimatedHeading`, `AnimatedCheckmark`, `AnimatedArrow`) benefit all future demos too. Completely independent of infrastructure work.
+**Why first**: Highest visual impact on the flagship demo. Zero new dependencies — pure Framer Motion + SVG. New framework components (`CircularProgress`, `AnimatedHeading`, `AnimatedCheckmark`, `AnimatedArrow`) benefit all future demos. Completely independent of infrastructure work.
 
-**Timeline**: ~1-2 weeks (3 internal phases)
+**Timeline**: ~3-4 sessions
 **Depends on**: Nothing — fully independent
-**Parallel with**: Can overlap with Config Unification (02) or any infrastructure initiative
+**Parallel with**: Boilerplate Reduction (01b), Config Unification (02)
+
+### 1b. Boilerplate Reduction (01b) — Start Now (Parallel with 01a)
+
+**Why now**: Zero new dependencies. Eliminates ~825 lines of repeated patterns across 42 instances in the flagship demo. Makes subsequent package integration (01c) touch less code. `MarkerCard` and `RevealCarousel` make new demos significantly faster to author.
+
+**Timeline**: ~2 sessions
+**Depends on**: Nothing — fully independent
+**Parallel with**: Visual Components (01a)
 
 ### 2. Config Unification (02) — Day 1 Prerequisite for Infrastructure
 
@@ -71,6 +88,13 @@ Each initiative is scored 1-5 on five dimensions:
 **Timeline**: ~1-1.5 weeks (Phase 1 can start day 1, overlapping with Cloud GPU)
 **Depends on**: Config Unification (02) for `VITE_*` pattern
 
+### 1c. Must-Have Packages (01c) — After 01a/01b
+
+**Why here**: Benefits from 01b completing first (less code to update after `MarkerCard` refactoring). `react-rough-notation` annotations, `shiki` CodeBlock rewrite, and `@xyflow/react` v12 are high-value, low-risk additions.
+
+**Timeline**: ~3-4 sessions
+**Depends on**: Benefits from 01b (soft dependency)
+
 ### 5. Azure Production Enhancements (05) — After Core Deployment
 
 **Why here**: Error reporting and offline support are production-quality polish. They depend on Azure being deployed (04) and MP3 conversion being in place (04, Phase 3). Can be deferred until the deployed SPA sees real usage.
@@ -92,6 +116,13 @@ Each initiative is scored 1-5 on five dimensions:
 **Timeline**: ~1-1.5 weeks
 **Depends on**: Nothing technically, but benefits from Cloud GPU for faster TTS iteration
 
+### 1d. Nice-to-Have Packages (01d) — Deferred (Per-Demo)
+
+**Why deferred**: These packages (`@visx/*`, `react-type-animation`, `lottie-react`) are best justified by specific demo needs. Install them when building the demo that needs them, not speculatively.
+
+**Timeline**: ~2-3 sessions per demo
+**Depends on**: Nothing — fully independent, install on demand
+
 ### 8. Repository Split (08) — Last
 
 **Why last**: Most disruptive — touches every import path, splits the package.json, restructures the entire project. Should only be done when the API surface is stable (i.e., after Slide Variants) and when there's a concrete need for a second demo project.
@@ -102,10 +133,20 @@ Each initiative is scored 1-5 on five dimensions:
 ## Dependency Graph
 
 ```
-Packages & Enhancements (01) ──── NO DEPENDENCIES ──── START NOW
-  Phase 1: Pure Framer Motion + SVG (zero new deps)
-  Phase 2: Must-have packages (rough-notation, shiki, xyflow v12)
-  Phase 3: Nice-to-have packages (visx, type-animation, lottie)
+Visual Components (01a) ────── NO DEPENDENCIES ────── START NOW
+  CircularProgress, AnimatedHeading, AnimatedCheckmark, AnimatedArrow
+  Graduated gauge, animated bars (inline)
+
+Boilerplate Reduction (01b) ── NO DEPENDENCIES ────── START NOW (parallel with 01a)
+  MarkerCard, RevealCarousel, cardStyle() overrides, gradientBadge(), monoText()
+
+Must-Have Packages (01c) ──── benefits from 01b ──── AFTER 01a/01b
+  react-rough-notation + AnnotateAtMarker
+  shiki CodeBlock rewrite
+  @xyflow/react v12 upgrade
+
+Nice-to-Have Packages (01d) ─ NO DEPENDENCIES ────── DEFERRED (per-demo)
+  @visx/*, react-type-animation, lottie-react
 
                     ┌─── can run in parallel ───┐
                     ▼                            ▼
@@ -137,7 +178,9 @@ Repo Split (08) ─────────────────────�
 ```
 
 **Hard dependencies:**
-- Packages & Enhancements (01) has **no dependencies** — fully independent of infrastructure
+- Visual Components (01a) and Boilerplate Reduction (01b) have **no dependencies** — fully independent
+- Must-Have Packages (01c) benefits from 01b (soft dependency — less code to touch)
+- Nice-to-Have Packages (01d) has **no dependencies** — install per-demo
 - Azure Production (05) requires Azure Deployment (04)
 - Content Pipeline (06) requires Cloud GPU (03) + Azure Deployment Phase 2 (04)
 - Repo Split (08) should wait for Slide Variants (07) for API surface stability
@@ -146,23 +189,30 @@ Repo Split (08) ─────────────────────�
 - Config Unification (02) benefits all infrastructure initiatives but technically doesn't block any
 - Cloud GPU (03) running makes Slide Variants (07) development faster (remote TTS)
 - Azure Deployment (04) is smoother before Repo Split (08) — one build pipeline to configure
-- Packages & Enhancements Phase 2 (shiki CodeBlock rewrite) should land before Slide Variants (07) to avoid reworking CodeBlock twice
+- Must-Have Packages (01c) shiki CodeBlock rewrite should land before Slide Variants (07) to avoid reworking CodeBlock twice
 
 ## Phasing Suggestions
 
-### Phase 0: Visual Enhancements (Weeks 1-2) — START HERE
+### Phase 0: Visual Enhancements + Boilerplate (Weeks 1-2) — START HERE
 
-Build new framework components and enhance the flagship demo. Three internal phases:
+Build new framework components, reduce boilerplate, and enhance the flagship demo:
 
-| Phase | Packages & Enhancements (01) | Scope |
-|-------|------------------------------|-------|
-| 01-P1 | `CircularProgress`, `AnimatedHeading`, `AnimatedCheckmark`, `AnimatedArrow` | Zero new deps — pure Framer Motion + SVG |
-| 01-P2 | `react-rough-notation`, `shiki` CodeBlock rewrite, `@xyflow/react` v12 | Must-have packages |
-| 01-P3 | `@visx/*`, `react-type-animation`, `lottie-react` (as needed per demo) | Nice-to-have packages |
+| Sub-Plan | Scope | Parallel? |
+|----------|-------|-----------|
+| [01a — Visual Components](./01a-visual-components.md) | `CircularProgress`, `AnimatedHeading`, `AnimatedCheckmark`, `AnimatedArrow`, graduated gauge, animated bars | Yes — 01a and 01b can run in parallel |
+| [01b — Boilerplate Reduction](./01b-boilerplate-reduction.md) | `MarkerCard`, `RevealCarousel`, `cardStyle()` overrides, `gradientBadge()`, `monoText()`, `StatusLabel` | Yes — 01a and 01b can run in parallel |
 
-Apply to `highlights-deep-dive`: Ch0 title, Ch1 annotations, Ch2 pipeline flow, Ch7 checkmarks, Ch9 progress rings, Ch10 closing.
+Apply to `highlights-deep-dive`: Ch0 title, Ch1 arrows + cards, Ch2 pipeline flow, Ch4 gauge + carousel, Ch6 cards + carousel, Ch7 checkmarks + cards, Ch8 cards, Ch9 progress rings + bars, Ch10 closing.
 
-**Outcome**: Flagship demo has polished visual effects. New reusable components available for all future demos. Documented in ANIMATION_REFERENCE.md.
+**Outcome**: Flagship demo has polished visual effects. ~825 lines of boilerplate eliminated. New reusable components available for all future demos. Documented in ANIMATION_REFERENCE.md and COMPONENT_CATALOG.md.
+
+### Phase 0.5: Must-Have Packages (Weeks 2-3)
+
+| Sub-Plan | Scope |
+|----------|-------|
+| [01c — Must-Have Packages](./01c-must-have-packages.md) | `react-rough-notation` + `<AnnotateAtMarker>`, `shiki` CodeBlock rewrite, `@xyflow/react` v12 upgrade |
+
+**Outcome**: Hand-drawn annotations synced to narration. VS Code-quality syntax highlighting. ReactFlow upgraded with dark mode and better types.
 
 ### Phase 1: Foundation (Day 1, can overlap with Phase 0)
 
@@ -219,11 +269,23 @@ Only pursue if a second demo project is created:
 - Create template repository for new demo projects
 - Set up cross-repo CI/CD
 
+### Deferred: Nice-to-Have Packages (01d)
+
+Install per-demo when the need arises:
+
+| Package | Install When |
+|---------|-------------|
+| `@visx/*` | Building a metrics dashboard or chart-heavy demo |
+| `react-type-animation` | Building a terminal/CLI or code generation demo |
+| `lottie-react` | Adding celebration effects or polished icon animations |
+
+See [01d](./01d-nice-to-have-packages.md) for full details and demo ideas.
+
 ## Overlap with FUTURE_ENHANCEMENTS.md
 
 | This Roadmap | FUTURE_ENHANCEMENTS.md | Relationship |
 |-------------|----------------------|--------------|
-| Packages & Enhancements (01) | #4 Advanced Animations, #8 Chart/Data Visualization | 01 builds the specific components and installs the packages; FUTURE_ENHANCEMENTS tracks broader capability wishlists |
+| Visual Components (01a) + Must-Have Packages (01c) | #4 Advanced Animations, #8 Chart/Data Visualization | 01a/01c build the specific components and install the packages; FUTURE_ENHANCEMENTS tracks broader capability wishlists |
 | Slide Variants (07) | #21 A/B Testing Framework | Variants provide the component-swapping mechanism; A/B Testing adds analytics, user assignment, and statistical analysis on top |
 | Azure Deployment (04) | #3 Presentation Recording | Recording could target deployed URL instead of localhost |
 | Azure Deployment (04) | #16 Shareable Links | Deployed SPA makes shareable links actually work for external viewers |
@@ -239,6 +301,7 @@ Only pursue if a second demo project is created:
 | 2026-02-23 | Restructured into 7 docs with new numbering | Split Azure into core + production enhancements; extracted Config Unification and Content Pipeline as standalone docs; renumbered by implementation order |
 | 2026-02-23 | Added Packages & Enhancements as first-priority initiative | High visual impact on flagship demo, zero-dep Phase 1, fully independent of infrastructure — delivers audience-facing value immediately |
 | 2026-02-23 | Renumbered all docs 01-08 to match priority order | Packages & Enhancements → 01, Config → 02, Cloud GPU → 03, Azure Deploy → 04, Azure Prod → 05, Content Pipeline → 06, Slide Variants → 07, Repo Split → 08 |
+| 2026-02-25 | Split Plan 01 into 01a–01d sub-plans | Original 800-line doc mixed research with implementation. Split into: 01-packages-research.md (reference), 01a (visual components), 01b (boilerplate reduction), 01c (must-have packages), 01d (nice-to-have packages). Each sub-plan is a clear session-sized scope. |
 | | | |
 
 *Update this table as decisions are made during implementation.*

@@ -1,5 +1,12 @@
 # Package Research & Deep Dive Enhancement Audit
 
+> **Reference document.** This is the research and audit backing the Plan 01 family.
+> For actionable implementation plans, see:
+> - [`01a-visual-components.md`](./01a-visual-components.md) — Phase 1a: framework SVG/animation components (zero new deps)
+> - [`01b-boilerplate-reduction.md`](./01b-boilerplate-reduction.md) — Phase 1b: MarkerCard, RevealCarousel, style utilities (zero new deps)
+> - [`01c-must-have-packages.md`](./01c-must-have-packages.md) — Phase 2: rough-notation, shiki, xyflow v12
+> - [`01d-nice-to-have-packages.md`](./01d-nice-to-have-packages.md) — Phase 3: visx, type-animation, lottie (deferred)
+
 ## Motivation
 
 The presentation framework has rich animation support (Framer Motion, 17+ animation factories, 6 reveal components) but relies on only one external visualization library (ReactFlow v11). There are no charting, diagramming, or fancy text/particle libraries installed. The `CodeBlock` component uses a hand-rolled regex tokenizer that misses edge cases (multi-line strings, nested structures). Meanwhile, the `highlights-deep-dive` demo — the flagship 25-slide, 11-chapter presentation — has several slides that would benefit from richer visual effects.
