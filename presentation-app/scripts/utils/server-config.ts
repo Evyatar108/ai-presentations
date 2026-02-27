@@ -39,3 +39,8 @@ export function loadTtsServerUrl(): string {
 export function loadWhisperUrl(): string {
   return loadConfigField('whisper_url', 'http://localhost:5001');
 }
+
+/** Load the API key from `tts/server_config.json` (field: `api_key`). */
+export function loadApiKey(): string {
+  return loadConfigField('api_key', '');
+}

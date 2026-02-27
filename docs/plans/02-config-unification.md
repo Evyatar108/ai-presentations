@@ -1,5 +1,7 @@
 # Configuration Unification
 
+**Status: Done** (2026-02-27)
+
 ## Motivation
 
 The codebase currently has **5 separate configuration patterns** that evolved independently. All other roadmap initiatives add new config dimensions (cloud URLs, asset URLs, API keys, feature flags), and without a unified strategy the config surface will sprawl further. Establishing a clean pattern first prevents each initiative from inventing its own approach.

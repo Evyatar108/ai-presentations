@@ -49,10 +49,13 @@ describe('config', () => {
         narrationApiBaseUrl: 'http://prod:8080',
         fallbackAudioPath: '/prod/fallback.mp3',
       });
-      expect(getConfig()).toEqual({
-        narrationApiBaseUrl: 'http://prod:8080',
-        fallbackAudioPath: '/prod/fallback.mp3',
-      });
+      const config = getConfig();
+      expect(config.narrationApiBaseUrl).toBe('http://prod:8080');
+      expect(config.fallbackAudioPath).toBe('/prod/fallback.mp3');
+      // New env-derived fields retain their defaults
+      expect(config.assetBaseUrl).toBe('');
+      expect(config.ttsEnabled).toBe(true);
+      expect(config.audioFormat).toBe('wav');
     });
 
     it('last setProjectConfig wins', () => {

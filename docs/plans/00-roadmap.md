@@ -11,7 +11,7 @@ This document aggregates strategic initiatives for the presentation framework. T
 | 1b | [Boilerplate Reduction](#1b-boilerplate-reduction) | [`01b-boilerplate-reduction.md`](./01b-boilerplate-reduction.md) | S-M | **Done** |
 | 1c | [Must-Have Packages](#1c-must-have-packages) | [`01c-must-have-packages.md`](./01c-must-have-packages.md) | M | Proposed |
 | 1d | [Nice-to-Have Packages](#1d-nice-to-have-packages) | [`01d-nice-to-have-packages.md`](./01d-nice-to-have-packages.md) | S-M | Proposed (Deferred) |
-| 2 | [Config Unification](#2-config-unification) | [`02-config-unification.md`](./02-config-unification.md) | S | Proposed |
+| 2 | [Config Unification](#2-config-unification) | [`02-config-unification.md`](./02-config-unification.md) | S | **Done** |
 | 3 | [Cloud GPU](#3-cloud-gpu) | [`03-cloud-gpu.md`](./03-cloud-gpu.md) | M | Proposed |
 | 4 | [Azure Deployment](#4-azure-deployment) | [`04-azure-deployment.md`](./04-azure-deployment.md) | M | Proposed |
 | 5 | [Azure Production Enhancements](#5-azure-production-enhancements) | [`05-azure-production.md`](./05-azure-production.md) | S-M | Proposed |
@@ -304,6 +304,7 @@ See [01d](./01d-nice-to-have-packages.md) for full details and demo ideas.
 | 2026-02-25 | Split Plan 01 into 01a–01d sub-plans | Original 800-line doc mixed research with implementation. Split into: 01-packages-research.md (reference), 01a (visual components), 01b (boilerplate reduction), 01c (must-have packages), 01d (nice-to-have packages). Each sub-plan is a clear session-sized scope. |
 | 2026-02-27 | Completed Plan 01a — Visual Components | Built 4 framework components (CircularProgress, AnimatedHeading, AnimatedCheckmark, AnimatedArrow) + 2 inline enhancements (graduated gauge, animated bar chart). Showcased in new `component-showcase` demo instead of modifying `highlights-deep-dive`. Discovered pathLength animation pattern (no explicit strokeDasharray) and WSL2 reduced-motion gotcha. |
 | 2026-02-27 | Completed Plan 01b — Boilerplate Reduction | Added `cardStyle()` overrides param, `monoText()`, `gradientBadge()` utilities to SlideStyles.ts. Created `MarkerCard` (MarkerDim + themed card wrapper) and `RevealCarousel` (auto-indexed one-at-a-time carousel) components. Showcased in `component-showcase` demo (slides 8-10). Refactoring of `highlights-deep-dive` deferred to a future pass. |
+| 2026-02-27 | Completed Plan 02 — Config Unification | Established `.env` / `.env.production` / `.env.local.example` convention with `VITE_*` variable naming. Added `assetBaseUrl`, `ttsEnabled`, `audioFormat` to `FrameworkConfig` wired to `import.meta.env`. Added `loadApiKey()` to `server-config.ts`. Applied 01b utilities (`monoText`, `cardStyle` overrides, `MarkerCard`) to `highlights-deep-dive` demo. |
 | | | |
 
 *Update this table as decisions are made during implementation.*

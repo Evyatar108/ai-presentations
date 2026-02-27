@@ -6,10 +6,14 @@ dist/
 .vite/
 *.tsbuildinfo
 
-# Environment files
-.env
-.env.*
-*.local
+# Environment files (secrets / machine-specific)
+.env.local
+.env.*.local
+
+# Allow checked-in .env defaults
+!presentation-app/.env
+!presentation-app/.env.production
+!presentation-app/.env.local.example
 
 # Logs
 npm-debug.log*

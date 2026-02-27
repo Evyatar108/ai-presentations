@@ -164,6 +164,27 @@ Subtitle corrections: `public/audio/{demo-id}/subtitle-corrections.json` — map
 | `tests/record.spec.ts` | Playwright test: CDP screencast → ffmpeg recording of narrated playback |
 | `playwright.config.ts` | Playwright config: `static` project (overflow/screenshot, reducedMotion) + `record` project (full animations) |
 
+## Configuration
+
+Environment variables use Vite's built-in `.env` file support. All files live in `presentation-app/`:
+
+| File | Purpose | Checked in? |
+|------|---------|-------------|
+| `.env` | Shared defaults | Yes |
+| `.env.production` | Production overrides | Yes |
+| `.env.local.example` | Template for machine-specific values | Yes |
+| `.env.local` | Machine-specific overrides | No (gitignored) |
+
+**Naming convention:**
+
+| Prefix | Scope | Example |
+|--------|-------|---------|
+| `VITE_` | Browser (exposed via `import.meta.env.VITE_*`) | `VITE_ASSET_BASE_URL`, `VITE_TTS_ENABLED`, `VITE_AUDIO_FORMAT` |
+| `TTS_` | CLI scripts only (never reaches browser) | `TTS_SERVER_URL`, `TTS_API_KEY` |
+| `APP_` | Build pipeline / CI only | `APP_AZURE_STORAGE_ACCOUNT` |
+
+Browser-side `VITE_*` variables are wired into `FrameworkConfig` in `src/framework/config.ts`. Machine-specific TTS/WhisperX server URLs and API keys live in `tts/server_config.json` (not checked in), accessed via `scripts/utils/server-config.ts`.
+
 ## Conventions
 
 - Demo IDs: kebab-case (e.g., `meeting-highlights`)
