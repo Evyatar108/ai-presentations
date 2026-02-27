@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import type { DemoMetadata } from '../../demos/types';
 import { useTheme } from '../../theme/ThemeContext';
 import { useReducedMotion } from '../../accessibility/ReducedMotion';
-import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
 import { HoverButton } from '../HoverButton';
 
 interface DemoCardProps {
@@ -37,15 +36,13 @@ export const DemoCard: React.FC<DemoCardProps> = ({
 }) => {
   const theme = useTheme();
   const { reduced } = useReducedMotion();
-  const { ref: ioRef, hasIntersected } = useIntersectionObserver({ threshold: 0.1 });
   const slideBreakdown = demo.durationInfo?.slideBreakdown;
 
   return (
     <motion.div
-      ref={ioRef}
       data-demo-id={demo.id}
       initial={reduced ? false : { opacity: 0, y: 20 }}
-      animate={reduced || hasIntersected ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: reduced ? 0 : Math.min(index % 3, 2) * 0.08 }}
       onHoverStart={() => onHover(demo.id)}
       onHoverEnd={() => onHover(null)}
