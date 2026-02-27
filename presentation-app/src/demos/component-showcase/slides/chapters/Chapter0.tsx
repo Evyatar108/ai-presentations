@@ -16,6 +16,12 @@ import {
   AnimatedHeading,
   AnimatedCheckmark,
   AnimatedArrow,
+  MarkerCard,
+  RevealCarousel,
+  Reveal,
+  cardStyle,
+  monoText,
+  gradientBadge,
 } from '@framework';
 
 /**
@@ -750,4 +756,283 @@ export const CS_S7_AnimatedBarChart = defineSlide({
     ],
   },
   component: AnimatedBarChartComponent,
+});
+
+// ─── Slide 8: Style Utilities ────────────────────────────────────────────────
+
+const StyleUtilitiesComponent: React.FC = () => {
+  const theme = useTheme();
+  const { isSegmentVisible } = useSegmentedAnimation();
+
+  return (
+    <SlideContainer>
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '2rem',
+        maxWidth: 900,
+      }}>
+        <AnimatedHeading text="Style Utilities" as="h2" style={{ fontSize: '2.8rem' }} />
+
+        {isSegmentVisible(1) && (
+          <motion.div
+            variants={fadeUp(false)}
+            initial="hidden"
+            animate="visible"
+            style={{ width: '100%' }}
+          >
+            <h3 style={{ color: theme.colors.textSecondary, fontSize: '1.1rem', marginBottom: '0.75rem' }}>
+              cardStyle() with overrides
+            </h3>
+            <div style={{ display: 'flex', gap: '1rem' }}>
+              <div style={cardStyle('primary', { padding: '1.5rem', flex: 1, textAlign: 'center' })}>
+                <span style={{ color: theme.colors.textPrimary }}>Primary + padding override</span>
+              </div>
+              <div style={cardStyle('success', { borderRadius: 20, flex: 1, textAlign: 'center' })}>
+                <span style={{ color: theme.colors.textPrimary }}>Success + rounded</span>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {isSegmentVisible(2) && (
+          <motion.div
+            variants={fadeUp(false)}
+            initial="hidden"
+            animate="visible"
+            style={{ width: '100%' }}
+          >
+            <h3 style={{ color: theme.colors.textSecondary, fontSize: '1.1rem', marginBottom: '0.75rem' }}>
+              monoText()
+            </h3>
+            <div style={cardStyle('default', { display: 'flex', flexDirection: 'column', gap: '0.5rem' })}>
+              <span style={{ ...monoText(), color: theme.colors.primary }}>monoText() — 13px / 600</span>
+              <span style={{ ...monoText(16, 400), color: theme.colors.textSecondary }}>monoText(16, 400)</span>
+              <span style={{ ...monoText(11, 700), color: theme.colors.success }}>monoText(11, 700)</span>
+            </div>
+          </motion.div>
+        )}
+
+        {isSegmentVisible(3) && (
+          <motion.div
+            variants={fadeUp(false)}
+            initial="hidden"
+            animate="visible"
+            style={{ width: '100%' }}
+          >
+            <h3 style={{ color: theme.colors.textSecondary, fontSize: '1.1rem', marginBottom: '0.75rem' }}>
+              gradientBadge()
+            </h3>
+            <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <div style={gradientBadge()}>✓</div>
+                <span style={{ color: theme.colors.textSecondary, fontSize: '0.9rem' }}>Default (22px)</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <div style={gradientBadge(32, '#3b82f6', '#1d4ed8')}>★</div>
+                <span style={{ color: theme.colors.textSecondary, fontSize: '0.9rem' }}>Blue (32px)</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <div style={gradientBadge(28, '#f59e0b', '#d97706')}>!</div>
+                <span style={{ color: theme.colors.textSecondary, fontSize: '0.9rem' }}>Amber (28px)</span>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        <ContentCard>
+          <code style={{
+            fontSize: '0.9rem',
+            color: theme.colors.textSecondary,
+            fontFamily: 'monospace',
+          }}>
+            {"cardStyle('primary', { padding: '2rem' })  |  monoText(14)  |  gradientBadge(28)"}
+          </code>
+        </ContentCard>
+      </div>
+    </SlideContainer>
+  );
+};
+
+export const CS_S8_StyleUtilities = defineSlide({
+  metadata: {
+    chapter: 0,
+    slide: 8,
+    title: 'Style Utilities',
+    audioSegments: [
+      { id: 0 },
+      { id: 1 },
+      { id: 2 },
+      { id: 3 },
+    ],
+  },
+  component: StyleUtilitiesComponent,
+});
+
+// ─── Slide 9: MarkerCard ─────────────────────────────────────────────────────
+
+const MarkerCardComponent: React.FC = () => {
+  const theme = useTheme();
+
+  return (
+    <SlideContainer>
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '2rem',
+        maxWidth: 900,
+      }}>
+        <AnimatedHeading text="MarkerCard" as="h2" style={{ fontSize: '2.8rem' }} />
+
+        <p style={{
+          color: theme.colors.textSecondary,
+          fontSize: '1.1rem',
+          textAlign: 'center',
+          maxWidth: 600,
+          lineHeight: 1.6,
+        }}>
+          Combines MarkerDim + themed card in one component.
+          In narrated mode, cards dim until their marker is reached.
+          In manual mode (no markers), all cards show at full opacity.
+        </p>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem', width: '100%' }}>
+          <MarkerCard marker="extract" icon="🔍" title="Extraction" variant="primary">
+            <span style={{ color: theme.colors.textSecondary, fontSize: '0.95rem' }}>
+              Extracts entities from transcript
+            </span>
+          </MarkerCard>
+          <MarkerCard marker="transform" icon="⚙️" title="Transform" variant="success">
+            <span style={{ color: theme.colors.textSecondary, fontSize: '0.95rem' }}>
+              Maps raw data to structured output
+            </span>
+          </MarkerCard>
+          <MarkerCard marker="validate" icon="✅" title="Validate" variant="warning">
+            <span style={{ color: theme.colors.textSecondary, fontSize: '0.95rem' }}>
+              Runs quality checks on results
+            </span>
+          </MarkerCard>
+          <MarkerCard marker="output" icon="📤" title="Output" variant="default">
+            <span style={{ color: theme.colors.textSecondary, fontSize: '0.95rem' }}>
+              Delivers final structured JSON
+            </span>
+          </MarkerCard>
+        </div>
+
+        <ContentCard>
+          <code style={{
+            fontSize: '0.9rem',
+            color: theme.colors.textSecondary,
+            fontFamily: 'monospace',
+          }}>
+            {'<MarkerCard marker="id" icon="🔍" title="Step" variant="primary">...</MarkerCard>'}
+          </code>
+        </ContentCard>
+      </div>
+    </SlideContainer>
+  );
+};
+
+export const CS_S9_MarkerCard = defineSlide({
+  metadata: {
+    chapter: 0,
+    slide: 9,
+    title: 'MarkerCard',
+    audioSegments: [{ id: 0 }],
+  },
+  component: MarkerCardComponent,
+});
+
+// ─── Slide 10: RevealCarousel ────────────────────────────────────────────────
+
+const CAROUSEL_ITEMS = [
+  { title: 'Step 1: Extract', body: 'Parse the raw transcript and identify key entities.', color: '#3b82f6' },
+  { title: 'Step 2: Classify', body: 'Categorize entities by type — action items, decisions, topics.', color: '#8b5cf6' },
+  { title: 'Step 3: Summarize', body: 'Generate concise summaries for each category.', color: '#10b981' },
+  { title: 'Step 4: Deliver', body: 'Format and deliver the structured output.', color: '#f59e0b' },
+];
+
+const RevealCarouselComponent: React.FC = () => {
+  const theme = useTheme();
+  const { isSegmentVisible } = useSegmentedAnimation();
+
+  return (
+    <SlideContainer>
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '2rem',
+        maxWidth: 700,
+      }}>
+        <AnimatedHeading text="RevealCarousel" as="h2" style={{ fontSize: '2.8rem' }} />
+
+        <Reveal from={0}>
+          <p style={{
+            color: theme.colors.textSecondary,
+            fontSize: '1.1rem',
+            textAlign: 'center',
+            lineHeight: 1.6,
+          }}>
+            Auto-wires from/until indices — one child visible at a time.
+            Step through with arrow keys.
+          </p>
+        </Reveal>
+
+        {isSegmentVisible(1) && (
+          <div style={{ width: '100%' }}>
+            <RevealCarousel startFrom={1} animation={fadeUp}>
+              {CAROUSEL_ITEMS.map((item) => (
+                <div
+                  key={item.title}
+                  style={{
+                    ...cardStyle('default', {
+                      padding: '2rem',
+                      borderLeft: `4px solid ${item.color}`,
+                      textAlign: 'center',
+                    }),
+                  }}
+                >
+                  <h3 style={{ color: item.color, fontSize: '1.5rem', margin: '0 0 0.75rem' }}>
+                    {item.title}
+                  </h3>
+                  <p style={{ color: theme.colors.textSecondary, fontSize: '1.1rem', margin: 0, lineHeight: 1.6 }}>
+                    {item.body}
+                  </p>
+                </div>
+              ))}
+            </RevealCarousel>
+          </div>
+        )}
+
+        <ContentCard>
+          <code style={{
+            fontSize: '0.9rem',
+            color: theme.colors.textSecondary,
+            fontFamily: 'monospace',
+          }}>
+            {'<RevealCarousel startFrom={1} animation={fadeUp}>{items}</RevealCarousel>'}
+          </code>
+        </ContentCard>
+      </div>
+    </SlideContainer>
+  );
+};
+
+export const CS_S10_RevealCarousel = defineSlide({
+  metadata: {
+    chapter: 0,
+    slide: 10,
+    title: 'RevealCarousel',
+    audioSegments: [
+      { id: 0 },
+      { id: 1 },
+      { id: 2 },
+      { id: 3 },
+      { id: 4 },
+    ],
+  },
+  component: RevealCarouselComponent,
 });

@@ -236,6 +236,33 @@ How it works:
 
 > See [TROUBLESHOOTING.md — Content jumps twice during RevealSequence transitions](TROUBLESHOOTING.md#content-jumps-twice-during-revealsequence-transitions) for the design rationale and debugging tips.
 
+### RevealCarousel — auto-indexed one-at-a-time carousel
+
+`<RevealCarousel>` auto-wires `<Reveal from={i} until={i}>` for each child inside a `<RevealSequence>`, creating a one-at-a-time carousel with zero manual index arithmetic.
+
+```tsx
+import { RevealCarousel, fadeUp } from '@framework';
+
+// Each child is shown one at a time, starting from segment 2
+<RevealCarousel startFrom={2} animation={fadeUp}>
+  <div>Shown on segment 2</div>
+  <div>Shown on segment 3</div>
+  <div>Shown on segment 4</div>
+</RevealCarousel>
+
+// Custom exit animation and delay
+<RevealCarousel startFrom={0} animation={fadeUp} exitAnimation={fadeDown} delay={300}>
+  {items.map(item => <Card key={item.id}>{item.content}</Card>)}
+</RevealCarousel>
+```
+
+Props:
+- `children: ReactNode[]` — items to cycle through (each gets its own segment)
+- `startFrom?: number` — segment offset for the first child (default: `0`)
+- `animation?: RevealAnimation` — entrance animation
+- `exitAnimation?: RevealAnimation` — exit animation
+- `delay?: number` — ms between exit completing and entrance starting (default: `500`)
+
 ---
 
 ## Using with `<RevealAtMarker>` (Time-Based)

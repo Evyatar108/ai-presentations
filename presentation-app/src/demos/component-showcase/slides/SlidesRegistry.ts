@@ -8,6 +8,9 @@ import {
   CS_S5_AnimatedArrow,
   CS_S6_GraduatedGauge,
   CS_S7_AnimatedBarChart,
+  CS_S8_StyleUtilities,
+  CS_S9_MarkerCard,
+  CS_S10_RevealCarousel,
 } from './chapters/Chapter0';
 
 /**
@@ -21,4 +24,7 @@ export const allSlides: SlideComponentWithMetadata[] = [
   CS_S5_AnimatedArrow,
   CS_S6_GraduatedGauge,
   CS_S7_AnimatedBarChart,
+  CS_S8_StyleUtilities,
+  CS_S9_MarkerCard,
+  CS_S10_RevealCarousel,
 ];

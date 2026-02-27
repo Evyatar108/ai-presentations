@@ -199,59 +199,68 @@ export type CardVariant = 'default' | 'primary' | 'error' | 'warning' | 'success
  * <div style={cardStyle('error')}>Error card</div>
  * ```
  */
-export const cardStyle = (variant: CardVariant = 'default'): CSSProperties => {
+export const cardStyle = (variant: CardVariant = 'default', overrides?: CSSProperties): CSSProperties => {
+  let base: CSSProperties;
   switch (variant) {
     case 'primary':
-      return {
+      base = {
         background: 'rgba(0, 183, 195, 0.06)',
         border: '1px solid rgba(0, 183, 195, 0.3)',
         borderRadius: 12,
         padding: '1rem 1.25rem',
       };
+      break;
     case 'error':
-      return {
+      base = {
         background: 'rgba(239, 68, 68, 0.1)',
         border: '2px solid rgba(239, 68, 68, 0.4)',
         borderRadius: 12,
         padding: '1.25rem',
       };
+      break;
     case 'warning':
-      return {
+      base = {
         background: 'rgba(251, 191, 36, 0.1)',
         border: '1px solid rgba(251, 191, 36, 0.3)',
         borderRadius: 12,
         padding: '1rem 1.25rem',
       };
+      break;
     case 'success':
-      return {
+      base = {
         background: 'rgba(16, 185, 129, 0.06)',
         border: '1px solid rgba(16, 185, 129, 0.4)',
         borderRadius: 12,
         padding: '1rem 1.25rem',
       };
+      break;
     default:
-      return {
+      base = {
         background: '#1e293b',
         border: '1px solid #334155',
         borderRadius: 12,
         padding: '1rem 1.25rem',
       };
   }
+  return overrides ? { ...base, ...overrides } : base;
 };
 
 /**
  * Theme-aware card factory. Use in framework components that call useTheme().
  */
-export function createCard(theme: PresentationTheme, variant: CardVariant = 'default'): CSSProperties {
+export function createCard(theme: PresentationTheme, variant: CardVariant = 'default', overrides?: CSSProperties): CSSProperties {
   const base = cardStyle(variant);
+  let themed: CSSProperties;
   if (variant === 'default') {
-    return {
+    themed = {
       ...base,
       background: theme.colors.bgSurface,
       border: `1px solid ${theme.colors.bgBorder}`,
     };
+  } else {
+    themed = base;
   }
-  return base;
+  return overrides ? { ...themed, ...overrides } : themed;
 }
 
 // ============================================================================
@@ -408,3 +417,50 @@ export const badgeStyle = (options: BadgeOptions = {}): CSSProperties => {
     whiteSpace: 'nowrap',
   };
 };
+
+// ============================================================================
+// Monospace text utility
+// ============================================================================
+
+/**
+ * Monospace text style — centralizes the JetBrains Mono / Fira Code font stack.
+ * Replaces 17+ inline `fontFamily: "'JetBrains Mono', 'Fira Code', monospace"` declarations.
+ *
+ * @example
+ * ```tsx
+ * <span style={{ ...monoText(), color: '#00B7C3' }}>api_endpoint</span>
+ * <code style={monoText(11, 400)}>const x = 1;</code>
+ * ```
+ */
+export const monoText = (fontSize: number = 13, fontWeight: number = 600): CSSProperties => ({
+  fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+  fontSize,
+  fontWeight,
+});
+
+// ============================================================================
+// Gradient badge utility
+// ============================================================================
+
+/**
+ * Gradient circular badge — used for checkmark/icon indicators.
+ * Replaces 3+ inline gradient badge style definitions.
+ *
+ * @example
+ * ```tsx
+ * <div style={gradientBadge()}>✓</div>
+ * <div style={gradientBadge(32, '#3b82f6', '#1d4ed8')}>★</div>
+ * ```
+ */
+export const gradientBadge = (size: number = 22, from: string = '#10b981', to: string = '#059669'): CSSProperties => ({
+  width: size,
+  height: size,
+  borderRadius: '50%',
+  background: `linear-gradient(135deg, ${from}, ${to})`,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  fontSize: size * 0.6,
+  color: '#fff',
+  flexShrink: 0,
+});

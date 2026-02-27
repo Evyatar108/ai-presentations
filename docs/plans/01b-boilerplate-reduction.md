@@ -1,7 +1,7 @@
 # 01b: Boilerplate Reduction (Zero New Dependencies)
 
 > **Parent**: [`01-packages-research.md`](./01-packages-research.md) — Part 5
-> **Phase**: 1b | **Size**: S-M (~2 sessions) | **Status**: Proposed
+> **Phase**: 1b | **Size**: S-M (~2 sessions) | **Status**: **Done**
 
 ## Motivation
 

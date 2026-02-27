@@ -63,6 +63,10 @@ export { PipelineDiagram } from './components/PipelineDiagram';
 export type { PipelineDiagramProps, PipelineStep } from './components/PipelineDiagram';
 export { CandidateGrid } from './components/CandidateGrid';
 export type { CandidateGridProps } from './components/CandidateGrid';
+export { MarkerCard } from './components/MarkerCard';
+export type { MarkerCardProps } from './components/MarkerCard';
+export { RevealCarousel } from './components/RevealCarousel';
+export type { RevealCarouselProps } from './components/RevealCarousel';
 
 // Reveal components
 export { Reveal, RevealAtMarker, RevealGroup, RevealContext, RevealSequence, MarkerDim } from './components/reveal';
@@ -115,7 +119,9 @@ export {
   createCard,
   calloutStyle,
   createCallout,
-  badgeStyle
+  badgeStyle,
+  monoText,
+  gradientBadge
 } from './slides/SlideStyles';
 export type { CardVariant, CalloutVariant, BadgeOptions } from './slides/SlideStyles';
 export { spacing, spacingPx, radii, shadows, fontSizes } from './slides/tokens';
