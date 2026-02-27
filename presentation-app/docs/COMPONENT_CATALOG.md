@@ -30,9 +30,11 @@
 | VideoPlayer | Media | `framework/components/VideoPlayer.tsx` | Controlled video with play/pause/end |
 | RevealAtMarker | Animation | `framework/components/reveal/RevealAtMarker.tsx` | Time-based reveal driven by inline markers |
 | MarkerDim | Animation | `framework/components/reveal/MarkerDim.tsx` | Declarative marker-driven opacity dimming |
+| MarkerCard | Animation | `framework/components/MarkerCard.tsx` | MarkerDim + themed card wrapper (replaces MarkerDim + cardStyle boilerplate) |
 | MarkerCodeBlock | Data Display | `framework/components/MarkerCodeBlock.tsx` | CodeBlock with marker-driven line highlighting |
 | AnimatedCounter | Data Display | `framework/components/AnimatedCounter.tsx` | Counting-up number animation |
 | ProgressSteps | Data Visualization | `framework/components/ProgressSteps.tsx` | Horizontal step indicator with states |
+| RevealCarousel | Animation | `framework/components/RevealCarousel.tsx` | Auto-indexed one-at-a-time RevealSequence children |
 
 ---
 
@@ -114,6 +116,60 @@ import { MarkerDim } from '@framework';
 **Graceful degradation:** When alignment data is missing, content renders at full opacity (markers default to `reached: true`).
 
 **Tips:** This is the #1 replacement for the common `useMarker()` + `opacity` boilerplate. Use `at` for progressive "light-up" reveals. Use `notAt` on BeforeAfterSplit sides to dim one side when the other is focused. Nest inside `<Reveal>` for combined segment + marker control.
+
+### MarkerCard
+
+Combines `<MarkerDim>` + themed card styling into a single component. Eliminates the common `<MarkerDim at={marker}><div style={cardStyle(variant)}>...</div></MarkerDim>` boilerplate.
+
+**Source:** `src/framework/components/MarkerCard.tsx`
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `marker` | `string` | — | Marker ID; content is dimmed until this marker is reached |
+| `icon` | `ReactNode` | — | Optional icon/emoji displayed to the left of the title |
+| `title` | `string` | — | Bold title text at the top of the card |
+| `children` | `ReactNode` | — | Card body content |
+| `variant` | `CardVariant` | `'default'` | Card color variant |
+| `style` | `CSSProperties` | — | Style overrides applied to the inner card div |
+| `dimOpacity` | `number` | `0.15` | Opacity when the marker hasn't been reached |
+
+```tsx
+import { MarkerCard } from '@framework';
+
+// Simple card with marker-driven reveal
+<MarkerCard marker="pipeline" variant="primary">
+  Pipeline processes transcript data
+</MarkerCard>
+
+// Card with icon, title, and style override
+<MarkerCard marker="validation" icon="✓" title="Output Validation" style={{ borderRadius: 10 }}>
+  JSON checked for structural correctness
+</MarkerCard>
+```
+
+**When to use:** Prefer `MarkerCard` over manual `MarkerDim` + `cardStyle()` whenever the content follows the standard card pattern. Use raw `MarkerDim` when you need non-card layouts or custom wrapper elements.
+
+### RevealCarousel
+
+Auto-indexed `RevealSequence` children — each child gets sequential `from`/`until` props so only one is visible at a time. Eliminates manual index wiring and off-by-one errors.
+
+**Source:** `src/framework/components/RevealCarousel.tsx`
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode[]` | — | Array of elements to cycle through |
+| `animation` | `AnimationFactory` | — | Optional entrance animation |
+| `startFrom` | `number` | `0` | Segment offset for the first child |
+
+```tsx
+import { RevealCarousel } from '@framework';
+
+<RevealCarousel animation={fadeUp}>
+  <SlideA />  {/* visible at segment 0, hidden at 1+ */}
+  <SlideB />  {/* visible at segment 1, hidden at 2+ */}
+  <SlideC />  {/* visible at segment 2+ */}
+</RevealCarousel>
+```
 
 ---
 
@@ -688,16 +744,38 @@ Beyond components, the framework provides style factories and design tokens for 
 
 | Function | Returns | Description |
 |----------|---------|-------------|
-| `cardStyle(variant?)` | `CSSProperties` | Card with variant-colored background/border (`'default'`, `'primary'`, `'error'`, `'warning'`, `'success'`) |
+| `cardStyle(variant?, overrides?)` | `CSSProperties` | Card with variant-colored background/border (`'default'`, `'primary'`, `'error'`, `'warning'`, `'success'`). Optional `overrides` merged into base styles. |
 | `calloutStyle(variant?)` | `CSSProperties` | Left-bordered box (`'info'`, `'tip'`, `'warning'`, `'error'`, `'success'`) |
 | `badgeStyle(options?)` | `CSSProperties` | Compact tag/label (`{ color?, bg? }`) |
+| `monoText(fontSize?, fontWeight?)` | `CSSProperties` | Monospace text (`JetBrains Mono / Fira Code`). Defaults: `fontSize=13`, `fontWeight=600`. |
+| `gradientBadge(size?, from?, to?)` | `CSSProperties` | Circular gradient badge for icons/checkmarks. Defaults: `size=22`, green gradient. |
 | `circularBadge(size?)` | `CSSProperties` | Numbered circle badge |
 | `layouts.flexRow(gap?)` | `CSSProperties` | Centered flex row |
 | `layouts.flexCol(gap?)` | `CSSProperties` | Flex column |
 | `layouts.grid2Col(gap?)` | `CSSProperties` | 2-column grid |
 | `layouts.grid3Col(gap?)` | `CSSProperties` | 3-column grid |
 
-Theme-aware counterparts: `createCard(theme, variant)`, `createCallout(theme, variant)`.
+Theme-aware counterparts: `createCard(theme, variant, overrides?)`, `createCallout(theme, variant)`.
+
+**`cardStyle` with overrides** — eliminates the `{ ...cardStyle('error'), borderRadius: 10 }` spread pattern:
+
+```tsx
+// Before: spread + override
+<div style={{ ...cardStyle('error'), borderRadius: 10, textAlign: 'center' }}>
+
+// After: overrides parameter
+<div style={cardStyle('error', { borderRadius: 10, textAlign: 'center' })}>
+```
+
+**`monoText`** — centralizes the monospace font stack:
+
+```tsx
+// Before: inline font stack
+<span style={{ fontFamily: "'JetBrains Mono', 'Fira Code', monospace", fontSize: 13, fontWeight: 600 }}>
+
+// After: utility
+<span style={{ ...monoText(13), color: theme.colors.primary }}>
+```
 
 ### Design Tokens (`tokens.ts`)
 
