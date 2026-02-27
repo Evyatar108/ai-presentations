@@ -590,7 +590,7 @@ import { ProgressSteps } from '@framework';
 
 ### VideoPlayer
 
-Controlled video element with play/pause tied to segment state, optional freeze-on-end, and captions support. Supports marker-driven seeks via the `videoId` prop + `VideoSyncContext`.
+Controlled video element with play/pause tied to segment state, optional freeze-on-end, and captions support. Auto-registers with `VideoSyncContext` (when present) for marker-driven seeks using its `videoPath`, and reports its `slideKey` from `SegmentContext` for video-slide usage tracking.
 
 **Source:** `src/framework/components/VideoPlayer.tsx`
 
@@ -602,7 +602,6 @@ Controlled video element with play/pause tied to segment state, optional freeze-
 | `freezeOnEnd` | `boolean` | `true` | Keep final frame visible |
 | `ariaLabel` | `string` | — | Accessibility label |
 | `captionsSrc` | `string` | — | Path to WebVTT captions file |
-| `videoId` | `string` | — | Registers this player with `VideoSyncContext` for marker-driven seeks |
 
 ```tsx
 import { VideoPlayer } from '@framework';
@@ -614,15 +613,16 @@ import { VideoPlayer } from '@framework';
   onEnded={() => console.log('done')}
 />
 
-// With marker-driven seeks (videoId required)
+// With marker-driven seeks (auto-registers when VideoSyncContext is present)
 <VideoPlayer
   videoPath="/videos/my-demo/demo.mp4"
-  videoId="demo-vid"
   isPlaying={segment >= 0}
 />
 ```
 
-**Marker-driven seeks:** When `videoId` is provided, the player registers a seek function with `VideoSyncContext`. When a TTS marker fires (via `videoSeeks` on the segment), the video automatically seeks to the bookmarked timestamp and plays or pauses based on the trigger's `autoPlay` (defaults to `true`). Use the 📹 Videos button in the dev-mode ProgressBar to create bookmarks interactively. See `MARKERS_GUIDE.md` for the full workflow.
+**Marker-driven seeks:** When `VideoSyncContext` is present, the player automatically registers a seek function using its `videoPath` and reports its `slideKey` (from `useSegmentContextOptional()`) for usage tracking. When a TTS marker fires (via `videoSeeks` on the segment), the video automatically seeks to the bookmarked timestamp and plays or pauses based on the trigger's `autoPlay` (defaults to `true`). The `videoPath` must match the `videoPath` field in `VideoSeekTrigger` and the key in `bookmarks.json`. Use the 📹 Videos button in the dev-mode ProgressBar to create bookmarks interactively. See `MARKERS_GUIDE.md` for the full workflow.
+
+**Usage cross-references in the bookmark editor:** The 📹 Videos editor shows which slides use each video and which bookmarks are referenced by triggers. Video-slide associations come from two sources: (1) a server-side source scan of slide `.tsx` files for `videoPath` references (`/api/video-bookmarks/:demoId/source-usage`), and (2) trigger metadata (`videoSeeks`/`videoWaits` on `AudioSegment`). Source-scanned references are available immediately; trigger details include bookmark IDs, marker names, and sync patterns.
 
 ---
 

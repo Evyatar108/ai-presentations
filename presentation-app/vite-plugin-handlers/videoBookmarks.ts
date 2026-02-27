@@ -1,8 +1,9 @@
 /**
  * Video bookmark endpoint handlers:
- *   GET  /api/video-bookmarks/:demoId        → reads public/videos/{demoId}/bookmarks.json
- *   POST /api/video-bookmarks/:demoId        → writes public/videos/{demoId}/bookmarks.json
- *   GET  /api/video-bookmarks/:demoId/list   → scans public/videos/{demoId}/ for .mp4/.webm
+ *   GET  /api/video-bookmarks/:demoId              → reads public/videos/{demoId}/bookmarks.json
+ *   POST /api/video-bookmarks/:demoId              → writes public/videos/{demoId}/bookmarks.json
+ *   GET  /api/video-bookmarks/:demoId/list         → scans public/videos/{demoId}/ for .mp4/.webm
+ *   GET  /api/video-bookmarks/:demoId/source-usage → scans slide source for videoPath references
  *
  * Note: The Vite middleware path matching strips the registered prefix, so we
  * receive the remainder of the URL (starting with '/') in req.url.
@@ -59,6 +60,64 @@ export function createVideoBookmarkHandlers(ctx: HandlerContext): { path: string
         sendJson(res, 200, { files });
       } catch (error: any) {
         console.error('[video-bookmarks] list error:', error);
+        sendJson(res, 500, { success: false, error: error.message });
+      }
+      return;
+    }
+
+    if (subPath === 'source-usage') {
+      // Scan slide source files for videoPath references and associate with slide metadata
+      try {
+        const chaptersDir = path.join(projectRoot, 'src', 'demos', demoId, 'slides', 'chapters');
+        const usage: Record<string, { chapter: number; slide: number; title: string }[]> = {};
+        if (!fs.existsSync(chaptersDir)) {
+          sendJson(res, 200, { usage });
+          return;
+        }
+        const files = fs.readdirSync(chaptersDir).filter(f => /\.(tsx?|jsx?)$/.test(f));
+        for (const file of files) {
+          const src = fs.readFileSync(path.join(chaptersDir, file), 'utf-8');
+          // Find defineSlide blocks by their starting positions
+          const slideStarts: { pos: number; chapter: number; slide: number; title: string }[] = [];
+          const defineRe = /defineSlide\s*\(\s*\{/g;
+          let dm;
+          while ((dm = defineRe.exec(src)) !== null) {
+            // Search the metadata block (next ~300 chars) for chapter/slide/title
+            const region = src.slice(dm.index, dm.index + 500);
+            const chMatch = region.match(/chapter:\s*(\d+)/);
+            const slMatch = region.match(/slide:\s*(\d+)/);
+            const tiMatch = region.match(/title:\s*['"]([^'"]+)['"]/);
+            if (chMatch && slMatch) {
+              slideStarts.push({
+                pos: dm.index,
+                chapter: Number(chMatch[1]),
+                slide: Number(slMatch[1]),
+                title: tiMatch ? tiMatch[1] : '',
+              });
+            }
+          }
+          // Find all videoPath references
+          const vpRe = /videoPath\s*[=:]\s*["']([^"']+)["']/g;
+          let vm;
+          while ((vm = vpRe.exec(src)) !== null) {
+            const videoPath = vm[1];
+            // Associate with the most recent defineSlide before this position
+            let owner = slideStarts[0];
+            for (const s of slideStarts) {
+              if (s.pos <= vm.index) owner = s;
+            }
+            if (owner) {
+              if (!usage[videoPath]) usage[videoPath] = [];
+              // Avoid duplicates
+              if (!usage[videoPath].some(u => u.chapter === owner.chapter && u.slide === owner.slide)) {
+                usage[videoPath].push({ chapter: owner.chapter, slide: owner.slide, title: owner.title });
+              }
+            }
+          }
+        }
+        sendJson(res, 200, { usage });
+      } catch (error: any) {
+        console.error('[video-bookmarks] source-usage error:', error);
         sendJson(res, 500, { success: false, error: error.message });
       }
       return;

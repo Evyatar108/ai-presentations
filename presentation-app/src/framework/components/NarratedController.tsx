@@ -477,6 +477,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
           <VideoBookmarkEditorModal
             demoId={demoMetadata.id}
             initialData={bookmarksData}
+            slides={allSlides}
             onClose={() => setShowVideoBookmarkEditor(false)}
           />
         )}

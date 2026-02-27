@@ -19,15 +19,22 @@ type VideoSeekFn = (time: number, autoPlay: boolean, endTime?: number, playbackR
 
 /** Pending resume for Pattern 3: waiting for a specific clip to finish */
 interface PendingResume {
-  clipKey: string; // `${videoId}:${bookmarkId}`
+  clipKey: string; // `${videoPath}:${bookmarkId}`
 }
 
 export interface VideoSyncContextValue {
   /**
-   * Register a video element's seek function by videoId.
+   * Register a video element's seek function by video file path.
+   * Optionally pass slideKey (e.g. "Ch1:S3") to track which slides use which videos.
    * Returns an unsubscribe function to call on unmount.
    */
-  registerVideo(videoId: string, seekFn: VideoSeekFn): () => void;
+  registerVideo(videoPath: string, seekFn: VideoSeekFn, slideKey?: string): () => void;
+
+  /**
+   * Get the accumulated map of videoPath → Set<slideKey> from all registrations.
+   * Persists across slide transitions (never cleared).
+   */
+  getVideoSlideMap(): Map<string, Set<string>>;
 
   /**
    * Register narration pause/resume callbacks so VideoSyncContext can control TTS.
@@ -68,6 +75,8 @@ interface VideoSyncProviderProps {
 
 export const VideoSyncProvider: React.FC<VideoSyncProviderProps> = ({ children }) => {
   const videoRegistryRef = useRef<Map<string, VideoSeekFn>>(new Map());
+  /** Persistent accumulator: videoPath → Set<slideKey>, never cleared */
+  const videoSlideMapRef = useRef<Map<string, Set<string>>>(new Map());
   const activeSeeksRef = useRef<VideoSeekTrigger[]>([]);
   const activeWaitsRef = useRef<VideoWaitTrigger[]>([]);
   const activeBookmarksRef = useRef<VideoBookmarksFile | null>(null);
@@ -89,12 +98,22 @@ export const VideoSyncProvider: React.FC<VideoSyncProviderProps> = ({ children }
   const pendingResumeRef = useRef<PendingResume | null>(null);
 
   const registerVideo = useCallback(
-    (videoId: string, seekFn: VideoSeekFn): (() => void) => {
-      videoRegistryRef.current.set(videoId, seekFn);
+    (videoPath: string, seekFn: VideoSeekFn, slideKey?: string): (() => void) => {
+      videoRegistryRef.current.set(videoPath, seekFn);
+      if (slideKey) {
+        let keys = videoSlideMapRef.current.get(videoPath);
+        if (!keys) { keys = new Set(); videoSlideMapRef.current.set(videoPath, keys); }
+        keys.add(slideKey);
+      }
       return () => {
-        videoRegistryRef.current.delete(videoId);
+        videoRegistryRef.current.delete(videoPath);
       };
     },
+    []
+  );
+
+  const getVideoSlideMap = useCallback(
+    () => videoSlideMapRef.current,
     []
   );
 
@@ -137,23 +156,23 @@ export const VideoSyncProvider: React.FC<VideoSyncProviderProps> = ({ children }
       const fired = firedRef.current;
 
       for (const trigger of triggers) {
-        const fireKey = `${trigger.videoId}:${trigger.bookmarkId}:${trigger.atMarker}`;
+        const fireKey = `${trigger.videoPath}:${trigger.bookmarkId}:${trigger.atMarker}`;
         if (fired.has(fireKey)) continue;
 
         const markerTime = getMarkerTime(trigger.atMarker);
         if (markerTime === null || currentTime < markerTime) continue;
 
         // Marker reached — look up bookmark
-        const videoSet = bookmarks?.videos[trigger.videoId];
+        const videoSet = bookmarks?.videos[trigger.videoPath];
         const bookmark = videoSet?.bookmarks.find(b => b.id === trigger.bookmarkId);
         if (!bookmark) continue;
 
-        const seekFn = videoRegistryRef.current.get(trigger.videoId);
+        const seekFn = videoRegistryRef.current.get(trigger.videoPath);
         if (!seekFn) continue;
 
         fired.add(fireKey);
 
-        const clipKey = `${trigger.videoId}:${trigger.bookmarkId}`;
+        const clipKey = `${trigger.videoPath}:${trigger.bookmarkId}`;
 
         // Resolve endBookmarkId → endTime
         const endBookmark = trigger.endBookmarkId
@@ -198,7 +217,7 @@ export const VideoSyncProvider: React.FC<VideoSyncProviderProps> = ({ children }
       const firedWaits = firedWaitsRef.current;
 
       for (const wait of waits) {
-        const waitKey = `wait:${wait.videoId}:${wait.bookmarkId}:${wait.atMarker}`;
+        const waitKey = `wait:${wait.videoPath}:${wait.bookmarkId}:${wait.atMarker}`;
         if (firedWaits.has(waitKey)) continue;
 
         const markerTime = getMarkerTime(wait.atMarker);
@@ -206,7 +225,7 @@ export const VideoSyncProvider: React.FC<VideoSyncProviderProps> = ({ children }
 
         firedWaits.add(waitKey);
 
-        const clipKey = `${wait.videoId}:${wait.bookmarkId}`;
+        const clipKey = `${wait.videoPath}:${wait.bookmarkId}`;
         if (activeClipsRef.current.has(clipKey)) {
           // Clip still playing — pause narration and register a pending resume
           pauseNarrationRef.current?.();
@@ -220,6 +239,7 @@ export const VideoSyncProvider: React.FC<VideoSyncProviderProps> = ({ children }
 
   const value: VideoSyncContextValue = {
     registerVideo,
+    getVideoSlideMap,
     registerNarrationControl,
     setActiveSeeks,
     checkAndFireSeeks,

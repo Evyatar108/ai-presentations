@@ -20,7 +20,7 @@ npm run type-check   # TypeScript type checking (tsc --noEmit)
 npm run test         # Run tests (vitest run)
 npm run test:watch   # Run tests in watch mode
 npm run tts:generate -- --demo {id}  # Generate TTS audio for a specific demo (requires Python TTS server running)
-npm run tts:generate -- --demo {id} --segments ch1:s2:intro,ch3:s1:summary  # Regenerate specific segments only
+npm run tts:generate -- --demo {id} --segments ch1:s2:0,ch3:s1:2  # Regenerate specific segments only
 npm run tts:duration -- --demo {id}  # Calculate audio durations and auto-update metadata.ts durationInfo
 npm run tts:align -- --demo {id}     # Generate word-level alignment via WhisperX + resolve {#markers}
 npm run tts:verify -- --demo {id}    # Transcribe TTS audio via WhisperX and output side-by-side comparison
@@ -151,6 +151,10 @@ Subtitle corrections: `public/audio/{demo-id}/subtitle-corrections.json` — map
 | `tts/server_whisperx.py` | WhisperX server (transcription + forced alignment) |
 | `src/framework/utils/audioPath.ts` | Audio file path derivation (buildAudioFilePath, resolveAudioFilePath) |
 | `src/framework/utils/formatTime.ts` | Time formatting utilities (mm:ss, delta colors) |
+| `src/framework/components/VideoPlayer.tsx` | Controlled video with freeze-on-end + VideoSyncContext registration (reports slideKey) |
+| `src/framework/components/VideoBookmarkEditorModal.tsx` | 3-panel video bookmark editor with usage cross-references |
+| `src/framework/contexts/VideoSyncContext.tsx` | RAF-integrated video seek routing + video-slide usage tracking |
+| `vite-plugin-handlers/videoBookmarks.ts` | Video bookmark API: GET/POST bookmarks, GET list, GET source-usage |
 | `vite-plugin-handlers/preview-store.ts` | Preview take directory + `previews.json` I/O for TTS preview workflow |
 | `vite-plugin-audio-writer.ts` | Custom Vite plugin for /api/save-audio, /api/staleness-check, /api/narration/* endpoints |
 | `scripts/record-obs.ts` | OBS automated recording via WebSocket (signal-based completion + VTT subtitle generation) |

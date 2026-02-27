@@ -226,11 +226,12 @@ Markers can do more than reveal UI — they can also **seek a video to a specifi
 ### Author workflow
 
 1. Put your MP4 at `public/videos/{demo-id}/demo.mp4`
-2. Add `<VideoPlayer videoPath="..." videoId="demo-vid" isPlaying={segment >= 0} />` to your slide
+2. Add `<VideoPlayer videoPath="/videos/{demo-id}/demo.mp4" isPlaying={segment >= 0} />` to your slide
 3. In dev mode, open the 📹 **Videos** button in the ProgressBar toolbar
-4. Select the video, scrub to a key moment, click **📌 Add Bookmark at current time**, set an ID (e.g., `scene2`), save
-5. Add `{#scene2}` to the relevant `narrationText` and run `npm run tts:align -- --demo {id}`
-6. Add `videoSeeks` to the segment in the slide metadata:
+4. Select the video — the editor shows which slides use it (via source scan) and which bookmarks are referenced by triggers
+5. Scrub to a key moment, click **📌 Add Bookmark at current time**, set an ID (e.g., `scene2`), save
+6. Add `{#scene2}` to the relevant `narrationText` and run `npm run tts:align -- --demo {id}`
+7. Add `videoSeeks` to the segment in the slide metadata:
 
 ```tsx
 audioSegments: [
@@ -238,19 +239,19 @@ audioSegments: [
     id: 0,
     narrationText: 'And here we can see {#scene2}the second scene in action.',
     videoSeeks: [
-      { videoId: 'demo-vid', bookmarkId: 'scene2', atMarker: 'scene2' }
+      { videoPath: '/videos/my-demo/demo.mp4', bookmarkId: 'scene2', atMarker: 'scene2' }
     ],
   },
 ],
 ```
 
-7. Play in narrated mode — the video seeks to the bookmarked timestamp the moment the narrator says "scene2".
+8. Play in narrated mode — the video seeks to the bookmarked timestamp the moment the narrator says "scene2".
 
 ### `VideoSeekTrigger` fields
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `videoId` | `string` | Key in `bookmarks.json` videos map; must match the `videoId` prop on `<VideoPlayer>` |
+| `videoPath` | `string` | Video file path — key in `bookmarks.json` videos map; must match the `videoPath` prop on `<VideoPlayer>` |
 | `bookmarkId` | `string` | ID of the bookmark to seek to |
 | `atMarker` | `string` | TTS marker ID (`{#id}` system) that fires the seek |
 | `pauseNarration` | `boolean?` | If `true`: pause TTS, play clip start→end, resume when clip ends (Pattern 1) |
@@ -292,7 +293,7 @@ Video:                 ├──── bookmark → endBookmark ─────�
 
 // AudioSegment
 videoSeeks: [
-  { videoId: 'demo', bookmarkId: 'clip1', atMarker: 'demo-clip', pauseNarration: true }
+  { videoPath: '/videos/my-demo/demo.mp4', bookmarkId: 'clip1', atMarker: 'demo-clip', pauseNarration: true }
 ]
 ```
 
@@ -317,7 +318,7 @@ Video:              ├── clip plays ──┤ (frozen at endTime)
 
 // AudioSegment
 videoSeeks: [
-  { videoId: 'demo', bookmarkId: 'clip-overlay', atMarker: 'side-clip', pauseNarration: false }
+  { videoPath: '/videos/my-demo/demo.mp4', bookmarkId: 'clip-overlay', atMarker: 'side-clip', pauseNarration: false }
 ]
 ```
 
@@ -350,10 +351,10 @@ Video:        ├── clip plays ──┤ (frozen)
 
 // AudioSegment
 videoSeeks: [
-  { videoId: 'demo', bookmarkId: 'clip1', atMarker: 'start-clip', pauseNarration: false }
+  { videoPath: '/videos/my-demo/demo.mp4', bookmarkId: 'clip1', atMarker: 'start-clip', pauseNarration: false }
 ],
 videoWaits: [
-  { videoId: 'demo', bookmarkId: 'clip1', atMarker: 'after-clip' }
+  { videoPath: '/videos/my-demo/demo.mp4', bookmarkId: 'clip1', atMarker: 'after-clip' }
 ]
 ```
 
@@ -361,14 +362,31 @@ videoWaits: [
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `videoId` | `string` | Key in `bookmarks.json` videos map |
+| `videoPath` | `string` | Video file path — key in `bookmarks.json` videos map |
 | `bookmarkId` | `string` | Which clip (bookmark) to wait for |
 | `atMarker` | `string` | TTS marker at which to check/wait |
+
+### Bookmark editor cross-references
+
+The 📹 Videos editor (dev-mode ProgressBar) enriches the video list with usage and cross-reference info:
+
+- **Left panel** — each video shows which slides reference it (chapter, slide, title) and, for trigger-based usage, the bookmark + marker + pattern per trigger
+- **Center panel** — selected video shows a usage summary above the scrubber
+- **Right panel** — each bookmark card shows cross-reference badges when referenced by triggers (marker, pattern, slide location)
+
+**Video-slide associations** come from two sources:
+
+| Source | What it detects | Availability |
+|--------|----------------|--------------|
+| Source scan (`/api/video-bookmarks/:demoId/source-usage`) | `videoPath` string references in slide `.tsx` files | Immediate (server-side regex scan) |
+| Trigger metadata (`videoSeeks`/`videoWaits` on `AudioSegment`) | Marker-driven seeks with bookmark/pattern details | When triggers are configured in metadata |
+
+Source-scanned usage shows slide location only (no trigger details). When both exist for the same video, trigger-based data takes precedence (it's a superset).
 
 ### Graceful degradation
 
 - A demo without `bookmarks.json` plays normally — `VideoSyncContext` has no triggers to fire
-- A `<VideoPlayer>` without `videoId` works unchanged (no registration)
+- A `<VideoPlayer>` without `VideoSyncContext` works unchanged (no registration)
 - A `VideoSeekTrigger` whose marker hasn't been aligned yet simply never fires
 - `endBookmarkId` absent → clip plays until `video.onended`, then the `onDone` callback fires
 - Segment change mid-clip → stale callbacks do not fire (generation counter guard)
@@ -391,7 +409,7 @@ Markers are transparent to the TTS cache. Both the narration cache (`narration-c
 | `npm run tts:generate -- --demo {id}` | Generate TTS audio (strips markers automatically) |
 | `npm run tts:align -- --demo {id}` | Generate alignment + resolve markers |
 | `npm run tts:align -- --demo {id} --force` | Regenerate alignment (ignore cache) |
-| `npm run tts:align -- --demo {id} --segments ch1:s2:explain` | Align specific segments only |
+| `npm run tts:align -- --demo {id} --segments ch1:s2:0` | Align specific segments only |
 
 ## Navigating Markers in Manual Mode
 

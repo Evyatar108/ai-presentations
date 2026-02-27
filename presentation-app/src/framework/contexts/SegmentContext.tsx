@@ -150,6 +150,14 @@ export function useSegmentContext(): SegmentContextValue {
 }
 
 /**
+ * Hook to access segment context, returning null if outside provider.
+ * Used by components that should degrade gracefully without the context.
+ */
+export function useSegmentContextOptional(): SegmentContextValue | null {
+  return useContext(SegmentContext);
+}
+
+/**
  * Return type of `useSegmentedAnimation()`.
  * Provides a simplified API for slides that use segmented progressive reveals.
  */

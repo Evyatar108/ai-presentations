@@ -61,7 +61,7 @@ export { Reveal, RevealAtMarker, RevealGroup, RevealContext, RevealSequence, Mar
 export type { RevealProps, RevealGroupProps, RevealContextProps, RevealAnimation, RevealVisibilityProps, MarkerDimProps } from './components/reveal';
 
 // Contexts
-export { SegmentProvider, useSegmentContext, useSegmentedAnimation } from './contexts/SegmentContext';
+export { SegmentProvider, useSegmentContext, useSegmentContextOptional, useSegmentedAnimation } from './contexts/SegmentContext';
 export type { SegmentedAnimationAPI, SegmentState, SegmentControls, SegmentContextValue } from './contexts/SegmentContext';
 export { AudioTimeProvider, useAudioTimeContext, useAudioTimeContextOptional } from './contexts/AudioTimeContext';
 export type { AudioTimeContextValue } from './contexts/AudioTimeContext';

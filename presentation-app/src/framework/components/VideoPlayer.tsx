@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useVideoSyncContextOptional } from '../contexts/VideoSyncContext';
+import { useSegmentContextOptional } from '../contexts/SegmentContext';
 
 interface VideoPlayerProps {
   videoPath: string;
@@ -9,8 +10,6 @@ interface VideoPlayerProps {
   freezeOnEnd?: boolean;  // Keep final frame visible
   ariaLabel?: string;
   captionsSrc?: string;   // Optional path to WebVTT captions file
-  /** When provided, registers this player with VideoSyncContext for marker-driven seeks. */
-  videoId?: string;
 }
 
 export const VideoPlayer: React.FC<VideoPlayerProps> = ({
@@ -20,11 +19,11 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   freezeOnEnd = true,
   ariaLabel,
   captionsSrc,
-  videoId,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [hasEnded, setHasEnded] = useState(false);
   const videoSyncCtx = useVideoSyncContextOptional();
+  const segmentCtx = useSegmentContextOptional();
 
   /** Active clip monitor: pause video and fire onDone when currentTime >= endTime */
   const clipMonitorRef = useRef<{ endTime: number; onDone: () => void } | null>(null);
@@ -60,7 +59,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   // Register with VideoSyncContext so marker-driven seeks can target this player
   useEffect(() => {
-    if (!videoId || !videoSyncCtx) return;
+    if (!videoSyncCtx) return;
     const seekFn = (time: number, autoPlay: boolean, endTime?: number, playbackRate?: number, onDone?: () => void) => {
       const video = videoRef.current;
       if (!video) return;
@@ -76,8 +75,8 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         video.pause();
       }
     };
-    return videoSyncCtx.registerVideo(videoId, seekFn);
-  }, [videoId, videoSyncCtx]);
+    return videoSyncCtx.registerVideo(videoPath, seekFn, segmentCtx?.slideKey ?? undefined);
+  }, [videoPath, videoSyncCtx, segmentCtx?.slideKey]);
 
   const handleVideoEnded = () => {
     // Clear any clip monitor — the video ended naturally (past endTime or no endTime)

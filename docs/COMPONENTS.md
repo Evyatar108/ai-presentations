@@ -100,6 +100,8 @@ Video embed component with playback controls.
 - `videoPath: string` - Path to video file
 - `isPlaying: boolean` - Whether video should play
 - `onEnded?: () => void` - Callback when video ends
+- `freezeOnEnd?: boolean` - Keep final frame visible (default `true`)
+- `ariaLabel?: string` - Accessibility label
 - `captionsSrc?: string` - Optional path to WebVTT captions file
 
 **Features**:
@@ -108,6 +110,8 @@ Video embed component with playback controls.
 - Responsive sizing
 - Synchronized with slide segments
 - Optional captions track (only rendered when `captionsSrc` is provided)
+- Auto-registers with `VideoSyncContext` (when present) for marker-driven seeks
+- Reports `slideKey` from `SegmentContext` during registration for video-slide usage tracking
 
 ## Shared Utilities
 
@@ -192,8 +196,12 @@ Manages multi-segment slide state.
 ```typescript
 import { useSegmentContext, useSegmentedAnimation } from '@framework';
 
-// Basic segment access
+// Basic segment access (throws if outside SegmentProvider)
 const { segment } = useSegmentContext();
+
+// Optional access (returns null if outside provider)
+import { useSegmentContextOptional } from '@framework';
+const segmentCtx = useSegmentContextOptional();
 
 // Advanced: segmented animation API with named segment lookups
 const { isSegmentVisible, getSegmentAnimation } = useSegmentedAnimation();
@@ -204,6 +212,7 @@ const { isSegmentVisible, getSegmentAnimation } = useSegmentedAnimation();
 - Named segment lookups via `isSegmentVisibleById()`
 - Segment progression
 - Slide-level state management
+- `useSegmentContextOptional()` for components that may render outside a provider
 
 ### ReducedMotion
 

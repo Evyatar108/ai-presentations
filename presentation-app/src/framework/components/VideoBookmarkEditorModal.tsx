@@ -6,11 +6,12 @@
  * Right:  Bookmark list for selected video (editable id/label/time, delete; start/end are readonly)
  * Footer: Save (POST /api/video-bookmarks/{demoId}) + Close
  */
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { useFocusTrap } from '../hooks/useFocusTrap';
 import { useTheme } from '../theme/ThemeContext';
 import type { VideoBookmark, VideoBookmarkSet, VideoBookmarksFile } from '../types/videoBookmarks';
+import type { SlideComponentWithMetadata } from '../slides/SlideMetadata';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -25,20 +26,26 @@ function cloneBookmarks(data: VideoBookmarksFile | null | undefined): Record<str
   return JSON.parse(JSON.stringify(data.videos));
 }
 
-function deriveVideoId(filePath: string, existing: Record<string, unknown>): string {
-  const basename = filePath.split('/').pop()?.replace(/\.(mp4|webm)$/i, '') ?? 'video';
-  let id = basename.replace(/_/g, '-');
-  if (!existing[id]) return id;
-  let n = 2;
-  while (existing[`${id}-${n}`]) n++;
-  return `${id}-${n}`;
+// ─── Props ────────────────────────────────────────────────────────────────────
+
+interface TriggerRef {
+  bookmarkId: string;
+  atMarker: string;
+  pattern: 'pause' | 'concurrent' | 'wait';
 }
 
-// ─── Props ────────────────────────────────────────────────────────────────────
+interface VideoUsage {
+  chapter: number;
+  slide: number;
+  slideTitle: string;
+  segmentIndex: number;
+  triggers: TriggerRef[];
+}
 
 interface VideoBookmarkEditorModalProps {
   demoId: string;
   initialData?: VideoBookmarksFile | null;
+  slides?: SlideComponentWithMetadata[];
   onClose: () => void;
 }
 
@@ -47,11 +54,70 @@ interface VideoBookmarkEditorModalProps {
 export const VideoBookmarkEditorModal: React.FC<VideoBookmarkEditorModalProps> = ({
   demoId,
   initialData,
+  slides,
   onClose,
 }) => {
   const theme = useTheme();
   const modalRef = useRef<HTMLDivElement>(null);
   useFocusTrap(modalRef, true);
+
+  // ── Source-scanned video usage (fetched from server, scans slide .tsx files) ──
+  const [sourceUsage, setSourceUsage] = useState<Record<string, { chapter: number; slide: number; title: string }[]>>({});
+  useEffect(() => {
+    fetch(`/api/video-bookmarks/${demoId}/source-usage`)
+      .then(r => r.ok ? r.json() : { usage: {} })
+      .then(data => setSourceUsage(data.usage ?? {}))
+      .catch(() => {});
+  }, [demoId]);
+
+  // ── Video usage map (videoPath → where it's referenced in slides) ───
+  const videoUsageMap = useMemo(() => {
+    const map = new Map<string, VideoUsage[]>();
+    if (!slides) return map;
+    // 1. Trigger-based usage (videoSeeks / videoWaits in segment metadata)
+    for (const slide of slides) {
+      const { chapter, slide: slideNum, title, audioSegments } = slide.metadata;
+      for (const seg of audioSegments) {
+        const triggersByPath = new Map<string, TriggerRef[]>();
+        for (const vs of seg.videoSeeks ?? []) {
+          let arr = triggersByPath.get(vs.videoPath);
+          if (!arr) { arr = []; triggersByPath.set(vs.videoPath, arr); }
+          arr.push({
+            bookmarkId: vs.bookmarkId,
+            atMarker: vs.atMarker,
+            pattern: vs.pauseNarration ? 'pause' : 'concurrent',
+          });
+        }
+        for (const vw of seg.videoWaits ?? []) {
+          let arr = triggersByPath.get(vw.videoPath);
+          if (!arr) { arr = []; triggersByPath.set(vw.videoPath, arr); }
+          arr.push({
+            bookmarkId: vw.bookmarkId,
+            atMarker: vw.atMarker,
+            pattern: 'wait',
+          });
+        }
+        for (const [path, triggers] of triggersByPath) {
+          let usages = map.get(path);
+          if (!usages) { usages = []; map.set(path, usages); }
+          usages.push({ chapter, slide: slideNum, slideTitle: title, segmentIndex: seg.id, triggers });
+        }
+      }
+    }
+    // 2. Source-scanned usage (videoPath references found in slide .tsx source)
+    for (const [videoPath, locations] of Object.entries(sourceUsage)) {
+      if (map.has(videoPath)) continue; // trigger data takes precedence
+      const usages: VideoUsage[] = locations.map(loc => ({
+        chapter: loc.chapter,
+        slide: loc.slide,
+        slideTitle: loc.title,
+        segmentIndex: -1,
+        triggers: [],
+      }));
+      if (usages.length > 0) map.set(videoPath, usages);
+    }
+    return map;
+  }, [slides, sourceUsage]);
 
   // ── State ──────────────────────────────────────────────────────────
   const [videos, setVideos] = useState<Record<string, VideoBookmarkSet>>(() => cloneBookmarks(initialData));
@@ -74,23 +140,14 @@ export const VideoBookmarkEditorModal: React.FC<VideoBookmarkEditorModalProps> =
       .then(data => {
         const files: string[] = data.files ?? [];
         setVideos(prev => {
-          // Build a map of all filesystem videos, preserving existing bookmarks
-          const srcToExisting = new Map<string, [string, VideoBookmarkSet]>();
-          for (const [id, set] of Object.entries(prev)) {
-            srcToExisting.set(set.src, [id, set]);
-          }
-
           const next: Record<string, VideoBookmarkSet> = {};
           for (const filePath of files) {
-            const existing = srcToExisting.get(filePath);
-            if (existing) {
-              // Preserve existing entry (ID + bookmarks)
-              next[existing[0]] = existing[1];
+            if (prev[filePath]) {
+              // Preserve existing bookmarks
+              next[filePath] = prev[filePath];
             } else {
-              // New file — derive videoId from filename
-              const videoId = deriveVideoId(filePath, next);
-              next[videoId] = {
-                src: filePath,
+              // New file
+              next[filePath] = {
                 bookmarks: [{ id: 'start', time: 0, label: 'Start' }],
               };
             }
@@ -183,6 +240,21 @@ export const VideoBookmarkEditorModal: React.FC<VideoBookmarkEditorModalProps> =
 
   // ── Helpers ─────────────────────────────────────────────────────────
   const selectedVideo = videos[selectedVideoId];
+
+  // ── Bookmark cross-reference map (bookmarkId → triggers that reference it) ──
+  const bookmarkRefMap = useMemo(() => {
+    const map = new Map<string, Array<TriggerRef & { chapter: number; slide: number }>>();
+    const usages = videoUsageMap.get(selectedVideoId);
+    if (!usages) return map;
+    for (const usage of usages) {
+      for (const trigger of usage.triggers) {
+        let arr = map.get(trigger.bookmarkId);
+        if (!arr) { arr = []; map.set(trigger.bookmarkId, arr); }
+        arr.push({ ...trigger, chapter: usage.chapter, slide: usage.slide });
+      }
+    }
+    return map;
+  }, [videoUsageMap, selectedVideoId]);
 
   const togglePlay = useCallback(() => {
     const video = videoRef.current;
@@ -376,29 +448,62 @@ export const VideoBookmarkEditorModal: React.FC<VideoBookmarkEditorModalProps> =
           {/* ── Left: Video list ── */}
           <div style={{ ...s.panel, ...s.leftPanel }}>
             <div style={{ fontSize: 11, fontWeight: 600, color: theme.colors.textSecondary, marginBottom: '0.25rem' }}>Videos</div>
-            {Object.keys(videos).map(id => (
-              <button
-                key={id}
-                onClick={() => setSelectedVideoId(id)}
-                title={id}
-                style={{
-                  background: id === selectedVideoId ? theme.colors.bgBorder : 'transparent',
-                  border: `1px solid ${id === selectedVideoId ? theme.colors.primary : theme.colors.borderSubtle}`,
-                  borderRadius: 6,
-                  padding: '0.3rem 0.5rem',
-                  fontSize: 11,
-                  cursor: 'pointer',
-                  color: id === selectedVideoId ? theme.colors.primary : theme.colors.textPrimary,
-                  textAlign: 'left',
-                  width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {id}
-              </button>
-            ))}
+            {Object.keys(videos)
+              .sort((a, b) => {
+                const ua = videoUsageMap.get(a);
+                const ub = videoUsageMap.get(b);
+                if (!ua?.length && !ub?.length) return 0;
+                if (!ua?.length) return 1;
+                if (!ub?.length) return -1;
+                const fa = ua[0], fb = ub[0];
+                return fa.chapter - fb.chapter || fa.slide - fb.slide || fa.segmentIndex - fb.segmentIndex;
+              })
+              .map(id => {
+              const usages = videoUsageMap.get(id);
+              const basename = id.split('/').pop() ?? id;
+              return (
+              <div key={id} style={{ display: 'flex', flexDirection: 'column' }}>
+                <button
+                  onClick={() => setSelectedVideoId(id)}
+                  title={id}
+                  style={{
+                    background: id === selectedVideoId ? theme.colors.bgBorder : 'transparent',
+                    border: `1px solid ${id === selectedVideoId ? theme.colors.primary : theme.colors.borderSubtle}`,
+                    borderRadius: 6,
+                    padding: '0.3rem 0.5rem',
+                    fontSize: 11,
+                    cursor: 'pointer',
+                    color: id === selectedVideoId ? theme.colors.primary : theme.colors.textPrimary,
+                    textAlign: 'left',
+                    width: '100%',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {basename}
+                </button>
+                {usages && usages.length > 0 && (
+                  <div style={{ fontSize: 10, color: theme.colors.textMuted, padding: '1px 0.5rem 0' }}>
+                    {usages.map((u, ui) => (
+                      <div key={ui} style={{ marginBottom: 2 }}>
+                        <div>
+                          Ch{u.chapter} S{u.slide}
+                          {u.segmentIndex >= 0 ? ` seg${u.segmentIndex}` : ''}
+                          {u.slideTitle ? ` — "${u.slideTitle}"` : ''}
+                        </div>
+                        {u.triggers.map((t, ti) => (
+                          <div key={ti} style={{ paddingLeft: '0.5rem', fontSize: 9, opacity: 0.8 }}>
+                            → {t.bookmarkId} at {'{#'}{t.atMarker}{'}'} ({t.pattern})
+                          </div>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              );
+            })}
             {Object.keys(videos).length === 0 && (
               <div style={{ color: theme.colors.textMuted, fontSize: 11, marginTop: '0.5rem' }}>
                 No video files found.
@@ -412,11 +517,46 @@ export const VideoBookmarkEditorModal: React.FC<VideoBookmarkEditorModalProps> =
               <>
                 <video
                   ref={videoRef}
-                  src={selectedVideo.src}
+                  src={selectedVideoId}
                   style={{ width: '100%', borderRadius: 8, background: '#000', maxHeight: 320 }}
                   preload="auto"
                   playsInline
                 />
+                {/* Usage summary */}
+                {(() => {
+                  const usages = videoUsageMap.get(selectedVideoId);
+                  return (
+                    <div style={{
+                      fontSize: 10,
+                      color: theme.colors.textMuted,
+                      background: theme.colors.bgDeep,
+                      borderRadius: 6,
+                      padding: '0.35rem 0.5rem',
+                    }}>
+                      {usages && usages.length > 0 ? (
+                        <>
+                          <div style={{ fontWeight: 600, marginBottom: 2 }}>Used in:</div>
+                          {usages.map((u, i) => (
+                            <div key={i} style={{ marginBottom: 2 }}>
+                              <span>
+                                Ch{u.chapter} S{u.slide}
+                                {u.slideTitle ? ` "${u.slideTitle}"` : ''}
+                                {u.segmentIndex >= 0 ? ` seg${u.segmentIndex}` : ''}
+                              </span>
+                              {u.triggers.map((t, ti) => (
+                                <span key={ti} style={{ marginLeft: 6, opacity: 0.8 }}>
+                                  [{t.bookmarkId} @ {'{#'}{t.atMarker}{'}'} ({t.pattern})]
+                                </span>
+                              ))}
+                            </div>
+                          ))}
+                        </>
+                      ) : (
+                        <span>No slide references found</span>
+                      )}
+                    </div>
+                  );
+                })()}
                 {/* Scrubber */}
                 <input
                   type="range"
@@ -458,7 +598,7 @@ export const VideoBookmarkEditorModal: React.FC<VideoBookmarkEditorModalProps> =
           {/* ── Right: Bookmark list ── */}
           <div style={{ ...s.panel, ...s.rightPanel }}>
             <div style={{ fontSize: 11, fontWeight: 600, color: theme.colors.textSecondary, marginBottom: '0.5rem' }}>
-              Bookmarks {selectedVideoId ? `— ${selectedVideoId}` : ''}
+              Bookmarks {selectedVideoId ? `— ${selectedVideoId.split('/').pop() ?? selectedVideoId}` : ''}
             </div>
             {(selectedVideo?.bookmarks ?? []).length === 0 ? (
               <div style={{ color: theme.colors.textMuted, fontSize: 11 }}>
@@ -518,6 +658,20 @@ export const VideoBookmarkEditorModal: React.FC<VideoBookmarkEditorModalProps> =
                         📌
                       </button>
                     </div>
+                    {/* Cross-references */}
+                    {(() => {
+                      const refs = bookmarkRefMap.get(bm.id);
+                      if (!refs || refs.length === 0) return null;
+                      return (
+                        <div style={{ fontSize: 9, color: theme.colors.textMuted, padding: '0 0.25rem' }}>
+                          {refs.map((r, ri) => (
+                            <div key={ri}>
+                              → at {'{#'}{r.atMarker}{'}'} ({r.pattern}) — Ch{r.chapter} S{r.slide}
+                            </div>
+                          ))}
+                        </div>
+                      );
+                    })()}
                     {/* Delete (hidden for start/end) */}
                     {bm.id !== 'start' && bm.id !== 'end' && (
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
