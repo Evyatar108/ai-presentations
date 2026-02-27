@@ -44,6 +44,106 @@ Compatible with `<Reveal>` and `<RevealGroup>`. Each factory takes `reduced: boo
 
 ---
 
+## Visual Components
+
+Self-contained animated components in `src/framework/components/`. Import from `@framework`. All respect `prefers-reduced-motion` via `useReducedMotion()`.
+
+### CircularProgress
+
+Animated SVG ring progress indicator. Uses imperative `useMotionValue` + `useSpring` for the `pathLength` animation (immune to parent variant state).
+
+```tsx
+import { CircularProgress, AnimatedCounter } from '@framework';
+
+<CircularProgress value={75} label={<AnimatedCounter to={75} suffix="%" />} />
+<CircularProgress value={92} size={140} thickness={10} color="#22c55e" />
+<CircularProgress value={42} max={50} size={80} trackColor="#1e293b" />
+```
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `number` | — | Current value |
+| `max` | `number` | `100` | Maximum value |
+| `size` | `number` | `120` | Diameter in px |
+| `color` | `string` | `theme.colors.primary` | Arc stroke color |
+| `trackColor` | `string` | `theme.colors.bgBorder` | Background track color |
+| `thickness` | `number` | `8` | Stroke width in px |
+| `label` | `ReactNode` | — | Centered content |
+| `animate` | `boolean` | `true` | Whether to animate on mount |
+| `delay` | `number` | `0` | Delay in seconds |
+
+### AnimatedHeading
+
+Per-character spring entrance animation with `staggerChildren`.
+
+```tsx
+import { AnimatedHeading } from '@framework';
+
+<AnimatedHeading text="Hello World" as="h1" />
+<AnimatedHeading text="Subtitle" stagger={0.06} stiffness={80} damping={8} />
+<AnimatedHeading text="Colored" color="#22c55e" delay={0.3} />
+```
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `text` | `string` | — | Text to animate |
+| `as` | `'h1'–'h6'` | `'h2'` | HTML heading level |
+| `stagger` | `number` | `0.04` | Delay between characters (seconds) |
+| `stiffness` | `number` | `120` | Spring stiffness |
+| `damping` | `number` | `14` | Spring damping |
+| `style` | `CSSProperties` | — | Heading element styles |
+| `color` | `string` | `theme.colors.textPrimary` | Text color |
+| `delay` | `number` | `0` | Delay before first character |
+
+### AnimatedCheckmark
+
+SVG path-draw checkmark with optional circle background.
+
+```tsx
+import { AnimatedCheckmark } from '@framework';
+
+<AnimatedCheckmark />
+<AnimatedCheckmark size={80} withCircle color="#22c55e" />
+<AnimatedCheckmark size={40} strokeWidth={4} delay={0.3} />
+```
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `size` | `number` | `60` | Diameter in px |
+| `color` | `string` | `theme.colors.success` | Checkmark stroke color |
+| `strokeWidth` | `number` | `3` | Stroke width |
+| `delay` | `number` | `0` | Delay in seconds |
+| `withCircle` | `boolean` | `false` | Show circular background |
+| `circleFill` | `string` | `color` at 15% opacity | Circle fill color |
+| `circleStroke` | `string` | `color` | Circle stroke color |
+
+### AnimatedArrow
+
+Self-drawing SVG arrow with arrowhead marker. Supports 4 directions or a custom bezier path.
+
+```tsx
+import { AnimatedArrow } from '@framework';
+
+<AnimatedArrow direction="right" length={150} />
+<AnimatedArrow direction="down" length={80} color="#22c55e" />
+<AnimatedArrow path="M 10 50 C 40 10, 160 10, 190 50" viewBoxWidth={200} viewBoxHeight={60} />
+```
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `direction` | `'right' \| 'down' \| 'left' \| 'up'` | `'right'` | Preset direction (ignored with `path`) |
+| `length` | `number` | `120` | Arrow length in px (ignored with `path`) |
+| `color` | `string` | `theme.colors.primary` | Stroke + arrowhead color |
+| `strokeWidth` | `number` | `3` | Stroke width |
+| `delay` | `number` | `0` | Delay in seconds |
+| `path` | `string` | — | Custom SVG path data |
+| `viewBoxWidth` | `number` | `200` | viewBox width for custom path |
+| `viewBoxHeight` | `number` | `100` | viewBox height for custom path |
+| `headSize` | `number` | `10` | Arrowhead size in px |
+| `style` | `CSSProperties` | — | SVG element styles |
+
+---
+
 ## Using with `<Reveal>`
 
 ### Basic usage
