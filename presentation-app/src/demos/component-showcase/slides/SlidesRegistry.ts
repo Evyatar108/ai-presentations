@@ -6,6 +6,8 @@ import {
   CS_S3_AnimatedHeading,
   CS_S4_AnimatedCheckmark,
   CS_S5_AnimatedArrow,
+  CS_S6_GraduatedGauge,
+  CS_S7_AnimatedBarChart,
 } from './chapters/Chapter0';
 
 /**
@@ -17,4 +19,6 @@ export const allSlides: SlideComponentWithMetadata[] = [
   CS_S3_AnimatedHeading,
   CS_S4_AnimatedCheckmark,
   CS_S5_AnimatedArrow,
+  CS_S6_GraduatedGauge,
+  CS_S7_AnimatedBarChart,
 ];

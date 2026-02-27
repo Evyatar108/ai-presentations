@@ -1,5 +1,5 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect } from 'react';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 import {
   defineSlide,
   useReducedMotion,
@@ -465,4 +465,289 @@ export const CS_S5_AnimatedArrow = defineSlide({
     ],
   },
   component: AnimatedArrowComponent,
+});
+
+// ─── Slide 6: Graduated Gauge ───────────────────────────────────────────────
+
+const GAUGE_STOPS = [
+  { offset: '0%', color: '#22c55e' },   // green
+  { offset: '50%', color: '#eab308' },  // yellow
+  { offset: '100%', color: '#ef4444' }, // red
+];
+
+const GaugeBar: React.FC<{
+  value: number;
+  max: number;
+  label: string;
+  height?: number;
+  delay?: number;
+  gradientId: string;
+}> = ({ value, max, label, height = 28, delay = 0, gradientId }) => {
+  const { reduced } = useReducedMotion();
+  const theme = useTheme();
+  const fraction = Math.min(Math.max(value / max, 0), 1);
+
+  const raw = useMotionValue(reduced ? fraction : 0);
+  const spring = useSpring(raw, { stiffness: 50, damping: 15, restDelta: 0.001 });
+  const scaleX = reduced ? raw : spring;
+
+  useEffect(() => {
+    if (reduced) {
+      raw.set(fraction);
+      return;
+    }
+    const timeout = setTimeout(() => raw.set(fraction), delay * 1000);
+    return () => clearTimeout(timeout);
+  }, [fraction, delay, reduced, raw]);
+
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+      <span style={{
+        fontSize: '0.9rem',
+        color: theme.colors.textSecondary,
+        fontFamily: theme.fontFamily,
+        minWidth: 100,
+        textAlign: 'right',
+      }}>
+        {label}
+      </span>
+      <div style={{
+        flex: 1,
+        height,
+        background: theme.colors.bgBorder,
+        borderRadius: height / 2,
+        overflow: 'hidden',
+        position: 'relative',
+      }}>
+        <svg width="100%" height={height} style={{ position: 'absolute', inset: 0 }}>
+          <defs>
+            <linearGradient id={gradientId}>
+              {GAUGE_STOPS.map((s) => (
+                <stop key={s.offset} offset={s.offset} stopColor={s.color} />
+              ))}
+            </linearGradient>
+          </defs>
+        </svg>
+        <motion.div
+          style={{
+            height: '100%',
+            borderRadius: height / 2,
+            background: `linear-gradient(90deg, #22c55e, #eab308, #ef4444)`,
+            transformOrigin: 'left',
+            scaleX,
+          }}
+        />
+      </div>
+      <span style={{
+        fontSize: '1rem',
+        fontWeight: 700,
+        color: theme.colors.textPrimary,
+        fontFamily: theme.fontFamily,
+        minWidth: 50,
+      }}>
+        {value}%
+      </span>
+    </div>
+  );
+};
+
+const GraduatedGaugeComponent: React.FC = () => {
+  const theme = useTheme();
+  const { isSegmentVisible } = useSegmentedAnimation();
+
+  return (
+    <SlideContainer>
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '2.5rem',
+        maxWidth: 700,
+      }}>
+        <AnimatedHeading text="Graduated Gauge" as="h2" style={{ fontSize: '2.8rem' }} />
+
+        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          {isSegmentVisible(1) && (
+            <motion.div variants={scaleIn(false)} initial="hidden" animate="visible">
+              <GaugeBar value={35} max={100} label="CPU Load" gradientId="gauge-cpu" />
+            </motion.div>
+          )}
+          {isSegmentVisible(2) && (
+            <motion.div variants={scaleIn(false)} initial="hidden" animate="visible">
+              <GaugeBar value={72} max={100} label="Memory" delay={0.15} gradientId="gauge-mem" />
+            </motion.div>
+          )}
+          {isSegmentVisible(3) && (
+            <motion.div variants={scaleIn(false)} initial="hidden" animate="visible">
+              <GaugeBar value={93} max={100} label="Disk I/O" delay={0.3} gradientId="gauge-disk" />
+            </motion.div>
+          )}
+        </div>
+
+        <ContentCard>
+          <code style={{
+            fontSize: '0.9rem',
+            color: theme.colors.textSecondary,
+            fontFamily: 'monospace',
+          }}>
+            SVG linearGradient (green→yellow→red) + useSpring scaleX
+          </code>
+        </ContentCard>
+      </div>
+    </SlideContainer>
+  );
+};
+
+export const CS_S6_GraduatedGauge = defineSlide({
+  metadata: {
+    chapter: 0,
+    slide: 6,
+    title: 'Graduated Gauge',
+    audioSegments: [
+      { id: 0 },
+      { id: 1 },
+      { id: 2 },
+      { id: 3 },
+    ],
+  },
+  component: GraduatedGaugeComponent,
+});
+
+// ─── Slide 7: Animated Bar Chart ────────────────────────────────────────────
+
+const BAR_DATA = [
+  { label: 'Grounding', value: 95, colorKey: 'success' as const },
+  { label: 'Coverage', value: 78, colorKey: 'primary' as const },
+  { label: 'Fluency', value: 88, colorKey: 'accent' as const },
+  { label: 'Relevance', value: 82, colorKey: 'secondary' as const },
+];
+
+const AnimatedBar: React.FC<{
+  value: number;
+  max: number;
+  color: string;
+  delay?: number;
+  height?: number;
+}> = ({ value, max, color, delay = 0, height = 32 }) => {
+  const { reduced } = useReducedMotion();
+  const theme = useTheme();
+  const fraction = Math.min(Math.max(value / max, 0), 1);
+
+  const raw = useMotionValue(reduced ? fraction : 0);
+  const spring = useSpring(raw, { stiffness: 50, damping: 15, restDelta: 0.001 });
+  const scaleX = reduced ? raw : spring;
+
+  useEffect(() => {
+    if (reduced) {
+      raw.set(fraction);
+      return;
+    }
+    const timeout = setTimeout(() => raw.set(fraction), delay * 1000);
+    return () => clearTimeout(timeout);
+  }, [fraction, delay, reduced, raw]);
+
+  return (
+    <div style={{
+      height,
+      background: theme.colors.bgBorder,
+      borderRadius: height / 2,
+      overflow: 'hidden',
+    }}>
+      <motion.div
+        style={{
+          height: '100%',
+          background: color,
+          borderRadius: height / 2,
+          transformOrigin: 'left',
+          scaleX,
+        }}
+      />
+    </div>
+  );
+};
+
+const AnimatedBarChartComponent: React.FC = () => {
+  const theme = useTheme();
+  const { isSegmentVisible } = useSegmentedAnimation();
+
+  return (
+    <SlideContainer>
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '2.5rem',
+        maxWidth: 700,
+      }}>
+        <AnimatedHeading text="Animated Bar Chart" as="h2" style={{ fontSize: '2.8rem' }} />
+
+        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+          {BAR_DATA.map((bar, i) => (
+            isSegmentVisible(i + 1) && (
+              <motion.div
+                key={bar.label}
+                variants={scaleIn(false)}
+                initial="hidden"
+                animate="visible"
+                style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}
+              >
+                <span style={{
+                  fontSize: '1rem',
+                  color: theme.colors.textSecondary,
+                  fontFamily: theme.fontFamily,
+                  minWidth: 90,
+                  textAlign: 'right',
+                }}>
+                  {bar.label}
+                </span>
+                <div style={{ flex: 1 }}>
+                  <AnimatedBar
+                    value={bar.value}
+                    max={100}
+                    color={theme.colors[bar.colorKey]}
+                    delay={0.1 * i}
+                  />
+                </div>
+                <span style={{
+                  fontSize: '1rem',
+                  fontWeight: 700,
+                  color: theme.colors[bar.colorKey],
+                  fontFamily: theme.fontFamily,
+                  minWidth: 40,
+                }}>
+                  {bar.value}%
+                </span>
+              </motion.div>
+            )
+          ))}
+        </div>
+
+        <ContentCard>
+          <code style={{
+            fontSize: '0.9rem',
+            color: theme.colors.textSecondary,
+            fontFamily: 'monospace',
+          }}>
+            useSpring scaleX with staggered delays per bar
+          </code>
+        </ContentCard>
+      </div>
+    </SlideContainer>
+  );
+};
+
+export const CS_S7_AnimatedBarChart = defineSlide({
+  metadata: {
+    chapter: 0,
+    slide: 7,
+    title: 'Animated Bar Chart',
+    audioSegments: [
+      { id: 0 },
+      { id: 1 },
+      { id: 2 },
+      { id: 3 },
+      { id: 4 },
+    ],
+  },
+  component: AnimatedBarChartComponent,
 });
