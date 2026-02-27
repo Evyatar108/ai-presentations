@@ -151,7 +151,8 @@ Subtitle corrections: `public/audio/{demo-id}/subtitle-corrections.json` — map
 | `tts/server_whisperx.py` | WhisperX server (transcription + forced alignment) |
 | `src/framework/utils/audioPath.ts` | Audio file path derivation (buildAudioFilePath, resolveAudioFilePath) |
 | `src/framework/utils/formatTime.ts` | Time formatting utilities (mm:ss, delta colors) |
-| `src/framework/components/VideoPlayer.tsx` | Controlled video with freeze-on-end + VideoSyncContext registration (reports slideKey) |
+| `src/framework/types/videoBookmarks.ts` | VideoZoomRegion, VideoBookmark, VideoBookmarkSet, VideoBookmarksFile types |
+| `src/framework/components/VideoPlayer.tsx` | Controlled video with freeze-on-end, zoom animation + VideoSyncContext registration (reports slideKey) |
 | `src/framework/components/VideoBookmarkEditorModal.tsx` | 3-panel video bookmark editor with usage cross-references |
 | `src/framework/contexts/VideoSyncContext.tsx` | RAF-integrated video seek routing + video-slide usage tracking |
 | `vite-plugin-handlers/videoBookmarks.ts` | Video bookmark API: GET/POST bookmarks, GET list, GET source-usage |

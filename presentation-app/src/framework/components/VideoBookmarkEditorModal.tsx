@@ -10,7 +10,7 @@ import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react'
 import { motion } from 'framer-motion';
 import { useFocusTrap } from '../hooks/useFocusTrap';
 import { useTheme } from '../theme/ThemeContext';
-import type { VideoBookmark, VideoBookmarkSet, VideoBookmarksFile } from '../types/videoBookmarks';
+import type { VideoBookmark, VideoBookmarkSet, VideoBookmarksFile, VideoZoomRegion } from '../types/videoBookmarks';
 import type { SlideComponentWithMetadata } from '../slides/SlideMetadata';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -24,6 +24,69 @@ function fmtTime(seconds: number): string {
 function cloneBookmarks(data: VideoBookmarksFile | null | undefined): Record<string, VideoBookmarkSet> {
   if (!data?.videos) return {};
   return JSON.parse(JSON.stringify(data.videos));
+}
+
+/** Clamp zoom center so the zoom box stays within [0,1]² bounds */
+function clampZoomCenter(cx: number, cy: number, scale: number): { cx: number; cy: number } {
+  const half = 0.5 / scale;
+  return {
+    cx: Math.max(half, Math.min(1 - half, cx)),
+    cy: Math.max(half, Math.min(1 - half, cy)),
+  };
+}
+
+/** Compute CSS transform values for a zoom region */
+function computeZoomTransform(zoom: VideoZoomRegion): { x: string; y: string; scale: number } {
+  return {
+    x: `${(0.5 - zoom.scale * zoom.cx) * 100}%`,
+    y: `${(0.5 - zoom.scale * zoom.cy) * 100}%`,
+    scale: zoom.scale,
+  };
+}
+
+/** Convert zoom center+scale to a bounding rect in normalized coords */
+function zoomToRect(zoom: VideoZoomRegion): { left: number; top: number; width: number; height: number } {
+  const size = 1 / zoom.scale;
+  return { left: zoom.cx - size / 2, top: zoom.cy - size / 2, width: size, height: size };
+}
+
+/** Convert a drawn rectangle (normalized) back to zoom center+scale */
+function rectToZoom(left: number, top: number, size: number): VideoZoomRegion {
+  const scale = 1 / Math.max(size, 0.05);
+  const cx = left + size / 2;
+  const cy = top + size / 2;
+  const clamped = clampZoomCenter(cx, cy, scale);
+  return { cx: clamped.cx, cy: clamped.cy, scale };
+}
+
+type CornerID = 'tl' | 'tr' | 'bl' | 'br';
+
+/** Hit-test corner handles, returns corner id or null */
+function hitTestCorner(normX: number, normY: number, zoom: VideoZoomRegion, threshold: number): CornerID | null {
+  const r = zoomToRect(zoom);
+  const corners: Array<[CornerID, number, number]> = [
+    ['tl', r.left, r.top],
+    ['tr', r.left + r.width, r.top],
+    ['bl', r.left, r.top + r.height],
+    ['br', r.left + r.width, r.top + r.height],
+  ];
+  for (const [id, cx, cy] of corners) {
+    if (Math.abs(normX - cx) < threshold && Math.abs(normY - cy) < threshold) return id;
+  }
+  return null;
+}
+
+/** Hit-test whether point is inside the zoom box */
+function hitTestBox(normX: number, normY: number, zoom: VideoZoomRegion): boolean {
+  const r = zoomToRect(zoom);
+  return normX >= r.left && normX <= r.left + r.width && normY >= r.top && normY <= r.top + r.height;
+}
+
+interface DragState {
+  mode: 'draw' | 'move' | 'resize';
+  startNorm: { x: number; y: number };
+  startZoom: VideoZoomRegion | null;
+  anchorCorner?: { x: number; y: number };
 }
 
 // ─── Props ────────────────────────────────────────────────────────────────────
@@ -130,8 +193,12 @@ export const VideoBookmarkEditorModal: React.FC<VideoBookmarkEditorModalProps> =
   const [isPlaying, setIsPlaying] = useState(false);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const [saveError, setSaveError] = useState('');
+  const [editingZoomIndex, setEditingZoomIndex] = useState<number | null>(null);
+  const [zoomPreview, setZoomPreview] = useState(false);
+  const [dragState, setDragState] = useState<DragState | null>(null);
 
   const videoRef = useRef<HTMLVideoElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
 
   // ── Auto-populate videos from filesystem ──────────────────────────────
   useEffect(() => {
@@ -307,6 +374,12 @@ export const VideoBookmarkEditorModal: React.FC<VideoBookmarkEditorModalProps> =
 
   const deleteBookmark = useCallback((index: number) => {
     if (!selectedVideoId) return;
+    setEditingZoomIndex(prev => {
+      if (prev === null) return null;
+      if (prev === index) return null;
+      if (prev > index) return prev - 1;
+      return prev;
+    });
     setVideos(prev => {
       const next = { ...prev };
       const bms = [...(next[selectedVideoId]?.bookmarks ?? [])];
@@ -337,6 +410,140 @@ export const VideoBookmarkEditorModal: React.FC<VideoBookmarkEditorModalProps> =
       setSaveError(e.message || 'Save failed');
     }
   }, [demoId, videos]);
+
+  // ── Zoom editing ──────────────────────────────────────────────────────
+  // Reset zoom editing state when video changes
+  useEffect(() => {
+    setEditingZoomIndex(null);
+    setDragState(null);
+    setZoomPreview(false);
+  }, [selectedVideoId]);
+
+  const editingZoom = editingZoomIndex !== null ? (selectedVideo?.bookmarks[editingZoomIndex]?.zoom ?? null) : null;
+
+  const setEditingZoom = useCallback((zoom: VideoZoomRegion | undefined) => {
+    if (editingZoomIndex === null || !selectedVideoId) return;
+    updateBookmark(editingZoomIndex, { zoom });
+  }, [editingZoomIndex, selectedVideoId, updateBookmark]);
+
+  /** Normalize mouse coords relative to overlay element */
+  const getNormCoords = useCallback((e: MouseEvent): { x: number; y: number } | null => {
+    const el = overlayRef.current;
+    if (!el) return null;
+    const rect = el.getBoundingClientRect();
+    return {
+      x: Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width)),
+      y: Math.max(0, Math.min(1, (e.clientY - rect.top) / rect.height)),
+    };
+  }, []);
+
+  const handleOverlayMouseDown = useCallback((e: React.MouseEvent) => {
+    if (editingZoomIndex === null) return;
+    e.preventDefault();
+    const el = overlayRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const norm = {
+      x: Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width)),
+      y: Math.max(0, Math.min(1, (e.clientY - rect.top) / rect.height)),
+    };
+    const threshold = 0.03;
+
+    if (editingZoom) {
+      const corner = hitTestCorner(norm.x, norm.y, editingZoom, threshold);
+      if (corner) {
+        // Resize mode: anchor at opposite corner
+        const r = zoomToRect(editingZoom);
+        const opposites: Record<CornerID, { x: number; y: number }> = {
+          tl: { x: r.left + r.width, y: r.top + r.height },
+          tr: { x: r.left, y: r.top + r.height },
+          bl: { x: r.left + r.width, y: r.top },
+          br: { x: r.left, y: r.top },
+        };
+        setDragState({ mode: 'resize', startNorm: norm, startZoom: editingZoom, anchorCorner: opposites[corner] });
+        return;
+      }
+      if (hitTestBox(norm.x, norm.y, editingZoom)) {
+        setDragState({ mode: 'move', startNorm: norm, startZoom: editingZoom });
+        return;
+      }
+    }
+    // Draw mode
+    setDragState({ mode: 'draw', startNorm: norm, startZoom: editingZoom });
+  }, [editingZoomIndex, editingZoom]);
+
+  // Document-level mousemove/mouseup for drag operations
+  useEffect(() => {
+    if (!dragState) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const norm = getNormCoords(e);
+      if (!norm) return;
+
+      if (dragState.mode === 'draw') {
+        const dx = Math.abs(norm.x - dragState.startNorm.x);
+        const dy = Math.abs(norm.y - dragState.startNorm.y);
+        const size = Math.max(dx, dy, 0.05);
+        const left = norm.x > dragState.startNorm.x
+          ? dragState.startNorm.x
+          : Math.max(0, dragState.startNorm.x - size);
+        const top = norm.y > dragState.startNorm.y
+          ? dragState.startNorm.y
+          : Math.max(0, dragState.startNorm.y - size);
+        const clampedSize = Math.min(size, 1 - left, 1 - top);
+        setEditingZoom(rectToZoom(left, top, clampedSize));
+      } else if (dragState.mode === 'move' && dragState.startZoom) {
+        const dx = norm.x - dragState.startNorm.x;
+        const dy = norm.y - dragState.startNorm.y;
+        const newCx = dragState.startZoom.cx + dx;
+        const newCy = dragState.startZoom.cy + dy;
+        const clamped = clampZoomCenter(newCx, newCy, dragState.startZoom.scale);
+        setEditingZoom({ ...dragState.startZoom, cx: clamped.cx, cy: clamped.cy });
+      } else if (dragState.mode === 'resize' && dragState.anchorCorner) {
+        const anchor = dragState.anchorCorner;
+        const dx = Math.abs(norm.x - anchor.x);
+        const dy = Math.abs(norm.y - anchor.y);
+        const size = Math.max(dx, dy, 0.05);
+        const left = Math.min(anchor.x, norm.x > anchor.x ? anchor.x : anchor.x - size);
+        const top = Math.min(anchor.y, norm.y > anchor.y ? anchor.y : anchor.y - size);
+        const clampedLeft = Math.max(0, left);
+        const clampedTop = Math.max(0, top);
+        const clampedSize = Math.min(size, 1 - clampedLeft, 1 - clampedTop);
+        setEditingZoom(rectToZoom(clampedLeft, clampedTop, clampedSize));
+      }
+    };
+
+    const handleMouseUp = () => {
+      setDragState(null);
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [dragState, getNormCoords, setEditingZoom]);
+
+  /** Get cursor style for overlay based on hover position */
+  const getOverlayCursor = useCallback((e: React.MouseEvent): string => {
+    if (editingZoomIndex === null) return 'default';
+    if (!editingZoom) return 'crosshair';
+    const el = overlayRef.current;
+    if (!el) return 'crosshair';
+    const rect = el.getBoundingClientRect();
+    const norm = {
+      x: (e.clientX - rect.left) / rect.width,
+      y: (e.clientY - rect.top) / rect.height,
+    };
+    const corner = hitTestCorner(norm.x, norm.y, editingZoom, 0.03);
+    if (corner === 'tl' || corner === 'br') return 'nwse-resize';
+    if (corner === 'tr' || corner === 'bl') return 'nesw-resize';
+    if (hitTestBox(norm.x, norm.y, editingZoom)) return 'move';
+    return 'crosshair';
+  }, [editingZoomIndex, editingZoom]);
+
+  const [overlayCursor, setOverlayCursor] = useState('crosshair');
 
   // ── Styles ──────────────────────────────────────────────────────────
   const s = {
@@ -515,13 +722,165 @@ export const VideoBookmarkEditorModal: React.FC<VideoBookmarkEditorModalProps> =
           <div style={{ ...s.panel, ...s.centerPanel }}>
             {selectedVideo ? (
               <>
-                <video
-                  ref={videoRef}
-                  src={selectedVideoId}
-                  style={{ width: '100%', borderRadius: 8, background: '#000', maxHeight: 320 }}
-                  preload="auto"
-                  playsInline
-                />
+                {/* Video + zoom overlay container */}
+                <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 8, background: '#000' }}>
+                  {/* Inner wrapper for zoom preview transform */}
+                  <div style={
+                    zoomPreview && editingZoom
+                      ? {
+                          transformOrigin: '0% 0%',
+                          width: '100%',
+                          transform: (() => {
+                            const t = computeZoomTransform(editingZoom);
+                            return `translate(${t.x}, ${t.y}) scale(${t.scale})`;
+                          })(),
+                          transition: 'transform 0.3s ease-in-out',
+                        }
+                      : { width: '100%' }
+                  }>
+                    <video
+                      ref={videoRef}
+                      src={selectedVideoId}
+                      style={{ width: '100%', display: 'block', maxHeight: 320 }}
+                      preload="auto"
+                      playsInline
+                    />
+                  </div>
+                  {/* Zoom crop overlay — visible when editing zoom and not previewing */}
+                  {editingZoomIndex !== null && !zoomPreview && (
+                    <div
+                      ref={overlayRef}
+                      style={{
+                        position: 'absolute',
+                        inset: 0,
+                        cursor: overlayCursor,
+                      }}
+                      onMouseDown={handleOverlayMouseDown}
+                      onMouseMove={(e) => setOverlayCursor(getOverlayCursor(e))}
+                    >
+                      {editingZoom && (() => {
+                        const r = zoomToRect(editingZoom);
+                        const pct = (v: number) => `${v * 100}%`;
+                        return (
+                          <>
+                            {/* Zoom rectangle with dimmed exterior */}
+                            <div style={{
+                              position: 'absolute',
+                              left: pct(r.left),
+                              top: pct(r.top),
+                              width: pct(r.width),
+                              height: pct(r.height),
+                              border: '2px dashed cyan',
+                              boxShadow: '0 0 0 9999px rgba(0,0,0,0.35)',
+                              pointerEvents: 'none',
+                            }} />
+                            {/* Corner handles */}
+                            {([
+                              ['tl', r.left, r.top, 'nwse-resize'],
+                              ['tr', r.left + r.width, r.top, 'nesw-resize'],
+                              ['bl', r.left, r.top + r.height, 'nesw-resize'],
+                              ['br', r.left + r.width, r.top + r.height, 'nwse-resize'],
+                            ] as const).map(([id, cx, cy, cursor]) => (
+                              <div key={id} style={{
+                                position: 'absolute',
+                                left: `calc(${pct(cx)} - 4px)`,
+                                top: `calc(${pct(cy)} - 4px)`,
+                                width: 8,
+                                height: 8,
+                                background: 'rgba(0,255,255,0.3)',
+                                border: '1px solid white',
+                                cursor,
+                                pointerEvents: 'none',
+                              }} />
+                            ))}
+                            {/* Center dot */}
+                            <div style={{
+                              position: 'absolute',
+                              left: `calc(${pct(editingZoom.cx)} - 3px)`,
+                              top: `calc(${pct(editingZoom.cy)} - 3px)`,
+                              width: 6,
+                              height: 6,
+                              borderRadius: '50%',
+                              background: 'cyan',
+                              pointerEvents: 'none',
+                            }} />
+                            {/* Scale label */}
+                            <div style={{
+                              position: 'absolute',
+                              left: pct(r.left),
+                              top: `calc(${pct(r.top)} - 16px)`,
+                              fontSize: 10,
+                              color: 'cyan',
+                              fontFamily: 'monospace',
+                              pointerEvents: 'none',
+                              textShadow: '0 0 3px black',
+                            }}>
+                              {editingZoom.scale.toFixed(1)}x
+                            </div>
+                          </>
+                        );
+                      })()}
+                    </div>
+                  )}
+                </div>
+                {/* Zoom controls panel (visible when editing zoom) */}
+                {editingZoomIndex !== null && (
+                  <div style={{
+                    background: theme.colors.bgDeep,
+                    borderRadius: 6,
+                    padding: '0.4rem 0.6rem',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '0.3rem',
+                    fontSize: 11,
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                      <span style={{ color: theme.colors.textMuted, fontSize: 10 }}>Scale</span>
+                      <input
+                        type="range"
+                        min={1}
+                        max={8}
+                        step={0.1}
+                        value={editingZoom?.scale ?? 2}
+                        onChange={e => {
+                          const newScale = Number(e.target.value);
+                          const current = editingZoom ?? { cx: 0.5, cy: 0.5, scale: 2 };
+                          const clamped = clampZoomCenter(current.cx, current.cy, newScale);
+                          setEditingZoom({ cx: clamped.cx, cy: clamped.cy, scale: newScale });
+                        }}
+                        style={{ flex: 1, minWidth: 60, cursor: 'pointer' }}
+                      />
+                      <span style={{ fontFamily: 'monospace', color: theme.colors.textSecondary, minWidth: 36 }}>
+                        {(editingZoom?.scale ?? 2).toFixed(1)}x
+                      </span>
+                    </div>
+                    <div style={{ fontFamily: 'monospace', fontSize: 10, color: theme.colors.textMuted }}>
+                      center: ({(editingZoom?.cx ?? 0.5).toFixed(3)}, {(editingZoom?.cy ?? 0.5).toFixed(3)}) scale: {(editingZoom?.scale ?? 1).toFixed(1)}x
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                      <label style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: 10, cursor: 'pointer' }}>
+                        <input
+                          type="checkbox"
+                          checked={zoomPreview}
+                          onChange={e => setZoomPreview(e.target.checked)}
+                        />
+                        Preview zoom
+                      </label>
+                      <button
+                        style={s.btn(false, true)}
+                        onClick={() => setEditingZoom(undefined)}
+                      >
+                        Clear Zoom
+                      </button>
+                      <button
+                        style={s.btn()}
+                        onClick={() => { setEditingZoomIndex(null); setZoomPreview(false); }}
+                      >
+                        Done
+                      </button>
+                    </div>
+                  </div>
+                )}
                 {/* Usage summary */}
                 {(() => {
                   const usages = videoUsageMap.get(selectedVideoId);
@@ -658,6 +1017,12 @@ export const VideoBookmarkEditorModal: React.FC<VideoBookmarkEditorModalProps> =
                         📌
                       </button>
                     </div>
+                    {/* Zoom badge */}
+                    {bm.zoom && (
+                      <div style={{ fontSize: 9, color: 'cyan', padding: '0 0.25rem', fontFamily: 'monospace' }}>
+                        🔍 {bm.zoom.scale.toFixed(1)}x
+                      </div>
+                    )}
                     {/* Cross-references */}
                     {(() => {
                       const refs = bookmarkRefMap.get(bm.id);
@@ -672,9 +1037,32 @@ export const VideoBookmarkEditorModal: React.FC<VideoBookmarkEditorModalProps> =
                         </div>
                       );
                     })()}
-                    {/* Delete (hidden for start/end) */}
-                    {bm.id !== 'start' && bm.id !== 'end' && (
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                    {/* Actions row */}
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '0.25rem' }}>
+                      <button
+                        style={{
+                          ...s.btn(),
+                          fontSize: 10,
+                          background: editingZoomIndex === i ? theme.colors.bgBorder : undefined,
+                        }}
+                        onClick={() => {
+                          seekTo(bm.time);
+                          if (editingZoomIndex === i) {
+                            setEditingZoomIndex(null);
+                            setZoomPreview(false);
+                          } else {
+                            setEditingZoomIndex(i);
+                            setZoomPreview(false);
+                            if (!bm.zoom) {
+                              updateBookmark(i, { zoom: { cx: 0.5, cy: 0.5, scale: 2 } });
+                            }
+                          }
+                        }}
+                        title={editingZoomIndex === i ? 'Stop editing zoom' : 'Edit zoom region'}
+                      >
+                        🔍 Zoom
+                      </button>
+                      {bm.id !== 'start' && bm.id !== 'end' && (
                         <button
                           style={s.btn(false, true)}
                           onClick={() => deleteBookmark(i)}
@@ -682,8 +1070,8 @@ export const VideoBookmarkEditorModal: React.FC<VideoBookmarkEditorModalProps> =
                         >
                           🗑
                         </button>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>

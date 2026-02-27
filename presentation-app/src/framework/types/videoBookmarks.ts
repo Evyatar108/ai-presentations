@@ -5,10 +5,17 @@
  * when a TTS marker fires during narrated playback.
  */
 
+export interface VideoZoomRegion {
+  cx: number;    // Normalized center x (0-1)
+  cy: number;    // Normalized center y (0-1)
+  scale: number; // Zoom factor (1=full, 2=2x, etc.)
+}
+
 export interface VideoBookmark {
   id: string;      // Referenced by VideoSeekTrigger.bookmarkId
   time: number;    // Seek target, seconds in the video
   label?: string;  // Human-readable description (editor only)
+  zoom?: VideoZoomRegion; // Optional zoom region — VideoPlayer zooms to this area on seek
 }
 
 export interface VideoBookmarkSet {

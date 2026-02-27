@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useRef, useCallback, ReactNode } from 'react';
 import type { VideoSeekTrigger, VideoWaitTrigger } from '../slides/SlideMetadata';
-import type { VideoBookmarksFile } from '../types/videoBookmarks';
+import type { VideoBookmarksFile, VideoZoomRegion } from '../types/videoBookmarks';
 
 /**
  * VideoSyncContext routes RAF-integrated seek commands to registered video elements.
@@ -14,8 +14,8 @@ import type { VideoBookmarksFile } from '../types/videoBookmarks';
  *   Pattern 3 — videoWaits            → TTS leads then waits at a later marker if clip still active
  */
 
-/** seekFn type registered by VideoPlayer — supports optional clip end + done callback */
-type VideoSeekFn = (time: number, autoPlay: boolean, endTime?: number, playbackRate?: number, onDone?: () => void) => void;
+/** seekFn type registered by VideoPlayer — supports optional clip end + done callback + zoom */
+type VideoSeekFn = (time: number, autoPlay: boolean, endTime?: number, playbackRate?: number, onDone?: () => void, zoom?: VideoZoomRegion | null) => void;
 
 /** Pending resume for Pattern 3: waiting for a specific clip to finish */
 interface PendingResume {
@@ -181,6 +181,8 @@ export const VideoSyncProvider: React.FC<VideoSyncProviderProps> = ({ children }
         const endTime = endBookmark?.time;
         const rate = trigger.playbackRate ?? 1;
 
+        const zoom = bookmark.zoom ?? null;
+
         if (trigger.pauseNarration) {
           // Pattern 1: pause TTS, play clip, resume when clip ends
           const gen = ++clipGenerationRef.current;
@@ -189,7 +191,7 @@ export const VideoSyncProvider: React.FC<VideoSyncProviderProps> = ({ children }
             if (clipGenerationRef.current === gen) {
               resumeNarrationRef.current?.();
             }
-          });
+          }, zoom);
         } else {
           // Pattern 2 (and Pattern 3 start): clip overlays TTS concurrently.
           // Track the clip so checkAndWaitForClips knows it's active.
@@ -202,7 +204,7 @@ export const VideoSyncProvider: React.FC<VideoSyncProviderProps> = ({ children }
               pendingResumeRef.current = null;
               resumeNarrationRef.current?.();
             }
-          });
+          }, zoom);
         }
       }
     },

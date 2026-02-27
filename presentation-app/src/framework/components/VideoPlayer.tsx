@@ -1,7 +1,9 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { useVideoSyncContextOptional } from '../contexts/VideoSyncContext';
 import { useSegmentContextOptional } from '../contexts/SegmentContext';
+import { useReducedMotion } from '../accessibility/ReducedMotion';
+import type { VideoZoomRegion } from '../types/videoBookmarks';
 
 interface VideoPlayerProps {
   videoPath: string;
@@ -22,8 +24,10 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [hasEnded, setHasEnded] = useState(false);
+  const [zoomRegion, setZoomRegion] = useState<VideoZoomRegion | null>(null);
   const videoSyncCtx = useVideoSyncContextOptional();
   const segmentCtx = useSegmentContextOptional();
+  const reduced = useReducedMotion();
 
   /** Active clip monitor: pause video and fire onDone when currentTime >= endTime */
   const clipMonitorRef = useRef<{ endTime: number; onDone: () => void } | null>(null);
@@ -60,12 +64,13 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   // Register with VideoSyncContext so marker-driven seeks can target this player
   useEffect(() => {
     if (!videoSyncCtx) return;
-    const seekFn = (time: number, autoPlay: boolean, endTime?: number, playbackRate?: number, onDone?: () => void) => {
+    const seekFn = (time: number, autoPlay: boolean, endTime?: number, playbackRate?: number, onDone?: () => void, zoom?: VideoZoomRegion | null) => {
       const video = videoRef.current;
       if (!video) return;
       video.currentTime = time;
       video.playbackRate = playbackRate ?? 1;
       setHasEnded(false);
+      setZoomRegion(zoom ?? null);
       clipMonitorRef.current = (endTime !== undefined && onDone)
         ? { endTime, onDone }
         : null;
@@ -101,6 +106,15 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
     }
   };
 
+  const zoomAnim = useMemo(() => {
+    if (!zoomRegion) return { x: '0%', y: '0%', scale: 1 };
+    return {
+      x: `${(0.5 - zoomRegion.scale * zoomRegion.cx) * 100}%`,
+      y: `${(0.5 - zoomRegion.scale * zoomRegion.cy) * 100}%`,
+      scale: zoomRegion.scale,
+    };
+  }, [zoomRegion]);
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
@@ -114,23 +128,29 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
         background: '#000'
       }}
     >
-      <video
-        ref={videoRef}
-        src={videoPath}
-        aria-label={ariaLabel}
-        style={{
-          width: '100%',
-          height: 'auto',
-          display: 'block'
-        }}
-        onEnded={handleVideoEnded}
-        playsInline
-        preload="auto"
+      <motion.div
+        animate={zoomAnim}
+        transition={{ duration: reduced ? 0 : 0.5, ease: 'easeInOut' }}
+        style={{ transformOrigin: '0% 0%', width: '100%' }}
       >
-        {captionsSrc && (
-          <track kind="captions" src={captionsSrc} label="Captions" default />
-        )}
-      </video>
+        <video
+          ref={videoRef}
+          src={videoPath}
+          aria-label={ariaLabel}
+          style={{
+            width: '100%',
+            height: 'auto',
+            display: 'block'
+          }}
+          onEnded={handleVideoEnded}
+          playsInline
+          preload="auto"
+        >
+          {captionsSrc && (
+            <track kind="captions" src={captionsSrc} label="Captions" default />
+          )}
+        </video>
+      </motion.div>
     </motion.div>
   );
 };

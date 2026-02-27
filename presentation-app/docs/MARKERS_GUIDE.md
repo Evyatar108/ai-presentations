@@ -266,8 +266,9 @@ audioSegments: [
 | `id` | `string` | Bookmark identifier, referenced by `VideoSeekTrigger.bookmarkId` |
 | `time` | `number` | Seek target timestamp (seconds) |
 | `label` | `string?` | Human-readable description (editor only) |
+| `zoom` | `VideoZoomRegion?` | Optional zoom region (`{ cx, cy, scale }`) — VideoPlayer zooms to this area on seek |
 
-Bookmarks are pure named timestamps. Playback behavior (`autoPlay`, `endTime`) lives on `VideoSeekTrigger` — the same bookmark can be played differently in different contexts.
+Bookmarks are named timestamps with optional zoom regions. Playback behavior (`autoPlay`, `endTime`) lives on `VideoSeekTrigger` — the same bookmark can be played differently in different contexts. When a bookmark includes a `zoom` region, the VideoPlayer smoothly animates to show the zoomed area; seeking to a bookmark without zoom resets to the full view.
 
 ### Narration-Pausing Video Clips (Three Patterns)
 

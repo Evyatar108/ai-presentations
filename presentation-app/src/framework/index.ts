@@ -164,7 +164,7 @@ export type { SlideDurationBreakdown, PresentationDurationReport, SegmentDuratio
 export type { AlignedWord, ResolvedMarker, SegmentAlignment, DemoAlignment } from './alignment/types';
 
 // Video bookmark types
-export type { VideoBookmark, VideoBookmarkSet, VideoBookmarksFile } from './types/videoBookmarks';
+export type { VideoZoomRegion, VideoBookmark, VideoBookmarkSet, VideoBookmarksFile } from './types/videoBookmarks';
 export type { VideoSeekTrigger, VideoWaitTrigger } from './slides/SlideMetadata';
 
 // Video sync context

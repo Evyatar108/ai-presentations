@@ -780,7 +780,7 @@ import { ProgressSteps } from '@framework';
 
 ### VideoPlayer
 
-Controlled video element with play/pause tied to segment state, optional freeze-on-end, and captions support. Auto-registers with `VideoSyncContext` (when present) for marker-driven seeks using its `videoPath`, and reports its `slideKey` from `SegmentContext` for video-slide usage tracking.
+Controlled video element with play/pause tied to segment state, optional freeze-on-end, and captions support. Auto-registers with `VideoSyncContext` (when present) for marker-driven seeks using its `videoPath`, and reports its `slideKey` from `SegmentContext` for video-slide usage tracking. When a bookmark includes a `zoom` region, the video smoothly animates (~0.5s) to show the zoomed area. Seeking to a bookmark without zoom resets to the full view.
 
 **Source:** `src/framework/components/VideoPlayer.tsx`
 
