@@ -48,7 +48,7 @@ By default, the generator skips segments whose audio file already exists and who
 ### Regenerate Specific Segments
 
 ```bash
-npm run tts:generate -- --demo meeting-highlights --segments ch1:s2:intro,ch1:s2:details,ch3:s1:summary
+npm run tts:generate -- --demo meeting-highlights --segments ch1:s2:0,ch1:s2:1,ch3:s1:2
 ```
 
 Regenerates only the listed segments, bypassing cache checks. All other segments are skipped entirely. Requires `--demo`. The format is `ch{N}:s{N}:{segmentId}`. Orphan cleanup is skipped in this mode. Unmatched segment keys produce a warning.
@@ -402,7 +402,7 @@ npm run tts:verify -- --demo highlights-deep-dive
 npm run tts:verify -- --demo highlights-deep-dive --force
 
 # Verify specific segments only
-npm run tts:verify -- --demo highlights-deep-dive --segments ch1:s2:intro,ch3:s1:summary
+npm run tts:verify -- --demo highlights-deep-dive --segments ch1:s2:0,ch3:s1:2
 ```
 
 ### Output

@@ -202,7 +202,7 @@ Content-Type: application/json
 {
   "demoId": "meeting-highlights",
   "segment": {
-    "key": "ch1:s1:intro",
+    "key": "ch1:s1:0",
     "hash": "a1b2c3d4e5f6789...",
     "timestamp": "2025-01-21T10:30:00Z"
   }
@@ -251,7 +251,7 @@ curl -X POST http://localhost:3001/api/narration/update-cache \
   -d '{
     "demoId": "meeting-highlights",
     "segment": {
-      "key": "ch1:s1:intro",
+      "key": "ch1:s1:0",
       "hash": "abc123...",
       "timestamp": "2025-01-21T10:30:00Z"
     }
@@ -525,7 +525,7 @@ curl -X POST http://localhost:3001/api/narration/update-cache \
   -d '{
     "demoId": "test-demo",
     "segment": {
-      "key": "ch1:s1:intro",
+      "key": "ch1:s1:0",
       "hash": "test123",
       "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'"
     }

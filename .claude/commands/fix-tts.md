@@ -85,7 +85,7 @@ The file structure is:
   "decisions": [
     {
       "demoId": "the-demo-id",
-      "segmentKey": "ch1:s2:intro",
+      "segmentKey": "ch1:s2:0",
       "original": "the original narration text",
       "transcribed": "what whisper heard",
       "diffSummary": "concise diff description",
