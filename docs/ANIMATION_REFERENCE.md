@@ -144,6 +144,85 @@ import { AnimatedArrow } from '@framework';
 
 ---
 
+## Background Effects
+
+Pre-built background animation components in `src/framework/components/effects/`. All handle `useReducedMotion()` internally — no need to pass `reduced` as a prop.
+
+### FloatingParticles
+
+Colored dots drifting across a container. Parent needs `position: relative; overflow: hidden`.
+
+```tsx
+import { FloatingParticles } from '@framework';
+
+<div style={{ position: 'relative', overflow: 'hidden', height: '100vh' }}>
+  <FloatingParticles />
+  <FloatingParticles count={25} size={6} speed={3} />
+</div>
+```
+
+### FloatingEmojis
+
+Emojis rising from bottom to top with rotation. Parent needs `position: relative; overflow: hidden`.
+
+```tsx
+import { FloatingEmojis } from '@framework';
+
+<FloatingEmojis />
+<FloatingEmojis emojis={['🔥', '💪']} speed={3} staggerDelay={2} />
+```
+
+### ShimmerOverlay
+
+Skewed gradient sweep across parent. Parent **must** have `position: relative; overflow: hidden`.
+
+```tsx
+import { ShimmerOverlay } from '@framework';
+
+<div style={{ position: 'relative', overflow: 'hidden' }}>
+  <ShimmerOverlay />
+  <ShimmerOverlay color="rgba(255,255,255,0.2)" duration={2} repeatDelay={1} />
+</div>
+```
+
+### GlowBorder
+
+Pulsing gradient halo wrapper. Static glow when reduced motion is active.
+
+```tsx
+import { GlowBorder } from '@framework';
+
+<GlowBorder>
+  <div style={{ padding: '1.5rem', background: 'rgba(255,255,255,0.05)', borderRadius: 16 }}>
+    Content
+  </div>
+</GlowBorder>
+```
+
+### GradientText
+
+Animated cycling gradient text. Static gradient when reduced.
+
+```tsx
+import { GradientText } from '@framework';
+
+<GradientText as="h1" style={{ fontSize: 48 }}>Hello World</GradientText>
+```
+
+### PulsingBadge
+
+Gradient badge with pulse, shine sweep, bouncing icon, and floating icons.
+
+```tsx
+import { PulsingBadge } from '@framework';
+
+<PulsingBadge icon="🚀" floatingIcons={['✨', '💡']}>
+  <div style={{ color: '#fff', fontWeight: 700 }}>Try It Now</div>
+</PulsingBadge>
+```
+
+---
+
 ## Using with `<Reveal>`
 
 ### Basic usage

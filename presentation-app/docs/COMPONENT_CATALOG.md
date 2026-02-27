@@ -38,6 +38,12 @@
 | AnimatedCounter | Data Display | `framework/components/AnimatedCounter.tsx` | Counting-up number animation |
 | ProgressSteps | Data Visualization | `framework/components/ProgressSteps.tsx` | Horizontal step indicator with states |
 | RevealCarousel | Animation | `framework/components/RevealCarousel.tsx` | Auto-indexed one-at-a-time RevealSequence children |
+| FloatingParticles | Effects | `framework/components/effects/FloatingParticles.tsx` | Drifting colored dots with fade in/out |
+| FloatingEmojis | Effects | `framework/components/effects/FloatingEmojis.tsx` | Emojis rising from bottom with rotation |
+| ShimmerOverlay | Effects | `framework/components/effects/ShimmerOverlay.tsx` | Skewed gradient sweep across parent |
+| GlowBorder | Effects | `framework/components/effects/GlowBorder.tsx` | Pulsing gradient halo wrapper |
+| GradientText | Effects | `framework/components/effects/GradientText.tsx` | Animated cycling gradient text |
+| PulsingBadge | Effects | `framework/components/effects/PulsingBadge.tsx` | Gradient badge with pulse, shine, floating icons |
 
 ---
 
@@ -917,6 +923,153 @@ spacingPx.lg  // 16
 radii.xl      // 12
 shadows.md    // '0 0 20px'
 fontSizes.lg  // 14
+```
+
+---
+
+## Effects
+
+Background animation components in `src/framework/components/effects/`. All respect `prefers-reduced-motion` via internal `useReducedMotion()`. Import from `@framework`.
+
+### FloatingParticles
+
+Colored dots that drift across the parent container with random positions, fading in/out infinitely. Renders nothing when reduced motion is active.
+
+**Source:** `src/framework/components/effects/FloatingParticles.tsx`
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `count` | `number` | `15` | Number of particles |
+| `colors` | `string[]` | theme primary/secondary/#8B5CF6 | Particle colors (cycled) |
+| `size` | `number` | `4` | Particle diameter in px |
+| `speed` | `number` | `5` | Base animation duration in seconds |
+
+```tsx
+import { FloatingParticles } from '@framework';
+
+<div style={{ position: 'relative', overflow: 'hidden', height: '100vh' }}>
+  <FloatingParticles />
+  <FloatingParticles count={25} size={6} colors={['#ff0', '#0ff']} />
+</div>
+```
+
+> **Tip:** Parent must have `position: relative; overflow: hidden`.
+
+### FloatingEmojis
+
+Emojis that rise from bottom to top with rotation and fade. Renders nothing when reduced motion is active.
+
+**Source:** `src/framework/components/effects/FloatingEmojis.tsx`
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `emojis` | `string[]` | `['⭐','👍','🎉','💯','✨']` | Emojis to float |
+| `size` | `number` | `26` | Font size in px |
+| `speed` | `number` | `5` | Base duration in seconds |
+| `staggerDelay` | `number` | `1.5` | Delay between each emoji start |
+
+```tsx
+import { FloatingEmojis } from '@framework';
+
+<div style={{ position: 'relative', overflow: 'hidden', height: '100vh' }}>
+  <FloatingEmojis />
+  <FloatingEmojis emojis={['🔥', '💪', '🏆']} speed={3} />
+</div>
+```
+
+> **Tip:** Parent must have `position: relative; overflow: hidden`.
+
+### ShimmerOverlay
+
+Skewed gradient that sweeps left-to-right across the parent. Renders nothing when reduced motion is active.
+
+**Source:** `src/framework/components/effects/ShimmerOverlay.tsx`
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `color` | `string` | `rgba(255,255,255,0.1)` | Shimmer highlight color |
+| `duration` | `number` | `3` | Sweep duration in seconds |
+| `repeatDelay` | `number` | `2` | Pause between sweeps in seconds |
+
+```tsx
+import { ShimmerOverlay } from '@framework';
+
+<div style={{ position: 'relative', overflow: 'hidden', borderRadius: 16 }}>
+  <ShimmerOverlay />
+  <div style={{ position: 'relative', zIndex: 1 }}>Card content</div>
+</div>
+```
+
+> **Tip:** Parent **must** have `position: relative; overflow: hidden`.
+
+### GlowBorder
+
+Wrapper that renders a pulsing gradient halo behind its children. Glow is visible but static when reduced motion is active.
+
+**Source:** `src/framework/components/effects/GlowBorder.tsx`
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | *required* | Content to wrap |
+| `colors` | `string[]` | theme primary/secondary/#8B5CF6 | Gradient colors |
+| `blur` | `number` | `10` | Blur radius in px |
+| `borderRadius` | `number` | `18` | Border radius in px |
+| `style` | `CSSProperties` | — | Outer wrapper styles |
+
+```tsx
+import { GlowBorder } from '@framework';
+
+<GlowBorder>
+  <div style={{ padding: '1.5rem', background: 'rgba(255,255,255,0.05)', borderRadius: 16 }}>
+    Card content
+  </div>
+</GlowBorder>
+```
+
+### GradientText
+
+Text with an animated cycling background gradient. Static gradient when reduced motion is active.
+
+**Source:** `src/framework/components/effects/GradientText.tsx`
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | *required* | Text content |
+| `colors` | `string[]` | theme primary/secondary/#8B5CF6 | Gradient colors |
+| `duration` | `number` | `5` | Animation cycle in seconds |
+| `as` | `'h1'\|'h2'\|'h3'\|'span'` | `'h2'` | HTML element |
+| `style` | `CSSProperties` | — | Element styles |
+
+```tsx
+import { GradientText } from '@framework';
+
+<GradientText>Hello World</GradientText>
+<GradientText as="h1" colors={['#ff0000', '#00ff00']} duration={3} style={{ fontSize: 48 }}>
+  Custom Gradient
+</GradientText>
+```
+
+### PulsingBadge
+
+Gradient badge with scale/boxShadow pulse, shine sweep overlay, bouncing icon, and floating icons around the edges. All animations disabled when reduced motion is active; badge renders with static gradient.
+
+**Source:** `src/framework/components/effects/PulsingBadge.tsx`
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | *required* | Badge content |
+| `icon` | `string` | `'🚀'` | Bouncing emoji above content |
+| `floatingIcons` | `string[]` | `['✨', '💡']` | Icons around badge edges |
+| `colors` | `[string, string]` | [theme.primary, theme.secondary] | Gradient from/to |
+| `style` | `CSSProperties` | — | Outer wrapper styles |
+
+```tsx
+import { PulsingBadge } from '@framework';
+
+<PulsingBadge>
+  <div style={{ color: '#fff', fontWeight: 700 }}>Try It Now</div>
+  <div style={{ color: 'rgba(255,255,255,0.85)', fontSize: 14 }}>Available today</div>
+</PulsingBadge>
 ```
 
 ---

@@ -70,6 +70,10 @@ export type { MarkerCardProps } from './components/MarkerCard';
 export { RevealCarousel } from './components/RevealCarousel';
 export type { RevealCarouselProps } from './components/RevealCarousel';
 
+// Effects
+export { FloatingParticles, FloatingEmojis, ShimmerOverlay, GlowBorder, GradientText, PulsingBadge } from './components/effects';
+export type { FloatingParticlesProps, FloatingEmojisProps, ShimmerOverlayProps, GlowBorderProps, GradientTextProps, PulsingBadgeProps } from './components/effects';
+
 // Reveal components
 export { Reveal, RevealAtMarker, RevealGroup, RevealContext, RevealSequence, MarkerDim, AnnotateAtMarker } from './components/reveal';
 export type { RevealProps, RevealGroupProps, RevealContextProps, RevealAnimation, RevealVisibilityProps, MarkerDimProps, AnnotateAtMarkerProps } from './components/reveal';

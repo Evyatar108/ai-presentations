@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 import {
   defineSlide,
@@ -7,10 +7,18 @@ import {
   useSegmentedAnimation,
   fadeIn,
   fadeUp,
+  fadeDown,
+  fadeRight,
   scaleIn,
   staggerContainer,
+  tileVariants,
   SlideContainer,
   ContentCard,
+  GradientHighlightBox,
+  SlideTitle,
+  BenefitCard,
+  MetricDisplay,
+  MetricTile,
   CircularProgress,
   AnimatedCounter,
   AnimatedHeading,
@@ -23,10 +31,29 @@ import {
   RevealSequence,
   CodeBlock,
   ShikiCodeBlock,
+  Callout,
+  NumberedStepCard,
+  ProgressSteps,
+  BeforeAfterSplit,
+  ComparisonTable,
+  TestimonialCard,
+  PipelineDiagram,
+  CandidateGrid,
+  FloatingParticles,
+  FloatingEmojis,
+  ShimmerOverlay,
+  GlowBorder,
+  GradientText,
+  PulsingBadge,
   cardStyle,
   monoText,
   gradientBadge,
 } from '@framework';
+import { TypeAnimation } from 'react-type-animation';
+import { scaleBand, scaleLinear } from '@visx/scale';
+import { Group } from '@visx/group';
+import { AxisBottom, AxisLeft } from '@visx/axis';
+import Lottie from 'lottie-react';
 
 /**
  * Component Showcase - Chapter 0
@@ -1358,4 +1385,1052 @@ export const CS_S12_ShikiCodeBlock = defineSlide({
     audioSegments: Array.from({ length: THEME_CHUNKS.length + 2 }, (_, i) => ({ id: i })),
   },
   component: ShikiCodeBlockComponent,
+});
+
+// ─── Slide 13: Layout Components ────────────────────────────────────────────
+// Demonstrates: SlideTitle, ContentCard, GradientHighlightBox
+
+const LayoutComponentsComponent: React.FC = () => {
+  const theme = useTheme();
+  const { reduced } = useReducedMotion();
+  const { isSegmentVisible } = useSegmentedAnimation();
+
+  return (
+    <SlideContainer>
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={fadeIn(reduced)}
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '2rem',
+          maxWidth: 800,
+        }}
+      >
+        <Reveal from={0}>
+          <SlideTitle reduced={reduced} subtitle="Ready-made layout primitives">
+            Layout Components
+          </SlideTitle>
+        </Reveal>
+
+        {isSegmentVisible(1) && (
+          <motion.div
+            variants={fadeUp(reduced)}
+            initial="hidden"
+            animate="visible"
+            style={{ width: '100%' }}
+          >
+            <h3 style={{ color: theme.colors.textMuted, fontSize: '0.85rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem' }}>
+              ContentCard
+            </h3>
+            <ContentCard>
+              <p style={{
+                fontSize: '1.2rem',
+                lineHeight: 1.6,
+                color: theme.colors.textSecondary,
+                margin: 0,
+              }}>
+                A themed card with subtle background, padding, and rounded corners.
+                Use it for explanatory text, summaries, or code usage examples.
+              </p>
+            </ContentCard>
+          </motion.div>
+        )}
+
+        {isSegmentVisible(2) && (
+          <motion.div
+            variants={fadeUp(reduced)}
+            initial="hidden"
+            animate="visible"
+            style={{ width: '100%' }}
+          >
+            <h3 style={{ color: theme.colors.textMuted, fontSize: '0.85rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem' }}>
+              GradientHighlightBox
+            </h3>
+            <GradientHighlightBox reduced={reduced}>
+              <p style={{
+                fontSize: '1.1rem',
+                margin: 0,
+                color: theme.colors.textPrimary,
+              }}>
+                An animated gradient border box for emphasizing key takeaways or calls to action.
+              </p>
+            </GradientHighlightBox>
+          </motion.div>
+        )}
+      </motion.div>
+    </SlideContainer>
+  );
+};
+
+export const CS_S13_LayoutComponents = defineSlide({
+  metadata: {
+    chapter: 0,
+    slide: 13,
+    title: 'Layout Components',
+    audioSegments: [
+      { id: 0 },
+      { id: 1 },
+      { id: 2 },
+    ],
+  },
+  component: LayoutComponentsComponent,
+});
+
+// ─── Slide 14: Data Cards ───────────────────────────────────────────────────
+// Demonstrates: BenefitCard with tileVariants + staggerContainer, MetricDisplay
+
+const benefits = [
+  { id: 'fast', icon: '⚡', title: 'Fast', desc: 'Instant hot-reload development', detail: 'Vite + React + HMR for sub-second feedback' },
+  { id: 'typed', icon: '🔒', title: 'Type-Safe', desc: 'End-to-end TypeScript', detail: 'Strict types from slides to TTS scripts' },
+  { id: 'modular', icon: '🧩', title: 'Modular', desc: 'Composable building blocks', detail: 'Mix and match components per demo' },
+];
+
+const DataCardsComponent: React.FC = () => {
+  const { reduced } = useReducedMotion();
+  const { isSegmentVisibleById, isOnSegment, isSegmentVisible } = useSegmentedAnimation();
+
+  return (
+    <SlideContainer>
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={fadeDown(reduced)}
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '2rem',
+          maxWidth: 1100,
+          width: '100%',
+        }}
+      >
+        <AnimatedHeading text="Data Cards" as="h2" style={{ fontSize: '2.8rem' }} />
+
+        <motion.div
+          variants={staggerContainer(reduced)}
+          initial="hidden"
+          animate="visible"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            gap: '1.5rem',
+            width: '100%',
+          }}
+        >
+          {benefits.map((b, i) => (
+            <motion.div key={b.id} variants={tileVariants(reduced)}>
+              <BenefitCard
+                icon={b.icon}
+                title={b.title}
+                description={b.desc}
+                detail={b.detail}
+                isVisible={isSegmentVisibleById(i)}
+                isHighlighted={isOnSegment(i)}
+                reduced={reduced}
+              />
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {isSegmentVisible(3) && (
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={staggerContainer(reduced)}
+            style={{
+              display: 'flex',
+              gap: '4rem',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <motion.div variants={fadeRight(reduced)}>
+              <MetricDisplay value="12" label="Components" reduced={reduced} emphasis />
+            </motion.div>
+            <motion.div variants={fadeRight(reduced, 0.2)}>
+              <MetricDisplay value="3x" label="Faster Setup" reduced={reduced} />
+            </motion.div>
+          </motion.div>
+        )}
+      </motion.div>
+    </SlideContainer>
+  );
+};
+
+export const CS_S14_DataCards = defineSlide({
+  metadata: {
+    chapter: 0,
+    slide: 14,
+    title: 'Data Cards',
+    audioSegments: [
+      { id: 0 },
+      { id: 1 },
+      { id: 2 },
+      { id: 3 },
+    ],
+  },
+  component: DataCardsComponent,
+});
+
+// ─── Slide 15: TypeAnimation ────────────────────────────────────────────────
+// Demonstrates: react-type-animation typewriter effect
+
+const TypeAnimationComponent: React.FC = () => {
+  const theme = useTheme();
+  const { isSegmentVisible } = useSegmentedAnimation();
+
+  return (
+    <SlideContainer>
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '2rem',
+        maxWidth: 800,
+      }}>
+        <AnimatedHeading text="TypeAnimation" as="h2" style={{ fontSize: '2.8rem' }} />
+
+        <Reveal from={0}>
+          <div style={{
+            background: '#1a1a2e',
+            borderRadius: 12,
+            padding: '1.5rem',
+            width: '100%',
+            fontFamily: 'monospace',
+            border: '1px solid rgba(255,255,255,0.1)',
+          }}>
+            <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
+              <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#ff5f57' }} />
+              <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#febc2e' }} />
+              <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#28c840' }} />
+            </div>
+            <div style={{ color: '#8be9fd', fontSize: '1rem' }}>
+              <span style={{ color: '#50fa7b' }}>$ </span>
+              <TypeAnimation
+                sequence={[
+                  'npm run build',
+                  800,
+                  'npm run build\n✓ TypeScript compiled',
+                  600,
+                  'npm run build\n✓ TypeScript compiled\n✓ Bundle optimized (142 KB)',
+                  600,
+                  'npm run build\n✓ TypeScript compiled\n✓ Bundle optimized (142 KB)\n✓ Assets copied',
+                  500,
+                  'npm run build\n✓ TypeScript compiled\n✓ Bundle optimized (142 KB)\n✓ Assets copied\n\nBuild complete in 2.1s',
+                  2000,
+                ]}
+                speed={60}
+                style={{ whiteSpace: 'pre-wrap' }}
+                cursor={true}
+              />
+            </div>
+          </div>
+        </Reveal>
+
+        {isSegmentVisible(1) && (
+          <div style={{
+            background: 'rgba(255,255,255,0.05)',
+            borderRadius: 12,
+            padding: '1.5rem',
+            width: '100%',
+            border: `1px solid ${theme.colors.primary}33`,
+          }}>
+            <p style={{
+              color: theme.colors.textMuted,
+              fontSize: '0.85rem',
+              fontWeight: 600,
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em',
+              margin: '0 0 0.75rem',
+            }}>
+              AI Streaming Simulation
+            </p>
+            <div style={{ color: theme.colors.textSecondary, fontSize: '1.05rem', lineHeight: 1.6 }}>
+              <TypeAnimation
+                sequence={[
+                  'The presentation framework uses a modular architecture with auto-discovery, theme-aware components, and progressive segment reveals for narrated storytelling.',
+                  3000,
+                ]}
+                speed={70}
+                cursor={true}
+              />
+            </div>
+          </div>
+        )}
+
+        <ContentCard>
+          <code style={{
+            fontSize: '0.9rem',
+            color: theme.colors.textSecondary,
+            fontFamily: 'monospace',
+          }}>
+            {'<TypeAnimation sequence={["text", 1000]} speed={60} cursor={true} />'}
+          </code>
+        </ContentCard>
+      </div>
+    </SlideContainer>
+  );
+};
+
+export const CS_S15_TypeAnimation = defineSlide({
+  metadata: {
+    chapter: 0,
+    slide: 15,
+    title: 'TypeAnimation',
+    audioSegments: [
+      { id: 0 },
+      { id: 1 },
+    ],
+  },
+  component: TypeAnimationComponent,
+});
+
+// ─── Slide 16: Visx Chart ───────────────────────────────────────────────────
+// Demonstrates: @visx/shape Bar, @visx/scale, @visx/axis, @visx/group
+
+const CHART_DATA = [
+  { label: 'Accuracy', score: 94 },
+  { label: 'Fluency', score: 88 },
+  { label: 'Relevance', score: 91 },
+  { label: 'Coherence', score: 85 },
+  { label: 'Coverage', score: 78 },
+];
+
+const CHART_WIDTH = 600;
+const CHART_HEIGHT = 320;
+const CHART_MARGIN = { top: 20, right: 30, bottom: 50, left: 70 };
+
+const VisxChartComponent: React.FC = () => {
+  const theme = useTheme();
+  const { reduced } = useReducedMotion();
+  const { isSegmentVisible } = useSegmentedAnimation();
+  const [animated, setAnimated] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setAnimated(true), reduced ? 0 : 300);
+    return () => clearTimeout(timer);
+  }, [reduced]);
+
+  const xMax = CHART_WIDTH - CHART_MARGIN.left - CHART_MARGIN.right;
+  const yMax = CHART_HEIGHT - CHART_MARGIN.top - CHART_MARGIN.bottom;
+
+  const xScale = scaleBand<string>({
+    domain: CHART_DATA.map(d => d.label),
+    range: [0, xMax],
+    padding: 0.35,
+  });
+
+  const yScale = scaleLinear<number>({
+    domain: [0, 100],
+    range: [yMax, 0],
+  });
+
+  const showAxes = isSegmentVisible(1);
+
+  return (
+    <SlideContainer>
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '1.5rem',
+        maxWidth: 800,
+      }}>
+        <AnimatedHeading text="Visx Chart" as="h2" style={{ fontSize: '2.8rem' }} />
+
+        <Reveal from={0}>
+          <p style={{
+            color: theme.colors.textSecondary,
+            fontSize: '1.05rem',
+            textAlign: 'center',
+            maxWidth: 600,
+            lineHeight: 1.6,
+          }}>
+            Composable React + D3 charts via <code style={{ color: theme.colors.primary }}>@visx/*</code> — SVG output works with Framer Motion
+          </p>
+        </Reveal>
+
+        <div style={{
+          background: 'rgba(255,255,255,0.03)',
+          borderRadius: 12,
+          padding: '1rem',
+          border: '1px solid rgba(255,255,255,0.08)',
+        }}>
+          <svg width={CHART_WIDTH} height={CHART_HEIGHT}>
+            <Group left={CHART_MARGIN.left} top={CHART_MARGIN.top}>
+              {CHART_DATA.map((d) => {
+                const barWidth = xScale.bandwidth();
+                const barHeight = yMax - (yScale(d.score) ?? 0);
+                const barX = xScale(d.label) ?? 0;
+                const barY = yMax - barHeight;
+                return (
+                  <motion.rect
+                    key={d.label}
+                    x={barX}
+                    y={barY}
+                    width={barWidth}
+                    height={barHeight}
+                    fill={theme.colors.primary}
+                    rx={4}
+                    initial={{ scaleY: 0 }}
+                    animate={{ scaleY: animated ? 1 : 0 }}
+                    transition={{ duration: reduced ? 0 : 0.6, delay: reduced ? 0 : CHART_DATA.indexOf(d) * 0.1 }}
+                    style={{ originY: 1, originX: 0.5, transformBox: 'fill-box' }}
+                  />
+                );
+              })}
+              {showAxes && (
+                <>
+                  <AxisBottom
+                    top={yMax}
+                    scale={xScale}
+                    tickStroke={theme.colors.textMuted}
+                    stroke={theme.colors.textMuted}
+                    tickLabelProps={() => ({
+                      fill: theme.colors.textSecondary,
+                      fontSize: 12,
+                      textAnchor: 'middle' as const,
+                      fontFamily: theme.fontFamily,
+                    })}
+                  />
+                  <AxisLeft
+                    scale={yScale}
+                    tickStroke={theme.colors.textMuted}
+                    stroke={theme.colors.textMuted}
+                    tickLabelProps={() => ({
+                      fill: theme.colors.textSecondary,
+                      fontSize: 12,
+                      textAnchor: 'end' as const,
+                      fontFamily: theme.fontFamily,
+                      dx: -4,
+                      dy: 4,
+                    })}
+                    label="Score"
+                    labelProps={{
+                      fill: theme.colors.textSecondary,
+                      fontSize: 13,
+                      fontFamily: theme.fontFamily,
+                      textAnchor: 'middle',
+                    }}
+                  />
+                </>
+              )}
+            </Group>
+          </svg>
+        </div>
+
+        <ContentCard>
+          <code style={{
+            fontSize: '0.9rem',
+            color: theme.colors.textSecondary,
+            fontFamily: 'monospace',
+          }}>
+            {'<Bar x={xScale(d)} y={yScale(d)} width={bandwidth} height={barHeight} />'}
+          </code>
+        </ContentCard>
+      </div>
+    </SlideContainer>
+  );
+};
+
+export const CS_S16_VisxChart = defineSlide({
+  metadata: {
+    chapter: 0,
+    slide: 16,
+    title: 'Visx Chart',
+    audioSegments: [
+      { id: 0 },
+      { id: 1 },
+    ],
+  },
+  component: VisxChartComponent,
+});
+
+// ─── Slide 17: Lottie Animation ─────────────────────────────────────────────
+// Demonstrates: lottie-react with Lottie JSON files
+
+const LottieAnimationComponent: React.FC = () => {
+  const theme = useTheme();
+  const { isSegmentVisible } = useSegmentedAnimation();
+  const [confettiData, setConfettiData] = useState<object | null>(null);
+  const [checkmarkData, setCheckmarkData] = useState<object | null>(null);
+
+  useEffect(() => {
+    fetch('/animations/confetti.json').then(r => r.json()).then(setConfettiData);
+    fetch('/animations/checkmark.json').then(r => r.json()).then(setCheckmarkData);
+  }, []);
+
+  return (
+    <SlideContainer>
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '2rem',
+        maxWidth: 800,
+      }}>
+        <AnimatedHeading text="Lottie Animation" as="h2" style={{ fontSize: '2.8rem' }} />
+
+        <p style={{
+          color: theme.colors.textSecondary,
+          fontSize: '1.05rem',
+          textAlign: 'center',
+          maxWidth: 600,
+          lineHeight: 1.6,
+        }}>
+          Pre-made vector animations from LottieFiles — confetti, checkmarks, spinners.
+          Frame-level control via ref.
+        </p>
+
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: '2rem',
+          width: '100%',
+        }}>
+          <Reveal from={0}>
+            <div style={{
+              ...cardStyle('default', {
+                padding: '2rem',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '1rem',
+                minHeight: 220,
+              }),
+            }}>
+              <span style={{
+                fontSize: '0.85rem',
+                fontWeight: 600,
+                color: theme.colors.textMuted,
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+              }}>
+                Confetti Burst
+              </span>
+              {confettiData && (
+                <Lottie
+                  animationData={confettiData}
+                  loop={true}
+                  style={{ width: 150, height: 150 }}
+                />
+              )}
+            </div>
+          </Reveal>
+
+          {isSegmentVisible(1) && (
+            <div style={{
+              ...cardStyle('success', {
+                padding: '2rem',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '1rem',
+                minHeight: 220,
+              }),
+            }}>
+              <span style={{
+                fontSize: '0.85rem',
+                fontWeight: 600,
+                color: theme.colors.textMuted,
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+              }}>
+                Success Check
+              </span>
+              {checkmarkData && (
+                <Lottie
+                  animationData={checkmarkData}
+                  loop={false}
+                  style={{ width: 150, height: 150 }}
+                />
+              )}
+            </div>
+          )}
+        </div>
+
+        <ContentCard>
+          <code style={{
+            fontSize: '0.9rem',
+            color: theme.colors.textSecondary,
+            fontFamily: 'monospace',
+          }}>
+            {'<Lottie animationData={data} loop={true} style={{ width: 150 }} />'}
+          </code>
+        </ContentCard>
+      </div>
+    </SlideContainer>
+  );
+};
+
+export const CS_S17_LottieAnimation = defineSlide({
+  metadata: {
+    chapter: 0,
+    slide: 17,
+    title: 'Lottie Animation',
+    audioSegments: [
+      { id: 0 },
+      { id: 1 },
+    ],
+  },
+  component: LottieAnimationComponent,
+});
+
+// ─── Slide 18: Info Components ──────────────────────────────────────────────
+// Demonstrates: Callout, NumberedStepCard, ProgressSteps
+
+const STEP_CARDS = [
+  { num: 1, title: 'Extract', desc: 'Parse raw transcript into structured segments' },
+  { num: 2, title: 'Classify', desc: 'Categorize by topic, speaker, and intent' },
+  { num: 3, title: 'Summarize', desc: 'Generate concise narrative highlights' },
+];
+
+const InfoComponentsComponent: React.FC = () => {
+  const theme = useTheme();
+  const { reduced } = useReducedMotion();
+  const { isSegmentVisible } = useSegmentedAnimation();
+
+  return (
+    <SlideContainer>
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '1.5rem',
+        maxWidth: 900,
+        width: '100%',
+      }}>
+        <AnimatedHeading text="Info Components" as="h2" style={{ fontSize: '2.8rem' }} />
+
+        <Reveal from={0}>
+          <div style={{ display: 'flex', gap: '1rem', width: '100%' }}>
+            <Callout variant="info" icon="💡" style={{ flex: 1 }}>
+              <div style={{ fontWeight: 600, color: theme.colors.primary, marginBottom: '0.3rem', fontSize: '0.95rem' }}>
+                Callout — Info Variant
+              </div>
+              <div style={{ color: theme.colors.textSecondary, fontSize: '0.9rem', lineHeight: 1.5 }}>
+                Use callouts to highlight tips, warnings, or important context.
+              </div>
+            </Callout>
+            <Callout variant="warning" icon="⚠️" style={{ flex: 1 }}>
+              <div style={{ fontWeight: 600, color: theme.colors.warning, marginBottom: '0.3rem', fontSize: '0.95rem' }}>
+                Warning Variant
+              </div>
+              <div style={{ color: theme.colors.textSecondary, fontSize: '0.9rem', lineHeight: 1.5 }}>
+                Draws attention to potential pitfalls or caveats.
+              </div>
+            </Callout>
+          </div>
+        </Reveal>
+
+        {isSegmentVisible(1) && (
+          <motion.div
+            variants={fadeUp(reduced)}
+            initial="hidden"
+            animate="visible"
+            style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', width: '100%' }}
+          >
+            {STEP_CARDS.map((s, i) => (
+              <NumberedStepCard
+                key={s.num}
+                number={s.num}
+                title={s.title}
+                description={s.desc}
+                isActive={i === 1}
+                variant={i === 2 ? 'error' : 'default'}
+              />
+            ))}
+          </motion.div>
+        )}
+
+        {isSegmentVisible(2) && (
+          <motion.div
+            variants={fadeUp(reduced)}
+            initial="hidden"
+            animate="visible"
+            style={{ width: '100%' }}
+          >
+            <ProgressSteps
+              steps={[
+                { label: 'Extract', status: 'completed' as const },
+                { label: 'Classify', status: 'completed' as const },
+                { label: 'Summarize', status: 'active' as const },
+              ]}
+              connectorStyle="arrow"
+            />
+          </motion.div>
+        )}
+      </div>
+    </SlideContainer>
+  );
+};
+
+export const CS_S18_InfoComponents = defineSlide({
+  metadata: {
+    chapter: 0,
+    slide: 18,
+    title: 'Info Components',
+    audioSegments: [
+      { id: 0 },
+      { id: 1 },
+      { id: 2 },
+    ],
+  },
+  component: InfoComponentsComponent,
+});
+
+// ─── Slide 19: Comparison Components ────────────────────────────────────────
+// Demonstrates: BeforeAfterSplit, ComparisonTable
+
+const ComparisonComponentsComponent: React.FC = () => {
+  const theme = useTheme();
+  const { reduced } = useReducedMotion();
+  const { isSegmentVisible } = useSegmentedAnimation();
+
+  return (
+    <SlideContainer>
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '1.5rem',
+        maxWidth: 950,
+        width: '100%',
+      }}>
+        <AnimatedHeading text="Comparison Components" as="h2" style={{ fontSize: '2.8rem' }} />
+
+        <Reveal from={0}>
+          <BeforeAfterSplit
+            beforeTitle="Before (4 LLM Calls)"
+            afterTitle="After (1 Unified Call)"
+            beforeContent={
+              <div style={{ padding: '1rem', color: theme.colors.textSecondary, fontSize: '0.95rem', lineHeight: 1.6 }}>
+                <div>1. Extract abstractives</div>
+                <div>2. Extract clips</div>
+                <div>3. Rank clips</div>
+                <div>4. Merge narrative</div>
+              </div>
+            }
+            afterContent={
+              <div style={{ padding: '1rem', color: theme.colors.success, fontSize: '0.95rem', lineHeight: 1.6 }}>
+                <div>1. Single unified prompt</div>
+                <div style={{ color: theme.colors.textMuted, marginTop: '0.5rem', fontSize: '0.85rem' }}>
+                  75% fewer tokens, 3x faster
+                </div>
+              </div>
+            }
+          />
+        </Reveal>
+
+        {isSegmentVisible(1) && (
+          <motion.div
+            variants={fadeUp(reduced)}
+            initial="hidden"
+            animate="visible"
+            style={{ width: '100%' }}
+          >
+            <ComparisonTable
+              columns={[
+                { header: 'Metric' },
+                { header: 'Before', color: theme.colors.warning },
+                { header: 'After', color: theme.colors.success },
+              ]}
+              rows={[
+                ['LLM Calls', '4', '1'],
+                ['Latency', '12s', '4s'],
+                ['Token Cost', '$0.08', '$0.02'],
+                ['GPU Hours', '600/day', '200/day'],
+              ]}
+            />
+          </motion.div>
+        )}
+      </div>
+    </SlideContainer>
+  );
+};
+
+export const CS_S19_ComparisonComponents = defineSlide({
+  metadata: {
+    chapter: 0,
+    slide: 19,
+    title: 'Comparison Components',
+    audioSegments: [
+      { id: 0 },
+      { id: 1 },
+    ],
+  },
+  component: ComparisonComponentsComponent,
+});
+
+// ─── Slide 20: Data Components ──────────────────────────────────────────────
+// Demonstrates: MetricTile, CandidateGrid, TestimonialCard
+
+const DataComponentsComponent: React.FC = () => {
+  const theme = useTheme();
+  const { reduced } = useReducedMotion();
+  const { isSegmentVisible } = useSegmentedAnimation();
+
+  return (
+    <SlideContainer>
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '1.5rem',
+        maxWidth: 950,
+        width: '100%',
+      }}>
+        <AnimatedHeading text="Data Components" as="h2" style={{ fontSize: '2.8rem' }} />
+
+        <Reveal from={0}>
+          <div style={{ display: 'flex', gap: '1rem', width: '100%', justifyContent: 'center' }}>
+            <MetricTile label="LLM Calls" after="4 → 1" note="75% reduction" />
+            <MetricTile label="Latency" after="3x faster" note="Batch processing" />
+            <MetricTile label="Cost" after="$0.02" note="Per request" />
+          </div>
+        </Reveal>
+
+        {isSegmentVisible(1) && (
+          <motion.div
+            variants={fadeUp(reduced)}
+            initial="hidden"
+            animate="visible"
+            style={{ width: '100%' }}
+          >
+            <h3 style={{ color: theme.colors.textMuted, fontSize: '0.85rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem' }}>
+              CandidateGrid (30 candidates, 3 topic ranges)
+            </h3>
+            <CandidateGrid n={30} animate topicRanges={[[0, 9], [10, 19], [20, 29]]} />
+          </motion.div>
+        )}
+
+        {isSegmentVisible(2) && (
+          <motion.div
+            variants={fadeUp(reduced)}
+            initial="hidden"
+            animate="visible"
+            style={{ width: '100%' }}
+          >
+            <TestimonialCard
+              quote="The framework made it possible to build narrated presentations in a fraction of the time."
+              author="Demo Author"
+              reduced={reduced}
+            />
+          </motion.div>
+        )}
+      </div>
+    </SlideContainer>
+  );
+};
+
+export const CS_S20_DataComponents = defineSlide({
+  metadata: {
+    chapter: 0,
+    slide: 20,
+    title: 'Data Components',
+    audioSegments: [
+      { id: 0 },
+      { id: 1 },
+      { id: 2 },
+    ],
+  },
+  component: DataComponentsComponent,
+});
+
+// ─── Slide 21: PipelineDiagram ───────────────────────────────────────────────
+// Demonstrates: PipelineDiagram with progressive step reveal
+
+const PipelineDiagramComponent: React.FC = () => {
+  const theme = useTheme();
+  const { isSegmentVisible } = useSegmentedAnimation();
+
+  const visibleSteps = isSegmentVisible(1) ? 4 : isSegmentVisible(0) ? 2 : 0;
+
+  return (
+    <SlideContainer>
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '1.5rem',
+        maxWidth: 900,
+        width: '100%',
+      }}>
+        <AnimatedHeading text="PipelineDiagram" as="h2" style={{ fontSize: '2.8rem' }} />
+
+        <Reveal from={0}>
+          <p style={{
+            color: theme.colors.textSecondary,
+            fontSize: '1.05rem',
+            textAlign: 'center',
+            maxWidth: 600,
+            lineHeight: 1.6,
+          }}>
+            Horizontal step pipeline with arrow connectors.
+            Control <code style={{ color: theme.colors.primary }}>visibleSteps</code> to progressively reveal stages.
+          </p>
+        </Reveal>
+
+        <div style={{ width: '100%' }}>
+          <PipelineDiagram
+            visibleSteps={visibleSteps}
+            steps={[
+              { name: 'Extract', purpose: 'Parse raw transcript' },
+              { name: 'Classify', purpose: 'Categorize segments' },
+              { name: 'Rank', purpose: 'Score by quality' },
+              { name: 'Narrate', purpose: 'Generate highlights' },
+            ]}
+            arrowLabel="JSON"
+          />
+        </div>
+
+        <ContentCard>
+          <code style={{
+            fontSize: '0.9rem',
+            color: theme.colors.textSecondary,
+            fontFamily: 'monospace',
+          }}>
+            {'<PipelineDiagram steps={[...]} visibleSteps={segment} arrowLabel="JSON" />'}
+          </code>
+        </ContentCard>
+      </div>
+    </SlideContainer>
+  );
+};
+
+export const CS_S21_PipelineDiagram = defineSlide({
+  metadata: {
+    chapter: 0,
+    slide: 21,
+    title: 'PipelineDiagram',
+    audioSegments: [
+      { id: 0 },
+      { id: 1 },
+    ],
+  },
+  component: PipelineDiagramComponent,
+});
+
+// ─── Slide 22: Background Effects ───────────────────────────────────────────
+// Demonstrates: Floating particles, shimmer, animated gradient text, glow border
+
+const BackgroundEffectsComponent: React.FC = () => {
+  const theme = useTheme();
+  const { isSegmentVisible } = useSegmentedAnimation();
+
+  return (
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: '100vh',
+      position: 'relative',
+      overflow: 'hidden',
+      background: `linear-gradient(135deg, ${theme.colors.bgDeep}, ${theme.colors.bgSurface})`,
+      fontFamily: theme.fontFamily,
+    }}>
+      <FloatingParticles />
+      <FloatingEmojis />
+
+      <div style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
+        <GradientText style={{ fontSize: '2.8rem', fontWeight: 700, marginBottom: '1rem' }}>
+          Background Effects
+        </GradientText>
+
+        <Reveal from={0}>
+          <p style={{
+            color: theme.colors.textSecondary,
+            fontSize: '1rem',
+            maxWidth: 550,
+            margin: '0 auto 1.5rem',
+            lineHeight: 1.6,
+          }}>
+            Floating particles, rising emojis, pulsing glow, gradient text, shimmer sweeps, glowing borders, and animated CTA badges.
+          </p>
+        </Reveal>
+
+        {isSegmentVisible(1) && (
+          <div style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+            {/* Card with shimmer */}
+            <div style={{
+              position: 'relative',
+              overflow: 'hidden',
+              borderRadius: 16,
+              padding: '1.25rem 1.75rem',
+              background: 'rgba(255,255,255,0.05)',
+              border: '1px solid rgba(255,255,255,0.1)',
+              minWidth: 180,
+            }}>
+              <ShimmerOverlay />
+              <div style={{ position: 'relative', zIndex: 1, color: theme.colors.textPrimary, fontSize: '0.95rem', fontWeight: 600 }}>
+                Shimmer Sweep
+              </div>
+              <div style={{ position: 'relative', zIndex: 1, color: theme.colors.textMuted, fontSize: '0.8rem', marginTop: '0.25rem' }}>
+                Skewed gradient slides across
+              </div>
+            </div>
+
+            {/* Card with glow border */}
+            <GlowBorder>
+              <div style={{
+                borderRadius: 16,
+                padding: '1.25rem 1.75rem',
+                background: 'rgba(255,255,255,0.05)',
+                minWidth: 180,
+              }}>
+                <div style={{ color: theme.colors.textPrimary, fontSize: '0.95rem', fontWeight: 600 }}>
+                  Glow Border
+                </div>
+                <div style={{ color: theme.colors.textMuted, fontSize: '0.8rem', marginTop: '0.25rem' }}>
+                  Pulsing gradient halo
+                </div>
+              </div>
+            </GlowBorder>
+
+            {/* CTA badge with shine + bouncing emoji + floating icons */}
+            <PulsingBadge style={{ minWidth: 180 }}>
+              <div style={{ color: '#fff', fontSize: '0.95rem', fontWeight: 700 }}>
+                CTA Badge
+              </div>
+              <div style={{ color: 'rgba(255,255,255,0.85)', fontSize: '0.75rem', marginTop: '0.2rem' }}>
+                Shine + floating icons
+              </div>
+            </PulsingBadge>
+          </div>
+        )}
+
+        {isSegmentVisible(2) && (
+          <div style={{ marginTop: '1.5rem' }}>
+            <ContentCard>
+              <code style={{
+                fontSize: '0.85rem',
+                color: theme.colors.textSecondary,
+                fontFamily: 'monospace',
+              }}>
+                {'All effects respect useReducedMotion() — disabled when prefers-reduced-motion is set.'}
+              </code>
+            </ContentCard>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export const CS_S22_BackgroundEffects = defineSlide({
+  metadata: {
+    chapter: 0,
+    slide: 22,
+    title: 'Background Effects',
+    audioSegments: [
+      { id: 0 },
+      { id: 1 },
+      { id: 2 },
+    ],
+  },
+  component: BackgroundEffectsComponent,
 });
