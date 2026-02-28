@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import {
   useReducedMotion,
   useTheme,
@@ -12,6 +13,7 @@ import {
   monoText,
   fadeUp,
   cardStyle,
+  useMarker,
 } from '@framework';
 
 /**
@@ -22,16 +24,15 @@ import {
 // ---------- Data ----------
 
 const CATEGORIES = [
-  { name: 'Navigation', icon: '\u{1F9ED}', count: 5, markerId: 'nav' },
-  { name: 'Telemetry', icon: '\u{1F4CA}', count: 10, markerId: 'tel' },
-  { name: 'Comparison', icon: '\u{2696}\u{FE0F}', count: 1, markerId: 'comp' },
-  { name: 'Chat Execution', icon: '\u{26A1}', count: 4, markerId: 'chat' },
-  { name: 'Configuration', icon: '\u{2699}\u{FE0F}', count: 3, markerId: 'config' },
+  { name: 'Conversation Loading', icon: '\u{1F4E5}', count: 3, markerId: 'nav' },
+  { name: 'Turn Inspection', icon: '\u{1F50D}', count: 2, markerId: 'turn' },
+  { name: 'Telemetry & Diagnostics', icon: '\u{1F4CA}', count: 10, markerId: 'tel' },
+  { name: 'Chat Execution', icon: '\u{26A1}', count: 1, markerId: 'chat' },
+  { name: 'Config Management', icon: '\u{2699}\u{FE0F}', count: 5, markerId: 'config' },
 ];
 
 const SKILLS = [
   { name: 'debug-conversation', markerId: 'sk-debug' },
-  { name: 'compare-conversations', markerId: 'sk-compare' },
   { name: 'send-and-debug', markerId: 'sk-send' },
   { name: 'setup-config', markerId: 'sk-config' },
   { name: 'check-flight', markerId: 'sk-flight' },
@@ -68,6 +69,26 @@ const CategoryBadge: React.FC<{
   </div>
 );
 
+/** Badge that always occupies space but fades in when its marker is reached. */
+const MarkerBadge: React.FC<{
+  markerId: string;
+  cat: typeof CATEGORIES[number];
+  theme: ReturnType<typeof useTheme>;
+  reduced: boolean;
+}> = ({ markerId, cat, theme, reduced }) => {
+  const { reached } = useMarker(markerId);
+
+  return (
+    <motion.div
+      animate={{ opacity: reached ? 1 : 0, y: reached ? 0 : 12 }}
+      transition={reduced ? { duration: 0 } : { duration: 0.4, ease: 'easeOut' }}
+      style={{ opacity: 0 }}
+    >
+      <CategoryBadge cat={cat} theme={theme} />
+    </motion.div>
+  );
+};
+
 // ---------- Slide 1: Solution Overview ----------
 
 const SolutionOverviewComponent: React.FC = () => {
@@ -78,7 +99,7 @@ const SolutionOverviewComponent: React.FC = () => {
     <SlideContainer maxWidth={900}>
       <Reveal from={0}>
         <SlideTitle reduced={reduced}>
-          23 Tools, 5 Skills, 1 Agent
+          21 Tools, 4 Skills, 1 Agent
         </SlideTitle>
       </Reveal>
 
@@ -93,7 +114,7 @@ const SolutionOverviewComponent: React.FC = () => {
               fontSize: 16,
               color: theme.colors.textSecondary,
             }}>
-              You know these tools. Now an AI agent has structured access to all of them.
+              Every DevUI surface you already use — now accessible to your AI agent.
             </div>
           </div>
         </GlowBorder>
@@ -102,16 +123,24 @@ const SolutionOverviewComponent: React.FC = () => {
       {/* Category badges — each revealed by an inline marker */}
       <Reveal from={1}>
         <div style={{
+          fontSize: 14,
+          fontWeight: 600,
+          color: theme.colors.textSecondary,
+          textTransform: 'uppercase',
+          letterSpacing: '0.05em',
+          textAlign: 'center',
+          marginTop: '2rem',
+          marginBottom: '0.5rem',
+        }}>
+          5 Tool Categories
+        </div>
+        <div style={{
           display: 'flex',
-          flexWrap: 'wrap',
           justifyContent: 'center',
           gap: '0.75rem',
-          marginTop: '2rem',
         }}>
           {CATEGORIES.map((cat) => (
-            <RevealAtMarker key={cat.markerId} at={cat.markerId} animation={fadeUp}>
-              <CategoryBadge cat={cat} theme={theme} />
-            </RevealAtMarker>
+            <MarkerBadge key={cat.markerId} markerId={cat.markerId} cat={cat} theme={theme} reduced={reduced} />
           ))}
         </div>
       </Reveal>
@@ -128,7 +157,7 @@ const SolutionOverviewComponent: React.FC = () => {
             color: theme.colors.textPrimary,
             marginBottom: '0.75rem',
           }}>
-            {'\u{1F916}'} devui-debugger agent — 5 guided skills:
+            {'\u{1F916}'} devui-debugger agent — 4 guided skills:
           </div>
           <div style={{
             display: 'flex',
@@ -162,22 +191,22 @@ export const Ch1_S1_SolutionOverview = defineSlide({
   metadata: {
     chapter: 1,
     slide: 1,
-    title: '23 Tools, 5 Skills, 1 Agent',
+    title: '21 Tools, 4 Skills, 1 Agent',
     audioSegments: [
       {
         id: 0,
         narrationText:
-          'Twenty-three tools across five categories — symptom reports, telemetry detail, execution flow, search, config management. You know these surfaces. Now an AI agent has structured access to all of them.',
+          'Twenty-one tools across five categories. Every Dev-UI surface you already use — now accessible to your AI agent. Let me walk you through each one.',
       },
       {
         id: 1,
         narrationText:
-          '{#nav}Navigation for loading conversations. {#tel}Telemetry — the largest group with ten tools for reports, search, and drill-down. {#comp}Comparison for side-by-side analysis. {#chat}Chat Execution for live requests. And {#config}Configuration for runtime config and test accounts.',
+          '{#nav}Conversation Loading — three tools for loading conversations by ID, shared session link, or exported JSON file. {#turn}Turn Inspection — two tools for viewing turn details and raw message content. {#tel}Telemetry and Diagnostics — the largest group with ten tools covering symptom reports, execution flow, search, and drill-down. {#chat}Chat Execution — one tool for sending live requests with automatic telemetry loading. And {#config}Config Management — five tools for creating, updating, and listing configs plus runtime settings and test accounts.',
       },
       {
         id: 2,
         narrationText:
-          'Wrapping all of this is the devui-debugger agent with five guided skills: {#sk-debug}debug-conversation, {#sk-compare}compare-conversations, {#sk-send}send-and-debug, {#sk-config}setup-config, and {#sk-flight}check-flight. Each skill chains multiple tools into a complete workflow.',
+          'Wrapping all of this is the Dev-UI debugger agent with four guided skills: {#sk-debug}\'debug conversation\', {#sk-send}\'send and debug\', {#sk-config}\'setup config\', and {#sk-flight}\'check flight\'. Each skill chains multiple tools into a complete workflow.',
       },
     ],
   },

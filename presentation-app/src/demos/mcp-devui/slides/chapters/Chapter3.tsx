@@ -11,7 +11,7 @@ import { ToolCategoryMap } from '../../components/ToolCategoryMap';
 
 /**
  * Chapter 3: "The Full Toolkit"
- * Ch3_S1 — 23 Tools at Your Fingertips
+ * Ch3_S1 — 21 Tools at Your Fingertips
  */
 
 const CATEGORY_SEQUENCE: Array<string | undefined> = [
@@ -38,7 +38,7 @@ const ToolMapOverviewComponent: React.FC = () => {
               color: theme.colors.textPrimary,
             }}
           >
-            23 Tools at Your Fingertips
+            21 Tools at Your Fingertips
           </h2>
         </Reveal>
         <div style={{ flex: 1, minHeight: 0 }}>
@@ -56,22 +56,22 @@ export const Ch3_S1_ToolMapOverview = defineSlide({
   metadata: {
     chapter: 3,
     slide: 1,
-    title: '23 Tools at Your Fingertips',
+    title: '21 Tools at Your Fingertips',
     audioSegments: [
       {
         id: 0,
         narrationText:
-          "You just saw five workflows. Here are all twenty-three tools — every one available to the agent. Tools you use every day: get symptom report, get telemetry detail, get execution flow, search telemetry.",
+          "You just saw four workflows. Here are all twenty-one tools — every Dev-UI surface your agent can access. Symptom reports, telemetry detail, execution flow, search — all via natural language.",
       },
       {
         id: 1,
         narrationText:
-          "Telemetry is the largest group with ten tools — it's where the real debugging power lives. Chat Execution gives you four tools for config management and live requests.",
+          "Telemetry and Diagnostics is the largest group with ten tools — it's where the real debugging power lives. Chat Execution has one tool for sending live requests, and Config Management has five tools for configs, settings, and test accounts.",
       },
       {
         id: 2,
         narrationText:
-          'Load a conversation once, and every drill-down tool operates on cached state. No re-fetching. All via natural language — just ask the agent what you need.',
+          'Load a conversation once, and every drill-down tool operates on the loaded data. No re-fetching. All via natural language — just ask the agent what you need.',
       },
     ],
   },

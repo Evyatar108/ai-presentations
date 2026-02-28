@@ -98,7 +98,7 @@ export const Ch4_S1_GetStarted = defineSlide({
       {
         id: 2,
         narrationText:
-          "That's it. You're ready. Just ask Claude to debug a conversation and the devui-debugger agent handles the rest. No config files, no environment variables.",
+          "That's it. You're ready. Just ask your agent to debug a conversation and the Dev-UI debugger agent handles the rest. No config files, no environment variables.",
       },
     ],
   },

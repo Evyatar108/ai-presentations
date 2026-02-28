@@ -10,9 +10,8 @@ import { Ch1_S1_SolutionOverview } from './chapters/Chapter1';
 import {
   Ch2_S1_DebugConversation,
   Ch2_S2_ExecutionFlow,
-  Ch2_S3_CompareConversations,
-  Ch2_S4_SendAndDebug,
-  Ch2_S5_ConfigFlightsMore,
+  Ch2_S3_SendAndDebug,
+  Ch2_S4_ConfigFlightsMore,
 } from './chapters/Chapter2';
 
 // Chapter 3: The Full Toolkit
@@ -26,7 +25,7 @@ import { Ch5_S1_ImpactAndNext } from './chapters/Chapter5';
 
 /**
  * Central registry of all slide components for the MCP DevUI demo.
- * 11 slides across 6 chapters.
+ * 10 slides across 6 chapters.
  */
 export const allSlides: SlideComponentWithMetadata[] = [
   Ch0_S1_Title,
@@ -34,9 +33,8 @@ export const allSlides: SlideComponentWithMetadata[] = [
   Ch1_S1_SolutionOverview,
   Ch2_S1_DebugConversation,
   Ch2_S2_ExecutionFlow,
-  Ch2_S3_CompareConversations,
-  Ch2_S4_SendAndDebug,
-  Ch2_S5_ConfigFlightsMore,
+  Ch2_S3_SendAndDebug,
+  Ch2_S4_ConfigFlightsMore,
   Ch3_S1_ToolMapOverview,
   Ch4_S1_GetStarted,
   Ch5_S1_ImpactAndNext,

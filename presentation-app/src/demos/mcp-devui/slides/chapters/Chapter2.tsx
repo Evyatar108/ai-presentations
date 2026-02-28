@@ -17,13 +17,34 @@ import {
 import { LiveTerminalSimulation } from '../../components/LiveTerminalSimulation';
 import { ExecutionFlowDiagram } from '../../components/ExecutionFlowDiagram';
 
+/** Small pill row showing which MCP tools a skill uses. */
+const ToolsUsed: React.FC<{ tools: string[]; theme: ReturnType<typeof useTheme> }> = ({ tools, theme }) => (
+  <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 6 }}>
+    <span style={{ fontSize: 11, fontWeight: 600, color: theme.colors.textSecondary, textTransform: 'uppercase', letterSpacing: '0.04em', alignSelf: 'center', marginRight: 4 }}>
+      Tools:
+    </span>
+    {tools.map(t => (
+      <span key={t} style={{
+        fontSize: 11,
+        fontFamily: "'Cascadia Code', 'Fira Code', monospace",
+        padding: '2px 8px',
+        borderRadius: 4,
+        background: theme.colors.bgSurface,
+        border: `1px solid ${theme.colors.bgBorder}`,
+        color: theme.colors.primary,
+      }}>
+        {t}
+      </span>
+    ))}
+  </div>
+);
+
 /**
- * Chapter 2: "What You Can Do" (5 slides)
- * Ch2_S1 — Debug a Conversation (NEW)
- * Ch2_S2 — See the Execution Flow (from old Ch4_S1, compressed)
- * Ch2_S3 — Compare Control vs Experiment (from old Ch5_S1, compressed)
- * Ch2_S4 — Send and Debug Live (from old Ch5_S2, renumbered)
- * Ch2_S5 — Config, Flights & More (NEW)
+ * Chapter 2: "What You Can Do" (4 slides)
+ * Ch2_S1 — Debug a Conversation
+ * Ch2_S2 — See the Execution Flow
+ * Ch2_S3 — Send and Debug Live
+ * Ch2_S4 — Config, Flights & More
  */
 
 // ─── Ch2_S1: Debug a Conversation ──────────────────────────────────
@@ -106,8 +127,9 @@ const DebugConversationComponent: React.FC = () => {
               margin: 0,
             }}
           >
-            Debug a Conversation
+            Debug a Conversation <span style={{ fontWeight: 400, fontSize: 18, color: theme.colors.textSecondary }}>(Skill)</span>
           </h2>
+          <ToolsUsed theme={theme} tools={['load_conversation', 'get_symptom_report', 'get_telemetry_detail', 'get_execution_flow']} />
         </Reveal>
 
         <div style={{ flex: 1, minHeight: 0 }}>
@@ -143,22 +165,22 @@ export const Ch2_S1_DebugConversation = defineSlide({
       {
         id: 0,
         narrationText:
-          "Here's the core workflow. Give the agent a conversation ID and it loads the conversation — twelve hundred telemetry entries cached and ready.",
+          "Let's start with the 'debug conversation' skill. The agent uses the 'load conversation' tool with a conversation ID, a shared session link, or an exported JSON file — and all conversation data is loaded, including the telemetry entries.",
       },
       {
         id: 1,
         narrationText:
-          'The agent runs a symptom report and triages the results. It flags a reasoning call at twelve hundred milliseconds and a search that returned zero results.',
+          'Next, the agent uses the \'get symptom report\' tool and interprets the results. It spots a search that returned zero results and a reasoning step that operated on empty context.',
       },
       {
         id: 2,
         narrationText:
-          'It drills into that reasoning call, pulling the full forty-two-kilobyte prompt. Request context, grounding docs, system instructions — all visible.',
+          'It drills in using the \'get telemetry detail\' tool, pulling the full forty-two-kilobyte prompt. Request context, grounding docs, system instructions — all visible to the agent.',
       },
       {
         id: 3,
         narrationText:
-          "Conversation ID to root cause in one request. The search grounding failed, reasoning worked with empty context, and that's why the latency spiked.",
+          "Conversation ID to root cause in one request. The search grounding failed, reasoning worked with empty context, and that's why the answer was wrong.",
       },
     ],
   },
@@ -193,6 +215,7 @@ const ExecutionFlowComponent: React.FC = () => {
           >
             See the Execution Flow
           </h2>
+          <ToolsUsed theme={theme} tools={['get_execution_flow']} />
         </Reveal>
         <div style={{ flex: 1, minHeight: 0 }}>
           <ExecutionFlowDiagram
@@ -214,238 +237,25 @@ export const Ch2_S2_ExecutionFlow = defineSlide({
       {
         id: 0,
         narrationText:
-          'The agent shows you the execution flow — the actual service call tree for any turn. TuringBot at the root, with ChatHub, connection setup, and telemetry flush.',
+          'Using the \'get execution flow\' tool, the agent retrieves the service call tree for any turn. TuringBot at the root, with ChatHub, connection setup, and telemetry flush.',
       },
       {
         id: 1,
         narrationText:
-          'ChatHub is where the real work happens — NLU, config, DeepLeo reasoning iterations, SubstrateSearch, and the final synthesis. All with individual latency tracking.',
+          'ChatHub is where the real work happens — NLU, config, DeepLeo reasoning iterations, SubstrateSearch, and the final synthesis. Each step with its own status and outcome.',
       },
       {
         id: 2,
         narrationText:
-          "DeepLeo Reasoning iteration one at twelve hundred milliseconds. That's your investigation target. The agent highlights where time is spent so you know exactly where to look.",
+          "DeepLeo Reasoning iteration one failed to get grounding data. That's your investigation target. The agent interprets the execution flow and tells you exactly where things went wrong.",
       },
     ],
   },
   component: ExecutionFlowComponent,
 });
 
-// ─── Ch2_S3: Compare Control vs Experiment ─────────────────────────
 
-const comparisonRows = [
-  { metric: 'Service Calls', slotA: '47', slotB: '52', delta: '+5', severity: 'warn' },
-  { metric: 'Failed Calls', slotA: '0', slotB: '2', delta: '+2', severity: 'error' },
-  { metric: 'Total Latency', slotA: '2,847ms', slotB: '3,412ms', delta: '+565ms', severity: 'warn' },
-  { metric: 'Reasoning Iters', slotA: '2', slotB: '3', delta: '+1', severity: 'neutral' },
-  { metric: 'Search Results', slotA: '12', slotB: '8', delta: '-4', severity: 'warn' },
-];
-
-const CompareConversationsComponent: React.FC = () => {
-  const theme = useTheme();
-
-  const slotStyle: React.CSSProperties = {
-    background: theme.colors.bgSurface,
-    borderRadius: 12,
-    border: `1px solid ${theme.colors.bgBorder}`,
-    padding: 20,
-  };
-
-  return (
-    <SlideContainer>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 20, height: '100%' }}>
-        <Reveal from={0} animation={fadeUp}>
-          <h2
-            style={{
-              color: theme.colors.textPrimary,
-              fontSize: 28,
-              fontWeight: 700,
-              textAlign: 'center',
-              margin: 0,
-            }}
-          >
-            Compare Control vs Experiment
-          </h2>
-        </Reveal>
-
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
-          {/* Slot A */}
-          <Reveal from={0} animation={fadeIn}>
-            <div style={slotStyle}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-                <div
-                  style={{
-                    width: 28,
-                    height: 28,
-                    borderRadius: '50%',
-                    background: 'rgba(59, 130, 246, 0.2)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#3b82f6',
-                    fontWeight: 700,
-                    fontSize: 14,
-                  }}
-                >
-                  A
-                </div>
-                <span style={{ color: theme.colors.textPrimary, fontWeight: 600 }}>Control</span>
-              </div>
-              <div style={{ color: theme.colors.textSecondary, fontSize: 13 }}>
-                Baseline without the new flight variant.
-              </div>
-            </div>
-          </Reveal>
-
-          {/* Slot B */}
-          <Reveal from={0} animation={fadeIn}>
-            <div style={slotStyle}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-                <div
-                  style={{
-                    width: 28,
-                    height: 28,
-                    borderRadius: '50%',
-                    background: 'rgba(16, 185, 129, 0.2)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#10b981',
-                    fontWeight: 700,
-                    fontSize: 14,
-                  }}
-                >
-                  B
-                </div>
-                <span style={{ color: theme.colors.textPrimary, fontWeight: 600 }}>Experiment</span>
-              </div>
-              <div style={{ color: theme.colors.textSecondary, fontSize: 13 }}>
-                Same query, with the new flight enabled.
-              </div>
-            </div>
-          </Reveal>
-        </div>
-
-        {/* Comparison Table */}
-        <Reveal from={1} animation={fadeUp}>
-          <div
-            style={{
-              background: theme.colors.bgSurface,
-              borderRadius: 12,
-              border: `1px solid ${theme.colors.bgBorder}`,
-              padding: 16,
-              overflow: 'auto',
-            }}
-          >
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
-              <thead>
-                <tr>
-                  {['Metric', 'Control', 'Experiment', 'Delta'].map((col) => (
-                    <th
-                      key={col}
-                      style={{
-                        textAlign: 'left',
-                        padding: '8px 12px',
-                        color: theme.colors.textMuted,
-                        fontWeight: 600,
-                        fontSize: 12,
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.05em',
-                        borderBottom: `1px solid ${theme.colors.bgBorder}`,
-                      }}
-                    >
-                      {col}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {comparisonRows.map((row) => (
-                  <tr key={row.metric}>
-                    <td style={{ padding: '8px 12px', color: theme.colors.textPrimary, fontWeight: 500 }}>
-                      {row.metric}
-                    </td>
-                    <td style={{ padding: '8px 12px', color: theme.colors.textSecondary, fontFamily: 'monospace' }}>
-                      {row.slotA}
-                    </td>
-                    <td style={{ padding: '8px 12px', color: theme.colors.textSecondary, fontFamily: 'monospace' }}>
-                      {row.slotB}
-                    </td>
-                    <td
-                      style={{
-                        padding: '8px 12px',
-                        fontFamily: 'monospace',
-                        fontWeight: 600,
-                        color: row.severity === 'error' ? '#ef4444'
-                          : row.severity === 'warn' ? '#f59e0b'
-                          : theme.colors.textSecondary,
-                      }}
-                    >
-                      {row.delta}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </Reveal>
-
-        {/* Delta summary */}
-        <Reveal from={2} animation={fadeUp}>
-          <div style={{ display: 'flex', gap: 16, justifyContent: 'center' }}>
-            {[
-              { label: 'New Failures', value: '2', color: '#ef4444' },
-              { label: 'Latency Increase', value: '+565ms', color: '#f59e0b' },
-              { label: 'Extra Reasoning', value: '+1 iter', color: theme.colors.textSecondary },
-            ].map(item => (
-              <div
-                key={item.label}
-                style={{
-                  background: theme.colors.bgSurface,
-                  borderRadius: 10,
-                  border: `1px solid ${theme.colors.bgBorder}`,
-                  padding: '12px 20px',
-                  textAlign: 'center',
-                }}
-              >
-                <div style={{ color: item.color, fontSize: 22, fontWeight: 700 }}>{item.value}</div>
-                <div style={{ color: theme.colors.textMuted, fontSize: 12, marginTop: 4 }}>{item.label}</div>
-              </div>
-            ))}
-          </div>
-        </Reveal>
-      </div>
-    </SlideContainer>
-  );
-};
-
-export const Ch2_S3_CompareConversations = defineSlide({
-  metadata: {
-    chapter: 2,
-    slide: 3,
-    title: 'Compare Control vs Experiment',
-    audioSegments: [
-      {
-        id: 0,
-        narrationText:
-          'SEVAL scores dropped? Load control and experiment into separate slots. Slot A is the baseline, Slot B has the new flight.',
-      },
-      {
-        id: 1,
-        narrationText:
-          'The comparison tool produces a structured diff. The experiment added five service calls, introduced two failures, and increased total latency by five sixty-five milliseconds. An extra reasoning iteration and fewer search results.',
-      },
-      {
-        id: 2,
-        narrationText:
-          "The extra reasoning iteration is the likely culprit. From here, drill into each slot's symptom report for the full picture.",
-      },
-    ],
-  },
-  component: CompareConversationsComponent,
-});
-
-// ─── Ch2_S4: Send and Debug Live ───────────────────────────────────
+// ─── Ch2_S3: Send and Debug Live ───────────────────────────────────
 
 const sendDebugPhases = [
   {
@@ -521,8 +331,9 @@ const SendAndDebugComponent: React.FC = () => {
               margin: 0,
             }}
           >
-            Send and Debug Live
+            Send and Debug Live <span style={{ fontWeight: 400, fontSize: 18, color: theme.colors.textSecondary }}>(Skill)</span>
           </h2>
+          <ToolsUsed theme={theme} tools={['send_chat_request', 'get_symptom_report', 'search_telemetry', 'get_telemetry_detail']} />
         </Reveal>
 
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 16, minHeight: 0 }}>
@@ -590,16 +401,16 @@ const SendAndDebugComponent: React.FC = () => {
   );
 };
 
-export const Ch2_S4_SendAndDebug = defineSlide({
+export const Ch2_S3_SendAndDebug = defineSlide({
   metadata: {
     chapter: 2,
-    slide: 4,
+    slide: 3,
     title: 'Send and Debug Live',
     audioSegments: [
       {
         id: 0,
         narrationText:
-          'The send-and-debug workflow combines chat execution with automatic telemetry loading. You send a message, and the tool does the rest.',
+          'The \'send and debug\' skill uses the \'send chat request\' tool to send a message, capture the response, and load all conversation data in one step.',
       },
       {
         id: 1,
@@ -609,12 +420,12 @@ export const Ch2_S4_SendAndDebug = defineSlide({
       {
         id: 2,
         narrationText:
-          'The bot responds with the answer. But here is the key difference from using Copilot normally — the telemetry is already loaded.',
+          'The bot responds with the answer. But here is the key difference — the conversation data including telemetry is already loaded.',
       },
       {
         id: 3,
         narrationText:
-          'Telemetry auto-loaded: true. Forty-seven entries are cached and ready. No separate load conversation call needed.',
+          'Telemetry auto-loaded: true. Forty-seven entries loaded and ready. No separate \'load conversation\' tool call needed.',
       },
       {
         id: 4,
@@ -626,7 +437,7 @@ export const Ch2_S4_SendAndDebug = defineSlide({
   component: SendAndDebugComponent,
 });
 
-// ─── Ch2_S5: Config, Flights & More ────────────────────────────────
+// ─── Ch2_S4: Config, Flights & More ────────────────────────────────
 
 const USE_CASES = [
   {
@@ -669,8 +480,9 @@ const ConfigFlightsMoreComponent: React.FC = () => {
               margin: 0,
             }}
           >
-            Config, Flights &amp; More
+            Config, Flights &amp; More <span style={{ fontWeight: 400, fontSize: 18, color: theme.colors.textSecondary }}>(Skill)</span>
           </h2>
+          <ToolsUsed theme={theme} tools={['create_chat_config', 'update_chat_config', 'load_conversation', 'get_turn_variants', 'search_telemetry']} />
         </Reveal>
 
         {USE_CASES.map((useCase, ucIndex) => (
@@ -722,26 +534,26 @@ const ConfigFlightsMoreComponent: React.FC = () => {
   );
 };
 
-export const Ch2_S5_ConfigFlightsMore = defineSlide({
+export const Ch2_S4_ConfigFlightsMore = defineSlide({
   metadata: {
     chapter: 2,
-    slide: 5,
+    slide: 4,
     title: 'Config, Flights & More',
     audioSegments: [
       {
         id: 0,
         narrationText:
-          'Beyond debugging, the agent handles config management. Fork the SDF config, add your flight, point it at your local endpoint — all via natural language with create and update chat config.',
+          'The \'setup config\' skill handles config management. Fork the SDF config, add your flight, point it at your local endpoint — all via the \'create chat config\' and \'update chat config\' tools.',
       },
       {
         id: 1,
         narrationText:
-          'Conversations load three ways: by conversation ID, by shared session link, or from a local JSON file. Whichever fits your workflow.',
+          'Conversations load three ways: by conversation ID — provided directly or pulled from a SEVAL job by the agent — by shared session link, or from an exported JSON file. Whatever is available or relevant.',
       },
       {
         id: 2,
         narrationText:
-          'Quick checks are just as easy. Is my flight active? Get turn variants. Find all SubstrateSearch calls? Search telemetry. The full breadth of DevUI, accessible in one conversation.',
+          'Quick checks are just as easy. Is my flight active? Get turn variants. Find all SubstrateSearch calls? Search telemetry. The full breadth of Dev-UI, accessible in one conversation.',
       },
     ],
   },

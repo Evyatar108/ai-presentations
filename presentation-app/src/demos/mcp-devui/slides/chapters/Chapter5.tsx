@@ -189,7 +189,7 @@ export const Ch5_S1_ImpactAndNext = defineSlide({
       {
         id: 0,
         narrationText:
-          "Let's look at the impact. Before: manual DevUI portal browsing, copy-pasting IDs between tabs, counting telemetry by hand. After: automatic triage via symptom report, side-by-side comparison, live chat with auto-loaded telemetry.",
+          "Let's look at the impact. Before: manually searching through telemetry in the Dev-UI portal, browser lag on every tab switch, reading raw JSON to find root causes. After: the agent reads and interprets everything for you in seconds.",
       },
       {
         id: 1,
@@ -199,11 +199,11 @@ export const Ch5_S1_ImpactAndNext = defineSlide({
       {
         id: 2,
         narrationText:
-          "We cover twelve of seventeen DevUI tabs today. Coming next: Prompt Explain for AI-powered annotations on forty-kilobyte prompts, and a Latency Waterfall for visual analysis across the service call tree.",
+          "We cover the most-used Dev-UI surfaces today. Coming next: Prompt Explain, where the agent annotates forty-kilobyte prompts for you, and a Latency Waterfall for visual analysis across the service call tree.",
       },
       {
         id: 3,
-        narrationText: 'Twenty-three tools. Five skills. One agent.',
+        narrationText: 'Twenty-one tools. Four skills. One agent.',
       },
     ],
   },

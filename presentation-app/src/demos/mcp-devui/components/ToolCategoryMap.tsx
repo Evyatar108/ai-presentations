@@ -27,21 +27,29 @@ interface CategoryData {
 
 const CATEGORIES: CategoryData[] = [
   {
-    id: 'navigation',
-    label: 'Navigation',
+    id: 'conversation-loading',
+    label: 'Conversation Loading',
     color: '#3b82f6',
-    icon: 'N',
+    icon: 'L',
     tools: [
       'load_conversation',
       'load_shared_conversation',
       'load_conversation_from_file',
+    ],
+  },
+  {
+    id: 'turn-inspection',
+    label: 'Turn Inspection',
+    color: '#06b6d4',
+    icon: 'I',
+    tools: [
       'get_turn',
       'get_turn_message',
     ],
   },
   {
     id: 'telemetry',
-    label: 'Telemetry',
+    label: 'Telemetry & Diagnostics',
     color: '#10b981',
     icon: 'T',
     tools: [
@@ -58,33 +66,25 @@ const CATEGORIES: CategoryData[] = [
     ],
   },
   {
-    id: 'comparison',
-    label: 'Comparison',
-    color: '#f59e0b',
-    icon: 'C',
-    tools: ['compare_turns'],
-  },
-  {
     id: 'chat-execution',
     label: 'Chat Execution',
     color: '#8b5cf6',
     icon: 'X',
     tools: [
-      'list_chat_configs',
-      'create_chat_config',
-      'update_chat_config',
       'send_chat_request',
     ],
   },
   {
-    id: 'configuration',
-    label: 'Configuration',
+    id: 'config-management',
+    label: 'Config Management',
     color: '#ef4444',
     icon: 'G',
     tools: [
+      'list_chat_configs',
+      'create_chat_config',
+      'update_chat_config',
       'get_sydney_config',
       'list_test_accounts',
-      'get_endpoint_status',
     ],
   },
 ];

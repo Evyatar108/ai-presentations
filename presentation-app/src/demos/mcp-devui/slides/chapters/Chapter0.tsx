@@ -82,7 +82,19 @@ const TitleComponent: React.FC = () => {
               letterSpacing: '0.01em',
             }}
           >
-            23 AI-Powered Debugging Tools for Copilot Conversations
+            An MCP Server with 21 Debugging Tools for AI Agents
+          </p>
+          <p
+            style={{
+              color: theme.colors.textSecondary,
+              fontSize: 16,
+              marginTop: 16,
+              fontWeight: 400,
+              opacity: 0.7,
+              textAlign: 'center',
+            }}
+          >
+            By Evyatar Mitrani
           </p>
         </Reveal>
       </div>
@@ -99,12 +111,12 @@ export const Ch0_S1_Title = defineSlide({
       {
         id: 0,
         narrationText:
-          'MCP DevUI.',
+          "Hello, I'm Kwen TTS, and I'll be narrating this presentation for EvYatar.",
       },
       {
         id: 1,
         narrationText:
-          'Twenty-three AI-powered debugging tools for Copilot conversations.',
+          "Today we're looking at MCP Dev-UI — an MCP server with twenty-one debugging tools for AI agents.",
       },
     ],
   },
@@ -123,7 +135,7 @@ const DebuggingProblemComponent: React.FC = () => {
         style={{
           display: 'flex',
           flexDirection: 'column',
-          gap: 32,
+          gap: 8,
           height: '100%',
         }}
       >
@@ -217,14 +229,18 @@ const DebuggingProblemComponent: React.FC = () => {
             <Reveal from={1} animation={fadeIn}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                 <TelemetryWall speed={25} rowCount={35} />
-                <div style={{ textAlign: 'center' }}>
-                  <PulsingBadge>
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                  <PulsingBadge
+                    icon="⚠️"
+                    floatingIcons={['😵', '🔥']}
+                    colors={['#dc2626', '#991b1b']}
+                  >
                     <span style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '4px 8px' }}>
                       <span
                         style={{
                           fontSize: 20,
                           fontWeight: 700,
-                          color: theme.colors.primary,
+                          color: '#fff',
                         }}
                       >
                         <AnimatedCounter
@@ -233,7 +249,7 @@ const DebuggingProblemComponent: React.FC = () => {
                           duration={reduced ? 0.1 : 2}
                         />
                       </span>
-                      <span style={{ color: theme.colors.textSecondary, fontSize: 14 }}>
+                      <span style={{ color: 'rgba(255,255,255,0.85)', fontSize: 14 }}>
                         telemetry entries
                       </span>
                     </span>
@@ -256,9 +272,9 @@ const DebuggingProblemComponent: React.FC = () => {
               }}
             >
               <h3 style={{ color: theme.colors.error, fontSize: 16, fontWeight: 600, margin: '0 0 12px 0' }}>
-                Without DevUI
+                Manual DevUI
               </h3>
-              {['Raw JSON in browser DevTools', 'Manually count 1,247 entries', 'Copy-paste between portal tabs'].map(item => (
+              {['Search hundreds of entries for root causes', 'Browser freezes searching telemetry', 'Read raw JSON payloads and stack traces'].map(item => (
                 <div key={item} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '4px 0', color: theme.colors.textSecondary, fontSize: 14 }}>
                   <span style={{ color: theme.colors.error }}>✕</span> {item}
                 </div>
@@ -273,9 +289,9 @@ const DebuggingProblemComponent: React.FC = () => {
               }}
             >
               <h3 style={{ color: theme.colors.primary, fontSize: 16, fontWeight: 600, margin: '0 0 12px 0' }}>
-                With DevUI
+                With MCP DevUI
               </h3>
-              {['Structured symptom report', '9 categorized sections', 'One-click drill-down to any metric'].map(item => (
+              {['AI agent reads and interprets the data', 'Chains multiple tools in one conversation', 'Root cause in seconds, not minutes'].map(item => (
                 <div key={item} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '4px 0', color: theme.colors.textPrimary, fontSize: 14 }}>
                   <span style={{ color: theme.colors.primary }}>✓</span> {item}
                 </div>
@@ -297,17 +313,17 @@ export const Ch0_S2_DebuggingProblem = defineSlide({
       {
         id: 0,
         narrationText:
-          "You ask Copilot a question, and it gives you a bad answer. Why? What went wrong behind the scenes? To find out, you'd open the DevUI portal and face a wall of raw telemetry.",
+          "You send a query to a Sydney-powered Copilot, and it gives you a bad answer. Why? What went wrong behind the scenes? To find out, you'd open the Dev-UI portal and face a wall of raw telemetry.",
       },
       {
         id: 1,
         narrationText:
-          'Twelve hundred and forty-seven telemetry entries for a single turn. Service calls, latencies, payloads — all in raw JSON with no structure, no triage, no guidance on where to look first.',
+          'Hundreds of telemetry entries for a single turn. Service calls, payloads, status codes — all in raw JSON with no structure, no triage, no guidance on where to look first.',
       },
       {
         id: 2,
         narrationText:
-          "That's the problem MCP DevUI solves. Instead of raw JSON chaos, you get structured, categorized reports with instant drill-down. Let me show you how.",
+          "That's the problem MCP Dev-UI solves. Instead of you reading raw JSON, the agent reads and interprets it for you — across all Dev-UI surfaces. Let me show you how.",
       },
     ],
   },
