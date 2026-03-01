@@ -63,7 +63,7 @@ const PhaseRow: React.FC<{ phase: TerminalPhase; reduced: boolean }> = ({ phase,
           margin: '4px 0',
         }}
       >
-        <span style={{ color: '#a78bfa', fontWeight: 600, fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.04em' }}>You </span>
+        <span style={{ color: '#a78bfa', fontWeight: 600, fontSize: 11, letterSpacing: '0.04em' }}>User: </span>
         <span style={{ color: '#e2e8f0', fontStyle: 'italic' }}>{phase.text}</span>
       </motion.div>
     );

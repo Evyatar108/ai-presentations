@@ -49,11 +49,11 @@ const ToolsUsed: React.FC<{ tools: string[]; theme: ReturnType<typeof useTheme> 
 const debugPhases = [
   {
     type: 'user' as const,
-    text: 'Debug this conversation: 51D|BizChat_WebChat|a1b2c3d4...',
+    text: 'Debug this conversation: a1b2c3d4-e5f6-7890-abcd-ef1234567890',
   },
   {
     type: 'input' as const,
-    text: 'debug-conversation(conversationId="51D|BizChat_WebChat|a1b2c3d4...")',
+    text: 'debug-conversation(conversationId="a1b2c3d4-e5f6-7890-abcd-ef1234567890")',
   },
   {
     type: 'output' as const,
