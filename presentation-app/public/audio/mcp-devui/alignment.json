@@ -1,6 +1,6 @@
 {
   "demoId": "mcp-devui",
-  "generatedAt": "2026-03-01T06:38:20.763Z",
+  "generatedAt": "2026-03-01T17:46:55.791Z",
   "slides": {
     "c0_s1": {
       "chapter": 0,
@@ -205,7 +205,7 @@
         {
           "segmentId": 0,
           "audioHash": "d070b906b2be5310501f8e58f315159a36b01ff8075deed9bd2dea96a3ae6270",
-          "narrationHash": "b9fbab0e7af157bc96711abcc250b23b01dbe836ba06bd6c7825d7d781988a17",
+          "narrationHash": "3095b21d22af37ff42ad8b68e416c03da3ecb9bbe6a131007aa637d26792524b",
           "words": [
             {
               "end": 0.181,
@@ -430,7 +430,14 @@
               "word": "telemetry."
             }
           ],
-          "markers": []
+          "markers": [
+            {
+              "id": "bad-answer",
+              "time": 3.13,
+              "anchor": "start",
+              "wordIndex": 13
+            }
+          ]
         },
         {
           "segmentId": 1,
@@ -623,7 +630,7 @@
         {
           "segmentId": 2,
           "audioHash": "0cbb72a1921c9fe6e57dc79634880ecc9e494d88e1ca393ae9cf7725892cd284",
-          "narrationHash": "4563c6773a9a5aa854b697d267ba8cf3655690a429d1739c1804e16f12fc67da",
+          "narrationHash": "77d3c8593408fe0c5b35d7d5ff012ea6d8653629d3b0e28bf90357a7cf216b43",
           "words": [
             {
               "end": 0.301,
@@ -806,7 +813,14 @@
               "word": "how."
             }
           ],
-          "markers": []
+          "markers": [
+            {
+              "id": "agent-reads",
+              "time": 6.4,
+              "anchor": "start",
+              "wordIndex": 13
+            }
+          ]
         }
       ]
     },
@@ -3049,7 +3063,7 @@
         {
           "segmentId": 4,
           "audioHash": "f1ab5886f3a28e6ce808241dd72fae072d860c8de81dcf7290dfa3e05127d7af",
-          "narrationHash": "bdff34183ed8eef9e989b43e411cbb922641a75e63fb222942c4688622606ff1",
+          "narrationHash": "198978b89395c9ed33fd5b3c8a65a14ab9e909cf91e8851e8b2ff77a4429b225",
           "words": [
             {
               "end": 0.341,
@@ -3256,7 +3270,32 @@
               "word": "setup."
             }
           ],
-          "markers": []
+          "markers": [
+            {
+              "id": "symptom",
+              "time": 3.971,
+              "anchor": "start",
+              "wordIndex": 9
+            },
+            {
+              "id": "exec-flow",
+              "time": 5.736,
+              "anchor": "start",
+              "wordIndex": 13
+            },
+            {
+              "id": "search-tel",
+              "time": 7.4,
+              "anchor": "start",
+              "wordIndex": 16
+            },
+            {
+              "id": "drill-detail",
+              "time": 11.03,
+              "anchor": "start",
+              "wordIndex": 26
+            }
+          ]
         }
       ]
     },
@@ -3467,7 +3506,7 @@
         {
           "segmentId": 1,
           "audioHash": "464e3b2a3e649ec2018aa57983488b910ae76dfd167c2edd5d2d81c20ac73a94",
-          "narrationHash": "448a67cc2ce230c3f9b3fcb2d81f35da2794c908dbf774da367528d8d123ed90",
+          "narrationHash": "c7c74ab0c5cdeb4f269163821c6e5d5bc707dfed2bf851a2e103ce2d15e8cf24",
           "words": [
             {
               "end": 0.822,
@@ -3680,12 +3719,31 @@
               "word": "relevant."
             }
           ],
-          "markers": []
+          "markers": [
+            {
+              "id": "by-id",
+              "time": 2.528,
+              "anchor": "start",
+              "wordIndex": 5
+            },
+            {
+              "id": "by-link",
+              "time": 7.924,
+              "anchor": "start",
+              "wordIndex": 21
+            },
+            {
+              "id": "by-file",
+              "time": 10.391,
+              "anchor": "start",
+              "wordIndex": 28
+            }
+          ]
         },
         {
           "segmentId": 2,
           "audioHash": "50e39af0d3123227e018d0a81f39fdc5a9c3f4107a0816d1f855d82721c000ad",
-          "narrationHash": "9dd1dbe1208f25e5d9da387924ecd06f1ddb8c9988e68a25af8a0db25b8fe34c",
+          "narrationHash": "5e9e87186764346987173655d5ca09b72330b40aa6bd07015d4f330bbddd1b69",
           "words": [
             {
               "end": 0.301,
@@ -3868,7 +3926,20 @@
               "word": "conversation."
             }
           ],
-          "markers": []
+          "markers": [
+            {
+              "id": "variants",
+              "time": 4.192,
+              "anchor": "start",
+              "wordIndex": 11
+            },
+            {
+              "id": "search-quick",
+              "time": 9.045,
+              "anchor": "start",
+              "wordIndex": 19
+            }
+          ]
         }
       ]
     },
@@ -5447,7 +5518,7 @@
         {
           "segmentId": 1,
           "audioHash": "71f407adfa88dc0be25ce83edce615eba7cf4ac3553e580b69a833a236039be8",
-          "narrationHash": "25731efd8c22dbe67a3a0c55a039a3a0596ef92a000089be92c94c6f3f047204",
+          "narrationHash": "bbf6bfdb55cc93de25a420226c23838b09dd30dc4d7f9c939076cd270de8704f",
           "words": [
             {
               "end": 0.281,
@@ -5672,7 +5743,20 @@
               "word": "scoping."
             }
           ],
-          "markers": []
+          "markers": [
+            {
+              "id": "devui-agent",
+              "time": 1.885,
+              "anchor": "start",
+              "wordIndex": 5
+            },
+            {
+              "id": "devui-tools",
+              "time": 7.098,
+              "anchor": "start",
+              "wordIndex": 19
+            }
+          ]
         },
         {
           "segmentId": 2,
@@ -5958,7 +6042,7 @@
         {
           "segmentId": 1,
           "audioHash": "3b93fee8e407fa72c674ccb3df37cf9ba866200484969665bbde486c65a1ae56",
-          "narrationHash": "fa82cebc269dc6d772a831451bb7dc0174a062cb8ba3fc576b789566cee49eb6",
+          "narrationHash": "92e916640b26454bd946ce459683ca10a583ae0a2033a2dab83bedae01aa175b",
           "words": [
             {
               "end": 0.241,
@@ -6219,7 +6303,32 @@
               "word": "delegated."
             }
           ],
-          "markers": []
+          "markers": [
+            {
+              "id": "debug",
+              "time": 9.58,
+              "anchor": "start",
+              "wordIndex": 21
+            },
+            {
+              "id": "develop",
+              "time": 11.063,
+              "anchor": "start",
+              "wordIndex": 25
+            },
+            {
+              "id": "appraise",
+              "time": 12.587,
+              "anchor": "start",
+              "wordIndex": 29
+            },
+            {
+              "id": "verify",
+              "time": 15.513,
+              "anchor": "start",
+              "wordIndex": 35
+            }
+          ]
         },
         {
           "segmentId": 2,

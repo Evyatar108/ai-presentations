@@ -29,7 +29,7 @@
       "segments": [
         {
           "id": 0,
-          "narrationText": "You send a query to a Sydney-powered Copilot, and it gives you a bad answer. Why? What went wrong behind the scenes? To find out, you'd open the Dev-UI portal and face a wall of raw telemetry.",
+          "narrationText": "You send a query to a Sydney-powered Copilot, and it gives you a {#bad-answer}bad answer. Why? What went wrong behind the scenes? To find out, you'd open the Dev-UI portal and face a wall of raw telemetry.",
           "visualDescription": "",
           "notes": ""
         },
@@ -41,7 +41,7 @@
         },
         {
           "id": 2,
-          "narrationText": "That's the problem MCP Dev-UI solves. Instead of you reading raw JSON, the agent reads and interprets it for you — across all Dev-UI surfaces. Let me show you how.",
+          "narrationText": "That's the problem MCP Dev-UI solves. Instead of you reading raw JSON, the {#agent-reads}agent reads and interprets it for you — across all Dev-UI surfaces. Let me show you how.",
           "visualDescription": "",
           "notes": ""
         }
@@ -134,7 +134,7 @@
         },
         {
           "id": 4,
-          "narrationText": "All four drill-down tools are immediately available. Get the symptom report, inspect the execution flow tree, search telemetry by any criteria, or drill into the full detail of any specific entry. Zero extra setup.",
+          "narrationText": "All four drill-down tools are immediately available. Get the {#symptom}symptom report, inspect the {#exec-flow}execution flow tree, {#search-tel}search telemetry by any criteria, or drill into the full {#drill-detail}detail of any specific entry. Zero extra setup.",
           "visualDescription": "",
           "notes": ""
         }
@@ -153,13 +153,13 @@
         },
         {
           "id": 1,
-          "narrationText": "Conversations load three ways: by conversation ID — provided directly or pulled from a SEVAL job by the agent — by shared session link, or from an exported JSON file. Whatever is available or relevant.",
+          "narrationText": "Conversations load three ways: by {#by-id}conversation ID — provided directly or pulled from a SEVAL job by the agent — by {#by-link}shared session link, or from an exported {#by-file}JSON file. Whatever is available or relevant.",
           "visualDescription": "",
           "notes": ""
         },
         {
           "id": 2,
-          "narrationText": "Quick checks are just as easy. Which flights are active? Use 'get turn variants'. Find all SubstrateSearch calls? Use 'search telemetry'. The full breadth of Dev-UI, accessible in one conversation.",
+          "narrationText": "Quick checks are just as easy. Which flights are active? Use {#variants}'get turn variants'. Find all SubstrateSearch calls? Use {#search-quick}'search telemetry'. The full breadth of Dev-UI, accessible in one conversation.",
           "visualDescription": "",
           "notes": ""
         }
@@ -228,7 +228,7 @@
         },
         {
           "id": 1,
-          "narrationText": "Step two: choose your plugin. devui-agent gives you a specialized debugger sub-agent with all the tools scoped to it. devui-tools exposes the same tools and skills directly to any agent you're already using. Same capabilities, different scoping.",
+          "narrationText": "Step two: choose your plugin. {#devui-agent}devui-agent gives you a specialized debugger sub-agent with all the tools scoped to it. {#devui-tools}devui-tools exposes the same tools and skills directly to any agent you're already using. Same capabilities, different scoping.",
           "visualDescription": "",
           "notes": ""
         },
@@ -253,7 +253,7 @@
         },
         {
           "id": 1,
-          "narrationText": "Your agent doesn't just write code. It runs requests, reads telemetry, inspects execution flows — and does it in a loop. Debug a bad answer, develop a new feature, appraise answer quality from the telemetry, verify the fix. The full developer workflow, delegated.",
+          "narrationText": "Your agent doesn't just write code. It runs requests, reads telemetry, inspects execution flows — and does it in a loop. {#debug}Debug a bad answer, {#develop}develop a new feature, {#appraise}appraise answer quality from the telemetry, {#verify}verify the fix. The full developer workflow, delegated.",
           "visualDescription": "",
           "notes": ""
         },

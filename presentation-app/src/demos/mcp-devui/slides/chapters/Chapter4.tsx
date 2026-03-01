@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import {
   useTheme,
   useReducedMotion,
@@ -14,6 +13,7 @@ import {
   GlowBorder,
   AnimatedCheckmark,
   useMarker,
+  MarkerDim,
   fadeUp,
   fadeIn,
 } from '@framework';
@@ -181,22 +181,26 @@ const GetStartedComponent: React.FC = () => {
             gap: 12,
             paddingLeft: 38,
           }}>
-            <PluginFlavorCard
-              title="devui-agent"
-              badge="Recommended"
-              badgeColor="#4ade80"
-              description="Specialized debugger sub-agent with 3 guided skills and all tools scoped to it."
-              installCmd={AGENT_INSTALL}
-              isActive={currentSegmentIndex === 1}
-            />
-            <PluginFlavorCard
-              title="devui-tools"
-              badge="Power users"
-              badgeColor={theme.colors.primary}
-              description="All tools and skills exposed directly to any agent you're using."
-              installCmd={TOOLS_INSTALL}
-              isActive={currentSegmentIndex === 1}
-            />
+            <MarkerDim at="devui-agent" dimOpacity={0.3} style={{ flex: 1, display: 'flex' }}>
+              <PluginFlavorCard
+                title="devui-agent"
+                badge="Recommended"
+                badgeColor="#4ade80"
+                description="Specialized debugger sub-agent with 3 guided skills and all tools scoped to it."
+                installCmd={AGENT_INSTALL}
+                isActive={currentSegmentIndex === 1}
+              />
+            </MarkerDim>
+            <MarkerDim at="devui-tools" dimOpacity={0.3} style={{ flex: 1, display: 'flex' }}>
+              <PluginFlavorCard
+                title="devui-tools"
+                badge="Power users"
+                badgeColor={theme.colors.primary}
+                description="All tools and skills exposed directly to any agent you're using."
+                installCmd={TOOLS_INSTALL}
+                isActive={currentSegmentIndex === 1}
+              />
+            </MarkerDim>
           </div>
         </Reveal>
 
@@ -233,10 +237,10 @@ export const Ch4_S1_GetStarted = defineSlide({
 // ─── Ch4_S2: Closing ──────────────────────────────────────────────
 
 const LOOP_CAPABILITIES = [
-  { icon: '🔍', label: 'Debug', description: 'Find the root cause in telemetry' },
-  { icon: '🛠️', label: 'Develop', description: 'Fix it in source code' },
-  { icon: '📊', label: 'Appraise', description: 'Judge answer quality from telemetry' },
-  { icon: '✅', label: 'Verify', description: 'Re-run and confirm the fix' },
+  { icon: '🔍', label: 'Debug', description: 'Find the root cause in telemetry', markerId: 'debug' },
+  { icon: '🛠️', label: 'Develop', description: 'Fix it in source code', markerId: 'develop' },
+  { icon: '📊', label: 'Appraise', description: 'Judge answer quality from telemetry', markerId: 'appraise' },
+  { icon: '✅', label: 'Verify', description: 'Re-run and confirm the fix', markerId: 'verify' },
 ] as const;
 
 /** Single capability card in the developer loop. */
@@ -282,7 +286,6 @@ const CapabilityCard: React.FC<{
 
 const ClosingComponent: React.FC = () => {
   const theme = useTheme();
-  const { reduced } = useReducedMotion();
   const { reached: dismissed } = useMarker('dismiss', { defaultReached: true });
 
   return (
@@ -322,16 +325,15 @@ const ClosingComponent: React.FC = () => {
                 display: 'flex',
                 gap: 12,
               }}>
-                {LOOP_CAPABILITIES.map((cap, i) => (
-                  <motion.div
+                {LOOP_CAPABILITIES.map((cap) => (
+                  <MarkerDim
                     key={cap.label}
-                    initial={reduced ? undefined : { opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={reduced ? undefined : { delay: i * 0.12, duration: 0.4 }}
+                    at={cap.markerId}
+                    dimOpacity={0.2}
                     style={{ flex: 1, display: 'flex' }}
                   >
                     <CapabilityCard {...cap} />
-                  </motion.div>
+                  </MarkerDim>
                 ))}
               </div>
               <p style={{

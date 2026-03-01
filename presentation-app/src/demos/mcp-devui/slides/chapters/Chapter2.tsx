@@ -1,9 +1,7 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import {
   defineSlide,
   useTheme,
-  useReducedMotion,
   useSegmentedAnimation,
   SlideContainer,
   Reveal,
@@ -11,6 +9,7 @@ import {
   ContentCard,
   AnimatedCheckmark,
   PulsingBadge,
+  MarkerDim,
   fadeUp,
 } from '@framework';
 import { LiveTerminalSimulation } from '../../components/LiveTerminalSimulation';
@@ -216,15 +215,14 @@ const sendDebugPhases = [
 ];
 
 const drillDownTools = [
-  { name: 'get_symptom_report', icon: '\u{1F4CB}' },
-  { name: 'get_execution_flow', icon: '\u{1F333}' },
-  { name: 'search_telemetry', icon: '\u{1F50D}' },
-  { name: 'get_telemetry_detail', icon: '\u{1F4C4}' },
+  { name: 'get_symptom_report', icon: '\u{1F4CB}', markerId: 'symptom' },
+  { name: 'get_execution_flow', icon: '\u{1F333}', markerId: 'exec-flow' },
+  { name: 'search_telemetry', icon: '\u{1F50D}', markerId: 'search-tel' },
+  { name: 'get_telemetry_detail', icon: '\u{1F4C4}', markerId: 'drill-detail' },
 ];
 
 const SendAndDebugComponent: React.FC = () => {
   const theme = useTheme();
-  const { reduced } = useReducedMotion();
   const { currentSegmentIndex } = useSegmentedAnimation();
 
   return (
@@ -274,12 +272,11 @@ const SendAndDebugComponent: React.FC = () => {
           {/* Drill-down tools */}
           <Reveal from={4} animation={fadeUp}>
             <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-              {drillDownTools.map((tool, i) => (
-                <motion.div
+              {drillDownTools.map((tool) => (
+                <MarkerDim
                   key={tool.name}
-                  initial={reduced ? undefined : { opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: reduced ? 0 : i * 0.15 }}
+                  at={tool.markerId}
+                  dimOpacity={0.2}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -300,7 +297,7 @@ const SendAndDebugComponent: React.FC = () => {
                   >
                     {tool.name}
                   </span>
-                </motion.div>
+                </MarkerDim>
               ))}
             </div>
           </Reveal>
@@ -339,16 +336,16 @@ const USE_CASES = [
   {
     title: 'Load Conversations',
     items: [
-      { cmd: 'load_conversation', desc: 'By conversation ID' },
-      { cmd: 'load_shared_session', desc: 'By shared session link' },
-      { cmd: 'load_conversation_file', desc: 'From a local JSON file' },
+      { cmd: 'load_conversation', desc: 'By conversation ID', markerId: 'by-id' },
+      { cmd: 'load_shared_session', desc: 'By shared session link', markerId: 'by-link' },
+      { cmd: 'load_conversation_file', desc: 'From a local JSON file', markerId: 'by-file' },
     ],
   },
   {
     title: 'Quick Checks',
     items: [
-      { cmd: 'get_turn_variants', desc: 'Check which flights are active' },
-      { cmd: 'search_telemetry', desc: 'Find all SubstrateSearch calls' },
+      { cmd: 'get_turn_variants', desc: 'Check which flights are active', markerId: 'variants' },
+      { cmd: 'search_telemetry', desc: 'Find all SubstrateSearch calls', markerId: 'search-quick' },
     ],
   },
 ];
@@ -386,34 +383,42 @@ const ConfigFlightsMoreComponent: React.FC = () => {
                 {useCase.title}
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {useCase.items.map((item) => (
-                  <div
-                    key={item.cmd}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 12,
-                      padding: '6px 0',
-                    }}
-                  >
-                    <code
+                {useCase.items.map((item) => {
+                  const content = (
+                    <div
                       style={{
-                        fontFamily: 'monospace',
-                        fontSize: 13,
-                        color: theme.colors.primary,
-                        background: 'rgba(0, 183, 195, 0.1)',
-                        padding: '2px 8px',
-                        borderRadius: 4,
-                        whiteSpace: 'nowrap',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 12,
+                        padding: '6px 0',
                       }}
                     >
-                      {item.cmd}
-                    </code>
-                    <span style={{ color: theme.colors.textSecondary, fontSize: 14 }}>
-                      {item.desc}
-                    </span>
-                  </div>
-                ))}
+                      <code
+                        style={{
+                          fontFamily: 'monospace',
+                          fontSize: 13,
+                          color: theme.colors.primary,
+                          background: 'rgba(0, 183, 195, 0.1)',
+                          padding: '2px 8px',
+                          borderRadius: 4,
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        {item.cmd}
+                      </code>
+                      <span style={{ color: theme.colors.textSecondary, fontSize: 14 }}>
+                        {item.desc}
+                      </span>
+                    </div>
+                  );
+                  return 'markerId' in item && item.markerId ? (
+                    <MarkerDim key={item.cmd} at={item.markerId} dimOpacity={0.2}>
+                      {content}
+                    </MarkerDim>
+                  ) : (
+                    <React.Fragment key={item.cmd}>{content}</React.Fragment>
+                  );
+                })}
               </div>
             </ContentCard>
           </Reveal>

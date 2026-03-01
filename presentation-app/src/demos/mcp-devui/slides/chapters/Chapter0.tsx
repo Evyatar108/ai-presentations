@@ -10,6 +10,7 @@ import {
   Reveal,
   PulsingBadge,
   AnimatedCounter,
+  AnnotateAtMarker,
   fadeIn,
   fadeUp,
 } from '@framework';
@@ -213,7 +214,9 @@ const DebuggingProblemComponent: React.FC = () => {
                   borderLeft: '3px solid rgba(239, 68, 68, 0.6)',
                 }}
               >
-                "I'm sorry, I wasn't able to find that information..."
+                <AnnotateAtMarker at="bad-answer" type="underline" color="rgba(239, 68, 68, 0.7)" strokeWidth={2}>
+                  "I'm sorry, I wasn't able to find that information..."
+                </AnnotateAtMarker>
               </div>
             </div>
 
@@ -281,7 +284,9 @@ const DebuggingProblemComponent: React.FC = () => {
               }}
             >
               <h3 style={{ color: theme.colors.primary, fontSize: 16, fontWeight: 600, margin: '0 0 12px 0' }}>
-                With MCP DevUI
+                <AnnotateAtMarker at="agent-reads" type="box" color={theme.colors.primary} strokeWidth={2}>
+                  With MCP DevUI
+                </AnnotateAtMarker>
               </h3>
               {['AI agent reads and interprets the data', 'Chains multiple tools in one conversation', 'Root cause in seconds, not minutes'].map(item => (
                 <div key={item} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '4px 0', color: theme.colors.textPrimary, fontSize: 14 }}>
