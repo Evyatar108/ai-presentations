@@ -1,5 +1,5 @@
-import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useEffect } from 'react';
+import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
 import { useReducedMotion, useTheme } from '@framework';
 import { TelemetryWall } from './TelemetryWall';
 
@@ -26,6 +26,23 @@ export const DismissedWall: React.FC<DismissedWallProps> = ({
   const { reduced } = useReducedMotion();
   const theme = useTheme();
 
+  // Imperative pathLength animation — required because this component mounts
+  // inside a Reveal (animated parent). Declarative animate={{ pathLength }}
+  // breaks in that context (see CLAUDE.md SVG pathLength note).
+  const pathLength = useMotionValue(0);
+  const springPath = useSpring(pathLength, { stiffness: 200, damping: 30 });
+  const lineOpacity = useMotionValue(0);
+
+  useEffect(() => {
+    if (reduced) {
+      pathLength.jump(dismissed ? 1 : 0);
+      lineOpacity.jump(dismissed ? 0.8 : 0);
+    } else {
+      pathLength.set(dismissed ? 1 : 0);
+      lineOpacity.set(dismissed ? 0.8 : 0);
+    }
+  }, [dismissed, reduced, pathLength, lineOpacity]);
+
   return (
     <div style={{
       position: 'relative',
@@ -34,14 +51,21 @@ export const DismissedWall: React.FC<DismissedWallProps> = ({
       borderRadius: 10,
       overflow: 'hidden',
     }}>
-      {/* The telemetry wall — scrolls when alive, pauses when dismissed */}
-      <motion.div
-        animate={{ opacity: dismissed ? 0.45 : 1 }}
-        transition={reduced ? { duration: 0 } : { duration: 0.6 }}
-        style={{ transform: 'scale(0.85)', transformOrigin: 'top left', width: '118%', height: '118%' }}
+      {/* The telemetry wall — scrolls when alive, pauses when dismissed.
+          Uses CSS transition (not motion.div) to avoid opacity conflicts
+          with the parent Reveal fadeIn animation. */}
+      <div
+        style={{
+          opacity: dismissed ? 0.45 : 1,
+          transition: reduced ? 'none' : 'opacity 0.6s',
+          transform: 'scale(0.85)',
+          transformOrigin: 'top left',
+          width: '118%',
+          height: '118%',
+        }}
       >
-        <TelemetryWall rowCount={rowCount} speed={18} paused={dismissed} />
-      </motion.div>
+        <TelemetryWall rowCount={rowCount} speed={18} />
+      </div>
 
       {/* Dark overlay — fades in on dismiss */}
       <AnimatePresence>
@@ -79,18 +103,7 @@ export const DismissedWall: React.FC<DismissedWallProps> = ({
           stroke={theme.colors.error}
           strokeWidth={3}
           strokeLinecap="round"
-          animate={{
-            pathLength: dismissed ? 1 : 0,
-            opacity: dismissed ? 0.8 : 0,
-          }}
-          transition={
-            reduced
-              ? { duration: 0 }
-              : {
-                  pathLength: { duration: 0.5, ease: 'easeOut' },
-                  opacity: { duration: 0.15 },
-                }
-          }
+          style={{ pathLength: springPath, opacity: lineOpacity }}
         />
       </svg>
     </div>

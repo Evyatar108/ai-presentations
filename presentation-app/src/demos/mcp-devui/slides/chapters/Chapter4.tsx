@@ -283,7 +283,7 @@ const CapabilityCard: React.FC<{
 const ClosingComponent: React.FC = () => {
   const theme = useTheme();
   const { reduced } = useReducedMotion();
-  const { reached: dismissed } = useMarker('dismiss');
+  const { reached: dismissed } = useMarker('dismiss', { defaultReached: true });
 
   return (
     <SlideContainer>
