@@ -1,6 +1,6 @@
 {
   "demoId": "mcp-devui",
-  "generatedAt": "2026-03-01T04:54:30.531Z",
+  "generatedAt": "2026-03-01T06:38:20.763Z",
   "slides": {
     "c0_s1": {
       "chapter": 0,
@@ -3878,600 +3878,642 @@
       "segments": [
         {
           "segmentId": 0,
-          "audioHash": "cbe11fbde5b90c4198b1e1a090d8ea79ae26f82035546eb2488cc3e779d72d62",
-          "narrationHash": "97a9fd95e12f465217676f084ceb0de03837ebb2651b525d02d5c887f1999215",
+          "audioHash": "16f2d883234b826de8dd25943c1866c03e6c4b5333fe95a81e3d3fd04ac51798",
+          "narrationHash": "a5f965561d1faea8557a7654064eec5ac78d6228c0f21f7cee2089122b7ee495",
           "words": [
             {
-              "end": 0.261,
-              "score": 0.728,
+              "end": 0.201,
+              "score": 0.709,
               "start": 0,
-              "word": "You"
+              "word": "What"
             },
             {
-              "end": 0.461,
-              "score": 0.963,
-              "start": 0.301,
-              "word": "just"
+              "end": 0.281,
+              "score": 0.836,
+              "start": 0.241,
+              "word": "if"
             },
             {
-              "end": 0.682,
-              "score": 0.919,
-              "start": 0.501,
-              "word": "saw"
+              "end": 0.421,
+              "score": 0.646,
+              "start": 0.321,
+              "word": "the"
             },
             {
-              "end": 0.983,
-              "score": 0.772,
-              "start": 0.722,
-              "word": "three"
-            },
-            {
-              "end": 1.585,
-              "score": 0.93,
-              "start": 1.043,
-              "word": "workflows."
-            },
-            {
-              "end": 2.367,
-              "score": 0.771,
-              "start": 2.206,
-              "word": "Here"
-            },
-            {
-              "end": 2.507,
-              "score": 0.508,
-              "start": 2.407,
-              "word": "are"
-            },
-            {
-              "end": 2.648,
-              "score": 0.802,
-              "start": 2.547,
-              "word": "all"
-            },
-            {
-              "end": 3.189,
-              "score": 0.834,
-              "start": 2.688,
-              "word": "twenty-two"
-            },
-            {
-              "end": 3.571,
-              "score": 0.796,
-              "start": 3.25,
-              "word": "tools"
-            },
-            {
-              "end": 4.313,
-              "score": 0.972,
-              "start": 3.591,
-              "word": "—"
-            },
-            {
-              "end": 4.533,
-              "score": 0.933,
-              "start": 4.333,
-              "word": "every"
-            },
-            {
-              "end": 5.155,
-              "score": 0.59,
-              "start": 4.573,
-              "word": "Dev-UI"
-            },
-            {
-              "end": 5.556,
-              "score": 0.788,
-              "start": 5.215,
-              "word": "surface"
-            },
-            {
-              "end": 5.717,
-              "score": 0.892,
-              "start": 5.576,
-              "word": "your"
-            },
-            {
-              "end": 5.998,
-              "score": 0.828,
-              "start": 5.777,
+              "end": 0.782,
+              "score": 0.753,
+              "start": 0.522,
               "word": "agent"
             },
             {
-              "end": 6.158,
-              "score": 0.941,
-              "start": 6.038,
-              "word": "can"
+              "end": 1.003,
+              "score": 0.867,
+              "start": 0.822,
+              "word": "could"
             },
             {
-              "end": 6.599,
-              "score": 0.843,
-              "start": 6.238,
-              "word": "access."
+              "end": 1.284,
+              "score": 0.845,
+              "start": 1.083,
+              "word": "read"
             },
             {
-              "end": 7.502,
-              "score": 0.816,
-              "start": 7.161,
-              "word": "Symptom"
+              "end": 1.585,
+              "score": 0.82,
+              "start": 1.324,
+              "word": "both"
             },
             {
-              "end": 7.963,
-              "score": 0.904,
-              "start": 7.542,
-              "word": "reports,"
-            },
-            {
-              "end": 8.846,
-              "score": 0.793,
-              "start": 8.385,
+              "end": 2.347,
+              "score": 0.824,
+              "start": 1.605,
               "word": "telemetry"
             },
             {
-              "end": 9.347,
-              "score": 0.699,
-              "start": 8.886,
-              "word": "detail,"
+              "end": 2.828,
+              "score": 0.583,
+              "start": 2.668,
+              "word": "and"
             },
             {
-              "end": 10.551,
-              "score": 0.882,
-              "start": 9.989,
-              "word": "execution"
+              "end": 3.29,
+              "score": 0.854,
+              "start": 2.869,
+              "word": "source"
             },
             {
-              "end": 10.892,
-              "score": 0.957,
-              "start": 10.611,
-              "word": "flow,"
+              "end": 3.611,
+              "score": 0.824,
+              "start": 3.33,
+              "word": "code?"
             },
             {
-              "end": 11.594,
+              "end": 4.433,
+              "score": 0.839,
+              "start": 4.333,
+              "word": "Add"
+            },
+            {
+              "end": 4.533,
+              "score": 0.982,
+              "start": 4.473,
+              "word": "the"
+            },
+            {
+              "end": 4.875,
+              "score": 0.849,
+              "start": 4.594,
+              "word": "Sydney"
+            },
+            {
+              "end": 5.236,
+              "score": 0.85,
+              "start": 4.935,
+              "word": "repo"
+            },
+            {
+              "end": 5.336,
+              "score": 0.81,
+              "start": 5.276,
+              "word": "to"
+            },
+            {
+              "end": 5.436,
+              "score": 1,
+              "start": 5.376,
+              "word": "the"
+            },
+            {
+              "end": 6.018,
+              "score": 0.835,
+              "start": 5.476,
+              "word": "workspace"
+            },
+            {
+              "end": 6.66,
+              "score": 0.845,
+              "start": 6.098,
+              "word": "alongside"
+            },
+            {
+              "end": 7.262,
+              "score": 0.84,
+              "start": 6.74,
+              "word": "Dev-UI"
+            },
+            {
+              "end": 7.944,
+              "score": 0.857,
+              "start": 7.382,
+              "word": "MCP,"
+            },
+            {
+              "end": 8.505,
+              "score": 0.936,
+              "start": 8.445,
+              "word": "and"
+            },
+            {
+              "end": 8.606,
+              "score": 0.833,
+              "start": 8.525,
+              "word": "the"
+            },
+            {
+              "end": 8.907,
+              "score": 0.88,
+              "start": 8.646,
+              "word": "agent"
+            },
+            {
+              "end": 9.067,
+              "score": 0.935,
+              "start": 8.947,
+              "word": "has"
+            },
+            {
+              "end": 9.528,
+              "score": 0.822,
+              "start": 9.107,
+              "word": "access"
+            },
+            {
+              "end": 9.649,
+              "score": 0.849,
+              "start": 9.568,
+              "word": "to"
+            },
+            {
+              "end": 9.849,
+              "score": 1,
+              "start": 9.709,
+              "word": "both"
+            },
+            {
+              "end": 10.632,
+              "score": 0.913,
+              "start": 9.889,
+              "word": "diagnostic"
+            },
+            {
+              "end": 10.953,
+              "score": 0.97,
+              "start": 10.672,
+              "word": "data"
+            },
+            {
+              "end": 11.695,
+              "score": 0.465,
+              "start": 11.554,
+              "word": "and"
+            },
+            {
+              "end": 11.956,
+              "score": 0.307,
+              "start": 11.735,
+              "word": "the"
+            },
+            {
+              "end": 12.557,
+              "score": 0.951,
+              "start": 12.156,
+              "word": "actual"
+            },
+            {
+              "end": 13.46,
               "score": 0.877,
-              "start": 11.313,
-              "word": "search"
-            },
-            {
-              "end": 12.236,
-              "score": 0,
-              "start": 12.216,
-              "word": "—"
-            },
-            {
-              "end": 12.417,
-              "score": 0.783,
-              "start": 12.256,
-              "word": "all"
-            },
-            {
-              "end": 12.737,
-              "score": 0.842,
-              "start": 12.497,
-              "word": "via"
-            },
-            {
-              "end": 13.119,
-              "score": 0.876,
-              "start": 12.798,
-              "word": "natural"
-            },
-            {
-              "end": 13.62,
-              "score": 0.759,
-              "start": 13.159,
-              "word": "language."
+              "start": 12.678,
+              "word": "implementation."
             }
           ],
           "markers": []
         },
         {
           "segmentId": 1,
-          "audioHash": "d189030c46d4f80c578f5e5ed4f54332b0128d3a1b792868b8f13a58e8d0ba79",
-          "narrationHash": "cde44c0aab6db16e9e67006f0f93c88546df6d3b600a6b84046db2f5db3b9422",
+          "audioHash": "6f67dce3a22d321a0821870d1b5e5675facc5a4bf2c386e7b00450e5da68701c",
+          "narrationHash": "9f5cd599b32d48ce1d226276ce912f97b067c10ec2319506f7d921285270e068",
           "words": [
             {
-              "end": 0.602,
-              "score": 0.437,
-              "start": 0,
-              "word": "Telemetry"
-            },
-            {
               "end": 0.702,
-              "score": 0.475,
-              "start": 0.622,
-              "word": "and"
+              "score": 0.765,
+              "start": 0,
+              "word": "Closed-loop"
             },
             {
-              "end": 1.384,
-              "score": 0.893,
-              "start": 0.762,
-              "word": "Execution"
+              "end": 1.184,
+              "score": 0.851,
+              "start": 0.742,
+              "word": "debugging:"
             },
             {
-              "end": 1.624,
-              "score": 0.634,
-              "start": 1.424,
-              "word": "is"
-            },
-            {
-              "end": 1.765,
-              "score": 0.937,
-              "start": 1.684,
+              "end": 1.746,
+              "score": 0.769,
+              "start": 1.665,
               "word": "the"
             },
             {
-              "end": 2.266,
-              "score": 0.821,
-              "start": 1.845,
-              "word": "largest"
+              "end": 2.087,
+              "score": 0.887,
+              "start": 1.806,
+              "word": "agent"
             },
             {
-              "end": 2.607,
-              "score": 0.788,
-              "start": 2.346,
-              "word": "group"
+              "end": 2.508,
+              "score": 0.878,
+              "start": 2.207,
+              "word": "finds"
             },
             {
-              "end": 2.767,
+              "end": 2.609,
+              "score": 0.985,
+              "start": 2.589,
+              "word": "a"
+            },
+            {
+              "end": 2.91,
+              "score": 0.819,
+              "start": 2.649,
+              "word": "bug"
+            },
+            {
+              "end": 3.17,
+              "score": 0.822,
+              "start": 2.97,
+              "word": "via"
+            },
+            {
+              "end": 3.271,
+              "score": 0.992,
+              "start": 3.211,
+              "word": "the"
+            },
+            {
+              "end": 3.652,
+              "score": 0.835,
+              "start": 3.311,
+              "word": "symptom"
+            },
+            {
+              "end": 4.053,
+              "score": 0.877,
+              "start": 3.692,
+              "word": "report,"
+            },
+            {
+              "end": 4.916,
+              "score": 0.827,
+              "start": 4.515,
+              "word": "traces"
+            },
+            {
+              "end": 5.077,
+              "score": 0.609,
+              "start": 4.956,
+              "word": "the"
+            },
+            {
+              "end": 5.478,
+              "score": 0.876,
+              "start": 5.137,
+              "word": "service"
+            },
+            {
+              "end": 5.799,
               "score": 0.93,
-              "start": 2.647,
-              "word": "with"
+              "start": 5.518,
+              "word": "call,"
             },
             {
-              "end": 3.128,
-              "score": 0.867,
-              "start": 2.807,
-              "word": "ten"
+              "end": 6.642,
+              "score": 0.853,
+              "start": 6.361,
+              "word": "opens"
             },
             {
-              "end": 3.529,
-              "score": 0.691,
-              "start": 3.188,
-              "word": "tools"
+              "end": 6.782,
+              "score": 0.539,
+              "start": 6.682,
+              "word": "the"
             },
             {
-              "end": 4.191,
-              "score": 0.955,
-              "start": 3.549,
+              "end": 7.123,
+              "score": 0.772,
+              "start": 6.843,
+              "word": "source"
+            },
+            {
+              "end": 7.465,
+              "score": 0.847,
+              "start": 7.164,
+              "word": "file,"
+            },
+            {
+              "end": 8.067,
+              "score": 0.857,
+              "start": 7.986,
+              "word": "and"
+            },
+            {
+              "end": 8.789,
+              "score": 0.811,
+              "start": 8.127,
+              "word": "identifies"
+            },
+            {
+              "end": 8.909,
+              "score": 0.509,
+              "start": 8.829,
+              "word": "the"
+            },
+            {
+              "end": 9.23,
+              "score": 0.757,
+              "start": 8.99,
+              "word": "root"
+            },
+            {
+              "end": 9.692,
+              "score": 0.934,
+              "start": 9.291,
+              "word": "cause"
+            },
+            {
+              "end": 9.732,
+              "score": 0.893,
+              "start": 9.712,
               "word": "—"
             },
             {
-              "end": 4.311,
-              "score": 0.764,
-              "start": 4.211,
-              "word": "it's"
+              "end": 10.555,
+              "score": 0.891,
+              "start": 10.394,
+              "word": "all"
             },
             {
-              "end": 4.492,
-              "score": 0.997,
-              "start": 4.351,
-              "word": "where"
+              "end": 10.695,
+              "score": 0.981,
+              "start": 10.635,
+              "word": "in"
             },
             {
-              "end": 4.592,
-              "score": 0.918,
-              "start": 4.532,
-              "word": "the"
-            },
-            {
-              "end": 4.993,
-              "score": 0.878,
-              "start": 4.752,
-              "word": "real"
-            },
-            {
-              "end": 5.534,
-              "score": 0.835,
-              "start": 5.053,
-              "word": "debugging"
-            },
-            {
-              "end": 5.915,
-              "score": 0.924,
-              "start": 5.614,
-              "word": "power"
-            },
-            {
-              "end": 6.276,
-              "score": 0.833,
-              "start": 5.955,
-              "word": "lives."
-            },
-            {
-              "end": 7.078,
-              "score": 0.912,
-              "start": 6.858,
-              "word": "Chat"
-            },
-            {
-              "end": 7.72,
-              "score": 0.896,
-              "start": 7.138,
-              "word": "Execution"
-            },
-            {
-              "end": 8.141,
-              "score": 0.852,
-              "start": 7.76,
-              "word": "has"
-            },
-            {
-              "end": 8.422,
-              "score": 0.641,
-              "start": 8.181,
+              "end": 11.056,
+              "score": 0.866,
+              "start": 10.936,
               "word": "one"
             },
             {
-              "end": 8.763,
-              "score": 0.82,
-              "start": 8.482,
-              "word": "tool"
-            },
-            {
-              "end": 8.923,
-              "score": 0.785,
-              "start": 8.823,
-              "word": "for"
-            },
-            {
-              "end": 9.284,
-              "score": 0.927,
-              "start": 8.983,
-              "word": "sending"
-            },
-            {
-              "end": 9.605,
-              "score": 0.987,
-              "start": 9.384,
-              "word": "live"
-            },
-            {
-              "end": 10.206,
-              "score": 0.889,
-              "start": 9.645,
-              "word": "requests,"
-            },
-            {
-              "end": 10.768,
-              "score": 0.804,
-              "start": 10.688,
-              "word": "and"
-            },
-            {
-              "end": 11.269,
-              "score": 0.922,
-              "start": 10.848,
-              "word": "Config"
-            },
-            {
-              "end": 11.79,
-              "score": 0.823,
-              "start": 11.309,
-              "word": "Management"
-            },
-            {
-              "end": 12.071,
-              "score": 0.839,
-              "start": 11.931,
-              "word": "has"
-            },
-            {
-              "end": 12.472,
-              "score": 0.958,
-              "start": 12.091,
-              "word": "five"
-            },
-            {
-              "end": 12.853,
-              "score": 0.616,
-              "start": 12.532,
-              "word": "tools"
-            },
-            {
-              "end": 13.054,
-              "score": 0.818,
-              "start": 12.933,
-              "word": "for"
-            },
-            {
-              "end": 13.615,
-              "score": 0.869,
-              "start": 13.114,
-              "word": "configs,"
-            },
-            {
-              "end": 14.658,
-              "score": 0.921,
-              "start": 13.896,
-              "word": "settings,"
-            },
-            {
-              "end": 14.778,
-              "score": 0.915,
-              "start": 14.678,
-              "word": "and"
-            },
-            {
-              "end": 15.099,
-              "score": 0.799,
-              "start": 14.858,
-              "word": "test"
-            },
-            {
-              "end": 15.54,
-              "score": 0.948,
-              "start": 15.139,
-              "word": "accounts."
+              "end": 12.18,
+              "score": 0.838,
+              "start": 11.197,
+              "word": "conversation."
             }
           ],
           "markers": []
         },
         {
           "segmentId": 2,
-          "audioHash": "ddf3b9f07361d968913d3e123e21efd92473fb3d4f9537c379991d3fe1231900",
-          "narrationHash": "ac40b22aadbe37b854bebae600c7b8d107145203a7fd15b2a3dd3be469a6c5a8",
+          "audioHash": "58e9a63b9ce43b569b3444b9d98b132e026f132d99d58fd397d0c8b1cff0b9f3",
+          "narrationHash": "a9fe7696587cfa026daa1f48f0cb7cd0f61676ceecefca6e3d4843c6a46a57a5",
           "words": [
             {
-              "end": 0.261,
-              "score": 0.774,
+              "end": 0.301,
+              "score": 0.761,
               "start": 0,
-              "word": "Load"
+              "word": "From"
             },
             {
-              "end": 0.321,
-              "score": 0.951,
-              "start": 0.301,
-              "word": "a"
+              "end": 0.742,
+              "score": 0.741,
+              "start": 0.341,
+              "word": "symptom"
             },
             {
-              "end": 1.044,
-              "score": 0.883,
-              "start": 0.382,
-              "word": "conversation"
+              "end": 1.143,
+              "score": 0.974,
+              "start": 0.782,
+              "word": "report"
             },
             {
-              "end": 1.406,
-              "score": 0.908,
-              "start": 1.084,
-              "word": "once,"
+              "end": 1.383,
+              "score": 0.98,
+              "start": 1.203,
+              "word": "to"
             },
             {
-              "end": 1.928,
-              "score": 0.934,
-              "start": 1.847,
-              "word": "and"
+              "end": 1.744,
+              "score": 0.818,
+              "start": 1.403,
+              "word": "source"
             },
             {
-              "end": 2.871,
-              "score": 0.746,
-              "start": 1.968,
-              "word": "every"
+              "end": 2.045,
+              "score": 0.918,
+              "start": 1.784,
+              "word": "code"
             },
             {
-              "end": 3.454,
-              "score": 0.838,
-              "start": 2.972,
-              "word": "drill-down"
+              "end": 2.426,
+              "score": 0.997,
+              "start": 2.105,
+              "word": "fix"
             },
             {
-              "end": 3.795,
-              "score": 0.843,
-              "start": 3.534,
-              "word": "tool"
-            },
-            {
-              "end": 4.237,
-              "score": 0.749,
-              "start": 3.875,
-              "word": "operates"
-            },
-            {
-              "end": 4.377,
-              "score": 0.932,
-              "start": 4.317,
-              "word": "on"
-            },
-            {
-              "end": 4.478,
-              "score": 0.827,
-              "start": 4.397,
-              "word": "the"
-            },
-            {
-              "end": 4.819,
-              "score": 0.77,
-              "start": 4.538,
-              "word": "loaded"
-            },
-            {
-              "end": 5.181,
-              "score": 0.957,
-              "start": 4.879,
-              "word": "data."
-            },
-            {
-              "end": 5.622,
-              "score": 0.802,
-              "start": 5.482,
-              "word": "No"
-            },
-            {
-              "end": 6.164,
-              "score": 0.926,
-              "start": 5.662,
-              "word": "re-fetching."
-            },
-            {
-              "end": 6.988,
-              "score": 0.725,
-              "start": 6.807,
-              "word": "All"
-            },
-            {
-              "end": 7.229,
-              "score": 0.707,
-              "start": 7.028,
-              "word": "via"
-            },
-            {
-              "end": 7.61,
-              "score": 0.793,
-              "start": 7.289,
-              "word": "natural"
-            },
-            {
-              "end": 8.032,
-              "score": 0.9,
-              "start": 7.65,
-              "word": "language"
-            },
-            {
-              "end": 8.393,
-              "score": 0.941,
-              "start": 8.052,
+              "end": 3.128,
+              "score": 0.971,
+              "start": 2.446,
               "word": "—"
             },
             {
-              "end": 8.574,
-              "score": 0.729,
-              "start": 8.413,
-              "word": "just"
+              "end": 3.228,
+              "score": 0.818,
+              "start": 3.148,
+              "word": "in"
             },
             {
-              "end": 8.815,
-              "score": 0.796,
-              "start": 8.654,
-              "word": "ask"
+              "end": 3.488,
+              "score": 0.73,
+              "start": 3.368,
+              "word": "one"
             },
             {
-              "end": 8.976,
-              "score": 0.683,
-              "start": 8.875,
+              "end": 4.25,
+              "score": 0.864,
+              "start": 3.549,
+              "word": "conversation."
+            },
+            {
+              "end": 4.812,
+              "score": 0.823,
+              "start": 4.731,
+              "word": "And"
+            },
+            {
+              "end": 5.132,
+              "score": 0.83,
+              "start": 4.972,
+              "word": "once"
+            },
+            {
+              "end": 5.273,
+              "score": 0.832,
+              "start": 5.193,
               "word": "the"
             },
             {
-              "end": 9.317,
-              "score": 0.865,
-              "start": 9.036,
+              "end": 5.594,
+              "score": 0.946,
+              "start": 5.333,
+              "word": "fix"
+            },
+            {
+              "end": 5.694,
+              "score": 0.694,
+              "start": 5.614,
+              "word": "is"
+            },
+            {
+              "end": 5.954,
+              "score": 0.816,
+              "start": 5.834,
+              "word": "in,"
+            },
+            {
+              "end": 6.215,
+              "score": 0.669,
+              "start": 5.995,
+              "word": "the"
+            },
+            {
+              "end": 6.656,
+              "score": 0.83,
+              "start": 6.375,
               "word": "agent"
             },
             {
-              "end": 9.618,
-              "score": 0.869,
-              "start": 9.498,
-              "word": "what"
+              "end": 6.877,
+              "score": 0.967,
+              "start": 6.736,
+              "word": "can"
             },
             {
-              "end": 9.779,
-              "score": 0.775,
-              "start": 9.658,
-              "word": "you"
+              "end": 7.338,
+              "score": 0.755,
+              "start": 6.957,
+              "word": "rerun"
             },
             {
-              "end": 10.1,
-              "score": 0.706,
-              "start": 9.819,
-              "word": "need."
+              "end": 7.458,
+              "score": 0.833,
+              "start": 7.378,
+              "word": "the"
+            },
+            {
+              "end": 7.939,
+              "score": 0.895,
+              "start": 7.518,
+              "word": "service,"
+            },
+            {
+              "end": 8.781,
+              "score": 0.909,
+              "start": 8.481,
+              "word": "query"
+            },
+            {
+              "end": 8.862,
+              "score": 0.992,
+              "start": 8.821,
+              "word": "it"
+            },
+            {
+              "end": 9.182,
+              "score": 0.938,
+              "start": 8.922,
+              "word": "again,"
+            },
+            {
+              "end": 9.824,
+              "score": 0.964,
+              "start": 9.202,
+              "word": "and"
+            },
+            {
+              "end": 10.445,
+              "score": 0.945,
+              "start": 9.944,
+              "word": "debug"
+            },
+            {
+              "end": 10.606,
+              "score": 0.988,
+              "start": 10.505,
+              "word": "the"
+            },
+            {
+              "end": 10.866,
+              "score": 0.931,
+              "start": 10.706,
+              "word": "new"
+            },
+            {
+              "end": 11.428,
+              "score": 0.882,
+              "start": 10.927,
+              "word": "response"
+            },
+            {
+              "end": 11.568,
+              "score": 0.998,
+              "start": 11.468,
+              "word": "to"
+            },
+            {
+              "end": 12.17,
+              "score": 0.926,
+              "start": 11.608,
+              "word": "verify."
+            },
+            {
+              "end": 12.851,
+              "score": 0.836,
+              "start": 12.21,
+              "word": "No"
+            },
+            {
+              "end": 13.453,
+              "score": 0.883,
+              "start": 12.911,
+              "word": "context"
+            },
+            {
+              "end": 13.934,
+              "score": 0.929,
+              "start": 13.513,
+              "word": "switching,"
+            },
+            {
+              "end": 14.555,
+              "score": 0.931,
+              "start": 13.954,
+              "word": "no"
+            },
+            {
+              "end": 15.458,
+              "score": 0.892,
+              "start": 14.696,
+              "word": "copy-pasting"
+            },
+            {
+              "end": 15.879,
+              "score": 0.793,
+              "start": 15.518,
+              "word": "between"
+            },
+            {
+              "end": 16.5,
+              "score": 0.827,
+              "start": 15.959,
+              "word": "tools."
             }
           ],
           "markers": []
@@ -4481,7 +4523,698 @@
     "c3_s2": {
       "chapter": 3,
       "slide": 2,
-      "segments": []
+      "segments": [
+        {
+          "segmentId": 0,
+          "audioHash": "84891e1071d12170fee167a72e934f56ce259628a2b86426dca11c0cdeae1d36",
+          "narrationHash": "dc23cf1d03d1aa6c757092cbc7e6f02c3731017b8774cb0144d251fb2f70304f",
+          "words": [
+            {
+              "end": 0.381,
+              "score": 0.732,
+              "start": 0,
+              "word": "SEVAL"
+            },
+            {
+              "end": 0.763,
+              "score": 0.825,
+              "start": 0.422,
+              "word": "scrapes"
+            },
+            {
+              "end": 1.204,
+              "score": 0.929,
+              "start": 0.863,
+              "word": "produce"
+            },
+            {
+              "end": 1.666,
+              "score": 0.858,
+              "start": 1.305,
+              "word": "hundreds"
+            },
+            {
+              "end": 1.746,
+              "score": 1,
+              "start": 1.706,
+              "word": "of"
+            },
+            {
+              "end": 2.69,
+              "score": 0.909,
+              "start": 1.847,
+              "word": "conversations."
+            },
+            {
+              "end": 3.633,
+              "score": 0.889,
+              "start": 3.372,
+              "word": "Instead"
+            },
+            {
+              "end": 3.713,
+              "score": 1,
+              "start": 3.673,
+              "word": "of"
+            },
+            {
+              "end": 4.376,
+              "score": 0.875,
+              "start": 3.753,
+              "word": "triaging"
+            },
+            {
+              "end": 4.918,
+              "score": 0.848,
+              "start": 4.436,
+              "word": "manually,"
+            },
+            {
+              "end": 5.56,
+              "score": 0.806,
+              "start": 5.379,
+              "word": "just"
+            },
+            {
+              "end": 5.901,
+              "score": 0.918,
+              "start": 5.7,
+              "word": "ask:"
+            },
+            {
+              "end": 6.503,
+              "score": 0.882,
+              "start": 6.383,
+              "word": "get"
+            },
+            {
+              "end": 6.624,
+              "score": 0.989,
+              "start": 6.543,
+              "word": "the"
+            },
+            {
+              "end": 6.985,
+              "score": 0.912,
+              "start": 6.724,
+              "word": "worst"
+            },
+            {
+              "end": 7.788,
+              "score": 0.879,
+              "start": 7.045,
+              "word": "conversation"
+            },
+            {
+              "end": 8.029,
+              "score": 0.942,
+              "start": 7.888,
+              "word": "from"
+            },
+            {
+              "end": 8.249,
+              "score": 0.837,
+              "start": 8.089,
+              "word": "my"
+            },
+            {
+              "end": 8.711,
+              "score": 0.858,
+              "start": 8.37,
+              "word": "latest"
+            },
+            {
+              "end": 9.133,
+              "score": 0.54,
+              "start": 8.791,
+              "word": "SEVAL"
+            },
+            {
+              "end": 9.474,
+              "score": 0.939,
+              "start": 9.153,
+              "word": "and"
+            },
+            {
+              "end": 10.136,
+              "score": 0.95,
+              "start": 9.554,
+              "word": "debug"
+            },
+            {
+              "end": 10.518,
+              "score": 0.991,
+              "start": 10.337,
+              "word": "what"
+            },
+            {
+              "end": 10.778,
+              "score": 0.787,
+              "start": 10.598,
+              "word": "went"
+            },
+            {
+              "end": 11.22,
+              "score": 0.764,
+              "start": 10.839,
+              "word": "wrong."
+            }
+          ],
+          "markers": []
+        },
+        {
+          "segmentId": 1,
+          "audioHash": "5563d4f39b0f16af933ab8523c04bede777c710126c7bc29201e65385f54745f",
+          "narrationHash": "cead42755df7796b4b3fb81293546c8ff6907aa7c932d531a9e6eab33cb41a72",
+          "words": [
+            {
+              "end": 0.421,
+              "score": 0.796,
+              "start": 0,
+              "word": "SEVAL"
+            },
+            {
+              "end": 0.882,
+              "score": 0.886,
+              "start": 0.461,
+              "word": "produces"
+            },
+            {
+              "end": 1.403,
+              "score": 0.865,
+              "start": 0.982,
+              "word": "metrics"
+            },
+            {
+              "end": 1.563,
+              "score": 0.857,
+              "start": 1.423,
+              "word": "—"
+            },
+            {
+              "end": 1.803,
+              "score": 0.747,
+              "start": 1.583,
+              "word": "both"
+            },
+            {
+              "end": 2.484,
+              "score": 0.856,
+              "start": 1.984,
+              "word": "aggregated"
+            },
+            {
+              "end": 2.785,
+              "score": 0.948,
+              "start": 2.685,
+              "word": "and"
+            },
+            {
+              "end": 3.045,
+              "score": 0.809,
+              "start": 2.865,
+              "word": "per"
+            },
+            {
+              "end": 3.446,
+              "score": 0.942,
+              "start": 3.106,
+              "word": "query"
+            },
+            {
+              "end": 3.827,
+              "score": 0.944,
+              "start": 3.466,
+              "word": "—"
+            },
+            {
+              "end": 4.208,
+              "score": 0.959,
+              "start": 3.847,
+              "word": "plus"
+            },
+            {
+              "end": 4.729,
+              "score": 0.895,
+              "start": 4.468,
+              "word": "LM"
+            },
+            {
+              "end": 5.229,
+              "score": 0.747,
+              "start": 4.809,
+              "word": "Checklist"
+            },
+            {
+              "end": 5.65,
+              "score": 0.96,
+              "start": 5.269,
+              "word": "results:"
+            },
+            {
+              "end": 6.852,
+              "score": 0.853,
+              "start": 6.311,
+              "word": "code-based"
+            },
+            {
+              "end": 7.213,
+              "score": 0.876,
+              "start": 7.093,
+              "word": "and"
+            },
+            {
+              "end": 8.575,
+              "score": 0.633,
+              "start": 7.594,
+              "word": "LLM-based"
+            },
+            {
+              "end": 9.156,
+              "score": 0.876,
+              "start": 8.615,
+              "word": "assertions"
+            },
+            {
+              "end": 9.357,
+              "score": 0.916,
+              "start": 9.217,
+              "word": "that"
+            },
+            {
+              "end": 9.738,
+              "score": 0.738,
+              "start": 9.497,
+              "word": "check"
+            },
+            {
+              "end": 10.038,
+              "score": 0.647,
+              "start": 9.898,
+              "word": "each"
+            },
+            {
+              "end": 10.459,
+              "score": 0.946,
+              "start": 10.118,
+              "word": "query"
+            },
+            {
+              "end": 10.619,
+              "score": 0.963,
+              "start": 10.499,
+              "word": "for"
+            },
+            {
+              "end": 11.22,
+              "score": 0.865,
+              "start": 10.679,
+              "word": "regressions."
+            },
+            {
+              "end": 12.082,
+              "score": 0.802,
+              "start": 11.881,
+              "word": "Through"
+            },
+            {
+              "end": 12.202,
+              "score": 0.822,
+              "start": 12.122,
+              "word": "the"
+            },
+            {
+              "end": 12.643,
+              "score": 0.763,
+              "start": 12.302,
+              "word": "SEVAL"
+            },
+            {
+              "end": 13.344,
+              "score": 0.823,
+              "start": 12.803,
+              "word": "MCP,"
+            },
+            {
+              "end": 13.865,
+              "score": 0.709,
+              "start": 13.765,
+              "word": "the"
+            },
+            {
+              "end": 14.246,
+              "score": 0.86,
+              "start": 13.965,
+              "word": "agent"
+            },
+            {
+              "end": 14.426,
+              "score": 0.942,
+              "start": 14.266,
+              "word": "can"
+            },
+            {
+              "end": 14.927,
+              "score": 0.916,
+              "start": 14.586,
+              "word": "access"
+            },
+            {
+              "end": 15.187,
+              "score": 0.878,
+              "start": 15.067,
+              "word": "all"
+            },
+            {
+              "end": 15.267,
+              "score": 0.998,
+              "start": 15.227,
+              "word": "of"
+            },
+            {
+              "end": 15.528,
+              "score": 0.885,
+              "start": 15.328,
+              "word": "that,"
+            },
+            {
+              "end": 16.83,
+              "score": 0.86,
+              "start": 16.269,
+              "word": "identify"
+            },
+            {
+              "end": 16.971,
+              "score": 0.64,
+              "start": 16.87,
+              "word": "the"
+            },
+            {
+              "end": 17.872,
+              "score": 0.902,
+              "start": 17.051,
+              "word": "worst-performing"
+            },
+            {
+              "end": 18.654,
+              "score": 0.883,
+              "start": 17.912,
+              "word": "conversations,"
+            },
+            {
+              "end": 19.415,
+              "score": 0.684,
+              "start": 19.315,
+              "word": "and"
+            },
+            {
+              "end": 19.816,
+              "score": 0.923,
+              "start": 19.515,
+              "word": "start"
+            },
+            {
+              "end": 20.297,
+              "score": 0.872,
+              "start": 19.856,
+              "word": "debugging"
+            },
+            {
+              "end": 20.477,
+              "score": 0.983,
+              "start": 20.337,
+              "word": "them"
+            },
+            {
+              "end": 20.657,
+              "score": 0.792,
+              "start": 20.537,
+              "word": "with"
+            },
+            {
+              "end": 20.797,
+              "score": 0.645,
+              "start": 20.697,
+              "word": "the"
+            },
+            {
+              "end": 21.459,
+              "score": 0.878,
+              "start": 20.878,
+              "word": "Dev-UI"
+            },
+            {
+              "end": 22.26,
+              "score": 0.806,
+              "start": 21.659,
+              "word": "MCP."
+            }
+          ],
+          "markers": []
+        },
+        {
+          "segmentId": 2,
+          "audioHash": "1901254a2768ae7f1f24bcd915aa9c06a6058c87bb071b6a55286b9a2704584d",
+          "narrationHash": "0b1de2d3ed1aed07fd21dd21023eae2294b3e29c70c22a630be0e0f1bdce4319",
+          "words": [
+            {
+              "end": 0.301,
+              "score": 0.869,
+              "start": 0,
+              "word": "Two"
+            },
+            {
+              "end": 1.002,
+              "score": 0.836,
+              "start": 0.441,
+              "word": "MCP"
+            },
+            {
+              "end": 1.503,
+              "score": 0.904,
+              "start": 1.062,
+              "word": "servers,"
+            },
+            {
+              "end": 2.065,
+              "score": 0.887,
+              "start": 1.944,
+              "word": "one"
+            },
+            {
+              "end": 2.886,
+              "score": 0.901,
+              "start": 2.145,
+              "word": "conversation."
+            },
+            {
+              "end": 3.488,
+              "score": 0.797,
+              "start": 3.388,
+              "word": "The"
+            },
+            {
+              "end": 3.869,
+              "score": 0.8,
+              "start": 3.548,
+              "word": "SEVAL"
+            },
+            {
+              "end": 4.55,
+              "score": 0.789,
+              "start": 3.969,
+              "word": "MCP"
+            },
+            {
+              "end": 4.831,
+              "score": 0.765,
+              "start": 4.65,
+              "word": "gives"
+            },
+            {
+              "end": 4.991,
+              "score": 0.669,
+              "start": 4.891,
+              "word": "the"
+            },
+            {
+              "end": 5.332,
+              "score": 0.901,
+              "start": 5.071,
+              "word": "agent"
+            },
+            {
+              "end": 5.873,
+              "score": 0.924,
+              "start": 5.472,
+              "word": "access"
+            },
+            {
+              "end": 6.034,
+              "score": 0.67,
+              "start": 5.913,
+              "word": "to"
+            },
+            {
+              "end": 6.595,
+              "score": 0.865,
+              "start": 6.134,
+              "word": "metrics"
+            },
+            {
+              "end": 6.795,
+              "score": 0.853,
+              "start": 6.695,
+              "word": "and"
+            },
+            {
+              "end": 7.316,
+              "score": 0.876,
+              "start": 6.895,
+              "word": "checklist"
+            },
+            {
+              "end": 7.777,
+              "score": 0.87,
+              "start": 7.377,
+              "word": "results,"
+            },
+            {
+              "end": 8.419,
+              "score": 0.812,
+              "start": 8.319,
+              "word": "the"
+            },
+            {
+              "end": 9.12,
+              "score": 0.916,
+              "start": 8.479,
+              "word": "Dev-UI"
+            },
+            {
+              "end": 9.882,
+              "score": 0.843,
+              "start": 9.301,
+              "word": "MCP"
+            },
+            {
+              "end": 10.163,
+              "score": 0.844,
+              "start": 9.962,
+              "word": "lets"
+            },
+            {
+              "end": 10.303,
+              "score": 0.929,
+              "start": 10.243,
+              "word": "it"
+            },
+            {
+              "end": 10.724,
+              "score": 0.926,
+              "start": 10.403,
+              "word": "load"
+            },
+            {
+              "end": 10.945,
+              "score": 0.765,
+              "start": 10.864,
+              "word": "and"
+            },
+            {
+              "end": 11.466,
+              "score": 0.94,
+              "start": 11.025,
+              "word": "debug"
+            },
+            {
+              "end": 11.706,
+              "score": 0.882,
+              "start": 11.526,
+              "word": "those"
+            },
+            {
+              "end": 12.528,
+              "score": 0.859,
+              "start": 11.766,
+              "word": "conversations"
+            },
+            {
+              "end": 13.069,
+              "score": 0.962,
+              "start": 12.548,
+              "word": "—"
+            },
+            {
+              "end": 13.25,
+              "score": 0.866,
+              "start": 13.089,
+              "word": "from"
+            },
+            {
+              "end": 13.811,
+              "score": 0.854,
+              "start": 13.33,
+              "word": "regression"
+            },
+            {
+              "end": 14.392,
+              "score": 0.91,
+              "start": 13.871,
+              "word": "detection"
+            },
+            {
+              "end": 14.593,
+              "score": 0.872,
+              "start": 14.472,
+              "word": "to"
+            },
+            {
+              "end": 14.873,
+              "score": 0.788,
+              "start": 14.653,
+              "word": "root"
+            },
+            {
+              "end": 15.234,
+              "score": 0.906,
+              "start": 14.913,
+              "word": "cause"
+            },
+            {
+              "end": 15.976,
+              "score": 0.96,
+              "start": 15.294,
+              "word": "diagnosis,"
+            },
+            {
+              "end": 16.738,
+              "score": 0.972,
+              "start": 16.597,
+              "word": "all"
+            },
+            {
+              "end": 16.858,
+              "score": 0.859,
+              "start": 16.818,
+              "word": "in"
+            },
+            {
+              "end": 17.259,
+              "score": 0.584,
+              "start": 17.118,
+              "word": "one"
+            },
+            {
+              "end": 17.86,
+              "score": 0.758,
+              "start": 17.379,
+              "word": "session."
+            }
+          ],
+          "markers": []
+        }
+      ]
     },
     "c4_s1": {
       "chapter": 4,
@@ -4489,642 +5222,1075 @@
       "segments": [
         {
           "segmentId": 0,
-          "audioHash": "7e75d6e5b080899a99ae216a55897b017f57cf4a8192d67f90eac567d9a88586",
-          "narrationHash": "a5f965561d1faea8557a7654064eec5ac78d6228c0f21f7cee2089122b7ee495",
+          "audioHash": "91d6016a89fb812554a53888885bef35091dca5ea6b6ff6db9bd9dbb3c3f592a",
+          "narrationHash": "6f1ba9043439f368b71d0d3738070c63558ac12811f5707e0390418acd3a883d",
           "words": [
             {
-              "end": 0.221,
-              "score": 0.933,
+              "end": 0.381,
+              "score": 0.799,
               "start": 0,
-              "word": "What"
+              "word": "Getting"
             },
             {
-              "end": 0.301,
-              "score": 0.998,
-              "start": 0.261,
-              "word": "if"
+              "end": 0.822,
+              "score": 0.875,
+              "start": 0.441,
+              "word": "started"
             },
             {
-              "end": 0.441,
-              "score": 0.671,
-              "start": 0.341,
+              "end": 1.203,
+              "score": 0.833,
+              "start": 0.862,
+              "word": "takes"
+            },
+            {
+              "end": 1.443,
+              "score": 0.991,
+              "start": 1.283,
+              "word": "two"
+            },
+            {
+              "end": 1.784,
+              "score": 0.832,
+              "start": 1.503,
+              "word": "minutes."
+            },
+            {
+              "end": 2.646,
+              "score": 0.828,
+              "start": 2.405,
+              "word": "Step"
+            },
+            {
+              "end": 2.906,
+              "score": 0.906,
+              "start": 2.786,
+              "word": "one:"
+            },
+            {
+              "end": 3.708,
+              "score": 0.747,
+              "start": 3.307,
+              "word": "register"
+            },
+            {
+              "end": 3.808,
+              "score": 1,
+              "start": 3.748,
               "word": "the"
             },
             {
-              "end": 0.782,
-              "score": 0.782,
-              "start": 0.522,
-              "word": "agent"
+              "end": 4.449,
+              "score": 0.892,
+              "start": 3.848,
+              "word": "marketplace."
             },
             {
-              "end": 0.983,
-              "score": 0.865,
-              "start": 0.843,
-              "word": "could"
+              "end": 6.494,
+              "score": 0.753,
+              "start": 5.091,
+              "word": "ai-developer-toolkit"
             },
             {
-              "end": 1.304,
-              "score": 0.908,
-              "start": 1.083,
-              "word": "read"
+              "end": 6.754,
+              "score": 0.836,
+              "start": 6.674,
+              "word": "is"
             },
             {
-              "end": 1.665,
-              "score": 0.684,
-              "start": 1.424,
-              "word": "both"
+              "end": 6.874,
+              "score": 0.971,
+              "start": 6.834,
+              "word": "an"
             },
             {
-              "end": 2.367,
-              "score": 0.785,
-              "start": 1.785,
-              "word": "telemetry"
+              "end": 7.516,
+              "score": 0.871,
+              "start": 6.914,
+              "word": "internal"
             },
             {
-              "end": 2.708,
-              "score": 0.882,
-              "start": 2.588,
-              "word": "and"
-            },
-            {
-              "end": 3.109,
-              "score": 0.897,
-              "start": 2.808,
-              "word": "source"
-            },
-            {
-              "end": 3.41,
-              "score": 0.895,
-              "start": 3.149,
-              "word": "code?"
-            },
-            {
-              "end": 4.112,
-              "score": 0.972,
-              "start": 3.972,
-              "word": "Add"
-            },
-            {
-              "end": 4.233,
-              "score": 0.71,
-              "start": 4.132,
-              "word": "the"
-            },
-            {
-              "end": 4.614,
-              "score": 0.896,
-              "start": 4.293,
-              "word": "Sydney"
-            },
-            {
-              "end": 5.035,
-              "score": 0.847,
-              "start": 4.654,
+              "end": 7.916,
+              "score": 0.926,
+              "start": 7.576,
               "word": "repo"
             },
             {
-              "end": 5.155,
-              "score": 0.632,
-              "start": 5.075,
-              "word": "to"
+              "end": 8.117,
+              "score": 0.847,
+              "start": 8.077,
+              "word": "I"
             },
             {
-              "end": 5.256,
-              "score": 0.999,
-              "start": 5.195,
-              "word": "the"
+              "end": 8.658,
+              "score": 0.907,
+              "start": 8.157,
+              "word": "maintain"
             },
             {
-              "end": 5.837,
-              "score": 0.9,
-              "start": 5.296,
-              "word": "workspace"
-            },
-            {
-              "end": 6.479,
-              "score": 0.825,
-              "start": 5.898,
-              "word": "alongside"
-            },
-            {
-              "end": 7.282,
-              "score": 0.916,
-              "start": 6.58,
-              "word": "Dev-UI"
-            },
-            {
-              "end": 7.984,
-              "score": 0.811,
-              "start": 7.442,
-              "word": "MCP,"
-            },
-            {
-              "end": 8.626,
-              "score": 0.852,
-              "start": 8.545,
-              "word": "and"
-            },
-            {
-              "end": 8.726,
-              "score": 0.522,
-              "start": 8.646,
-              "word": "the"
-            },
-            {
-              "end": 9.067,
-              "score": 0.756,
-              "start": 8.806,
-              "word": "agent"
-            },
-            {
-              "end": 9.227,
+              "end": 8.858,
               "score": 0.917,
-              "start": 9.107,
-              "word": "has"
+              "start": 8.718,
+              "word": "with"
             },
             {
-              "end": 9.729,
-              "score": 0.911,
-              "start": 9.348,
-              "word": "access"
+              "end": 9.119,
+              "score": 0.852,
+              "start": 8.999,
+              "word": "all"
             },
             {
-              "end": 9.889,
-              "score": 0.998,
-              "start": 9.789,
-              "word": "to"
-            },
-            {
-              "end": 10.17,
-              "score": 0.87,
-              "start": 9.97,
-              "word": "both"
-            },
-            {
-              "end": 10.953,
-              "score": 0.899,
-              "start": 10.271,
-              "word": "diagnostic"
-            },
-            {
-              "end": 11.314,
-              "score": 0.996,
-              "start": 11.013,
-              "word": "data"
-            },
-            {
-              "end": 11.936,
-              "score": 0.575,
-              "start": 11.835,
-              "word": "and"
-            },
-            {
-              "end": 12.096,
-              "score": 0.461,
-              "start": 11.976,
+              "end": 9.259,
+              "score": 0.766,
+              "start": 9.179,
               "word": "the"
             },
             {
-              "end": 12.517,
-              "score": 0.905,
-              "start": 12.196,
-              "word": "actual"
+              "end": 9.861,
+              "score": 0.805,
+              "start": 9.4,
+              "word": "MCP"
             },
             {
-              "end": 13.46,
-              "score": 0.896,
-              "start": 12.597,
-              "word": "implementation."
+              "end": 10.362,
+              "score": 0.876,
+              "start": 9.921,
+              "word": "plugins."
+            },
+            {
+              "end": 11.223,
+              "score": 0.804,
+              "start": 10.983,
+              "word": "Run"
+            },
+            {
+              "end": 12.045,
+              "score": 0.853,
+              "start": 11.284,
+              "word": "slash"
+            },
+            {
+              "end": 12.546,
+              "score": 0.812,
+              "start": 12.185,
+              "word": "plugin"
+            },
+            {
+              "end": 13.187,
+              "score": 0.798,
+              "start": 12.606,
+              "word": "marketplace"
+            },
+            {
+              "end": 14.009,
+              "score": 0.89,
+              "start": 13.869,
+              "word": "add"
+            },
+            {
+              "end": 14.791,
+              "score": 0.779,
+              "start": 14.19,
+              "word": "gim-home"
+            },
+            {
+              "end": 15.552,
+              "score": 0.754,
+              "start": 15.172,
+              "word": "slash"
+            },
+            {
+              "end": 17.096,
+              "score": 0.808,
+              "start": 15.793,
+              "word": "ai-developer-toolkit"
+            },
+            {
+              "end": 17.496,
+              "score": 0.947,
+              "start": 17.116,
+              "word": "—"
+            },
+            {
+              "end": 17.697,
+              "score": 0.899,
+              "start": 17.516,
+              "word": "this"
+            },
+            {
+              "end": 17.917,
+              "score": 0.833,
+              "start": 17.817,
+              "word": "is"
+            },
+            {
+              "end": 17.957,
+              "score": 1,
+              "start": 17.937,
+              "word": "a"
+            },
+            {
+              "end": 18.859,
+              "score": 0.746,
+              "start": 18.378,
+              "word": "one-time"
+            },
+            {
+              "end": 19.22,
+              "score": 0.564,
+              "start": 18.919,
+              "word": "setup."
             }
           ],
           "markers": []
         },
         {
           "segmentId": 1,
-          "audioHash": "9dcf207e674e9b666c5f7e0b2309c3814e3fe9d4d2a5462a65c1a46fd4be05ce",
-          "narrationHash": "9f5cd599b32d48ce1d226276ce912f97b067c10ec2319506f7d921285270e068",
+          "audioHash": "71f407adfa88dc0be25ce83edce615eba7cf4ac3553e580b69a833a236039be8",
+          "narrationHash": "25731efd8c22dbe67a3a0c55a039a3a0596ef92a000089be92c94c6f3f047204",
           "words": [
             {
-              "end": 0.642,
-              "score": 0.735,
+              "end": 0.281,
+              "score": 0.879,
               "start": 0,
-              "word": "Closed-loop"
+              "word": "Step"
             },
             {
-              "end": 1.144,
-              "score": 0.94,
-              "start": 0.682,
-              "word": "debugging:"
+              "end": 0.481,
+              "score": 0.829,
+              "start": 0.301,
+              "word": "two:"
             },
             {
-              "end": 1.867,
-              "score": 0.671,
-              "start": 1.766,
-              "word": "the"
+              "end": 0.822,
+              "score": 0.83,
+              "start": 0.622,
+              "word": "choose"
             },
             {
-              "end": 2.228,
-              "score": 0.927,
-              "start": 1.967,
-              "word": "agent"
+              "end": 0.962,
+              "score": 0.867,
+              "start": 0.842,
+              "word": "your"
             },
             {
-              "end": 2.549,
-              "score": 0.993,
-              "start": 2.288,
-              "word": "finds"
+              "end": 1.363,
+              "score": 0.934,
+              "start": 1.003,
+              "word": "plugin."
             },
             {
-              "end": 2.65,
-              "score": 0.998,
-              "start": 2.63,
+              "end": 2.567,
+              "score": 0.806,
+              "start": 1.885,
+              "word": "devui-agent"
+            },
+            {
+              "end": 2.767,
+              "score": 0.715,
+              "start": 2.627,
+              "word": "gives"
+            },
+            {
+              "end": 2.887,
+              "score": 0.974,
+              "start": 2.787,
+              "word": "you"
+            },
+            {
+              "end": 2.968,
+              "score": 0.5,
+              "start": 2.927,
               "word": "a"
             },
             {
-              "end": 2.951,
-              "score": 0.929,
-              "start": 2.69,
-              "word": "bug"
+              "end": 3.83,
+              "score": 0.79,
+              "start": 3.088,
+              "word": "specialized"
             },
             {
-              "end": 3.232,
-              "score": 0.958,
-              "start": 3.011,
-              "word": "via"
+              "end": 4.371,
+              "score": 0.815,
+              "start": 3.99,
+              "word": "debugger"
             },
             {
-              "end": 3.352,
-              "score": 0.961,
-              "start": 3.292,
-              "word": "the"
+              "end": 4.993,
+              "score": 0.857,
+              "start": 4.431,
+              "word": "sub-agent"
             },
             {
-              "end": 3.754,
-              "score": 0.74,
-              "start": 3.412,
-              "word": "symptom"
+              "end": 5.233,
+              "score": 0.752,
+              "start": 5.113,
+              "word": "with"
             },
             {
-              "end": 4.195,
-              "score": 0.901,
-              "start": 3.814,
-              "word": "report,"
-            },
-            {
-              "end": 4.978,
-              "score": 0.807,
-              "start": 4.657,
-              "word": "traces"
-            },
-            {
-              "end": 5.119,
-              "score": 0.775,
-              "start": 5.018,
-              "word": "the"
-            },
-            {
-              "end": 5.5,
-              "score": 0.934,
-              "start": 5.179,
-              "word": "service"
-            },
-            {
-              "end": 5.821,
-              "score": 0.996,
-              "start": 5.54,
-              "word": "call,"
-            },
-            {
-              "end": 6.343,
-              "score": 0.812,
-              "start": 6.062,
-              "word": "opens"
-            },
-            {
-              "end": 6.483,
-              "score": 0.64,
-              "start": 6.383,
-              "word": "the"
-            },
-            {
-              "end": 6.805,
-              "score": 0.842,
-              "start": 6.544,
-              "word": "source"
-            },
-            {
-              "end": 7.166,
-              "score": 0.851,
-              "start": 6.845,
-              "word": "file,"
-            },
-            {
-              "end": 7.728,
-              "score": 0.769,
-              "start": 7.628,
-              "word": "and"
-            },
-            {
-              "end": 8.33,
-              "score": 0.866,
-              "start": 7.768,
-              "word": "identifies"
-            },
-            {
-              "end": 8.451,
-              "score": 0.699,
-              "start": 8.37,
-              "word": "the"
-            },
-            {
-              "end": 8.712,
-              "score": 0.631,
-              "start": 8.511,
-              "word": "root"
-            },
-            {
-              "end": 9.073,
-              "score": 0.875,
-              "start": 8.752,
-              "word": "cause"
-            },
-            {
-              "end": 9.113,
-              "score": 0.976,
-              "start": 9.093,
-              "word": "—"
-            },
-            {
-              "end": 9.876,
-              "score": 0.869,
-              "start": 9.735,
+              "end": 5.434,
+              "score": 0.92,
+              "start": 5.314,
               "word": "all"
             },
             {
-              "end": 9.976,
-              "score": 0.912,
-              "start": 9.936,
-              "word": "in"
+              "end": 5.534,
+              "score": 0.998,
+              "start": 5.474,
+              "word": "the"
             },
             {
-              "end": 10.237,
-              "score": 0.817,
-              "start": 10.016,
-              "word": "one"
+              "end": 5.835,
+              "score": 0.684,
+              "start": 5.574,
+              "word": "tools"
             },
             {
-              "end": 11.06,
-              "score": 0.832,
-              "start": 10.297,
-              "word": "conversation."
+              "end": 6.236,
+              "score": 0.855,
+              "start": 5.935,
+              "word": "scoped"
+            },
+            {
+              "end": 6.376,
+              "score": 0.952,
+              "start": 6.276,
+              "word": "to"
+            },
+            {
+              "end": 6.517,
+              "score": 0.973,
+              "start": 6.456,
+              "word": "it."
+            },
+            {
+              "end": 8.201,
+              "score": 0.537,
+              "start": 7.098,
+              "word": "devui-tools"
+            },
+            {
+              "end": 8.863,
+              "score": 0.89,
+              "start": 8.301,
+              "word": "exposes"
+            },
+            {
+              "end": 9.023,
+              "score": 0.718,
+              "start": 8.883,
+              "word": "the"
+            },
+            {
+              "end": 9.344,
+              "score": 0.91,
+              "start": 9.103,
+              "word": "same"
+            },
+            {
+              "end": 9.705,
+              "score": 0.654,
+              "start": 9.404,
+              "word": "tools"
+            },
+            {
+              "end": 9.865,
+              "score": 0.895,
+              "start": 9.785,
+              "word": "and"
+            },
+            {
+              "end": 10.306,
+              "score": 0.809,
+              "start": 9.945,
+              "word": "skills"
+            },
+            {
+              "end": 10.888,
+              "score": 0.827,
+              "start": 10.386,
+              "word": "directly"
+            },
+            {
+              "end": 11.108,
+              "score": 0.705,
+              "start": 10.968,
+              "word": "to"
+            },
+            {
+              "end": 11.549,
+              "score": 0.857,
+              "start": 11.128,
+              "word": "any"
+            },
+            {
+              "end": 11.91,
+              "score": 0.785,
+              "start": 11.65,
+              "word": "agent"
+            },
+            {
+              "end": 12.131,
+              "score": 0.951,
+              "start": 11.95,
+              "word": "you're"
+            },
+            {
+              "end": 12.572,
+              "score": 0.822,
+              "start": 12.291,
+              "word": "already"
+            },
+            {
+              "end": 12.933,
+              "score": 0.871,
+              "start": 12.692,
+              "word": "using."
+            },
+            {
+              "end": 13.675,
+              "score": 0.855,
+              "start": 13.474,
+              "word": "Same"
+            },
+            {
+              "end": 14.437,
+              "score": 0.814,
+              "start": 13.755,
+              "word": "capabilities,"
+            },
+            {
+              "end": 15.259,
+              "score": 0.904,
+              "start": 14.978,
+              "word": "different"
+            },
+            {
+              "end": 15.7,
+              "score": 0.799,
+              "start": 15.279,
+              "word": "scoping."
             }
           ],
           "markers": []
         },
         {
           "segmentId": 2,
-          "audioHash": "38e71d83f44d371b8eeb837f0ad968a88ca2011a95d0d6c37183cd90cddc9727",
-          "narrationHash": "a9fe7696587cfa026daa1f48f0cb7cd0f61676ceecefca6e3d4843c6a46a57a5",
+          "audioHash": "7ec9128fd286025a53b209aec5c80469c46354b2971376ceb706c47cc009cb0c",
+          "narrationHash": "ada56f4a2af26ae2cb65e8460a463e71681f8d726117e2fac961849c5cc39b0c",
           "words": [
             {
-              "end": 0.241,
-              "score": 0.838,
+              "end": 0.382,
+              "score": 0.842,
               "start": 0,
-              "word": "From"
+              "word": "That's"
             },
             {
-              "end": 0.662,
-              "score": 0.871,
-              "start": 0.281,
-              "word": "symptom"
-            },
-            {
-              "end": 1.063,
-              "score": 0.818,
-              "start": 0.702,
-              "word": "report"
-            },
-            {
-              "end": 1.183,
-              "score": 0.983,
-              "start": 1.103,
-              "word": "to"
-            },
-            {
-              "end": 1.504,
-              "score": 0.833,
-              "start": 1.243,
-              "word": "source"
-            },
-            {
-              "end": 1.765,
-              "score": 0.724,
-              "start": 1.544,
-              "word": "code"
-            },
-            {
-              "end": 2.126,
-              "score": 0.998,
-              "start": 1.845,
-              "word": "fix"
-            },
-            {
-              "end": 2.246,
-              "score": 0,
-              "start": 2.226,
-              "word": "—"
-            },
-            {
-              "end": 2.346,
-              "score": 0.748,
-              "start": 2.266,
-              "word": "in"
-            },
-            {
-              "end": 2.687,
-              "score": 0.793,
-              "start": 2.567,
-              "word": "one"
-            },
-            {
-              "end": 3.509,
-              "score": 0.877,
-              "start": 2.787,
-              "word": "conversation."
-            },
-            {
-              "end": 4.131,
-              "score": 0.867,
-              "start": 4.051,
-              "word": "And"
-            },
-            {
-              "end": 4.412,
-              "score": 0.809,
-              "start": 4.271,
-              "word": "once"
-            },
-            {
-              "end": 4.532,
-              "score": 0.833,
-              "start": 4.452,
-              "word": "the"
-            },
-            {
-              "end": 4.793,
-              "score": 0.989,
-              "start": 4.592,
-              "word": "fix"
-            },
-            {
-              "end": 4.933,
-              "score": 0.83,
-              "start": 4.853,
-              "word": "is"
-            },
-            {
-              "end": 5.134,
-              "score": 0.928,
-              "start": 5.033,
-              "word": "in,"
-            },
-            {
-              "end": 5.755,
-              "score": 0.875,
-              "start": 5.194,
-              "word": "the"
-            },
-            {
-              "end": 6.216,
-              "score": 0.867,
-              "start": 5.936,
-              "word": "agent"
-            },
-            {
-              "end": 6.457,
-              "score": 0.964,
-              "start": 6.297,
-              "word": "can"
-            },
-            {
-              "end": 6.838,
-              "score": 0.874,
-              "start": 6.517,
-              "word": "rerun"
-            },
-            {
-              "end": 6.958,
-              "score": 0.833,
-              "start": 6.878,
-              "word": "the"
-            },
-            {
-              "end": 7.38,
-              "score": 0.905,
-              "start": 6.999,
-              "word": "service,"
-            },
-            {
-              "end": 8.242,
-              "score": 0.908,
-              "start": 7.941,
-              "word": "query"
-            },
-            {
-              "end": 8.322,
-              "score": 0.995,
-              "start": 8.282,
+              "end": 0.603,
+              "score": 0.87,
+              "start": 0.522,
               "word": "it"
             },
             {
-              "end": 8.643,
-              "score": 0.931,
-              "start": 8.382,
-              "word": "again,"
+              "end": 1.044,
+              "score": 0.952,
+              "start": 0.623,
+              "word": "—"
             },
             {
-              "end": 9.224,
-              "score": 0.473,
-              "start": 8.683,
-              "word": "and"
+              "end": 1.245,
+              "score": 0.895,
+              "start": 1.065,
+              "word": "you're"
             },
             {
-              "end": 9.726,
-              "score": 0.923,
-              "start": 9.285,
-              "word": "debug"
+              "end": 1.547,
+              "score": 0.94,
+              "start": 1.306,
+              "word": "ready."
             },
             {
-              "end": 9.866,
-              "score": 0.951,
-              "start": 9.786,
-              "word": "the"
+              "end": 2.43,
+              "score": 0.856,
+              "start": 2.229,
+              "word": "Just"
             },
             {
-              "end": 10.047,
-              "score": 0.785,
-              "start": 9.906,
-              "word": "new"
+              "end": 2.671,
+              "score": 0.975,
+              "start": 2.531,
+              "word": "ask"
             },
             {
-              "end": 10.548,
-              "score": 0.875,
-              "start": 10.107,
-              "word": "response"
+              "end": 2.852,
+              "score": 0.887,
+              "start": 2.711,
+              "word": "your"
             },
             {
-              "end": 10.668,
-              "score": 0.822,
-              "start": 10.588,
+              "end": 3.234,
+              "score": 0.847,
+              "start": 2.953,
+              "word": "agent"
+            },
+            {
+              "end": 3.354,
+              "score": 0.766,
+              "start": 3.274,
               "word": "to"
             },
             {
-              "end": 11.23,
-              "score": 0.928,
-              "start": 10.728,
-              "word": "verify."
+              "end": 3.816,
+              "score": 0.929,
+              "start": 3.414,
+              "word": "debug"
             },
             {
-              "end": 12.112,
-              "score": 0.93,
-              "start": 11.27,
+              "end": 3.876,
+              "score": 0.993,
+              "start": 3.856,
+              "word": "a"
+            },
+            {
+              "end": 4.599,
+              "score": 0.876,
+              "start": 3.937,
+              "word": "conversation"
+            },
+            {
+              "end": 4.74,
+              "score": 0.951,
+              "start": 4.66,
+              "word": "and"
+            },
+            {
+              "end": 5.021,
+              "score": 0.794,
+              "start": 4.78,
+              "word": "start"
+            },
+            {
+              "end": 5.463,
+              "score": 0.896,
+              "start": 5.102,
+              "word": "working."
+            },
+            {
+              "end": 6.347,
+              "score": 0.71,
+              "start": 6.206,
               "word": "No"
             },
             {
-              "end": 12.653,
-              "score": 0.952,
-              "start": 12.192,
-              "word": "context"
+              "end": 6.889,
+              "score": 0.969,
+              "start": 6.407,
+              "word": "config"
             },
             {
-              "end": 13.034,
-              "score": 0.893,
-              "start": 12.694,
-              "word": "switching,"
+              "end": 7.371,
+              "score": 0.941,
+              "start": 6.949,
+              "word": "files,"
             },
             {
-              "end": 13.536,
-              "score": 0.858,
-              "start": 13.395,
+              "end": 8.054,
+              "score": 0.757,
+              "start": 7.914,
               "word": "no"
             },
             {
-              "end": 14.338,
-              "score": 0.897,
-              "start": 13.616,
-              "word": "copy-pasting"
+              "end": 8.737,
+              "score": 0.906,
+              "start": 8.134,
+              "word": "environment"
             },
             {
-              "end": 14.679,
+              "end": 9.46,
+              "score": 0.836,
+              "start": 8.797,
+              "word": "variables."
+            }
+          ],
+          "markers": []
+        }
+      ]
+    },
+    "c4_s2": {
+      "chapter": 4,
+      "slide": 2,
+      "segments": [
+        {
+          "segmentId": 0,
+          "audioHash": "b83de66659977c003601ce0d7ac62ff0e6170f7fc5524cc9465da75f0b369174",
+          "narrationHash": "d372f73182f7ff46616ba69b410682602a0636defdc22ed9cfdcfab677807b54",
+          "words": [
+            {
+              "end": 0.442,
+              "score": 0.871,
+              "start": 0,
+              "word": "Remember"
+            },
+            {
+              "end": 0.663,
+              "score": 0.934,
+              "start": 0.502,
+              "word": "that"
+            },
+            {
+              "end": 1.145,
+              "score": 0.878,
+              "start": 0.703,
+              "word": "wall"
+            },
+            {
+              "end": 1.245,
+              "score": 1,
+              "start": 1.205,
+              "word": "of"
+            },
+            {
+              "end": 1.888,
+              "score": 0.843,
+              "start": 1.265,
+              "word": "telemetry"
+            },
+            {
+              "end": 2.31,
+              "score": 0.853,
+              "start": 1.948,
+              "word": "entries?"
+            },
+            {
+              "end": 3.394,
+              "score": 0.844,
+              "start": 3.294,
+              "word": "The"
+            },
+            {
+              "end": 3.796,
+              "score": 0.865,
+              "start": 3.435,
+              "word": "manual"
+            },
+            {
+              "end": 4.479,
               "score": 0.859,
-              "start": 14.398,
-              "word": "between"
+              "start": 3.856,
+              "word": "triage,"
             },
             {
-              "end": 15.14,
-              "score": 0.837,
-              "start": 14.759,
-              "word": "tools."
+              "end": 4.68,
+              "score": 0.725,
+              "start": 4.599,
+              "word": "the"
+            },
+            {
+              "end": 4.961,
+              "score": 0.702,
+              "start": 4.74,
+              "word": "raw"
+            },
+            {
+              "end": 5.543,
+              "score": 0.927,
+              "start": 5.001,
+              "word": "JSON,"
+            },
+            {
+              "end": 6.186,
+              "score": 0.812,
+              "start": 6.086,
+              "word": "the"
+            },
+            {
+              "end": 6.829,
+              "score": 0.985,
+              "start": 6.226,
+              "word": "context"
+            },
+            {
+              "end": 7.311,
+              "score": 0.889,
+              "start": 6.869,
+              "word": "switching"
+            },
+            {
+              "end": 7.351,
+              "score": 1,
+              "start": 7.331,
+              "word": "—"
+            },
+            {
+              "end": 8.355,
+              "score": 0.824,
+              "start": 8.134,
+              "word": "that's"
+            },
+            {
+              "end": 8.837,
+              "score": 0.878,
+              "start": 8.416,
+              "word": "behind"
+            },
+            {
+              "end": 9.038,
+              "score": 1,
+              "start": 8.898,
+              "word": "you"
+            },
+            {
+              "end": 9.46,
+              "score": 0.804,
+              "start": 9.099,
+              "word": "now."
+            }
+          ],
+          "markers": [
+            {
+              "id": "dismiss",
+              "time": 8.134,
+              "anchor": "start",
+              "wordIndex": 16
+            }
+          ]
+        },
+        {
+          "segmentId": 1,
+          "audioHash": "3b93fee8e407fa72c674ccb3df37cf9ba866200484969665bbde486c65a1ae56",
+          "narrationHash": "fa82cebc269dc6d772a831451bb7dc0174a062cb8ba3fc576b789566cee49eb6",
+          "words": [
+            {
+              "end": 0.241,
+              "score": 0.647,
+              "start": 0,
+              "word": "Your"
+            },
+            {
+              "end": 0.601,
+              "score": 0.924,
+              "start": 0.341,
+              "word": "agent"
+            },
+            {
+              "end": 0.962,
+              "score": 0.853,
+              "start": 0.661,
+              "word": "doesn't"
+            },
+            {
+              "end": 1.443,
+              "score": 0.832,
+              "start": 1.183,
+              "word": "just"
+            },
+            {
+              "end": 1.724,
+              "score": 0.661,
+              "start": 1.523,
+              "word": "write"
+            },
+            {
+              "end": 2.125,
+              "score": 0.883,
+              "start": 1.824,
+              "word": "code."
+            },
+            {
+              "end": 2.545,
+              "score": 0.974,
+              "start": 2.485,
+              "word": "It"
+            },
+            {
+              "end": 2.886,
+              "score": 0.708,
+              "start": 2.626,
+              "word": "runs"
+            },
+            {
+              "end": 3.568,
+              "score": 0.868,
+              "start": 2.986,
+              "word": "requests,"
+            },
+            {
+              "end": 4.51,
+              "score": 0.844,
+              "start": 4.269,
+              "word": "reads"
+            },
+            {
+              "end": 5.151,
+              "score": 0.858,
+              "start": 4.61,
+              "word": "telemetry,"
+            },
+            {
+              "end": 6.093,
+              "score": 0.904,
+              "start": 5.552,
+              "word": "inspects"
+            },
+            {
+              "end": 6.895,
+              "score": 0.821,
+              "start": 6.253,
+              "word": "execution"
+            },
+            {
+              "end": 7.336,
+              "score": 0.807,
+              "start": 6.975,
+              "word": "flows"
+            },
+            {
+              "end": 7.376,
+              "score": 0.999,
+              "start": 7.356,
+              "word": "—"
+            },
+            {
+              "end": 7.957,
+              "score": 0.898,
+              "start": 7.857,
+              "word": "and"
+            },
+            {
+              "end": 8.278,
+              "score": 0.663,
+              "start": 8.077,
+              "word": "does"
+            },
+            {
+              "end": 8.398,
+              "score": 1,
+              "start": 8.358,
+              "word": "it"
+            },
+            {
+              "end": 8.538,
+              "score": 0.938,
+              "start": 8.478,
+              "word": "in"
+            },
+            {
+              "end": 8.618,
+              "score": 0.94,
+              "start": 8.598,
+              "word": "a"
+            },
+            {
+              "end": 8.939,
+              "score": 0.899,
+              "start": 8.698,
+              "word": "loop."
+            },
+            {
+              "end": 9.921,
+              "score": 0.905,
+              "start": 9.58,
+              "word": "Debug"
+            },
+            {
+              "end": 10.001,
+              "score": 0.909,
+              "start": 9.961,
+              "word": "a"
+            },
+            {
+              "end": 10.262,
+              "score": 0.95,
+              "start": 10.041,
+              "word": "bad"
+            },
+            {
+              "end": 10.602,
+              "score": 0.88,
+              "start": 10.342,
+              "word": "answer,"
+            },
+            {
+              "end": 11.464,
+              "score": 0.703,
+              "start": 11.063,
+              "word": "develop"
+            },
+            {
+              "end": 11.524,
+              "score": 0.905,
+              "start": 11.504,
+              "word": "a"
+            },
+            {
+              "end": 11.685,
+              "score": 0.979,
+              "start": 11.585,
+              "word": "new"
+            },
+            {
+              "end": 12.086,
+              "score": 0.898,
+              "start": 11.725,
+              "word": "feature,"
+            },
+            {
+              "end": 13.028,
+              "score": 0.802,
+              "start": 12.587,
+              "word": "appraise"
+            },
+            {
+              "end": 13.428,
+              "score": 0.713,
+              "start": 13.168,
+              "word": "answer"
+            },
+            {
+              "end": 13.97,
+              "score": 0.836,
+              "start": 13.529,
+              "word": "quality"
+            },
+            {
+              "end": 14.17,
+              "score": 0.844,
+              "start": 14.03,
+              "word": "from"
+            },
+            {
+              "end": 14.27,
+              "score": 0.827,
+              "start": 14.19,
+              "word": "the"
+            },
+            {
+              "end": 14.872,
+              "score": 0.862,
+              "start": 14.33,
+              "word": "telemetry,"
+            },
+            {
+              "end": 15.934,
+              "score": 0.91,
+              "start": 15.513,
+              "word": "verify"
+            },
+            {
+              "end": 16.034,
+              "score": 0.833,
+              "start": 15.954,
+              "word": "the"
+            },
+            {
+              "end": 16.355,
+              "score": 0.997,
+              "start": 16.074,
+              "word": "fix."
+            },
+            {
+              "end": 16.796,
+              "score": 0.996,
+              "start": 16.715,
+              "word": "The"
+            },
+            {
+              "end": 17.036,
+              "score": 0.932,
+              "start": 16.836,
+              "word": "full"
+            },
+            {
+              "end": 17.537,
+              "score": 0.757,
+              "start": 17.096,
+              "word": "developer"
+            },
+            {
+              "end": 18.098,
+              "score": 0.88,
+              "start": 17.577,
+              "word": "workflow,"
+            },
+            {
+              "end": 18.9,
+              "score": 0.896,
+              "start": 18.319,
+              "word": "delegated."
+            }
+          ],
+          "markers": []
+        },
+        {
+          "segmentId": 2,
+          "audioHash": "3f1fdb1bbd5b402fdb389da88a62f03dad0502206ea6395119ab4c866b15e8d9",
+          "narrationHash": "2d097ec48c5b336274f22e44d970988b0f34b14a1637a519e034e52690f20512",
+          "words": [
+            {
+              "end": 0.726,
+              "score": 0.864,
+              "start": 0,
+              "word": "MCP"
+            },
+            {
+              "end": 1.25,
+              "score": 0.693,
+              "start": 0.806,
+              "word": "Dev-UI."
+            },
+            {
+              "end": 2.398,
+              "score": 0.961,
+              "start": 2.278,
+              "word": "Not"
+            },
+            {
+              "end": 2.62,
+              "score": 0.853,
+              "start": 2.439,
+              "word": "just"
+            },
+            {
+              "end": 2.701,
+              "score": 0.999,
+              "start": 2.681,
+              "word": "a"
+            },
+            {
+              "end": 3.205,
+              "score": 0.698,
+              "start": 2.902,
+              "word": "code"
+            },
+            {
+              "end": 3.628,
+              "score": 0.828,
+              "start": 3.225,
+              "word": "assistant"
+            },
+            {
+              "end": 4.091,
+              "score": 0,
+              "start": 4.071,
+              "word": "—"
+            },
+            {
+              "end": 4.132,
+              "score": 0.956,
+              "start": 4.112,
+              "word": "a"
+            },
+            {
+              "end": 4.595,
+              "score": 0.951,
+              "start": 4.253,
+              "word": "Sydney"
+            },
+            {
+              "end": 5.22,
+              "score": 0.868,
+              "start": 4.656,
+              "word": "developer."
             }
           ],
           "markers": []

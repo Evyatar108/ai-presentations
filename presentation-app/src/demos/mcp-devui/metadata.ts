@@ -15,12 +15,12 @@ export const metadata: DemoMetadata = {
   tags: ['mcp', 'devui', 'debugging', 'copilot', 'tooling', 'technical'],
 
   durationInfo: {
-    audioOnly: 334.72,
-    segmentDelays: 30,
-    slideDelays: 24,
+    audioOnly: 427.12,
+    segmentDelays: 33,
+    slideDelays: 27,
     finalDelay: 5,
     startSilence: 3,
-    total: 396.72,
+    total: 495.12,
     slideBreakdown: [
       { slideIndex: 1, slideTitle: 'MCP DevUI', chapterIndex: 0, totalDuration: 16.42, audioDuration: 11.92, delaysDuration: 4.5, segments: [{ segmentIndex: 0, audioDuration: 4.96, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 6.96, delayAfter: 3 }] },
       { slideIndex: 2, slideTitle: 'The Debugging Problem', chapterIndex: 0, totalDuration: 43.12, audioDuration: 37.12, delaysDuration: 6, segments: [{ segmentIndex: 0, audioDuration: 12.08, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 12.4, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 12.64, delayAfter: 3 }] },
@@ -28,10 +28,10 @@ export const metadata: DemoMetadata = {
       { slideIndex: 1, slideTitle: 'Debug a Conversation', chapterIndex: 2, totalDuration: 57.98, audioDuration: 50.48, delaysDuration: 7.5, segments: [{ segmentIndex: 0, audioDuration: 15.68, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 13.04, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 12.32, delayAfter: 1.5 }, { segmentIndex: 3, audioDuration: 9.44, delayAfter: 3 }] },
       { slideIndex: 2, slideTitle: 'Send and Debug Live', chapterIndex: 2, totalDuration: 63.88, audioDuration: 54.88, delaysDuration: 9, segments: [{ segmentIndex: 0, audioDuration: 10.56, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 13.28, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 8.24, delayAfter: 1.5 }, { segmentIndex: 3, audioDuration: 8.16, delayAfter: 1.5 }, { segmentIndex: 4, audioDuration: 14.64, delayAfter: 3 }] },
       { slideIndex: 3, slideTitle: 'Setup Config', chapterIndex: 2, totalDuration: 47.36, audioDuration: 41.36, delaysDuration: 6, segments: [{ segmentIndex: 0, audioDuration: 13.76, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 13.28, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 14.32, delayAfter: 3 }] },
-      { slideIndex: 1, slideTitle: 'Agent Meets Source Code', chapterIndex: 3, totalDuration: 45.2, audioDuration: 39.2, delaysDuration: 6, segments: [{ segmentIndex: 0, audioDuration: 13.6, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 15.52, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 10.08, delayAfter: 3 }] },
-      { slideIndex: 2, slideTitle: 'SEVAL at Scale', chapterIndex: 3, totalDuration: 6, audioDuration: 0, delaysDuration: 6, segments: [{ segmentIndex: 0, audioDuration: 0, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 0, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 0, delayAfter: 3 }] },
-      { slideIndex: 1, slideTitle: 'Two Minutes to Start Debugging', chapterIndex: 4, totalDuration: 47.6, audioDuration: 39.6, delaysDuration: 8, segments: [{ segmentIndex: 0, audioDuration: 13.44, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 11.04, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 15.12, delayAfter: 5 }] },
-      { slideIndex: 2, slideTitle: 'Closing', chapterIndex: 4, totalDuration: 6, audioDuration: 0, delaysDuration: 6, segments: [{ segmentIndex: 0, audioDuration: 0, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 0, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 0, delayAfter: 3 }] },
+      { slideIndex: 1, slideTitle: 'Agent Meets Source Code', chapterIndex: 3, totalDuration: 48.08, audioDuration: 42.08, delaysDuration: 6, segments: [{ segmentIndex: 0, audioDuration: 13.44, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 12.16, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 16.48, delayAfter: 3 }] },
+      { slideIndex: 2, slideTitle: 'SEVAL at Scale', chapterIndex: 3, totalDuration: 57.28, audioDuration: 51.28, delaysDuration: 6, segments: [{ segmentIndex: 0, audioDuration: 11.2, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 22.24, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 17.84, delayAfter: 3 }] },
+      { slideIndex: 1, slideTitle: 'Two Minutes to Start Debugging', chapterIndex: 4, totalDuration: 50.32, audioDuration: 44.32, delaysDuration: 6, segments: [{ segmentIndex: 0, audioDuration: 19.2, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 15.68, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 9.44, delayAfter: 3 }] },
+      { slideIndex: 2, slideTitle: 'Closing', chapterIndex: 4, totalDuration: 41.52, audioDuration: 33.52, delaysDuration: 8, segments: [{ segmentIndex: 0, audioDuration: 9.44, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 18.88, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 5.2, delayAfter: 5 }] },
     ]
   }
 };

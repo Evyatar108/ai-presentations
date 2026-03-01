@@ -1,12 +1,12 @@
 {
   "mcp-devui": {
     "demoId": "mcp-devui",
-    "audioOnlyDuration": 334.72,
-    "segmentDelays": 30,
-    "slideDelays": 24,
+    "audioOnlyDuration": 427.11999999999995,
+    "segmentDelays": 33,
+    "slideDelays": 27,
     "finalDelay": 5,
     "startSilence": 3,
-    "totalDuration": 396.72,
+    "totalDuration": 495.11999999999995,
     "slideBreakdowns": [
       {
         "slideIndex": 1,
@@ -172,59 +172,9 @@
         "slideIndex": 1,
         "slideTitle": "Agent Meets Source Code",
         "chapterIndex": 3,
-        "totalDuration": 45.199999999999996,
-        "audioDuration": 39.199999999999996,
+        "totalDuration": 48.08,
+        "audioDuration": 42.08,
         "delaysDuration": 6,
-        "segments": [
-          {
-            "segmentIndex": 0,
-            "audioDuration": 13.6,
-            "delayAfter": 1.5
-          },
-          {
-            "segmentIndex": 1,
-            "audioDuration": 15.52,
-            "delayAfter": 1.5
-          },
-          {
-            "segmentIndex": 2,
-            "audioDuration": 10.08,
-            "delayAfter": 3
-          }
-        ]
-      },
-      {
-        "slideIndex": 2,
-        "slideTitle": "SEVAL at Scale",
-        "chapterIndex": 3,
-        "totalDuration": 6,
-        "audioDuration": 0,
-        "delaysDuration": 6,
-        "segments": [
-          {
-            "segmentIndex": 0,
-            "audioDuration": 0,
-            "delayAfter": 1.5
-          },
-          {
-            "segmentIndex": 1,
-            "audioDuration": 0,
-            "delayAfter": 1.5
-          },
-          {
-            "segmentIndex": 2,
-            "audioDuration": 0,
-            "delayAfter": 3
-          }
-        ]
-      },
-      {
-        "slideIndex": 1,
-        "slideTitle": "Two Minutes to Start Debugging",
-        "chapterIndex": 4,
-        "totalDuration": 47.599999999999994,
-        "audioDuration": 39.599999999999994,
-        "delaysDuration": 8,
         "segments": [
           {
             "segmentIndex": 0,
@@ -233,20 +183,95 @@
           },
           {
             "segmentIndex": 1,
-            "audioDuration": 11.04,
+            "audioDuration": 12.16,
             "delayAfter": 1.5
           },
           {
             "segmentIndex": 2,
-            "audioDuration": 15.12,
+            "audioDuration": 16.48,
+            "delayAfter": 3
+          }
+        ]
+      },
+      {
+        "slideIndex": 2,
+        "slideTitle": "SEVAL at Scale",
+        "chapterIndex": 3,
+        "totalDuration": 57.28,
+        "audioDuration": 51.28,
+        "delaysDuration": 6,
+        "segments": [
+          {
+            "segmentIndex": 0,
+            "audioDuration": 11.2,
+            "delayAfter": 1.5
+          },
+          {
+            "segmentIndex": 1,
+            "audioDuration": 22.24,
+            "delayAfter": 1.5
+          },
+          {
+            "segmentIndex": 2,
+            "audioDuration": 17.84,
+            "delayAfter": 3
+          }
+        ]
+      },
+      {
+        "slideIndex": 1,
+        "slideTitle": "Two Minutes to Start Debugging",
+        "chapterIndex": 4,
+        "totalDuration": 50.31999999999999,
+        "audioDuration": 44.31999999999999,
+        "delaysDuration": 6,
+        "segments": [
+          {
+            "segmentIndex": 0,
+            "audioDuration": 19.2,
+            "delayAfter": 1.5
+          },
+          {
+            "segmentIndex": 1,
+            "audioDuration": 15.68,
+            "delayAfter": 1.5
+          },
+          {
+            "segmentIndex": 2,
+            "audioDuration": 9.44,
+            "delayAfter": 3
+          }
+        ]
+      },
+      {
+        "slideIndex": 2,
+        "slideTitle": "Closing",
+        "chapterIndex": 4,
+        "totalDuration": 41.52,
+        "audioDuration": 33.52,
+        "delaysDuration": 8,
+        "segments": [
+          {
+            "segmentIndex": 0,
+            "audioDuration": 9.44,
+            "delayAfter": 1.5
+          },
+          {
+            "segmentIndex": 1,
+            "audioDuration": 18.88,
+            "delayAfter": 1.5
+          },
+          {
+            "segmentIndex": 2,
+            "audioDuration": 5.2,
             "delayAfter": 5
           }
         ]
       }
     ],
     "formattedDurations": {
-      "audioOnly": "5:34",
-      "total": "6:36"
+      "audioOnly": "7:07",
+      "total": "8:15"
     }
   }
 }
