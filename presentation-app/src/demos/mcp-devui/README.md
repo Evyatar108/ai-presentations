@@ -23,9 +23,9 @@ Sydney/Copilot engineers who:
 | Chapter | Slides | Purpose |
 |---------|--------|---------|
 | 0 — The Black Box | Title + The Debugging Problem | Hook: show the pain of manual DevUI debugging |
-| 1 — The Toolkit | 21 Tools, 4 Skills, 1 Agent | Overview: categories, skill names, agent architecture |
-| 2 — What You Can Do | Debug a Conversation, Execution Flow, Send and Debug, Config & Flights | Deep dive into each skill with tool usage breakdowns |
-| 3 — The Full Toolkit | 21 Tools at Your Fingertips | Visual tool map showing all categories |
+| 1 — The Toolkit | 22 Tools, 3 Skills, 1 Agent | Overview: categories, skill names, agent architecture |
+| 2 — What You Can Do | Debug a Conversation, Send and Debug, Setup Config | Deep dive into each skill with tool usage breakdowns |
+| 3 — The Full Toolkit | 22 Tools at Your Fingertips | Visual tool map showing all categories |
 | 4 — Get Started | Two Minutes to Start Debugging | Installation and setup steps |
 | 5 — Impact | Impact & What's Next | Before/after comparison, future roadmap |
 
@@ -59,7 +59,7 @@ The MCP server, agent, and skills live in a separate repo:
 - **Repo**: `D:\ai-developer-toolkit\`
 - **MCP Server**: `mcp-servers/servers/devui/` (C#)
 - **Agent**: `plugins/devui-agent/agents/devui-debugger.md`
-- **Skills**: `plugins/devui-agent/skills/` (4 skill folders)
+- **Skills**: `plugins/devui-agent/skills/` (3 skill folders)
 
 ## Extending This Demo
 

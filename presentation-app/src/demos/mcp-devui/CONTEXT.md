@@ -16,21 +16,22 @@ Key distinction: the tools themselves are **not AI-powered** — they return str
 
 ## Architecture
 
-- **MCP Server**: `mcp-servers/servers/devui/` — C# server exposing 21 tools
+- **MCP Server**: `mcp-servers/servers/devui/` — C# server exposing 22 tools
 - **Agent**: `plugins/devui-agent/agents/devui-debugger.md` — orchestrates tools via skills
 - **Skills**: `plugins/devui-agent/skills/` — 4 guided workflows that chain tools
 - **Source**: `D:\ai-developer-toolkit\` (separate repo)
 
-## Tool Categories (21 tools)
+## Tool Categories (22 tools)
 
-### Conversation Loading (3 tools)
-Load conversation data into the debugger for analysis.
+### Conversation Loading (4 tools)
+Load and export conversation data.
 
 | Tool | Description |
 |------|-------------|
 | `load_conversation` | Load by conversation ID from Substrate Sydney |
 | `load_shared_conversation` | Load by shared session ID (e.g., from SEVAL jobs) |
 | `load_conversation_from_file` | Load from an exported JSON file |
+| `export_conversation` | Export loaded conversation data to a JSON file |
 
 Conversation IDs can be provided directly by the user, pulled from a SEVAL job by the agent, or obtained via a shared session link. Exported JSON files can come from manual DevUI exports or SEVAL job downloads.
 
@@ -42,7 +43,7 @@ View details of specific turns within a loaded conversation.
 | `get_turn` | Get turn detail: user input, bot response, telemetry summary |
 | `get_turn_message` | Get full raw message content for a turn |
 
-### Telemetry & Diagnostics (10 tools)
+### Telemetry & Execution (10 tools)
 The largest group — covers all debugging and analysis of conversation telemetry.
 
 | Tool | Description |
@@ -76,7 +77,7 @@ Create, update, and manage chat configurations and runtime settings.
 | `get_sydney_config` | Get Sydney runtime config from Substrate (feature flags, apps) |
 | `list_test_accounts` | List available test accounts |
 
-## Skills (4 guided workflows)
+## Skills (3 guided workflows)
 
 ### debug-conversation
 **Purpose**: Debug a single conversation end-to-end.
@@ -98,11 +99,6 @@ Create, update, and manage chat configurations and runtime settings.
 **Workflow**: `list_chat_configs` → choose base config to fork → configure variant flights in optionsSets → `create_chat_config` → test with `send_chat_request`.
 
 **Critical**: Always fork from a default config to preserve telemetry-enabling optionsSets — creating from scratch means no telemetry emission.
-
-### check-flight
-**Purpose**: Verify whether a specific flight/variant is active in a conversation.
-
-**Workflow**: Load conversation → `get_turn_variants` → search for flight in optionsSets and resolved variants → report enabled/disabled state.
 
 ## DevUI Portal Tabs
 

@@ -596,8 +596,8 @@
       "generatedAt": "2026-02-28T20:23:33.506Z"
     },
     "c0/s1_segment_01.wav": {
-      "narrationText": "Today we're looking at MCP Dev-UI — an MCP server with twenty-three debugging tools for AI agents.",
-      "generatedAt": "2026-02-28T19:39:00.210Z"
+      "narrationText": "Today we're looking at MCP Dev-UI — an MCP server with twenty-two debugging tools for AI agents.",
+      "generatedAt": "2026-03-01T00:15:12.064Z"
     },
     "c0/s2_segment_00.wav": {
       "narrationText": "You send a query to a Sydney-powered Copilot, and it gives you a bad answer. Why? What went wrong behind the scenes? To find out, you'd open the Dev-UI portal and face a wall of raw telemetry.",
@@ -612,16 +612,16 @@
       "generatedAt": "2026-02-28T22:23:42.787Z"
     },
     "c1/s1_segment_00.wav": {
-      "narrationText": "Twenty-three tools across five categories. Every Dev-UI surface you already use — now accessible to your AI agent. Let me walk you through each one.",
-      "generatedAt": "2026-02-28T21:01:43.676Z"
+      "narrationText": "Twenty-two tools across five categories. Every Dev-UI surface you already use — now accessible to your AI agent. Let me walk you through each one.",
+      "generatedAt": "2026-03-01T00:15:12.066Z"
     },
     "c1/s1_segment_01.wav": {
-      "narrationText": "Navigation for loading conversations into the debugger. Telemetry — the largest group, covering symptom reports, execution flow, search, and drill-down into individual entries. Comparison for side-by-side analysis of control versus experiment. Chat Execution for sending live requests and auto-loading telemetry. And Config management for creating and updating SDF configs and test accounts.",
-      "generatedAt": "2026-02-28T20:58:10.265Z"
+      "narrationText": "Conversation Loading — four tools for loading conversations by ID, shared session link, or exported JSON file, plus exporting conversations out. Turn Inspection — two tools for viewing turn details and raw message content. Telemetry and Diagnostics — the largest group with ten tools covering symptom reports, execution flow, search, and drill-down. Chat Execution — one tool for sending live requests with automatic telemetry loading. And Config Management — five tools for creating, updating, and listing configs plus runtime settings and test accounts.",
+      "generatedAt": "2026-03-01T00:15:12.073Z"
     },
     "c1/s1_segment_02.wav": {
-      "narrationText": "Wrapping all of this is the Dev-UI debugger agent with five guided skills: 'debug conversation', 'compare conversations', 'send and debug', 'setup config', and 'check flight'. Each skill chains multiple tools into a complete workflow.",
-      "generatedAt": "2026-02-28T21:16:06.823Z"
+      "narrationText": "Wrapping all of this is the Dev-UI debugger agent with four guided skills: 'debug conversation', 'send and debug', 'setup config', and 'check flight'. Each skill chains multiple tools into a complete workflow.",
+      "generatedAt": "2026-02-28T23:56:36.955Z"
     },
     "c2/s1_segment_00.wav": {
       "narrationText": "Let's start with the 'debug conversation' skill. The agent uses the 'load conversation' tool with a conversation ID, a shared session link, or an exported JSON file — and all conversation data is loaded, including the telemetry entries.",
@@ -652,56 +652,36 @@
       "generatedAt": "2026-02-28T21:36:43.275Z"
     },
     "c2/s3_segment_00.wav": {
-      "narrationText": "Next skill: 'compare conversations'. SEVAL scores dropped? The agent uses the 'load conversation' tool twice — loading control into slot A and experiment into slot B.",
-      "generatedAt": "2026-02-28T22:23:42.797Z"
+      "narrationText": "The 'send and debug' skill uses the 'send chat request' tool to send a message, capture the response, and load all conversation data in one step.",
+      "generatedAt": "2026-02-28T23:56:36.957Z"
     },
     "c2/s3_segment_01.wav": {
-      "narrationText": "The 'compare turns' tool produces a structured diff. The experiment added five service calls, introduced two failures, and triggered an extra reasoning iteration with fewer search results.",
-      "generatedAt": "2026-02-28T22:23:42.800Z"
+      "narrationText": "The request flows through SignalR ChatHub. You see progress messages in real-time — search queries, loader messages, reasoning iterations, and the final response. It's like watching the pipeline execute.",
+      "generatedAt": "2026-02-28T23:56:36.959Z"
     },
     "c2/s3_segment_02.wav": {
-      "narrationText": "The extra reasoning iteration is the likely culprit. From here, drill into each slot's symptom report for the full picture.",
-      "generatedAt": "2026-02-28T02:27:51.958Z"
+      "narrationText": "The bot responds with the answer. But here is the key difference — the conversation data including telemetry is already loaded.",
+      "generatedAt": "2026-02-28T23:56:36.962Z"
     },
     "c2/s4_segment_00.wav": {
-      "narrationText": "The 'send and debug' skill uses the 'send chat request' tool to send a message, capture the response, and load all conversation data in one step.",
-      "generatedAt": "2026-02-28T22:23:42.803Z"
+      "narrationText": "The 'setup config' skill handles config management. Fork the SDF config, add your flight, point it at your local endpoint — all via the 'create chat config' and 'update chat config' tools.",
+      "generatedAt": "2026-02-28T23:56:36.966Z"
     },
     "c2/s4_segment_01.wav": {
-      "narrationText": "The request flows through SignalR ChatHub. You see progress messages in real-time — search queries, loader messages, reasoning iterations, and the final response. It's like watching the pipeline execute.",
-      "generatedAt": "2026-02-28T02:27:51.961Z"
+      "narrationText": "Conversations load three ways: by conversation ID — provided directly or pulled from a SEVAL job by the agent — by shared session link, or from an exported JSON file. Whatever is available or relevant.",
+      "generatedAt": "2026-02-28T23:56:36.969Z"
     },
     "c2/s4_segment_02.wav": {
-      "narrationText": "The bot responds with the answer. But here is the key difference — the conversation data including telemetry is already loaded.",
-      "generatedAt": "2026-02-28T22:23:42.805Z"
-    },
-    "c2/s4_segment_03.wav": {
-      "narrationText": "Telemetry auto-loaded: true. Forty-seven entries loaded and ready. No separate 'load conversation' tool call needed.",
-      "generatedAt": "2026-02-28T22:27:05.130Z"
-    },
-    "c2/s4_segment_04.wav": {
-      "narrationText": "All four drill-down tools are immediately available. Get the symptom report, inspect the execution flow tree, search telemetry by any criteria, or drill into the full detail of any specific entry. Zero extra setup.",
-      "generatedAt": "2026-02-28T02:39:39.790Z"
-    },
-    "c2/s5_segment_00.wav": {
-      "narrationText": "The 'setup config' skill handles config management. Fork the SDF config, add your flight, point it at your local endpoint — all via the 'create chat config' and 'update chat config' tools.",
-      "generatedAt": "2026-02-28T22:27:05.133Z"
-    },
-    "c2/s5_segment_01.wav": {
-      "narrationText": "Conversations load three ways: by conversation ID — provided directly or pulled from a SEVAL job by the agent — by shared session link, or from an exported JSON file. Whatever is available or relevant.",
-      "generatedAt": "2026-02-28T21:48:21.493Z"
-    },
-    "c2/s5_segment_02.wav": {
       "narrationText": "Quick checks are just as easy. Is my flight active? Get turn variants. Find all SubstrateSearch calls? Search telemetry. The full breadth of Dev-UI, accessible in one conversation.",
-      "generatedAt": "2026-02-28T19:36:57.786Z"
+      "generatedAt": "2026-02-28T23:56:36.971Z"
     },
     "c3/s1_segment_00.wav": {
-      "narrationText": "You just saw five workflows. Here are all twenty-three tools — every Dev-UI surface your agent can access. Symptom reports, telemetry detail, execution flow, search — all via natural language.",
-      "generatedAt": "2026-02-28T20:20:22.975Z"
+      "narrationText": "You just saw four workflows. Here are all twenty-two tools — every Dev-UI surface your agent can access. Symptom reports, telemetry detail, execution flow, search — all via natural language.",
+      "generatedAt": "2026-03-01T00:15:12.075Z"
     },
     "c3/s1_segment_01.wav": {
-      "narrationText": "Telemetry is the largest group with ten tools — it's where the real debugging power lives. Chat Execution gives you four tools for config management and live requests.",
-      "generatedAt": "2026-02-28T02:39:39.796Z"
+      "narrationText": "Telemetry and Diagnostics is the largest group with ten tools — it's where the real debugging power lives. Chat Execution has one tool for sending live requests, and Config Management has five tools for configs, settings, and test accounts.",
+      "generatedAt": "2026-03-01T00:01:29.728Z"
     },
     "c3/s1_segment_02.wav": {
       "narrationText": "Load a conversation once, and every drill-down tool operates on the loaded data. No re-fetching. All via natural language — just ask the agent what you need.",
@@ -728,12 +708,20 @@
       "generatedAt": "2026-02-28T02:43:57.559Z"
     },
     "c5/s1_segment_02.wav": {
-      "narrationText": "We cover twelve of seventeen Dev-UI tabs today. Coming next: Prompt Explain, where the agent annotates forty-kilobyte prompts for you, and a Latency Waterfall for visual analysis across the service call tree.",
-      "generatedAt": "2026-02-28T20:20:22.982Z"
+      "narrationText": "We cover the most-used Dev-UI surfaces today. Coming next: Prompt Explain, where the agent annotates forty-kilobyte prompts for you, and a Latency Waterfall for visual analysis across the service call tree.",
+      "generatedAt": "2026-03-01T00:01:29.730Z"
     },
     "c5/s1_segment_03.wav": {
-      "narrationText": "Twenty-three tools. Five skills. One agent.",
-      "generatedAt": "2026-02-28T02:43:57.563Z"
+      "narrationText": "Twenty-two tools. Four skills. One agent.",
+      "generatedAt": "2026-03-01T00:15:12.078Z"
+    },
+    "c2/s3_segment_03.wav": {
+      "narrationText": "Telemetry auto-loaded: true. Forty-seven entries loaded and ready. No separate 'load conversation' tool call needed.",
+      "generatedAt": "2026-02-28T22:27:05.130Z"
+    },
+    "c2/s3_segment_04.wav": {
+      "narrationText": "All four drill-down tools are immediately available. Get the symptom report, inspect the execution flow tree, search telemetry by any criteria, or drill into the full detail of any specific entry. Zero extra setup.",
+      "generatedAt": "2026-02-28T02:39:39.790Z"
     }
   }
 }

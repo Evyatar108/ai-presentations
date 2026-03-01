@@ -18,15 +18,15 @@ import {
 
 /**
  * Chapter 1: "The Toolkit" (1 slide)
- * Ch1_S1 — 23 Tools, 5 Skills, 1 Agent
+ * Ch1_S1 — 22 Tools, 3 Skills, 1 Agent
  */
 
 // ---------- Data ----------
 
 const CATEGORIES = [
-  { name: 'Conversation Loading', icon: '\u{1F4E5}', count: 3, markerId: 'nav' },
+  { name: 'Conversation Loading', icon: '\u{1F4E5}', count: 4, markerId: 'nav' },
   { name: 'Turn Inspection', icon: '\u{1F50D}', count: 2, markerId: 'turn' },
-  { name: 'Telemetry & Diagnostics', icon: '\u{1F4CA}', count: 10, markerId: 'tel' },
+  { name: 'Telemetry & Execution', icon: '\u{1F4CA}', count: 10, markerId: 'tel' },
   { name: 'Chat Execution', icon: '\u{26A1}', count: 1, markerId: 'chat' },
   { name: 'Config Management', icon: '\u{2699}\u{FE0F}', count: 5, markerId: 'config' },
 ];
@@ -35,7 +35,6 @@ const SKILLS = [
   { name: 'debug-conversation', markerId: 'sk-debug' },
   { name: 'send-and-debug', markerId: 'sk-send' },
   { name: 'setup-config', markerId: 'sk-config' },
-  { name: 'check-flight', markerId: 'sk-flight' },
 ];
 
 // ---------- Subcomponents ----------
@@ -99,7 +98,7 @@ const SolutionOverviewComponent: React.FC = () => {
     <SlideContainer maxWidth={900}>
       <Reveal from={0}>
         <SlideTitle reduced={reduced}>
-          21 Tools, 4 Skills, 1 Agent
+          22 Tools, 3 Skills, 1 Agent
         </SlideTitle>
       </Reveal>
 
@@ -157,7 +156,7 @@ const SolutionOverviewComponent: React.FC = () => {
             color: theme.colors.textPrimary,
             marginBottom: '0.75rem',
           }}>
-            {'\u{1F916}'} devui-debugger agent — 4 guided skills:
+            {'\u{1F916}'} devui-debugger agent — 3 guided skills:
           </div>
           <div style={{
             display: 'flex',
@@ -191,22 +190,22 @@ export const Ch1_S1_SolutionOverview = defineSlide({
   metadata: {
     chapter: 1,
     slide: 1,
-    title: '21 Tools, 4 Skills, 1 Agent',
+    title: '22 Tools, 3 Skills, 1 Agent',
     audioSegments: [
       {
         id: 0,
         narrationText:
-          'Twenty-one tools across five categories. Every Dev-UI surface you already use — now accessible to your AI agent. Let me walk you through each one.',
+          'Twenty-two tools across five categories. Every Dev-UI surface you already use — now accessible to your AI agent. Let me walk you through each one.',
       },
       {
         id: 1,
         narrationText:
-          '{#nav}Conversation Loading — three tools for loading conversations by ID, shared session link, or exported JSON file. {#turn}Turn Inspection — two tools for viewing turn details and raw message content. {#tel}Telemetry and Diagnostics — the largest group with ten tools covering symptom reports, execution flow, search, and drill-down. {#chat}Chat Execution — one tool for sending live requests with automatic telemetry loading. And {#config}Config Management — five tools for creating, updating, and listing configs plus runtime settings and test accounts.',
+          '{#nav}Conversation Loading — four tools for loading conversations by ID, shared session link, or exported JSON file, plus exporting conversations out. {#turn}Turn Inspection — two tools for viewing turn details and raw message content. {#tel}Telemetry and Execution — the largest group with ten tools covering symptom reports, execution flow, search, and drill-down. {#chat}Chat Execution — one tool for sending live requests with automatic telemetry loading. And {#config}Config Management — five tools for creating, updating, and listing configs plus runtime settings and test accounts.',
       },
       {
         id: 2,
         narrationText:
-          'Wrapping all of this is the Dev-UI debugger agent with four guided skills: {#sk-debug}\'debug conversation\', {#sk-send}\'send and debug\', {#sk-config}\'setup config\', and {#sk-flight}\'check flight\'. Each skill chains multiple tools into a complete workflow.',
+          'Wrapping all of this is the Dev-UI debugger agent with three guided skills: {#sk-debug}\'debug conversation\', {#sk-send}\'send and debug\', and {#sk-config}\'setup config\'. Each skill chains multiple tools into a complete workflow.',
       },
     ],
   },

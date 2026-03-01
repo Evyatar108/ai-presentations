@@ -133,13 +133,13 @@ const ImpactAndNextComponent: React.FC = () => {
           alignItems: 'center',
         }}>
           <CircularProgress
-            value={12}
-            max={17}
+            value={8}
+            max={13}
             size={90}
             label={
               <div style={{ textAlign: 'center' }}>
                 <div style={{ ...typography.h2, fontSize: '1.1rem', color: theme.colors.textPrimary }}>
-                  12/17
+                  8/13
                 </div>
                 <div style={{ ...typography.caption, color: theme.colors.textMuted, fontSize: '0.6rem' }}>
                   tabs
@@ -172,7 +172,7 @@ const ImpactAndNextComponent: React.FC = () => {
               letterSpacing: '-0.02em',
             }}
           >
-            23 tools. 5 skills. 1 agent.
+            22 tools. 3 skills. 1 agent.
           </GradientText>
         </div>
       </Reveal>
@@ -203,7 +203,7 @@ export const Ch5_S1_ImpactAndNext = defineSlide({
       },
       {
         id: 3,
-        narrationText: 'Twenty-one tools. Four skills. One agent.',
+        narrationText: 'Twenty-two tools. Three skills. One agent.',
       },
     ],
   },

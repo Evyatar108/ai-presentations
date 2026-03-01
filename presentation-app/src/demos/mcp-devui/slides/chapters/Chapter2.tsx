@@ -15,7 +15,6 @@ import {
   fadeUp,
 } from '@framework';
 import { LiveTerminalSimulation } from '../../components/LiveTerminalSimulation';
-import { ExecutionFlowDiagram } from '../../components/ExecutionFlowDiagram';
 
 /** Small pill row showing which MCP tools a skill uses. */
 const ToolsUsed: React.FC<{ tools: string[]; theme: ReturnType<typeof useTheme> }> = ({ tools, theme }) => (
@@ -40,11 +39,10 @@ const ToolsUsed: React.FC<{ tools: string[]; theme: ReturnType<typeof useTheme> 
 );
 
 /**
- * Chapter 2: "What You Can Do" (4 slides)
+ * Chapter 2: "What You Can Do" (3 slides)
  * Ch2_S1 — Debug a Conversation
- * Ch2_S2 — See the Execution Flow
- * Ch2_S3 — Send and Debug Live
- * Ch2_S4 — Config, Flights & More
+ * Ch2_S2 — Send and Debug Live
+ * Ch2_S3 — Setup Config
  */
 
 // ─── Ch2_S1: Debug a Conversation ──────────────────────────────────
@@ -52,59 +50,53 @@ const ToolsUsed: React.FC<{ tools: string[]; theme: ReturnType<typeof useTheme> 
 const debugPhases = [
   {
     type: 'input' as const,
-    text: 'debug-conversation(conversationId="abc-123-def-456")',
+    text: 'debug-conversation(conversationId="51D|BizChat_WebChat|a1b2c3d4...")',
   },
   {
     type: 'output' as const,
-    text: 'Loading conversation abc-123-def-456...',
-    prefix: '[Info]',
+    text: 'load_conversation → ConversationOverview: 2 turns, entryPoint: BizChat',
+    prefix: '[Tool]',
     color: '#60a5fa',
   },
   {
     type: 'output' as const,
-    text: 'Conversation loaded: 1,247 telemetry entries cached',
-    prefix: '[Success]',
-    color: '#34d399',
-  },
-  {
-    type: 'output' as const,
-    text: 'Running symptom report...',
-    prefix: '[Info]',
+    text: 'get_turn(0) → 1,030 telemetry entries, 2 failed calls',
+    prefix: '[Tool]',
     color: '#60a5fa',
   },
   {
     type: 'output' as const,
-    text: 'Symptom Report \u2014 9 sections analyzed',
-    prefix: '[Report]',
+    text: 'get_symptom_report(0) → 9 sections analyzed',
+    prefix: '[Tool]',
     color: '#a78bfa',
   },
   {
     type: 'output' as const,
-    text: '\u26A0 Reasonings: DeepLeo-Reasoning-1 latency 1,200ms (high)',
+    text: '\u26A0 Retrievals: SubstrateSearch returned 0 results (grounding failed)',
     prefix: '[Flag]',
     color: '#fbbf24',
   },
   {
     type: 'output' as const,
-    text: '\u26A0 Retrievals: SubstrateSearch returned 0 results',
+    text: '\u26A0 Reasonings: DeepLeo-Reasoning-1 operated with empty context',
     prefix: '[Flag]',
     color: '#fbbf24',
   },
   {
     type: 'output' as const,
-    text: 'Drilling into reasoning call at telemetryIndex 600...',
-    prefix: '[Info]',
+    text: 'get_telemetry_detail(0, 600) → full prompt: 42,381 bytes',
+    prefix: '[Tool]',
     color: '#60a5fa',
   },
   {
     type: 'output' as const,
-    text: 'Full prompt: 42,381 bytes \u2014 request context, grounding docs, system instructions',
+    text: 'Request context, grounding docs, system instructions \u2014 all visible',
     prefix: '[Detail]',
     color: '#a78bfa',
   },
   {
     type: 'output' as const,
-    text: 'Root cause: Search grounding failed \u2192 reasoning operated with empty context \u2192 high latency',
+    text: 'Root cause: Search grounding failed \u2192 reasoning operated with empty context \u2192 wrong answer',
     prefix: '[Summary]',
     color: '#34d399',
   },
@@ -132,21 +124,21 @@ const DebugConversationComponent: React.FC = () => {
           <ToolsUsed theme={theme} tools={['load_conversation', 'get_symptom_report', 'get_telemetry_detail', 'get_execution_flow']} />
         </Reveal>
 
-        <div style={{ flex: 1, minHeight: 0 }}>
+        <div style={{ flex: 1, minHeight: 0, textAlign: 'left' }}>
           <LiveTerminalSimulation
             phases={debugPhases}
             activePhase={
               currentSegmentIndex === 0 ? 2 :
-              currentSegmentIndex === 1 ? 6 :
-              currentSegmentIndex === 2 ? 8 :
-              currentSegmentIndex >= 3 ? 9 :
+              currentSegmentIndex === 1 ? 5 :
+              currentSegmentIndex === 2 ? 7 :
+              currentSegmentIndex >= 3 ? 8 :
               0
             }
           />
         </div>
 
         <Reveal from={3} animation={fadeUp}>
-          <Callout variant="info">
+          <Callout variant="info" style={{ color: theme.colors.textPrimary }}>
             <strong>Conversation ID to root cause</strong> &mdash; the agent reads the symptom report,
             spots the anomaly, and drills into the 40KB prompt. All from one request.
           </Callout>
@@ -187,75 +179,7 @@ export const Ch2_S1_DebugConversation = defineSlide({
   component: DebugConversationComponent,
 });
 
-// ─── Ch2_S2: See the Execution Flow ────────────────────────────────
-
-const ACTIVE_NODE_SEQUENCE: Array<string | undefined> = [
-  undefined,
-  'chat-hub',
-  'deepleo-r1',
-];
-
-const ExecutionFlowComponent: React.FC = () => {
-  const { currentSegmentIndex, isSegmentVisible } = useSegmentedAnimation();
-  const theme = useTheme();
-  const activeNode = ACTIVE_NODE_SEQUENCE[currentSegmentIndex];
-
-  return (
-    <SlideContainer>
-      <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-        <Reveal from={0} animation={fadeUp}>
-          <h2
-            style={{
-              color: theme.colors.textPrimary,
-              fontSize: 28,
-              fontWeight: 700,
-              textAlign: 'center',
-              margin: '0 0 12px 0',
-            }}
-          >
-            See the Execution Flow
-          </h2>
-          <ToolsUsed theme={theme} tools={['get_execution_flow']} />
-        </Reveal>
-        <div style={{ flex: 1, minHeight: 0 }}>
-          <ExecutionFlowDiagram
-            activeNode={activeNode}
-            showLatency={isSegmentVisible(2)}
-          />
-        </div>
-      </div>
-    </SlideContainer>
-  );
-};
-
-export const Ch2_S2_ExecutionFlow = defineSlide({
-  metadata: {
-    chapter: 2,
-    slide: 2,
-    title: 'See the Execution Flow',
-    audioSegments: [
-      {
-        id: 0,
-        narrationText:
-          'Using the \'get execution flow\' tool, the agent retrieves the service call tree for any turn. TuringBot at the root, with ChatHub, connection setup, and telemetry flush.',
-      },
-      {
-        id: 1,
-        narrationText:
-          'ChatHub is where the real work happens — NLU, config, DeepLeo reasoning iterations, SubstrateSearch, and the final synthesis. Each step with its own status and outcome.',
-      },
-      {
-        id: 2,
-        narrationText:
-          "DeepLeo Reasoning iteration one failed to get grounding data. That's your investigation target. The agent interprets the execution flow and tells you exactly where things went wrong.",
-      },
-    ],
-  },
-  component: ExecutionFlowComponent,
-});
-
-
-// ─── Ch2_S3: Send and Debug Live ───────────────────────────────────
+// ─── Ch2_S2: Send and Debug ─────────────────────────────────────
 
 const sendDebugPhases = [
   {
@@ -270,37 +194,31 @@ const sendDebugPhases = [
   },
   {
     type: 'output' as const,
-    text: 'SearchQuery: files shared meeting recent',
-    prefix: '[Progress]',
+    text: 'files shared with me last week',
+    prefix: '[SearchQuery]',
     color: '#fbbf24',
   },
   {
     type: 'output' as const,
-    text: 'LoaderMessage: Searching your meetings...',
-    prefix: '[Progress]',
+    text: 'Searching your files...',
+    prefix: '[LoaderMessage]',
     color: '#fbbf24',
   },
   {
     type: 'output' as const,
-    text: 'DeepLeo: Reasoning iteration 1 (1,200ms)',
-    prefix: '[Progress]',
+    text: 'Analyzing results...',
+    prefix: '[LoaderMessage]',
     color: '#fbbf24',
   },
   {
     type: 'output' as const,
-    text: 'DeepLeo: Responding (600ms)',
-    prefix: '[Progress]',
-    color: '#fbbf24',
-  },
-  {
-    type: 'output' as const,
-    text: 'Bot: "Here are the files shared in your last meeting:\\n- Q3 Report.xlsx\\n- Design Review.pptx"',
+    text: '"Here are the files shared in your last meeting:\\n- Q3 Report.xlsx\\n- Design Review.pptx"',
     prefix: '[Response]',
     color: '#34d399',
   },
   {
     type: 'output' as const,
-    text: 'telemetryAutoLoaded: true \u2014 47 entries cached, drill-down tools ready',
+    text: 'telemetryAutoLoaded: true \u2014 1,030 entries loaded, drill-down tools ready',
     prefix: '[Success]',
     color: '#34d399',
   },
@@ -336,14 +254,14 @@ const SendAndDebugComponent: React.FC = () => {
           <ToolsUsed theme={theme} tools={['send_chat_request', 'get_symptom_report', 'search_telemetry', 'get_telemetry_detail']} />
         </Reveal>
 
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 16, minHeight: 0 }}>
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 16, minHeight: 0, textAlign: 'left' }}>
           <LiveTerminalSimulation
             phases={sendDebugPhases}
             activePhase={
               currentSegmentIndex === 0 ? 0 :
-              currentSegmentIndex === 1 ? 5 :
-              currentSegmentIndex === 2 ? 6 :
-              currentSegmentIndex >= 3 ? 7 :
+              currentSegmentIndex === 1 ? 4 :
+              currentSegmentIndex === 2 ? 5 :
+              currentSegmentIndex >= 3 ? 6 :
               0
             }
           />
@@ -401,10 +319,10 @@ const SendAndDebugComponent: React.FC = () => {
   );
 };
 
-export const Ch2_S3_SendAndDebug = defineSlide({
+export const Ch2_S2_SendAndDebug = defineSlide({
   metadata: {
     chapter: 2,
-    slide: 3,
+    slide: 2,
     title: 'Send and Debug Live',
     audioSegments: [
       {
@@ -437,7 +355,7 @@ export const Ch2_S3_SendAndDebug = defineSlide({
   component: SendAndDebugComponent,
 });
 
-// ─── Ch2_S4: Config, Flights & More ────────────────────────────────
+// ─── Ch2_S3: Setup Config ──────────────────────────────────────────
 
 const USE_CASES = [
   {
@@ -458,7 +376,7 @@ const USE_CASES = [
   {
     title: 'Quick Checks',
     items: [
-      { cmd: 'get_turn_variants', desc: 'Is my flight active?' },
+      { cmd: 'get_turn_variants', desc: 'Check which flights are active' },
       { cmd: 'search_telemetry', desc: 'Find all SubstrateSearch calls' },
     ],
   },
@@ -480,7 +398,7 @@ const ConfigFlightsMoreComponent: React.FC = () => {
               margin: 0,
             }}
           >
-            Config, Flights &amp; More <span style={{ fontWeight: 400, fontSize: 18, color: theme.colors.textSecondary }}>(Skill)</span>
+            Setup Config <span style={{ fontWeight: 400, fontSize: 18, color: theme.colors.textSecondary }}>(Skill)</span>
           </h2>
           <ToolsUsed theme={theme} tools={['create_chat_config', 'update_chat_config', 'load_conversation', 'get_turn_variants', 'search_telemetry']} />
         </Reveal>
@@ -534,11 +452,11 @@ const ConfigFlightsMoreComponent: React.FC = () => {
   );
 };
 
-export const Ch2_S4_ConfigFlightsMore = defineSlide({
+export const Ch2_S3_SetupConfig = defineSlide({
   metadata: {
     chapter: 2,
-    slide: 4,
-    title: 'Config, Flights & More',
+    slide: 3,
+    title: 'Setup Config',
     audioSegments: [
       {
         id: 0,
@@ -553,7 +471,7 @@ export const Ch2_S4_ConfigFlightsMore = defineSlide({
       {
         id: 2,
         narrationText:
-          'Quick checks are just as easy. Is my flight active? Get turn variants. Find all SubstrateSearch calls? Search telemetry. The full breadth of Dev-UI, accessible in one conversation.',
+          'Quick checks are just as easy. Which flights are active? Use \'get turn variants\'. Find all SubstrateSearch calls? Use \'search telemetry\'. The full breadth of Dev-UI, accessible in one conversation.',
       },
     ],
   },

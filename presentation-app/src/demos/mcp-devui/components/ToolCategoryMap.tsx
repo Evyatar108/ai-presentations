@@ -35,6 +35,7 @@ const CATEGORIES: CategoryData[] = [
       'load_conversation',
       'load_shared_conversation',
       'load_conversation_from_file',
+      'export_conversation',
     ],
   },
   {
@@ -49,7 +50,7 @@ const CATEGORIES: CategoryData[] = [
   },
   {
     id: 'telemetry',
-    label: 'Telemetry & Diagnostics',
+    label: 'Telemetry & Execution',
     color: '#10b981',
     icon: 'T',
     tools: [

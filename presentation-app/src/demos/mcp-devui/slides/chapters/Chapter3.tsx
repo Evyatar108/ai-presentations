@@ -11,7 +11,7 @@ import { ToolCategoryMap } from '../../components/ToolCategoryMap';
 
 /**
  * Chapter 3: "The Full Toolkit"
- * Ch3_S1 — 21 Tools at Your Fingertips
+ * Ch3_S1 — 22 Tools at Your Fingertips
  */
 
 const CATEGORY_SEQUENCE: Array<string | undefined> = [
@@ -38,7 +38,7 @@ const ToolMapOverviewComponent: React.FC = () => {
               color: theme.colors.textPrimary,
             }}
           >
-            21 Tools at Your Fingertips
+            22 Tools at Your Fingertips
           </h2>
         </Reveal>
         <div style={{ flex: 1, minHeight: 0 }}>
@@ -56,17 +56,17 @@ export const Ch3_S1_ToolMapOverview = defineSlide({
   metadata: {
     chapter: 3,
     slide: 1,
-    title: '21 Tools at Your Fingertips',
+    title: '22 Tools at Your Fingertips',
     audioSegments: [
       {
         id: 0,
         narrationText:
-          "You just saw four workflows. Here are all twenty-one tools — every Dev-UI surface your agent can access. Symptom reports, telemetry detail, execution flow, search — all via natural language.",
+          "You just saw three workflows. Here are all twenty-two tools — every Dev-UI surface your agent can access. Symptom reports, telemetry detail, execution flow, search — all via natural language.",
       },
       {
         id: 1,
         narrationText:
-          "Telemetry and Diagnostics is the largest group with ten tools — it's where the real debugging power lives. Chat Execution has one tool for sending live requests, and Config Management has five tools for configs, settings, and test accounts.",
+          "Telemetry and Execution is the largest group with ten tools — it's where the real debugging power lives. Chat Execution has one tool for sending live requests, and Config Management has five tools for configs, settings, and test accounts.",
       },
       {
         id: 2,

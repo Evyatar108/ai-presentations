@@ -82,7 +82,7 @@ const TitleComponent: React.FC = () => {
               letterSpacing: '0.01em',
             }}
           >
-            An MCP Server with 21 Debugging Tools for AI Agents
+            An MCP Server with 22 Debugging Tools for AI Agents
           </p>
           <p
             style={{
@@ -116,7 +116,7 @@ export const Ch0_S1_Title = defineSlide({
       {
         id: 1,
         narrationText:
-          "Today we're looking at MCP Dev-UI — an MCP server with twenty-one debugging tools for AI agents.",
+          "Today we're looking at MCP Dev-UI — an MCP server with twenty-two debugging tools for AI agents.",
       },
     ],
   },
