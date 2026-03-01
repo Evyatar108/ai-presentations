@@ -6,7 +6,7 @@ import type { ThemeColors } from '../theme/types';
 import type { ThemedToken } from 'shiki';
 
 /** Any bundled shiki theme name, or 'framework' for theme-aware colors. */
-export type ShikiColorTheme = 'framework' | (string & {});
+export type ShikiColorTheme = 'framework' | (string & Record<string, never>);
 
 export interface ShikiCodeBlockProps {
   code: string;
