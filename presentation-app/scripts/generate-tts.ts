@@ -35,7 +35,6 @@ interface TTSConfig {
   cacheFile: string;          // Path to narration cache file
   demoFilter?: string;        // Optional: generate only for specific demo
   segmentFilter?: string[];   // Optional: regenerate only these segments (e.g. ["ch1:s2:intro", "ch3:s1:summary"])
-  fromJson?: boolean;         // NEW: Use JSON exclusively
   instruct?: string;          // CLI-level default instruct (lowest priority)
 }
 
@@ -166,13 +165,9 @@ async function loadAndMergeNarration(
   const narrationData = loadNarrationJson(demoId);
 
   if (narrationData) {
-    console.log(`✅ Loaded external narration (version ${narrationData.version}, ${narrationData.slides.length} slides)`);
-  } else if (config.fromJson) {
-    console.error(`❌ --from-json specified but narration.json not found for '${demoId}'`);
-    console.error(`   Expected: public/narration/${demoId}/narration.json\n`);
-    return null;
+    console.log(`✅ Loaded narration (version ${narrationData.version}, ${narrationData.slides.length} slides)`);
   } else {
-    console.log(`📝 No external narration found, using inline narration`);
+    console.log(`📝 No narration.json found, using inline narration from slides`);
   }
   console.log();
 
@@ -220,13 +215,7 @@ async function loadAndMergeNarration(
           segment.instruct = jsonInstruct;
         }
 
-        if (!segment.narrationText && config.fromJson) {
-          // Error if --from-json but missing in JSON
-          console.error(
-            `❌ Missing JSON narration for ch${slide.metadata.chapter}:s${slide.metadata.slide}:${segment.id}`
-          );
-          missingCount++;
-        } else if (!segment.narrationText) {
+        if (!segment.narrationText) {
           console.warn(
             `⚠️  No narration for ch${slide.metadata.chapter}:s${slide.metadata.slide}:${segment.id} (not in JSON or inline)`
           );
@@ -240,10 +229,6 @@ async function loadAndMergeNarration(
       console.log(`   ⚠️  ${missingCount} segments missing narration`);
     }
 
-    if (config.fromJson && missingCount > 0) {
-      console.error(`\n❌ Cannot proceed with --from-json: ${missingCount} segments missing in JSON\n`);
-      return null;
-    }
     console.log();
   }
 
@@ -807,7 +792,6 @@ const cliArgs = (() => {
     demoFilter,
     segmentFilter,
     skipExisting: !hasFlag('force'),
-    fromJson: hasFlag('from-json'),
     instruct: getArg('instruct'),
   };
 })();
@@ -819,7 +803,6 @@ const config: TTSConfig = {
   cacheFile: path.join(__dirname, '../.tts-narration-cache.json'),
   demoFilter: cliArgs.demoFilter,
   segmentFilter: cliArgs.segmentFilter,
-  fromJson: cliArgs.fromJson,
   instruct: cliArgs.instruct
 };
 

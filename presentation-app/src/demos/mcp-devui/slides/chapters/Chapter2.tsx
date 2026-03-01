@@ -11,7 +11,6 @@ import {
   ContentCard,
   AnimatedCheckmark,
   PulsingBadge,
-  fadeIn,
   fadeUp,
 } from '@framework';
 import { LiveTerminalSimulation } from '../../components/LiveTerminalSimulation';
@@ -158,26 +157,10 @@ export const Ch2_S1_DebugConversation = defineSlide({
     slide: 1,
     title: 'Debug a Conversation',
     audioSegments: [
-      {
-        id: 0,
-        narrationText:
-          "Let's start with the 'debug conversation' skill. The agent uses the 'load conversation' tool with a conversation ID, a shared session link, or an exported JSON file — and all conversation data is loaded, including the telemetry entries.",
-      },
-      {
-        id: 1,
-        narrationText:
-          'Next, the agent uses the \'get symptom report\' tool and interprets the results. It spots a search that returned zero results and a reasoning step that operated on empty context.',
-      },
-      {
-        id: 2,
-        narrationText:
-          'It drills in using the \'get telemetry detail\' tool, pulling the full forty-two-kilobyte prompt. Request context, grounding docs, system instructions — all visible to the agent.',
-      },
-      {
-        id: 3,
-        narrationText:
-          "Conversation ID to root cause in one request. The search grounding failed, reasoning worked with empty context, and that's why the answer was wrong.",
-      },
+      { id: 0 },
+      { id: 1 },
+      { id: 2 },
+      { id: 3 },
     ],
   },
   component: DebugConversationComponent,
@@ -333,31 +316,11 @@ export const Ch2_S2_SendAndDebug = defineSlide({
     slide: 2,
     title: 'Send and Debug Live',
     audioSegments: [
-      {
-        id: 0,
-        narrationText:
-          'The \'send and debug\' skill uses the \'send chat request\' tool to send a message, capture the response, and load all conversation data in one step.',
-      },
-      {
-        id: 1,
-        narrationText:
-          "The request flows through SignalR ChatHub. You see progress messages in real-time — search queries, loader messages, reasoning iterations, and the final response. It's like watching the pipeline execute.",
-      },
-      {
-        id: 2,
-        narrationText:
-          'The bot responds with the answer. But here is the key difference — the conversation data including telemetry is already loaded.',
-      },
-      {
-        id: 3,
-        narrationText:
-          'Telemetry auto-loaded: true. Forty-seven entries loaded and ready. No separate \'load conversation\' tool call needed.',
-      },
-      {
-        id: 4,
-        narrationText:
-          'All four drill-down tools are immediately available. Get the symptom report, inspect the execution flow tree, search telemetry by any criteria, or drill into the full detail of any specific entry. Zero extra setup.',
-      },
+      { id: 0 },
+      { id: 1 },
+      { id: 2 },
+      { id: 3 },
+      { id: 4 },
     ],
   },
   component: SendAndDebugComponent,
@@ -466,21 +429,9 @@ export const Ch2_S3_SetupConfig = defineSlide({
     slide: 3,
     title: 'Setup Config',
     audioSegments: [
-      {
-        id: 0,
-        narrationText:
-          'The \'setup config\' skill handles config management. Fork the SDF config, add your flight, point it at your local endpoint — all via the \'create chat config\' and \'update chat config\' tools.',
-      },
-      {
-        id: 1,
-        narrationText:
-          'Conversations load three ways: by conversation ID — provided directly or pulled from a SEVAL job by the agent — by shared session link, or from an exported JSON file. Whatever is available or relevant.',
-      },
-      {
-        id: 2,
-        narrationText:
-          'Quick checks are just as easy. Which flights are active? Use \'get turn variants\'. Find all SubstrateSearch calls? Use \'search telemetry\'. The full breadth of Dev-UI, accessible in one conversation.',
-      },
+      { id: 0 },
+      { id: 1 },
+      { id: 2 },
     ],
   },
   component: ConfigFlightsMoreComponent,

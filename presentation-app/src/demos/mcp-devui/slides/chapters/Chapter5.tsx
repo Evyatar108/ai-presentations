@@ -214,21 +214,9 @@ export const Ch5_S1_GetStarted = defineSlide({
     slide: 1,
     title: 'Two Minutes to Start Debugging',
     audioSegments: [
-      {
-        id: 0,
-        narrationText:
-          "Getting started takes two minutes. Step one: register the marketplace. ai-developer-toolkit is an internal repo I maintain with all the MCP plugins. Run slash plugin marketplace add gim-home slash ai-developer-toolkit — this is a one-time setup.",
-      },
-      {
-        id: 1,
-        narrationText:
-          "Step two: choose your plugin. devui-agent gives you a specialized debugger sub-agent with all the tools scoped to it. devui-tools exposes the same tools and skills directly to any agent you're already using. Same capabilities, different scoping.",
-      },
-      {
-        id: 2,
-        narrationText:
-          "That's it — you're ready. Just ask your agent to debug a conversation and start working. No config files, no environment variables.",
-      },
+      { id: 0 },
+      { id: 1 },
+      { id: 2 },
     ],
   },
   component: GetStartedComponent,

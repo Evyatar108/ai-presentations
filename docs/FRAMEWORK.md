@@ -55,7 +55,7 @@ src/
 │   │   ├── useNarrationEditor.ts  ← Narration editing workflow
 │   │   └── useFocusTrap.ts        ← Keyboard focus trap for modals
 │   ├── utils/
-│   │   ├── narrationLoader.ts     ← External narration JSON loader
+│   │   ├── narrationLoader.ts     ← Narration JSON loader
 │   │   ├── narrationApiClient.ts  ← Backend API client (uses config)
 │   │   ├── ttsClient.ts           ← TTS server communication
 │   │   ├── debug.ts               ← Debug logging utilities
@@ -132,7 +132,7 @@ The framework barrel uses explicit named exports (no wildcard `export *`) for Sl
 
 Additional exports available from the barrel:
 - **Slide factory**: `defineSlide()` — creates slides with metadata and component in a single call
-- **Types**: `DurationInfo`, `NarrationFallback`, `DemoDefaultMode`, `SlideDurationBreakdown`, `PresentationDurationReport`, `SegmentDurationInfo`
+- **Types**: `DurationInfo`, `DemoDefaultMode`, `SlideDurationBreakdown`, `PresentationDurationReport`, `SegmentDurationInfo`
 - **Narration helpers**: `getNarrationSegment()` — returns full narration segment data from narration JSON
 - **Component props**: `DemoPlayerProps`, `SlidePlayerProps`, `NarratedControllerProps`, plus all layout props (`SlideContainerProps`, `ContentCardProps`, etc.)
 - **Calculator functions**: `calculateSlideDuration`, `calculatePresentationDuration`

@@ -371,7 +371,7 @@ npm run tts:generate -- --demo {demo-id}
 
 ## Development Workflow
 
-1. Edit slide narration text in components or `narration.json`
+1. Edit slide narration text in `narration.json`
 2. Run `npm run dev`
 3. Pre-flight check detects changes (narration text, missing audio, unresolved markers)
 4. Answer `y` to regenerate — auto-runs `tts:generate` then `tts:align` for affected demos

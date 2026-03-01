@@ -86,7 +86,7 @@ code public/narration/meeting-highlights/narration.json
 npm run check-narration
 
 # Regenerate TTS audio if needed
-npm run tts:from-json
+npm run tts:generate
 ```
 
 ---
@@ -163,12 +163,12 @@ npm run tts:from-json
 npm run check-narration
 
 # Regenerate audio for changes
-npm run tts:from-json -- --demo meeting-highlights
+npm run tts:generate -- --demo meeting-highlights
 ```
 
 ### Inline Markers in Narration Text
 
-Narration text (both inline in slide components and in external `narration.json` files) can contain inline marker tokens for sub-segment animation timing:
+Narration text in `narration.json` files can contain inline marker tokens for sub-segment animation timing:
 
 ```json
 {
@@ -221,10 +221,10 @@ The narration system integrates seamlessly with the TTS (Text-to-Speech) audio g
 **Command**:
 ```bash
 # Generate audio for all demos from their narration.json
-npm run tts:from-json
+npm run tts:generate
 
 # Generate for specific demo
-npm run tts:from-json -- --demo meeting-highlights
+npm run tts:generate -- --demo meeting-highlights
 ```
 
 **What it does**:
@@ -255,7 +255,7 @@ code public/narration/meeting-highlights/narration.json
 npm run check-narration
 
 # Step 3: Regenerate audio
-npm run tts:from-json -- --demo meeting-highlights
+npm run tts:generate -- --demo meeting-highlights
 ```
 
 ### Cache Synchronization
@@ -266,7 +266,7 @@ The system maintains two caches that must stay synchronized:
 2. **Narration Cache** (`narration-cache.json`) - Tracks narration JSON hashes
 
 **Both caches update together** when:
-- Generating audio via `npm run tts:from-json`
+- Generating audio via `npm run tts:generate`
 - Regenerating single segment via browser
 - Running TTS generation scripts
 
@@ -308,7 +308,7 @@ npm run check-narration
    - Chapter 0, Slide 1, Segment: intro (Text changed)
    - Chapter 0, Slide 2, Segment: main (New segment)
 
-⚠️ Changes detected. Regenerate audio? (npm run tts:from-json)
+⚠️ Changes detected. Regenerate audio? (npm run tts:generate)
 ```
 
 ### Integrated Cache Check
@@ -437,21 +437,6 @@ fs.writeFileSync(narrationPath, JSON.stringify(narration, null, 2));
 console.log('✅ Updated narration');
 ```
 
-### Narration Extraction
-
-**Extract narration from React components** (one-time migration):
-
-```bash
-npm run extract-narration -- --demo meeting-highlights
-```
-
-**What it does**:
-1. Scans React component files
-2. Extracts `narrationText` from metadata
-3. Builds `narration.json` structure
-4. Generates initial `narration-cache.json`
-5. Saves to `public/narration/{demo-id}/`
-
 ### Export and Import
 
 **Export narration** (browser or command line):
@@ -473,7 +458,7 @@ cp backups/narration-backup-20250121.json \
    public/narration/meeting-highlights/narration.json
 
 # Regenerate audio
-npm run tts:from-json -- --demo meeting-highlights
+npm run tts:generate -- --demo meeting-highlights
 ```
 
 ### Backend API Details

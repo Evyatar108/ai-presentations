@@ -15,9 +15,6 @@ export const metadata: DemoMetadata = {
   thumbnail: '/images/highlights-deep-dive/thumbnail.png',
   tags: ['prompt-engineering', 'llm', 'optimization', 'cogs', 'deep-dive', 'technical'],
 
-  useExternalNarration: true,
-  narrationFallback: 'silent',
-
   durationInfo: {
     audioOnly: 1214.24,
     segmentDelays: 84,

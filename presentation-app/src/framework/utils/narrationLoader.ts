@@ -1,8 +1,8 @@
 /**
  * Narration Loader Utility
- * 
- * Provides functions to load and access externalized narration data from JSON files.
- * Supports hybrid fallback mode: JSON → inline → error/silent
+ *
+ * Provides functions to load and access narration data from JSON files.
+ * Returns null when narration.json is missing (e.g. silent demos).
  */
 
 /**
@@ -55,22 +55,26 @@ export interface NarrationData {
  * }
  */
 export async function loadNarration(
-  demoId: string,
-  options?: { silent?: boolean }
+  demoId: string
 ): Promise<NarrationData | null> {
   try {
     const response = await fetch(`/narration/${demoId}/narration.json`);
 
     if (!response.ok) {
       if (response.status === 404) {
-        if (!options?.silent) {
-          console.info(`[NarrationLoader] No external narration found for demo "${demoId}" (404)`);
-        }
+        console.info(`[NarrationLoader] No narration found for demo "${demoId}" (404)`);
         return null;
       }
       throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
-    
+
+    // Vite's SPA fallback returns 200 with HTML for missing files — detect and treat as 404
+    const contentType = response.headers.get('content-type') ?? '';
+    if (!contentType.includes('application/json')) {
+      console.info(`[NarrationLoader] No narration found for demo "${demoId}" (not JSON)`);
+      return null;
+    }
+
     const data = await response.json() as NarrationData;
     
     // Validate basic structure

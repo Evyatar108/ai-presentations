@@ -63,7 +63,7 @@ Each demo lives in `src/demos/{demo-id}/` with:
 `DemoConfig` supports an optional `chapters?: Record<number, { title: string }>` field that maps chapter numbers to titles. When provided, chapter-level navigation can be enabled in manual mode (see Slide Model below).
 
 ### Slide Model
-Slides are objects with `metadata` (chapter, slide number, title, audio segments) and a `component` React function receiving `{ segment }`. Progressive reveals use `segment >= N` conditionals. Audio segments define `narrationText`, and optional `timing` and `instruct` overrides. `audioFilePath` is **auto-derived** at runtime from slide coordinates (via `resolveAudioFilePath` in `DemoPlayer`) — do not hardcode it. The pattern is `/audio/{demoId}/c{chapter}/s{slide}_segment_{paddedIndex}_{segmentId}.wav`. To override, set `audioFilePath` explicitly on the segment.
+Slides are objects with `metadata` (chapter, slide number, title, audio segments) and a `component` React function receiving `{ segment }`. Progressive reveals use `segment >= N` conditionals. Audio segments have an `id` and optional `timing` and `instruct` overrides; `narrationText` is merged at runtime from `narration.json` by DemoPlayer. `audioFilePath` is **auto-derived** at runtime from slide coordinates (via `resolveAudioFilePath` in `DemoPlayer`) — do not hardcode it. The pattern is `/audio/{demoId}/c{chapter}/s{slide}_segment_{paddedIndex}_{segmentId}.wav`. To override, set `audioFilePath` explicitly on the segment.
 
 **Inline markers** enable sub-segment animations synchronized to the narrator's speech. Embed `{#id}` (forward anchor — start of next word) or `{id#}` (backward anchor — end of previous word) tokens in `narrationText`. These are stripped before TTS and resolved to word-level timestamps via WhisperX forced alignment (`tts:align`). Use `<RevealAtMarker at="id">` for progressive reveals or `<RevealAtMarker from="a" until="b">` for bounded ranges. See `docs/MARKERS_GUIDE.md` for details.
 
@@ -82,7 +82,7 @@ Timing (beforeFirstSlide, betweenSegments, betweenSlides, afterFinalSlide) can b
 TTS style instructions (`instruct?: string`) follow the same three-level pattern: `DemoConfig.instruct` → `SlideMetadata.instruct` → `AudioSegment.instruct`. Most-specific wins (first non-undefined). Passed to Qwen3-TTS server as the `instruct` parameter. CLI scripts also accept `--instruct "..."` as lowest-priority fallback. Instruct changes are tracked in the TTS cache and trigger regeneration.
 
 ### Narration System
-Two modes: **inline** (narration text in slide components) or **external** (JSON in `public/narration/{demo-id}/narration.json`). External mode enabled via `useExternalNarration: true` in metadata with fallback options: `'inline'`, `'error'`, `'silent'`.
+Narration text lives in `public/narration/{demo-id}/narration.json`, merged at runtime by DemoPlayer. Demos without narration (e.g. component-showcase) simply have no narration.json.
 
 ### Playback
 `NarratedController.tsx` orchestrates audio playback, segment sequencing, and slide advancement. Missing audio falls back to configurable silence path (default: `public/audio/silence-1s.wav`).

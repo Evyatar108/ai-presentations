@@ -131,6 +131,7 @@ describe('loadNarration', () => {
   it('returns parsed data on successful fetch', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
       ok: true,
+      headers: { get: () => 'application/json' },
       json: () => Promise.resolve(sampleData),
     }));
 
@@ -170,6 +171,7 @@ describe('loadNarration', () => {
   it('returns null on invalid JSON structure (missing demoId)', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
       ok: true,
+      headers: { get: () => 'application/json' },
       json: () => Promise.resolve({ version: '1.0', slides: [] }),
     }));
 
@@ -180,6 +182,7 @@ describe('loadNarration', () => {
   it('returns null on invalid JSON structure (slides not array)', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
       ok: true,
+      headers: { get: () => 'application/json' },
       json: () => Promise.resolve({ demoId: 'test', version: '1.0', slides: 'not-array' }),
     }));
 
@@ -191,6 +194,7 @@ describe('loadNarration', () => {
     const mismatchData = { ...sampleData, demoId: 'wrong-id' };
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
       ok: true,
+      headers: { get: () => 'application/json' },
       json: () => Promise.resolve(mismatchData),
     }));
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});

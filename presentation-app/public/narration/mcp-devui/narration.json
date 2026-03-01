@@ -1,0 +1,269 @@
+{
+  "demoId": "mcp-devui",
+  "version": "1.0",
+  "lastModified": "2026-03-01T02:45:23.053Z",
+  "slides": [
+    {
+      "chapter": 0,
+      "slide": 1,
+      "title": "MCP DevUI",
+      "segments": [
+        {
+          "id": 0,
+          "narrationText": "Hello, I'm Kwen TTS, and I'll be narrating this presentation for EvYatar.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 1,
+          "narrationText": "Today we're looking at MCP Dev-UI — an MCP server with twenty-two debugging tools for AI agents.",
+          "visualDescription": "",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 0,
+      "slide": 2,
+      "title": "The Debugging Problem",
+      "segments": [
+        {
+          "id": 0,
+          "narrationText": "You send a query to a Sydney-powered Copilot, and it gives you a bad answer. Why? What went wrong behind the scenes? To find out, you'd open the Dev-UI portal and face a wall of raw telemetry.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 1,
+          "narrationText": "Hundreds of telemetry entries for a single turn. Service calls, payloads, status codes — all in raw JSON with no structure, no triage, no guidance on where to look first.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 2,
+          "narrationText": "That's the problem MCP Dev-UI solves. Instead of you reading raw JSON, the agent reads and interprets it for you — across all Dev-UI surfaces. Let me show you how.",
+          "visualDescription": "",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 1,
+      "slide": 1,
+      "title": "22 Tools, 3 Skills, 1 Agent",
+      "segments": [
+        {
+          "id": 0,
+          "narrationText": "Twenty-two tools across five categories. Every Dev-UI surface you already use — now accessible to your AI agent. Let me walk you through each one.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 1,
+          "narrationText": "{#nav}Conversation Loading — four tools for loading conversations by ID, shared session link, or exported JSON file, plus exporting conversations out. {#turn}Turn Inspection — two tools for viewing turn details and raw message content. {#tel}Telemetry and Execution — the largest group with ten tools covering symptom reports, execution flow, search, and drill-down. {#chat}Chat Execution — one tool for sending live requests with automatic telemetry loading. And {#config}Config Management — five tools for creating, updating, and listing configs plus runtime settings and test accounts.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 2,
+          "narrationText": "Wrapping all of this is the Dev-UI debugger agent with three guided skills: {#sk-debug}'debug conversation', {#sk-send}'send and debug', and {#sk-config}'setup config'. Each skill chains multiple tools into a complete workflow.",
+          "visualDescription": "",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 2,
+      "slide": 1,
+      "title": "Debug a Conversation",
+      "segments": [
+        {
+          "id": 0,
+          "narrationText": "Let's start with the 'debug conversation' skill. The agent uses the 'load conversation' tool with a conversation ID, a shared session link, or an exported JSON file — and all conversation data is loaded, including the telemetry entries.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 1,
+          "narrationText": "Next, the agent uses the 'get symptom report' tool and interprets the results. It spots a search that returned zero results and a reasoning step that operated on empty context.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 2,
+          "narrationText": "It drills in using the 'get telemetry detail' tool, pulling the full forty-two-kilobyte prompt. Request context, grounding docs, system instructions — all visible to the agent.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 3,
+          "narrationText": "Conversation ID to root cause in one request. The search grounding failed, reasoning worked with empty context, and that's why the answer was wrong.",
+          "visualDescription": "",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 2,
+      "slide": 2,
+      "title": "Send and Debug Live",
+      "segments": [
+        {
+          "id": 0,
+          "narrationText": "The 'send and debug' skill uses the 'send chat request' tool to send a message, capture the response, and load all conversation data in one step.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 1,
+          "narrationText": "The request flows through SignalR ChatHub. You see progress messages in real-time — search queries, loader messages, reasoning iterations, and the final response. It's like watching the pipeline execute.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 2,
+          "narrationText": "The bot responds with the answer. But here is the key difference — the conversation data including telemetry is already loaded.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 3,
+          "narrationText": "Telemetry auto-loaded: true. Forty-seven entries loaded and ready. No separate 'load conversation' tool call needed.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 4,
+          "narrationText": "All four drill-down tools are immediately available. Get the symptom report, inspect the execution flow tree, search telemetry by any criteria, or drill into the full detail of any specific entry. Zero extra setup.",
+          "visualDescription": "",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 2,
+      "slide": 3,
+      "title": "Setup Config",
+      "segments": [
+        {
+          "id": 0,
+          "narrationText": "The 'setup config' skill handles config management. Fork the SDF config, add your flight, point it at your local endpoint — all via the 'create chat config' and 'update chat config' tools.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 1,
+          "narrationText": "Conversations load three ways: by conversation ID — provided directly or pulled from a SEVAL job by the agent — by shared session link, or from an exported JSON file. Whatever is available or relevant.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 2,
+          "narrationText": "Quick checks are just as easy. Which flights are active? Use 'get turn variants'. Find all SubstrateSearch calls? Use 'search telemetry'. The full breadth of Dev-UI, accessible in one conversation.",
+          "visualDescription": "",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "slide": 1,
+      "title": "22 Tools at Your Fingertips",
+      "segments": [
+        {
+          "id": 0,
+          "narrationText": "You just saw three workflows. Here are all twenty-two tools — every Dev-UI surface your agent can access. Symptom reports, telemetry detail, execution flow, search — all via natural language.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 1,
+          "narrationText": "Telemetry and Execution is the largest group with ten tools — it's where the real debugging power lives. Chat Execution has one tool for sending live requests, and Config Management has five tools for configs, settings, and test accounts.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 2,
+          "narrationText": "Load a conversation once, and every drill-down tool operates on the loaded data. No re-fetching. All via natural language — just ask the agent what you need.",
+          "visualDescription": "",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 4,
+      "slide": 1,
+      "title": "Agent Meets Source Code",
+      "segments": [
+        {
+          "id": 0,
+          "narrationText": "What if the agent could read both telemetry and source code? Add the Sydney repo to the workspace alongside Dev-UI MCP, and the agent has access to both diagnostic data and the actual implementation.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 1,
+          "narrationText": "Closed-loop debugging: the agent finds a bug via the symptom report, traces the service call, opens the source file, and identifies the root cause — all in one conversation.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 2,
+          "narrationText": "From symptom report to source code fix — in one conversation. And once the fix is in, the agent can rerun the service, query it again, and debug the new response to verify. No context switching, no copy-pasting between tools.",
+          "visualDescription": "",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 4,
+      "slide": 2,
+      "title": "SEVAL at Scale",
+      "segments": [
+        {
+          "id": 0,
+          "narrationText": "SEVAL scrapes produce hundreds of conversations. Instead of triaging manually, just ask: get the worst conversation from my latest SEVAL and debug what went wrong.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 1,
+          "narrationText": "SEVAL produces metrics — both aggregated and per query — plus LM Checklist results: code-based and LLM-based assertions that check each query for regressions. Through the SEVAL MCP, the agent can access all of that, identify the worst-performing conversations, and start debugging them with the Dev-UI MCP.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 2,
+          "narrationText": "Two MCP servers, one conversation. The SEVAL MCP gives the agent access to metrics and checklist results, the Dev-UI MCP lets it load and debug those conversations — from regression detection to root cause diagnosis, all in one session.",
+          "visualDescription": "",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 5,
+      "slide": 1,
+      "title": "Two Minutes to Start Debugging",
+      "segments": [
+        {
+          "id": 0,
+          "narrationText": "Getting started takes two minutes. Step one: register the marketplace. ai-developer-toolkit is an internal repo I maintain with all the MCP plugins. Run slash plugin marketplace add gim-home slash ai-developer-toolkit — this is a one-time setup.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 1,
+          "narrationText": "Step two: choose your plugin. devui-agent gives you a specialized debugger sub-agent with all the tools scoped to it. devui-tools exposes the same tools and skills directly to any agent you're already using. Same capabilities, different scoping.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 2,
+          "narrationText": "That's it — you're ready. Just ask your agent to debug a conversation and start working. No config files, no environment variables.",
+          "visualDescription": "",
+          "notes": ""
+        }
+      ]
+    }
+  ]
+}

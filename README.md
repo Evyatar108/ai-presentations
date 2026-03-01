@@ -40,7 +40,7 @@ Scaffold a new demo: `.\scripts\new-demo.ps1 -DemoId "my-demo" [-DemoTitle "My D
 │   │   ├── audio/{demo-id}/   # TTS audio per demo
 │   │   ├── images/{demo-id}/  # Images per demo
 │   │   ├── videos/{demo-id}/  # Videos per demo
-│   │   └── narration/{demo-id}/  # External narration JSON
+│   │   └── narration/{demo-id}/  # Narration JSON
 │   └── scripts/            # TTS generation, duration calc, cache check
 ├── tts/                    # Python TTS server (VibeVoice + Qwen3-TTS)
 ├── scripts/                # new-demo.ps1 scaffolding
@@ -130,7 +130,7 @@ Detailed docs in [`docs/`](docs/):
 | [COMPONENTS.md](docs/COMPONENTS.md) | Component documentation |
 | [THEMING.md](docs/THEMING.md) | Theme system and customization |
 | [TIMING_SYSTEM.md](docs/TIMING_SYSTEM.md) | Three-level timing hierarchy |
-| [NARRATION_SYSTEM_GUIDE.md](docs/NARRATION_SYSTEM_GUIDE.md) | Inline and external narration |
+| [NARRATION_SYSTEM_GUIDE.md](docs/NARRATION_SYSTEM_GUIDE.md) | Narration system |
 | [TTS_GUIDE.md](docs/TTS_GUIDE.md) | TTS generation workflow |
 | [TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) | Common issues and solutions |
 

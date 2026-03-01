@@ -63,9 +63,6 @@ curl http://localhost:3001/api/health
 
 **Solution**:
 ```bash
-# Re-extract narration from React components
-npm run extract-narration -- --demo meeting-highlights
-
 # Verify file exists
 ls public/narration/meeting-highlights/narration.json
 
@@ -103,7 +100,7 @@ curl http://localhost:5000/health
 
 **Workaround**:
 - Use "Save" button only (no audio regeneration)
-- Generate audio later via CLI: `npm run tts:from-json`
+- Generate audio later via CLI: `npm run tts:generate`
 
 **See**: [`TTS_GUIDE.md`](../../docs/TTS_GUIDE.md) for TTS server setup
 
@@ -140,9 +137,6 @@ code public/narration/meeting-highlights/narration.json
 ```bash
 # Restore from git
 git checkout public/narration/meeting-highlights/narration.json
-
-# Or re-extract from components
-npm run extract-narration -- --demo meeting-highlights
 ```
 
 ---
@@ -244,10 +238,10 @@ ls -la public/narration/
 **Action Required**:
 ```bash
 # Regenerate audio for changed segments
-npm run tts:from-json -- --demo meeting-highlights
+npm run tts:generate -- --demo meeting-highlights
 
 # Or regenerate all demos
-npm run tts:from-json
+npm run tts:generate
 ```
 
 **Understanding the Warning**:
@@ -313,18 +307,8 @@ console.log('[DemoPlayer] Slides with narration:', slidesWithNarration);
 ```
 
 **Common Causes**:
-- `useExternalNarration` flag not set in metadata
-- Narration JSON file missing
+- Narration JSON file missing (`public/narration/{demo-id}/narration.json`)
 - Fetch request failing (check Network tab)
-
-**Solution**:
-```typescript
-// In src/demos/meeting-highlights/metadata.ts
-export const meetingHighlightsMetadata: DemoMetadata = {
-  // ... other fields
-  useExternalNarration: true  // Ensure this is present
-};
-```
 
 ---
 
@@ -378,7 +362,7 @@ console.log('Is valid:', editedText.trim().length > 0);
 ls public/narration/meeting-highlights/narration.json
 
 # Check if script loads it
-tsx scripts/generate-tts.ts --demo meeting-highlights --from-json
+tsx scripts/generate-tts.ts --demo meeting-highlights
 ```
 
 **Common Causes**:
@@ -388,11 +372,11 @@ tsx scripts/generate-tts.ts --demo meeting-highlights --from-json
 
 **Solution**:
 ```bash
-# Re-extract if missing
-npm run extract-narration -- --demo meeting-highlights
+# Verify narration.json exists with correct demo ID
+cat public/narration/meeting-highlights/narration.json | python -m json.tool | head -5
 
-# Use correct demo ID (matches folder name)
-npm run tts:from-json -- --demo meeting-highlights
+# Generate TTS audio
+npm run tts:generate -- --demo meeting-highlights
 ```
 
 ---
@@ -486,7 +470,7 @@ See [User Guide](NARRATION_SYSTEM_GUIDE.md#editing-narration) for details.
 
 **A**: Two ways:
 1. **Browser** - Click "Save & Regenerate Audio" in edit modal
-2. **CLI** - Run `npm run tts:from-json -- --demo {demo-id}`
+2. **CLI** - Run `npm run tts:generate -- --demo {demo-id}`
 
 Requires TTS server running on port 5000.
 
@@ -532,39 +516,14 @@ git log --follow public/narration/meeting-highlights/narration.json
 
 ### Q: What if I accidentally delete narration.json?
 
-**A**: Recover from React components:
+**A**: Recover from git or backup:
 ```bash
-# Re-extract from inline narration (if available)
-npm run extract-narration -- --demo meeting-highlights
-
-# Or restore from git
+# Restore from git
 git checkout public/narration/meeting-highlights/narration.json
 
 # Or restore from backup
 cp backups/narration-backup-*.json public/narration/meeting-highlights/narration.json
 ```
-
----
-
-### Q: How do I migrate a new demo to external narration?
-
-**A**: Follow these steps:
-```bash
-# 1. Extract narration from React components
-npm run extract-narration -- --demo new-demo
-
-# 2. Enable external narration in metadata
-# Edit src/demos/new-demo/metadata.ts:
-# Add: useExternalNarration: true
-
-# 3. Generate TTS audio from JSON
-npm run tts:from-json -- --demo new-demo
-
-# 4. Test in browser
-npm run dev
-```
-
-See [Migration Guide](NARRATION_EXTERNALIZATION_PLAN.md#migration-strategy).
 
 ---
 
@@ -586,7 +545,7 @@ git checkout --theirs public/narration/meeting-highlights/narration.json
 git checkout --ours public/narration/meeting-highlights/narration.json
 
 # Then regenerate audio
-npm run tts:from-json
+npm run tts:generate
 ```
 
 ---
@@ -631,10 +590,8 @@ cp -r public/narration/ backups/narration-$(date +%Y%m%d)/
 
 **Solution**:
 ```bash
-# Regenerate cache to match current state
-npm run extract-narration -- --demo meeting-highlights
-
-# This updates hashes to current content
+# Regenerate TTS to rebuild cache with current content
+npm run tts:generate -- --demo meeting-highlights
 ```
 
 ---
@@ -645,9 +602,8 @@ npm run extract-narration -- --demo meeting-highlights
 
 **If needed**:
 1. Update TypeScript interfaces in `src/framework/utils/narrationLoader.ts`
-2. Update extraction script `scripts/extract-narration.ts`
-3. Update all consumers of narration data
-4. Update documentation
+2. Update all consumers of narration data
+3. Update documentation
 
 ---
 

@@ -192,21 +192,9 @@ export const Ch1_S1_SolutionOverview = defineSlide({
     slide: 1,
     title: '22 Tools, 3 Skills, 1 Agent',
     audioSegments: [
-      {
-        id: 0,
-        narrationText:
-          'Twenty-two tools across five categories. Every Dev-UI surface you already use — now accessible to your AI agent. Let me walk you through each one.',
-      },
-      {
-        id: 1,
-        narrationText:
-          '{#nav}Conversation Loading — four tools for loading conversations by ID, shared session link, or exported JSON file, plus exporting conversations out. {#turn}Turn Inspection — two tools for viewing turn details and raw message content. {#tel}Telemetry and Execution — the largest group with ten tools covering symptom reports, execution flow, search, and drill-down. {#chat}Chat Execution — one tool for sending live requests with automatic telemetry loading. And {#config}Config Management — five tools for creating, updating, and listing configs plus runtime settings and test accounts.',
-      },
-      {
-        id: 2,
-        narrationText:
-          'Wrapping all of this is the Dev-UI debugger agent with three guided skills: {#sk-debug}\'debug conversation\', {#sk-send}\'send and debug\', and {#sk-config}\'setup config\'. Each skill chains multiple tools into a complete workflow.',
-      },
+      { id: 0 },
+      { id: 1 },
+      { id: 2 },
     ],
   },
   component: SolutionOverviewComponent,

@@ -37,14 +37,6 @@ export const metadata: DemoMetadata = {
   tags: ['meeting-highlights', 'llm', 'optimization', 'cogs', 'ai', 'product'],
 
   /**
-   * External narration configuration.
-   * Loads narration text from /public/narration/meeting-highlights/narration.json
-   * Strict mode: Errors if JSON is missing (inline narrationText removed in Phase 7).
-   */
-  useExternalNarration: true,
-  narrationFallback: 'error', // Strict mode - inline narrationText removed
-
-  /**
    * Duration information calculated by calculate-durations script.
    *
    * Breakdown:

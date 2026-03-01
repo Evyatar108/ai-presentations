@@ -154,7 +154,7 @@ export { ArrowDown, ArrowRight, ArrowRightLarge, ArrowRightXL, ArrowDownSmall, C
 
 // Demos
 export { DemoRegistry } from './demos/DemoRegistry';
-export type { DemoMetadata, DemoConfig, DemoRegistryEntry, DurationInfo, NarrationFallback, DemoDefaultMode } from './demos/types';
+export type { DemoMetadata, DemoConfig, DemoRegistryEntry, DurationInfo, DemoDefaultMode } from './demos/types';
 export { resolveTimingConfig, DEFAULT_TIMING, DEFAULT_START_TRANSITION } from './demos/timing/types';
 export type { TimingConfig, ResolvedTimingConfig, StartTransition } from './demos/timing/types';
 export { calculateSlideDuration, calculatePresentationDuration } from './demos/timing/calculator';

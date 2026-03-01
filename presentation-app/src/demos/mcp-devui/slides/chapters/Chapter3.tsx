@@ -58,21 +58,9 @@ export const Ch3_S1_ToolMapOverview = defineSlide({
     slide: 1,
     title: '22 Tools at Your Fingertips',
     audioSegments: [
-      {
-        id: 0,
-        narrationText:
-          "You just saw three workflows. Here are all twenty-two tools — every Dev-UI surface your agent can access. Symptom reports, telemetry detail, execution flow, search — all via natural language.",
-      },
-      {
-        id: 1,
-        narrationText:
-          "Telemetry and Execution is the largest group with ten tools — it's where the real debugging power lives. Chat Execution has one tool for sending live requests, and Config Management has five tools for configs, settings, and test accounts.",
-      },
-      {
-        id: 2,
-        narrationText:
-          'Load a conversation once, and every drill-down tool operates on the loaded data. No re-fetching. All via natural language — just ask the agent what you need.',
-      },
+      { id: 0 },
+      { id: 1 },
+      { id: 2 },
     ],
   },
   component: ToolMapOverviewComponent,

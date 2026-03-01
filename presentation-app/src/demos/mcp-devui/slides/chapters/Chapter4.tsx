@@ -75,21 +75,9 @@ export const Ch4_S1_AgentMeetsSource = defineSlide({
     slide: 1,
     title: 'Agent Meets Source Code',
     audioSegments: [
-      {
-        id: 0,
-        narrationText:
-          "What if the agent could read both telemetry and source code? Add the Sydney repo to the workspace alongside Dev-UI MCP, and the agent has access to both diagnostic data and the actual implementation.",
-      },
-      {
-        id: 1,
-        narrationText:
-          "Closed-loop debugging: the agent finds a bug via the symptom report, traces the service call, opens the source file, and identifies the root cause — all in one conversation.",
-      },
-      {
-        id: 2,
-        narrationText:
-          "From symptom report to source code fix — in one conversation. And once the fix is in, the agent can rerun the service, query it again, and debug the new response to verify. No context switching, no copy-pasting between tools.",
-      },
+      { id: 0 },
+      { id: 1 },
+      { id: 2 },
     ],
   },
   component: AgentMeetsSourceComponent,
@@ -153,21 +141,9 @@ export const Ch4_S2_SevalAtScale = defineSlide({
     slide: 2,
     title: 'SEVAL at Scale',
     audioSegments: [
-      {
-        id: 0,
-        narrationText:
-          "SEVAL scrapes produce hundreds of conversations. Instead of triaging manually, just ask: get the worst conversation from my latest SEVAL and debug what went wrong.",
-      },
-      {
-        id: 1,
-        narrationText:
-          "SEVAL produces metrics — both aggregated and per query — plus LM Checklist results: code-based and LLM-based assertions that check each query for regressions. Through the SEVAL MCP, the agent can access all of that, identify the worst-performing conversations, and start debugging them with the Dev-UI MCP.",
-      },
-      {
-        id: 2,
-        narrationText:
-          "Two MCP servers, one conversation. The SEVAL MCP gives the agent access to metrics and checklist results, the Dev-UI MCP lets it load and debug those conversations — from regression detection to root cause diagnosis, all in one session.",
-      },
+      { id: 0 },
+      { id: 1 },
+      { id: 2 },
     ],
   },
   component: SevalAtScaleComponent,

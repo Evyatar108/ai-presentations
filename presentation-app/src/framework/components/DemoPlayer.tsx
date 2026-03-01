@@ -82,11 +82,8 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideIn
         
         if (!mounted) return;
         
-        // Always try to load narration.json (silent for inline demos)
-        const narration = await loadNarration(
-          config.metadata.id,
-          config.metadata.useExternalNarration ? undefined : { silent: true }
-        );
+        // Load narration.json (null if missing — e.g. silent demos)
+        const narration = await loadNarration(config.metadata.id);
         if (!mounted) return;
         setNarrationData(narration);
 
@@ -128,54 +125,26 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideIn
     };
   }, [demoId]);
 
-  // Build slides with narration merged from JSON (if enabled)
+  // Build slides with narration merged from JSON
   const slidesWithNarration = useMemo((): SlideComponentWithMetadata[] => {
     if (!loadedSlides || loadedSlides.length === 0) return [];
     if (!narrationData) return loadedSlides;
-    
-    // Merge external narration into slide metadata
+
+    // Merge narration.json into slide metadata
     return loadedSlides.map(slideComponent => {
-      const fallbackMode = demoConfig?.metadata.narrationFallback || 'inline';
-      
       const chapter = slideComponent.metadata.chapter;
       const slide = slideComponent.metadata.slide;
 
       // Update each segment with narration fields from JSON
       const updatedSegments = slideComponent.metadata.audioSegments.map(segment => {
         const narrationSeg = getNarrationSegment(narrationData, chapter, slide, segment.id);
-
-        // Hybrid fallback: JSON → inline → error/silent
         if (narrationSeg) {
-          // Spread all narration fields (narrationText, instruct, visualDescription, etc.)
           const { id: _, ...narrationOverrides } = narrationSeg;
           return { ...segment, ...narrationOverrides };
-        } else if (segment.narrationText) {
-          // Fall back to inline narration
-          if (fallbackMode === 'inline') {
-            console.warn(
-              `[DemoPlayer] Using inline narration for ch${chapter}:s${slide}:${segment.id} ` +
-              `(not found in narration.json)`
-            );
-          } else if (fallbackMode === 'error') {
-            console.error(
-              `[DemoPlayer] Missing narration in JSON for ch${chapter}:s${slide}:${segment.id}, ` +
-              `falling back to inline`
-            );
-          }
-          // 'silent' mode: no console output
-          return segment;
-        } else {
-          // No narration available at all
-          if (fallbackMode !== 'silent') {
-            console.error(
-              `[DemoPlayer] No narration available for ch${chapter}:s${slide}:${segment.id} ` +
-              `(missing in both JSON and inline)`
-            );
-          }
-          return segment;
         }
+        return segment;
       });
-      
+
       // Also merge slide-level instruct from narration.json
       const narrationSlide = narrationData.slides.find(
         s => s.chapter === chapter && s.slide === slide
@@ -195,7 +164,7 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideIn
 
       return updatedComponent;
     });
-  }, [loadedSlides, narrationData, demoConfig]);
+  }, [loadedSlides, narrationData]);
   
   // Resolve auto-derived audioFilePaths for segments that omit it
   const slidesWithResolvedPaths = useMemo((): SlideComponentWithMetadata[] => {

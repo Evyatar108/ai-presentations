@@ -106,18 +106,17 @@ code public/narration/meeting-highlights/narration.json
 # Check for changes
 npm run check-narration
 
-# Regenerate TTS audio from JSON
-npm run tts:from-json
+# Regenerate TTS audio
+npm run tts:generate
 ```
 
 ### NPM Scripts
 
 ```bash
-npm run extract-narration      # Extract narration from React components to JSON
 npm run check-narration        # Detect narration changes via hash comparison
 npm run narration-api          # Start backend API server (port 3001)
 npm run dev:full              # Start both dev server and narration API
-npm run tts:from-json         # Generate TTS audio from narration JSON exclusively
+npm run tts:generate          # Generate TTS audio from narration
 ```
 
 ### Features

@@ -108,16 +108,8 @@ export const Ch0_S1_Title = defineSlide({
     slide: 1,
     title: 'MCP DevUI',
     audioSegments: [
-      {
-        id: 0,
-        narrationText:
-          "Hello, I'm Kwen TTS, and I'll be narrating this presentation for EvYatar.",
-      },
-      {
-        id: 1,
-        narrationText:
-          "Today we're looking at MCP Dev-UI — an MCP server with twenty-two debugging tools for AI agents.",
-      },
+      { id: 0 },
+      { id: 1 },
     ],
   },
   component: TitleComponent,
@@ -310,21 +302,9 @@ export const Ch0_S2_DebuggingProblem = defineSlide({
     slide: 2,
     title: 'The Debugging Problem',
     audioSegments: [
-      {
-        id: 0,
-        narrationText:
-          "You send a query to a Sydney-powered Copilot, and it gives you a bad answer. Why? What went wrong behind the scenes? To find out, you'd open the Dev-UI portal and face a wall of raw telemetry.",
-      },
-      {
-        id: 1,
-        narrationText:
-          'Hundreds of telemetry entries for a single turn. Service calls, payloads, status codes — all in raw JSON with no structure, no triage, no guidance on where to look first.',
-      },
-      {
-        id: 2,
-        narrationText:
-          "That's the problem MCP Dev-UI solves. Instead of you reading raw JSON, the agent reads and interprets it for you — across all Dev-UI surfaces. Let me show you how.",
-      },
+      { id: 0 },
+      { id: 1 },
+      { id: 2 },
     ],
   },
   component: DebuggingProblemComponent,

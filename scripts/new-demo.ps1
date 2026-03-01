@@ -42,6 +42,8 @@ $publicVideosPath = "presentation-app/public/videos/$DemoId"
 # Create directories
 Write-Host "Creating directories..." -ForegroundColor Yellow
 
+$publicNarrationPath = "presentation-app/public/narration/$DemoId"
+
 $directories = @(
     $docsPath,
     "$docsPath/context",
@@ -50,7 +52,8 @@ $directories = @(
     "$srcPath/slides/chapters",
     "$publicAudioPath/c0",
     $publicImagesPath,
-    $publicVideosPath
+    $publicVideosPath,
+    $publicNarrationPath
 )
 
 foreach ($dir in $directories) {
@@ -351,6 +354,35 @@ $techReadmePath = "$srcPath/README.md"
 $techReadmeContent | Out-File -FilePath $techReadmePath -Encoding UTF8
 $createdFiles += $techReadmePath
 Write-Host "  ✓ Created: $techReadmePath" -ForegroundColor Green
+
+# narration.json (starter)
+Write-Host "`nCreating narration file..." -ForegroundColor Yellow
+
+$narrationContent = @"
+{
+  "demoId": "$DemoId",
+  "version": "1.0",
+  "lastModified": "$(Get-Date -Format 'yyyy-MM-ddTHH:mm:ss.fffZ')",
+  "slides": [
+    {
+      "chapter": 0,
+      "slide": 1,
+      "title": "$DemoTitle",
+      "segments": [
+        {
+          "id": 0,
+          "narrationText": "Welcome to $DemoTitle."
+        }
+      ]
+    }
+  ]
+}
+"@
+
+$narrationPath = "$publicNarrationPath/narration.json"
+$narrationContent | Out-File -FilePath $narrationPath -Encoding UTF8
+$createdFiles += $narrationPath
+Write-Host "  ✓ Created: $narrationPath" -ForegroundColor Green
 
 # Summary
 Write-Host "`n=== Summary ===" -ForegroundColor Cyan
