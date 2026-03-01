@@ -1,106 +1,174 @@
 import React from 'react';
 import {
-  useReducedMotion,
-  useSegmentedAnimation,
   defineSlide,
+  useTheme,
+  useSegmentedAnimation,
   SlideContainer,
-  SlideTitle,
   Reveal,
-  NumberedStepCard,
-  ShikiCodeBlock,
   Callout,
   fadeUp,
 } from '@framework';
+import { WorkspaceBridgeDiagram } from '../../components/WorkspaceBridgeDiagram';
+import { ConversationTriagePipeline } from '../../components/ConversationTriagePipeline';
 
 /**
- * Chapter 4: "Get Started"
- * Ch4_S1 — Two Minutes to Start Debugging
+ * Chapter 4: "Going Further" (2 slides)
+ * Ch4_S1 — Agent Meets Source Code
+ * Ch4_S2 — SEVAL at Scale
  */
 
-const INSTALL_CODE = `/plugin install devui-agent@ai-developer-toolkit`;
+// ─── Ch4_S1: Agent Meets Source Code ──────────────────────────────────
 
-const GetStartedComponent: React.FC = () => {
-  const { reduced } = useReducedMotion();
+const PHASE_MAP_SOURCE: Record<number, number> = {
+  0: 1,  // both panels visible
+  1: 2,  // arrows animate
+  2: 3,  // full glow
+};
+
+const AgentMeetsSourceComponent: React.FC = () => {
+  const theme = useTheme();
   const { currentSegmentIndex } = useSegmentedAnimation();
+  const phase = PHASE_MAP_SOURCE[currentSegmentIndex] ?? 0;
 
   return (
-    <SlideContainer maxWidth={850}>
-      <Reveal from={0}>
-        <SlideTitle reduced={reduced}>
-          Two Minutes to Start Debugging
-        </SlideTitle>
-      </Reveal>
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '1rem' }}>
+    <SlideContainer>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, height: '100%' }}>
         <Reveal from={0} animation={fadeUp}>
-          <NumberedStepCard
-            number={1}
-            title="Install the plugin"
-            description="Sparse clone + dotnet publish on first use (~30s), then instant on every subsequent call."
-            isActive={currentSegmentIndex === 0}
-          />
-          <div style={{ marginTop: '0.5rem' }}>
-            <ShikiCodeBlock
-              code={INSTALL_CODE}
-              language="bash"
-              colorTheme="framework"
-              fontSize={13}
-            />
-          </div>
+          <h2
+            style={{
+              color: theme.colors.textPrimary,
+              fontSize: 28,
+              fontWeight: 700,
+              textAlign: 'center',
+              margin: 0,
+            }}
+          >
+            Agent Meets Source Code
+          </h2>
+          <p style={{
+            textAlign: 'center',
+            fontSize: 15,
+            color: theme.colors.textSecondary,
+            margin: '6px 0 0',
+          }}>
+            DevUI MCP + workspace source code = closed-loop debugging
+          </p>
         </Reveal>
 
-        <Reveal from={1} animation={fadeUp}>
-          <NumberedStepCard
-            number={2}
-            title="Authenticate once"
-            description="First tool call opens a WebView2 window for Azure AD login. Tokens are cached locally — you only authenticate once."
-            isActive={currentSegmentIndex === 1}
-          />
-        </Reveal>
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', minHeight: 0 }}>
+          <WorkspaceBridgeDiagram activePhase={phase} />
+        </div>
 
         <Reveal from={2} animation={fadeUp}>
-          <NumberedStepCard
-            number={3}
-            title="Start debugging"
-            description="Just ask Claude to debug a conversation. The devui-debugger agent is automatically available — no config files, no environment variables."
-            isActive={currentSegmentIndex === 2}
-          />
+          <Callout variant="tip" style={{ color: theme.colors.textPrimary }}>
+            <strong>From symptom report to source code fix</strong> &mdash; in one conversation.
+          </Callout>
         </Reveal>
       </div>
-
-      <Reveal from={0} animation={fadeUp}>
-        <div style={{ marginTop: '1rem' }}>
-          <Callout variant="tip">
-            The server binary auto-builds from source on first use. Every subsequent call starts instantly.
-          </Callout>
-        </div>
-      </Reveal>
     </SlideContainer>
   );
 };
 
-export const Ch4_S1_GetStarted = defineSlide({
+export const Ch4_S1_AgentMeetsSource = defineSlide({
   metadata: {
     chapter: 4,
     slide: 1,
-    title: 'Two Minutes to Start Debugging',
+    title: 'Agent Meets Source Code',
     audioSegments: [
       {
         id: 0,
         narrationText:
-          "Getting started takes about two minutes. Step one: install the plugin. Run slash plugin install devui-agent at ai-developer-toolkit. The server auto-builds on first use — about thirty seconds, then instant.",
+          "What if the agent could read both telemetry and source code? Add the Sydney repo to the workspace alongside Dev-UI MCP, and the agent has access to both diagnostic data and the actual implementation.",
       },
       {
         id: 1,
         narrationText:
-          "Step two: authentication. On your first tool call, a WebView2 window opens for Azure AD login. Tokens are cached, so you authenticate once.",
+          "Closed-loop debugging: the agent finds a bug via the symptom report, traces the service call, opens the source file, and identifies the root cause — all in one conversation.",
       },
       {
         id: 2,
         narrationText:
-          "That's it. You're ready. Just ask your agent to debug a conversation and the Dev-UI debugger agent handles the rest. No config files, no environment variables.",
+          "From symptom report to source code fix — in one conversation. No context switching, no copy-pasting between tools.",
       },
     ],
   },
-  component: GetStartedComponent,
+  component: AgentMeetsSourceComponent,
+});
+
+// ─── Ch4_S2: SEVAL at Scale ───────────────────────────────────────────
+
+const PHASE_MAP_SEVAL: Record<number, number> = {
+  0: 0,  // prompt only
+  1: 1,  // cards stagger in
+  2: 2,  // sort + highlight worst
+};
+
+const SevalAtScaleComponent: React.FC = () => {
+  const theme = useTheme();
+  const { currentSegmentIndex } = useSegmentedAnimation();
+  const phase = PHASE_MAP_SEVAL[currentSegmentIndex] ?? 0;
+
+  return (
+    <SlideContainer maxWidth={700}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, height: '100%' }}>
+        <Reveal from={0} animation={fadeUp}>
+          <h2
+            style={{
+              color: theme.colors.textPrimary,
+              fontSize: 28,
+              fontWeight: 700,
+              textAlign: 'center',
+              margin: 0,
+            }}
+          >
+            SEVAL at Scale
+          </h2>
+          <p style={{
+            textAlign: 'center',
+            fontSize: 15,
+            color: theme.colors.textSecondary,
+            margin: '6px 0 0',
+          }}>
+            SEVAL MCP + DevUI MCP = automated triage
+          </p>
+        </Reveal>
+
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', minHeight: 0 }}>
+          <ConversationTriagePipeline activePhase={phase} />
+        </div>
+
+        <Reveal from={2} animation={fadeUp}>
+          <Callout variant="info" style={{ color: theme.colors.textPrimary }}>
+            <strong>Two MCP servers, one conversation</strong> &mdash; from SEVAL job to root cause diagnosis.
+          </Callout>
+        </Reveal>
+      </div>
+    </SlideContainer>
+  );
+};
+
+export const Ch4_S2_SevalAtScale = defineSlide({
+  metadata: {
+    chapter: 4,
+    slide: 2,
+    title: 'SEVAL at Scale',
+    audioSegments: [
+      {
+        id: 0,
+        narrationText:
+          "SEVAL scrapes produce hundreds of conversations. Instead of triaging manually, just ask: get the worst conversation from my latest SEVAL and debug what went wrong.",
+      },
+      {
+        id: 1,
+        narrationText:
+          "SEVAL MCP surfaces the failing conversations and ranks them by score. The agent picks up the results and can start debugging immediately.",
+      },
+      {
+        id: 2,
+        narrationText:
+          "Two MCP servers, one conversation — from SEVAL job to root cause diagnosis. Dev-UI MCP picks up the worst conversation and debugs it automatically.",
+      },
+    ],
+  },
+  component: SevalAtScaleComponent,
 });

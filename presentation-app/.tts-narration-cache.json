@@ -676,32 +676,32 @@
       "generatedAt": "2026-02-28T22:27:05.134Z"
     },
     "c4/s1_segment_00.wav": {
-      "narrationText": "Getting started takes about two minutes. Step one: install the plugin. Run slash plugin install devui-agent at ai-developer-toolkit. The server auto-builds on first use — about thirty seconds, then instant.",
-      "generatedAt": "2026-02-28T02:39:39.800Z"
+      "narrationText": "What if the agent could read both telemetry and source code? Add the Sydney repo to the workspace alongside Dev-UI MCP, and the agent has access to both diagnostic data and the actual implementation.",
+      "generatedAt": "2026-03-01T01:57:36.280Z"
     },
     "c4/s1_segment_01.wav": {
-      "narrationText": "Step two: authentication. On your first tool call, a WebView2 window opens for Azure AD login. Tokens are cached, so you authenticate once.",
-      "generatedAt": "2026-02-28T02:39:39.801Z"
+      "narrationText": "Closed-loop debugging: the agent finds a bug via the symptom report, traces the service call, opens the source file, and identifies the root cause — all in one conversation.",
+      "generatedAt": "2026-03-01T01:57:36.282Z"
     },
     "c4/s1_segment_02.wav": {
-      "narrationText": "That's it. You're ready. Just ask your agent to debug a conversation and the Dev-UI debugger agent handles the rest. No config files, no environment variables.",
-      "generatedAt": "2026-02-28T21:36:43.282Z"
+      "narrationText": "From symptom report to source code fix — in one conversation. No context switching, no copy-pasting between tools.",
+      "generatedAt": "2026-03-01T01:57:36.284Z"
     },
     "c5/s1_segment_00.wav": {
-      "narrationText": "Let's look at the impact. Before: manually searching through telemetry in the Dev-UI portal, browser lag on every tab switch, reading raw JSON to find root causes. After: the agent reads and interprets everything for you in seconds.",
-      "generatedAt": "2026-02-28T20:20:22.980Z"
+      "narrationText": "Getting started takes two minutes. Step one: register the marketplace. Run slash plugin marketplace add gim-home slash ai-developer-toolkit. This is a one-time setup.",
+      "generatedAt": "2026-03-01T01:57:36.295Z"
     },
     "c5/s1_segment_01.wav": {
-      "narrationText": "What used to take fifteen to twenty minutes of manual navigation now takes a single natural-language request. The agent chains operations that would take multiple manual steps.",
-      "generatedAt": "2026-02-28T02:43:57.559Z"
+      "narrationText": "Step two: choose your plugin. devui-agent scopes all tools to a specialized debugger agent — best for structured workflows. devui-tools exposes everything directly to your main agent — best for power users who want full control.",
+      "generatedAt": "2026-03-01T01:57:36.297Z"
     },
     "c5/s1_segment_02.wav": {
-      "narrationText": "We cover the most-used Dev-UI surfaces today. Coming next: Prompt Explain, where the agent annotates forty-kilobyte prompts for you, and a Latency Waterfall for visual analysis across the service call tree.",
-      "generatedAt": "2026-03-01T00:01:29.730Z"
+      "narrationText": "Step three: authenticate. On your first tool call, a WebView2 window opens for Azure AD login. Tokens are cached, so you only authenticate once.",
+      "generatedAt": "2026-03-01T01:57:36.299Z"
     },
     "c5/s1_segment_03.wav": {
-      "narrationText": "Twenty-two tools. Three skills. One agent.",
-      "generatedAt": "2026-03-01T01:07:58.470Z"
+      "narrationText": "That's it — you're ready. Just ask your agent to debug a conversation and start working. No config files, no environment variables.",
+      "generatedAt": "2026-03-01T01:57:36.301Z"
     },
     "c2/s2_segment_03.wav": {
       "narrationText": "Telemetry auto-loaded: true. Forty-seven entries loaded and ready. No separate 'load conversation' tool call needed.",
@@ -710,6 +710,18 @@
     "c2/s2_segment_04.wav": {
       "narrationText": "All four drill-down tools are immediately available. Get the symptom report, inspect the execution flow tree, search telemetry by any criteria, or drill into the full detail of any specific entry. Zero extra setup.",
       "generatedAt": "2026-02-28T02:39:39.790Z"
+    },
+    "c4/s2_segment_00.wav": {
+      "narrationText": "SEVAL scrapes produce hundreds of conversations. Instead of triaging manually, just ask: get the worst conversation from my latest SEVAL and debug what went wrong.",
+      "generatedAt": "2026-03-01T01:57:36.287Z"
+    },
+    "c4/s2_segment_01.wav": {
+      "narrationText": "SEVAL MCP surfaces the failing conversations and ranks them by score. The agent picks up the results and can start debugging immediately.",
+      "generatedAt": "2026-03-01T01:57:36.289Z"
+    },
+    "c4/s2_segment_02.wav": {
+      "narrationText": "Two MCP servers, one conversation — from SEVAL job to root cause diagnosis. Dev-UI MCP picks up the worst conversation and debugs it automatically.",
+      "generatedAt": "2026-03-01T01:57:36.292Z"
     }
   }
 }

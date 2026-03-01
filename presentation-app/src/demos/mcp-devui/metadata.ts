@@ -2,7 +2,7 @@
  * MCP DevUI Demo Metadata
  *
  * Presents the MCP DevUI debugging toolset for Sydney/Copilot conversations:
- * 23 tools in 5 categories, wrapped by a devui-debugger agent with 5 guided skills.
+ * 22 tools in 5 categories, wrapped by a devui-debugger agent with 3 guided skills.
  */
 
 import type { DemoMetadata } from '@framework';
@@ -15,12 +15,12 @@ export const metadata: DemoMetadata = {
   tags: ['mcp', 'devui', 'debugging', 'copilot', 'tooling', 'technical'],
 
   durationInfo: {
-    audioOnly: 330.96,
-    segmentDelays: 22,
-    slideDelays: 21,
+    audioOnly: 405.76,
+    segmentDelays: 34.5,
+    slideDelays: 27,
     finalDelay: 5,
     startSilence: 3,
-    total: 381.96,
+    total: 475.26,
     slideBreakdown: [
       { slideIndex: 1, slideTitle: 'MCP DevUI', chapterIndex: 0, totalDuration: 16.42, audioDuration: 11.92, delaysDuration: 4.5, segments: [{ segmentIndex: 0, audioDuration: 4.96, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 6.96, delayAfter: 3 }] },
       { slideIndex: 2, slideTitle: 'The Debugging Problem', chapterIndex: 0, totalDuration: 43.12, audioDuration: 37.12, delaysDuration: 6, segments: [{ segmentIndex: 0, audioDuration: 12.08, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 12.4, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 12.64, delayAfter: 3 }] },
@@ -29,7 +29,9 @@ export const metadata: DemoMetadata = {
       { slideIndex: 2, slideTitle: 'Send and Debug Live', chapterIndex: 2, totalDuration: 63.88, audioDuration: 54.88, delaysDuration: 9, segments: [{ segmentIndex: 0, audioDuration: 10.56, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 13.28, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 8.24, delayAfter: 1.5 }, { segmentIndex: 3, audioDuration: 8.16, delayAfter: 1.5 }, { segmentIndex: 4, audioDuration: 14.64, delayAfter: 3 }] },
       { slideIndex: 3, slideTitle: 'Setup Config', chapterIndex: 2, totalDuration: 47.36, audioDuration: 41.36, delaysDuration: 6, segments: [{ segmentIndex: 0, audioDuration: 13.76, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 13.28, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 14.32, delayAfter: 3 }] },
       { slideIndex: 1, slideTitle: '22 Tools at Your Fingertips', chapterIndex: 3, totalDuration: 45.2, audioDuration: 39.2, delaysDuration: 6, segments: [{ segmentIndex: 0, audioDuration: 13.6, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 15.52, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 10.08, delayAfter: 3 }] },
-      { slideIndex: 1, slideTitle: 'Two Minutes to Start Debugging', chapterIndex: 4, totalDuration: 41.84, audioDuration: 35.84, delaysDuration: 6, segments: [{ segmentIndex: 0, audioDuration: 14.56, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 10.08, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 11.2, delayAfter: 3 }] },
+      { slideIndex: 1, slideTitle: 'Agent Meets Source Code', chapterIndex: 4, totalDuration: 38.48, audioDuration: 32.48, delaysDuration: 6, segments: [{ segmentIndex: 0, audioDuration: 13.44, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 11.04, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 8, delayAfter: 3 }] },
+      { slideIndex: 2, slideTitle: 'SEVAL at Scale', chapterIndex: 4, totalDuration: 38.08, audioDuration: 32.08, delaysDuration: 6, segments: [{ segmentIndex: 0, audioDuration: 10.08, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 8.48, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 13.52, delayAfter: 3 }] },
+      { slideIndex: 1, slideTitle: 'Two Minutes to Start Debugging', chapterIndex: 5, totalDuration: 55.58, audioDuration: 46.08, delaysDuration: 9.5, segments: [{ segmentIndex: 0, audioDuration: 12.32, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 15.28, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 10.08, delayAfter: 1.5 }, { segmentIndex: 3, audioDuration: 8.4, delayAfter: 5 }] },
     ]
   }
 };
