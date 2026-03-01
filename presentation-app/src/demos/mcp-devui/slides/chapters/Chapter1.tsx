@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import {
   useReducedMotion,
   useTheme,
-  useSegmentedAnimation,
   defineSlide,
   SlideContainer,
   SlideTitle,
@@ -88,13 +87,12 @@ const MarkerBadge: React.FC<{
 };
 
 /** "3 Guided Skills" header — always in DOM, fades in at marker. */
-const MarkerHeader: React.FC<{ markerId: string; reduced: boolean; enabled: boolean }> = ({ markerId, reduced, enabled }) => {
+const MarkerHeader: React.FC<{ markerId: string; reduced: boolean }> = ({ markerId, reduced }) => {
   const { reached } = useMarker(markerId);
-  const show = enabled && reached;
 
   return (
     <motion.div
-      animate={{ opacity: show ? 1 : 0 }}
+      animate={{ opacity: reached ? 1 : 0 }}
       transition={reduced ? { duration: 0 } : { duration: 0.4 }}
       style={{
         opacity: 0,
@@ -118,14 +116,12 @@ const MarkerSkillCard: React.FC<{
   skill: typeof SKILLS[number];
   theme: ReturnType<typeof useTheme>;
   reduced: boolean;
-  enabled: boolean;
-}> = ({ skill, theme, reduced, enabled }) => {
+}> = ({ skill, theme, reduced }) => {
   const { reached } = useMarker(skill.markerId);
-  const show = enabled && reached;
 
   return (
     <motion.div
-      animate={{ opacity: show ? 1 : 0, y: show ? 0 : 12 }}
+      animate={{ opacity: reached ? 1 : 0, y: reached ? 0 : 12 }}
       transition={reduced ? { duration: 0 } : { duration: 0.4, ease: 'easeOut' }}
       style={{ opacity: 0 }}
     >
@@ -162,8 +158,6 @@ const MarkerSkillCard: React.FC<{
 const SolutionOverviewComponent: React.FC = () => {
   const theme = useTheme();
   const { reduced } = useReducedMotion();
-  const { currentSegmentIndex } = useSegmentedAnimation();
-  const showAgentSkills = currentSegmentIndex >= 2;
 
   return (
     <SlideContainer maxWidth={900}>
@@ -215,12 +209,8 @@ const SolutionOverviewComponent: React.FC = () => {
         </div>
       </Reveal>
 
-      {/* Agent + Skills section — always in DOM to avoid layout shift */}
-      <motion.div
-        animate={{ opacity: showAgentSkills ? 1 : 0 }}
-        transition={{ duration: reduced ? 0 : 0.5 }}
-        style={{ opacity: 0, pointerEvents: showAgentSkills ? 'auto' : 'none' }}
-      >
+      {/* Agent + Skills section — keepInDOM avoids layout shift */}
+      <Reveal from={2} keepInDOM>
         {/* Agent card */}
         <div style={{
           marginTop: '1.5rem',
@@ -270,17 +260,17 @@ const SolutionOverviewComponent: React.FC = () => {
         </div>
 
         {/* Skills — always in DOM, opacity driven by markers */}
-        <MarkerHeader markerId="sk-debug" reduced={reduced} enabled={showAgentSkills} />
+        <MarkerHeader markerId="sk-debug" reduced={reduced} />
         <div style={{
           display: 'flex',
           justifyContent: 'center',
           gap: '0.75rem',
         }}>
           {SKILLS.map((skill) => (
-            <MarkerSkillCard key={skill.markerId} skill={skill} theme={theme} reduced={reduced} enabled={showAgentSkills} />
+            <MarkerSkillCard key={skill.markerId} skill={skill} theme={theme} reduced={reduced} />
           ))}
         </div>
-      </motion.div>
+      </Reveal>
     </SlideContainer>
   );
 };

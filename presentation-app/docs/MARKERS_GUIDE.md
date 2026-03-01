@@ -144,13 +144,21 @@ const { words, currentWordIndex, currentWord } = useWordHighlight();
 
 ## Graceful Degradation
 
-When `alignment.json` is missing (e.g., markers haven't been aligned yet):
+Two fallback paths depending on context:
 
-- `<RevealAtMarker>` renders children **immediately** (visible without sync)
-- `useMarker()` returns `{ time: null, reached: true }`
+**No AudioTimeContext** (manual mode, no narration):
+- `useMarker()` returns `{ time: null, reached: true }` — content is immediately visible
 - `useMarkerRange()` returns `{ within: true, progress: 0 }`
+- `<RevealAtMarker>` renders children immediately
 
-This means slides with markers work correctly even before alignment data exists — content just appears without waiting for the narrator.
+**Context exists but markers not found** (alignment not loaded yet, between segment transitions):
+- `useMarker()` returns `{ time: null, reached: false }` — content stays hidden until alignment confirms
+- `useMarkerRange()` returns `{ within: false, progress: 0 }`
+- `<RevealAtMarker>` keeps children hidden until alignment loads
+
+This prevents flash-of-content during segment transitions while still showing content in manual/non-narrated modes.
+
+**Overriding the default:** Pass `{ defaultReached: true }` to `useMarker()` or `{ defaultWithin: true }` to `useMarkerRange()` to restore the old behavior for specific callers (e.g., in-DOM opacity animations that should be visible while alignment loads).
 
 ## End-to-End Example
 

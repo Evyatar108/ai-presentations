@@ -40,7 +40,14 @@ interface RevealBaseProps {
 /**
  * Props for the `<Reveal>` component.
  */
-export type RevealProps = RevealBaseProps & RevealVisibilityProps;
+export type RevealProps = RevealBaseProps & RevealVisibilityProps & {
+  /**
+   * When true, the element stays in the DOM at all times (no AnimatePresence mount/unmount).
+   * Animates between `visible`/`hidden` variants and disables pointer events when hidden.
+   * Use this to avoid layout shifts when revealing content alongside marker-driven sub-animations.
+   */
+  keepInDOM?: boolean;
+};
 
 /**
  * Props for the `<RevealGroup>` component.

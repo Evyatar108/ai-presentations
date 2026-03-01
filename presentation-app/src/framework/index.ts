@@ -190,7 +190,7 @@ export { useFocusTrap } from './hooks/useFocusTrap';
 export { useAudioTime } from './hooks/useAudioTime';
 export type { AudioTimeState } from './hooks/useAudioTime';
 export { useMarker, useMarkerRange } from './hooks/useMarker';
-export type { MarkerState, MarkerRangeState } from './hooks/useMarker';
+export type { MarkerState, MarkerRangeState, UseMarkerOptions, UseMarkerRangeOptions } from './hooks/useMarker';
 export { useWordHighlight } from './hooks/useWordHighlight';
 export type { WordHighlightState } from './hooks/useWordHighlight';
 export { useLocalStorage } from './hooks/useLocalStorage';

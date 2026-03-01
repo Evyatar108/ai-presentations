@@ -81,7 +81,7 @@ import { RevealAtMarker, fadeUp } from '@framework';
 </RevealAtMarker>
 ```
 
-**Graceful degradation:** When `alignment.json` is missing (markers not yet aligned), children render immediately without waiting for audio timestamps.
+**Graceful degradation:** When no AudioTimeContext exists (manual mode), children render immediately. When context exists but alignment data hasn't loaded yet, children stay **hidden** until alignment confirms the marker — preventing flash-of-content during segment transitions.
 
 **Tips:** Use `at` for content that should stay visible once introduced. Use `from`/`until` for temporary highlights or callouts. Combine with segment-based `<Reveal>` on the same slide for mixed granularity.
 
@@ -123,7 +123,7 @@ import { MarkerDim } from '@framework';
 </MarkerDim>
 ```
 
-**Graceful degradation:** When alignment data is missing, content renders at full opacity (markers default to `reached: true`).
+**Graceful degradation:** When no AudioTimeContext exists (manual mode), content renders at full opacity. When context exists but alignment hasn't loaded, content starts dimmed (markers default to `reached: false`) and reveals once alignment confirms.
 
 **Tips:** This is the #1 replacement for the common `useMarker()` + `opacity` boilerplate. Use `at` for progressive "light-up" reveals. Use `notAt` on BeforeAfterSplit sides to dim one side when the other is focused. Nest inside `<Reveal>` for combined segment + marker control.
 

@@ -28,6 +28,12 @@ type RevealAtMarkerVisibilityProps =
 interface RevealAtMarkerBaseProps {
   animation?: RevealAnimation;
   exitAnimation?: RevealAnimation;
+  /**
+   * When true, the element stays in the DOM at all times (no AnimatePresence mount/unmount).
+   * Animates between `visible`/`hidden` variants and disables pointer events when hidden.
+   * Use this to avoid layout shifts when revealing marker-timed content.
+   */
+  keepInDOM?: boolean;
   as?: 'div' | 'span' | 'li' | 'section' | 'article' | 'p';
   className?: string;
   style?: CSSProperties;
@@ -43,7 +49,9 @@ type RevealAtMarkerProps = RevealAtMarkerBaseProps & RevealAtMarkerVisibilityPro
  *   - `at="X"` — Progressive: visible once audio reaches marker X (stays visible)
  *   - `from="X" until="Y"` — Bounded: visible while audio is between markers X and Y
  *
- * Graceful degradation: when alignment data is missing, children are immediately visible.
+ * Graceful degradation: when alignment data is missing (AudioTimeContext exists but markers
+ * not yet loaded), children stay **hidden** until alignment confirms the marker. When no
+ * AudioTimeContext exists at all (manual mode, no narration), children are immediately visible.
  *
  * @example
  * ```tsx
@@ -59,7 +67,7 @@ type RevealAtMarkerProps = RevealAtMarkerBaseProps & RevealAtMarkerVisibilityPro
  * ```
  */
 export const RevealAtMarker: React.FC<RevealAtMarkerProps> = (props) => {
-  const { animation, exitAnimation, as = 'div', className, style, children } = props;
+  const { animation, exitAnimation, keepInDOM, as = 'div', className, style, children } = props;
   const { reduced } = useReducedMotion();
   const contextAnimation = useRevealAnimation();
   const MotionElement = motionElements[as];
@@ -81,6 +89,21 @@ export const RevealAtMarker: React.FC<RevealAtMarkerProps> = (props) => {
     }
     return (variants.exit ?? variants.hidden ?? { opacity: 0 }) as TargetAndTransition;
   }, [exitAnimation, variants, reduced]);
+
+  // keepInDOM: always render, animate between visible/hidden, no AnimatePresence.
+  if (keepInDOM) {
+    return (
+      <MotionElement
+        variants={variants}
+        initial="hidden"
+        animate={visible ? 'visible' : 'hidden'}
+        className={className}
+        style={{ ...style, pointerEvents: visible ? 'auto' : 'none' }}
+      >
+        {children}
+      </MotionElement>
+    );
+  }
 
   return (
     <AnimatePresence>

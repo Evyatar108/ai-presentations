@@ -8,34 +8,53 @@ export interface MarkerState {
   reached: boolean;
 }
 
+export interface UseMarkerOptions {
+  /**
+   * Value for `reached` when AudioTimeContext exists but the marker is not
+   * found in alignment data (e.g., alignment not loaded yet, between segment
+   * transitions). Default: `false`.
+   *
+   * Set to `true` for in-DOM components (opacity/dimming) where you want
+   * content visible while alignment loads. Leave as `false` for mount/unmount
+   * components (RevealAtMarker) to avoid flash-of-content.
+   */
+  defaultReached?: boolean;
+}
+
 /**
  * Hook to check whether a single marker has been reached during audio playback.
  * Progressive: once reached, stays true for the remainder of the segment.
  *
- * Degrades gracefully: when no alignment data exists, `reached` defaults to true
- * (content is immediately visible without sync).
+ * Graceful degradation:
+ * - No AudioTimeContext (manual mode, no narration): `reached` defaults to `true`
+ *   so content is immediately visible.
+ * - Context exists but marker not found (alignment not loaded, between segment
+ *   transitions): `reached` defaults to `options.defaultReached` (default `false`) —
+ *   content stays hidden until alignment confirms the marker timestamp.
  */
-export function useMarker(id: string): MarkerState {
+export function useMarker(id: string, options?: UseMarkerOptions): MarkerState {
   const ctx = useAudioTimeContextOptional();
+  const defaultReached = options?.defaultReached ?? false;
 
   const currentTime = ctx?.currentTime ?? 0;
 
   return useMemo(() => {
+    // No AudioTimeContext at all → manual mode / no narration → show content
     if (!ctx) {
       return { time: null, reached: true };
     }
 
     const time = ctx.getMarkerTime(id);
     if (time === null) {
-      // Marker not found in alignment data — degrade gracefully
-      return { time: null, reached: true };
+      // Context exists but marker not resolved yet
+      return { time: null, reached: defaultReached };
     }
 
     return {
       time,
       reached: currentTime >= time,
     };
-  }, [ctx, id, currentTime]);
+  }, [ctx, id, currentTime, defaultReached]);
 }
 
 export interface MarkerRangeState {
@@ -47,18 +66,31 @@ export interface MarkerRangeState {
   untilTime: number | null;
 }
 
+export interface UseMarkerRangeOptions {
+  /**
+   * Value for `within` when AudioTimeContext exists but markers are not found
+   * in alignment data. Default: `false`.
+   */
+  defaultWithin?: boolean;
+}
+
 /**
  * Hook to check whether the current audio time is within a range
  * defined by two markers.
  *
- * Degrades gracefully: when markers are missing, `within` defaults to true
- * and `progress` is 0.
+ * Graceful degradation:
+ * - No AudioTimeContext (manual mode): `within` defaults to `true`.
+ * - Context exists but markers not found: `within` defaults to
+ *   `options.defaultWithin` (default `false`) — content stays hidden
+ *   until alignment loads.
  */
-export function useMarkerRange(fromId: string, untilId: string): MarkerRangeState {
+export function useMarkerRange(fromId: string, untilId: string, options?: UseMarkerRangeOptions): MarkerRangeState {
   const ctx = useAudioTimeContextOptional();
+  const defaultWithin = options?.defaultWithin ?? false;
   const currentTime = ctx?.currentTime ?? 0;
 
   return useMemo(() => {
+    // No AudioTimeContext at all → manual mode / no narration → show content
     if (!ctx) {
       return { within: true, progress: 0, fromTime: null, untilTime: null };
     }
@@ -67,7 +99,8 @@ export function useMarkerRange(fromId: string, untilId: string): MarkerRangeStat
     const untilTime = ctx.getMarkerTime(untilId);
 
     if (fromTime === null || untilTime === null) {
-      return { within: true, progress: 0, fromTime, untilTime };
+      // Context exists but markers not resolved yet
+      return { within: defaultWithin, progress: 0, fromTime, untilTime };
     }
 
     const within = currentTime >= fromTime && currentTime < untilTime;
@@ -77,5 +110,5 @@ export function useMarkerRange(fromId: string, untilId: string): MarkerRangeStat
       : 0;
 
     return { within, progress, fromTime, untilTime };
-  }, [ctx, fromId, untilId, currentTime]);
+  }, [ctx, fromId, untilId, currentTime, defaultWithin]);
 }

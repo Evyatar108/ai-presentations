@@ -50,6 +50,7 @@ const motionElements = {
 export const Reveal: React.FC<RevealProps> = ({
   animation,
   exitAnimation,
+  keepInDOM,
   as = 'div',
   className,
   style,
@@ -125,6 +126,25 @@ export const Reveal: React.FC<RevealProps> = ({
       },
     };
   }, [sequence, variants]);
+
+  // ---------------------------------------------------------------------------
+  // keepInDOM: always render, animate between visible/hidden, no AnimatePresence.
+  // Avoids layout shifts from mount/unmount — useful alongside marker-driven
+  // sub-animations that need the container in the DOM at all times.
+  // ---------------------------------------------------------------------------
+  if (keepInDOM && !sequence) {
+    return (
+      <MotionElement
+        variants={variants}
+        initial="hidden"
+        animate={effectiveVisible ? 'visible' : 'hidden'}
+        className={className}
+        style={{ ...style, pointerEvents: effectiveVisible ? 'auto' : 'none' }}
+      >
+        {children}
+      </MotionElement>
+    );
+  }
 
   // ---------------------------------------------------------------------------
   // Inside a RevealSequence: don't use AnimatePresence.
