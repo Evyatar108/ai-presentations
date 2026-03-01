@@ -57,8 +57,8 @@ See [CONTEXT.md](./CONTEXT.md) for detailed domain knowledge about DevUI, Sydney
 The MCP server, agent, and skills live in a separate repo:
 - **Repo**: `D:\ai-developer-toolkit\`
 - **MCP Server**: `mcp-servers/servers/devui/` (C#)
-- **Agent**: `plugins/devui-agent/agents/devui-debugger.md`
-- **Skills**: `plugins/devui-agent/skills/` (3 skill folders)
+- **Agent**: `plugins/devui/agents/devui-debugger.md`
+- **Skills**: `plugins/devui/skills/` (3 skill folders)
 
 ## Extending This Demo
 

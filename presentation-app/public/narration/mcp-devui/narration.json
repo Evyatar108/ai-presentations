@@ -228,7 +228,7 @@
         },
         {
           "id": 1,
-          "narrationText": "Step two: choose your plugin. {#devui-agent}devui-agent gives you a specialized debugger sub-agent with all the tools scoped to it. {#devui-tools}devui-tools exposes the same tools and skills directly to any agent you're already using. Same capabilities, different scoping.",
+          "narrationText": "Step two: install the plugin. Run slash plugin install devui at ai-developer-toolkit. That gives you all twenty-two tools and three guided skills directly in your conversation.",
           "visualDescription": "",
           "notes": ""
         },

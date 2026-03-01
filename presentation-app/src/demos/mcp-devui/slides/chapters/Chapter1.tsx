@@ -253,7 +253,7 @@ const SolutionOverviewComponent: React.FC = () => {
                 color: theme.colors.textSecondary,
                 lineHeight: 1.4,
               }}>
-                Optional sub-agent — scopes all tools and skills into a dedicated debugging workflow
+                Optional sub-agent — bundles all tools and skills into a dedicated debugging workflow
               </div>
             </div>
           </div>

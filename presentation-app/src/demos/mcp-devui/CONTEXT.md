@@ -17,8 +17,8 @@ Key distinction: the tools themselves are **not AI-powered** — they return str
 ## Architecture
 
 - **MCP Server**: `mcp-servers/servers/devui/` — C# server exposing 22 tools
-- **Agent**: `plugins/devui-agent/agents/devui-debugger.md` — orchestrates tools via skills
-- **Skills**: `plugins/devui-agent/skills/` — 3 guided workflows that chain tools
+- **Agent**: `plugins/devui/agents/devui-debugger.md` — orchestrates tools via skills
+- **Skills**: `plugins/devui/skills/` — 3 guided workflows that chain tools
 - **Source**: `D:\ai-developer-toolkit\` (separate repo)
 
 ## Tool Categories (22 tools)
