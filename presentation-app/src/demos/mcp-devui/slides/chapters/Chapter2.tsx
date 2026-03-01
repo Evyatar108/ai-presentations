@@ -49,6 +49,10 @@ const ToolsUsed: React.FC<{ tools: string[]; theme: ReturnType<typeof useTheme> 
 
 const debugPhases = [
   {
+    type: 'user' as const,
+    text: 'Debug this conversation: 51D|BizChat_WebChat|a1b2c3d4...',
+  },
+  {
     type: 'input' as const,
     text: 'debug-conversation(conversationId="51D|BizChat_WebChat|a1b2c3d4...")',
   },
@@ -128,10 +132,10 @@ const DebugConversationComponent: React.FC = () => {
           <LiveTerminalSimulation
             phases={debugPhases}
             activePhase={
-              currentSegmentIndex === 0 ? 2 :
-              currentSegmentIndex === 1 ? 5 :
-              currentSegmentIndex === 2 ? 7 :
-              currentSegmentIndex >= 3 ? 8 :
+              currentSegmentIndex === 0 ? 3 :
+              currentSegmentIndex === 1 ? 6 :
+              currentSegmentIndex === 2 ? 8 :
+              currentSegmentIndex >= 3 ? 9 :
               0
             }
           />
@@ -182,6 +186,10 @@ export const Ch2_S1_DebugConversation = defineSlide({
 // ─── Ch2_S2: Send and Debug ─────────────────────────────────────
 
 const sendDebugPhases = [
+  {
+    type: 'user' as const,
+    text: 'Send "What files were shared in my last meeting?" to the sdf-debug config and debug the response',
+  },
   {
     type: 'input' as const,
     text: 'send_chat_request(configId="sdf-debug", message="What files were shared in my last meeting?")',
@@ -258,10 +266,10 @@ const SendAndDebugComponent: React.FC = () => {
           <LiveTerminalSimulation
             phases={sendDebugPhases}
             activePhase={
-              currentSegmentIndex === 0 ? 0 :
-              currentSegmentIndex === 1 ? 4 :
-              currentSegmentIndex === 2 ? 5 :
-              currentSegmentIndex >= 3 ? 6 :
+              currentSegmentIndex === 0 ? 1 :
+              currentSegmentIndex === 1 ? 5 :
+              currentSegmentIndex === 2 ? 6 :
+              currentSegmentIndex >= 3 ? 7 :
               0
             }
           />

@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useReducedMotion } from '@framework';
 
 export interface TerminalPhase {
-  type: 'input' | 'output';
+  type: 'input' | 'output' | 'user';
   text: string;
   color?: string;
   prefix?: string;
@@ -44,6 +44,31 @@ const TitleBar: React.FC = () => (
 );
 
 const PhaseRow: React.FC<{ phase: TerminalPhase; reduced: boolean }> = ({ phase, reduced }) => {
+  if (phase.type === 'user') {
+    return (
+      <motion.div
+        initial={reduced ? { opacity: 1 } : { opacity: 0, y: 6 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.25 }}
+        style={{
+          fontFamily: FONT_FAMILY,
+          fontSize: 13,
+          lineHeight: '22px',
+          whiteSpace: 'pre-wrap',
+          wordBreak: 'break-word',
+          background: 'rgba(139, 92, 246, 0.08)',
+          border: '1px solid rgba(139, 92, 246, 0.2)',
+          borderRadius: 8,
+          padding: '8px 12px',
+          margin: '4px 0',
+        }}
+      >
+        <span style={{ color: '#a78bfa', fontWeight: 600, fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.04em' }}>You </span>
+        <span style={{ color: '#e2e8f0', fontStyle: 'italic' }}>{phase.text}</span>
+      </motion.div>
+    );
+  }
+
   if (phase.type === 'input') {
     return (
       <motion.div

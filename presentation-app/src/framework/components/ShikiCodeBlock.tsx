@@ -16,6 +16,8 @@ export interface ShikiCodeBlockProps {
   fontSize?: number;
   /** Color theme for syntax tokens. Default: 'one-dark-pro' */
   colorTheme?: ShikiColorTheme;
+  /** Show line numbers in the gutter. Default: true */
+  showLineNumbers?: boolean;
 }
 
 // Module-level singleton for the shiki highlighter
@@ -176,6 +178,7 @@ export const ShikiCodeBlock: React.FC<ShikiCodeBlockProps> = ({
   title,
   fontSize = 13,
   colorTheme = 'one-dark-pro',
+  showLineNumbers = true,
 }) => {
   const theme = useTheme();
   const { reduced } = useReducedMotion();
@@ -249,20 +252,22 @@ export const ShikiCodeBlock: React.FC<ShikiCodeBlockProps> = ({
                 padding: '0 1rem',
               }}
             >
-              <span
-                style={{
-                  display: 'inline-block',
-                  width: '2.5em',
-                  textAlign: 'right',
-                  marginRight: '1em',
-                  color: theme.colors.textMuted,
-                  userSelect: 'none',
-                  flexShrink: 0,
-                  fontSize: fontSize - 1,
-                }}
-              >
-                {lineNum}
-              </span>
+              {showLineNumbers && (
+                <span
+                  style={{
+                    display: 'inline-block',
+                    width: '2.5em',
+                    textAlign: 'right',
+                    marginRight: '1em',
+                    color: theme.colors.textMuted,
+                    userSelect: 'none',
+                    flexShrink: 0,
+                    fontSize: fontSize - 1,
+                  }}
+                >
+                  {lineNum}
+                </span>
+              )}
               <span style={{ flex: 1 }}>
                 {tokenLine
                   ? tokenLine.map((token, j) => (
