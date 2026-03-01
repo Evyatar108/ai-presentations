@@ -88,7 +88,7 @@ export const Ch4_S1_AgentMeetsSource = defineSlide({
       {
         id: 2,
         narrationText:
-          "From symptom report to source code fix — in one conversation. No context switching, no copy-pasting between tools.",
+          "From symptom report to source code fix — in one conversation. And once the fix is in, the agent can rerun the service, query it again, and debug the new response to verify. No context switching, no copy-pasting between tools.",
       },
     ],
   },
@@ -161,12 +161,12 @@ export const Ch4_S2_SevalAtScale = defineSlide({
       {
         id: 1,
         narrationText:
-          "SEVAL MCP surfaces the failing conversations and ranks them by score. The agent picks up the results and can start debugging immediately.",
+          "SEVAL produces metrics — both aggregated and per query — plus LM Checklist results: code-based and LLM-based assertions that check each query for regressions. Through the SEVAL MCP, the agent can access all of that, identify the worst-performing conversations, and start debugging them with the Dev-UI MCP.",
       },
       {
         id: 2,
         narrationText:
-          "Two MCP servers, one conversation — from SEVAL job to root cause diagnosis. Dev-UI MCP picks up the worst conversation and debugs it automatically.",
+          "Two MCP servers, one conversation. The SEVAL MCP gives the agent access to metrics and checklist results, the Dev-UI MCP lets it load and debug those conversations — from regression detection to root cause diagnosis, all in one session.",
       },
     ],
   },

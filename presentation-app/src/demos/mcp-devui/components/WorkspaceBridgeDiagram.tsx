@@ -187,6 +187,7 @@ export const WorkspaceBridgeDiagram: React.FC<WorkspaceBridgeDiagramProps> = ({ 
         transition={{ duration: 0.5 }}
         style={{
           ...panelBase,
+          textAlign: 'left',
           background: 'rgba(34, 197, 94, 0.06)',
           border: `1.5px solid ${fullGlow ? '#22c55e' : 'rgba(34, 197, 94, 0.3)'}`,
           boxShadow: fullGlow ? '0 0 20px rgba(34, 197, 94, 0.15)' : 'none',

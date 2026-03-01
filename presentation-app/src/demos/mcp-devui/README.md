@@ -22,11 +22,12 @@ Sydney/Copilot engineers who:
 
 | Chapter | Slides | Purpose |
 |---------|--------|---------|
-| 0 — The Black Box | Title + The Debugging Problem | Hook: show the pain of manual DevUI debugging |
+| 0 — The Problem | Title + The Debugging Problem | Hook: show the pain of manual DevUI debugging |
 | 1 — The Toolkit | 22 Tools, 3 Skills, 1 Agent | Overview: categories, skill names, agent architecture |
 | 2 — What You Can Do | Debug a Conversation, Send and Debug, Setup Config | Deep dive into each skill with tool usage breakdowns |
 | 3 — The Full Toolkit | 22 Tools at Your Fingertips | Visual tool map showing all categories |
-| 4 — Get Started | Two Minutes to Start Debugging | Installation and setup steps |
+| 4 — Going Further | Agent Meets Source Code, SEVAL at Scale | Vision: combining DevUI MCP with workspace source code and SEVAL MCP |
+| 5 — Get Started | Two Minutes to Start Debugging | Marketplace registration, plugin flavors, authentication, setup |
 
 ## Key Messaging
 
@@ -37,7 +38,7 @@ Sydney/Copilot engineers who:
 
 ## Duration
 
-~6 minutes narrated, 8 slides across 5 chapters.
+~8 minutes narrated, 10 slides across 6 chapters.
 
 ## Narration Conventions
 
