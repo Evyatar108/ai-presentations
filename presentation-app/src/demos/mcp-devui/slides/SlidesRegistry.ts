@@ -19,12 +19,9 @@ import { Ch3_S1_ToolMapOverview } from './chapters/Chapter3';
 // Chapter 4: Get Started
 import { Ch4_S1_GetStarted } from './chapters/Chapter4';
 
-// Chapter 5: Impact & What's Next
-import { Ch5_S1_ImpactAndNext } from './chapters/Chapter5';
-
 /**
  * Central registry of all slide components for the MCP DevUI demo.
- * 9 slides across 6 chapters.
+ * 8 slides across 5 chapters.
  */
 export const allSlides: SlideComponentWithMetadata[] = [
   Ch0_S1_Title,
@@ -35,5 +32,4 @@ export const allSlides: SlideComponentWithMetadata[] = [
   Ch2_S3_SetupConfig,
   Ch3_S1_ToolMapOverview,
   Ch4_S1_GetStarted,
-  Ch5_S1_ImpactAndNext,
 ];

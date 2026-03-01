@@ -15,12 +15,12 @@ export const metadata: DemoMetadata = {
   tags: ['mcp', 'devui', 'debugging', 'copilot', 'tooling', 'technical'],
 
   durationInfo: {
-    audioOnly: 373.52,
-    segmentDelays: 31.5,
-    slideDelays: 24,
+    audioOnly: 330.96,
+    segmentDelays: 22,
+    slideDelays: 21,
     finalDelay: 5,
     startSilence: 3,
-    total: 437.02,
+    total: 381.96,
     slideBreakdown: [
       { slideIndex: 1, slideTitle: 'MCP DevUI', chapterIndex: 0, totalDuration: 16.42, audioDuration: 11.92, delaysDuration: 4.5, segments: [{ segmentIndex: 0, audioDuration: 4.96, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 6.96, delayAfter: 3 }] },
       { slideIndex: 2, slideTitle: 'The Debugging Problem', chapterIndex: 0, totalDuration: 43.12, audioDuration: 37.12, delaysDuration: 6, segments: [{ segmentIndex: 0, audioDuration: 12.08, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 12.4, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 12.64, delayAfter: 3 }] },
@@ -30,7 +30,6 @@ export const metadata: DemoMetadata = {
       { slideIndex: 3, slideTitle: 'Setup Config', chapterIndex: 2, totalDuration: 47.36, audioDuration: 41.36, delaysDuration: 6, segments: [{ segmentIndex: 0, audioDuration: 13.76, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 13.28, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 14.32, delayAfter: 3 }] },
       { slideIndex: 1, slideTitle: '22 Tools at Your Fingertips', chapterIndex: 3, totalDuration: 45.2, audioDuration: 39.2, delaysDuration: 6, segments: [{ segmentIndex: 0, audioDuration: 13.6, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 15.52, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 10.08, delayAfter: 3 }] },
       { slideIndex: 1, slideTitle: 'Two Minutes to Start Debugging', chapterIndex: 4, totalDuration: 41.84, audioDuration: 35.84, delaysDuration: 6, segments: [{ segmentIndex: 0, audioDuration: 14.56, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 10.08, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 11.2, delayAfter: 3 }] },
-      { slideIndex: 1, slideTitle: 'Impact & What\'s Next', chapterIndex: 5, totalDuration: 52.06, audioDuration: 42.56, delaysDuration: 9.5, segments: [{ segmentIndex: 0, audioDuration: 14.88, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 10.96, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 14, delayAfter: 1.5 }, { segmentIndex: 3, audioDuration: 2.72, delayAfter: 5 }] },
     ]
   }
 };

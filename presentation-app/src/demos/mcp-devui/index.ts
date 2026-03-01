@@ -2,7 +2,7 @@
  * MCP DevUI Demo Configuration
  *
  * 23 AI-powered debugging tools for Copilot conversations.
- * Restructured for FHL: 11 slides, 6 chapters — workflow-focused.
+ * Restructured for FHL: 8 slides, 5 chapters — workflow-focused.
  */
 
 import type { DemoConfig, TimingConfig } from '@framework';
@@ -24,7 +24,6 @@ const demoConfig: DemoConfig = {
     2: { title: 'What You Can Do' },
     3: { title: 'The Full Toolkit' },
     4: { title: 'Get Started' },
-    5: { title: 'Impact & What\'s Next' },
   },
   getSlides: async () => {
     const { allSlides } = await import('./slides/SlidesRegistry');

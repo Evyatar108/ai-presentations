@@ -27,7 +27,6 @@ Sydney/Copilot engineers who:
 | 2 — What You Can Do | Debug a Conversation, Send and Debug, Setup Config | Deep dive into each skill with tool usage breakdowns |
 | 3 — The Full Toolkit | 22 Tools at Your Fingertips | Visual tool map showing all categories |
 | 4 — Get Started | Two Minutes to Start Debugging | Installation and setup steps |
-| 5 — Impact | Impact & What's Next | Before/after comparison, future roadmap |
 
 ## Key Messaging
 
@@ -38,7 +37,7 @@ Sydney/Copilot engineers who:
 
 ## Duration
 
-~7 minutes narrated, 9 slides across 6 chapters.
+~6 minutes narrated, 8 slides across 5 chapters.
 
 ## Narration Conventions
 
