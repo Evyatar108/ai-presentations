@@ -684,24 +684,8 @@
       "generatedAt": "2026-03-01T01:57:36.282Z"
     },
     "c4/s1_segment_02.wav": {
-      "narrationText": "From symptom report to source code fix — in one conversation. No context switching, no copy-pasting between tools.",
-      "generatedAt": "2026-03-01T01:57:36.284Z"
-    },
-    "c5/s1_segment_00.wav": {
-      "narrationText": "Getting started takes two minutes. Step one: register the marketplace. Run slash plugin marketplace add gim-home slash ai-developer-toolkit. This is a one-time setup.",
-      "generatedAt": "2026-03-01T01:57:36.295Z"
-    },
-    "c5/s1_segment_01.wav": {
-      "narrationText": "Step two: choose your plugin. devui-agent scopes all tools to a specialized debugger agent — best for structured workflows. devui-tools exposes everything directly to your main agent — best for power users who want full control.",
-      "generatedAt": "2026-03-01T01:57:36.297Z"
-    },
-    "c5/s1_segment_02.wav": {
-      "narrationText": "Step three: authenticate. On your first tool call, a WebView2 window opens for Azure AD login. Tokens are cached, so you only authenticate once.",
-      "generatedAt": "2026-03-01T01:57:36.299Z"
-    },
-    "c5/s1_segment_03.wav": {
-      "narrationText": "That's it — you're ready. Just ask your agent to debug a conversation and start working. No config files, no environment variables.",
-      "generatedAt": "2026-03-01T01:57:36.301Z"
+      "narrationText": "From symptom report to source code fix — in one conversation. And once the fix is in, the agent can rerun the service, query it again, and debug the new response to verify. No context switching, no copy-pasting between tools.",
+      "generatedAt": "2026-03-01T04:54:27.178Z"
     },
     "c2/s2_segment_03.wav": {
       "narrationText": "Telemetry auto-loaded: true. Forty-seven entries loaded and ready. No separate 'load conversation' tool call needed.",
@@ -710,18 +694,6 @@
     "c2/s2_segment_04.wav": {
       "narrationText": "All four drill-down tools are immediately available. Get the symptom report, inspect the execution flow tree, search telemetry by any criteria, or drill into the full detail of any specific entry. Zero extra setup.",
       "generatedAt": "2026-02-28T02:39:39.790Z"
-    },
-    "c4/s2_segment_00.wav": {
-      "narrationText": "SEVAL scrapes produce hundreds of conversations. Instead of triaging manually, just ask: get the worst conversation from my latest SEVAL and debug what went wrong.",
-      "generatedAt": "2026-03-01T01:57:36.287Z"
-    },
-    "c4/s2_segment_01.wav": {
-      "narrationText": "SEVAL MCP surfaces the failing conversations and ranks them by score. The agent picks up the results and can start debugging immediately.",
-      "generatedAt": "2026-03-01T01:57:36.289Z"
-    },
-    "c4/s2_segment_02.wav": {
-      "narrationText": "Two MCP servers, one conversation — from SEVAL job to root cause diagnosis. Dev-UI MCP picks up the worst conversation and debugs it automatically.",
-      "generatedAt": "2026-03-01T01:57:36.292Z"
     }
   }
 }

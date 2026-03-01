@@ -1,12 +1,12 @@
 {
   "mcp-devui": {
     "demoId": "mcp-devui",
-    "audioOnlyDuration": 405.76,
-    "segmentDelays": 34.5,
-    "slideDelays": 27,
+    "audioOnlyDuration": 334.72,
+    "segmentDelays": 30,
+    "slideDelays": 24,
     "finalDelay": 5,
     "startSilence": 3,
-    "totalDuration": 475.26,
+    "totalDuration": 396.72,
     "slideBreakdowns": [
       {
         "slideIndex": 1,
@@ -170,7 +170,7 @@
       },
       {
         "slideIndex": 1,
-        "slideTitle": "22 Tools at Your Fingertips",
+        "slideTitle": "Agent Meets Source Code",
         "chapterIndex": 3,
         "totalDuration": 45.199999999999996,
         "audioDuration": 39.199999999999996,
@@ -194,12 +194,37 @@
         ]
       },
       {
-        "slideIndex": 1,
-        "slideTitle": "Agent Meets Source Code",
-        "chapterIndex": 4,
-        "totalDuration": 38.48,
-        "audioDuration": 32.48,
+        "slideIndex": 2,
+        "slideTitle": "SEVAL at Scale",
+        "chapterIndex": 3,
+        "totalDuration": 6,
+        "audioDuration": 0,
         "delaysDuration": 6,
+        "segments": [
+          {
+            "segmentIndex": 0,
+            "audioDuration": 0,
+            "delayAfter": 1.5
+          },
+          {
+            "segmentIndex": 1,
+            "audioDuration": 0,
+            "delayAfter": 1.5
+          },
+          {
+            "segmentIndex": 2,
+            "audioDuration": 0,
+            "delayAfter": 3
+          }
+        ]
+      },
+      {
+        "slideIndex": 1,
+        "slideTitle": "Two Minutes to Start Debugging",
+        "chapterIndex": 4,
+        "totalDuration": 47.599999999999994,
+        "audioDuration": 39.599999999999994,
+        "delaysDuration": 8,
         "segments": [
           {
             "segmentIndex": 0,
@@ -213,70 +238,15 @@
           },
           {
             "segmentIndex": 2,
-            "audioDuration": 8,
-            "delayAfter": 3
-          }
-        ]
-      },
-      {
-        "slideIndex": 2,
-        "slideTitle": "SEVAL at Scale",
-        "chapterIndex": 4,
-        "totalDuration": 38.08,
-        "audioDuration": 32.08,
-        "delaysDuration": 6,
-        "segments": [
-          {
-            "segmentIndex": 0,
-            "audioDuration": 10.08,
-            "delayAfter": 1.5
-          },
-          {
-            "segmentIndex": 1,
-            "audioDuration": 8.48,
-            "delayAfter": 1.5
-          },
-          {
-            "segmentIndex": 2,
-            "audioDuration": 13.52,
-            "delayAfter": 3
-          }
-        ]
-      },
-      {
-        "slideIndex": 1,
-        "slideTitle": "Two Minutes to Start Debugging",
-        "chapterIndex": 5,
-        "totalDuration": 55.58,
-        "audioDuration": 46.08,
-        "delaysDuration": 9.5,
-        "segments": [
-          {
-            "segmentIndex": 0,
-            "audioDuration": 12.32,
-            "delayAfter": 1.5
-          },
-          {
-            "segmentIndex": 1,
-            "audioDuration": 15.28,
-            "delayAfter": 1.5
-          },
-          {
-            "segmentIndex": 2,
-            "audioDuration": 10.08,
-            "delayAfter": 1.5
-          },
-          {
-            "segmentIndex": 3,
-            "audioDuration": 8.4,
+            "audioDuration": 15.12,
             "delayAfter": 5
           }
         ]
       }
     ],
     "formattedDurations": {
-      "audioOnly": "6:45",
-      "total": "7:55"
+      "audioOnly": "5:34",
+      "total": "6:36"
     }
   }
 }
