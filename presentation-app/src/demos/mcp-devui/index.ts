@@ -2,7 +2,7 @@
  * MCP DevUI Demo Configuration
  *
  * 22 debugging tools for Copilot conversations.
- * 10 slides, 6 chapters — workflow-focused.
+ * 9 slides, 5 chapters — workflow-focused.
  */
 
 import type { DemoConfig, TimingConfig } from '@framework';
@@ -22,9 +22,8 @@ const demoConfig: DemoConfig = {
     0: { title: 'The Problem' },
     1: { title: 'The Toolkit' },
     2: { title: 'What You Can Do' },
-    3: { title: 'The Full Toolkit' },
-    4: { title: 'Going Further' },
-    5: { title: 'Get Started' },
+    3: { title: 'Going Further' },
+    4: { title: 'Get Started' },
   },
   getSlides: async () => {
     const { allSlides } = await import('./slides/SlidesRegistry');

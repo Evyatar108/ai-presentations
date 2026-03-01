@@ -5,63 +5,146 @@ import {
   useSegmentedAnimation,
   SlideContainer,
   Reveal,
+  Callout,
   fadeUp,
 } from '@framework';
-import { ToolCategoryMap } from '../../components/ToolCategoryMap';
+import { WorkspaceBridgeDiagram } from '../../components/WorkspaceBridgeDiagram';
+import { ConversationTriagePipeline } from '../../components/ConversationTriagePipeline';
 
 /**
- * Chapter 3: "The Full Toolkit"
- * Ch3_S1 — 22 Tools at Your Fingertips
+ * Chapter 3: "Going Further" (2 slides)
+ * Ch3_S1 — Agent Meets Source Code
+ * Ch3_S2 — SEVAL at Scale
  */
 
-const CATEGORY_SEQUENCE: Array<string | undefined> = [
-  undefined,   // segment 0: full map
-  'telemetry', // segment 1: highlight telemetry
-  undefined,   // segment 2: back to full view
-];
+// ─── Ch3_S1: Agent Meets Source Code ──────────────────────────────────
 
-const ToolMapOverviewComponent: React.FC = () => {
-  const { currentSegmentIndex } = useSegmentedAnimation();
+const PHASE_MAP_SOURCE: Record<number, number> = {
+  0: 1,  // both panels visible
+  1: 2,  // arrows animate
+  2: 3,  // full glow
+};
+
+const AgentMeetsSourceComponent: React.FC = () => {
   const theme = useTheme();
-  const activeCategory = CATEGORY_SEQUENCE[currentSegmentIndex];
+  const { currentSegmentIndex } = useSegmentedAnimation();
+  const phase = PHASE_MAP_SOURCE[currentSegmentIndex] ?? 0;
 
   return (
     <SlideContainer>
-      <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, height: '100%' }}>
         <Reveal from={0} animation={fadeUp}>
           <h2
             style={{
-              textAlign: 'center',
+              color: theme.colors.textPrimary,
               fontSize: 28,
               fontWeight: 700,
-              margin: '0 0 12px 0',
-              color: theme.colors.textPrimary,
+              textAlign: 'center',
+              margin: 0,
             }}
           >
-            22 Tools at Your Fingertips
+            Agent Meets Source Code
           </h2>
+          <p style={{
+            textAlign: 'center',
+            fontSize: 15,
+            color: theme.colors.textSecondary,
+            margin: '6px 0 0',
+          }}>
+            DevUI MCP + workspace source code = closed-loop debugging
+          </p>
         </Reveal>
-        <div style={{ flex: 1, minHeight: 0 }}>
-          <ToolCategoryMap
-            activeCategory={activeCategory}
-            showTools={true}
-          />
+
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', minHeight: 0 }}>
+          <WorkspaceBridgeDiagram activePhase={phase} />
         </div>
+
+        <Reveal from={2} animation={fadeUp}>
+          <Callout variant="tip" style={{ color: theme.colors.textPrimary }}>
+            <strong>From symptom report to source code fix</strong> &mdash; in one conversation.
+          </Callout>
+        </Reveal>
       </div>
     </SlideContainer>
   );
 };
 
-export const Ch3_S1_ToolMapOverview = defineSlide({
+export const Ch3_S1_AgentMeetsSource = defineSlide({
   metadata: {
     chapter: 3,
     slide: 1,
-    title: '22 Tools at Your Fingertips',
+    title: 'Agent Meets Source Code',
     audioSegments: [
       { id: 0 },
       { id: 1 },
       { id: 2 },
     ],
   },
-  component: ToolMapOverviewComponent,
+  component: AgentMeetsSourceComponent,
+});
+
+// ─── Ch3_S2: SEVAL at Scale ───────────────────────────────────────────
+
+const PHASE_MAP_SEVAL: Record<number, number> = {
+  0: 0,  // prompt only
+  1: 1,  // cards stagger in
+  2: 2,  // sort + highlight worst
+};
+
+const SevalAtScaleComponent: React.FC = () => {
+  const theme = useTheme();
+  const { currentSegmentIndex } = useSegmentedAnimation();
+  const phase = PHASE_MAP_SEVAL[currentSegmentIndex] ?? 0;
+
+  return (
+    <SlideContainer maxWidth={700}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, height: '100%' }}>
+        <Reveal from={0} animation={fadeUp}>
+          <h2
+            style={{
+              color: theme.colors.textPrimary,
+              fontSize: 28,
+              fontWeight: 700,
+              textAlign: 'center',
+              margin: 0,
+            }}
+          >
+            SEVAL at Scale
+          </h2>
+          <p style={{
+            textAlign: 'center',
+            fontSize: 15,
+            color: theme.colors.textSecondary,
+            margin: '6px 0 0',
+          }}>
+            SEVAL MCP + DevUI MCP = automated triage
+          </p>
+        </Reveal>
+
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', minHeight: 0 }}>
+          <ConversationTriagePipeline activePhase={phase} />
+        </div>
+
+        <Reveal from={2} animation={fadeUp}>
+          <Callout variant="info" style={{ color: theme.colors.textPrimary }}>
+            <strong>Two MCP servers, one conversation</strong> &mdash; from SEVAL job to root cause diagnosis.
+          </Callout>
+        </Reveal>
+      </div>
+    </SlideContainer>
+  );
+};
+
+export const Ch3_S2_SevalAtScale = defineSlide({
+  metadata: {
+    chapter: 3,
+    slide: 2,
+    title: 'SEVAL at Scale',
+    audioSegments: [
+      { id: 0 },
+      { id: 1 },
+      { id: 2 },
+    ],
+  },
+  component: SevalAtScaleComponent,
 });

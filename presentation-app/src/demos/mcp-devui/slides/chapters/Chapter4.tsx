@@ -1,150 +1,223 @@
 import React from 'react';
 import {
-  defineSlide,
   useTheme,
+  useReducedMotion,
   useSegmentedAnimation,
+  defineSlide,
   SlideContainer,
+  SlideTitle,
   Reveal,
-  Callout,
+  ShikiCodeBlock,
   fadeUp,
 } from '@framework';
-import { WorkspaceBridgeDiagram } from '../../components/WorkspaceBridgeDiagram';
-import { ConversationTriagePipeline } from '../../components/ConversationTriagePipeline';
 
 /**
- * Chapter 4: "Going Further" (2 slides)
- * Ch4_S1 — Agent Meets Source Code
- * Ch4_S2 — SEVAL at Scale
+ * Chapter 4: "Get Started"
+ * Ch4_S1 — Two Minutes to Start Debugging
+ *
+ * 3 segments: marketplace registration, choose plugin flavor, start debugging.
  */
 
-// ─── Ch4_S1: Agent Meets Source Code ──────────────────────────────────
+const MARKETPLACE_CODE = `/plugin marketplace add gim-home/ai-developer-toolkit`;
+const AGENT_INSTALL = `/plugin install devui-agent@ai-developer-toolkit`;
+const TOOLS_INSTALL = `/plugin install devui-tools@ai-developer-toolkit`;
 
-const PHASE_MAP_SOURCE: Record<number, number> = {
-  0: 1,  // both panels visible
-  1: 2,  // arrows animate
-  2: 3,  // full glow
-};
-
-const AgentMeetsSourceComponent: React.FC = () => {
+/** Numbered step header with optional active highlight. */
+const StepHeader: React.FC<{
+  number: number;
+  title: string;
+  isActive: boolean;
+}> = ({ number, title, isActive }) => {
   const theme = useTheme();
-  const { currentSegmentIndex } = useSegmentedAnimation();
-  const phase = PHASE_MAP_SOURCE[currentSegmentIndex] ?? 0;
 
   return (
-    <SlideContainer>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, height: '100%' }}>
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: 10,
+      marginBottom: 8,
+    }}>
+      <div style={{
+        width: 28,
+        height: 28,
+        borderRadius: '50%',
+        background: isActive ? theme.colors.primary : theme.colors.bgSurface,
+        border: `1.5px solid ${isActive ? theme.colors.primary : theme.colors.bgBorder}`,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: 14,
+        fontWeight: 700,
+        color: isActive ? '#fff' : theme.colors.textSecondary,
+        flexShrink: 0,
+        transition: 'background 0.3s, border-color 0.3s, color 0.3s',
+      }}>
+        {number}
+      </div>
+      <span style={{
+        fontSize: 16,
+        fontWeight: 600,
+        color: theme.colors.textPrimary,
+      }}>
+        {title}
+      </span>
+    </div>
+  );
+};
+
+/** Side-by-side plugin flavor card. */
+const PluginFlavorCard: React.FC<{
+  title: string;
+  badge: string;
+  badgeColor: string;
+  description: string;
+  installCmd: string;
+  isActive: boolean;
+}> = ({ title, badge, badgeColor, description, installCmd, isActive }) => {
+  const theme = useTheme();
+
+  return (
+    <div style={{
+      flex: 1,
+      background: isActive ? 'rgba(0, 183, 195, 0.06)' : theme.colors.bgSurface,
+      border: `1.5px solid ${isActive ? theme.colors.primary : theme.colors.bgBorder}`,
+      borderRadius: 10,
+      padding: '14px 16px',
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 8,
+      transition: 'border-color 0.3s, background 0.3s',
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <span style={{
+          fontWeight: 700,
+          fontSize: 15,
+          color: theme.colors.textPrimary,
+        }}>
+          {title}
+        </span>
+        <span style={{
+          fontSize: 10.5,
+          fontWeight: 600,
+          padding: '2px 8px',
+          borderRadius: 4,
+          background: `${badgeColor}18`,
+          color: badgeColor,
+          textTransform: 'uppercase',
+          letterSpacing: '0.04em',
+        }}>
+          {badge}
+        </span>
+      </div>
+      <div style={{
+        fontSize: 13,
+        color: theme.colors.textSecondary,
+        lineHeight: 1.45,
+      }}>
+        {description}
+      </div>
+      <div style={{ marginTop: 'auto' }}>
+        <ShikiCodeBlock
+          code={installCmd}
+          language="bash"
+          colorTheme="framework"
+          fontSize={12}
+          showLineNumbers={false}
+        />
+      </div>
+    </div>
+  );
+};
+
+const GetStartedComponent: React.FC = () => {
+  const theme = useTheme();
+  const { reduced } = useReducedMotion();
+  const { currentSegmentIndex } = useSegmentedAnimation();
+
+  return (
+    <SlideContainer maxWidth={850}>
+      <Reveal from={0}>
+        <SlideTitle reduced={reduced}>
+          Two Minutes to Start Debugging
+        </SlideTitle>
+      </Reveal>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '0.75rem' }}>
+        {/* Step 1: Register marketplace */}
         <Reveal from={0} animation={fadeUp}>
-          <h2
-            style={{
-              color: theme.colors.textPrimary,
-              fontSize: 28,
-              fontWeight: 700,
-              textAlign: 'center',
-              margin: 0,
-            }}
-          >
-            Agent Meets Source Code
-          </h2>
-          <p style={{
-            textAlign: 'center',
-            fontSize: 15,
+          <StepHeader number={1} title="Register the marketplace" isActive={currentSegmentIndex === 0} />
+          <div style={{
+            fontSize: 13,
             color: theme.colors.textSecondary,
-            margin: '6px 0 0',
+            marginBottom: 8,
+            paddingLeft: 38,
           }}>
-            DevUI MCP + workspace source code = closed-loop debugging
-          </p>
+            One-time setup — ai-developer-toolkit is an internal repo I maintain with all the MCP plugins.
+          </div>
+          <div style={{ paddingLeft: 38 }}>
+            <ShikiCodeBlock
+              code={MARKETPLACE_CODE}
+              language="bash"
+              colorTheme="framework"
+              fontSize={13}
+              showLineNumbers={false}
+            />
+          </div>
         </Reveal>
 
-        <div style={{ flex: 1, display: 'flex', alignItems: 'center', minHeight: 0 }}>
-          <WorkspaceBridgeDiagram activePhase={phase} />
-        </div>
+        {/* Step 2: Choose your plugin */}
+        <Reveal from={1} animation={fadeUp}>
+          <StepHeader number={2} title="Choose your plugin" isActive={currentSegmentIndex === 1} />
+          <div style={{
+            display: 'flex',
+            gap: 12,
+            paddingLeft: 38,
+          }}>
+            <PluginFlavorCard
+              title="devui-agent"
+              badge="Recommended"
+              badgeColor="#4ade80"
+              description="Specialized debugger sub-agent with 3 guided skills and all tools scoped to it."
+              installCmd={AGENT_INSTALL}
+              isActive={currentSegmentIndex === 1}
+            />
+            <PluginFlavorCard
+              title="devui-tools"
+              badge="Power users"
+              badgeColor={theme.colors.primary}
+              description="All tools and skills exposed directly to any agent you're using."
+              installCmd={TOOLS_INSTALL}
+              isActive={currentSegmentIndex === 1}
+            />
+          </div>
+        </Reveal>
 
+        {/* Step 3: Start debugging */}
         <Reveal from={2} animation={fadeUp}>
-          <Callout variant="tip" style={{ color: theme.colors.textPrimary }}>
-            <strong>From symptom report to source code fix</strong> &mdash; in one conversation.
-          </Callout>
+          <StepHeader number={3} title="Start debugging" isActive={currentSegmentIndex === 2} />
+          <div style={{
+            fontSize: 13,
+            color: theme.colors.textSecondary,
+            paddingLeft: 38,
+          }}>
+            Just ask your agent to debug a conversation. No config files, no environment variables — just ask.
+          </div>
         </Reveal>
       </div>
     </SlideContainer>
   );
 };
 
-export const Ch4_S1_AgentMeetsSource = defineSlide({
+export const Ch4_S1_GetStarted = defineSlide({
   metadata: {
     chapter: 4,
     slide: 1,
-    title: 'Agent Meets Source Code',
+    title: 'Two Minutes to Start Debugging',
     audioSegments: [
       { id: 0 },
       { id: 1 },
       { id: 2 },
     ],
   },
-  component: AgentMeetsSourceComponent,
-});
-
-// ─── Ch4_S2: SEVAL at Scale ───────────────────────────────────────────
-
-const PHASE_MAP_SEVAL: Record<number, number> = {
-  0: 0,  // prompt only
-  1: 1,  // cards stagger in
-  2: 2,  // sort + highlight worst
-};
-
-const SevalAtScaleComponent: React.FC = () => {
-  const theme = useTheme();
-  const { currentSegmentIndex } = useSegmentedAnimation();
-  const phase = PHASE_MAP_SEVAL[currentSegmentIndex] ?? 0;
-
-  return (
-    <SlideContainer maxWidth={700}>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, height: '100%' }}>
-        <Reveal from={0} animation={fadeUp}>
-          <h2
-            style={{
-              color: theme.colors.textPrimary,
-              fontSize: 28,
-              fontWeight: 700,
-              textAlign: 'center',
-              margin: 0,
-            }}
-          >
-            SEVAL at Scale
-          </h2>
-          <p style={{
-            textAlign: 'center',
-            fontSize: 15,
-            color: theme.colors.textSecondary,
-            margin: '6px 0 0',
-          }}>
-            SEVAL MCP + DevUI MCP = automated triage
-          </p>
-        </Reveal>
-
-        <div style={{ flex: 1, display: 'flex', alignItems: 'center', minHeight: 0 }}>
-          <ConversationTriagePipeline activePhase={phase} />
-        </div>
-
-        <Reveal from={2} animation={fadeUp}>
-          <Callout variant="info" style={{ color: theme.colors.textPrimary }}>
-            <strong>Two MCP servers, one conversation</strong> &mdash; from SEVAL job to root cause diagnosis.
-          </Callout>
-        </Reveal>
-      </div>
-    </SlideContainer>
-  );
-};
-
-export const Ch4_S2_SevalAtScale = defineSlide({
-  metadata: {
-    chapter: 4,
-    slide: 2,
-    title: 'SEVAL at Scale',
-    audioSegments: [
-      { id: 0 },
-      { id: 1 },
-      { id: 2 },
-    ],
-  },
-  component: SevalAtScaleComponent,
+  component: GetStartedComponent,
 });

@@ -3,15 +3,14 @@ import { motion } from 'framer-motion';
 import {
   useReducedMotion,
   useTheme,
+  useSegmentedAnimation,
   defineSlide,
   SlideContainer,
   SlideTitle,
   Reveal,
-  RevealAtMarker,
   GlowBorder,
   gradientBadge,
   monoText,
-  fadeUp,
   cardStyle,
   useMarker,
 } from '@framework';
@@ -32,9 +31,9 @@ const CATEGORIES = [
 ];
 
 const SKILLS = [
-  { name: 'debug-conversation', markerId: 'sk-debug' },
-  { name: 'send-and-debug', markerId: 'sk-send' },
-  { name: 'setup-config', markerId: 'sk-config' },
+  { name: 'debug-conversation', desc: 'Load a conversation and diagnose issues end-to-end', markerId: 'sk-debug' },
+  { name: 'send-and-debug', desc: 'Send a live request and debug the response', markerId: 'sk-send' },
+  { name: 'setup-config', desc: 'Create and manage chat configs and flights', markerId: 'sk-config' },
 ];
 
 // ---------- Subcomponents ----------
@@ -88,11 +87,83 @@ const MarkerBadge: React.FC<{
   );
 };
 
+/** "3 Guided Skills" header — always in DOM, fades in at marker. */
+const MarkerHeader: React.FC<{ markerId: string; reduced: boolean; enabled: boolean }> = ({ markerId, reduced, enabled }) => {
+  const { reached } = useMarker(markerId);
+  const show = enabled && reached;
+
+  return (
+    <motion.div
+      animate={{ opacity: show ? 1 : 0 }}
+      transition={reduced ? { duration: 0 } : { duration: 0.4 }}
+      style={{
+        opacity: 0,
+        fontSize: 14,
+        fontWeight: 600,
+        color: 'rgba(148,163,184,0.8)',
+        textTransform: 'uppercase',
+        letterSpacing: '0.05em',
+        textAlign: 'center',
+        marginTop: '1rem',
+        marginBottom: '0.5rem',
+      }}
+    >
+      3 Guided Skills
+    </motion.div>
+  );
+};
+
+/** Skill card — always in DOM, fades in at marker. */
+const MarkerSkillCard: React.FC<{
+  skill: typeof SKILLS[number];
+  theme: ReturnType<typeof useTheme>;
+  reduced: boolean;
+  enabled: boolean;
+}> = ({ skill, theme, reduced, enabled }) => {
+  const { reached } = useMarker(skill.markerId);
+  const show = enabled && reached;
+
+  return (
+    <motion.div
+      animate={{ opacity: show ? 1 : 0, y: show ? 0 : 12 }}
+      transition={reduced ? { duration: 0 } : { duration: 0.4, ease: 'easeOut' }}
+      style={{ opacity: 0 }}
+    >
+      <div style={{
+        padding: '0.75rem 1rem',
+        borderRadius: 10,
+        background: theme.colors.bgSurface,
+        border: `1px solid ${theme.colors.bgBorder}`,
+        minWidth: 200,
+        textAlign: 'left',
+      }}>
+        <div style={{
+          ...monoText(13),
+          color: theme.colors.primary,
+          fontWeight: 600,
+          marginBottom: 4,
+        }}>
+          {skill.name}
+        </div>
+        <div style={{
+          fontSize: 12,
+          color: theme.colors.textSecondary,
+          lineHeight: 1.4,
+        }}>
+          {skill.desc}
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
 // ---------- Slide 1: Solution Overview ----------
 
 const SolutionOverviewComponent: React.FC = () => {
   const theme = useTheme();
   const { reduced } = useReducedMotion();
+  const { currentSegmentIndex } = useSegmentedAnimation();
+  const showAgentSkills = currentSegmentIndex >= 2;
 
   return (
     <SlideContainer maxWidth={900}>
@@ -144,44 +215,72 @@ const SolutionOverviewComponent: React.FC = () => {
         </div>
       </Reveal>
 
-      {/* Agent + Skills section */}
-      <Reveal from={2}>
+      {/* Agent + Skills section — always in DOM to avoid layout shift */}
+      <motion.div
+        animate={{ opacity: showAgentSkills ? 1 : 0 }}
+        transition={{ duration: reduced ? 0 : 0.5 }}
+        style={{ opacity: 0, pointerEvents: showAgentSkills ? 'auto' : 'none' }}
+      >
+        {/* Agent card */}
         <div style={{
-          marginTop: '2rem',
-          textAlign: 'center',
+          marginTop: '1.5rem',
+          display: 'flex',
+          justifyContent: 'center',
         }}>
           <div style={{
-            fontSize: 15,
-            fontWeight: 600,
-            color: theme.colors.textPrimary,
-            marginBottom: '0.75rem',
-          }}>
-            {'\u{1F916}'} devui-debugger agent — 3 guided skills:
-          </div>
-          <div style={{
             display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-            gap: '0.5rem',
+            alignItems: 'center',
+            gap: 14,
+            padding: '0.75rem 1.25rem',
+            borderRadius: 10,
+            background: 'rgba(139, 92, 246, 0.06)',
+            border: '1.5px solid rgba(139, 92, 246, 0.3)',
           }}>
-            {SKILLS.map((skill) => (
-              <RevealAtMarker key={skill.markerId} at={skill.markerId} animation={fadeUp}>
-                <div style={{
-                  ...monoText(12),
-                  padding: '0.4rem 0.75rem',
-                  borderRadius: 8,
-                  background: theme.colors.bgSurface,
-                  border: `1px solid ${theme.colors.bgBorder}`,
-                  color: theme.colors.primary,
-                  fontWeight: 600,
-                }}>
-                  {skill.name}
-                </div>
-              </RevealAtMarker>
-            ))}
+            <div style={{
+              width: 36,
+              height: 36,
+              borderRadius: '50%',
+              background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(59, 130, 246, 0.2))',
+              border: '1.5px solid rgba(139, 92, 246, 0.5)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: 18,
+              flexShrink: 0,
+            }}>
+              {'\u{1F916}'}
+            </div>
+            <div>
+              <div style={{
+                ...monoText(14),
+                color: '#a78bfa',
+                fontWeight: 700,
+              }}>
+                devui-debugger
+              </div>
+              <div style={{
+                fontSize: 12,
+                color: theme.colors.textSecondary,
+                lineHeight: 1.4,
+              }}>
+                Optional sub-agent — scopes all tools and skills into a dedicated debugging workflow
+              </div>
+            </div>
           </div>
         </div>
-      </Reveal>
+
+        {/* Skills — always in DOM, opacity driven by markers */}
+        <MarkerHeader markerId="sk-debug" reduced={reduced} enabled={showAgentSkills} />
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          gap: '0.75rem',
+        }}>
+          {SKILLS.map((skill) => (
+            <MarkerSkillCard key={skill.markerId} skill={skill} theme={theme} reduced={reduced} enabled={showAgentSkills} />
+          ))}
+        </div>
+      </motion.div>
     </SlideContainer>
   );
 };

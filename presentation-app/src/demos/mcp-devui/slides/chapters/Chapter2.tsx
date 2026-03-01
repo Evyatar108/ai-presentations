@@ -358,7 +358,7 @@ const ConfigFlightsMoreComponent: React.FC = () => {
 
   return (
     <SlideContainer maxWidth={900}>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 20, height: '100%' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12, height: '100%' }}>
         <Reveal from={0} animation={fadeUp}>
           <h2
             style={{
@@ -376,12 +376,12 @@ const ConfigFlightsMoreComponent: React.FC = () => {
 
         {USE_CASES.map((useCase, ucIndex) => (
           <Reveal key={useCase.title} from={ucIndex} animation={fadeUp}>
-            <ContentCard>
+            <ContentCard style={{ padding: '1rem 1.5rem' }}>
               <div style={{
                 fontWeight: 600,
                 color: theme.colors.primary,
                 fontSize: 16,
-                marginBottom: 12,
+                marginBottom: 8,
               }}>
                 {useCase.title}
               </div>

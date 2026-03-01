@@ -34,6 +34,7 @@
 | MarkerCard | Animation | `framework/components/MarkerCard.tsx` | MarkerDim + themed card wrapper (replaces MarkerDim + cardStyle boilerplate) |
 | AnnotateAtMarker | Animation | `framework/components/reveal/AnnotateAtMarker.tsx` | Hand-drawn annotations (circle, underline, highlight, box) driven by markers |
 | RevealSequence | Animation | `framework/components/reveal/RevealSequence.tsx` | Exit-before-enter coordination for swapping Reveal children |
+| RevealGroup | Animation | `framework/components/reveal/RevealGroup.tsx` | Staggered group reveal for lists/grids |
 | MarkerCodeBlock | Data Display | `framework/components/MarkerCodeBlock.tsx` | CodeBlock with marker-driven line highlighting |
 | AnimatedCounter | Data Display | `framework/components/AnimatedCounter.tsx` | Counting-up number animation |
 | ProgressSteps | Data Visualization | `framework/components/ProgressSteps.tsx` | Horizontal step indicator with states |
@@ -256,6 +257,43 @@ import { RevealCarousel } from '@framework';
   <SlideC />  {/* visible at segment 2+ */}
 </RevealCarousel>
 ```
+
+---
+
+### RevealGroup
+
+Staggered group reveal for lists and grids. When `stagger` is enabled, the container uses a stagger transition and each direct child is wrapped in a motion element with `childAnimation`. Without `stagger`, behaves like `<Reveal>` but for a group wrapper.
+
+**Source:** `src/framework/components/reveal/RevealGroup.tsx`
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `from` / `until` / `on` / `id` | — | — | Same visibility props as `Reveal` |
+| `animation` | `AnimationFactory` | — | Container entrance animation |
+| `stagger` | `boolean` | `false` | Enable staggered child animations |
+| `staggerDelay` | `number` | `0.15` | Delay between each child (seconds) |
+| `childDelay` | `number` | `0.2` | Initial delay before first child |
+| `childAnimation` | `AnimationFactory` | `fadeUp` | Animation applied to each child |
+| `as` | `'div' \| 'span' \| ...` | `'div'` | HTML element type |
+
+```tsx
+import { RevealGroup } from '@framework';
+
+// Staggered list — children animate in one by one
+<RevealGroup from={1} stagger>
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
+</RevealGroup>
+
+// Custom stagger timing and child animation
+<RevealGroup from={2} stagger staggerDelay={0.2} childAnimation={scaleIn}>
+  <Card>A</Card>
+  <Card>B</Card>
+</RevealGroup>
+```
+
+**When to use:** Use `RevealGroup` with `stagger` for lists or grids where children should animate in sequentially. Without `stagger`, it's equivalent to `Reveal` but useful as a semantic wrapper for grouped content.
 
 ---
 

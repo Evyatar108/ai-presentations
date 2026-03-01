@@ -122,10 +122,10 @@ const HubNode: React.FC<{ data: Record<string, unknown> }> = (_props) => {
           animation: reduced ? 'none' : 'hub-glow 2.5s ease-in-out infinite',
         }}
       >
-        <div style={{ color: '#93c5fd', fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: 1 }}>
+        <div style={{ color: '#93c5fd', fontSize: 13, fontWeight: 600, textTransform: 'uppercase', letterSpacing: 1 }}>
           Conversation
         </div>
-        <div style={{ color: '#e2e8f0', fontSize: 14, fontWeight: 700, marginTop: 2 }}>
+        <div style={{ color: '#e2e8f0', fontSize: 16, fontWeight: 700, marginTop: 2 }}>
           State
         </div>
       </div>
@@ -189,8 +189,8 @@ const CategoryNode: React.FC<{ data: Record<string, unknown> }> = ({ data }) => 
             {icon}
           </div>
           <div>
-            <div style={{ color: '#e2e8f0', fontSize: 13, fontWeight: 600 }}>{label}</div>
-            <div style={{ color: color, fontSize: 11 }}>
+            <div style={{ color: '#e2e8f0', fontSize: 15, fontWeight: 600 }}>{label}</div>
+            <div style={{ color: color, fontSize: 13 }}>
               {toolCount} tool{toolCount !== 1 ? 's' : ''}
             </div>
           </div>
@@ -202,7 +202,7 @@ const CategoryNode: React.FC<{ data: Record<string, unknown> }> = ({ data }) => 
                 key={tool}
                 style={{
                   color: 'rgba(203,213,225,0.8)',
-                  fontSize: 10,
+                  fontSize: 12,
                   fontFamily: "'Cascadia Code', 'Fira Code', Consolas, monospace",
                   padding: '2px 0',
                   whiteSpace: 'nowrap',

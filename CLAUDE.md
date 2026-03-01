@@ -138,7 +138,13 @@ Subtitle corrections: `public/audio/{demo-id}/subtitle-corrections.json` — map
 | `src/framework/alignment/types.ts` | AlignedWord, ResolvedMarker, DemoAlignment types |
 | `src/framework/contexts/AudioTimeContext.tsx` | Continuous audio time tracking context (sub-segment markers) |
 | `src/framework/utils/alignmentLoader.ts` | Lazy-load alignment.json per demo |
+| `src/framework/components/reveal/Reveal.tsx` | Segment-based show/hide (AnimatePresence mount/unmount) |
+| `src/framework/components/reveal/RevealSequence.tsx` | Exit-before-enter coordination for swapping Reveal children |
+| `src/framework/components/RevealCarousel.tsx` | Auto-indexed one-at-a-time RevealSequence children |
+| `src/framework/components/reveal/RevealGroup.tsx` | Staggered group reveal for lists/grids |
 | `src/framework/components/reveal/RevealAtMarker.tsx` | Time-based reveal driven by inline markers |
+| `src/framework/components/reveal/MarkerDim.tsx` | Marker-driven opacity dimming (keeps content in layout) |
+| `src/framework/components/reveal/AnnotateAtMarker.tsx` | Hand-drawn annotations synced to markers |
 | `src/framework/hooks/useMarker.ts` | useMarker() and useMarkerRange() hooks |
 | `src/framework/hooks/useAudioTime.ts` | Raw useAudioTime() hook |
 | `src/framework/hooks/useWordHighlight.ts` | Karaoke word-level highlight hook |
@@ -198,8 +204,9 @@ Browser-side `VITE_*` variables are wired into `FrameworkConfig` in `src/framewo
 - **SVG `pathLength` animations**: Do NOT set explicit `strokeDasharray` or `strokeDashoffset` on `motion.circle`/`motion.path` — Framer Motion computes these internally from the `pathLength` motion value. Setting them manually overrides FM's values and breaks the animation. Use imperative `useMotionValue` + `useSpring` + `style={{ pathLength }}` instead of declarative `initial`/`animate` when the component mounts inside an already-animated parent.
 - Framework components use `useTheme()` for colors; demo slides may use static style exports or theme-aware `create*()` factories
 - **`<ShikiCodeBlock colorTheme="framework">` is the preferred code block** for new slides — accurate tokenization, 200+ languages, framework theme colors. Use `CodeBlock` only as a lightweight fallback. `MarkerCodeBlock` still wraps `CodeBlock` for marker-driven line highlighting.
-- **`<Reveal>` is the preferred pattern for segment-based visibility** — use `useSegmentedAnimation()` hook only for non-visual logic (data computation, conditional styling, components with built-in `isVisible` props)
+- **`<Reveal>` is the preferred pattern for segment-based visibility** — use `useSegmentedAnimation()` hook only for non-visual logic (data computation, conditional styling, components with built-in `isVisible` props). Note: `Reveal` uses `AnimatePresence` (mount/unmount) — this can cause layout shifts when content appears. Use `animation={fadeIn}` to avoid Y-translate shifts, or wrap in `<RevealSequence>` for coordinated exit-before-enter swaps.
 - **`<RevealAtMarker>` is the preferred pattern for sub-segment (time-based) visibility** — use `useMarker()` / `useMarkerRange()` hooks only for programmatic logic. Requires `{#id}` markers in `narrationText` and `alignment.json` from `tts:align`.
+- **Full reveal component family:** `Reveal` (segment show/hide), `RevealSequence` (exit-before-enter coordination), `RevealCarousel` (auto-indexed one-at-a-time on RevealSequence), `RevealGroup` (staggered group reveal for lists/grids), `RevealAtMarker` (marker-timed show/hide), `MarkerDim` (marker-timed opacity dimming), `AnnotateAtMarker` (hand-drawn annotations synced to markers). See `docs/COMPONENT_CATALOG.md` for full API docs.
 - See `docs/ANIMATION_REFERENCE.md` for the full animation catalog; keep it updated when adding or modifying animation factories
 
 ## Documentation
