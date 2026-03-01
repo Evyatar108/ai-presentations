@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import {
   useTheme,
   useReducedMotion,
@@ -8,8 +9,15 @@ import {
   SlideTitle,
   Reveal,
   ShikiCodeBlock,
+  FloatingParticles,
+  GradientText,
+  GlowBorder,
+  AnimatedCheckmark,
+  useMarker,
   fadeUp,
+  fadeIn,
 } from '@framework';
+import { DismissedWall } from '../../components/DismissedWall';
 
 /**
  * Chapter 4: "Get Started"
@@ -220,4 +228,164 @@ export const Ch4_S1_GetStarted = defineSlide({
     ],
   },
   component: GetStartedComponent,
+});
+
+// ─── Ch4_S2: Closing ──────────────────────────────────────────────
+
+const LOOP_CAPABILITIES = [
+  { icon: '🔍', label: 'Debug', description: 'Find the root cause in telemetry' },
+  { icon: '🛠️', label: 'Develop', description: 'Fix it in source code' },
+  { icon: '📊', label: 'Appraise', description: 'Judge answer quality from telemetry' },
+  { icon: '✅', label: 'Verify', description: 'Re-run and confirm the fix' },
+] as const;
+
+/** Single capability card in the developer loop. */
+const CapabilityCard: React.FC<{
+  icon: string;
+  label: string;
+  description: string;
+}> = ({ icon, label, description }) => {
+  const theme = useTheme();
+
+  return (
+    <div style={{
+      flex: 1,
+      background: theme.colors.bgSurface,
+      border: `1px solid ${theme.colors.bgBorder}`,
+      borderRadius: 10,
+      padding: '16px 14px',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      gap: 6,
+      textAlign: 'center',
+      minWidth: 0,
+    }}>
+      <span style={{ fontSize: 28 }}>{icon}</span>
+      <span style={{
+        fontWeight: 700,
+        fontSize: 16,
+        color: theme.colors.textPrimary,
+      }}>
+        {label}
+      </span>
+      <span style={{
+        fontSize: 12.5,
+        color: theme.colors.textSecondary,
+        lineHeight: 1.4,
+      }}>
+        {description}
+      </span>
+    </div>
+  );
+};
+
+const ClosingComponent: React.FC = () => {
+  const theme = useTheme();
+  const { reduced } = useReducedMotion();
+  const { reached: dismissed } = useMarker('dismiss');
+
+  return (
+    <SlideContainer>
+      <FloatingParticles
+        count={30}
+        colors={['#3b82f6', '#06b6d4', '#8b5cf6']}
+        speed={0.3}
+      />
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100%',
+        position: 'relative',
+        zIndex: 1,
+        gap: 32,
+      }}>
+        {/* Segment 0: The Wall Is Gone — starts scrolling, dismisses at {#dismiss} marker */}
+        <Reveal from={0} animation={fadeIn}>
+          <DismissedWall dismissed={dismissed} />
+        </Reveal>
+
+        {/* Segment 1: The Developer Loop */}
+        <Reveal from={1} animation={fadeUp}>
+          <GlowBorder borderRadius={14} style={{ width: '100%', maxWidth: 700 }}>
+            <div style={{
+              background: theme.colors.bgSurface,
+              borderRadius: 14,
+              padding: '20px 24px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 16,
+            }}>
+              <div style={{
+                display: 'flex',
+                gap: 12,
+              }}>
+                {LOOP_CAPABILITIES.map((cap, i) => (
+                  <motion.div
+                    key={cap.label}
+                    initial={reduced ? undefined : { opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={reduced ? undefined : { delay: i * 0.12, duration: 0.4 }}
+                    style={{ flex: 1, display: 'flex' }}
+                  >
+                    <CapabilityCard {...cap} />
+                  </motion.div>
+                ))}
+              </div>
+              <p style={{
+                textAlign: 'center',
+                fontSize: 14,
+                color: theme.colors.textSecondary,
+                margin: 0,
+                fontStyle: 'italic',
+              }}>
+                The full developer workflow, delegated.
+              </p>
+            </div>
+          </GlowBorder>
+        </Reveal>
+
+        {/* Segment 2: The Tagline */}
+        <Reveal from={2} animation={fadeIn}>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 20,
+          }}>
+            <GradientText
+              as="h2"
+              style={{
+                fontSize: 36,
+                fontWeight: 700,
+                letterSpacing: '-0.01em',
+                lineHeight: 1.2,
+                textAlign: 'center',
+                margin: 0,
+              }}
+            >
+              Not just a code assistant — a Sydney developer.
+            </GradientText>
+            <AnimatedCheckmark size={52} withCircle delay={0.3} />
+          </div>
+        </Reveal>
+      </div>
+    </SlideContainer>
+  );
+};
+
+export const Ch4_S2_Closing = defineSlide({
+  metadata: {
+    chapter: 4,
+    slide: 2,
+    title: 'Closing',
+    audioSegments: [
+      { id: 0 },
+      { id: 1 },
+      { id: 2 },
+    ],
+  },
+  component: ClosingComponent,
 });

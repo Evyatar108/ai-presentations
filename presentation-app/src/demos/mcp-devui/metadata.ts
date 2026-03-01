@@ -31,6 +31,7 @@ export const metadata: DemoMetadata = {
       { slideIndex: 1, slideTitle: 'Agent Meets Source Code', chapterIndex: 3, totalDuration: 45.2, audioDuration: 39.2, delaysDuration: 6, segments: [{ segmentIndex: 0, audioDuration: 13.6, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 15.52, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 10.08, delayAfter: 3 }] },
       { slideIndex: 2, slideTitle: 'SEVAL at Scale', chapterIndex: 3, totalDuration: 6, audioDuration: 0, delaysDuration: 6, segments: [{ segmentIndex: 0, audioDuration: 0, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 0, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 0, delayAfter: 3 }] },
       { slideIndex: 1, slideTitle: 'Two Minutes to Start Debugging', chapterIndex: 4, totalDuration: 47.6, audioDuration: 39.6, delaysDuration: 8, segments: [{ segmentIndex: 0, audioDuration: 13.44, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 11.04, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 15.12, delayAfter: 5 }] },
+      { slideIndex: 2, slideTitle: 'Closing', chapterIndex: 4, totalDuration: 6, audioDuration: 0, delaysDuration: 6, segments: [{ segmentIndex: 0, audioDuration: 0, delayAfter: 1.5 }, { segmentIndex: 1, audioDuration: 0, delayAfter: 1.5 }, { segmentIndex: 2, audioDuration: 0, delayAfter: 3 }] },
     ]
   }
 };

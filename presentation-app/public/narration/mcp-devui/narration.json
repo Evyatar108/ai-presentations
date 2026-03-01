@@ -168,31 +168,6 @@
     {
       "chapter": 3,
       "slide": 1,
-      "title": "22 Tools at Your Fingertips",
-      "segments": [
-        {
-          "id": 0,
-          "narrationText": "You just saw three workflows. Here are all twenty-two tools — every Dev-UI surface your agent can access. Symptom reports, telemetry detail, execution flow, search — all via natural language.",
-          "visualDescription": "",
-          "notes": ""
-        },
-        {
-          "id": 1,
-          "narrationText": "Telemetry and Execution is the largest group with ten tools — it's where the real debugging power lives. Chat Execution has one tool for sending live requests, and Config Management has five tools for configs, settings, and test accounts.",
-          "visualDescription": "",
-          "notes": ""
-        },
-        {
-          "id": 2,
-          "narrationText": "Load a conversation once, and every drill-down tool operates on the loaded data. No re-fetching. All via natural language — just ask the agent what you need.",
-          "visualDescription": "",
-          "notes": ""
-        }
-      ]
-    },
-    {
-      "chapter": 4,
-      "slide": 1,
       "title": "Agent Meets Source Code",
       "segments": [
         {
@@ -216,7 +191,7 @@
       ]
     },
     {
-      "chapter": 4,
+      "chapter": 3,
       "slide": 2,
       "title": "SEVAL at Scale",
       "segments": [
@@ -241,7 +216,7 @@
       ]
     },
     {
-      "chapter": 5,
+      "chapter": 4,
       "slide": 1,
       "title": "Two Minutes to Start Debugging",
       "segments": [
@@ -260,6 +235,31 @@
         {
           "id": 2,
           "narrationText": "That's it — you're ready. Just ask your agent to debug a conversation and start working. No config files, no environment variables.",
+          "visualDescription": "",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 4,
+      "slide": 2,
+      "title": "Closing",
+      "segments": [
+        {
+          "id": 0,
+          "narrationText": "Remember that wall of telemetry entries? The manual triage, the raw JSON, the context switching — {#dismiss}that's behind you now.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 1,
+          "narrationText": "Your agent doesn't just write code. It runs requests, reads telemetry, inspects execution flows — and does it in a loop. Debug a bad answer, develop a new feature, appraise answer quality from the telemetry, verify the fix. The full developer workflow, delegated.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 2,
+          "narrationText": "MCP Dev-UI. Not just a code assistant — a Sydney developer.",
           "visualDescription": "",
           "notes": ""
         }

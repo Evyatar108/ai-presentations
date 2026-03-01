@@ -17,11 +17,11 @@ import {
 import { Ch3_S1_AgentMeetsSource, Ch3_S2_SevalAtScale } from './chapters/Chapter3';
 
 // Chapter 4: Get Started
-import { Ch4_S1_GetStarted } from './chapters/Chapter4';
+import { Ch4_S1_GetStarted, Ch4_S2_Closing } from './chapters/Chapter4';
 
 /**
  * Central registry of all slide components for the MCP DevUI demo.
- * 9 slides across 5 chapters.
+ * 10 slides across 5 chapters.
  */
 export const allSlides: SlideComponentWithMetadata[] = [
   Ch0_S1_Title,
@@ -33,4 +33,5 @@ export const allSlides: SlideComponentWithMetadata[] = [
   Ch3_S1_AgentMeetsSource,
   Ch3_S2_SevalAtScale,
   Ch4_S1_GetStarted,
+  Ch4_S2_Closing,
 ];
