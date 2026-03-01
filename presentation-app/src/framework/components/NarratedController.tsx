@@ -47,7 +47,7 @@ export interface NarratedControllerProps {
   chapterModeEnabled: boolean;
   onChapterModeToggle: (value: boolean) => void;
   onSlideChange: (chapter: number, slide: number) => void;
-  onPlaybackStart?: () => void;
+  onPlaybackStart?: (mode: 'narrated' | 'manual') => void;
   onPlaybackEnd?: () => void;
   manualSlideChange?: { chapter: number; slide: number } | null;
   hideInterface: boolean;
@@ -291,7 +291,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     setIsManualMode(false);
     setCurrentIndex(0);
     document.title = `[PLAYING] ${demoMetadata.title}`;
-    onPlaybackStart?.();
+    onPlaybackStart?.('narrated');
   };
 
   // Start manual mode
@@ -304,6 +304,7 @@ export const NarratedController: React.FC<NarratedControllerProps> = ({
     setAudioEnabled(true);
     setCurrentIndex(0);
     onSlideChange(allSlides[0].metadata.chapter, allSlides[0].metadata.slide);
+    onPlaybackStart?.('manual');
   };
 
   // Consume external manual slide changes

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { DemoRegistry } from '../demos/DemoRegistry';
 import type { DemoConfig } from '../demos/types';
@@ -44,10 +44,24 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideIn
   const [error, setError] = useState<string | null>(null);
   const [currentSlide, setCurrentSlide] = useState<{ chapter: number; slide: number } | undefined>(undefined);
   const [isNarratedMode, setIsNarratedMode] = useState(false);
+  const [slideGeneration, setSlideGeneration] = useState(0);
   const [manualSlideChange, setManualSlideChange] = useState<{ chapter: number; slide: number } | null>(null);
   const [hideInterface, setHideInterface] = useState(autoplay?.hideInterface ?? false);
   const [zoomEnabled, setZoomEnabled] = useState(autoplay?.zoom ?? false);
   const [chapterModeEnabled, setChapterModeEnabled] = useState(false);
+
+  // Force SlidePlayer re-mount when presentation starts, so mount-time
+  // animations (e.g. TypeAnimation) play fresh when the user can see them.
+  // For narrated mode this fires after the start silence period (when
+  // onSlideChange first sets currentSlide); for manual mode it fires
+  // immediately when the user clicks "Manual".
+  const prevSlideRef = useRef(currentSlide);
+  useEffect(() => {
+    if (prevSlideRef.current === undefined && currentSlide !== undefined) {
+      setSlideGeneration(g => g + 1);
+    }
+    prevSlideRef.current = currentSlide;
+  }, [currentSlide]);
 
   const handleHideInterfaceChange = useCallback((hidden: boolean) => {
     setHideInterface(hidden);
@@ -220,8 +234,8 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideIn
     setCurrentSlide({ chapter, slide });
   };
 
-  const handlePlaybackStart = () => {
-    setIsNarratedMode(true);
+  const handlePlaybackStart = (mode: 'narrated' | 'manual') => {
+    if (mode === 'narrated') setIsNarratedMode(true);
   };
 
   const handlePlaybackEnd = () => {
@@ -414,6 +428,7 @@ export const DemoPlayer: React.FC<DemoPlayerProps> = ({ demoId, onBack, onHideIn
              (AnnotateAtMarker) position correctly. Transform zoom is the legacy
              approach that breaks annotation positioning but has simpler layout. */}
         <div
+          key={slideGeneration}
           style={
             zoomEnabled
               ? { transform: 'scale(1.8)', transformOrigin: 'center center', width: '100%', height: '100%' }

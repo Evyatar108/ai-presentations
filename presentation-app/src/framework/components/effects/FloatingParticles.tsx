@@ -52,7 +52,7 @@ export const FloatingParticles: React.FC<FloatingParticlesProps> = ({
             opacity: [0, 0.3, 0],
           }}
           transition={{
-            duration: speed - 1 + ((i * 17) % 30) / 10,
+            duration: Math.max(0.1, speed - 1 + ((i * 17) % 30) / 10),
             repeat: Infinity,
             delay: i * (speed / count),
             ease: 'linear',

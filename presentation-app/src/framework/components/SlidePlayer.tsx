@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSegmentContext } from '../contexts/SegmentContext';
 import { useAudioTimeContextOptional } from '../contexts/AudioTimeContext';
@@ -42,6 +42,12 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
   const theme = useTheme();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
+
+  // Track first mount so we can skip the slide-transition animation
+  // without using AnimatePresence initial={false} (which suppresses all
+  // descendant motion initial props — breaking FloatingParticles, etc.)
+  const isFirstMount = useRef(true);
+  useEffect(() => { isFirstMount.current = false; }, []);
 
   // Get segment context for segment navigation (needs to be declared early for use in callbacks)
   const segmentContext = useSegmentContext();
@@ -267,12 +273,12 @@ export const SlidePlayer: React.FC<SlidePlayerProps> = ({
   return (
     <div style={{ position: 'relative', width: '100%', height: '100vh', overflow: 'hidden', background: theme.colors.bgDeep }}>
       {/* Slide content */}
-      <AnimatePresence initial={false} custom={direction}>
+      <AnimatePresence custom={direction}>
         <motion.div
           key={currentIndex}
           custom={direction}
           variants={variants}
-          initial="enter"
+          initial={isFirstMount.current ? "center" : "enter"}
           animate="center"
           exit="exit"
           transition={{
