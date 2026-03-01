@@ -38,7 +38,7 @@ Sydney/Copilot engineers who:
 
 ## Duration
 
-~8 minutes narrated, 10 slides across 6 chapters.
+~7 minutes narrated, 9 slides across 6 chapters.
 
 ## Narration Conventions
 

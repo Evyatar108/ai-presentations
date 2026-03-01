@@ -1,12 +1,12 @@
 {
   "mcp-devui": {
     "demoId": "mcp-devui",
-    "audioOnlyDuration": 412.96000000000004,
-    "segmentDelays": 34.5,
-    "slideDelays": 27,
+    "audioOnlyDuration": 373.52000000000004,
+    "segmentDelays": 31.5,
+    "slideDelays": 24,
     "finalDelay": 5,
     "startSilence": 3,
-    "totalDuration": 482.46000000000004,
+    "totalDuration": 437.02000000000004,
     "slideBreakdowns": [
       {
         "slideIndex": 1,
@@ -55,10 +55,10 @@
       },
       {
         "slideIndex": 1,
-        "slideTitle": "22 Tools, 4 Skills, 1 Agent",
+        "slideTitle": "22 Tools, 3 Skills, 1 Agent",
         "chapterIndex": 1,
-        "totalDuration": 71.84,
-        "audioDuration": 65.84,
+        "totalDuration": 66.16,
+        "audioDuration": 60.16,
         "delaysDuration": 6,
         "segments": [
           {
@@ -68,12 +68,12 @@
           },
           {
             "segmentIndex": 1,
-            "audioDuration": 42.08,
+            "audioDuration": 38.16,
             "delayAfter": 1.5
           },
           {
             "segmentIndex": 2,
-            "audioDuration": 14.4,
+            "audioDuration": 12.64,
             "delayAfter": 3
           }
         ]
@@ -110,50 +110,25 @@
       },
       {
         "slideIndex": 2,
-        "slideTitle": "See the Execution Flow",
-        "chapterIndex": 2,
-        "totalDuration": 41.28,
-        "audioDuration": 35.28,
-        "delaysDuration": 6,
-        "segments": [
-          {
-            "segmentIndex": 0,
-            "audioDuration": 11.2,
-            "delayAfter": 1.5
-          },
-          {
-            "segmentIndex": 1,
-            "audioDuration": 12.88,
-            "delayAfter": 1.5
-          },
-          {
-            "segmentIndex": 2,
-            "audioDuration": 11.2,
-            "delayAfter": 3
-          }
-        ]
-      },
-      {
-        "slideIndex": 3,
         "slideTitle": "Send and Debug Live",
         "chapterIndex": 2,
-        "totalDuration": 60.92,
-        "audioDuration": 51.92,
+        "totalDuration": 63.879999999999995,
+        "audioDuration": 54.879999999999995,
         "delaysDuration": 9,
         "segments": [
           {
             "segmentIndex": 0,
-            "audioDuration": 9.76,
+            "audioDuration": 10.56,
             "delayAfter": 1.5
           },
           {
             "segmentIndex": 1,
-            "audioDuration": 12.08,
+            "audioDuration": 13.28,
             "delayAfter": 1.5
           },
           {
             "segmentIndex": 2,
-            "audioDuration": 7.28,
+            "audioDuration": 8.24,
             "delayAfter": 1.5
           },
           {
@@ -169,11 +144,36 @@
         ]
       },
       {
-        "slideIndex": 4,
-        "slideTitle": "Config, Flights & More",
+        "slideIndex": 3,
+        "slideTitle": "Setup Config",
         "chapterIndex": 2,
-        "totalDuration": 46.8,
-        "audioDuration": 40.8,
+        "totalDuration": 47.36,
+        "audioDuration": 41.36,
+        "delaysDuration": 6,
+        "segments": [
+          {
+            "segmentIndex": 0,
+            "audioDuration": 13.76,
+            "delayAfter": 1.5
+          },
+          {
+            "segmentIndex": 1,
+            "audioDuration": 13.28,
+            "delayAfter": 1.5
+          },
+          {
+            "segmentIndex": 2,
+            "audioDuration": 14.32,
+            "delayAfter": 3
+          }
+        ]
+      },
+      {
+        "slideIndex": 1,
+        "slideTitle": "22 Tools at Your Fingertips",
+        "chapterIndex": 3,
+        "totalDuration": 45.199999999999996,
+        "audioDuration": 39.199999999999996,
         "delaysDuration": 6,
         "segments": [
           {
@@ -183,32 +183,7 @@
           },
           {
             "segmentIndex": 1,
-            "audioDuration": 14.24,
-            "delayAfter": 1.5
-          },
-          {
-            "segmentIndex": 2,
-            "audioDuration": 12.96,
-            "delayAfter": 3
-          }
-        ]
-      },
-      {
-        "slideIndex": 1,
-        "slideTitle": "22 Tools at Your Fingertips",
-        "chapterIndex": 3,
-        "totalDuration": 47.52,
-        "audioDuration": 41.52,
-        "delaysDuration": 6,
-        "segments": [
-          {
-            "segmentIndex": 0,
-            "audioDuration": 14.16,
-            "delayAfter": 1.5
-          },
-          {
-            "segmentIndex": 1,
-            "audioDuration": 17.28,
+            "audioDuration": 15.52,
             "delayAfter": 1.5
           },
           {
@@ -247,8 +222,8 @@
         "slideIndex": 1,
         "slideTitle": "Impact & What's Next",
         "chapterIndex": 5,
-        "totalDuration": 51.74,
-        "audioDuration": 42.24,
+        "totalDuration": 52.06,
+        "audioDuration": 42.56,
         "delaysDuration": 9.5,
         "segments": [
           {
@@ -268,15 +243,15 @@
           },
           {
             "segmentIndex": 3,
-            "audioDuration": 2.4,
+            "audioDuration": 2.72,
             "delayAfter": 5
           }
         ]
       }
     ],
     "formattedDurations": {
-      "audioOnly": "6:52",
-      "total": "8:02"
+      "audioOnly": "6:13",
+      "total": "7:17"
     }
   }
 }
