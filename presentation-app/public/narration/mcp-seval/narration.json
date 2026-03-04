@@ -1,0 +1,288 @@
+{
+  "demoId": "mcp-seval",
+  "version": "1.0",
+  "lastModified": "2026-03-03T00:00:00.000Z",
+  "slides": [
+    {
+      "chapter": 0,
+      "slide": 1,
+      "title": "MCP SEVAL",
+      "segments": [
+        {
+          "id": 0,
+          "narrationText": "Hello, I'm Kwen TTS, and I'll be narrating this presentation for EvYatar.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 1,
+          "narrationText": "Today we're looking at MCP SEVAL — an MCP server with sixteen evaluation tools that give your AI agent full access to the Sydney evaluation platform.",
+          "visualDescription": "",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 0,
+      "slide": 2,
+      "title": "The Evaluation Problem",
+      "segments": [
+        {
+          "id": 0,
+          "narrationText": "You've shipped a change to improve search grounding in Copilot. But did it actually work? To find out, you'd open the SEVAL dashboard, create a job, wait for it to finish, then manually sift through scorecards and metrics across multiple tabs.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 1,
+          "narrationText": "Hundreds of utterances. Multiple metrics per utterance — quality, grounding, citations, safety, checklists. Control versus experiment comparisons. P-values and statistical significance. All spread across different dashboard views with no single place to get the full picture.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 2,
+          "narrationText": "That's the problem MCP SEVAL solves. Instead of clicking through dashboards, your agent creates jobs, polls for completion, reads scorecards, and drills into per-utterance metrics — all in one conversation.",
+          "visualDescription": "",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 1,
+      "slide": 1,
+      "title": "16 Tools, 4 Categories",
+      "segments": [
+        {
+          "id": 0,
+          "narrationText": "Sixteen tools across four categories. The full SEVAL lifecycle — from job creation to per-utterance diagnosis — now accessible to your AI agent.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 1,
+          "narrationText": "{#conn}Connectivity — two tools for health checks and template discovery. {#lifecycle}Job Lifecycle — six tools: list, get, create, cancel, rerun, rename. {#results}Results and Metrics — seven tools for scorecards, utterance queries, conversation detail, and file downloads. {#templates}And Templates — version history and build selection.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 2,
+          "narrationText": "The power is in how these tools chain together. Create a job, pull the scorecard, find regressions, drill into the utterance, get a Dev-UI debug link — all in one conversation.",
+          "visualDescription": "",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 2,
+      "slide": 1,
+      "title": "Create a Job",
+      "segments": [
+        {
+          "id": 0,
+          "narrationText": "Let's start with creating a job. The agent calls 'list job templates' to find available templates, then 'get template versions' to pick a stable build. This gives you the configuration structure to work with.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 1,
+          "narrationText": "Next, the agent calls 'create job' with the template, version, and your configuration — control and experiment flights, dataset, metrics, scraping options. The job is submitted and a numeric job ID is returned.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 2,
+          "narrationText": "Template to running job in one conversation. The agent handles template lookup, version selection, and configuration — you just describe what you want to evaluate.",
+          "visualDescription": "",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 2,
+      "slide": 2,
+      "title": "Analyze Results",
+      "segments": [
+        {
+          "id": 0,
+          "narrationText": "Once a job completes, the agent calls 'get job metrics' to pull the full scorecard. It returns control values, experiment values, deltas, sample sizes, and p-values for every metric.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 1,
+          "narrationText": "The agent interprets the results: SbS Leo v3 improved by two points, statistically significant at p equals zero point zero three. Ground Leo dropped by one point five, also significant.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 2,
+          "narrationText": "This is the quality-versus-grounding tradeoff — a well-known pattern in SEVAL analysis. Improving answer quality can reduce grounding fidelity. The agent recognizes this tradeoff and explains it, so you don't need to cross-reference columns manually.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 3,
+          "narrationText": "Scorecard to actionable insight in seconds. The agent reads the metrics, spots the tradeoff, and tells you exactly where to look next.",
+          "visualDescription": "",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 2,
+      "slide": 3,
+      "title": "Diagnose Utterances",
+      "segments": [
+        {
+          "id": 0,
+          "narrationText": "The scorecard showed a grounding regression. Let's find out why. The agent uses 'query utterance metrics' to find which specific utterances regressed on Ground Leo. It returns per-utterance scores sorted by severity.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 1,
+          "narrationText": "For the worst utterance, it calls 'query utterance detail' — returning the full query text, control and experiment scores, and all metric breakdowns.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 2,
+          "narrationText": "Here's the key: the agent calls 'query utterance conversation' to get a Dev-UI side-by-side debug link. Click it and you see control versus experiment for that exact utterance. Or pass the conversation ID to the Dev-UI MCP for programmatic debugging.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 3,
+          "narrationText": "From scorecard regression to root cause investigation — the agent finds the worst utterance, surfaces the detail, and gives you the tools to act on it.",
+          "visualDescription": "",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 2,
+      "slide": 4,
+      "title": "Download and Manage",
+      "segments": [
+        {
+          "id": 0,
+          "narrationText": "The agent can download output files using 'get job output' and 'download job file'. For MChat jobs, it automatically falls back to the Heron download path — you don't need to know which blob backend stores the data.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 1,
+          "narrationText": "Lifecycle management is just as easy. 'Rerun job' to retry with the same config. 'Cancel job' to stop a stuck run. 'Rename job' to label your experiments for tracking.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 2,
+          "narrationText": "The full lifecycle — create, monitor, analyze, download, rerun — accessible through natural conversation.",
+          "visualDescription": "",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "slide": 1,
+      "title": "SEVAL + DevUI Bridge",
+      "segments": [
+        {
+          "id": 0,
+          "narrationText": "What if SEVAL finds a regression and your agent can debug it automatically? Add both SEVAL MCP and Dev-UI MCP to the same workspace — the agent gets evaluation metrics and conversation debugging in one context.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 1,
+          "narrationText": "SEVAL MCP identifies the worst utterance and extracts the conversation ID. Dev-UI MCP loads that conversation, pulls the symptom report, and diagnoses the root cause. All in one conversation.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 2,
+          "narrationText": "Two MCP servers, one conversation. From regression detection to root cause diagnosis without switching tools.",
+          "visualDescription": "",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 3,
+      "slide": 2,
+      "title": "The Quality Loop",
+      "segments": [
+        {
+          "id": 0,
+          "narrationText": "This is the vision: a closed-loop quality workflow. Run a SEVAL job, find regressions, debug them, fix the code, rerun to verify.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 1,
+          "narrationText": "Evaluate, diagnose, fix, verify. Each step delegated to the agent — you describe the goal.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 2,
+          "narrationText": "MCP SEVAL. Not just metrics — a quality engineer.",
+          "visualDescription": "",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 4,
+      "slide": 1,
+      "title": "Two Minutes to Start Evaluating",
+      "segments": [
+        {
+          "id": 0,
+          "narrationText": "Getting started takes two minutes. Step one: register the marketplace. Run slash plugin marketplace add gim-home slash ai-developer-toolkit.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 1,
+          "narrationText": "Step two: install the SEVAL plugin. Run slash plugin install seval-tools at ai-developer-toolkit. All sixteen tools are immediately available.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 2,
+          "narrationText": "That's it. Ask your agent to create a SEVAL job, analyze results, or diagnose regressions.",
+          "visualDescription": "",
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "chapter": 4,
+      "slide": 2,
+      "title": "Closing",
+      "segments": [
+        {
+          "id": 0,
+          "narrationText": "Remember that wall of scorecard metrics? The manual spreadsheet parsing, the p-value cross-referencing — {#dismiss}that's behind you now.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 1,
+          "narrationText": "Your agent creates evaluation jobs, reads scorecards, diagnoses regressions per-utterance, and bridges to Dev-UI for root cause analysis.",
+          "visualDescription": "",
+          "notes": ""
+        },
+        {
+          "id": 2,
+          "narrationText": "MCP SEVAL. Not just metrics — a quality engineer.",
+          "visualDescription": "",
+          "notes": ""
+        }
+      ]
+    }
+  ]
+}
