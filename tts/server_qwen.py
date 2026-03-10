@@ -233,8 +233,8 @@ def generate_audio_batch():
 def main():
     parser = argparse.ArgumentParser(description="Qwen3-TTS Server")
     parser.add_argument(
-        "--speaker", type=str, default="Vivian",
-        help="Preset speaker timbre (default: Vivian). Options: Vivian, Chelsie, Ethan, etc.",
+        "--speaker", type=str, default="Aiden",
+        help="Preset speaker timbre (default: Aiden). Options: Aiden, Vivian, Chelsie, Ethan, etc.",
     )
     parser.add_argument(
         "--language", type=str, default="English",
